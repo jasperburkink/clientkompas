@@ -1,4 +1,5 @@
 ﻿using AuthenticationPoC.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -13,9 +14,10 @@ namespace AuthenticationPoC.Controllers
             _logger = logger;
         }
 
+        [Authorize]
         public IActionResult Index()
         {
-            return View();
+            return View((object)"Hello");
         }
 
         public IActionResult Privacy()

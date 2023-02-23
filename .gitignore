@@ -1,0 +1,6 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/CSV-Com/AuthenticationPoC/obj/Container/AbsoluteOutputAssemblyPath.cache
+/CSV-Com/AuthenticationPoC/obj/Container

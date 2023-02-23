@@ -5,13 +5,11 @@ VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AuthenticationPoC", "AuthenticationPoC", "{7D19B059-A955-4AB4-9C52-B9C869251190}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthenticationModel", "AuthenticationModel\AuthenticationModel.csproj", "{9545144F-8A28-405C-A823-1E6E59428B1F}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthenticationAPI", "AuthenticationAPI\AuthenticationAPI.csproj", "{F9ACC8E0-CF68-42BB-9358-01487F75DF63}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationWebsite", "AuthenticationWebsite\AuthenticationWebsite.csproj", "{5374B31A-54E5-4CFB-A5E0-D32DC09B2C94}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationPoC", "AuthenticationPoC\AuthenticationPoC.csproj", "{A201BDCA-192E-4B05-98DD-8CDA488B7F4A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthenticationPoC", "AuthenticationPoC\AuthenticationPoC.csproj", "{A201BDCA-192E-4B05-98DD-8CDA488B7F4A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dockertest", "dockertest\dockertest.csproj", "{0561A3E0-16E1-486F-8510-CB651CE8DB30}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,14 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9545144F-8A28-405C-A823-1E6E59428B1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9545144F-8A28-405C-A823-1E6E59428B1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9545144F-8A28-405C-A823-1E6E59428B1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9545144F-8A28-405C-A823-1E6E59428B1F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F9ACC8E0-CF68-42BB-9358-01487F75DF63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F9ACC8E0-CF68-42BB-9358-01487F75DF63}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F9ACC8E0-CF68-42BB-9358-01487F75DF63}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F9ACC8E0-CF68-42BB-9358-01487F75DF63}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5374B31A-54E5-4CFB-A5E0-D32DC09B2C94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5374B31A-54E5-4CFB-A5E0-D32DC09B2C94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5374B31A-54E5-4CFB-A5E0-D32DC09B2C94}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -35,13 +25,15 @@ Global
 		{A201BDCA-192E-4B05-98DD-8CDA488B7F4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A201BDCA-192E-4B05-98DD-8CDA488B7F4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A201BDCA-192E-4B05-98DD-8CDA488B7F4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0561A3E0-16E1-486F-8510-CB651CE8DB30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0561A3E0-16E1-486F-8510-CB651CE8DB30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0561A3E0-16E1-486F-8510-CB651CE8DB30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0561A3E0-16E1-486F-8510-CB651CE8DB30}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{9545144F-8A28-405C-A823-1E6E59428B1F} = {7D19B059-A955-4AB4-9C52-B9C869251190}
-		{F9ACC8E0-CF68-42BB-9358-01487F75DF63} = {7D19B059-A955-4AB4-9C52-B9C869251190}
 		{5374B31A-54E5-4CFB-A5E0-D32DC09B2C94} = {7D19B059-A955-4AB4-9C52-B9C869251190}
 		{A201BDCA-192E-4B05-98DD-8CDA488B7F4A} = {7D19B059-A955-4AB4-9C52-B9C869251190}
 	EndGlobalSection

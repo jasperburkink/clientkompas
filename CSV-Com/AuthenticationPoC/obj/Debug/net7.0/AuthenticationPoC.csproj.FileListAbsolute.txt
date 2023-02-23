@@ -79,3 +79,5 @@ C:\Users\burkinkj\source\repos\cvs-com\CSV-Com\AuthenticationPoC\bin\Debug\net7.
 C:\Users\burkinkj\source\repos\cvs-com\CSV-Com\AuthenticationPoC\bin\Debug\net7.0\Microsoft.Extensions.DependencyModel.dll
 C:\Users\burkinkj\source\repos\cvs-com\CSV-Com\AuthenticationPoC\bin\Debug\net7.0\Mono.TextTemplating.dll
 C:\Users\burkinkj\source\repos\cvs-com\CSV-Com\AuthenticationPoC\bin\Debug\net7.0\System.CodeDom.dll
+C:\Users\burkinkj\source\repos\cvs-com\CSV-Com\AuthenticationPoC\bin\Debug\net7.0\MySqlConnector.dll
+C:\Users\burkinkj\source\repos\cvs-com\CSV-Com\AuthenticationPoC\bin\Debug\net7.0\Pomelo.EntityFrameworkCore.MySql.dll

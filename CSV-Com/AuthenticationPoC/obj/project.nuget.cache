@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "OLpL1grroPSGJZokCRWkHi+SqKUAzVtX0CxksMahON4ZO9i5K+Ob9sfzm4LAcplJDdN0BKteisd307RJjmdrCg==",
+  "dgSpecHash": "UUMCFL/ZhRhFR/ORox8j33+R89Uto/y/zobsluVAG1XV4qmA2/tmve5GZ3eDspTmb9SIRenjaaBxZMazka+z5Q==",
   "success": true,
   "projectFilePath": "C:\\Users\\burkinkj\\source\\repos\\cvs-com\\CSV-Com\\AuthenticationPoC\\AuthenticationPoC.csproj",
   "expectedPackageFiles": [
@@ -48,6 +48,8 @@
     "C:\\Users\\burkinkj\\.nuget\\packages\\microsoft.win32.registry\\5.0.0\\microsoft.win32.registry.5.0.0.nupkg.sha512",
     "C:\\Users\\burkinkj\\.nuget\\packages\\microsoft.win32.systemevents\\5.0.0\\microsoft.win32.systemevents.5.0.0.nupkg.sha512",
     "C:\\Users\\burkinkj\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
+    "C:\\Users\\burkinkj\\.nuget\\packages\\mysqlconnector\\2.2.5\\mysqlconnector.2.2.5.nupkg.sha512",
+    "C:\\Users\\burkinkj\\.nuget\\packages\\pomelo.entityframeworkcore.mysql\\7.0.0\\pomelo.entityframeworkcore.mysql.7.0.0.nupkg.sha512",
     "C:\\Users\\burkinkj\\.nuget\\packages\\system.buffers\\4.5.1\\system.buffers.4.5.1.nupkg.sha512",
     "C:\\Users\\burkinkj\\.nuget\\packages\\system.codedom\\4.4.0\\system.codedom.4.4.0.nupkg.sha512",
     "C:\\Users\\burkinkj\\.nuget\\packages\\system.configuration.configurationmanager\\5.0.0\\system.configuration.configurationmanager.5.0.0.nupkg.sha512",
