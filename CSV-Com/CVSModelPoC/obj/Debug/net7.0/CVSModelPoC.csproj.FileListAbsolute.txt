@@ -1,0 +1,12 @@
+C:\Users\burkinkj\source\repos\cvs-com\CSV-Com\CVSModelPoC\bin\Debug\net7.0\CVSModelPoC.deps.json
+C:\Users\burkinkj\source\repos\cvs-com\CSV-Com\CVSModelPoC\bin\Debug\net7.0\CVSModelPoC.dll
+C:\Users\burkinkj\source\repos\cvs-com\CSV-Com\CVSModelPoC\bin\Debug\net7.0\CVSModelPoC.pdb
+C:\Users\burkinkj\source\repos\cvs-com\CSV-Com\CVSModelPoC\obj\Debug\net7.0\CVSModelPoC.csproj.AssemblyReference.cache
+C:\Users\burkinkj\source\repos\cvs-com\CSV-Com\CVSModelPoC\obj\Debug\net7.0\CVSModelPoC.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\burkinkj\source\repos\cvs-com\CSV-Com\CVSModelPoC\obj\Debug\net7.0\CVSModelPoC.AssemblyInfoInputs.cache
+C:\Users\burkinkj\source\repos\cvs-com\CSV-Com\CVSModelPoC\obj\Debug\net7.0\CVSModelPoC.AssemblyInfo.cs
+C:\Users\burkinkj\source\repos\cvs-com\CSV-Com\CVSModelPoC\obj\Debug\net7.0\CVSModelPoC.csproj.CoreCompileInputs.cache
+C:\Users\burkinkj\source\repos\cvs-com\CSV-Com\CVSModelPoC\obj\Debug\net7.0\CVSModelPoC.dll
+C:\Users\burkinkj\source\repos\cvs-com\CSV-Com\CVSModelPoC\obj\Debug\net7.0\refint\CVSModelPoC.dll
+C:\Users\burkinkj\source\repos\cvs-com\CSV-Com\CVSModelPoC\obj\Debug\net7.0\CVSModelPoC.pdb
+C:\Users\burkinkj\source\repos\cvs-com\CSV-Com\CVSModelPoC\obj\Debug\net7.0\ref\CVSModelPoC.dll

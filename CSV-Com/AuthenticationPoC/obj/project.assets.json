@@ -1251,6 +1251,16 @@
             "rid": "win"
           }
         }
+      },
+      "CVSModelPoC/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "compile": {
+          "bin/placeholder/CVSModelPoC.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/CVSModelPoC.dll": {}
+        }
       }
     }
   },
@@ -3786,10 +3796,16 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
+    },
+    "CVSModelPoC/1.0.0": {
+      "type": "project",
+      "path": "../CVSModelPoC/CVSModelPoC.csproj",
+      "msbuildProject": "../CVSModelPoC/CVSModelPoC.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net7.0": [
+      "CVSModelPoC >= 1.0.0",
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 7.0.3",
       "Microsoft.EntityFrameworkCore >= 7.0.3",
       "Microsoft.EntityFrameworkCore.Design >= 7.0.3",
@@ -3830,7 +3846,11 @@
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\burkinkj\\source\\repos\\cvs-com\\CSV-Com\\CVSModelPoC\\CVSModelPoC.csproj": {
+              "projectPath": "C:\\Users\\burkinkj\\source\\repos\\cvs-com\\CSV-Com\\CVSModelPoC\\CVSModelPoC.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

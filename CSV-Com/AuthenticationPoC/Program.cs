@@ -16,7 +16,7 @@ var serverVersion = MySqlServerVersion.LatestSupportedServerVersion;
 //var serverVersion = ServerVersion.AutoDetect(connectionString);
 //builder.Services.AddDbContext<AppIdentityDbContext>(options => options.UseSqlServer(connectionString));
 
-// Custom policy variables NOTE: Apperantly custompolicies have to be added before calling add dbcontext. Else errors are shown double.
+// Custom policy variables NOTE: Apparently custompolicies have to be added before calling add dbcontext. Else errors are shown double.
 builder.Services.AddTransient<IPasswordValidator<AppUser>, CustomPasswordPolicy>();
 builder.Services.AddTransient<IUserValidator<AppUser>, CustomUsernameEmailPolicy>();
 
@@ -33,8 +33,30 @@ builder.Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<A
 // Policy variables
 builder.Services.Configure<IdentityOptions>(identityOptions);
 
+// Custom policies
+builder.Services.AddAuthorization(opts => {
+    opts.AddPolicy("NederlandseAdmin", policy => {
+        policy.RequireRole("Admin");
+        policy.RequireClaim("Nationaliteit", "Nederlands");
+    });
+});
+
 // Login URL
-builder.Services.ConfigureApplicationCookie(opts => opts.LoginPath = "/Authenticate/Login");
+builder.Services.ConfigureApplicationCookie(opts => opts.LoginPath = "/Account/Login");
+
+// Cookie settings for login
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.Name = ".AspNetCore.Identity.Application";
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+    options.SlidingExpiration = true;
+});
+
+// Access denied. When authorization for a page failes. Default = /Account/AccessDenied
+builder.Services.ConfigureApplicationCookie(opts =>
+{
+    opts.AccessDeniedPath = "/Account/AccessDenied";
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

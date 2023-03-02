@@ -37,13 +37,24 @@ namespace AuthenticationPoC.Controllers
                 if (appUser != null)
                 {
                     await signInManager.SignOutAsync();
-                    Microsoft.AspNetCore.Identity.SignInResult result = await signInManager.PasswordSignInAsync(appUser, login.Password, false, false);
+                    Microsoft.AspNetCore.Identity.SignInResult result = await signInManager.PasswordSignInAsync(appUser, login.Password, login.Remember, false);
                     if (result.Succeeded)
                         return Redirect(login.ReturnUrl ?? "/");
                 }
                 ModelState.AddModelError(nameof(login.Email), "Login Failed: Invalid Email or password");
             }
             return View(login);
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
     }
 }

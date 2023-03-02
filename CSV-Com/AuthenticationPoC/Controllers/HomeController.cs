@@ -1,5 +1,6 @@
 ﻿using AuthenticationPoC.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -7,17 +8,21 @@ namespace AuthenticationPoC.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly UserManager<AppUser> _userManager;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, UserManager<AppUser> userManager)
         {
+            _userManager = userManager;
             _logger = logger;
         }
 
         [Authorize]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View((object)"Hello");
+            AppUser user = await _userManager.GetUserAsync(HttpContext.User);
+            string message = "Hello " + user.UserName;
+            return View((object)message);
         }
 
         public IActionResult Privacy()

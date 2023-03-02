@@ -1,7 +1,9 @@
 ﻿using AuthenticationPoC.Models;
 using AuthenticationPoC.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace AuthenticationPoC.Controllers
 {
@@ -19,7 +21,7 @@ namespace AuthenticationPoC.Controllers
             passwordValidator = passwordVal;
             userValidator = userValid;
         }
-
+        
         public IActionResult Index()
         {
             return View(userManager.Users);
@@ -28,14 +30,14 @@ namespace AuthenticationPoC.Controllers
         public ViewResult Create() => View();
 
         [HttpPost]
-        public async Task<IActionResult> Create(Gebruiker gebruiker)
+        public async Task<IActionResult> Create(GebruikerViewModel gebruiker)
         {
             if (ModelState.IsValid)
             {
                 AppUser appUser = new AppUser
                 {
                     UserName = gebruiker.Gebruikersnaam,
-                    Email = gebruiker.Email                    
+                    Email = gebruiker.Email
                 };
 
                 IdentityResult result = await userManager.CreateAsync(appUser, gebruiker.Wachtwoord);
@@ -53,6 +55,8 @@ namespace AuthenticationPoC.Controllers
 
         public async Task<IActionResult> Update(string id)
         {
+            //TODO: get a gebruiker
+
             AppUser user = await userManager.FindByIdAsync(id);
             if (user != null)
                 return View(user);
@@ -61,8 +65,10 @@ namespace AuthenticationPoC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(string id, string email, string password)
+        public async Task<IActionResult> Update(string id, string email, string voornaam, string achternaam, string password)
         {
+            // TOTO: update a user in de CVS db
+
             AppUser user = await userManager.FindByIdAsync(id);
             if (user != null)
             {
