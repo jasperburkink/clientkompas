@@ -10,9 +10,12 @@ namespace AuthenticationPoC.Controllers
     public class ClaimsController : Controller
     {
         private UserManager<AppUser> userManager;
-        public ClaimsController(UserManager<AppUser> userMgr)
+        private IAuthorizationService authService;
+
+        public ClaimsController(UserManager<AppUser> userMgr, IAuthorizationService auth)
         {
             userManager = userMgr;
+            authService = auth;
         }
 
         public ViewResult Index() => View(User?.Claims);
@@ -54,6 +57,17 @@ namespace AuthenticationPoC.Controllers
             return View("Index");
         }
 
+        public async Task<IActionResult> PrivateAccess(string title)
+        {
+            string[] allowedUsers = { "jasper", "alice" };
+            AuthorizationResult authorized = await authService.AuthorizeAsync(User, allowedUsers, "PrivateAccess");
+
+            if (authorized.Succeeded)
+                return View("Index", User?.Claims);
+            else
+                return new ChallengeResult();
+        }
+
         void Errors(IdentityResult result)
         {
             foreach (IdentityError error in result.Errors)
@@ -61,6 +75,12 @@ namespace AuthenticationPoC.Controllers
         }
 
         [Authorize(Policy = "NederlandseAdmin")]
-        public IActionResult Project() => View("Index", User?.Claims);
+        public IActionResult NederlandseAdmin() => View("Index", User?.Claims);
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult Admin() => View("Index", User?.Claims);
+
+        [Authorize(Policy = "AllowJasper")]
+        public ViewResult JasperFiles() => View("Index", User?.Claims);
     }
 }

@@ -37,7 +37,8 @@ namespace AuthenticationPoC.Controllers
                 AppUser appUser = new AppUser
                 {
                     UserName = gebruiker.Gebruikersnaam,
-                    Email = gebruiker.Email
+                    Email = gebruiker.Email,
+                    TwoFactorEnabled = true
                 };
 
                 IdentityResult result = await userManager.CreateAsync(appUser, gebruiker.Wachtwoord);
@@ -72,6 +73,8 @@ namespace AuthenticationPoC.Controllers
             AppUser user = await userManager.FindByIdAsync(id);
             if (user != null)
             {
+                user.TwoFactorEnabled = true;
+
                 IdentityResult validEmail = null;
                 if (!string.IsNullOrEmpty(email))
                 {

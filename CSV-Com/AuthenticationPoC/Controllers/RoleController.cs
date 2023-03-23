@@ -18,8 +18,7 @@ namespace AuthenticationPoC.Controllers
             roleManager = roleMgr;
             userManager = userMrg;
         }
-
-        [Authorize(Roles = "Admin")]
+        
         public ViewResult Index() => View(roleManager.Roles);
 
         private void Errors(IdentityResult result)

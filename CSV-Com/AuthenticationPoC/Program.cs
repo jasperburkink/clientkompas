@@ -5,6 +5,8 @@ using System.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using AuthenticationPoC.IdentityPolicy;
+using AuthenticationPoC.CustomPolicy;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,11 +35,29 @@ builder.Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<A
 // Policy variables
 builder.Services.Configure<IdentityOptions>(identityOptions);
 
-// Custom policies
+// Custom policies static
 builder.Services.AddAuthorization(opts => {
     opts.AddPolicy("NederlandseAdmin", policy => {
         policy.RequireRole("Admin");
         policy.RequireClaim("Nationaliteit", "Nederlands");
+    });
+});
+
+// Custom user policy with custom user policy class
+builder.Services.AddTransient<IAuthorizationHandler, AllowUsersHandler>();
+builder.Services.AddAuthorization(opts => {
+    opts.AddPolicy("AllowJasper", policy => {
+        policy.AddRequirements(new AllowUserPolicy("Jasper"));
+    });
+});
+
+// Custom user policy without constructor --> Can be used to add authorization without the authorization attribute
+builder.Services.AddTransient<IAuthorizationHandler, AllowPrivateHandler>();
+builder.Services.AddAuthorization(opts =>
+{
+    opts.AddPolicy("PrivateAccess", policy =>
+    {
+        policy.AddRequirements(new AllowPrivatePolicy());
     });
 });
 
