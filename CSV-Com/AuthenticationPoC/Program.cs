@@ -12,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
 var identityOptions = builder.Configuration.GetSection(nameof(IdentityOptions));
+
 var serverVersion = MySqlServerVersion.LatestSupportedServerVersion;
 
 // MSSQL --> MySQL
@@ -35,6 +36,13 @@ builder.Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<A
 // Policy variables
 builder.Services.Configure<IdentityOptions>(identityOptions);
 
+//builder.Services.Configure<IdentityOptions>(opts => {
+//    opts.User.RequireUniqueEmail = true;
+//    opts.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz";
+//    opts.Password.RequiredLength = 8;
+//    opts.Password.RequireLowercase = true;
+//});
+
 // Custom policies static
 builder.Services.AddAuthorization(opts => {
     opts.AddPolicy("NederlandseAdmin", policy => {
@@ -42,6 +50,7 @@ builder.Services.AddAuthorization(opts => {
         policy.RequireClaim("Nationaliteit", "Nederlands");
     });
 });
+
 
 // Custom user policy with custom user policy class
 builder.Services.AddTransient<IAuthorizationHandler, AllowUsersHandler>();
