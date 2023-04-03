@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Authorization;
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
-var identityOptions = builder.Configuration.GetSection(nameof(IdentityOptions));
 
 var serverVersion = MySqlServerVersion.LatestSupportedServerVersion;
 
@@ -34,6 +33,7 @@ builder.Services.AddDbContext<AppIdentityDbContext>(
 builder.Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppIdentityDbContext>().AddDefaultTokenProviders();
 
 // Policy variables
+var identityOptions = builder.Configuration.GetSection(nameof(IdentityOptions));
 builder.Services.Configure<IdentityOptions>(identityOptions);
 
 //builder.Services.Configure<IdentityOptions>(opts => {
