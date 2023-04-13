@@ -6,5 +6,6 @@ namespace AuthenticationPoC.Models
 {
     public class AppUser : IdentityUser
     {
+        public int CVSUserId { get; set; }
     }
 }
