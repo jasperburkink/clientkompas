@@ -8,9 +8,6 @@ namespace CVSModelPoC
         public int Id { get; set; }
 
         [Required]
-        public string Gebruikersnaam { get; set; }
-
-        [Required]
         public string Voornaam { get; set; }
 
         //[Required]
@@ -27,8 +24,5 @@ namespace CVSModelPoC
         //public string Telefoon { get; set; }
 
         //public string Mobiel { get; set; }
-
-        [Required]
-        public string Wachtwoord { get; set; }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using AuthenticationPoC.Models;
 using AuthenticationPoC.ViewModels;
+using CVSInfrastructurePoC.Repositories;
+using CVSModelPoC;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -13,13 +15,15 @@ namespace AuthenticationPoC.Controllers
         private IPasswordHasher<AppUser> passwordHasher;
         private IPasswordValidator<AppUser> passwordValidator;
         private IUserValidator<AppUser> userValidator;
+        private readonly IGebruikerRepository gebruikerRepository;
 
-        public AdminController(UserManager<AppUser> usrMgr, IPasswordHasher<AppUser> passwordHash, IPasswordValidator<AppUser> passwordVal, IUserValidator<AppUser> userValid)
+        public AdminController(UserManager<AppUser> usrMgr, IPasswordHasher<AppUser> passwordHash, IPasswordValidator<AppUser> passwordVal, IUserValidator<AppUser> userValid, IGebruikerRepository gebruikerRepository)
         {
             userManager = usrMgr;
             passwordHasher = passwordHash;
             passwordValidator = passwordVal;
             userValidator = userValid;
+            this.gebruikerRepository = gebruikerRepository;
         }
         
         public IActionResult Index()
@@ -34,13 +38,23 @@ namespace AuthenticationPoC.Controllers
         {
             if (ModelState.IsValid)
             {
+                // CVS data
+                var cvsGebruiker = new Gebruiker()
+                {
+                    Voornaam = gebruiker.Voornaam,
+                    Achternaam = gebruiker.Achternaam,
+                    Email = gebruiker.Email                    
+                };
+                cvsGebruiker = await gebruikerService.CreateGebruikerAsync(cvsGebruiker);
+
+                // Authentication gebruiker
                 AppUser appUser = new AppUser
                 {
+                    CVSUserId = cvsGebruiker.Id,
                     UserName = gebruiker.Gebruikersnaam,
                     Email = gebruiker.Email,
                     TwoFactorEnabled = true
                 };
-
                 IdentityResult result = await userManager.CreateAsync(appUser, gebruiker.Wachtwoord);
 
                 if (result.Succeeded)

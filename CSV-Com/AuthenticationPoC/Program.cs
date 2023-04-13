@@ -7,11 +7,14 @@ using Microsoft.AspNetCore.Identity;
 using AuthenticationPoC.IdentityPolicy;
 using AuthenticationPoC.CustomPolicy;
 using Microsoft.AspNetCore.Authorization;
+using CVSInfrastructurePoC;
+using Pomelo.EntityFrameworkCore.MySql.Internal;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
-var identityOptions = builder.Configuration.GetSection(nameof(IdentityOptions));
+var connectionStringAuthentication = builder.Configuration.GetValue<string>("ConnectionStrings:AuthenticationConnection");
+var connectionStringCVS = builder.Configuration.GetValue<string>("ConnectionStrings:CVSConnection");
+
 var serverVersion = MySqlServerVersion.LatestSupportedServerVersion;
 
 // MSSQL --> MySQL
@@ -22,9 +25,22 @@ var serverVersion = MySqlServerVersion.LatestSupportedServerVersion;
 builder.Services.AddTransient<IPasswordValidator<AppUser>, CustomPasswordPolicy>();
 builder.Services.AddTransient<IUserValidator<AppUser>, CustomUsernameEmailPolicy>();
 
+builder.Services.AddDbContext<CVSDbContext>(
+dbContextOptions => dbContextOptions
+                .UseMySql(connectionStringCVS, serverVersion, 
+                mySqlOptions =>
+                {
+                    mySqlOptions.MigrationsAssembly(typeof(CVSDbContext).Assembly.FullName); // Migrations in class library
+                })
+                // The following three options help with debugging, but should
+                // be changed or removed for production.
+                .LogTo(Console.WriteLine, LogLevel.Information)
+                .EnableSensitiveDataLogging()
+                .EnableDetailedErrors());
+
 builder.Services.AddDbContext<AppIdentityDbContext>(
             dbContextOptions => dbContextOptions
-                .UseMySql(connectionString, serverVersion)
+                .UseMySql(connectionStringAuthentication, serverVersion)
                 // The following three options help with debugging, but should
                 // be changed or removed for production.
                 .LogTo(Console.WriteLine, LogLevel.Information)
@@ -32,8 +48,18 @@ builder.Services.AddDbContext<AppIdentityDbContext>(
                 .EnableDetailedErrors());
 builder.Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppIdentityDbContext>().AddDefaultTokenProviders();
 
+builder.Services.AddScoped<IGebruikerService, GebruikerService>();
+
 // Policy variables
+var identityOptions = builder.Configuration.GetSection(nameof(IdentityOptions));
 builder.Services.Configure<IdentityOptions>(identityOptions);
+
+//builder.Services.Configure<IdentityOptions>(opts => {
+//    opts.User.RequireUniqueEmail = true;
+//    opts.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz";
+//    opts.Password.RequiredLength = 8;
+//    opts.Password.RequireLowercase = true;
+//});
 
 // Custom policies static
 builder.Services.AddAuthorization(opts => {
@@ -42,6 +68,7 @@ builder.Services.AddAuthorization(opts => {
         policy.RequireClaim("Nationaliteit", "Nederlands");
     });
 });
+
 
 // Custom user policy with custom user policy class
 builder.Services.AddTransient<IAuthorizationHandler, AllowUsersHandler>();
