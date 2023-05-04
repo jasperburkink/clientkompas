@@ -8,4 +8,11 @@
 /CSV-Com/.vs
 /CSV-Com/.vs/
 /CSV-Com/.vs/CSV-Com/DesignTimeBuild/.dtbcache.v2
-/.vs
+.vs/
+bin/
+obj/
+/CSV-Com/.vs/CSV-Com/v17/.suo
+/CSV-Com/.vs/CSV-Com/v17/.futdcache.v2
+/CSV-Com/.vs/ProjectEvaluation/csv-com.projects.v5.2
+/CSV-Com/.vs/ProjectEvaluation/csv-com.metadata.v5.2
+/CSV-Com/AuthenticationPoC/obj/Debug/net7.0/AuthenticationPoC.csproj.AssemblyReference.cache
