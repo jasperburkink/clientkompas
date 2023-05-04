@@ -5,6 +5,7 @@ using CVSModelPoC;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Client;
 using System.Data;
 
 namespace AuthenticationPoC.Controllers
@@ -43,9 +44,11 @@ namespace AuthenticationPoC.Controllers
                 {
                     Voornaam = gebruiker.Voornaam,
                     Achternaam = gebruiker.Achternaam,
-                    Email = gebruiker.Email                    
+                    Email = gebruiker.Email
                 };
-                cvsGebruiker = await gebruikerService.CreateGebruikerAsync(cvsGebruiker);
+                await gebruikerRepository.InsertGebruikerAsync(cvsGebruiker);
+                await gebruikerRepository.SaveAsync();
+                cvsGebruiker =  await gebruikerRepository.GetGebruikerByEmailAsync(cvsGebruiker.Email);
 
                 // Authentication gebruiker
                 AppUser appUser = new AppUser
@@ -70,20 +73,33 @@ namespace AuthenticationPoC.Controllers
 
         public async Task<IActionResult> Update(string id)
         {
-            //TODO: get a gebruiker
-
             AppUser user = await userManager.FindByIdAsync(id);
-            if (user != null)
-                return View(user);
+            Gebruiker cvsGebruiker = await gebruikerRepository.GetGebruikerAsync(user.CVSUserId);
+
+            if (user == null || cvsGebruiker == null)
+            {
+                ModelState.AddModelError("", "User Not Found"); // NOTE: heeft dit zin als je daarna redirect naar index?
+            }
             else
-                return RedirectToAction("Index");
+            {
+                GebruikerViewModel gebruikerViewModel = new GebruikerViewModel
+                {
+                    Id = user.Id,
+                    Achternaam = cvsGebruiker.Achternaam,
+                    Voornaam = cvsGebruiker.Voornaam,
+                    Gebruikersnaam = user.UserName,
+                    Email = user.Email
+                };
+
+                return View(gebruikerViewModel);
+            }
+
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
         public async Task<IActionResult> Update(string id, string email, string voornaam, string achternaam, string password)
         {
-            // TOTO: update a user in de CVS db
-
             AppUser user = await userManager.FindByIdAsync(id);
             if (user != null)
             {
@@ -120,6 +136,22 @@ namespace AuthenticationPoC.Controllers
                         return RedirectToAction("Index");
                     else
                         Errors(result);
+                }
+
+                var cvsUser = await gebruikerRepository.GetGebruikerAsync(user.CVSUserId);
+
+                if (cvsUser == null)
+                {
+                    ModelState.AddModelError("", "CVSUser Not Found");
+                    return View(user);
+                }
+                else
+                {
+                    cvsUser.Email = email;
+                    cvsUser.Achternaam = achternaam;
+                    cvsUser.Voornaam = voornaam;
+
+                    await gebruikerRepository.UpdateGebruikerAsync(cvsUser);
                 }
             }
             else

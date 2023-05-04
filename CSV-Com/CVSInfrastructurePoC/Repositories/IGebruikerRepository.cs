@@ -14,5 +14,11 @@ namespace CVSInfrastructurePoC.Repositories
         Task InsertGebruikerAsync(Gebruiker gebruiker);
 
         Task SaveAsync();
+
+        Task<Gebruiker> GetGebruikerByEmailAsync(string email);
+
+        Task<Gebruiker> GetGebruikerAsync(int id);
+
+        Task UpdateGebruikerAsync(Gebruiker gebruiker);
     }
 }

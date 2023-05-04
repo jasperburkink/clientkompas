@@ -9,6 +9,7 @@ using AuthenticationPoC.CustomPolicy;
 using Microsoft.AspNetCore.Authorization;
 using CVSInfrastructurePoC;
 using Pomelo.EntityFrameworkCore.MySql.Internal;
+using CVSInfrastructurePoC.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +20,8 @@ var serverVersion = MySqlServerVersion.LatestSupportedServerVersion;
 
 // MSSQL --> MySQL
 //var serverVersion = ServerVersion.AutoDetect(connectionString);
-//builder.Services.AddDbContext<AppIdentityDbContext>(options => options.UseSqlServer(connectionString));
+
+//builder.Services.AddDbContext<AppIdentityDbContext>(options => options.UseSqlServer(connectionStringAuthentication));
 
 // Custom policy variables NOTE: Apparently custompolicies have to be added before calling add dbcontext. Else errors are shown double.
 builder.Services.AddTransient<IPasswordValidator<AppUser>, CustomPasswordPolicy>();
@@ -48,7 +50,7 @@ builder.Services.AddDbContext<AppIdentityDbContext>(
                 .EnableDetailedErrors());
 builder.Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppIdentityDbContext>().AddDefaultTokenProviders();
 
-builder.Services.AddScoped<IGebruikerService, GebruikerService>();
+builder.Services.AddScoped<IGebruikerRepository, GebruikerRepository>();
 
 // Policy variables
 var identityOptions = builder.Configuration.GetSection(nameof(IdentityOptions));

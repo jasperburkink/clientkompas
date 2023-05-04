@@ -7,6 +7,9 @@ namespace AuthenticationPoC.ViewModels
     public class GebruikerViewModel
     {
         [Required]
+        public string Id { get; set; }
+
+        [Required]
         public string Gebruikersnaam { get; set; }
 
         [Required]
