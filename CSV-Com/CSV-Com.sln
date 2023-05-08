@@ -7,9 +7,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AuthenticationPoC", "Authen
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthenticationPoC", "AuthenticationPoC\AuthenticationPoC.csproj", "{A201BDCA-192E-4B05-98DD-8CDA488B7F4A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CVSModelPoC", "CVSModelPoC\CVSModelPoC.csproj", "{79E3EF45-ADB0-487F-87E6-09BF56EE303B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CVSModelPoC", "CVSModelPoC\CVSModelPoC.csproj", "{79E3EF45-ADB0-487F-87E6-09BF56EE303B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CVSInfrastructurePoC", "CVSInfrastructurePoC\CVSInfrastructurePoC.csproj", "{1467BEC5-553E-429C-BE6B-42826B369B2E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CVSInfrastructurePoC", "CVSInfrastructurePoC\CVSInfrastructurePoC.csproj", "{1467BEC5-553E-429C-BE6B-42826B369B2E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pipelines", "Pipelines", "{80BDF1C2-D40E-4C0A-9240-9FA5ECCFEF4F}"
+	ProjectSection(SolutionItems) = preProject
+		Pipelines\Configuration.yml = Pipelines\Configuration.yml
+		Pipelines\DevPipeline.yml = Pipelines\DevPipeline.yml
+		Pipelines\FeaturePipeline.yml = Pipelines\FeaturePipeline.yml
+		Pipelines\ReleasePipeline.yml = Pipelines\ReleasePipeline.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
