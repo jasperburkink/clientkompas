@@ -20,3 +20,15 @@ obj/
 /CSV-Com/CVSModelPoC/obj/Debug/net7.0/CVSModelPoC.assets.cache
 /CSV-Com/CVSInfrastructurePoC/obj/Debug/net7.0/CVSInfrastructurePoC.assets.cache
 /CSV-Com/AuthenticationPoC/obj/Debug/net7.0/AuthenticationPoC.assets.cache
+/CSV-Com/AuthenticationPoC/obj/project.nuget.cache
+/CSV-Com/AuthenticationPoC/obj/project.assets.json
+/CSV-Com/AuthenticationPoC/obj/AuthenticationPoC.csproj.nuget.g.props
+/CSV-Com/AuthenticationPoC/obj/AuthenticationPoC.csproj.nuget.dgspec.json
+/CSV-Com/CVSInfrastructurePoC/obj/project.nuget.cache
+/CSV-Com/CVSInfrastructurePoC/obj/project.assets.json
+/CSV-Com/CVSInfrastructurePoC/obj/CVSInfrastructurePoC.csproj.nuget.g.props
+/CSV-Com/CVSInfrastructurePoC/obj/CVSInfrastructurePoC.csproj.nuget.dgspec.json
+/CSV-Com/CVSModelPoC/obj/project.nuget.cache
+/CSV-Com/CVSModelPoC/obj/project.assets.json
+/CSV-Com/CVSModelPoC/obj/CVSModelPoC.csproj.nuget.g.props
+/CSV-Com/CVSModelPoC/obj/CVSModelPoC.csproj.nuget.dgspec.json
