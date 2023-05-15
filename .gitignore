@@ -20,3 +20,4 @@ obj/
 /CSV-Com/CVSModelPoC/obj/Debug/net7.0/CVSModelPoC.assets.cache
 /CSV-Com/CVSInfrastructurePoC/obj/Debug/net7.0/CVSInfrastructurePoC.assets.cache
 /CSV-Com/AuthenticationPoC/obj/Debug/net7.0/AuthenticationPoC.assets.cache
+/CSV-Com/UI/webapp/node_modules
