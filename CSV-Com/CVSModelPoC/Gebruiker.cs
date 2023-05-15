@@ -21,6 +21,11 @@ namespace CVSModelPoC
         [Required]
         public string Email { get; set; }
 
+        //public static implicit operator Gebruiker(void v)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
         //public string Telefoon { get; set; }
 
         //public string Mobiel { get; set; }

@@ -23,14 +23,14 @@ namespace CVSInfrastructurePoC.Repositories
             return context.Gebruikers.ToListAsync();
         }
 
-        public Task InsertGebruikerAsync(Gebruiker gebruiker)
+        public async Task InsertGebruikerAsync(Gebruiker gebruiker)
         {
-            throw new NotImplementedException();
+            await context.Gebruikers.AddAsync(gebruiker);            
         }
 
-        public Task SaveAsync()
+        public async Task SaveAsync()
         {
-            throw new NotImplementedException();
+            await context.SaveChangesAsync();
         }
 
         protected virtual void Dispose(bool disposing)
@@ -49,6 +49,26 @@ namespace CVSInfrastructurePoC.Repositories
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        public async Task<Gebruiker> GetGebruikerByEmailAsync(string email)
+        {
+            return await context.Gebruikers.FirstAsync(g => g.Email == email);
+        }
+
+        public async Task<Gebruiker> GetGebruikerAsync(int id)
+        {
+            return await context.Gebruikers.FindAsync(id);
+        }
+
+        public async Task UpdateGebruikerAsync(Gebruiker gebruiker)
+        {
+            await Task.Run(() =>
+            {
+                context.Gebruikers.Update(gebruiker);
+                context.SaveChanges();
+            });
+            
         }
     }
 }
