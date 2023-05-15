@@ -18,7 +18,7 @@ namespace Infrastructure.Persistence.CVS
             this.context = context;
         }
 
-        public GenericRepository<Gebruiker> GebruikerRepository
+        public IRepository<Gebruiker> GebruikerRepository
         {
             get
             {
