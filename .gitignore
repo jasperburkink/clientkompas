@@ -16,6 +16,10 @@ obj/
 /CSV-Com/.vs/ProjectEvaluation/csv-com.projects.v5.2
 /CSV-Com/.vs/ProjectEvaluation/csv-com.metadata.v5.2
 /CSV-Com/AuthenticationPoC/obj/Debug/net7.0/AuthenticationPoC.csproj.AssemblyReference.cache
+/CSV-Com/CVSModelPoC/obj/Debug/net7.0/CVSModelPoC.csproj.AssemblyReference.cache
+/CSV-Com/CVSModelPoC/obj/Debug/net7.0/CVSModelPoC.assets.cache
+/CSV-Com/CVSInfrastructurePoC/obj/Debug/net7.0/CVSInfrastructurePoC.assets.cache
+/CSV-Com/AuthenticationPoC/obj/Debug/net7.0/AuthenticationPoC.assets.cache
 /CSV-Com/AuthenticationPoC/obj/project.nuget.cache
 /CSV-Com/AuthenticationPoC/obj/project.assets.json
 /CSV-Com/AuthenticationPoC/obj/Debug/net7.0/AuthenticationPoC.csproj.CoreCompileInputs.cache
