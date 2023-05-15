@@ -21,3 +21,4 @@ obj/
 /CSV-Com/CVSInfrastructurePoC/obj/Debug/net7.0/CVSInfrastructurePoC.assets.cache
 /CSV-Com/AuthenticationPoC/obj/Debug/net7.0/AuthenticationPoC.assets.cache
 /CSV-Com/UI/webapp/node_modules
+/CSV-Com/WebUI/node_modules
