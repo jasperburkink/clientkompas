@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Application.Common.Interfaces.CVS;
+using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,6 +9,13 @@ namespace API.Controllers
     [ApiController]
     public class GebruikersController : ControllerBase
     {
+        public IUnitOfWork UnitOfWork { get; set; }
+
+        public GebruikersController(IUnitOfWork unitOfWork)
+        {
+            UnitOfWork = unitOfWork;
+        }    
+
         // GET: api/<GebruikersController>
         [HttpGet]
         public IEnumerable<string> Get()
