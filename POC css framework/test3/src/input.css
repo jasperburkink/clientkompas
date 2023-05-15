@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer components {
+    .btnSollid {
+      @apply bg-mainBlue text-white w-200px h-50px text-center font-medium text-sm rounded-md;
+    }
+    .btnNotSollid {
+      @apply text-mainBlue w-200px h-50px text-center font-medium text-sm border-4 rounded-md border-mainBlue;
+    }
+    .inputField {
+      @apply bg-mainLightGray border-2 border-subGray2 focus:border-mainBlue focus:ring-1 ring-mainBlue text-gray-900 outline-none text-sm rounded-lg block w-full p-2.5;
+    }
+
+    .logoBar{
+      @apply bg-mainBlue md:bg-transparent w-full md:w-sidebarBlue h-100px md:h-fit md:mt-50px flex justify-between md:justify-center content-center flex-wrap px-2 md:px-50px absolute z-30
+    }
+
+    .navBtnsContainer{
+      @apply flex flex-col justify-between h-2/3 w-11/12 md:h-400px md:w-60 mt-100px md:mt-200px mx-auto
+    }
+    .navBtnsContainerGray{
+      @apply h-2/3 w-11/12 md:h-500px md:w-64 mt-1 mx-auto md:mt-100px md:ml-150px ease-in-out duration-700
+    }
+    .navBtn{
+      @apply text-white w-11/12 md:w-60 h-65px cursor-pointer rounded-md flex justify-between content-center p-2 flex-wrap md:hover:bg-gradient-to-l md:hover:from-subBlue2 
+      /*also add class "group" in the html file*/
+    }
+    .navBtnGray{
+      @apply text-black w-11/12 md:w-64 h-fit cursor-pointer rounded-md flex justify-between content-center px-1 py-2 flex-wrap
+      /*also add class "group" in the html file*/
+    }
+    .navBtnArrow{
+      @apply invisible md:group-hover:visible h-fit my-auto
+    }
+
+    .sidebar{
+      @apply bg-mainBlue w-full md:w-sidebarBlue h-0 md:block md:h-sidebar md:-mt-15px z-20 overflow-hidden md:rounded-tr-sidebarT md:rounded-br-sidebarB ease-in-out duration-500
+    }
+    .sidebarGray{
+      @apply bg-white md:bg-mainGray border-mainGray border-b-2 md:border-none w-full md:w-sidebarGray h-fit md:h-sidebar max-h-10 md:max-h-none pb-10 mt-100px md:-ml-sidebarGray md:-mt-15px overflow-hidden md:rounded-tr-sidebarT md:rounded-br-sidebarB relative ease-in-out duration-500
+    }
+    .sidebarLine{
+      @apply h-48 rounded-50% w-50rem rotate-line hidden md:block 
+      /*
+      BlueLine mt-lineBlue -ml-250px
+      GrayLine mt-lineGray -ml-150px
+      */
+    }
+    .sidebarDarkLine{
+      @apply h-48 rounded-50% w-50rem rotate-darkLine -mt-darkLine -ml-150px hidden md:block 
+      /*
+      BlueDarkLine -ml-250px
+      GrayDarkLine -ml-150px
+      */
+    }
+    .sidebarArrow{
+      @apply ease-in-out duration-500 absolute right-1/2 bottom-0 md:right-0 md:bottom-1/2 md:cursor-pointer
+    }
+    /* Sidebar Example
+    <div class="sidebar">
+        <div class="bg-subBlue1 sidebarLine mt-lineBlue -ml-250px"></div>
+        <div class="bg-subBlue2 sidebarDarkLine -ml-250px"></div>
+    </div>
+    <div id="sidebarGray" class="sidebarGray">
+        <div class="bg-subGray1 sidebarLine mt-lineGray -ml-150px"></div>
+        <div class="bg-subGray2 sidebarDarkLine -ml-150px"></div>
+        <i id="sidebarArrow" class="sidebarArrow fa-solid fa-angle-right fa-3x" onclick="openCloseSideBar()"></i>
+    </div>
+    */
+}
