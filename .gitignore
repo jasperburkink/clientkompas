@@ -2,8 +2,13 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/CSV-Com/AuthenticationPoC/obj/Container/AbsoluteOutputAssemblyPath.cache
-/CSV-Com/AuthenticationPoC/obj/Container
+/CSV-Com/AuthenticationPoC/obj
+/CSV-Com/AuthenticationPoC/bin
+/CSV-Com/CVSInfrastructurePoC/obj
+/CSV-Com/CVSInfrastructurePoC/bin
+/CSV-Com/CVSModelPoC/obj
+/CSV-Com/CVSModelPoC/bin
+
 /Poc css framework/test2/node_modules
 /CSV-Com/.vs
 /CSV-Com/.vs/
@@ -22,13 +27,25 @@ obj/
 /CSV-Com/AuthenticationPoC/obj/Debug/net7.0/AuthenticationPoC.assets.cache
 /CSV-Com/AuthenticationPoC/obj/project.nuget.cache
 /CSV-Com/AuthenticationPoC/obj/project.assets.json
+/CSV-Com/AuthenticationPoC/obj/Debug/net7.0/AuthenticationPoC.csproj.CoreCompileInputs.cache
+/CSV-Com/AuthenticationPoC/obj/Debug/net7.0/AuthenticationPoC.assets.cache
+/CSV-Com/AuthenticationPoC/obj/Debug/net7.0/apphost.exe
 /CSV-Com/AuthenticationPoC/obj/AuthenticationPoC.csproj.nuget.g.props
 /CSV-Com/AuthenticationPoC/obj/AuthenticationPoC.csproj.nuget.dgspec.json
 /CSV-Com/CVSInfrastructurePoC/obj/project.nuget.cache
 /CSV-Com/CVSInfrastructurePoC/obj/project.assets.json
+/CSV-Com/CVSInfrastructurePoC/obj/Debug/net7.0/CVSInfrastructurePoC.csproj.CoreCompileInputs.cache
+/CSV-Com/CVSInfrastructurePoC/obj/Debug/net7.0/CVSInfrastructurePoC.assets.cache
 /CSV-Com/CVSInfrastructurePoC/obj/CVSInfrastructurePoC.csproj.nuget.g.props
 /CSV-Com/CVSInfrastructurePoC/obj/CVSInfrastructurePoC.csproj.nuget.dgspec.json
+/CSV-Com/CVSInfrastructurePoC/bin/Debug/net7.0/CVSInfrastructurePoC.deps.json
 /CSV-Com/CVSModelPoC/obj/project.nuget.cache
 /CSV-Com/CVSModelPoC/obj/project.assets.json
+/CSV-Com/CVSModelPoC/obj/Debug/net7.0/CVSModelPoC.csproj.CoreCompileInputs.cache
+/CSV-Com/CVSModelPoC/obj/Debug/net7.0/CVSModelPoC.csproj.AssemblyReference.cache
+/CSV-Com/CVSModelPoC/obj/Debug/net7.0/CVSModelPoC.assets.cache
 /CSV-Com/CVSModelPoC/obj/CVSModelPoC.csproj.nuget.g.props
 /CSV-Com/CVSModelPoC/obj/CVSModelPoC.csproj.nuget.dgspec.json
+/CSV-Com/UI/webapp/node_modules
+/CSV-Com/WebUI/node_modules
+/CSV-Com/UpgradeLog.htm

@@ -1,0 +1,31 @@
+stages:
+    - triggers
+
+# Trigger development pipeline when creating a mergerequest
+trigger_DevPipeline:
+    stage: triggers
+    trigger:
+        include:             
+            - local: DevPipeline.yml
+    only: 
+        - merge_requests
+
+# Trigger feature pipeline when pushing to feature branch
+trigger_FeaturePipeline:    
+    stage: triggers
+    trigger:
+        include:
+          - local: FeaturePipeline.yml
+    only:
+      - /^Feature[0-9]*_*//i 
+#TODO: Hier moeten we nog bepalen hoe we de naamgeving van een feature branch doen. Voor nu is het een regex pattern "Feature[Featurenummer]_". Dus bijv. "feature25_Beschrijving-van-een-feature".
+
+trigger_DevPipelineTest:
+    stage: triggers
+    trigger:
+        include: DevPipeline.yml
+
+#trigger_ReleasePipeline:
+#    stage: triggers
+#    trigger:
+#        include: ReleasePipeline.yml
