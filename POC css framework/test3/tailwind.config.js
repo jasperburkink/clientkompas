@@ -17,17 +17,30 @@ module.exports = {
         '50px' : '50px',
         '150px' : '150px',
         '200px' : '200px',
+        '324px' : '324px', 
+        '748px' : '748px',
         'sidebarBlue' : '374px',
         'sidebarGray' : '474px',
         '50rem' : '50rem'
+      },
+      minWidth: {
+        'sidebarBlue' : '374px',
+        'sidebarGray' : '474px'
       },
       height: {
         '50px' : '50px',
         '65px' : '65px',
         '100px' : '100px',
+        '150px' : '150px',
+        '324px' : '324px', 
         '400px' : '400px',
         '500px' : '500px',
+        '698px' : '698px',
+        '748px' : '748px',
         'sidebar' : '125vh'
+      },
+      maxHeight: {
+        '300px' : '300px'
       },
       margin: {
         '15px' : '15px',
@@ -38,6 +51,7 @@ module.exports = {
         '250px' : '250px',
         'sidebarGray' : '430px',
         'line' : '185px',
+        'lineEmptySidebar' : '785px',
         'darkLine' : '90px'
       },
       padding: {
@@ -51,6 +65,9 @@ module.exports = {
       rotate: {
         "line" : "50deg",
         "darkLine" : "30deg"
+      },
+      textUnderlineOffset: {
+        3: '3px'
       }
     },
   },

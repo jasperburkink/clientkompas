@@ -5,6 +5,11 @@
       .cls-1 {
         fill: #fff;
       }
+      @media screen and (min-width:500px) {
+        .cls-1 {
+          fill: #148CB8;
+        }
+      }
     </style>
   </defs>
   <g>

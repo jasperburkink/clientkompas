@@ -12,15 +12,16 @@
 
     <link rel="stylesheet" href="output.css">
 </head>
-<body class="flex overflow-hidden">
-    <div class="sidebar absolute">
-        <div class="navBtnsContainer"></div>
-        <div class="bg-subBlue1 sidebarLine mt-line -ml-250px"></div>
-        <div class="hidden md:block bg-subBlue2 sidebarDarkLine -ml-250px"></div>
+<body class="md:flex overflow-hidden">
+    <div class="sidebar">
+        <div class="sidebarEmptyLine"></div>
+        <div class="sidebarDarkLine"></div>
     </div>
-    <div class="w-full h-screen flex justify-center content-center flex-wrap flex-col">
-        <img src="/sprong_logo_svg.svg" alt="Logo" class="bg-mainBlue w-fit h-52">
-        <form class="flex flex-col content-center flex-wrap gap-2">
+    <div class="w-screen h-screen flex md:justify-center content-center flex-wrap flex-col">
+        <div class="bg-mainBlue md:bg-transparent w-full h-56 px-16">
+            <img src="/POC css framework/test3/sprong_logo_svg.svg" alt="Logo" class="w-fit h-full md:h-52 my-auto md:mx-auto">
+        </div>
+        <form class="flex flex-col content-center flex-wrap gap-2 mt-50px">
             <input type="text" class="inputField w-[300px]" placeholder="Gebruikersnaam">
             <div class="flex w-[300px]">
                 <input id="inputPassword" type="password" class="inputField w-full" placeholder="Wachtwoord">
