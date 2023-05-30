@@ -13,6 +13,8 @@ namespace Infrastructure.Persistence.CVS
     {
         public DbSet<Gebruiker> Gebruikers { get; set; }
 
+        public DbSet<Cliënt> Cliënten { get; set; }
+
         public CVSDbContext(DbContextOptions<CVSDbContext> options) : base(options) { }
     }
 }

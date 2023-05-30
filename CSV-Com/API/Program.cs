@@ -23,6 +23,7 @@ dbContextOptions => dbContextOptions
                 .EnableSensitiveDataLogging()
 .EnableDetailedErrors());
 
+// TODO: live unitofwork gebruiken die met db communiceerd ipv in memory
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddAutoMapper(typeof(Program));

@@ -9,6 +9,7 @@
   <ItemGroup>
     <Folder Include="Gebruikers\Commands\" />
     <Folder Include="Gebruikers\EventHandlers\" />
+    <Folder Include="Gebruikers\Queries\GetGebruikers\" />
   </ItemGroup>
 
   <ItemGroup>

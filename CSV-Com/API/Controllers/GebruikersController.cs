@@ -1,5 +1,4 @@
-﻿using API.ViewModels;
-using Application.Common.Interfaces.CVS;
+﻿using Application.Common.Interfaces.CVS;
 using AutoMapper;
 using Domain.CVS.Domain;
 using Microsoft.AspNetCore.Mvc;
@@ -12,52 +11,44 @@ namespace API.Controllers
     [ApiController]
     public class GebruikersController : ControllerBase
     {
-        private readonly IMapper _mapper;
 
         private readonly IUnitOfWork _unitOfWork;
 
-        public GebruikersController(IUnitOfWork unitOfWork, IMapper mapper)
+        public GebruikersController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _mapper = mapper;
         }    
 
         // GET: api/<GebruikersController>
         [HttpGet]
-        public IEnumerable<GebruikerViewModel> Get()
+        public IEnumerable<Gebruiker> Get()
         {
             var gebruikers = _unitOfWork.GebruikerRepository.Get().ToList();            
 
-            var gebruikersViewModel = _mapper.Map<List<GebruikerViewModel>>(gebruikers);
-
-            return gebruikersViewModel;
+            return gebruikers;
         }
 
         // GET api/<GebruikersController>/5
         [HttpGet("{id}")]
-        public GebruikerViewModel Get(int id)
+        public Gebruiker Get(int id)
         {
             var gebruiker = _unitOfWork.GebruikerRepository.Get(g => g.Id.Equals(id)).First();
-            return _mapper.Map<GebruikerViewModel>(gebruiker);
+            return gebruiker;
         }
 
         // POST api/<GebruikersController>
         [HttpPost]
-        public void Post([FromBody] GebruikerViewModel gebruikerViewModel)
+        public void Post([FromBody] Gebruiker gebruiker)
         {
-            var gebruiker = _mapper.Map<Gebruiker>(gebruikerViewModel);
-
             _unitOfWork.GebruikerRepository.Insert(gebruiker);
             _unitOfWork.Save();
         }
 
         // PUT api/<GebruikersController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] GebruikerViewModel value)
+        public void Put(int id, [FromBody] Gebruiker value)
         {
-            var gebruiker = _mapper.Map<Gebruiker>(value);
-
-            _unitOfWork.GebruikerRepository.Update(gebruiker);
+            _unitOfWork.GebruikerRepository.Update(value);
             _unitOfWork.Save();
         }
 

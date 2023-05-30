@@ -12,6 +12,7 @@ namespace Infrastructure.Persistence.CVS
     {
         private CVSDbContext context;
         private GenericRepository<Gebruiker> gebruikerRepository;
+        private GenericRepository<Cliënt> cliëntenRepository;
 
         public UnitOfWork(CVSDbContext context)
         {
@@ -28,6 +29,19 @@ namespace Infrastructure.Persistence.CVS
                     gebruikerRepository = new GenericRepository<Gebruiker>(context);
                 }
                 return gebruikerRepository;
+            }
+        }
+
+        public IRepository<Cliënt> CliëntRepository
+        {
+            get
+            {
+
+                if (cliëntenRepository == null)
+                {
+                    cliëntenRepository = new GenericRepository<Cliënt>(context);
+                }
+                return cliëntenRepository;
             }
         }
 
