@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.CVS.Migrations
 {
     [DbContext(typeof(CVSDbContext))]
-    [Migration("20230530114145_DB-init")]
+    [Migration("20230605101747_DB-init")]
     partial class DBinit
     {
         /// <inheritdoc />
@@ -21,88 +21,88 @@ namespace Infrastructure.Persistence.CVS.Migrations
                 .HasAnnotation("ProductVersion", "7.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("Domain.CVS.Domain.Cliënt", b =>
+            modelBuilder.Entity("Domain.CVS.Domain.Client", b =>
                 {
-                    b.Property<int>("CliëntId")
+                    b.Property<int>("ClientId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Achternaam")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("BSNNummer")
+                    b.Property<int>("BSNNumber")
                         .HasColumnType("int");
 
-                    b.Property<string>("Emailadres")
+                    b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("Huisnummer")
+                    b.Property<string>("EmailAddress")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("HouseNumber")
                         .HasColumnType("int");
 
-                    b.Property<string>("HuisnummerToevoeging")
+                    b.Property<string>("HouseNumberAddition")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Mobielnummer")
+                    b.Property<string>("Infix")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Postcode")
+                    b.Property<string>("Initials")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Roepnaam")
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("StraatNaam")
+                    b.Property<string>("MobileNumber")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Telefoonnummer")
+                    b.Property<string>("PostalCode")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Tussenvoegsel")
+                    b.Property<string>("Residence")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Voorletters")
+                    b.Property<string>("StreetName")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Woonplaats")
+                    b.Property<string>("TelephoneNumber")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.HasKey("CliëntId");
+                    b.HasKey("ClientId");
 
-                    b.ToTable("Cliënten");
+                    b.ToTable("Clients");
                 });
 
-            modelBuilder.Entity("Domain.CVS.Domain.Gebruiker", b =>
+            modelBuilder.Entity("Domain.CVS.Domain.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Achternaam")
+                    b.Property<string>("EmailAddress")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Email")
+                    b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Voornaam")
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Gebruikers");
+                    b.ToTable("Users");
                 });
 #pragma warning restore 612, 618
         }
