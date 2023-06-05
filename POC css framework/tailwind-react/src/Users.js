@@ -8,15 +8,23 @@ import { NavButtonGray } from './components/navButtonGray';
 import { SearchInputField } from './components/searchInputField';
 import { NavTitle } from './components/navTitle';
 import { Button } from './components/button';
-import { InputField } from './components/inputField';
 import { ProfilePicture } from './components/profilePicture';
 import { InfoBox } from './components/infoBox';
 import { InfoBoxPartClientInfo } from './components/infoBoxPartClientInfo';
+import { InfoBoxPartTrajectInfo } from './components/infoBoxPartTrajectInfo';
 
+// Deze data is een mock voor nu, zoals besproken in de sprint planning
+var client = {
+    naam: "Naam Naam",
+    mobiel: "06-12345678",
+    straat: "Straatstraat 2",
+    email: "email@email.mail",
+    adres: "1234 AB Adres"
+};
 
 function Users() {
     return (
-        <div className="flex flex-col md:flex-row h-screen md:h-auto">
+        <div className="flex flex-col lg:flex-row h-screen lg:h-auto">
             <div className="lg:flex">
                 <Sidebar>
                     <NavButton text="Cliënten" icon="Gebruikers"/>
@@ -36,9 +44,10 @@ function Users() {
                     </div>
                 </SidebarGray>
             </div>
-            <div className="flex w-screen overflow-scroll snap-x snap-mandatory md:overflow-visible md:grid md:grid-cols-3 md:grid-rows-infoBox md:mt-100px md:gap-50px md:mx-50px">
-                <InfoBox type="moreInfo" button1="Cliënt Aanpassen" button2="Urenoverzicht">
+            <div className="flex w-screen md:w-fit overflow-scroll snap-x snap-mandatory md:overflow-visible md:grid md:grid-cols-3 md:grid-rows-infoBox md:m-5 lg:my-100px lg:mx-50px lg:gap-clienten">
+                <InfoBox type="Client" button1="Cliënt Aanpassen" button2="Urenoverzicht" classNameMoreInfoBtns="md:bg-gradient-to-t md:from-white md:from-30% md:to-transparent md:to-30% ">
                      <InfoBoxPartClientInfo 
+                        client={client}
                         naam="Naam Naam" mobiel="06-12345678" straat="Straatstraat 2" email="email@mail.mail" adres="1234 AB Adres" geboortedatum="1-2-2000" bsn="bsn" 
                         contactNaam="Naam Naam" contactStaat="Ongehuwd" contactMobiel="06-12345678" contactRijbewijs="Geen"
                         diagnose="Autisme" contract="/" uitkeringsvorm="/" van="/" werk="SBICT" tot="/" functie="/"
@@ -46,23 +55,16 @@ function Users() {
                      />
                 </InfoBox>
                 <ProfilePicture />
-                <InfoBox button1="Traject Aanpassen" button2="Nieuw Traject">
-                    <div className='p-3'>
-                        <ul className="twoSpaceUlBox md:h-150px">
-                            <li className="pieceTitle">Traject info</li>
-                            <InputField type="dropdown"> 
-                                <ul>
-                                    <li>Test1</li>
-                                    <li>Test2</li>
-                                </ul>
-                            </InputField>
-                            <li>Begindatum</li>
-                            <li>Traject type</li>
-                            <li>Einddatum</li>
-                        </ul>
-                    </div>
+                <InfoBox type="Traject" button1="Traject Aanpassen" button2="Nieuw Traject" classNameMoreInfoBtns="md:bg-gradient-to-t md:from-white md:from-70% md:to-transparent md:to-70% ">
+                    <InfoBoxPartTrajectInfo 
+                        ordernummer="1234" trajectType="Jobcoach extern" opdrachtgever="UWV" 
+                        begindatum="01-01-2022" einddatum="31-12-2022" budgetBedrag="5000" uurtarief="40"
+                        teBestedenUren="125" coachWerktVoor="/"
+                    />
                 </InfoBox>
-                <Button type="btnSollid" text="De-activeer cliënt" className="hidden"/>
+                <div className='h-[300px] flex flex-wrap justify-end content-end'>
+                    <Button type="btnSollid" text="De-activeer cliënt" className="hidden md:block"/>
+                </div>
                 
             </div>
             <Copyright />

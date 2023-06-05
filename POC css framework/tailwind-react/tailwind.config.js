@@ -72,7 +72,8 @@ module.exports = {
           3: '3px'
         },
         gap: {
-          '50px' : '50px'
+          '50px' : '50px',
+          'clienten' : '25px 50px'
         },
         gridTemplateRows: {
           "infoBox" : "min-content min-content"

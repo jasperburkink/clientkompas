@@ -17,8 +17,8 @@ export function InputField(props) {
     var type = props.type
     if(type === "dropdown"){
         return (
-        <div className='col-span-2'>
-            <button type="text" className="col-span-2 inputField flex justify-between" placeholder={props.placeholder} onClick={openDropDown}>
+        <div className='md:col-span-2'>
+            <button type="text" className="md:col-span-2 inputField flex justify-between" placeholder={props.placeholder} onClick={openDropDown}>
                 Traject Naam <FontAwesomeIcon icon={faSortDown} className="fa-solid fa-xl my-auto" />
             </button>
             <div id='dropdown' className='absolute bg-mainLightGray w-full p-2.5 invisible'>

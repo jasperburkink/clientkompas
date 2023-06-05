@@ -14,7 +14,7 @@
       @apply bg-mainLightGray border-2 border-subGray2 focus:border-mainBlue focus:ring-1 ring-mainBlue text-gray-900 outline-none text-sm rounded-lg block w-full p-2.5;
     }
     .profilePictureBox{
-      @apply w-324px h-324px bg-mainGray rounded-3xl flex justify-center content-center flex-wrap p-16
+      @apply bg-mainGray rounded-3xl flex justify-center content-center flex-wrap aspect-square 
     }
 
     .logoBar{
@@ -84,15 +84,15 @@
     }
 
     .infoBox{
-      @apply flex flex-col relative h-full md:h-fit w-full md:max-h-300px ease-in-out duration-500
+      @apply flex flex-col relative h-full md:h-fit w-full md:max-h-[330px] ease-in-out duration-500
     }
 
     .twoSpaceUlBox{
-      @apply grid grid-cols-1 md:grid-cols-2 shrink-0
+      @apply grid grid-cols-1 md:grid-cols-2 shrink-0 gap-3
     }
 
     .pieceTitle{
-      @apply md:col-span-2 text-lg font-bold underline underline-offset-3 decoration-gray-400 decoration-2
+      @apply md:col-span-2 text-lg font-bold underline underline-offset-3 decoration-gray-400 decoration-2 py-3 md:p-0
     }
 
 }
