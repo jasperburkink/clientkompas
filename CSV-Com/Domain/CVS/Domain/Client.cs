@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Domain.CVS.Domain
 {
-    public class Cliënt
+    public class Client
     {
-        public int CliëntId { get; set; }
+        public int ClientId { get; set; }
 
         public int BSNNummer { get; set; }
 

@@ -11,7 +11,7 @@ namespace Application.Common.Interfaces.CVS
     {
         IRepository<Gebruiker> GebruikerRepository { get; }
 
-        IRepository<Cliënt> CliëntRepository { get; }
+        IRepository<Client> ClientRepository { get; }
 
         public void Save();
     }
