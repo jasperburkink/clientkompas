@@ -15,58 +15,58 @@ namespace Infrastructure.Persistence.CVS.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Cliënten",
+                name: "Clients",
                 columns: table => new
                 {
-                    CliëntId = table.Column<int>(type: "int", nullable: false)
+                    ClientId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    BSNNummer = table.Column<int>(type: "int", nullable: false),
-                    Roepnaam = table.Column<string>(type: "longtext", nullable: false)
+                    BSNNumber = table.Column<int>(type: "int", nullable: false),
+                    DisplayName = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Voorletters = table.Column<string>(type: "longtext", nullable: false)
+                    Initials = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Tussenvoegsel = table.Column<string>(type: "longtext", nullable: false)
+                    Infix = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Achternaam = table.Column<string>(type: "longtext", nullable: false)
+                    LastName = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    StraatNaam = table.Column<string>(type: "longtext", nullable: false)
+                    StreetName = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Huisnummer = table.Column<int>(type: "int", nullable: false),
-                    HuisnummerToevoeging = table.Column<string>(type: "longtext", nullable: false)
+                    HouseNumber = table.Column<int>(type: "int", nullable: false),
+                    HouseNumberAddition = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Postcode = table.Column<string>(type: "longtext", nullable: false)
+                    PostalCode = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Woonplaats = table.Column<string>(type: "longtext", nullable: false)
+                    Residence = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Telefoonnummer = table.Column<string>(type: "longtext", nullable: false)
+                    TelephoneNumber = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Mobielnummer = table.Column<string>(type: "longtext", nullable: false)
+                    MobileNumber = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Emailadres = table.Column<string>(type: "longtext", nullable: false)
+                    EmailAddress = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Cliënten", x => x.CliëntId);
+                    table.PrimaryKey("PK_Clients", x => x.ClientId);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Gebruikers",
+                name: "Users",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Voornaam = table.Column<string>(type: "longtext", nullable: false)
+                    FirstName = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Achternaam = table.Column<string>(type: "longtext", nullable: false)
+                    LastName = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Email = table.Column<string>(type: "longtext", nullable: false)
+                    EmailAddress = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Gebruikers", x => x.Id);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
         }
@@ -75,10 +75,10 @@ namespace Infrastructure.Persistence.CVS.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Cliënten");
+                name: "Clients");
 
             migrationBuilder.DropTable(
-                name: "Gebruikers");
+                name: "Users");
         }
     }
 }
