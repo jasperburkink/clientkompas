@@ -9,7 +9,7 @@ namespace Application.Common.Interfaces.CVS
 {
     public interface IUnitOfWork : IDisposable
     {
-        IRepository<Gebruiker> GebruikerRepository { get; }
+        IRepository<User> UserRepository { get; }
 
         IRepository<Client> ClientRepository { get; }
 

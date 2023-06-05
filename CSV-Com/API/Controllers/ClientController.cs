@@ -6,11 +6,11 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ClientsController : Controller
+    public class ClientController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public ClientsController(IUnitOfWork unitOfWork)
+        public ClientController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }

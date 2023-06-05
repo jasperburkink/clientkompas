@@ -3,7 +3,7 @@ using Domain.CVS.Domain;
 
 namespace API.AutoMapper
 {
-    public class GebruikerProfile : Profile
+    public class UserProfile : Profile
     {
         //public GebruikerProfile()
         //{

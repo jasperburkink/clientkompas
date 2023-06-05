@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 
 namespace Domain.CVS.Domain
 {
-    public class Gebruiker
+    public class User
     {
         [Key]
         public int Id { get; set; }
 
         [Required]
-        public string Voornaam { get; set; }
+        public string FirstName { get; set; }
 
         [Required]
-        public string Achternaam { get; set; }
+        public string LastName { get; set; }
 
         [Required]
-        public string Email { get; set; }
+        public string EmailAddress { get; set; }
     }
 }
