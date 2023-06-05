@@ -7,9 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Gebruikers\Commands\" />
-    <Folder Include="Gebruikers\EventHandlers\" />
-    <Folder Include="Gebruikers\Queries\GetGebruikers\" />
+    <Folder Include="Users\Commands\" />
+    <Folder Include="Users\EventHandlers\" />
+    <Folder Include="Users\Queries\GetUsers\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -10,30 +10,30 @@ namespace Domain.CVS.Domain
     {
         public int ClientId { get; set; }
 
-        public int BSNNummer { get; set; }
+        public int BSNNumber { get; set; }
 
-        public string Roepnaam { get; set; }
+        public string DisplayName { get; set; }
 
-        public string Voorletters { get; set; }
+        public string Initials { get; set; }
 
-        public string Tussenvoegsel { get; set; }
+        public string Infix { get; set; }
 
-        public string Achternaam { get; set; }
+        public string LastName{ get; set; }
 
-        public string StraatNaam { get; set; }
+        public string StreetName { get; set; }
 
-        public int Huisnummer { get; set; }
+        public int HouseNumber { get; set; }
 
-        public string HuisnummerToevoeging { get; set; }
+        public string HouseNumberAddition { get; set; }
 
-        public string Postcode { get; set; }
+        public string PostalCode { get; set; }
 
-        public string Woonplaats { get; set; }
+        public string Residence { get; set; }
 
-        public string Telefoonnummer { get; set; }
+        public string TelephoneNumber { get; set; }
 
-        public string Mobielnummer { get; set; }
+        public string MobileNumber { get; set; }
 
-        public string Emailadres { get; set; }                
+        public string EmailAddress { get; set; }                
     }
 }
