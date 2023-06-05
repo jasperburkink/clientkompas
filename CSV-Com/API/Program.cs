@@ -1,4 +1,6 @@
+using Application.Common.Interfaces.CVS;
 using Infrastructure.Persistence.CVS;
+using Microsoft.DotNet.Scaffolding.Shared.ProjectModel;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,7 +21,12 @@ dbContextOptions => dbContextOptions
                 // be changed or removed for production.
                 .LogTo(Console.WriteLine, LogLevel.Information)
                 .EnableSensitiveDataLogging()
-                .EnableDetailedErrors());
+.EnableDetailedErrors());
+
+// TODO: live unitofwork gebruiken die met db communiceerd ipv in memory
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
