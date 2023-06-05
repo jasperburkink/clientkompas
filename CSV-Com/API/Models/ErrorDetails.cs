@@ -2,6 +2,7 @@
 
 namespace API.Models
 {
+    // TODO: Replace this class with a record struct/class.
     public class ErrorDetails
     {
         public int StatusCode { get; set; }
