@@ -1,3 +1,4 @@
+using API.Policies;
 using Application.Common.Interfaces.CVS;
 using Infrastructure.Persistence.CVS;
 using Microsoft.DotNet.Scaffolding.Shared.ProjectModel;
@@ -28,7 +29,8 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddAutoMapper(typeof(Program));
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = new LowerCaseNamingPolicy());
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
