@@ -27,6 +27,6 @@ export function InputField(props) {
         </div>
         )
     }else{
-        return (<input type="text" className="inputField w-32 h-10" placeholder={props.placeholder} required></input> );
+        return (<input type="text" className="inputField w-32 h-10" placeholder={props.placeholder} required></input> );        
     } 
 }

@@ -11,7 +11,10 @@
       @apply text-mainBlue w-200px h-50px text-center font-medium text-sm border-4 rounded-lg border-mainBlue;
     }
     .inputField {
-      @apply bg-mainLightGray border-2 border-subGray2 focus:border-mainBlue focus:ring-1 ring-mainBlue text-gray-900 outline-none text-sm rounded-lg block w-full p-2.5;
+      @apply bg-mainLightGray border-2 border-subGray2 placeholder-subGray2 focus:border-mainBlue focus:ring-1 ring-mainBlue text-gray-900 outline-none text-sm rounded-lg block w-full p-2.5;
+    }
+    .inputFieldDropDown {
+      @apply bg-mainLightGray border-2 border-subGray2 text-gray-900 outline-none text-sm rounded-lg block w-full p-2.5;
     }
     .profilePictureBox{
       @apply bg-mainGray rounded-3xl flex justify-center content-center flex-wrap aspect-square 
@@ -92,7 +95,7 @@
     }
 
     .pieceTitle{
-      @apply md:col-span-2 text-lg font-bold underline underline-offset-3 decoration-gray-400 decoration-2 py-3 md:p-0
+      @apply md:col-span-2 text-lg font-bold underline underline-offset-3 decoration-gray-400 decoration-2 py-3 md:p-0 list-none
     }
 
 }

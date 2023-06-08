@@ -12,17 +12,36 @@ import { ProfilePicture } from './components/profilePicture';
 import { InfoBox } from './components/infoBox';
 import { InfoBoxPartClientInfo } from './components/infoBoxPartClientInfo';
 import { InfoBoxPartTrajectInfo } from './components/infoBoxPartTrajectInfo';
+import React, { useEffect, useState } from "react";
+import { useParams } from 'react-router-dom';
 
-// Deze data is een mock voor nu, zoals besproken in de sprint planning
-var client = {
-    naam: "Naam Naam",
-    mobiel: "06-12345678",
-    straat: "Straatstraat 2",
-    email: "email@email.mail",
-    adres: "1234 AB Adres"
-};
+function Clients() {
+    var [ client, setClient ] = useState(null);
+    var { id } = useParams();
 
-function Users() {
+    useEffect(() => {
+        fetch("https://localhost:7017/api/Client")
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                //console.log(data);
+                setClient(data);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }, 
+    [] // Voert nu maar 1 keer uit als het component gerenderd wordt
+    ); 
+
+    if(client == null) {
+        return "loading...";
+    };
+    if(id == null) {
+        id = 0
+    };
+
     return (
         <div className="flex flex-col lg:flex-row h-screen lg:h-auto">
             <div className="lg:flex">
@@ -34,20 +53,21 @@ function Users() {
                     <NavButton text="Uitloggen" icon="Uitloggen"/>
                 </Sidebar>
                 <SidebarGray>
-                    <NavTitle lijstNaam="Cliëntenlijst"/>
+                    <NavTitle lijstNaam="Cliëntenlijst" path="/ClientsAdd"/>
                     <SearchInputField />
                     <div className="h-fit">
-                        <NavButtonGray text="Onderdeel lijst" />
-                        <NavButtonGray text="Placeholder" />
-                        <NavButtonGray text="HolderPlace" />
-                        <NavButtonGray text="Placie Holderie" />
+                        {client.map((infoClient, pathNumber) => {
+                            return (
+                                <NavButtonGray key={pathNumber} path={"/Clients/" + pathNumber} text={infoClient.displayName+ " " + infoClient.infix + " " + infoClient.lastName} />
+                            )
+                        })}
                     </div>
                 </SidebarGray>
             </div>
             <div className="flex w-screen md:w-fit overflow-scroll snap-x snap-mandatory md:overflow-visible md:grid md:grid-cols-3 md:grid-rows-infoBox md:m-5 lg:my-100px lg:mx-50px lg:gap-clienten">
-                <InfoBox type="Client" button1="Cliënt Aanpassen" button2="Urenoverzicht" classNameMoreInfoBtns="md:bg-gradient-to-t md:from-white md:from-30% md:to-transparent md:to-30% ">
+                <InfoBox type="Client" buttonPrimaryText="Cliënt Aanpassen" buttonSecondaryText="Urenoverzicht" classNameMoreInfoBtns="md:bg-gradient-to-t md:from-white md:from-30% md:to-transparent md:to-30% ">
                      <InfoBoxPartClientInfo 
-                        client={client}
+                        client={client[id]}
                         naam="Naam Naam" mobiel="06-12345678" straat="Straatstraat 2" email="email@mail.mail" adres="1234 AB Adres" geboortedatum="1-2-2000" bsn="bsn" 
                         contactNaam="Naam Naam" contactStaat="Ongehuwd" contactMobiel="06-12345678" contactRijbewijs="Geen"
                         diagnose="Autisme" contract="/" uitkeringsvorm="/" van="/" werk="SBICT" tot="/" functie="/"
@@ -55,7 +75,7 @@ function Users() {
                      />
                 </InfoBox>
                 <ProfilePicture />
-                <InfoBox type="Traject" button1="Traject Aanpassen" button2="Nieuw Traject" classNameMoreInfoBtns="md:bg-gradient-to-t md:from-white md:from-70% md:to-transparent md:to-70% ">
+                <InfoBox type="Traject" buttonPrimaryText="Traject Aanpassen" buttonSecondaryText="Nieuw Traject" classNameMoreInfoBtns="md:bg-gradient-to-t md:from-white md:from-70% md:to-transparent md:to-70% ">
                     <InfoBoxPartTrajectInfo 
                         ordernummer="1234" trajectType="Jobcoach extern" opdrachtgever="UWV" 
                         begindatum="01-01-2022" einddatum="31-12-2022" budgetBedrag="5000" uurtarief="40"
@@ -72,4 +92,4 @@ function Users() {
     )
 }
 
-export default Users;
+export default Clients;

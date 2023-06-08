@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import Users from './Users';
+import Clients from './Clients';
+import ClientsAdd from './ClientsAdd';
 import reportWebVitals from './reportWebVitals';
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -13,7 +14,12 @@ root.render(
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<App/>} />
-        <Route path='/Users' element={<Users/>}/>
+        <Route path='/Clients' element={<Clients/>}/>
+        <Route path='/Clients/:id' element={<Clients/>}/>
+        <Route path='/ClientsAdd' element={<ClientsAdd/>}/>
+        <Route path='/ClientsAdd/:id' element={<ClientsAdd/>}/>
+        {/* <Route path="/user/edit/{id}" element={<EditUser mode="edit"/>}/>
+        <Route path="/user/new" element={<EditUser mode="add"/>}/> */}
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

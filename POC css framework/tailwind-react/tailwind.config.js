@@ -23,7 +23,8 @@ module.exports = {
           '748px' : '748px',
           'sidebarBlue' : '374px',
           'sidebarGray' : '474px',
-          '50rem' : '50rem'
+          '50rem' : '50rem',
+          '4/5-45px' : 'calc(80% - 45px)'
         },
         minWidth: {
           'sidebarBlue' : '374px',

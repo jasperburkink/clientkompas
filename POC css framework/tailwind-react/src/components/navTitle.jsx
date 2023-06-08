@@ -9,7 +9,7 @@ export function NavTitle(props) {
         <React.Fragment>
             <div className="flex justify-between px-1">
                 <div className="text-lg font-semibold">{props.lijstNaam}</div>
-                <FontAwesomeIcon icon={faPlus} className="fa-lg my-auto" />
+                <FontAwesomeIcon icon={faPlus} className="fa-lg my-auto cursor-pointer" onClick={event =>  window.location.href=[props.path]}/>
             </div>
             <hr className="hidden md:block h-px bg-black border-0 -mt-1"/>
         </React.Fragment>
