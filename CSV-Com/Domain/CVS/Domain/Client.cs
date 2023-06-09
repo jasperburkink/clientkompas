@@ -39,15 +39,15 @@ namespace Domain.CVS.Domain
 
         public MaritalStatus MaritalStatus { get; set; }
 
-        public List<DriversLicence> DriversLicence { get; set; }
+        public ICollection<DriversLicence> DriversLicence { get; set; }
 
-        public List<EmergencyPerson> EmergencyPeople { get; set; }
+        public ICollection<EmergencyPerson> EmergencyPeople { get; set; }
 
-        public List<Diagnosis> Diagnoses { get; set; }
+        public ICollection<Diagnosis> Diagnoses { get; set; }
 
         public BenefitForm BenefitForm { get; set; }
 
-        public List<WorkingContract> WorkingContract { get; set; }
+        public ICollection<WorkingContract> WorkingContract { get; set; }
 
         public string Remarks { get; set; }
     }

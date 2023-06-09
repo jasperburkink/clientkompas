@@ -26,7 +26,7 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public Client Get(int id)
         {
-            var client = _unitOfWork.ClientRepository.Get(c => c.ClientId.Equals(id)).First();
+            var client = _unitOfWork.ClientRepository.Get(c => c.Id.Equals(id)).First();
             return client;
         }
 
