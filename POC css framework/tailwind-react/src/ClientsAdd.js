@@ -19,9 +19,9 @@ function ClientsAdd() {
     const [initials, setInitials] = useState('');
     const [prefixLastName, setPrefixLastName] = useState('');
     const [lastName, setLastName] = useState('');
-    const [sex, setSex] = useState('');
+    const [sex, setSex] = useState(0);
     const [streetName, setStreetName] = useState('');
-    const [houseNumber, setHouseNumber] = useState('');
+    const [houseNumber, setHouseNumber] = useState(0);
     const [houseNumberAddition, setHouseNumberAddition] = useState('');
     const [postalCode, setPostalCode] = useState('');
     const [residence, setResidence] = useState('');
@@ -52,7 +52,7 @@ function ClientsAdd() {
     ); 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const newClient = {identificationNumber, firstName, initials, prefixLastName, lastName, streetName, houseNumber, houseNumberAddition, postalCode, residence, telephoneNumber, emailAddress}
+        const newClient = {identificationNumber, firstName, initials, prefixLastName, lastName, streetName, houseNumber, houseNumberAddition, postalCode, residence, telephoneNumber, emailAddress, remarks}
         console.log(newClient)
         
 //, {mode: 'cors'}
@@ -61,8 +61,9 @@ const headers = {
     'Accept' : '*/*',
     'accept':'application/json',
     'content-type':'application/json',
-    'Access-Control-Allow-Origin':'http://localhost:7017',
-    'Access-Control-Allow-Origin':'http://localhost:3000',
+    'Access-Control-Allow-Origin':'https://localhost:7017',
+    'Access-Control-Allow-Origin':'https://localhost:3000',
+    "Access-Control-Allow-Origin": "*",
     "Content-Type" : "application/json",
 
     "Access-Control-Allow-Origin": "*",
@@ -75,20 +76,7 @@ const headers = {
             method: 'POST',
             mode: 'cors',
             headers: headers,
-            body: JSON.stringify({
-                identificationNumber: 7,
-                firstName: "aaa",
-                emailAddress: "",
-                houseNumber: 0,
-                houseNumberAddition: "",
-                prefixLastName: "",
-                initials: "",
-                lastName: "",
-                postalCode: "",
-                residence: "",
-                streetName: "",
-                telephoneNumber: ""
-            })
+            body: JSON.stringify(newClient)
         }).then((response) =>{
             console.log("new client added")
         }).catch(error => {
@@ -108,19 +96,19 @@ const headers = {
                 <div className="">
                     <InputFieldText value={identificationNumber} onChange={(e) => setIdentificationNumber(e.target.value)} text="BSN" placeholder="BSN nummer" required={true}/>
                     <div className='flex w-full justify-between'>
-                        <InputFieldText type="small" text="Voorletters" placeholder="b.v. A B"/>
-                        <InputFieldText type="small" text="Tussenvoegsel" placeholder="b.v. de"/>
+                        <InputFieldText value={initials} onChange={(e) => setInitials(e.target.value)} type="small" text="Voorletters" placeholder="b.v. A B"/>
+                        <InputFieldText value={prefixLastName} onChange={(e) => setPrefixLastName(e.target.value)} type="small" text="Tussenvoegsel" placeholder="b.v. de"/>
                     </div>
-                    <InputFieldText text="Straatnaam" placeholder="Straatnaam"/>
-                    <InputFieldText text="Postcode" placeholder="b.v. 1234 AA"/>
-                    <InputFieldText text="Telefoon" placeholder="b.v. 0543-123456"/>
+                    <InputFieldText value={streetName} onChange={(e) => setStreetName(e.target.value)} text="Straatnaam" placeholder="Straatnaam"/>
+                    <InputFieldText value={postalCode} onChange={(e) => setPostalCode(e.target.value)} text="Postcode" placeholder="b.v. 1234 AA"/>
+                    <InputFieldText value={telephoneNumber} onChange={(e) => setTelephoneNumber(e.target.value)} text="Telefoon" placeholder="b.v. 0543-123456"/>
                     <InputFieldText text="Geboortedatum" placeholder="b.v. 01-01-2001"/>
-                    <InputFieldText type="dropdown" text="Burgelijke staat" placeholder="Kies uit de lijst" />
+                    <InputFieldText value={maritalStatus} onChange={(e) => setMaritalStatus(e.target.value)} type="dropdown" text="Burgelijke staat" placeholder="Kies uit de lijst" />
 
                 </div>
                 <div className="">
                     <InputFieldText value={firstName} onChange={(e) => setFirstName(e.target.value)} text="RoepNaam" placeholder="RoepNaam"/>
-                    <InputFieldText text="AchterNaam" placeholder="Achternaam"/>
+                    <InputFieldText value={lastName} onChange={(e) => setLastName(e.target.value)} text="AchterNaam" placeholder="Achternaam"/>
                     <div className='flex w-full justify-between'>
                         <InputFieldText type="small" text="Huisnummer" placeholder="Huisnummer"/>
                         <InputFieldText type="small" text="Toevoegingen" placeholder="b.v. a"/>

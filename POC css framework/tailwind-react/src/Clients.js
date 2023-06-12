@@ -40,15 +40,9 @@ function Clients() {
     return (
         <div className="flex flex-col lg:flex-row h-screen lg:h-auto">
             <SidebarFull client={client} />
-            <div className="flex w-screen md:w-fit overflow-scroll snap-x snap-mandatory md:overflow-visible md:grid md:grid-cols-3 md:grid-rows-infoBox md:m-5 lg:my-100px lg:mx-50px lg:gap-clienten">
+            <div className="flex w-screen md:w-full overflow-scroll snap-x snap-mandatory md:overflow-visible md:grid md:grid-cols-3 md:grid-rows-infoBox md:m-5 lg:my-100px lg:mx-50px lg:gap-clienten">
                 <InfoBox type="Client" buttonPrimaryText="Cliënt Aanpassen" buttonSecondaryText="Urenoverzicht" classNameMoreInfoBtns="md:bg-gradient-to-t md:from-white md:from-30% md:to-transparent md:to-30% ">
-                     <InfoBoxPartClientInfo 
-                        client={client[id]}
-                        naam="Naam Naam" mobiel="06-12345678" straat="Straatstraat 2" email="email@mail.mail" adres="1234 AB Adres" geboortedatum="1-2-2000" bsn="bsn" 
-                        contactNaam="Naam Naam" contactStaat="Ongehuwd" contactMobiel="06-12345678" contactRijbewijs="Geen"
-                        diagnose="Autisme" contract="/" uitkeringsvorm="/" van="/" werk="SBICT" tot="/" functie="/"
-                        opmerking="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-                     />
+                     <InfoBoxPartClientInfo client={client[id]} geboortedatum="1-2-2000" />
                 </InfoBox>
                 <ProfilePicture />
                 <InfoBox type="Traject" buttonPrimaryText="Traject Aanpassen" buttonSecondaryText="Nieuw Traject" classNameMoreInfoBtns="md:bg-gradient-to-t md:from-white md:from-70% md:to-transparent md:to-70% ">

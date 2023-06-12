@@ -48,7 +48,10 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: "CvsCustomCorsPolicy",
                       policy =>
                       {
-                          policy.WithOrigins("http://localhost:3000");
+                          policy.WithOrigins("http://localhost:3000")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials();
                       });
 });
 
