@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
@@ -22,30 +23,23 @@ namespace Infrastructure.Persistence.CVS
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder
-     .Entity<Client>()
-     .Property(e => e.DriversLicence)
-     .HasConversion(
-         v => string.Join(",", v.Select(e => e.ToString("D")).ToArray()),
-         v => v.Split(new[] { ',' })
-           .Select(e => Enum.Parse(typeof(DriversLicence), e))
-           .Cast<DriversLicence>()
-           .ToList());
+            modelBuilder.Entity<Client>().HasMany(c => c.Diagnoses)
+                .WithOne(d => d.Client)
+                .OnDelete(DeleteBehavior.Cascade);
 
-        //    modelBuilder.Entity<Client>()
-        //.Property(e => e.DriversLicence)
-        //.HasConversion(
-        //    v => string.Join(',', v),
-        //    v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList() ?? new List<DriversLicence>())
-        //.Metadata.SetValueComparer(valueComparer);
+            modelBuilder.Entity<Client>().HasMany(c => c.DriversLicences)
+                .WithOne(dl => dl.Client)
+                .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<Client>().HasMany(c => c.EmergencyPeople)
+                .WithOne(ep => ep.Client)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            //        modelBuilder
-            //.Entity<Client>()
-            //.Property(c => c.DriversLicence)
-            //.HasConversion(
-            //  v => v.ToString(),
-            //  v => (DriversLicence)Enum.Parse(typeof(DriversLicence), v));
+            modelBuilder.Entity<Client>().HasMany(c => c.WorkingContracts)
+                .WithOne(wc => wc.Client)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

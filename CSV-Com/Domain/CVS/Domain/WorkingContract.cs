@@ -11,6 +11,8 @@ namespace Domain.CVS.Domain
     {
         public int Id { get; set; }
 
+        public virtual Client Client { get; set; }
+
         public string CompanyName { get; set; }
 
         public string Function { get; set; }
