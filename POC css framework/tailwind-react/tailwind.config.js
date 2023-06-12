@@ -77,7 +77,10 @@ module.exports = {
           'clienten' : '25px 50px'
         },
         gridTemplateRows: {
-          "infoBox" : "min-content min-content"
+          "infoBox" : "min-content min-content",
+        },
+        gridTemplateColumns: {
+          "halfhalf" : "50% 50%"
         }
     },
   },
