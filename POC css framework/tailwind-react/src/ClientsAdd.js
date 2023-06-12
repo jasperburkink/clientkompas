@@ -14,19 +14,26 @@ function ClientsAdd() {
     var [ client, setClient ] = useState(null);
     const { id } = useParams();
 
-    const [bsnNumber, setBsnNumber] = useState('');
-    const [displayName, setDisplayName] = useState('');
+    const [identificationNumber, setIdentificationNumber] = useState('');
+    const [firstName, setFirstName] = useState('');
     const [initials, setInitials] = useState('');
-    const [infix, setInfix] = useState('');
+    const [prefixLastName, setPrefixLastName] = useState('');
     const [lastName, setLastName] = useState('');
+    const [sex, setSex] = useState('');
     const [streetName, setStreetName] = useState('');
     const [houseNumber, setHouseNumber] = useState('');
     const [houseNumberAddition, setHouseNumberAddition] = useState('');
     const [postalCode, setPostalCode] = useState('');
     const [residence, setResidence] = useState('');
     const [telephoneNumber, setTelephoneNumber] = useState('');
-    const [mobileNumber, setMobileNumber] = useState('');
     const [emailAddress, setEmailAddress] = useState('');
+    const [maritalStatus, setMaritalStatus] = useState('');
+    const [driversLicences, setDriversLicences] = useState([]);
+    const [emergencyPeople, setEmergencyPeople] = useState([]);
+    const [diagnoses, setDiagnoses] = useState([]);
+    const [benefitForm, setBenefitForm] = useState('');
+    const [workingContracts, setWorkingContracts] = useState([]);
+    const [remarks, setRemarks] = useState('');
 //, {mode: 'cors'}
     useEffect(() => {
         fetch("https://localhost:7017/api/Client")
@@ -45,7 +52,7 @@ function ClientsAdd() {
     ); 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const newClient = {bsnNumber, displayName, initials, infix, lastName, streetName, houseNumber, houseNumberAddition, postalCode, residence, telephoneNumber, mobileNumber, emailAddress}
+        const newClient = {identificationNumber, firstName, initials, prefixLastName, lastName, streetName, houseNumber, houseNumberAddition, postalCode, residence, telephoneNumber, emailAddress}
         console.log(newClient)
         
 //, {mode: 'cors'}
@@ -69,15 +76,14 @@ const headers = {
             mode: 'cors',
             headers: headers,
             body: JSON.stringify({
-                bsnNumber: 7,
-                displayName: "aaa",
+                identificationNumber: 7,
+                firstName: "aaa",
                 emailAddress: "",
                 houseNumber: 0,
                 houseNumberAddition: "",
-                infix: "",
+                prefixLastName: "",
                 initials: "",
                 lastName: "",
-                mobileNumber: "",
                 postalCode: "",
                 residence: "",
                 streetName: "",
@@ -100,7 +106,7 @@ const headers = {
                 <div className="pieceTitle">Cliënt Aanmaken</div>
                 <div className='md:col-span-2'>Client gegevens</div>
                 <div className="">
-                    <InputFieldText value={bsnNumber} onChange={(e) => setBsnNumber(e.target.value)} text="BSN" placeholder="BSN nummer" required={true}/>
+                    <InputFieldText value={identificationNumber} onChange={(e) => setIdentificationNumber(e.target.value)} text="BSN" placeholder="BSN nummer" required={true}/>
                     <div className='flex w-full justify-between'>
                         <InputFieldText type="small" text="Voorletters" placeholder="b.v. A B"/>
                         <InputFieldText type="small" text="Tussenvoegsel" placeholder="b.v. de"/>
@@ -113,7 +119,7 @@ const headers = {
 
                 </div>
                 <div className="">
-                    <InputFieldText value={displayName} onChange={(e) => setDisplayName(e.target.value)} text="RoepNaam" placeholder="RoepNaam"/>
+                    <InputFieldText value={firstName} onChange={(e) => setFirstName(e.target.value)} text="RoepNaam" placeholder="RoepNaam"/>
                     <InputFieldText text="AchterNaam" placeholder="Achternaam"/>
                     <div className='flex w-full justify-between'>
                         <InputFieldText type="small" text="Huisnummer" placeholder="Huisnummer"/>

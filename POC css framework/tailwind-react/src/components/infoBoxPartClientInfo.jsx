@@ -9,11 +9,11 @@ export function InfoBoxPartClientInfo(props) {
         <div className="p-3 md:p-0 md:overflow-hidden w-screen md:w-full h-fit md:h-full gap-3 flex flex-col justify-between">
             <ul className={`twoSpaceUlBox`}>           
                 <li className="pieceTitle">Cliënt info</li>
-                <li className='md:order-1'>{props.client.displayName} {props.client.infix} {props.client.lastName}</li>
+                <li className='md:order-1'>{props.client.firstName} {props.client.prefixLastName} {props.client.lastName}</li>
                 <li className='md:order-3'>{props.client.streetName} {props.client.houseNumber}{props.client.houseNumberAddition}</li>
                 <li className='md:order-5'>{props.client.postalCode} {props.client.residence}</li>
                 <li className='md:order-7'></li>
-                <li className='md:order-8 my-3 md:m-0'>BSN: {props.client.bsnNumber}</li>
+                <li className='md:order-8 my-3 md:m-0'>BSN: {props.client.identificationNumber}</li>
                 <li className='md:order-2'>Mobiel: {props.client.mobileNumber} {props.client.telephoneNumber}</li>
                 <li className='md:order-4'>Email: {props.client.emailAddress}</li>
                 <li className='md:order-6'>Geboortedatum: {props.geboortedatum}</li>

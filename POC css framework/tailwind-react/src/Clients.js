@@ -1,12 +1,6 @@
 import './index.css';
 
 import { Copyright } from './components/copyright';
-import { Sidebar } from './components/sidebar';
-import { SidebarGray } from './components/sidebarGray';
-import { NavButton } from './components/navButton';
-import { NavButtonGray } from './components/navButtonGray';
-import { SearchInputField } from './components/searchInputField';
-import { NavTitle } from './components/navTitle';
 import { Button } from './components/button';
 import { ProfilePicture } from './components/profilePicture';
 import { InfoBox } from './components/infoBox';

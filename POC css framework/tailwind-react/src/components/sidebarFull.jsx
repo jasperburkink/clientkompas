@@ -26,7 +26,7 @@ export function SidebarFull(props) {
                     <div className="h-fit">
                         {props.client.map((infoClient, pathNumber) => {
                             return (
-                                <NavButtonGray key={pathNumber} path={"/Clients/" + pathNumber} text={infoClient.displayName+ " " + infoClient.infix + " " + infoClient.lastName} />
+                                <NavButtonGray key={pathNumber} path={"/Clients/" + pathNumber} text={infoClient.firstName+ " " + infoClient.prefixLastName + " " + infoClient.lastName} />
                             )
                         })}
                     </div>
