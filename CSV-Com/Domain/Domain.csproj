@@ -9,7 +9,6 @@
   <ItemGroup>
     <Folder Include="CVS\Common\" />
     <Folder Include="CVS\Entities\" />
-    <Folder Include="CVS\Enums\" />
     <Folder Include="CVS\Events\" />
     <Folder Include="CVS\Exceptions\" />
     <Folder Include="CVS\ValueObjects\" />

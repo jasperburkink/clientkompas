@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <Folder Include="Persistence\CVS\Migrations\" />
+    <Folder Include="Persistence\CVS\ValueComparers\" />
   </ItemGroup>
 
 </Project>

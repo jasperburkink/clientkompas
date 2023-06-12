@@ -20,15 +20,14 @@ namespace API.Controllers
         [HttpGet]
         public IEnumerable<Client> Get()
         {
-            var clienten = _unitOfWork.ClientRepository.Get().ToList();
-
+            var clienten = _unitOfWork.ClientRepository.Get(includeProperties: "DriversLicences,Diagnoses,EmergencyPeople,WorkingContracts").ToList();
             return clienten;
         }
 
         [HttpGet("{id}")]
         public Client Get(int id)
         {
-            var client = _unitOfWork.ClientRepository.Get(c => c.ClientId.Equals(id)).First();
+            var client = _unitOfWork.ClientRepository.Get(c => c.Id.Equals(id), includeProperties: "DriversLicences,Diagnoses,EmergencyPeople,WorkingContracts").First();
             return client;
         }
 
