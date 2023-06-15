@@ -35,6 +35,8 @@ namespace Domain.CVS.Domain
 
         public string TelephoneNumber { get; set; }
 
+        public DateOnly DateOfBirth { get; set; }
+
         public string EmailAddress { get; set; }        
 
         public MaritalStatus MaritalStatus { get; set; }
