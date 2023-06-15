@@ -1,9 +1,37 @@
 import '../index.css';
+import React, { useEffect, useState } from "react";
+import { ClientWork } from './clientWork';
 
 export function InfoBoxPartClientInfo(props) {
+    const [werkLijst, setwerkLijst] = useState([])
+    
     if(props.client == null) {
         return "loading...";
     } 
+
+    const getAllInfo = (soort, naam) =>{
+            if(props.client[soort].length > 0){
+            let allInfo = ""
+            for (let i = 0; i < props.client[soort].length; i++) {
+                allInfo += props.client[soort][i][naam] + " "
+            }
+            return(allInfo)
+        }else{
+            return("/")
+        }
+    }
+    const GetWork = () =>{
+        if(props.client.workingContracts.length > 0){
+        let allInfo = []
+        for (let i = 0; i < props.client.workingContracts.length; i++) {
+            allInfo.push(<ClientWork key={i} client={props.client} id={i}/>)
+        }
+        console.log(allInfo)
+        return(allInfo)
+    }else{
+        return("/")
+    }
+}
 
     return (
         <div className="p-3 md:p-0 md:overflow-hidden w-screen md:w-full h-fit md:h-full gap-3 flex flex-col justify-between">
@@ -22,21 +50,18 @@ export function InfoBoxPartClientInfo(props) {
             </ul>
             <ul className="twoSpaceUlBox">
                 <li className="md:col-span-2 font-bold pt-3 md:p-0">In geval van nood</li>
-                <li>{props.client.emergencyPeople[0].name}</li>
+                <li>{getAllInfo("emergencyPeople", "name")}</li>
                 <li className='hidden md:block'>Burgelijke staat: {props.client.maritalStatus}</li>
-                <li>Mobiel: {props.client.emergencyPeople[0].telephoneNumber}</li>
-                <li className='hidden md:block'>Rijbewijs: {props.client.driversLicences[0] ? props.client.driversLicences[0].driversLicenceCode : "geen"}</li>
+                <li>Mobiel: {getAllInfo("emergencyPeople", "telephoneNumber")}</li>
+                <li className='hidden md:block'>Rijbewijs: {getAllInfo("driversLicences", "driversLicenceCode")}</li>
             </ul>
             <ul className="twoSpaceUlBox">
                 <li className="md:col-span-2 font-bold pt-3 md:p-0">Overige informatie</li>
-                <li className='md:order-1'>Diagnose(s): {props.client.diagnoses[0].name}</li>
-                <li className='md:order-3'>Uitkeringsvorm: {props.client.benefitForm}</li>
-                <li className='md:order-5'>Werkt bij: {props.client.workingContracts[0].companyName}</li>
-                <li className='md:order-2'>Contract: {props.client.workingContracts[0].contractType}</li>
-                <li className='md:order-4'>Van: {props.client.workingContracts[0].fromDate}</li>
-                <li className='md:order-6'>Tot: {props.client.workingContracts[0].toDate}</li>
-                <li className='md:order-7'>Functie: {props.client.workingContracts[0].function}</li>
+                <li>Diagnose(s): {getAllInfo("diagnoses", "name")}</li>
+                <li>Uitkeringsvorm: {props.client.benefitForm}</li>
             </ul>
+            <GetWork/>
+                
             <ul className="h-fit shrink-0">
                 <li className="md:col-span-2 font-bold pt-3 md:p-0">Opmerkingen</li>
                 <li className="md:col-span-2">{props.client.remarks}</li>

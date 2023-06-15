@@ -6,7 +6,21 @@ import { faAngleDown, faPlus } from "@fortawesome/free-solid-svg-icons";
 import React, { useEffect, useState } from "react";
 import { InputFieldAddition } from './inputFieldAddition';
 
+
+
 export function InputFieldText(props) {  
+    const GetOptions = (props) =>{
+        if (props.options === undefined) return null;
+        if(props.options.length > 0){
+            let allOptions = []
+            for (let i = 0; i < props.options.length; i++) {
+                allOptions.push(<div key={i} onClick={ () => setValueDropdown(props.options[i].name)} value={props.options[i].value} className='cursor-pointer'>{props.options[i].name}</div>)
+            }
+            return(allOptions)
+        }else{
+            return("")
+        }
+    }
     const [value, setValue] = useState(props.placeholder);
     const [extraList, setExtraList] = useState([])
     const openCloseDropDown = () => {
@@ -36,6 +50,10 @@ export function InputFieldText(props) {
         list.splice(index, 1)
         setExtraList(list)
     }
+    const handleGetData = () => {
+        return "Test"
+    }
+    
     // const handleTestChange = (e, index) => {
     //     console.log(index)
     //     const {name, value} = e.target;
@@ -43,8 +61,10 @@ export function InputFieldText(props) {
     //     list[index][name] = value;
     //     setTestList(list);
     // }
+    
     var type = props.type
     if(type === "dropdown"){
+        //if (!props.options) return null;
         return (
         <div className='md:col-span-2'>
             <div className='flex'>
@@ -57,8 +77,7 @@ export function InputFieldText(props) {
                 </div>
             </div>
             <div id={'dropdown' + props.text} className='w-4/5 ml-auto bg-gray-200  text-sm rounded-b-lg -mt-5 p-2.5 pt-[30px] hidden'>
-                {props.children}
-                <div onClick={ () => setValueDropdown("Test")} value="Test" className='cursor-pointer'>Test1</div>
+                <GetOptions options={props.options} />
             </div>
         </div>
         )
@@ -67,7 +86,7 @@ export function InputFieldText(props) {
             <div className='md:col-span-2'>
                 <div className='flex'>
                     <div className='w-1/5'>{props.text}</div>
-                    <div className='w-4/5 flex'>
+                    <div className='w-4/5 flex gap-2'>
                         <div className="inputFieldDropDown flex justify-between cursor-pointer" onClick={openCloseDropDown}>
                             <div id={'value' + props.text} className='text-subGray2'>
                                 {value}                   
@@ -80,49 +99,37 @@ export function InputFieldText(props) {
                     </div>
                 </div>
                 <div id={'dropdown' + props.text} className='w-4/5-45px ml-auto mr-[45px] bg-gray-200 text-sm rounded-b-lg -mt-5 p-2.5 pt-[30px] hidden'>
-                    {props.children}
-                    <div onClick={ () => setValueDropdown("Test")} value="Test" className='cursor-pointer'>Test1</div>
+                    <GetOptions options={props.options} />
                 </div>
                 <div className='flex flex-wrap w-4/5 ml-auto'>
                     {extraList.map((singleExtra, index) => (
-                        <div id='test' key={index}>
+                        <div id='extra' key={index}>
                             {singleExtra.extra && <div><InputFieldAddition key={index} value={singleExtra.extra} onClick={handleExtraRemove}/></div>}
                         </div>
                         
                     ))}
                 </div>
-                    {/* {testList.map((singleTest, index) => (
-                        <div key={index} id='test'>
-                            <input name='test' type="text" placeholder='Test' className='' id='test'
-                            value={singleTest.test}
-                            onChange = {(e) => handleTestChange(e, index)}
-                            />
-                            Test
-                            <div>
-                                {testList.length > 1 && (
-                                    <div onClick={() => handleTestRemove(index)}>X</div>
-                                )}
-                            </div>
-                            {testList.length - 1 === index && testList.length < 4 && 
-                                (<button className='btnSollid' onClick={handleTestAdd}>+</button>)
-                            }
-                        </div>
-                    ))} */}
-                
             </div>
         )
     }else if(type === "small"){
         return (
             <div className='flex w-2/5'>
                 <div className='w-1/2'>{props.text}</div>
-                <input value={props.value} onChange={props.onChange} type="text" className="inputField w-1/2 h-8" placeholder={props.placeholder} required={props.required}></input>
+                <input value={props.value} onChange={props.onChange} type="text" className="inputField w-1/2 h-12" placeholder={props.placeholder} required={props.required}></input>
             </div>
             );
-    } else{
+    }else if(type === "big"){
+        return (
+            <div className='flex col-span-2'>
+                <div className='w-[10%]'>{props.text}</div>
+                <textarea value={props.value} onChange={props.onChange} type="text" className="inputField w-[90%] h-32" placeholder={props.placeholder} required={props.required}></textarea>
+            </div>
+            );
+    }else{
         return (
             <div className='flex'>
                 <div className='w-1/5'>{props.text}</div>
-                <input value={props.value} onChange={props.onChange} type="text" className="inputField w-4/5 h-8" placeholder={props.placeholder} required={props.required}></input>
+                <input value={props.value} onChange={props.onChange} type="text" className="inputField w-4/5 h-12" placeholder={props.placeholder} required={props.required}></input>
             </div>
             );
     } 

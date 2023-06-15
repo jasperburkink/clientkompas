@@ -4,7 +4,6 @@ import './index.css';
 import App from './App';
 import Clients from './Clients';
 import ClientsAdd from './ClientsAdd';
-import ClientsEdit from './ClientsEdit';
 import reportWebVitals from './reportWebVitals';
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -19,8 +18,6 @@ root.render(
         <Route path='/Clients/:id' element={<Clients/>}/>
         <Route path='/ClientsAdd' element={<ClientsAdd/>}/>
         <Route path='/ClientsAdd/:id' element={<ClientsAdd/>}/>
-        <Route path='/ClientsEdit' element={<ClientsEdit/>}/>
-        <Route path='/ClientsEdit/:id' element={<ClientsEdit/>}/>
         {/* <Route path="/user/edit/{id}" element={<EditUser mode="edit"/>}/>
         <Route path="/user/new" element={<EditUser mode="add"/>}/> */}
       </Routes>
