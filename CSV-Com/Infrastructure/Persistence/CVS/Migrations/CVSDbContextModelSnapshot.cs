@@ -28,6 +28,9 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     b.Property<int>("BenefitForm")
                         .HasColumnType("int");
 
+                    b.Property<DateOnly>("DateOfBirth")
+                        .HasColumnType("date");
+
                     b.Property<string>("EmailAddress")
                         .IsRequired()
                         .HasColumnType("longtext");
