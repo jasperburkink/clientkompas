@@ -1,14 +1,14 @@
 import '../index.css';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleDown, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faAngleDown, faL, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 import React, { useEffect, useState } from "react";
 import { InputFieldAddition } from './inputFieldAddition';
 
 
 
-export function InputFieldText(props) {  
+export function InputFieldText({state, stateChanger, stateName, ...props}) {  
     const GetOptions = (props) =>{
         if (props.options === undefined) return null;
         if(props.options.length > 0){
@@ -22,6 +22,7 @@ export function InputFieldText(props) {
         }
     }
     const [value, setValue] = useState(props.placeholder);
+    
     const [extraList, setExtraList] = useState([])
     const openCloseDropDown = () => {
         const isOpen = document.getElementById("dropdown" + props.text).style.display
@@ -40,20 +41,31 @@ export function InputFieldText(props) {
         setValue(newValue)
         openCloseDropDown()
         document.getElementById("value" + props.text).style.color = "black"
+        if(!stateName){
+            stateChanger(newValue)
+        }
     }
     const handleExtraAdd = (value) => {
-        console.log(value)
         setExtraList([...extraList, {extra: [value]}])
+        stateChanger([...state, {[stateName]: value}])
+        console.log(extraList)
     }
     const handleExtraRemove = (index) => {
         const list = [...extraList]
         list.splice(index, 1)
         setExtraList(list)
     }
-    const handleGetData = () => {
-        return "Test"
-    }
     
+    
+    useEffect(() =>{
+        if(props.info){
+            let arr = [...extraList];
+            for(let i = 0; i < props.info.length; i++){
+                arr[i] = {extra: [props.info[i].naam]}
+            }
+            setExtraList(arr)
+        }
+    }, [])
     // const handleTestChange = (e, index) => {
     //     console.log(index)
     //     const {name, value} = e.target;
@@ -65,14 +77,23 @@ export function InputFieldText(props) {
     var type = props.type
     if(type === "dropdown"){
         //if (!props.options) return null;
+        //console.log(props.placeholder)
+        let isDefault = true
+        if (props.placeholder != "Kies uit de lijst"){isDefault = false}
         return (
-        <div className='md:col-span-2'>
+        <div className=''>
             <div className='flex'>
                 <div className='w-1/5'>{props.text}</div>
                 <div className="md:col-span-2 inputField w-4/5 flex justify-between cursor-pointer" onClick={openCloseDropDown}>
-                    <div id={'value' + props.text} className='text-subGray2'>
+                {isDefault ? (
+                    <div id={'value' + props.text} value={value} className='text-subGray2'>
                         {value}                    
                     </div>
+                ) : (
+                    <div id={'value' + props.text} value={value} className='text-black'>
+                        {value}                    
+                    </div>
+                )}
                     <FontAwesomeIcon icon={faAngleDown} className="fa-solid fa-xl my-auto" />
                 </div>
             </div>
@@ -82,20 +103,21 @@ export function InputFieldText(props) {
         </div>
         )
     }else if(type === "dropdownPlus"){
+        
         return (
-            <div className='md:col-span-2'>
+            <div className=''>
                 <div className='flex'>
                     <div className='w-1/5'>{props.text}</div>
                     <div className='w-4/5 flex gap-2'>
                         <div className="inputFieldDropDown flex justify-between cursor-pointer" onClick={openCloseDropDown}>
-                            <div id={'value' + props.text} className='text-subGray2'>
+                            <div id={'value' + props.text} value={value} className='text-subGray2'>
                                 {value}                   
                             </div>
                             <FontAwesomeIcon icon={faAngleDown} className="fa-solid fa-xl my-auto" />
                         </div>
-                        <div onClick={() => handleExtraAdd(value)} className='inputField h-[45px] w-[45px] flex justify-center content-center flex-wrap aspect-square '>
-                            <FontAwesomeIcon icon={faPlus} className=" fa-lg m-auto cursor-pointer"/>
-                        </div>
+                            <div onClick={() => handleExtraAdd(value)} className='inputField h-[45px] w-[45px] flex justify-center content-center flex-wrap aspect-square '>
+                                <FontAwesomeIcon icon={faPlus} className=" fa-lg m-auto cursor-pointer"/>
+                            </div> 
                     </div>
                 </div>
                 <div id={'dropdown' + props.text} className='w-4/5-45px ml-auto mr-[45px] bg-gray-200 text-sm rounded-b-lg -mt-5 p-2.5 pt-[30px] hidden'>

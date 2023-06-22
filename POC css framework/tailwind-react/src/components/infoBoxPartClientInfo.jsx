@@ -11,7 +11,7 @@ export function InfoBoxPartClientInfo(props) {
 
     const getAllInfo = (soort, naam) =>{
             if(props.client[soort].length > 0){
-            let allInfo = ""
+            let allInfo = []
             for (let i = 0; i < props.client[soort].length; i++) {
                 allInfo += props.client[soort][i][naam] + " "
             }
@@ -44,7 +44,7 @@ export function InfoBoxPartClientInfo(props) {
                 <li className='md:order-8 my-3 md:m-0'>BSN: {props.client.identificationNumber}</li>
                 <li className='md:order-2'>Mobiel: {props.client.mobileNumber} {props.client.telephoneNumber}</li>
                 <li className='md:order-4'>Email: {props.client.emailAddress}</li>
-                <li className='md:order-6'>Geboortedatum: {props.geboortedatum}</li>
+                <li className='md:order-6'>Geboortedatum: {props.client.dateOfBirth}</li>
                 <li className='mt-3 md:hidden'>Burgelijke staat: {props.client.maritalStatus}</li>
                 <li className='md:hidden'>Rijbewijs: {props.client.driversLicences[0] ? props.client.driversLicences[0].driversLicenceCode : "geen"}</li>
             </ul>
