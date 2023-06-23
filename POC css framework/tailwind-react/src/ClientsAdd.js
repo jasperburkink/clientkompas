@@ -5,18 +5,11 @@ import { Button } from './components/button';
 import React, { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom';
 import { InputFieldText } from './components/inputFieldText';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faL, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { SidebarFull } from './components/sidebarFull';
-import { InputFieldAddition } from './components/inputFieldAddition';
 
 function ClientsAdd() {
     var [ client, setClient ] = useState(null);
     const { id } = useParams();
-    const [emergencyPeopleList, setEmergencyPeopleList] = useState([]);
-    const [idEmergencyPeople, setIdEmergencyPeople] = useState([0]);
-    //const [newClient, setNewClient] = useState([0]);
-    //const [isSubmidded, setIsSunmidded] = useState(false);
 
     const optionsSex = [{name: "man", value : 0}, {name: "female", value: 1}, {name: "nonbinary", value: 2}]
     const optionsMaritalStatus = [{name: "unmarried", value : 0}, {name: "Married", value: 1}, {name: "Divorced", value: 2}, {name: "Widowed", value: 3}, {name: "RegistratedPartner", value: 4}]
@@ -35,7 +28,7 @@ function ClientsAdd() {
     const [lastName, setLastName] = useState('');
     const [sex, setSex] = useState(0);
     const [streetName, setStreetName] = useState('');
-    const [houseNumber, setHouseNumber] = useState(0);
+    const [houseNumber, setHouseNumber] = useState();
     const [houseNumberAddition, setHouseNumberAddition] = useState('');
     const [postalCode, setPostalCode] = useState('');
     const [residence, setResidence] = useState('');
@@ -56,7 +49,6 @@ function ClientsAdd() {
     const [workingContracts, setWorkingContracts] = useState([]);
     const [remarks, setRemarks] = useState('');
     const [dateOfBirth, setDateOfBirth] = useState('');
-//, {mode: 'cors'}
     useEffect(() => {
         fetch("https://localhost:7017/api/Client")
             .then(response => {
@@ -66,42 +58,63 @@ function ClientsAdd() {
                 //console.log(data);
                 setClient(data);
                 if(id){
-                    setIdentificationNumber(data[id].identificationNumber)
-                    setFirstName(data[id].firstName)
-                    setInitials(data[id].initials)
-                    setPrefixLastName(data[id].prefixLastName)
-                    setLastName(data[id].lastName)
-                    setSex(getNameOfValue(data[id].sex, optionsSex))
-                    setStreetName(data[id].streetName)
-                    setHouseNumber(data[id].houseNumber)
-                    setHouseNumberAddition(data[id].houseNumberAddition)
-                    setPostalCode(data[id].postalCode)
-                    setResidence(data[id].residence)
-                    setTelephoneNumber(data[id].telephoneNumber)
-                    setDateOfBirth(data[id].dateOfBirth)
-                    setEmailAddress(data[id].emailAddress)
-                    setMaritalStatus(getNameOfValue(data[id].maritalStatus, optionsMaritalStatus))
-                    setDriversLicences(getAllInfo(data[id], "driversLicences", "driversLicenceCode", optionsDriversLicences))
-                    
-                    setEmergencyPeople(getAllInfoDouble(data[id], "emergencyPeople", "name", "telephoneNumber"))
+                    var clientData = data.find((element) => {
+                        return element.id == id
+                    })
+                    if(clientData){
+                        setIdentificationNumber(clientData.identificationNumber)
+                        setFirstName(clientData.firstName)
+                        setInitials(clientData.initials)
+                        setPrefixLastName(clientData.prefixLastName)
+                        setLastName(clientData.lastName)
+                        setSex(getNameOfValue(clientData.sex, optionsSex))
+                        setStreetName(clientData.streetName)
+                        setHouseNumber(clientData.houseNumber)
+                        setHouseNumberAddition(clientData.houseNumberAddition)
+                        setPostalCode(clientData.postalCode)
+                        setResidence(clientData.residence)
+                        setTelephoneNumber(clientData.telephoneNumber)
+                        setDateOfBirth(clientData.dateOfBirth)
+                        setEmailAddress(clientData.emailAddress)
+                        setMaritalStatus(getNameOfValue(clientData.maritalStatus, optionsMaritalStatus))
+                        if(clientData.driversLicences[0]){
+                            setDriversLicences(getAllInfo(clientData, "driversLicences", "driversLicenceCode", optionsDriversLicences))
+                        }
+                        if(clientData.emergencyPeople[0]){
+                            let allInfo = []
+                            for (let i = 0; i < clientData.emergencyPeople.length; i++) {
+                                allInfo = ([...allInfo, {name: clientData.emergencyPeople[i].name, telephoneNumber: clientData.emergencyPeople[i].telephoneNumber}])
+                                setEmergencyPeople(allInfo)
+                            }
+                        }
 
-                    setDiagnoses(getAllInfo(data[id], "diagnoses", "name"))
-                    setBenefitForm(getNameOfValue(data[id].benefitForm, optionsBenefitForm))
-                    setCompanyName(getAllInfo(data[id], "workingContracts", "companyName"))
-                    setFunction(data[id].workingContracts[0].function)
-                    let contractTypeNumber = data[id].workingContracts[0].contractType - 1
-                    setContractType(getNameOfValue(contractTypeNumber, optionsContract))
-                    setFromDate(data[id].workingContracts[0].fromDate)
-                    setToDate(data[id].workingContracts[0].toDate)
-                    setWorkingContracts([{companyName}, {functionWork}, {contractType}, {fromDate}, {toDate}])
-                    setRemarks(data[id].remarks)
+                        if(clientData.diagnoses[0]){
+                            setDiagnoses(getAllInfo(clientData, "diagnoses", "name"))
+                        }
+                        setBenefitForm(getNameOfValue(clientData.benefitForm, optionsBenefitForm))
+                        if(clientData.workingContracts[0]){
+                            // setCompanyName(getAllInfo(data[id], "workingContracts", "companyName"))
+                            // setFunction(data[id].workingContracts[0].function)
+                            // let contractTypeNumber = data[id].workingContracts[0].contractType - 1
+                            // setContractType(getNameOfValue(contractTypeNumber, optionsContract))
+                            // setFromDate(data[id].workingContracts[0].fromDate)
+                            // setToDate(data[id].workingContracts[0].toDate)
+                            setWorkingContracts([])
+                        }
+                        //setWorkingContracts([{companyName}, {functionWork}, {contractType}, {fromDate}, {toDate}])
+                        setRemarks(clientData.remarks)
+                    }else{
+                        setEmergencyPeople([...emergencyPeople, {name: "", telephoneNumber: ""}])
+                    }
+                }else{
+                    setEmergencyPeople([...emergencyPeople, {name: "", telephoneNumber: ""}])
                 }
             })
             .catch(error => {
                 console.error(error);
             });
     }, 
-    [] // Voert nu maar 1 keer uit als het component gerenderd wordt
+    [] 
     ); 
     const getNameOfValue = (client, options) => {
         if(client || client === 0){
@@ -139,131 +152,44 @@ function ClientsAdd() {
             return("/")
         }
     }
-    const getAllInfoDouble = (client, soort, naam, naam2) =>{
-        if(client[soort].length > 0){
-            let allInfo = []
-            console.log(client)
-            for (let i = 0; i < client[soort].length; i++) {
-                allInfo = ([...allInfo, {[naam]: client[soort][i][naam], [naam2]: client[soort][i][naam2]}])
-                addEmergencyPeopleList(client[soort][i][naam], client[soort][i][naam2])
-            }
-            return(allInfo)
-        }else{
-            return(addEmergencyPeopleList())
-        }
-    }
-    const setEmergencyPeopleValue = (index, name, value) =>{
-            console.log(index)
-        if(index || index === 0){
-            let items = [...emergencyPeople]
-            console.log(items)
-            items[index][name] = value
-            console.log(emergencyPeople)
-            setEmergencyPeople({items})
-            //setEmergencyPeople(...emergencyPeople, {items})
-            // setEmergencyPeople((prevState) => {
-            //     // const newIds = prevState[index].slice()
-            //     // console.log(emergencyPeople)
-            //     return Object[index][name].assign({}, {value});
-            //  });
-        }else{
-            return("/")
-        }
-    }
-    const GetEmergencyPeople = () =>{
-        if(client[id]){
-            let allInfo = []
-            //let newId = 0
-            console.log(emergencyPeople)
-            for (let i = 0; i < client[id].emergencyPeople.length; i++) {
-                allInfo.push(<div key={i} id='extra'><div className='grid grid-cols-2 md:col-span-2 gap-2'><InputFieldText value={emergencyPeople[i].name} onChange={(e) => setEmergencyPeopleList[i].name(e.target.value)} text="Naam" placeholder="Voor en/of Achternaam"/>
-                <InputFieldText value={emergencyPeople[i].telephoneNumber} onChange={(e) => setEmergencyPeopleList[i].telephoneNumber(e.target.value)} text="Telefoon" placeholder="b.v. 06-78912345"/></div></div>)
-                //newId = newId + 1
-            }
-            //setIdEmergencyPeople(newId) 
-            return(allInfo)
-        }else{
-            return(<div id='extra'><div className='grid grid-cols-2 md:col-span-2 gap-2'><InputFieldText text="Naam" placeholder="Voor en/of Achternaam"/>
-            <InputFieldText text="Telefoon" placeholder="b.v. 06-78912345"/></div></div>)
-        }
-    }
-    const addEmergencyPeopleList = (name, telephoneNumber) => {
-        if(name && telephoneNumber){
-            setEmergencyPeopleList([...emergencyPeopleList, {name: [name], telephoneNumber: [telephoneNumber]}])
-            console.log(emergencyPeople)
-        }else{
-            setEmergencyPeopleList([...emergencyPeopleList, {name: "", telephoneNumber: ""}])
-            setEmergencyPeople([...emergencyPeople, {name: "", telephoneNumber: ""}])
-        }
-    }
-    const getNewClient = async () => {
-        setWorkingContracts([companyName, functionWork, contractType, fromDate, toDate])
-        setBenefitForm(getValueOfName(benefitForm, optionsBenefitForm))
-        setMaritalStatus(getValueOfName(maritalStatus, optionsMaritalStatus))
-    }
-    // const [isFirstRun, setIsFirstRun] = useState(true);
-    //     useEffect(() =>{
-    //         if(isFirstRun === true){
-    //             setIsFirstRun(false)
-    //             return
-    //         }
-    //         if(isSubmidded === false){
-    //             return
-    //         }
-    //         console.log(workingContracts)
-    //         if(!maritalStatus === Number) {
-    //             console.log("a")
-    //             setNewClient([identificationNumber, firstName, initials, prefixLastName, lastName, sex, streetName, houseNumber, houseNumberAddition, postalCode, residence, telephoneNumber, dateOfBirth, emailAddress, maritalStatus, driversLicences, emergencyPeople, diagnoses, benefitForm, workingContracts, remarks])
-    //             console.log(newClient)
-    //             addNewClient()
-    //         }else{
-    //             console.log("b")
-    //             setWorkingContracts([companyName, functionWork, contractType, fromDate, toDate])
-    //             setBenefitForm(getValueOfName(benefitForm, optionsBenefitForm))
-    //             setMaritalStatus(getValueOfName(maritalStatus, optionsMaritalStatus))
-    //         }
-    //     }, [workingContracts, benefitForm, maritalStatus])
     const handleSubmit = async (e) => {
         e.preventDefault();
-        //setIsSunmidded(true)
-        //setBenefitForm(getValueOfName(benefitForm, optionsBenefitForm))
-        //setMaritalStatus(getValueOfName(maritalStatus, optionsMaritalStatus))
-        //setWorkingContracts([companyName, functionWork, contractType, fromDate, toDate])
-        //await newClient sex, benefitForm,, maritalStatus,  workingContracts
-        //setDriversLicences([{getValueOfName[driversLicences],'id': id, 'client': null}]) 
-        console.log(emergencyPeople)
-        const newClient = {identificationNumber, firstName, initials, prefixLastName, lastName, streetName, houseNumber, houseNumberAddition, postalCode, residence, telephoneNumber, dateOfBirth, emailAddress, driversLicences, emergencyPeople, diagnoses, remarks}
-        //const newClient = {identificationNumber, firstName, initials, prefixLastName, lastName, streetName, houseNumber, houseNumberAddition, postalCode, residence, telephoneNumber, dateOfBirth, emailAddress, driversLicences, emergencyPeople, diagnoses, remarks}
-        console.log(newClient)
-        
-        
-        //, {mode: 'cors'}
         const headers = {
             'Accept': 'application/json',
-            //'Accept' : '*/*',
-            //'accept':'application/json',
             'content-type':'application/json',
-            // 'Access-Control-Allow-Origin':'https://localhost:7017',
-            // 'Access-Control-Allow-Origin':'https://localhost:3000',
-            // "Access-Control-Allow-Origin": "*",
             "Content-Type" : "application/json",
-
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Credentials": "true",
             "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS,POST,PUT",
             "Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"
-            
         }
-        fetch("https://localhost:7017/api/Client", {
-            method: 'POST',
-            mode: 'cors',
-            headers: headers,
-            body: JSON.stringify(newClient)
-        }).then((response) =>{
-            console.log("new client added")
-        }).catch(error => {
-            console.error(error);
-        });
+        if(id){
+            const newClient = {id, identificationNumber, firstName, initials, prefixLastName, lastName, streetName, houseNumber, houseNumberAddition, postalCode, residence, telephoneNumber, dateOfBirth, emailAddress, driversLicences, emergencyPeople, diagnoses, remarks}
+            console.log(newClient)
+            fetch("https://localhost:7017/api/Client/" + id, {
+                method: 'PUT',
+                mode: 'cors',
+                headers: headers,
+                body: JSON.stringify(newClient)
+            }).then((response) =>{
+                console.log("client updated")
+            }).catch(error => {
+                console.error(error);
+            });
+        }else{
+            const newClient = {identificationNumber, firstName, initials, prefixLastName, lastName, streetName, houseNumber, houseNumberAddition, postalCode, residence, telephoneNumber, dateOfBirth, emailAddress, driversLicences, emergencyPeople, diagnoses, remarks}
+            console.log(newClient)
+            fetch("https://localhost:7017/api/Client", {
+                method: 'POST',
+                mode: 'cors',
+                headers: headers,
+                body: JSON.stringify(newClient)
+            }).then((response) =>{
+                console.log("new client added")
+            }).catch(error => {
+                console.error(error);
+            });
+        }
     }
 
     if(client == null) {
@@ -273,8 +199,8 @@ function ClientsAdd() {
         <div className='flex flex-col lg:flex-row h-screen lg:h-auto'>
             <SidebarFull client={client} />
             <form onSubmit={handleSubmit} className='grid grid-2 h-fit w-full my-100px px-10 gap-10'>
-                <div className="pieceTitle">Cliënt Aanmaken</div>
-                <div className='md:col-span-2'>Client gegevens</div>
+                {id ? <div className="pieceTitle">Cliënt Aanpassen</div> : <div className="pieceTitle">Cliënt Aanmaken</div>}
+                <div className='md:col-span-2 font-bold'>Client gegevens</div>
                 <div className='flex flex-col gap-2'>
                     <InputFieldText value={identificationNumber} onChange={(e) => setIdentificationNumber(e.target.value)} text="BSN" placeholder="BSN nummer" required={true}/>
                     <div className='flex w-full justify-between'>
@@ -301,12 +227,11 @@ function ClientsAdd() {
                     <InputFieldText info={driversLicences} value={driversLicences} state={driversLicences} stateChanger={setDriversLicences} stateName="driversLicenceCode" options={optionsDriversLicences} type="dropdownPlus" text="Rijbewijs" placeholder="Kies uit de lijst" />
 
                 </div>
-                <div className='md:col-span-2'>In geval van nood</div>
+                <div className='md:col-span-2 font-bold'>In geval van nood</div>
                 <div className='grid grid-cols-1 md:col-span-2 gap-2'>
-                    {/* <GetEmergencyPeople /> */}
-                    {emergencyPeopleList.map((singleEmergencyPeopleList, index) => (
+                    {emergencyPeople.map((singleEmergencyPeople, index) => (
                         <div id={index} key={index}>
-                            {singleEmergencyPeopleList.name ? <div className='grid grid-cols-2 md:col-span-2 gap-2'>
+                            {singleEmergencyPeople.name ? <div className='grid grid-cols-2 md:col-span-2 gap-2'>
                                 <InputFieldText value={emergencyPeople[index].name} onChange={(e) => setEmergencyPeople((prevState) => {
                                     let newEmergencyPeople = [...prevState]
                                     newEmergencyPeople[index].name = e.target.value
@@ -335,9 +260,9 @@ function ClientsAdd() {
                         </div>
                         
                     ))}
-                    <div className='text-blue-400 cursor-pointer' onClick={() => addEmergencyPeopleList()}>Voeg nog een persoon toe</div>
+                    <div className='text-blue-400 cursor-pointer' onClick={() => setEmergencyPeople([...emergencyPeople, {name: "", telephoneNumber: ""}])}>Voeg nog een persoon toe</div>
                 </div>
-                <div className='md:col-span-2'>Overige informatie</div>
+                <div className='md:col-span-2 font-bold'>Overige informatie</div>
                 <div className='grid grid-cols-2 gap-2 col-span-2'>
                     <InputFieldText info={diagnoses} value={diagnoses} state={diagnoses} stateChanger={setDiagnoses} stateName="name" options={optionsDiagnoses} type="dropdownPlus" text="Diagnose(s)" placeholder="Kies uit de lijst"/> 
                     <InputFieldText value={benefitForm} onChange={(e) => setBenefitForm(e.target.value)} stateChanger={setBenefitForm} options={optionsBenefitForm} type="dropdown" text="Uitkeringsvorm" placeholder={benefitForm ? benefitForm : "Kies uit de lijst"} />
@@ -349,7 +274,6 @@ function ClientsAdd() {
                     <InputFieldText value={functionWork} onChange={(e) => setFunction(e.target.value)} text="Functie" placeholder="b.v. Administratie"/>
                     <InputFieldText value={fromDate} onChange={(e) => setFromDate(e.target.value)} text="Van" placeholder="b.v. 01-01-2022"/>
                     <InputFieldText value={toDate} onChange={(e) => setToDate(e.target.value)} text="Tot" placeholder="b.v. 01-01-2022"/>
-                    {/* <div className='text-blue-400 cursor-pointer' onClick={() => addEmergencyPeopleList()}>Voeg nog een persoon toe</div> */}
                 </div>
                 <InputFieldText value={remarks} onChange={(e) => setRemarks(e.target.value)} text="Opmerking" placeholder="Voeg opmerking toe" type="big" />
                 <div className='flex justify-end col-span-2'>

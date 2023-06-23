@@ -34,9 +34,6 @@ export function InputFieldText({state, stateChanger, stateName, ...props}) {
         }
 
     }
-    // useEffect(() => {
-    //     setValueDropdown();
-    // }, [])
     const setValueDropdown = (newValue) =>{
         setValue(newValue)
         openCloseDropDown()
@@ -48,15 +45,12 @@ export function InputFieldText({state, stateChanger, stateName, ...props}) {
     const handleExtraAdd = (value) => {
         setExtraList([...extraList, {extra: [value]}])
         stateChanger([...state, {[stateName]: value}])
-        console.log(extraList)
     }
     const handleExtraRemove = (index) => {
         const list = [...extraList]
         list.splice(index, 1)
         setExtraList(list)
     }
-    
-    
     useEffect(() =>{
         if(props.info){
             let arr = [...extraList];
@@ -66,18 +60,8 @@ export function InputFieldText({state, stateChanger, stateName, ...props}) {
             setExtraList(arr)
         }
     }, [])
-    // const handleTestChange = (e, index) => {
-    //     console.log(index)
-    //     const {name, value} = e.target;
-    //     const list = [...testList];
-    //     list[index][name] = value;
-    //     setTestList(list);
-    // }
-    
     var type = props.type
     if(type === "dropdown"){
-        //if (!props.options) return null;
-        //console.log(props.placeholder)
         let isDefault = true
         if (props.placeholder != "Kies uit de lijst"){isDefault = false}
         return (

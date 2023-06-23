@@ -27,7 +27,7 @@ function Clients() {
                 console.error(error);
             });
     }, 
-    [] // Voert nu maar 1 keer uit als het component gerenderd wordt
+    []
     ); 
 
     if(client == null) {
