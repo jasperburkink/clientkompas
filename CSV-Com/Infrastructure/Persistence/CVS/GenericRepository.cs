@@ -79,5 +79,66 @@ namespace Infrastructure.Persistence.CVS
             dbSet.Attach(entityToUpdate);
             context.Entry(entityToUpdate).State = EntityState.Modified;           
         }
+
+        public async Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "")
+        {
+            IQueryable<TEntity> query = dbSet;
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            foreach (var includeProperty in includeProperties.Split
+                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+
+            if (orderBy != null)
+            {
+                return await orderBy(query).ToListAsync();
+            }
+            else
+            {
+                return await query.ToListAsync();
+            }
+        }
+
+        public virtual async Task<TEntity> GetByIDAsync(object id)
+        {
+            return await dbSet.FindAsync(id);
+        }
+
+        public virtual async Task InsertAsync(TEntity entity)
+        {
+            await dbSet.AddAsync(entity);
+        }
+
+        public virtual async Task DeleteAsync(object id)
+        {
+            TEntity entityToDelete = await dbSet.FindAsync(id);
+            await DeleteAsync(entityToDelete);
+        }
+        public async Task DeleteAsync(TEntity entityToDelete)
+        {
+            await Task.Run(() =>
+            {
+                if (context.Entry(entityToDelete).State == EntityState.Detached)
+                {
+                    dbSet.Attach(entityToDelete);
+                }
+                dbSet.Remove(entityToDelete);
+            });
+        }
+
+        public async Task UpdateAsync(TEntity entityToUpdate)
+        {
+            await Task.Run(() =>
+            {
+                dbSet.Attach(entityToUpdate);
+                context.Entry(entityToUpdate).State = EntityState.Modified;
+            });
+        }
     }
 }
