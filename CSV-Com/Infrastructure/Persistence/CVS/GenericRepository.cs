@@ -80,7 +80,7 @@ namespace Infrastructure.Persistence.CVS
             context.Entry(entityToUpdate).State = EntityState.Modified;           
         }
 
-        public async Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "")
+        public async Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "", CancellationToken cancellationToken = default)
         {
             IQueryable<TEntity> query = dbSet;
 
@@ -97,30 +97,30 @@ namespace Infrastructure.Persistence.CVS
 
             if (orderBy != null)
             {
-                return await orderBy(query).ToListAsync();
+                return await orderBy(query).ToListAsync(cancellationToken);
             }
             else
             {
-                return await query.ToListAsync();
+                return await query.ToListAsync(cancellationToken);
             }
         }
 
-        public virtual async Task<TEntity> GetByIDAsync(object id)
+        public virtual async Task<TEntity> GetByIDAsync(object id, CancellationToken cancellationToken = default)
         {
-            return await dbSet.FindAsync(id);
+            return await dbSet.FindAsync(id, cancellationToken);
         }
 
-        public virtual async Task InsertAsync(TEntity entity)
+        public virtual async Task InsertAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
-            await dbSet.AddAsync(entity);
+            await dbSet.AddAsync(entity, cancellationToken);
         }
 
-        public virtual async Task DeleteAsync(object id)
+        public virtual async Task DeleteAsync(object id, CancellationToken cancellationToken = default)
         {
             TEntity entityToDelete = await dbSet.FindAsync(id);
-            await DeleteAsync(entityToDelete);
+            await DeleteAsync(entityToDelete, cancellationToken);
         }
-        public async Task DeleteAsync(TEntity entityToDelete)
+        public async Task DeleteAsync(TEntity entityToDelete, CancellationToken cancellationToken = default)
         {
             await Task.Run(() =>
             {
@@ -129,16 +129,16 @@ namespace Infrastructure.Persistence.CVS
                     dbSet.Attach(entityToDelete);
                 }
                 dbSet.Remove(entityToDelete);
-            });
+            }, cancellationToken);
         }
 
-        public async Task UpdateAsync(TEntity entityToUpdate)
+        public async Task UpdateAsync(TEntity entityToUpdate, CancellationToken cancellationToken = default)
         {
             await Task.Run(() =>
             {
                 dbSet.Attach(entityToUpdate);
                 context.Entry(entityToUpdate).State = EntityState.Modified;
-            });
+            }, cancellationToken);
         }
     }
 }

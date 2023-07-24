@@ -13,6 +13,8 @@ namespace Application.Clients.Queries
 {
     public class ClientDto : IMapFrom<Client>
     {
+        private const char SeperatorChar = ',';
+
         public int IdentificationNumber { get; set; }
 
         public string FirstName { get; set; }
@@ -61,9 +63,9 @@ namespace Application.Clients.Queries
             profile.CreateMap<Client, ClientDto>()
                 .ForMember(cDto => cDto.Sex, s => s.MapFrom(c => Enum.GetName(typeof(Sex), c.Sex)))
                 .ForMember(cDto => cDto.MaritalStatus, ms => ms.MapFrom(c => Enum.GetName(typeof(MaritalStatus), c.MaritalStatus)))
-                .ForMember(cDto => cDto.DriversLicences, dl => dl.MapFrom(c => c.DriversLicences.Aggregate(string.Empty, (concat, dl) => $"{concat}, {Enum.GetName(typeof(DriversLicence), dl.DriversLicenceCode)}")))                
+                .ForMember(cDto => cDto.DriversLicences, dl => dl.MapFrom(c => string.Join(SeperatorChar, c.DriversLicences.Select(dl => Enum.GetName(typeof(DriversLicenceEnum), dl.DriversLicenceCode)))))
                 .ForMember(cDto => cDto.BenefitForm, bf => bf.MapFrom(c => Enum.GetName(typeof(BenefitForm), c.BenefitForm)))
-                .ForMember(cDto => cDto.Diagnoses, dDto => dDto.MapFrom(c => c.Diagnoses.Aggregate(string.Empty, (concat, d) => $"{concat}, {d.Name}")));
+                .ForMember(cDto => cDto.Diagnoses, dDto => dDto.MapFrom(c => string.Join(SeperatorChar, c.Diagnoses.Select(d => d.Name))));
         }
     }
 }

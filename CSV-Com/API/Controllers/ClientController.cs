@@ -1,4 +1,5 @@
-﻿using Application.Clients.Queries;
+﻿using Application.Clients.Commands;
+using Application.Clients.Queries;
 using Application.Common.Interfaces.CVS;
 using Domain.CVS.Domain;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,7 @@ namespace API.Controllers
     public class ClientController : ApiControllerBase
     {
         [HttpGet]
-        public async Task<IEnumerable<ClientDto>> Get(GetClientsQuery query)
+        public async Task<IEnumerable<ClientDto>> Get([FromQuery] GetClientsQuery query)
         {
             return await Mediator.Send(query);
         }
@@ -22,12 +23,11 @@ namespace API.Controllers
         //    return client;
         //}
 
-        //[HttpPost]
-        //public void Post([FromBody] Client client)
-        //{
-        //    _unitOfWork.ClientRepository.Insert(client);
-        //    _unitOfWork.Save();
-        //}
+        [HttpPost]
+        public async Task<ActionResult<int>> Create(CreateClientCommand command)
+        {
+            return await Mediator.Send(command);
+        }
 
         //[HttpPut("{id}")]
         //public void Put(int id, [FromBody] Client value)

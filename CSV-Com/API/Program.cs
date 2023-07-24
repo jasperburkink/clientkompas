@@ -6,6 +6,8 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddApplicationServices();
+
 var connectionStringAuthentication = builder.Configuration.GetValue<string>("ConnectionStrings:AuthenticationConnectionString");
 var connectionStringCVS = builder.Configuration.GetValue<string>("ConnectionStrings:CVSConnectionString");
 

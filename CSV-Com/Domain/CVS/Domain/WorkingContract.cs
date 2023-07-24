@@ -1,4 +1,5 @@
-﻿using Domain.CVS.Enums;
+﻿using Domain.CVS.Common;
+using Domain.CVS.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Domain.CVS.Domain
 {
-    public class WorkingContract
+    public class WorkingContract : BaseAuditableEntity
     {
         public int Id { get; set; }
 

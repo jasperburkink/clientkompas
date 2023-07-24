@@ -27,17 +27,17 @@ namespace Application.Common.Interfaces.CVS
 
         Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-            string includeProperties = "");
+            string includeProperties = "", CancellationToken cancellationToken = default);
 
-        Task<TEntity> GetByIDAsync(object id);
+        Task<TEntity> GetByIDAsync(object id, CancellationToken cancellationToken = default);
 
-        Task InsertAsync(TEntity entity);
+        Task InsertAsync(TEntity entity, CancellationToken cancellationToken = default);
 
-        Task DeleteAsync(object id);
+        Task DeleteAsync(object id, CancellationToken cancellationToken = default);
 
-        Task DeleteAsync(TEntity entityToDelete);
+        Task DeleteAsync(TEntity entityToDelete, CancellationToken cancellationToken = default);
 
-        Task UpdateAsync(TEntity entityToUpdate);
+        Task UpdateAsync(TEntity entityToUpdate, CancellationToken cancellationToken = default);
 
         
     }

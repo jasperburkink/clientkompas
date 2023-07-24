@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Application.Clients.Queries
 {
-    [Authorize]
+    //[Authorize]
     public record GetClientsQuery : IRequest<IEnumerable<ClientDto>>;
 
     public class GetClientsQueryHandler: IRequestHandler<GetClientsQuery, IEnumerable<ClientDto>>
