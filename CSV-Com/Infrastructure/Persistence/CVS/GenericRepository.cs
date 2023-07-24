@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces.CVS;
+using Domain.CVS.Common;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Persistence.CVS
 {
-    public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : class
+    public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
     {
         public CVSDbContext context { get; }
 
@@ -89,11 +90,7 @@ namespace Infrastructure.Persistence.CVS
                 query = query.Where(filter);
             }
 
-            foreach (var includeProperty in includeProperties.Split
-                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                query = query.Include(includeProperty);
-            }
+            query = IncludeProperties(includeProperties, query);
 
             if (orderBy != null)
             {
@@ -105,9 +102,31 @@ namespace Infrastructure.Persistence.CVS
             }
         }
 
+        private static IQueryable<TEntity> IncludeProperties(string includeProperties, IQueryable<TEntity> query)
+        {
+            foreach (var includeProperty in includeProperties.Split
+                            (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+
+            return query;
+        }
+
         public virtual async Task<TEntity> GetByIDAsync(object id, CancellationToken cancellationToken = default)
         {
             return await dbSet.FindAsync(id, cancellationToken);
+        }
+
+        public virtual async Task<TEntity> GetByIDAsync(object id, string includeProperties = "", CancellationToken cancellationToken = default)
+        {
+            IQueryable<TEntity> query = dbSet;
+
+            query = query.Where(entity => entity.Id == (int)id);
+
+            query = IncludeProperties(includeProperties, query);
+
+            return await query.FirstOrDefaultAsync(cancellationToken);
         }
 
         public virtual async Task InsertAsync(TEntity entity, CancellationToken cancellationToken = default)

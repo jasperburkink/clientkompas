@@ -1,4 +1,6 @@
-﻿using Application.Clients.Commands;
+﻿using Application.Clients.Commands.AddClientDriversLicence;
+using Application.Clients.Commands.CreateClient;
+using Application.Clients.Commands.DeleteClientDriversLicence;
 using Application.Clients.Queries;
 using Application.Common.Interfaces.CVS;
 using Domain.CVS.Domain;
@@ -29,6 +31,13 @@ namespace API.Controllers
             return await Mediator.Send(command);
         }
 
+        [Route("[action]")]
+        [HttpPost]
+        public async Task<ActionResult<int>> AddDriversLicence(AddClientDriversLicenceCommand command)
+        {
+            return await Mediator.Send(command);
+        }
+
         //[HttpPut("{id}")]
         //public void Put(int id, [FromBody] Client value)
         //{
@@ -42,5 +51,17 @@ namespace API.Controllers
         //    _unitOfWork.ClientRepository.Delete(id);
         //    _unitOfWork.Save();
         //}
+
+        [Route("[action]")]
+        [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> DeleteDriversLicence(DeleteClientDriversLicenceCommand command)
+        {
+            await Mediator.Send(command);
+
+            return NoContent();
+        }
     }
 }

@@ -31,6 +31,8 @@ namespace Application.Common.Interfaces.CVS
 
         Task<TEntity> GetByIDAsync(object id, CancellationToken cancellationToken = default);
 
+        Task<TEntity> GetByIDAsync(object id, string includeProperties = "", CancellationToken cancellationToken = default);
+
         Task InsertAsync(TEntity entity, CancellationToken cancellationToken = default);
 
         Task DeleteAsync(object id, CancellationToken cancellationToken = default);

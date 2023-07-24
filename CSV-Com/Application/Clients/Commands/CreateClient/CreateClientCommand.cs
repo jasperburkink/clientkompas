@@ -10,9 +10,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Clients.Commands
+namespace Application.Clients.Commands.CreateClient
 {
-    public class CreateClientCommand : IRequest<int>
+    public record CreateClientCommand : IRequest<int>
     {
         public int IdentificationNumber { get; init; }
 
@@ -63,7 +63,7 @@ namespace Application.Clients.Commands
             var client = new Client
             {
                 IdentificationNumber = request.IdentificationNumber,
-                FirstName = request.FirstName,                 
+                FirstName = request.FirstName,
                 Initials = request.Initials,
                 PrefixLastName = request.PrefixLastName,
                 LastName = request.LastName,
