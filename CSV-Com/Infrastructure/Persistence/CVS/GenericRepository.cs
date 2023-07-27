@@ -1,5 +1,5 @@
 ﻿using Application.Common.Interfaces.CVS;
-using Domain.CVS.Common;
+using Domain.Common;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

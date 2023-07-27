@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.CVS.Common
+namespace Domain.Common
 {
     public abstract class BaseAuditableEntity : BaseEntity
     {

@@ -1,4 +1,4 @@
-﻿using Domain.CVS.Common;
+﻿using Domain.Common;
 using Domain.CVS.Domain;
 using System;
 using System.Collections.Generic;
