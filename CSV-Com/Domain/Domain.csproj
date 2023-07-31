@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="CVS\Entities\" />
     <Folder Include="CVS\Exceptions\" />
     <Folder Include="CVS\ValueObjects\" />
   </ItemGroup>

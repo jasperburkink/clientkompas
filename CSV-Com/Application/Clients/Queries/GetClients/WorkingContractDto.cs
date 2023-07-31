@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Clients.Queries
+namespace Application.Clients.Queries.GetClients
 {
-    public class WorkingContractDto: IMapFrom<WorkingContract>
+    public class WorkingContractDto : IMapFrom<WorkingContract>
     {
         public string CompanyName { get; set; }
 

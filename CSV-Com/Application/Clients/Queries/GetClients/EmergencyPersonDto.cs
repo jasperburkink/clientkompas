@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Clients.Queries
+namespace Application.Clients.Queries.GetClients
 {
     public class EmergencyPersonDto : IMapFrom<EmergencyPerson>
     {

@@ -10,12 +10,12 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Clients.Queries
+namespace Application.Clients.Queries.GetClients
 {
     //[Authorize]
     public record GetClientsQuery : IRequest<IEnumerable<ClientDto>>;
 
-    public class GetClientsQueryHandler: IRequestHandler<GetClientsQuery, IEnumerable<ClientDto>>
+    public class GetClientsQueryHandler : IRequestHandler<GetClientsQuery, IEnumerable<ClientDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -35,10 +35,11 @@ namespace Application.Clients.Queries
         public async Task<IEnumerable<ClientDto>> Handle(GetClientsQuery request, CancellationToken cancellationToken)
         {
             // TODO: Find a better solution for including properties.
-            return from client in await _unitOfWork.ClientRepository.GetAsync(includeProperties: "DriversLicences,Diagnoses,EmergencyPeople,WorkingContracts")
-            let clientDto = _mapper.Map<ClientDto>(client)            
-            orderby clientDto.LastName, clientDto.FirstName
-            select clientDto;            
+            return (await _unitOfWork.ClientRepository.GetAsync(includeProperties: "DriversLicences,Diagnoses,EmergencyPeople,WorkingContracts"))
+                .AsQueryable()
+                .ProjectTo<ClientDto>(_mapper.ConfigurationProvider)
+                .OrderBy(c => c.LastName)
+                .ThenBy(c => c.FirstName);
         }
     }
 }
