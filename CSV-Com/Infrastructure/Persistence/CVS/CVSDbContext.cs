@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,25 +22,12 @@ namespace Infrastructure.Persistence.CVS
 
         public CVSDbContext(DbContextOptions<CVSDbContext> options) : base(options) { }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            modelBuilder.Entity<Client>().HasMany(c => c.Diagnoses)
-                .WithOne(d => d.Client)
-                .OnDelete(DeleteBehavior.Cascade);
+            // Execute configurations
+            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-            modelBuilder.Entity<Client>().HasMany(c => c.DriversLicences)
-                .WithOne(dl => dl.Client)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<Client>().HasMany(c => c.EmergencyPeople)
-                .WithOne(ep => ep.Client)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<Client>().HasMany(c => c.WorkingContracts)
-                .WithOne(wc => wc.Client)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(builder);
         }
     }
 }
