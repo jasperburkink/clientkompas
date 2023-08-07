@@ -31,7 +31,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{D11CDFEC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API\API.csproj", "{836447F4-9D54-47D0-B4DF-F2705A0B4B26}"
 EndProject
-Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "webapp", "webapp\webapp.njsproj", "{4B9FD210-96C4-47C4-AC57-44C365E59A7E}"
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "webapp_old", "webapp_old\webapp_old.njsproj", "{4B9FD210-96C4-47C4-AC57-44C365E59A7E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
