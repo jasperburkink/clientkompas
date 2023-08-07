@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.CVS.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,17 +9,19 @@ namespace Domain.CVS.Domain
 {
     public class Client
     {
-        public int ClientId { get; set; }
+        public int Id { get; set; }
 
-        public int BSNNumber { get; set; }
+        public int IdentificationNumber { get; set; }
 
-        public string DisplayName { get; set; }
+        public string FirstName { get; set; }
 
         public string Initials { get; set; }
 
-        public string Infix { get; set; }
+        public string PrefixLastName { get; set; }
 
         public string LastName{ get; set; }
+
+        public Sex Sex { get; set; }
 
         public string StreetName { get; set; }
 
@@ -31,9 +34,23 @@ namespace Domain.CVS.Domain
         public string Residence { get; set; }
 
         public string TelephoneNumber { get; set; }
+        
+        public DateOnly DateOfBirth { get; set; }
 
-        public string MobileNumber { get; set; }
+        public string EmailAddress { get; set; }        
 
-        public string EmailAddress { get; set; }                
+        public MaritalStatus MaritalStatus { get; set; }
+
+        public virtual ICollection<DriversLicence> DriversLicences { get; set; }
+
+        public virtual ICollection<EmergencyPerson> EmergencyPeople { get; set; }
+
+        public virtual ICollection<Diagnosis> Diagnoses { get; set; }
+
+        public BenefitForm BenefitForm { get; set; }
+
+        public virtual ICollection<WorkingContract> WorkingContracts { get; set; }
+
+        public string Remarks { get; set; }
     }
 }
