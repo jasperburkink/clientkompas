@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link href="../fontawesome/css/fontawesome.css" rel="stylesheet">
+    <link href="../fontawesome/css/brands.css" rel="stylesheet">
+    <link href="../fontawesome/css/solid.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="output.css">
+</head>
+<body class="md:flex"><!--  overflow-hidden -->
+    <div class="logoBar">
+        <img src="../sprong_logo_svg.svg" class="w-150px md:w-[60%]">
+        <i id="hamburger" class="fa-solid fa-bars leading-none fa-3x md:hidden h-fit text-white ease-in-out duration-500 my-auto" onclick="openCloseBlueSidebar()"></i>
+    </div>
+    <div id="sidebar" class="sidebar">
+        <div class="navBtnsContainer">
+            <div class="navBtn group ">
+                <i class="fa-solid fa-users fa-xl leading-none"></i>
+                <div class="w-1/2">Cliënten</div>
+                <i class="fa-solid fa-arrow-right navBtnArrow"></i>
+            </div>
+            <div class="navBtn group ">
+                <i class="fa-solid fa-clock fa-xl leading-none"></i>
+                <div class="w-1/2">Uren registratie</div>
+                <i class="fa-solid fa-arrow-right navBtnArrow"></i>
+            </div>
+            <div class="navBtn group ">
+                <i class="fa-solid fa-building fa-xl leading-none"></i>
+                <div class="w-1/2">Organistatie</div>
+                <i class="fa-solid fa-arrow-right navBtnArrow"></i>
+            </div>
+            <div class="navBtn group ">
+                <i class="fa-solid fa-user fa-xl leading-none"></i>
+                <div class="w-1/2">Gebruiker</div>
+                <i class="fa-solid fa-arrow-right navBtnArrow"></i>
+            </div>
+            <div class="navBtn group ">
+                <i class="fa-solid fa-arrow-right-from-bracket fa-xl leading-none"></i>
+                <div class="w-1/2">Uitloggen</div>
+                <i class="fa-solid fa-arrow-right navBtnArrow"></i>
+            </div>
+        </div>
+        <div class="sidebarLine"></div>
+        <div class="sidebarDarkLine"></div>
+    </div>
+    <div id="sidebarGray" class="sidebarGray">
+        <div id="navBtnsContainerGray" class="navBtnsContainerGray">
+            <div class="flex justify-between px-1">
+                <div class="text-lg font-semibold">LijstNaam</div>
+                <i class="fa-solid fa-plus fa-lg my-auto"></i>
+            </div>
+            <hr class="hidden md:block h-px bg-black border-0 -mt-1">
+            <form class="py-3">   
+                <div class="relative">
+                    <input class="inputField" placeholder="Zoeken">
+                    <button type="submit" class="absolute right-2.5 bottom-0 top-0">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </div>
+            </form>
+            <div class="h-fit">
+                <div class="navBtnGray group ">
+                    <div class="w-1/2">Onderdeel lijst</div>
+                    <i class="fa-solid fa-arrow-right navBtnArrow"></i>
+                </div>
+                <div class="navBtnGray group ">
+                    <div class="w-1/2">Placeholder</div>
+                    <i class="fa-solid fa-arrow-right navBtnArrow"></i>
+                </div>
+                <div class="navBtnGray group ">
+                    <div class="w-1/2">HolderPlace</div>
+                    <i class="fa-solid fa-arrow-right navBtnArrow"></i>
+                </div>
+                <div class="navBtnGray group ">
+                    <div class="w-1/2">Placie Holderie</div>
+                    <i class="fa-solid fa-arrow-right navBtnArrow"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebarLineGray"></div>
+        <div class="sidebarDarkLineGray"></div>
+
+        <i id="sidebarArrow" class="sidebarArrow fa-solid fa-angle-right fa-3x hidden md:block" onclick="openCloseGraySideBar()"></i>
+        <i id="sidebarArrowMobile" class="sidebarArrow fa-solid fa-sort-down fa-2x md:hidden pb-2" onclick="openCloseGraySideBarMobile()"></i>
+    </div>
+</body>
+</html>
+
+<script>
+    function openCloseBlueSidebar() {
+        var rotatedeg = document.getElementById("hamburger").style.rotate;
+
+        if(rotatedeg === "90deg")
+        {
+            document.getElementById("sidebar").style.height ="0px";
+            document.getElementById("hamburger").style.rotate = "0deg";
+            document.body.style.overflow ="hidden";
+        }
+        else
+        {
+            document.getElementById("sidebar").style.height ="100vh";
+            document.getElementById("hamburger").style.rotate = "90deg";
+            document.body.style.overflow ="hidden";
+        }
+    }
+    function openCloseGraySideBar() {
+        var rotatedeg = document.getElementById("sidebarArrow").style.rotate;
+
+        if(rotatedeg === "180deg")
+        {
+            document.getElementById("sidebarGray").style.marginLeft = "-430px"
+            document.getElementById("sidebarArrow").style.rotate = "0deg";
+        }
+        else
+        {
+            document.getElementById("sidebarGray").style.marginLeft = "-100px";
+            document.getElementById("sidebarArrow").style.rotate = "180deg";
+        }
+    }
+    function openCloseGraySideBarMobile() {
+        var rotatedeg = document.getElementById("sidebarArrowMobile").style.rotate;
+
+        if(rotatedeg === "180deg")
+        {
+            document.getElementById("sidebarGray").style.maxHeight = "40px"
+            document.getElementById("sidebarArrowMobile").style.paddingBottom = "8px";
+            document.getElementById("sidebarArrowMobile").style.rotate = "0deg";
+        }
+        else
+        {
+            document.getElementById("sidebarGray").style.maxHeight = "50vh"
+            document.getElementById("sidebarArrowMobile").style.paddingBottom = "0px";
+            document.getElementById("sidebarArrowMobile").style.rotate = "180deg";
+        }
+    }
+</script>
