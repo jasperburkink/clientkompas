@@ -1,3 +1,4 @@
+using API.Policies;
 using Application.Common.Interfaces.CVS;
 using Infrastructure.Persistence.CVS;
 using Microsoft.DotNet.Scaffolding.Shared.ProjectModel;
@@ -36,6 +37,7 @@ builder.Services.AddControllers(options =>
     {
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
         options.JsonSerializerOptions.WriteIndented = true;
+        options.JsonSerializerOptions.PropertyNamingPolicy = new LowerCaseNamingPolicy();
     });
 
 //builder.Services.AddControllers();
