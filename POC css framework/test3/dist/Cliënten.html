@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link href="../fontawesome/css/fontawesome.css" rel="stylesheet">
+    <link href="../fontawesome/css/brands.css" rel="stylesheet">
+    <link href="../fontawesome/css/solid.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="output.css">
+</head>
+<body class="lg:flex gap-[50px]">
+    <div class="lg:flex">
+        <div class="logoBar">
+            <img src="/POC css framework/test3/sprong_logo_svg.svg" class="w-150px lg:w-[60%]">
+            <i id="hamburger" class="fa-solid fa-bars leading-none fa-3x lg:hidden h-fit text-white ease-in-out duration-500 my-auto" onclick="openCloseBlueSidebar()"></i>
+        </div>
+        <div id="sidebar" class="sidebar">
+            <div class="navBtnsContainer">
+                <div class="navBtn group ">
+                    <i class="fa-solid fa-users fa-xl leading-none"></i>
+                    <div class="w-1/2">Cliënten</div>
+                    <i class="fa-solid fa-arrow-right navBtnArrow"></i>
+                </div>
+                <div class="navBtn group ">
+                    <i class="fa-solid fa-clock fa-xl leading-none"></i>
+                    <div class="w-1/2">Uren registratie</div>
+                    <i class="fa-solid fa-arrow-right navBtnArrow"></i>
+                </div>
+                <div class="navBtn group ">
+                    <i class="fa-solid fa-building fa-xl leading-none"></i>
+                    <div class="w-1/2">Organistatie</div>
+                    <i class="fa-solid fa-arrow-right navBtnArrow"></i>
+                </div>
+                <div class="navBtn group ">
+                    <i class="fa-solid fa-user fa-xl leading-none"></i>
+                    <div class="w-1/2">Gebruiker</div>
+                    <i class="fa-solid fa-arrow-right navBtnArrow"></i>
+                </div>
+                <div class="navBtn group ">
+                    <i class="fa-solid fa-arrow-right-from-bracket fa-xl leading-none"></i>
+                    <div class="w-1/2">Uitloggen</div>
+                    <i class="fa-solid fa-arrow-right navBtnArrow"></i>
+                </div>
+            </div>
+            <div class="sidebarLine"></div>
+            <div class="sidebarDarkLine"></div>
+        </div>
+        <div id="sidebarGray" class="sidebarGray">
+            <div id="navBtnsContainerGray" class="navBtnsContainerGray">
+                <div class="flex justify-between px-1">
+                    <div class="text-lg font-semibold">Cliëntenlijst</div>
+                    <i class="fa-solid fa-plus fa-lg my-auto"></i>
+                </div>
+                <hr class="hidden lg:block h-px bg-black border-0 -mt-1">
+                <form class="py-3">   
+                    <div class="relative">
+                        <input class="inputField" placeholder="Zoeken">
+                        <button type="submit" class="absolute right-2.5 bottom-0 top-0">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </div>
+                </form>
+                <div class="h-fit">
+                    <div class="navBtnGray group ">
+                        <div class="w-1/2">Cliënt1</div>
+                        <i class="fa-solid fa-arrow-right navBtnArrow"></i>
+                    </div>
+                    <div class="navBtnGray group ">
+                        <div class="w-1/2">Cliënt2</div>
+                        <i class="fa-solid fa-arrow-right navBtnArrow"></i>
+                    </div>
+                    <div class="navBtnGray group ">
+                        <div class="w-1/2">Cliënt3</div>
+                        <i class="fa-solid fa-arrow-right navBtnArrow"></i>
+                    </div>
+                    <div class="navBtnGray group ">
+                        <div class="w-1/2">Cliënt4</div>
+                        <i class="fa-solid fa-arrow-right navBtnArrow"></i>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="sidebarLineGray"></div>
+            <div class="sidebarDarkLineGray"></div>
+    
+            <i id="sidebarArrow" class="sidebarArrow fa-solid fa-angle-right fa-3x hidden lg:block" onclick="openCloseGraySideBar()"></i>
+            <i id="sidebarArrowMobile" class="sidebarArrow fa-solid fa-sort-down fa-2x lg:hidden pb-2" onclick="openCloseGraySideBarMobile()"></i>
+        </div>
+    </div>
+    <div class="md:flex md:flex-col w-2/3">
+        <div id="info" class="infoBox">
+            <div class="overflow-hidden w-full h-full gap-3 flex flex-col justify-between">
+                <ul class="twoSpaceUlBox h-150px">
+                    <li class="pieceTitle">Cliënt info</li>
+                    <li>Naam</li>
+                    <li>mobiel</li>
+                    <li>straat</li>
+                    <li>email</li>
+                    <li>adres</li>
+                    <li>geboorte</li>
+                    <li></li>
+                    <li>bsn</li>
+                </ul>
+                <ul class="twoSpaceUlBox h-100px">
+                    <li class="col-span-2">In geval van nood</li>
+                    <li>naam</li>
+                    <li>Burgelijke staat</li>
+                    <li>mobiel</li>
+                    <li>rijbewijs</li>
+                </ul>
+                <ul class="twoSpaceUlBox h-150px">
+                    <li class="col-span-2">Overige informatie</li>
+                    <li>Diagnose</li>
+                    <li>Contact</li>
+                    <li>Uitkeringvorm</li>
+                    <li>van</li>
+                    <li>Werk</li>
+                    <li>tot</li>
+                    <li>functie</li>
+                </ul>
+                <ul class="h-fit  shrink-0">
+                    <li class="col-span-2">Opmerkingen</li>
+                    <li class="col-span-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</li>
+                </ul>
+            </div>
+            <div id="clientBtns"  class="absolute h-[175px] w-full top-[150px] z-30 ease-in-out duration-500 cursor-pointer bg-gradient-to-t from-white from-30% to-transparent to-30%">
+                <div class="relative h-full">
+                    <div class="bg-white h-full w-1/2 flex flex-col content-end flex-wrap gap-3 absolute right-0">
+                        <button class="btnSollid">Cliënt Aanpassen</button>
+                        <button class="btnNotSollid">Urenoverzicht</button>
+                        <div onclick="moreInformation(this)" class="mt-auto text-sky-500 underline ml-auto">
+                            meer informatie
+                            <i id="moreInfoArrow" class="fa-solid fa-angle-down underline"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="infoBox">
+            <div class="overflow-hidden ">
+                <ul class="twoSpaceUlBox h-150px">
+                    <li class="pieceTitle">Traject info</li>
+                    <button class="col-span-2 inputField flex justify-between">
+                        <div>Traject Naam</div>
+                        <i class="fa-solid fa-sort-down fa-xl h-[8px] my-auto"></i>
+                    </button>
+                    <li>mobiel</li>
+                    <li>straat</li>
+                    <li>email</li>
+                    <li>adres</li>
+                    <li>geboorte</li>
+                    <li></li>
+                    <li>bsn</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="w-1/3 mr-50px">
+        <div class="profilePictureBox">
+            <i class="fa-solid fa-circle-user fa-10x text-white"></i>
+        </div>
+        <div class="text-sky-500 underline">Uploaden</div>
+        <div class="text-sky-500 underline">Verwijderen</div>
+        <button class="btnSollid">De-activeer cliënt</button>
+    </div>
+    <div class="fixed right-1/2 w-[350px] -mr-[175px] bottom-0 z-50 text-subGray2">@ 2023 Copyright: Coaching Bureau Ron de Jong</div>
+</body>
+</html>
+<script>
+    function openCloseBlueSidebar() {
+        var rotatedeg = document.getElementById("hamburger").style.rotate;
+
+        if(rotatedeg === "90deg")
+        {
+            document.getElementById("sidebar").style.height ="0px";
+            document.getElementById("hamburger").style.rotate = "0deg";
+            document.body.style.overflow ="hidden";
+        }
+        else
+        {
+            document.getElementById("sidebar").style.height ="100vh";
+            document.getElementById("hamburger").style.rotate = "90deg";
+            document.body.style.overflow ="hidden";
+        }
+    }
+    function openCloseGraySideBar() {
+        var rotatedeg = document.getElementById("sidebarArrow").style.rotate;
+
+        if(rotatedeg === "180deg")
+        {
+            document.getElementById("sidebarGray").style.marginLeft = "-430px"
+            document.getElementById("sidebarArrow").style.rotate = "0deg";
+        }
+        else
+        {
+            document.getElementById("sidebarGray").style.marginLeft = "-100px";
+            document.getElementById("sidebarArrow").style.rotate = "180deg";
+        }
+    }
+    function openCloseGraySideBarMobile() {
+        var rotatedeg = document.getElementById("sidebarArrowMobile").style.rotate;
+
+        if(rotatedeg === "180deg")
+        {
+            document.getElementById("sidebarGray").style.maxHeight = "40px"
+            document.getElementById("sidebarArrowMobile").style.paddingBottom = "8px";
+            document.getElementById("sidebarArrowMobile").style.rotate = "0deg";
+        }
+        else
+        {
+            document.getElementById("sidebarGray").style.maxHeight = "50vh"
+            document.getElementById("sidebarArrowMobile").style.paddingBottom = "0px";
+            document.getElementById("sidebarArrowMobile").style.rotate = "180deg";
+        }
+    }
+    function moreInformation(moreInfo){
+        var icon = (moreInfo.childNodes[1])
+
+        if(icon.classList.contains('fa-angle-up'))
+        {
+            document.getElementById("info").style.maxHeight = "300px";
+            icon.classList.remove("fa-angle-up");
+            icon.classList.add("fa-angle-down");
+            document.getElementById("clientBtns").style.top = "150px";
+        }
+        else
+        {
+            document.getElementById("info").style.maxHeight = "698px";
+            icon.classList.remove("fa-angle-down");
+            icon.classList.add("fa-angle-up");
+            document.getElementById("clientBtns").style.top = "100%";
+        }
+    }
+</script>

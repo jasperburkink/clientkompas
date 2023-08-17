@@ -5,9 +5,11 @@ using Application.Clients.Queries.GetClients;
 using Application.Common.Interfaces.CVS;
 using Domain.CVS.Domain;
 using Microsoft.AspNetCore.Mvc;
+using System.Web.Http.Cors;
 
 namespace API.Controllers
 {
+    // [EnableCors(origins: "localhost:3000", headers: "*", methods: "*")]
     [Route("api/[controller]")]
     [ApiController]
     public class ClientController : ApiControllerBase

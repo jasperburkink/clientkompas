@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link href="../fontawesome/css/fontawesome.css" rel="stylesheet">
+    <link href="../fontawesome/css/brands.css" rel="stylesheet">
+    <link href="../fontawesome/css/solid.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="output.css">
+</head>
+<body class="md:flex overflow-hidden">
+    <div class="sidebar">
+        <div class="sidebarEmptyLine"></div>
+        <div class="sidebarDarkLine"></div>
+    </div>
+    <div class="w-screen h-screen flex md:justify-center content-center flex-wrap flex-col">
+        <div class="bg-mainBlue md:bg-transparent w-full h-56 px-16">
+            <img src="/POC css framework/test3/sprong_logo_svg.svg" alt="Logo" class="w-fit h-full md:h-52 my-auto md:mx-auto">
+        </div>
+        <form class="flex flex-col content-center flex-wrap gap-2 mt-50px">
+            <input type="text" class="inputField w-[300px]" placeholder="Gebruikersnaam">
+            <div class="flex w-[300px]">
+                <input id="inputPassword" type="password" class="inputField w-full" placeholder="Wachtwoord">
+                <i id="icon" class="fa-solid fa-eye my-auto -ml-8" onclick="showInputPassword(this)"></i>
+            </div>
+            <a href="http://127.0.0.1:5500/dist/sidebar.html" class="text-sky-500 underline ml-auto">Wachtwoord vergeten?</a>
+            <button class="btnSollid mx-auto">Inloggen</button>
+        </form>
+    </div>
+</body>
+</html>
+<script> 
+    function showInputPassword(icon){
+        var inputPassword = document.getElementById("inputPassword");
+        if (inputPassword.type === "password") {
+            inputPassword.type = "text";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
+        } else {
+            inputPassword.type = "password";
+            icon.classList.remove("fa-eye-slash");
+            icon.classList.add("fa-eye");
+        }
+    }
+</script>

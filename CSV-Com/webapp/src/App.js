@@ -1,5 +1,6 @@
 import logo from './logo.svg';
 import './App.scss';
+import { Button } from './components/button.jsx';
 
 function App() {
   return (
@@ -9,6 +10,8 @@ function App() {
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
+        <p>And now for the tailwind component button</p>
+        <Button text="Button" href="#" />
         <a
           className="App-link"
           href="https://reactjs.org"

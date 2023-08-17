@@ -1,3 +1,4 @@
+using API.Policies;
 using Application.Common.Interfaces.CVS;
 using Infrastructure.Persistence.Authentication;
 using Infrastructure.Persistence.CVS;
@@ -17,11 +18,24 @@ builder.Services.AddControllers(options =>
     {
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
         options.JsonSerializerOptions.WriteIndented = true;
+        options.JsonSerializerOptions.PropertyNamingPolicy = new LowerCaseNamingPolicy();
     });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "CvsCustomCorsPolicy",
+                      policy =>
+                      {
+                          policy.WithOrigins("http://localhost:3000")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials();
+                      });
+});
 
 var app = builder.Build();
 
@@ -46,6 +60,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.UseCors("CvsCustomCorsPolicy");
 
 app.UseHttpsRedirection();
 

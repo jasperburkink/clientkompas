@@ -33,7 +33,7 @@ namespace Domain.CVS.Domain
         public string Residence { get; set; }
 
         public string TelephoneNumber { get; set; }
-
+        
         public DateOnly DateOfBirth { get; set; }
 
         public string EmailAddress { get; set; }        
