@@ -18,12 +18,12 @@ namespace API.Controllers
             return await Mediator.Send(query);
         }
 
-        //[HttpGet("{id}")]
-        //public Client Get(int id)
-        //{
-        //    var client = _unitOfWork.ClientRepository.Get(c => c.Id.Equals(id), includeProperties: "DriversLicences,Diagnoses,EmergencyPeople,WorkingContracts").First();
-        //    return client;
-        //}
+        //TODO: implement with new Mediator structure
+        [HttpGet("{id}")]
+        public Client Get(int id)
+        {
+            throw new NotImplementedException();
+        }
 
         [HttpPost]
         public async Task<ActionResult<int>> Create(CreateClientCommand command)
@@ -38,19 +38,19 @@ namespace API.Controllers
             return await Mediator.Send(command);
         }
 
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] Client value)
-        //{
-        //    _unitOfWork.ClientRepository.Update(value);
-        //    _unitOfWork.Save();
-        //}
+        //TODO: implement with new Mediator structure
+        [HttpPut("{id}")]
+        public void Put(int id, [FromBody] Client value)
+        {
+            throw new NotImplementedException();
+        }
 
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //    _unitOfWork.ClientRepository.Delete(id);
-        //    _unitOfWork.Save();
-        //}
+        //TODO: implement with new Mediator structure
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
 
         [Route("[action]")]
         [HttpDelete]
