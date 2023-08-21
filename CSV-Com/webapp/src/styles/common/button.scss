@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .btnSollid {
+        @apply bg-mainBlue text-white w-200px h-50px text-center font-medium text-sm rounded-lg;
+    }
+
+    .btnNotSollid {
+        @apply text-mainBlue w-200px h-50px text-center font-medium text-sm border-4 rounded-lg border-mainBlue;
+    }
+}
