@@ -1,4 +1,4 @@
-import '../index.css';
+import '../../index.css';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUsers, faClock, faBuilding, faUser, faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";

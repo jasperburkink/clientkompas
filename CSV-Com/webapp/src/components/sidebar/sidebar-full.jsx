@@ -1,16 +1,16 @@
-import '../index.css';
+import '../../index.css';
 
 import { Sidebar } from './sidebar';
-import { SidebarGray } from './sidebarGray';
-import { NavButton } from './navButton';
-import { NavButtonGray } from './navButtonGray';
-import { SearchInputField } from './searchInputField';
-import { NavTitle } from './navTitle';
+import { SidebarGray } from './sidebar-gray';
+import { NavButton } from '../nav/nav-button';
+import { NavButtonGray } from '../nav/nav-button-gray';
+import { SearchInputField } from '../common/search-input-field';
+import { NavTitle } from '../nav/nav-title';
 
 export function SidebarFull(props) {  
-    if(props.client == null) {
-        return "loading...";
-    }
+    //if(props.client == null) {
+    //    return "loading...";
+    //}
     return(
         <div className="lg:flex">
                 <Sidebar>

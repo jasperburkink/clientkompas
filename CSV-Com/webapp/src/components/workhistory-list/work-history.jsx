@@ -1,10 +1,10 @@
-import '../index.css';
+import '../../index.css';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 import React, { useEffect, useState } from "react";
-import { InputFieldAddition } from './inputFieldAddition';
+import { InputFieldAddition } from '../common/input-field-addition';
 
 const optionsWork = [{name: "SBICT", value : 0}]
 const optionsContract = [{name: "Temporary", value : 0}, {name: "Permanent", value: 1}]

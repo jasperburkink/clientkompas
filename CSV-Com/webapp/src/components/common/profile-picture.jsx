@@ -1,4 +1,4 @@
-import '../index.css';
+import '../../index.css';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";

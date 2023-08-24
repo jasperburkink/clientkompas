@@ -1,6 +1,6 @@
-import '../index.css';
+import '../../index.css';
 
-import { InputField } from './inputField';
+import { InputField } from '../common/input-field';
 
 export function InfoBoxPartTrajectInfo(props) {
     return (

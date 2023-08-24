@@ -1,10 +1,10 @@
-import '../../styles/common/input-field-text.scss';
+import '../../styles/common/input-field-text.css';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faL, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 import React, { useEffect, useState } from "react";
-import { InputFieldAddition } from './inputFieldAddition';
+import { InputFieldAddition } from './input-field-addition';
 
 
 

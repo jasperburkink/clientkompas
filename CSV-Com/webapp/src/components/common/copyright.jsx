@@ -1,4 +1,4 @@
-import '../../styles/common/copyright.scss';
+import '../../styles/common/copyright.css';
 
 export function Copyright(props) {
     return (

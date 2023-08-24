@@ -1,8 +1,8 @@
-import './index.css';
+import '../index.css';
 
 import { Copyright } from '../components/common/copyright';
 import { Button } from '../components/common/button';
-import React, { useEffect, useState } from "react";
+import React, { SetStateAction, useEffect, useState } from "react";
 import { useParams } from 'react-router-dom';
 import { InputFieldText } from '../components/common/input-field-text';
 import { SidebarFull } from '../components/sidebar/sidebar-full';
@@ -58,7 +58,7 @@ function ClientsAdd() {
                 //console.log(data);
                 setClient(data);
                 if(id){
-                    var clientData = data.find((element) => {
+                    var clientData = data.find((element: { id: string; }) => {
                         return element.id == id
                     })
                     if(clientData){
@@ -115,16 +115,25 @@ function ClientsAdd() {
             });
     }, 
     [] 
-    ); 
-    const getNameOfValue = (client, options) => {
-        if(client || client === 0){
+    );
+    const getNameOfValue = (client: SetStateAction<number>, options) => {
+        if (client || client === 0) {
             let nameOfValue = ""
             nameOfValue += options[client].name
-            return(nameOfValue)
-        }else{
-            return("/")
+            return (nameOfValue)
+        } else {
+            return ("/")
         }
     }
+    //const getNameOfValue = (client, options) => {
+    //    if(client || client === 0){
+    //        let nameOfValue = ""
+    //        nameOfValue += options[client].name
+    //        return(nameOfValue)
+    //    }else{
+    //        return("/")
+    //    }
+    //}
     const getValueOfName = (name, options) => {
         if(options.find(function(element){return element.name == name})){
             let valueOfName = ""
@@ -192,9 +201,9 @@ function ClientsAdd() {
         }
     }
 
-    if(client == null) {
-        return "loading...";
-    };
+    //if(client == null) {
+    //    return "loading...";
+    //};
     return(
         <div className='flex flex-col lg:flex-row h-screen lg:h-auto'>
             <SidebarFull client={client} />

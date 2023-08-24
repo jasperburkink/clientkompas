@@ -1,4 +1,4 @@
-import '../../styles/common/button.scss';
+import '../../styles/common/button.css';
 
 export function Button(props) {
   var type = props.type

@@ -1,6 +1,6 @@
-import '../index.css';
+import '../../index.css';
 import React, { useEffect, useState } from "react";
-import { ClientWork } from './clientWork';
+import { ClientWork } from '../workhistory-list/work-history';
 
 export function InfoBoxPartClientInfo(props) {
     const [werkLijst, setwerkLijst] = useState([])
@@ -14,9 +14,9 @@ export function InfoBoxPartClientInfo(props) {
     {name: "B", value: 4}, {name: "C1", value: 5}, {name: "C", value: 6}, {name: "D1", value: 7}, {name: "D", value: 8}, {name: "BE", value: 9},
     {name: "C1E", value: 10}, {name: "CE", value: 11}, {name: "D1E", value: 12}, {name: "DE", value: 13}, {name: "T", value: 14}]
     
-    if(props.client == null) {
-        return "loading...";
-    } 
+    //if(props.client == null) {
+    //    return "loading...";
+    //} 
 
     const getAllInfo = (soort, naam, options) =>{
         if(props.client[soort].length > 0){

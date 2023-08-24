@@ -13,7 +13,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="src\components\workhistory-list\" />
-    <Folder Include="src\styles\common\" />
     <Folder Include="src\types\" />
   </ItemGroup>
 </Project>
