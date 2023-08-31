@@ -54,7 +54,7 @@ function Clients() {
                     />
                 </InfoBox>
                 <div className='h-[300px] flex flex-wrap justify-end content-end'>
-                    <Button type="btnSollid" text="De-activeer cliënt" className="hidden md:block"/>
+                    <Button buttonType={{type:'Solid'}} text="De-activeer cliënt" className="hidden md:block" onClick={()=>{}} />
                 </div>
                 
             </div>

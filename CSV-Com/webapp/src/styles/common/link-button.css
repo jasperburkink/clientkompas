@@ -3,19 +3,23 @@
 @tailwind utilities;
 
 @layer components {
-    button{
-        @apply w-200px h-50px text-center font-medium text-sm rounded-lg;
+    a {
+        @apply w-200px h-50px font-medium text-sm rounded-lg flex;
     }
 
-    button.solid {
+    p {
+        @apply m-auto;
+    }
+
+    a.solid {
         @apply bg-mainBlue text-white;
     }
 
-    button.not-solid {
+    a.not-solid {
         @apply text-mainBlue border-4 border-mainBlue;
     }
 
-    button.underline {
+    a.underline {
         @apply text-mainBlue;
     }
 }
