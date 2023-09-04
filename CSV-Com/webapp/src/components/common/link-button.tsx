@@ -10,7 +10,7 @@ interface LinkButtonProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> 
 
 export const LinkButton = (props: LinkButtonProps) => (
   <a {...props}
-  className={getClassNameButtonType(props.buttonType.type)} >
-    <p>{props.text}</p>
+  className={props.className + ' ' + getClassNameButtonType(props.buttonType.type)} >
+    <p className='button'>{props.text}</p>
   </a>
 );

@@ -6,7 +6,9 @@ interface HeaderProps extends React.LabelHTMLAttributes<HTMLHeadingElement> {
 }
 
 export const Header = (props: HeaderProps) => (
-    <h1>
-        {props.text}
-    </h1>
+    <div {...props} className={"header " + props.className}>
+        <p>
+            {props.text}
+        </p>
+    </div>
   );

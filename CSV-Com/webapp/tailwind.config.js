@@ -5,6 +5,9 @@ module.exports = {
     ],
     theme: {
         extend: {
+            fontFamily:{
+                'primary': ['Work+Sans']
+            },
             colors: {
                 'mainBlue': '#148CB8',
                 'mainGray': '#E3E3E3',

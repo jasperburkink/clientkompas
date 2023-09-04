@@ -7,10 +7,10 @@ export function getClassNameButtonType(param: string) {
     {
       default:
       case 'Solid':
-        return 'solid';
+        return 'button button-solid';
       case 'NotSolid':
-        return 'not-solid';
+        return 'button button-not-solid';
       case 'Underline':
-        return 'underline';
+        return 'button button-underline';
     }
   };

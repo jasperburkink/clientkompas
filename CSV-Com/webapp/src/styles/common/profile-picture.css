@@ -4,11 +4,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600&display=swap');
 
 @layer components {
-    .header{
-        @apply m-auto;
-    }
-
-    .header p{ 
-        @apply font-primary font-semibold text-black text-lg underline underline-offset-4;
+    .profile-picture-box {
+        @apply bg-mainGray rounded-3xl flex justify-center content-center flex-wrap aspect-square max-w-sm
     }
 }

@@ -16,12 +16,13 @@ import { NavButtonGray } from '../components/nav/nav-button-gray';
 import { SearchInputField } from '../components/common/search-input-field';
 import { NavTitle } from '../components/nav/nav-title';
 
+
 function App() {
     return (
         <div className="md:flex">
             <div className='md:flex'>
                 <Sidebar>
-                    <NavButton text="Cli�nten" icon="Gebruikers" />
+                    <NavButton text="Cliënten" icon="Gebruikers" />
                     <NavButton text="Uren registratie" icon="Klok" />
                     <NavButton text="Organistatie" icon="Gebouw" />
                     <NavButton text="Gebruiker" icon="Gebruiker" />
@@ -40,7 +41,7 @@ function App() {
             </div>
             <div className='grid grid-cols-2'>
                 <p>Header</p>
-                <Header text="Test header. Dit zijn alle Components!" />
+                <Header text="Dit zijn alle beschikbare componenten." />
 
                 <p>Button</p>
                 <table className="table-auto">
@@ -52,16 +53,16 @@ function App() {
                     </thead>
                     <tbody>
                         <tr>
-                            <td><p>Solid</p></td>
-                            <td><Button buttonType={{type:"Solid"}} text="Test1" onClick={()=> {alert('test1');}} /></td>
+                            <td><p>Solid:</p></td>
+                            <td><Button buttonType={{type:"Solid"}} text="Button1" className='w-200px h-50px' onClick={()=> {alert('Button1');}} /></td>
                         </tr>
                         <tr>
-                            <td><p>Not solid</p></td>
-                            <td><Button buttonType={{type:"NotSolid"}} text="Test2" onClick={()=> {alert('test2');}} /></td>
+                            <td><p>Not solid:</p></td>
+                            <td><Button buttonType={{type:"NotSolid"}} text="Button2" className='w-200px h-50px' onClick={()=> {alert('Button2');}} /></td>
                         </tr>
                         <tr>
-                            <td><p>Underline</p></td>
-                            <td><Button buttonType={{type:"Underline"}} text="Test3" onClick={()=> {alert('test3');}} /></td>
+                            <td><p>Underline:</p></td>
+                            <td><Button buttonType={{type:"Underline"}} text="Button3" className='w-200px h-50px' onClick={()=> {alert('Button3');}} /></td>
                         </tr>
                     </tbody>
                 </table>
@@ -76,31 +77,29 @@ function App() {
                     </thead>
                     <tbody>
                         <tr>
-                            <td><p>Solid</p></td>
-                            <td><LinkButton buttonType={{type:"Solid"}} text="Test" href="https://specializedbrainsict.nl/" /></td>
+                            <td><p>Solid:</p></td>
+                            <td><LinkButton buttonType={{type:"Solid"}} text="Button1" href="https://specializedbrainsict.nl/" /></td>
                         </tr>
                         <tr>
-                            <td><p>Not solid</p></td>
-                            <td><LinkButton buttonType={{type:"NotSolid"}} text="Test2" href="https://specializedbrainsict.nl/" /></td>
+                            <td><p>Not solid:</p></td>
+                            <td><LinkButton buttonType={{type:"NotSolid"}} text="Button2" href="https://specializedbrainsict.nl/" /></td>
                         </tr>
                         <tr>
-                            <td><p>Underline</p></td>
-                            <td><LinkButton buttonType={{type:"Underline"}} text="Test2" href="https://specializedbrainsict.nl/" /></td>
+                            <td><p>Underline:</p></td>
+                            <td><LinkButton buttonType={{type:"Underline"}} text="Button3" href="https://specializedbrainsict.nl/" /></td>
                         </tr>
                     </tbody>
                 </table>               
 
-                <label>InputField</label>
+                <p>InputField</p>
                 <InputField placeholder="Test" />
+
+                <p>ProfilePicture</p>                
                 <ProfilePicture />
-                <div className="md:flex md:flex-col w-2/3">
-                    {/*<InfoBox>*/}
-                    {/*    <InfoBoxPartClientInfo naam="Naam" mobiel="Mobiel" straat="Straat" email="Email" adres="Adres" geboortedatum="Geboorte" bsn="bsn" />*/}
-                    {/*</InfoBox>*/}
-                {/*    <InfoBox>*/}
-                {/*        <InfoBoxPartClientInfo naam="Naam" mobiel="Mobiel" straat="Straat" email="Email" adres="Adres" geboortedatum="Geboorte" bsn="bsn" />*/}
-                {/*    </InfoBox>*/}
-                </div>
+
+                <p>ProfilePicture</p>
+                <ProfilePicture pictureUrl='https://media.licdn.com/dms/image/C5603AQG1ibjUUZ7NFQ/profile-displayphoto-shrink_800_800/0/1655221337005?e=2147483647&v=beta&t=KKnYXDtk5PeT9utOaIAjUPjDLqk55-IrkCu1R5GuaRg' />
+                
             </div>
             <Copyright />
         </div>

@@ -1,16 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600&display=swap');
 
 @layer components {
-    .btnSollid {
-        @apply bg-mainBlue text-white w-200px h-50px text-center font-medium text-sm rounded-lg;
-    }
-
-    .btnNotSollid {
-        @apply text-mainBlue w-200px h-50px text-center font-medium text-sm border-4 rounded-lg border-mainBlue;
-    }
 
     .inputField {
         @apply bg-mainLightGray border-2 border-subGray2 placeholder-subGray2 focus:border-mainBlue focus:ring-1 ring-mainBlue text-gray-900 outline-none text-sm rounded-lg block w-full p-2.5;
@@ -18,11 +11,7 @@
 
     .inputFieldDropDown {
         @apply bg-mainLightGray border-2 border-subGray2 text-gray-900 outline-none text-sm rounded-lg block w-full p-2.5;
-    }
-
-    .profilePictureBox {
-        @apply bg-mainGray rounded-3xl flex justify-center content-center flex-wrap aspect-square
-    }
+    }    
 
     .logoBar {
         @apply bg-mainBlue lg:bg-transparent w-full lg:w-sidebarBlue h-100px lg:h-fit lg:mt-50px flex justify-between lg:justify-center content-center flex-wrap px-2 lg:px-50px absolute z-30

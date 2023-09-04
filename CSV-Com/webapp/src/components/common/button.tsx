@@ -10,8 +10,7 @@ interface ButtonProps extends React.HtmlHTMLAttributes<HTMLButtonElement> {
 
 export const Button = (props: ButtonProps) => (
   <button {...props}
-    className={getClassNameButtonType(props.buttonType.type)} >
+    className={props.className + ' ' + getClassNameButtonType(props.buttonType.type)} >
       {props.text}
   </button>
 );
-
