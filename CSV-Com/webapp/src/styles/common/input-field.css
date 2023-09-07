@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .inputField{
+        @apply w-4/5 h-12;
+    }
+}

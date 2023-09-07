@@ -5,6 +5,6 @@
 
 @layer components {
     .profile-picture-box {
-        @apply bg-mainGray rounded-3xl flex justify-center content-center flex-wrap aspect-square max-w-sm
+        @apply bg-mainGray rounded-3xl flex justify-center content-center flex-wrap aspect-square w-80
     }
 }

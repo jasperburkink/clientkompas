@@ -4,13 +4,11 @@ import { Sidebar } from './sidebar';
 import { SidebarGray } from './sidebar-gray';
 import { NavButton } from '../nav/nav-button';
 import { NavButtonGray } from '../nav/nav-button-gray';
-import { SearchInputField } from '../common/search-input-field';
+// import { SearchInputField } from '../common/search-input-field';
 import { NavTitle } from '../nav/nav-title';
 
 export function SidebarFull(props) {  
-    //if(props.client == null) {
-    //    return "loading...";
-    //}
+  
     return(
         <div className="lg:flex">
                 <Sidebar>
@@ -22,7 +20,7 @@ export function SidebarFull(props) {
                 </Sidebar>
                 <SidebarGray>
                     <NavTitle lijstNaam="Cliëntenlijst" path="/ClientsAdd"/>
-                    <SearchInputField />
+                    {/* <SearchInputField /> */}
                     <div className="h-fit">
                         {props.client.map((infoClient, pathNumber) => {
                             return (

@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    div.input-field-with-label{
+        @apply flex justify-between py-4;
+    }
+
+    div.input-field-with-label label{
+        @apply ;
+    }
+}
