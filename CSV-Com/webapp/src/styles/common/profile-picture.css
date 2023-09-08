@@ -5,6 +5,14 @@
 
 @layer components {
     .profile-picture-box {
-        @apply bg-mainGray rounded-3xl flex justify-center content-center flex-wrap aspect-square w-80
+        @apply bg-mainGray rounded-3xl flex justify-center content-center flex-wrap aspect-square w-80;
+    }
+
+    .profile-picture-box img {
+        @apply rounded-3xl;
+    }
+    
+    .profile-picture-buttons{
+        @apply flex justify-between py-4;
     }
 }

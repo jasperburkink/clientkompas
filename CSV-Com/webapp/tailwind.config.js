@@ -16,7 +16,10 @@ module.exports = {
                 'subBlue1': '#117DA3',
                 'subBlue2': '#0c6a8c',
                 'subGray1': '#CECECE',
-                'subGray2': '#B3B3B3'
+                'subGray2': '#B3B3B3',
+
+                'redRequired': '#C41E3A',
+                'redError': '#D2042D'
             },
             width: {
                 '50px': '50px',

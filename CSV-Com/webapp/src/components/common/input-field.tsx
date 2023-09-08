@@ -1,6 +1,8 @@
 import React from 'react';
 import '../../styles/common/input-field.css';
 import { InputFieldType } from '../../types/common/InputFieldType';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAsterisk } from "@fortawesome/free-solid-svg-icons";
 
 export interface InputFieldProps extends React.HtmlHTMLAttributes<HTMLInputElement> {
     value?: string,
@@ -10,10 +12,13 @@ export interface InputFieldProps extends React.HtmlHTMLAttributes<HTMLInputEleme
 }
 
 export const InputField = (props: InputFieldProps) => (  
-    <input {...props}
-     value={props.value} 
-     type={props.inputFieldType.type} 
-     className="inputField" 
-     placeholder={props.placeholder} 
-     required={props.required} />
+    <div className='input-field'>
+        <input {...props}
+        value={props.value} 
+        type={props.inputFieldType.type}         
+        placeholder={props.placeholder} 
+        required={props.required} /> 
+        {props.required === true &&
+        <FontAwesomeIcon icon={faAsterisk} className="fa-solid fa-1x"/>}
+     </div>
 );

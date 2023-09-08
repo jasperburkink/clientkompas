@@ -3,7 +3,16 @@
 @tailwind utilities;
 
 @layer components {
-    .inputField{
-        @apply w-4/5 h-12;
+    .input-field{
+        @apply flex;
     }
+
+    .input-field input{
+        @apply w-4/5 h-12 bg-mainLightGray border-2 border-subGray2 placeholder-subGray2 focus:border-mainBlue focus:ring-1 ring-mainBlue text-gray-900 outline-none text-sm rounded-lg block w-full p-2.5;
+    }
+
+    .input-field svg{
+        @apply m-3 text-redRequired;
+    }
+    
 }

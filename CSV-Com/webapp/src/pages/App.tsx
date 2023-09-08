@@ -94,10 +94,13 @@ function App() {
                 <p>Inputfield text with value</p>
                 <InputField inputFieldType={{type:'text'}} required={false} value='Test' placeholder='Placeholder' />
 
-                <p>Inputfield Required</p>
+                <p>Inputfield required</p>
                 <InputField inputFieldType={{type:'text'}} required={true} placeholder='Placeholder' />
 
                 <p>Inputfield with label</p>
+                <InputFieldWithLabel text='TextField' inputFieldProps={{ required: false, placeholder:'Placeholder', inputFieldType:{ type:'text'} }} />
+
+                <p>Inputfield required with label </p>
                 <InputFieldWithLabel text='TextField' inputFieldProps={{ required: true, placeholder:'Placeholder', inputFieldType:{ type:'text'} }} />
 
                 <p>ProfilePicture empty</p>

@@ -1,13 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans&display=swap');
 
 @layer components {
     div.input-field-with-label{
-        @apply flex justify-between py-4;
+        @apply font-primary flex justify-between py-4;
     }
 
     div.input-field-with-label label{
-        @apply ;
+        @apply mr-5 mt-3;
     }
 }
