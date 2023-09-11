@@ -1,0 +1,1 @@
+This folder contains alle assets for the webapp. Such as images etc.

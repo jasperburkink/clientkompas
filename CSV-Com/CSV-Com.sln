@@ -31,13 +31,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{D11CDFEC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API\API.csproj", "{836447F4-9D54-47D0-B4DF-F2705A0B4B26}"
 EndProject
-Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "webapp", "webapp\webapp.njsproj", "{4B9FD210-96C4-47C4-AC57-44C365E59A7E}"
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "webapp_old", "webapp_old\webapp_old.njsproj", "{4B9FD210-96C4-47C4-AC57-44C365E59A7E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.UnitTests", "Application.UnitTests\Application.UnitTests.csproj", "{1397A85B-B9A7-4236-9243-02DC80A82591}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.IntegrationTests", "Application.IntegrationTests\Application.IntegrationTests.csproj", "{B1368454-2C62-4751-9834-074DAE9B4C48}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArchitectureTests", "ArchitectureTests\ArchitectureTests.csproj", "{B5949667-F430-4D84-B971-AF47A65E3971}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "webapp", "webapp\webapp.esproj", "{BCD6A1E2-E16A-4CD4-AE9E-82EBB5FC8F8E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -89,6 +91,12 @@ Global
 		{B5949667-F430-4D84-B971-AF47A65E3971}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B5949667-F430-4D84-B971-AF47A65E3971}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B5949667-F430-4D84-B971-AF47A65E3971}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCD6A1E2-E16A-4CD4-AE9E-82EBB5FC8F8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCD6A1E2-E16A-4CD4-AE9E-82EBB5FC8F8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCD6A1E2-E16A-4CD4-AE9E-82EBB5FC8F8E}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{BCD6A1E2-E16A-4CD4-AE9E-82EBB5FC8F8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCD6A1E2-E16A-4CD4-AE9E-82EBB5FC8F8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCD6A1E2-E16A-4CD4-AE9E-82EBB5FC8F8E}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

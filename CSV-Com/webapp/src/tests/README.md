@@ -1,0 +1,1 @@
+All testfiles for playwright are added to this folder.
