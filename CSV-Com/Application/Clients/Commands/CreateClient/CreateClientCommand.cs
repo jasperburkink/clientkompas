@@ -24,7 +24,7 @@ namespace Application.Clients.Commands.CreateClient
 
         public string LastName { get; init; }
 
-        public Sex Sex { get; init; }
+        public Gender Gender { get; init; }
 
         public string StreetName { get; init; }
 
@@ -67,7 +67,7 @@ namespace Application.Clients.Commands.CreateClient
                 Initials = request.Initials,
                 PrefixLastName = request.PrefixLastName,
                 LastName = request.LastName,
-                Sex = request.Sex,
+                Gender = request.Gender,
                 StreetName = request.StreetName,
                 HouseNumber = request.HouseNumber,
                 HouseNumberAddition = request.HouseNumberAddition,

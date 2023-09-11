@@ -67,7 +67,7 @@ namespace Infrastructure.Persistence.CVS
                     Initials = "J",
                     PrefixLastName = "",
                     LastName = "Jansen",
-                    Sex = Sex.Men,
+                    Gender = Gender.Men,
                     StreetName = "Dorpstraat",
                     HouseNumber = 1,
                     HouseNumberAddition = "a",

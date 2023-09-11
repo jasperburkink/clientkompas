@@ -25,7 +25,7 @@ namespace Application.Clients.Queries.GetClients
 
         public string LastName { get; set; }
 
-        public string Sex { get; set; }
+        public string Gender { get; set; }
 
         public string StreetName { get; set; }
 
@@ -61,7 +61,7 @@ namespace Application.Clients.Queries.GetClients
         {
             // TODO: Get the right text value for the enum values. Depends on language user.
             profile.CreateMap<Client, ClientDto>()
-                .ForMember(cDto => cDto.Sex, s => s.MapFrom(c => Enum.GetName(typeof(Sex), c.Sex)))
+                .ForMember(cDto => cDto.Gender, s => s.MapFrom(c => Enum.GetName(typeof(Gender), c.Gender)))
                 .ForMember(cDto => cDto.MaritalStatus, ms => ms.MapFrom(c => Enum.GetName(typeof(MaritalStatus), c.MaritalStatus)))
                 .ForMember(cDto => cDto.DriversLicences, dl => dl.MapFrom(c => string.Join(SeperatorChar, c.DriversLicences.Select(dl => Enum.GetName(typeof(DriversLicenceEnum), dl.DriversLicenceCode)))))
                 .ForMember(cDto => cDto.BenefitForm, bf => bf.MapFrom(c => Enum.GetName(typeof(BenefitForm), c.BenefitForm)))
