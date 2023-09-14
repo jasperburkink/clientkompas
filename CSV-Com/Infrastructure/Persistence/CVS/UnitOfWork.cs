@@ -49,6 +49,11 @@ namespace Infrastructure.Persistence.CVS
             context.SaveChanges();
         }
 
+        public async Task SaveAsync(CancellationToken cancellationToken = default)
+        {
+            await context.SaveChangesAsync(cancellationToken);
+        }
+
         private bool disposed = false;        
 
         protected virtual void Dispose(bool disposing)

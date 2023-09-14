@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Cliënten.Queries
+namespace Application.Common.Interfaces.Authentication
 {
-    public class GetCliënten
+    public interface ICurrentUserService
     {
+        string? UserId { get; }
     }
 }

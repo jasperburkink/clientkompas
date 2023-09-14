@@ -1,4 +1,5 @@
-﻿using Domain.CVS.Enums;
+﻿using Domain.Common;
+using Domain.CVS.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +8,8 @@ using System.Threading.Tasks;
 
 namespace Domain.CVS.Domain
 {
-    public class DriversLicence
+    public class DriversLicence : BaseAuditableEntity
     {
-        public int Id { get; set; }
-
         public virtual Client Client { get; set; }
 
         public DriversLicenceEnum DriversLicenceCode { get; set;}

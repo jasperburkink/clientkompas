@@ -8,7 +8,7 @@ namespace Domain.CVS.Enums
 {
     public enum MaritalStatus
     {
-        unmarried,
+        Unmarried,
         Married,
         Divorced,
         Widowed,

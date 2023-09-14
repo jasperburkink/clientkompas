@@ -16,7 +16,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("ProductVersion", "7.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Domain.CVS.Domain.Client", b =>
@@ -28,6 +28,12 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     b.Property<int>("BenefitForm")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("longtext");
+
                     b.Property<DateOnly>("DateOfBirth")
                         .HasColumnType("date");
 
@@ -37,7 +43,8 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<int>("HouseNumber")
                         .HasColumnType("int");
@@ -53,9 +60,16 @@ namespace Infrastructure.Persistence.CVS.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<int>("MaritalStatus")
                         .HasColumnType("int");
@@ -66,7 +80,8 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
                     b.Property<string>("PrefixLastName")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
@@ -74,14 +89,16 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
                     b.Property<string>("Residence")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<int>("Sex")
                         .HasColumnType("int");
 
                     b.Property<string>("StreetName")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("TelephoneNumber")
                         .IsRequired()
@@ -100,6 +117,18 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
                     b.Property<int>("ClientId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -121,8 +150,20 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     b.Property<int>("ClientId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("longtext");
+
                     b.Property<int>("DriversLicenceCode")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -139,6 +180,18 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
                     b.Property<int>("ClientId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -161,12 +214,24 @@ namespace Infrastructure.Persistence.CVS.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("EmailAddress")
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("LastModifiedBy")
                         .HasColumnType("longtext");
 
                     b.Property<string>("LastName")
@@ -194,11 +259,23 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     b.Property<int>("ContractType")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("longtext");
+
                     b.Property<DateOnly>("FromDate")
                         .HasColumnType("date");
 
                     b.Property<string>("Function")
                         .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("LastModifiedBy")
                         .HasColumnType("longtext");
 
                     b.Property<DateOnly>("ToDate")
