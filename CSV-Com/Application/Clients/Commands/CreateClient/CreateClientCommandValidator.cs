@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Application.Clients.Commands.CreateClient
 {
-    public class CreateClientCommandValidator : AbstractValidator<CreateClientCommand>
+    public class CreateClientCommandValidator : AbstractValidator<CreateDriversLicenceCommand>
     {
         private readonly IUnitOfWork _unitOfWork;
 

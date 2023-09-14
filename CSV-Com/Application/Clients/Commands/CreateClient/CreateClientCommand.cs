@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Application.Clients.Commands.CreateClient
 {
-    public record CreateClientCommand : IRequest<int>
+    public record CreateDriversLicenceCommand : IRequest<int>
     {
         public int IdentificationNumber { get; init; }
 
@@ -49,7 +49,7 @@ namespace Application.Clients.Commands.CreateClient
         public string Remarks { get; set; }
     }
 
-    public class CreateClientCommandHandler : IRequestHandler<CreateClientCommand, int>
+    public class CreateClientCommandHandler : IRequestHandler<CreateDriversLicenceCommand, int>
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -58,7 +58,7 @@ namespace Application.Clients.Commands.CreateClient
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<int> Handle(CreateClientCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(CreateDriversLicenceCommand request, CancellationToken cancellationToken)
         {
             var client = new Client
             {
