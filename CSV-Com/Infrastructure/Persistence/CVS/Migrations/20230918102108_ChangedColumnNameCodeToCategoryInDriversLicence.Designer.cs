@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.CVS.Migrations
 {
     [DbContext(typeof(CVSDbContext))]
-    [Migration("20230915094743_newdbtabel")]
-    partial class newdbtabel
+    [Migration("20230918102108_ChangedColumnNameCodeToCategoryInDriversLicence")]
+    partial class ChangedColumnNameCodeToCategoryInDriversLicence
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,19 +22,19 @@ namespace Infrastructure.Persistence.CVS.Migrations
                 .HasAnnotation("ProductVersion", "7.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("ClientDriverLicence", b =>
+            modelBuilder.Entity("ClientDriversLicence", b =>
                 {
                     b.Property<int>("ClientsId")
                         .HasColumnType("int");
 
-                    b.Property<int>("DriverLicencesId")
+                    b.Property<int>("DriversLicencesId")
                         .HasColumnType("int");
 
-                    b.HasKey("ClientsId", "DriverLicencesId");
+                    b.HasKey("ClientsId", "DriversLicencesId");
 
-                    b.HasIndex("DriverLicencesId");
+                    b.HasIndex("DriversLicencesId");
 
-                    b.ToTable("ClientDriverLicence");
+                    b.ToTable("ClientDriversLicence");
                 });
 
             modelBuilder.Entity("Domain.CVS.Domain.Client", b =>
@@ -159,13 +159,13 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     b.ToTable("Diagnosis");
                 });
 
-            modelBuilder.Entity("Domain.CVS.Domain.DriverLicence", b =>
+            modelBuilder.Entity("Domain.CVS.Domain.DriversLicence", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Code")
+                    b.Property<string>("Category")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -186,37 +186,6 @@ namespace Infrastructure.Persistence.CVS.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
-
-                    b.ToTable("DriverLicence");
-                });
-
-            modelBuilder.Entity("Domain.CVS.Domain.DriversLicence", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("DriversLicenceCode")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClientId");
 
                     b.ToTable("DriversLicence");
                 });
@@ -337,7 +306,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     b.ToTable("WorkingContract");
                 });
 
-            modelBuilder.Entity("ClientDriverLicence", b =>
+            modelBuilder.Entity("ClientDriversLicence", b =>
                 {
                     b.HasOne("Domain.CVS.Domain.Client", null)
                         .WithMany()
@@ -345,9 +314,9 @@ namespace Infrastructure.Persistence.CVS.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.CVS.Domain.DriverLicence", null)
+                    b.HasOne("Domain.CVS.Domain.DriversLicence", null)
                         .WithMany()
-                        .HasForeignKey("DriverLicencesId")
+                        .HasForeignKey("DriversLicencesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -356,17 +325,6 @@ namespace Infrastructure.Persistence.CVS.Migrations
                 {
                     b.HasOne("Domain.CVS.Domain.Client", "Client")
                         .WithMany("Diagnoses")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Client");
-                });
-
-            modelBuilder.Entity("Domain.CVS.Domain.DriversLicence", b =>
-                {
-                    b.HasOne("Domain.CVS.Domain.Client", "Client")
-                        .WithMany("DriversLicences")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -399,8 +357,6 @@ namespace Infrastructure.Persistence.CVS.Migrations
             modelBuilder.Entity("Domain.CVS.Domain.Client", b =>
                 {
                     b.Navigation("Diagnoses");
-
-                    b.Navigation("DriversLicences");
 
                     b.Navigation("EmergencyPeople");
 

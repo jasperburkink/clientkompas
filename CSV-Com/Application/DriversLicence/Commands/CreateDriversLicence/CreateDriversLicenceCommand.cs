@@ -15,7 +15,7 @@ namespace Application.DriversLicence.Commands.CreateDriversLicence
     public record CreateDriversLicenceCommand : IRequest<int>
     {
 
-        public string Code { get; set; }
+        public string Category { get; set; }
 
         public string Omschrijving { get; set; }
         
@@ -35,7 +35,7 @@ namespace Application.DriversLicence.Commands.CreateDriversLicence
         {
             var driversLicence = new Domain.CVS.Domain.DriversLicence
             {
-                Code = request.Code,
+                Category = request.Category,
                 Omschrijving = request.Omschrijving
         
                

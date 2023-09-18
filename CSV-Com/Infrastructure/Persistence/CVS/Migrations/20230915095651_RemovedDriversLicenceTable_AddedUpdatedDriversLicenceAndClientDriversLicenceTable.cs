@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Persistence.CVS.Migrations
 {
     /// <inheritdoc />
-    public partial class newdbtabelupdate : Migration
+    public partial class RemovedDriversLicenceTable_AddedUpdatedDriversLicenceAndClientDriversLicenceTable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -162,7 +162,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Code")
+                    b.Property<string>("Category")
                         .IsRequired()
                         .HasColumnType("longtext");
 

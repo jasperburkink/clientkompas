@@ -11,7 +11,7 @@ namespace Domain.CVS.Domain
     {
         
 
-        public string Code { get; set; }
+        public string Category { get; set; }
 
         public string Omschrijving { get; set; }
 
