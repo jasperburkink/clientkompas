@@ -11,15 +11,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.CVS.Migrations
 {
     [DbContext(typeof(CVSDbContext))]
-    [Migration("20230803083206_DB-init")]
-    partial class DBinit
+    [Migration("20230918091458_ChangedColumnNameSexToGender")]
+    partial class ChangedColumnNameSexToGender
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.9")
+                .HasAnnotation("ProductVersion", "7.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Domain.CVS.Domain.Client", b =>
@@ -48,6 +48,9 @@ namespace Infrastructure.Persistence.CVS.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
 
                     b.Property<int>("HouseNumber")
                         .HasColumnType("int");
@@ -94,9 +97,6 @@ namespace Infrastructure.Persistence.CVS.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
-
-                    b.Property<int>("Sex")
-                        .HasColumnType("int");
 
                     b.Property<string>("StreetName")
                         .IsRequired()
