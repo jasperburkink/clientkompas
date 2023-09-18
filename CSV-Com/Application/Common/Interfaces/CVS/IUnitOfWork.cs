@@ -13,6 +13,8 @@ namespace Application.Common.Interfaces.CVS
 
         IRepository<Client> ClientRepository { get; }
 
+        IRepository<Domain.CVS.Domain.DriversLicence> DriversLicenceRepository { get; }
+
         public void Save();
 
         public Task SaveAsync(CancellationToken cancellationToken = default);

@@ -9,7 +9,6 @@
   <ItemGroup>
     <Folder Include="Clients\Commands\DeleteClient\" />
     <Folder Include="Clients\Commands\UpdateClient\" />
-    <Folder Include="DriversLicence\Commands\CreateDriversLicence\" />
     <Folder Include="Users\Commands\" />
     <Folder Include="Users\EventHandlers\" />
     <Folder Include="Users\Queries\GetUsers\" />

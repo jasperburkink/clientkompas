@@ -36,11 +36,11 @@ namespace Application.DriversLicence.Queries
         {
             var driversLicences = new List<DriversLicenceDto>();
 
-            foreach (var enumValue in Enum.GetValues(typeof(DriversLicenceEnum)))
+          /*  foreach (var enumValue in Enum.GetValues(typeof(DriversLicenceEnum)))
             {
                 var driversLicence = _mapper.Map<DriversLicenceDto>(enumValue);
                 driversLicences.Add(driversLicence);
-            }
+            }*/
 
             return driversLicences;
         }

@@ -77,14 +77,14 @@ namespace Infrastructure.Persistence.CVS
                     DateOfBirth = new DateOnly(1990, 5, 14),
                     EmailAddress = "a@b.com",
                     MaritalStatus = MaritalStatus.Unmarried,
-                    DriversLicences =
+                   /* DriversLicences =
                     {
                         new DriversLicence
                         {
                             Id = 1,
                             DriversLicenceCode = DriversLicenceEnum.B
                         }
-                    },
+                    },*/
                     EmergencyPeople =
                     {
                         new EmergencyPerson

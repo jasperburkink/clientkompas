@@ -28,7 +28,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> Create(CreateDriversLicenceCommand command)
+        public async Task<ActionResult<int>> Create(CreateClientCommand command)
         {
             return await Mediator.Send(command);
         }

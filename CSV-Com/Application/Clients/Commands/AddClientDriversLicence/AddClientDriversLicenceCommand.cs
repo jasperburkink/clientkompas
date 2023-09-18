@@ -17,7 +17,7 @@ namespace Application.Clients.Commands.AddClientDriversLicence
     {
         public int ClientId { get; set; }
 
-        public DriversLicenceEnum DriversLicence { get; set; }
+       // public DriversLicenceEnum DriversLicence { get; set; }
     }
 
     public class AddClientDriversLicenceCommandHandler : IRequestHandler<AddClientDriversLicenceCommand, int>
@@ -31,7 +31,7 @@ namespace Application.Clients.Commands.AddClientDriversLicence
 
         public async Task<int> Handle(AddClientDriversLicenceCommand request, CancellationToken cancellationToken)
         {
-            var client = await _unitOfWork.ClientRepository.GetByIDAsync(request.ClientId, cancellationToken);
+          /*  var client = await _unitOfWork.ClientRepository.GetByIDAsync(request.ClientId, cancellationToken);
 
             if (client == null)
             {
@@ -45,7 +45,8 @@ namespace Application.Clients.Commands.AddClientDriversLicence
 
             await _unitOfWork.SaveAsync(cancellationToken);
 
-            return driversLicence.Id;
+            return driversLicence.Id;*/
+          throw new NotImplementedException();
         }
     }
 }

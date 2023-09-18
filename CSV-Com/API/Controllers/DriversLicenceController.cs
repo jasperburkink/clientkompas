@@ -3,6 +3,7 @@ using Application.Clients.Commands.AddClientDriversLicence;
 using Application.Clients.Commands.CreateClient;
 using Application.Clients.Queries;
 using Application.Common.Interfaces.CVS;
+using Application.DriversLicence.Commands.CreateDriversLicence;
 using Application.DriversLicence.Queries;
 using Domain.CVS.Domain;
 using Infrastructure.Persistence.CVS;
@@ -21,8 +22,8 @@ namespace API.Controllers
         }
 
 
-        [HttpPost]
-        public async Task<ActionResult<int>> AddDriversLicence(AddClientDriversLicenceCommand command)
+        [HttpPost("CreateNewDriversLicence")]
+        public async Task<ActionResult<int>> createDriversLicence(CreateDriversLicenceCommand command)
         {
             return await Mediator.Send(command);
         }

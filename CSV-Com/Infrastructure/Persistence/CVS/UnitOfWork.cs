@@ -13,6 +13,7 @@ namespace Infrastructure.Persistence.CVS
         private CVSDbContext context;
         private GenericRepository<User> userRepository;
         private GenericRepository<Client> clientRepository;
+        private GenericRepository<DriversLicence> driversLicenceRepository;
 
         public UnitOfWork(CVSDbContext context)
         {
@@ -41,6 +42,17 @@ namespace Infrastructure.Persistence.CVS
                     clientRepository = new GenericRepository<Client>(context);
                 }
                 return clientRepository;
+            }
+        }
+        public IRepository<DriversLicence> DriversLicenceRepository
+        {
+            get
+            {
+                if (driversLicenceRepository == null)
+                {
+                    driversLicenceRepository = new GenericRepository<DriversLicence>(context);
+                }
+                return driversLicenceRepository;
             }
         }
 
