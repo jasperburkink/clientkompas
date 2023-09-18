@@ -95,7 +95,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
-                    b.Property<int>("Gender")
+                    b.Property<int>("Sex")
                         .HasColumnType("int");
 
                     b.Property<string>("StreetName")

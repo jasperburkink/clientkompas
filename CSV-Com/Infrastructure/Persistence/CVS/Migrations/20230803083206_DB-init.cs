@@ -30,7 +30,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     LastName = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Gender = table.Column<int>(type: "int", nullable: false),
+                    Sex = table.Column<int>(type: "int", nullable: false),
                     StreetName = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     HouseNumber = table.Column<int>(type: "int", nullable: false),
