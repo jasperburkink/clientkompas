@@ -24,5 +24,21 @@ namespace Application.Common.Interfaces.CVS
         void Delete(TEntity entityToDelete);
 
         void Update(TEntity entityToUpdate);
+
+        Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            string includeProperties = "", CancellationToken cancellationToken = default);
+
+        Task<TEntity> GetByIDAsync(object id, CancellationToken cancellationToken = default);
+
+        Task<TEntity> GetByIDAsync(object id, string includeProperties = "", CancellationToken cancellationToken = default);
+
+        Task InsertAsync(TEntity entity, CancellationToken cancellationToken = default);
+
+        Task DeleteAsync(object id, CancellationToken cancellationToken = default);
+
+        Task DeleteAsync(TEntity entityToDelete, CancellationToken cancellationToken = default);
+
+        Task UpdateAsync(TEntity entityToUpdate, CancellationToken cancellationToken = default);
     }
 }

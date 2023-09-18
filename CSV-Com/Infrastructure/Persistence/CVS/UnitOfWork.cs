@@ -11,29 +11,47 @@ namespace Infrastructure.Persistence.CVS
     public class UnitOfWork : IUnitOfWork
     {
         private CVSDbContext context;
-        private GenericRepository<Gebruiker> gebruikerRepository;
+        private GenericRepository<User> userRepository;
+        private GenericRepository<Client> clientRepository;
 
         public UnitOfWork(CVSDbContext context)
         {
             this.context = context;
         }
 
-        public GenericRepository<Gebruiker> GebruikerRepository
+        public IRepository<User> UserRepository
         {
             get
             {
 
-                if (gebruikerRepository == null)
+                if (userRepository == null)
                 {
-                    gebruikerRepository = new GenericRepository<Gebruiker>(context);
+                    userRepository = new GenericRepository<User>(context);
                 }
-                return gebruikerRepository;
+                return userRepository;
+            }
+        }
+
+        public IRepository<Client> ClientRepository
+        {
+            get
+            {
+                if (clientRepository == null)
+                {
+                    clientRepository = new GenericRepository<Client>(context);
+                }
+                return clientRepository;
             }
         }
 
         public void Save()
         {
             context.SaveChanges();
+        }
+
+        public async Task SaveAsync(CancellationToken cancellationToken = default)
+        {
+            await context.SaveChangesAsync(cancellationToken);
         }
 
         private bool disposed = false;        

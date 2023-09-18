@@ -1,39 +1,67 @@
+using API.Policies;
+using Application.Common.Interfaces.CVS;
+using Infrastructure.Persistence.Authentication;
 using Infrastructure.Persistence.CVS;
+using Microsoft.DotNet.Scaffolding.Shared.ProjectModel;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionStringAuthentication = builder.Configuration.GetValue<string>("ConnectionStrings:AuthenticationConnectionString");
-var connectionStringCVS = builder.Configuration.GetValue<string>("ConnectionStrings:CVSConnectionString");
+builder.Services.AddApplicationServices();
+builder.Services.AddInfrastructureServices(builder.Configuration);
 
-var serverVersion = MySqlServerVersion.LatestSupportedServerVersion;
+// Makes sure that you don't have to add foreignkey objects in de JSON
+builder.Services.AddControllers(options =>
+    options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true
+    ).AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.WriteIndented = true;
+        options.JsonSerializerOptions.PropertyNamingPolicy = new LowerCaseNamingPolicy();
+    });
 
-builder.Services.AddDbContext<CVSDbContext>(
-dbContextOptions => dbContextOptions
-                .UseMySql(connectionStringCVS, serverVersion,
-                mySqlOptions =>
-                {
-                    mySqlOptions.MigrationsAssembly(typeof(CVSDbContext).Assembly.FullName); // Migrations in class library
-                })
-                // The following three options help with debugging, but should
-                // be changed or removed for production.
-                .LogTo(Console.WriteLine, LogLevel.Information)
-                .EnableSensitiveDataLogging()
-                .EnableDetailedErrors());
-
-builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "CvsCustomCorsPolicy",
+                      policy =>
+                      {
+                          policy.WithOrigins("http://localhost:3000")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials();
+                      });
+});
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseDeveloperExceptionPage();
+
+    // Initialise and seed database
+    using (var scope = app.Services.CreateScope())
+    {
+        // TODO: Uncomment for authentication
+        //var initialiserAuthentication = scope.ServiceProvider.GetRequiredService<AuthenticationDbContextInitialiser>();        
+        //await initialiserAuthentication.InitialiseAsync();
+        //await initialiserAuthentication.SeedAsync();
+
+        var initialiserCVS = scope.ServiceProvider.GetRequiredService<CVSDbContextInitialiser>();
+        await initialiserCVS.InitialiseAsync();
+        await initialiserCVS.SeedAsync();
+    }    
 }
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
+app.UseCors("CvsCustomCorsPolicy");
 
 app.UseHttpsRedirection();
 
@@ -42,3 +70,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }

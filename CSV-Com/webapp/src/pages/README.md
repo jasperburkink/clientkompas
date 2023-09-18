@@ -1,0 +1,1 @@
+Page tsx files with their css files are in this folder.
