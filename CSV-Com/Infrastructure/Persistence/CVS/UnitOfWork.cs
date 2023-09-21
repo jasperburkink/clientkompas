@@ -14,6 +14,7 @@ namespace Infrastructure.Persistence.CVS
         private GenericRepository<User> userRepository;
         private GenericRepository<Client> clientRepository;
         private GenericRepository<DriversLicence> driversLicenceRepository;
+       
 
         public UnitOfWork(CVSDbContext context)
         {
@@ -55,6 +56,7 @@ namespace Infrastructure.Persistence.CVS
                 return driversLicenceRepository;
             }
         }
+      
 
         public void Save()
         {

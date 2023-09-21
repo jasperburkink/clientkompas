@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.CVS.Migrations
 {
     [DbContext(typeof(CVSDbContext))]
-    [Migration("20230918102108_ChangedColumnNameCodeToCategoryInDriversLicence")]
-    partial class ChangedColumnNameCodeToCategoryInDriversLicence
+    [Migration("20230918121334_DB-init")]
+    partial class DBinit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

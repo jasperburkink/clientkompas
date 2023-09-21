@@ -172,14 +172,14 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("longtext");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Omschrijving")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");

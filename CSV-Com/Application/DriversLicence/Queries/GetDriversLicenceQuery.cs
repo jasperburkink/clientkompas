@@ -1,6 +1,8 @@
 ﻿using Application.Clients.Queries;
+using Application.Clients.Queries.GetClients;
 using Application.Common.Interfaces.CVS;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Domain.CVS.Enums;
 using MediatR;
 using System;
@@ -36,11 +38,12 @@ namespace Application.DriversLicence.Queries
         {
             var driversLicences = new List<DriversLicenceDto>();
 
-          /*  foreach (var enumValue in Enum.GetValues(typeof(DriversLicenceEnum)))
-            {
-                var driversLicence = _mapper.Map<DriversLicenceDto>(enumValue);
-                driversLicences.Add(driversLicence);
-            }*/
+            
+            /*  foreach (var enumValue in Enum.GetValues(typeof(DriversLicenceEnum)))
+              {
+                  var driversLicence = _mapper.Map<DriversLicenceDto>(enumValue);
+                  driversLicences.Add(driversLicence);
+              }*/
 
             return driversLicences;
         }

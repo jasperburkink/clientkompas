@@ -5,24 +5,24 @@
 namespace Infrastructure.Persistence.CVS.Migrations
 {
     /// <inheritdoc />
-    public partial class ChangedColumnNameSexToGender : Migration
+    public partial class ChangedColumnNameOmschrijvingToDescriptionInDriversLicence : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.RenameColumn(
-                name: "Sex",
-                table: "Clients",
-                newName: "Gender");
+                name: "Omschrijving",
+                table: "DriversLicence",
+                newName: "Description");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.RenameColumn(
-                name: "Gender",
-                table: "Clients",
-                newName: "Sex");
+                name: "Description",
+                table: "DriversLicence",
+                newName: "Omschrijving");
         }
     }
 }

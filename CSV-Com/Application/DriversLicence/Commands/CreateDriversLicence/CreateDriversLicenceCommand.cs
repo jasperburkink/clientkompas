@@ -17,7 +17,7 @@ namespace Application.DriversLicence.Commands.CreateDriversLicence
 
         public string Category { get; set; }
 
-        public string Omschrijving { get; set; }
+        public string Description { get; set; }
         
 
       
@@ -36,9 +36,9 @@ namespace Application.DriversLicence.Commands.CreateDriversLicence
             var driversLicence = new Domain.CVS.Domain.DriversLicence
             {
                 Category = request.Category,
-                Omschrijving = request.Omschrijving
-        
-               
+                Description = request.Description
+
+
             };
 
             driversLicence.AddDomainEvent(new DriversLicenceCreatedEvent(driversLicence));

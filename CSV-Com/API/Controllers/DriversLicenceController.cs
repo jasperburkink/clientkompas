@@ -1,6 +1,7 @@
 ﻿using Application.Clients.Commands;
 using Application.Clients.Commands.AddClientDriversLicence;
 using Application.Clients.Commands.CreateClient;
+using Application.Clients.Commands.DeleteClientDriversLicence;
 using Application.Clients.Queries;
 using Application.Common.Interfaces.CVS;
 using Application.DriversLicence.Commands.CreateDriversLicence;
@@ -36,10 +37,11 @@ namespace API.Controllers
 
             throw new NotImplementedException();
         }*/
+
         [HttpDelete]
-        public async Task<IEnumerable<DriversLicenceDto>> delete([FromQuery] GetDriversLicenceQuery query)
+        public async void DeleteDriversLicence(DeleteDriversLicenceCommand command)
         {
-            return await Mediator.Send(query);
+            await Mediator.Send(command);
         }
     }
 }
