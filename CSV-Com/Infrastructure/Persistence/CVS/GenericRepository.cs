@@ -20,6 +20,7 @@ namespace Infrastructure.Persistence.CVS
         {
             this.context = context;
             dbSet = context.Set<TEntity>();
+            GC.KeepAlive(dbSet);
         }
 
         public virtual IEnumerable<TEntity> Get(

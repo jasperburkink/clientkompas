@@ -13,7 +13,7 @@ namespace Application.Common.Interfaces.CVS
 
         IRepository<Client> ClientRepository { get; }
 
-        IRepository<Domain.CVS.Domain.DriversLicence> DriversLicenceRepository { get; }
+        IRepository<DriversLicence> DriversLicenceRepository { get; }
 
         public void Save();
 

@@ -2,10 +2,11 @@
 using Application.Clients.Commands.AddClientDriversLicence;
 using Application.Clients.Commands.CreateClient;
 using Application.Clients.Commands.DeleteClientDriversLicence;
+using Application.Clients.Commands.DeleteClientDriversLicences;
 using Application.Clients.Queries;
 using Application.Common.Interfaces.CVS;
-using Application.DriversLicence.Commands.CreateDriversLicence;
-using Application.DriversLicence.Queries;
+using Application.DriversLicences.Commands.CreateDriversLicences;
+using Application.DriversLicences.Queries;
 using Domain.CVS.Domain;
 using Infrastructure.Persistence.CVS;
 using Microsoft.AspNetCore.Mvc;

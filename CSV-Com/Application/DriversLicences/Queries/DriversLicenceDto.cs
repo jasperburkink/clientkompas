@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.DriversLicence.Queries
+namespace Application.DriversLicences.Queries
 {
     public class DriversLicenceDto/* : IMapFrom<DriversLicenceEnum>*/
     {

@@ -1,6 +1,8 @@
 ﻿using Application.Clients.Commands.CreateClient;
+using Application.Clients.Queries.GetClients;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces.CVS;
+using AutoMapper.QueryableExtensions;
 using Domain.CVS.Domain;
 using Domain.CVS.Events;
 using MediatR;
@@ -10,14 +12,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Clients.Commands.DeleteClientDriversLicence
+namespace Application.Clients.Commands.DeleteClientDriversLicences
 {
-    public record DeleteDriversLicenceCommand : IRequest
+    public record DeleteDriversLicenceCommand : IRequest<bool>
     {
         public int DriversLicenceId { get; init; }
     }
 
-    public class DeleteDriversLicenceCommandHandler : IRequestHandler<DeleteDriversLicenceCommand>
+    public class DeleteDriversLicenceCommandHandler : IRequestHandler<DeleteDriversLicenceCommand, bool>
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -26,12 +28,19 @@ namespace Application.Clients.Commands.DeleteClientDriversLicence
             _unitOfWork = unitOfWork;
         }
 
-        public async Task Handle(DeleteDriversLicenceCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(DeleteDriversLicenceCommand request, CancellationToken cancellationToken)
         {
-            var driversLicence = await _unitOfWork.DriversLicenceRepository.GetByIDAsync(request.DriversLicenceId, "DriversLicences", cancellationToken);
+            var test = (await _unitOfWork.DriversLicenceRepository.GetAsync())
+                .AsQueryable()
+                //.ProjectTo<DriversLicence>(_mapper.ConfigurationProvider)
+                .SingleOrDefault(x => x.Id == request.DriversLicenceId);
+
+
+
+            var driversLicence = await _unitOfWork.DriversLicenceRepository.GetByIDAsync(request.DriversLicenceId, cancellationToken);
             if (driversLicence == null)
             {
-                throw new NotFoundException(nameof(DriversLicence), request.DriversLicenceId);
+                throw new NotFoundException(nameof(DriversLicences), request.DriversLicenceId);
             }
 
             /* var driversLicence = client.DriversLicences.FirstOrDefault(dl => dl.Id.Equals(request.DriversLicenceId));
@@ -44,6 +53,8 @@ namespace Application.Clients.Commands.DeleteClientDriversLicence
             await _unitOfWork.DriversLicenceRepository.UpdateAsync(driversLicence, cancellationToken);
 
             await _unitOfWork.SaveAsync(cancellationToken);
+
+            return true;
         }
     }
 }

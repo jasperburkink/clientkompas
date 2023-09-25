@@ -13,7 +13,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.DriversLicence.Queries
+namespace Application.DriversLicences.Queries
 {
     public record GetDriversLicenceQuery : IRequest<IEnumerable<DriversLicenceDto>> { }
 
