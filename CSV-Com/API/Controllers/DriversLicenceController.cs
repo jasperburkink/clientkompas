@@ -40,9 +40,9 @@ namespace API.Controllers
         }*/
 
         [HttpDelete]
-        public async void DeleteDriversLicence(DeleteDriversLicenceCommand command)
+        public async Task<ActionResult<bool>> DeleteDriversLicence(DeleteDriversLicenceCommand command)
         {
-            await Mediator.Send(command);
+            return await Mediator.Send(command);
         }
     }
 }

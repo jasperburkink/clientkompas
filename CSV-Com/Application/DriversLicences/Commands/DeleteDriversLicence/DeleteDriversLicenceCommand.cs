@@ -29,30 +29,18 @@ namespace Application.Clients.Commands.DeleteClientDriversLicences
         }
 
         public async Task<bool> Handle(DeleteDriversLicenceCommand request, CancellationToken cancellationToken)
-        {
-            var driversLicence = _unitOfWork.DriversLicenceRepository.GetByID(request.DriversLicenceId);
-
+        {        
+            var driversLicence = await _unitOfWork.DriversLicenceRepository.GetByIDAsync(request.DriversLicenceId, cancellationToken);
             if (driversLicence == null)
             {
                 throw new NotFoundException(nameof(DriversLicences), request.DriversLicenceId);
             }
 
-            _unitOfWork.DriversLicenceRepository.Delete(driversLicence);
+            await _unitOfWork.DriversLicenceRepository.DeleteAsync(driversLicence);
 
-            _unitOfWork.Save();
+            await _unitOfWork.DriversLicenceRepository.UpdateAsync(driversLicence, cancellationToken);
 
-            // TODO: Make this method async by using code below            
-            //var driversLicence = await _unitOfWork.DriversLicenceRepository.GetByIDAsync(request.DriversLicenceId, cancellationToken);
-            //if (driversLicence == null)
-            //{
-            //    throw new NotFoundException(nameof(DriversLicences), request.DriversLicenceId);
-            //}
-
-            //await _unitOfWork.DriversLicenceRepository.DeleteAsync(driversLicence);
-
-            //await _unitOfWork.DriversLicenceRepository.UpdateAsync(driversLicence, cancellationToken);
-
-            //await _unitOfWork.SaveAsync(cancellationToken);
+            await _unitOfWork.SaveAsync(cancellationToken);
 
             return true;
         }
