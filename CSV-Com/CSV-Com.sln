@@ -33,11 +33,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API\API.csproj", "{8
 EndProject
 Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "webapp_old", "webapp_old\webapp_old.njsproj", "{4B9FD210-96C4-47C4-AC57-44C365E59A7E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.UnitTests", "Application.UnitTests\Application.UnitTests.csproj", "{1397A85B-B9A7-4236-9243-02DC80A82591}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.UnitTests", "Application.UnitTests\Application.UnitTests.csproj", "{1397A85B-B9A7-4236-9243-02DC80A82591}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.IntegrationTests", "Application.IntegrationTests\Application.IntegrationTests.csproj", "{B1368454-2C62-4751-9834-074DAE9B4C48}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.IntegrationTests", "Application.IntegrationTests\Application.IntegrationTests.csproj", "{B1368454-2C62-4751-9834-074DAE9B4C48}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArchitectureTests", "ArchitectureTests\ArchitectureTests.csproj", "{B5949667-F430-4D84-B971-AF47A65E3971}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArchitectureTests", "ArchitectureTests\ArchitectureTests.csproj", "{B5949667-F430-4D84-B971-AF47A65E3971}"
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "webapp", "webapp\webapp.esproj", "{BCD6A1E2-E16A-4CD4-AE9E-82EBB5FC8F8E}"
 EndProject
