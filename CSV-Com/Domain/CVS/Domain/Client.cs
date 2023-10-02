@@ -20,7 +20,7 @@ namespace Domain.CVS.Domain
 
         public string LastName{ get; set; }
 
-        public Sex Sex { get; set; }
+        public Gender Gender { get; set; }
 
         public string StreetName { get; set; }
 

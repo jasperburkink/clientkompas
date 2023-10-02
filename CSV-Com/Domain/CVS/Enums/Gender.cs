@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Domain.CVS.Enums
 {
-    public enum Sex
+    public enum Gender
     {
         Men,
         Woman,
