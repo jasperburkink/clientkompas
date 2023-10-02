@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../styles/common/input-field-with-label.css';
+import './input-field-with-label.css';
 import { InputField, InputFieldProps } from '../../components/common/input-field';
 
 interface InputFieldWithLabelProps extends React.HtmlHTMLAttributes<HTMLElement> {

@@ -1,5 +1,5 @@
 import React, { ImgHTMLAttributes, LabelHTMLAttributes } from 'react';
-import '../../styles/common/picture.css';
+import './picture.css';
 
 interface PictureProps extends React.ImgHTMLAttributes<HTMLImageElement> {
     source: string

@@ -1,5 +1,5 @@
 import React, { LabelHTMLAttributes } from 'react';
-import '../../styles/common/header.css';
+import './header.css';
 
 interface HeaderProps extends React.LabelHTMLAttributes<HTMLHeadingElement> {
     text: string

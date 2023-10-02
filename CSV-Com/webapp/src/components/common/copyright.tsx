@@ -1,4 +1,4 @@
-import '../../styles/common/copyright.css';
+import './copyright.css';
 
 interface CopyrightProps extends React.HtmlHTMLAttributes<HTMLElement> {
 }

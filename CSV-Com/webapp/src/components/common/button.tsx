@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../styles/common/button.css';
+import './button.css';
 import { ButtonType } from '../../types/common/ButtonType';
 import { getClassNameButtonType } from '../../types/common/ButtonType';
 

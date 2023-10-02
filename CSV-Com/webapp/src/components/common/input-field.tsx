@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../styles/common/input-field.css';
+import './input-field.css';
 import { InputFieldType } from '../../types/common/InputFieldType';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAsterisk } from "@fortawesome/free-solid-svg-icons";

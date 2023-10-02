@@ -1,6 +1,6 @@
 import React, { LabelHTMLAttributes } from 'react';
 import { useState } from "react";
-import '../../styles/common/profile-picture.css';
+import './profile-picture.css';
 import { Button } from '../common/button';
 import { Picture } from '../common/picture';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

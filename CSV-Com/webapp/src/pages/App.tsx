@@ -1,4 +1,4 @@
-import '../styles/App.css';
+import './App.css';
 import '../index.css';
 
 import { Header } from '../components/common/header';
