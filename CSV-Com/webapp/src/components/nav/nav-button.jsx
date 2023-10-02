@@ -5,18 +5,26 @@ import { faUsers, faClock, faBuilding, faUser, faArrowRightFromBracket } from "@
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 function GetIcon(props){
-    var icon = props.icon
-    if(icon === "Gebruikers"){
-        return <FontAwesomeIcon icon={faUsers} className="leading-none h-6" />
-    }else if(icon === "Klok"){
-        return <FontAwesomeIcon icon={faClock} className="leading-none h-6" />
-    }else if(icon === "Gebouw"){
-        return <FontAwesomeIcon icon={faBuilding} className="leading-none h-6" />
-    }else if(icon === "Gebruiker"){
-        return <FontAwesomeIcon icon={faUser} className="leading-none h-6" />
-    }else if(icon === "Uitloggen"){
-        return <FontAwesomeIcon icon={faArrowRightFromBracket} className="leading-none h-6" />
+    let icon;
+    switch (props.icon) {
+        case "Gebruikers":
+            icon = faUsers;
+            break;
+        case "Klok":
+            icon = faClock;
+            break;
+        case "Gebouw":
+            icon = faBuilding;
+            break;
+        case "Gebruiker":
+            icon = faUser;
+            break;
+        case "Uitloggen":
+            icon = faArrowRightFromBracket;
+            break;
     }
+
+    return <FontAwesomeIcon icon={icon} className="leading-none h-6" />
 }
 
 export function NavButton(props) {
