@@ -10,7 +10,7 @@ interface InputFieldWithLabelProps extends React.HtmlHTMLAttributes<HTMLElement>
 export const InputFieldWithLabel = (props: InputFieldWithLabelProps) => (
     <div className='input-field-with-label'>
         <label htmlFor={props.id}>{props.text}</label>
-        <InputField
+        <InputField {...props}
         value={props.inputFieldProps.value}
         placeholder={props.inputFieldProps.placeholder}
         required={props.inputFieldProps.required}
