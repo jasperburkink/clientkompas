@@ -20,7 +20,7 @@ export function SidebarFull(props) {
                 </Sidebar>
                 <SidebarGray>
                     <NavTitle lijstNaam="Cliëntenlijst" path="/ClientsAdd"/>
-                    {/* <SearchInputField /> */}
+                    {/*TODO: Add a searchfield for clients. Maybe the client list should not be in this file/control.*/}
                     <div className="h-fit">
                         {props.client.map((infoClient, pathNumber) => {
                             return (
