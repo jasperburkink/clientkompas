@@ -11,17 +11,15 @@ using System.Threading.Tasks;
 
 namespace Application.DriversLicences.Queries
 {
-    public class DriversLicenceDto/* : IMapFrom<DriversLicenceEnum>*/
+    public class DriversLicenceDto : IMapFrom<DriversLicence>
     {
-        public string DriverLicenceCategory { get; set; }
 
-        public int DriverLicenceId { get; set; }
+        public int Id { get; set; }
+        public string Category { get; set; }
+        public string Description { get; set; }
 
-      /*  public void Mapping(Profile profile)
-        {
-            profile.CreateMap<DriversLicenceEnum, DriversLicenceDto>()
-                .ForMember(dlDto => dlDto.DriverLicenceCategory, c => c.MapFrom(dlEnum => Enum.GetName(typeof(DriversLicenceEnum), dlEnum)))
-                .ForMember(dlDto => dlDto.DriverLicenceId, c => c.MapFrom(dlEnum => (int)dlEnum));
-        }*/
+
+
+
     }
 }

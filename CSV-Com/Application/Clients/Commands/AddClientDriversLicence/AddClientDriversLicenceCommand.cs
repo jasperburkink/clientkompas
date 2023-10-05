@@ -16,8 +16,8 @@ namespace Application.Clients.Commands.AddClientDriversLicence
     public class AddClientDriversLicenceCommand : IRequest<int>
     {
         public int ClientId { get; set; }
+        public int DriversLicenceId { get; set; }
 
-       // public DriversLicenceEnum DriversLicence { get; set; }
     }
 
     public class AddClientDriversLicenceCommandHandler : IRequestHandler<AddClientDriversLicenceCommand, int>
@@ -31,22 +31,32 @@ namespace Application.Clients.Commands.AddClientDriversLicence
 
         public async Task<int> Handle(AddClientDriversLicenceCommand request, CancellationToken cancellationToken)
         {
-          /*  var client = await _unitOfWork.ClientRepository.GetByIDAsync(request.ClientId, cancellationToken);
+            var client = await _unitOfWork.ClientRepository.GetByIDAsync(request.ClientId, cancellationToken);
 
             if (client == null)
             {
                 throw new NotFoundException(nameof(Client), request.ClientId);
             }
+            var driversLicence = await _unitOfWork.DriversLicenceRepository.GetByIDAsync(request.DriversLicenceId, cancellationToken);
 
-            var driversLicence = new Domain.CVS.Domain.DriversLicence() { Client = client, DriversLicenceCode = request.DriversLicence };
-            client.DriversLicences.Add(driversLicence);
+            if (driversLicence == null)
+            {
+                throw new NotFoundException(nameof(Client), request.DriversLicenceId);
+            }
 
-            await _unitOfWork.ClientRepository.UpdateAsync(client, cancellationToken);
+       
+
+            
+            
+
+            
+
+           /* await _unitOfWork.ClientRepository.UpdateAsync(client, cancellationToken);
 
             await _unitOfWork.SaveAsync(cancellationToken);
 
             return driversLicence.Id;*/
-          throw new NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

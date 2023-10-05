@@ -36,16 +36,13 @@ namespace Application.DriversLicences.Queries
         /// <returns></returns>
         public async Task<IEnumerable<DriversLicenceDto>> Handle(GetDriversLicenceQuery request, CancellationToken cancellationToken)
         {
-            var driversLicences = new List<DriversLicenceDto>();
+            //var driversLicences = new List<DriversLicenceDto>();
 
-            
-            /*  foreach (var enumValue in Enum.GetValues(typeof(DriversLicenceEnum)))
-              {
-                  var driversLicence = _mapper.Map<DriversLicenceDto>(enumValue);
-                  driversLicences.Add(driversLicence);
-              }*/
+            return (await _unitOfWork.DriversLicenceRepository.GetAsync())
+               .AsQueryable()
+               .ProjectTo<DriversLicenceDto>(_mapper.ConfigurationProvider);
 
-            return driversLicences;
+
         }
     }
 }

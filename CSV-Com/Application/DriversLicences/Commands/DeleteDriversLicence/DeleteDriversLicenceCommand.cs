@@ -14,22 +14,23 @@ using System.Threading.Tasks;
 
 namespace Application.Clients.Commands.DeleteClientDriversLicences
 {
-    public record DeleteDriversLicenceCommand : IRequest<bool>
+    public record DeleteDriversLicenceCommand : IRequest<int>
     {
         public int DriversLicenceId { get; init; }
     }
 
-    public class DeleteDriversLicenceCommandHandler : IRequestHandler<DeleteDriversLicenceCommand, bool>
+    public class DeleteDriversLicenceCommandHandler : IRequestHandler<DeleteDriversLicenceCommand, int>
     {
         private readonly IUnitOfWork _unitOfWork;
-
+        
         public DeleteDriversLicenceCommandHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<bool> Handle(DeleteDriversLicenceCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(DeleteDriversLicenceCommand request, CancellationToken cancellationToken)
         {        
+
             var driversLicence = await _unitOfWork.DriversLicenceRepository.GetByIDAsync(request.DriversLicenceId, cancellationToken);
             if (driversLicence == null)
             {
@@ -38,11 +39,9 @@ namespace Application.Clients.Commands.DeleteClientDriversLicences
 
             await _unitOfWork.DriversLicenceRepository.DeleteAsync(driversLicence);
 
-            await _unitOfWork.DriversLicenceRepository.UpdateAsync(driversLicence, cancellationToken);
-
             await _unitOfWork.SaveAsync(cancellationToken);
 
-            return true;
+            return driversLicence.Id;
         }
     }
 }

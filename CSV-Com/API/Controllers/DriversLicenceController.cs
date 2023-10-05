@@ -6,6 +6,7 @@ using Application.Clients.Commands.DeleteClientDriversLicences;
 using Application.Clients.Queries;
 using Application.Common.Interfaces.CVS;
 using Application.DriversLicences.Commands.CreateDriversLicences;
+using Application.DriversLicences.Commands.UpdateDriversLicence;
 using Application.DriversLicences.Queries;
 using Domain.CVS.Domain;
 using Infrastructure.Persistence.CVS;
@@ -24,25 +25,48 @@ namespace API.Controllers
         }
 
 
-        [HttpPost("CreateNewDriversLicence")]
-        public async Task<ActionResult<int>> createDriversLicence(CreateDriversLicenceCommand command)
+        [HttpPost]
+        public async Task<ActionResult<int>> CreateDriversLicence(CreateDriversLicenceCommand command)
         {
-            return await Mediator.Send(command);
+            try
+            {
+                var result = await Mediator.Send(command);
+                return Ok("Created DriversLicence with an id of " + result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
         }
 
 
 
-/*        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] DriversLicence value)
+        [HttpPut]
+        public async Task<ActionResult<int>>  Put(UpdateDriversLicenceCommand command)
         {
-
-            throw new NotImplementedException();
-        }*/
+            try
+            {
+                var result = await Mediator.Send(command);
+                return Ok("Updated DriversLicence with an id of " + result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
+        }
 
         [HttpDelete]
-        public async Task<ActionResult<bool>> DeleteDriversLicence(DeleteDriversLicenceCommand command)
+        public async Task<ActionResult<int>> DeleteDriversLicence(DeleteDriversLicenceCommand command)
         {
-            return await Mediator.Send(command);
+            try
+            {
+                var result = await Mediator.Send(command);
+                return Ok("Deleted DriversLicence with an id of "+result);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
         }
     }
 }

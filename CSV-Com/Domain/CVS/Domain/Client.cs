@@ -42,9 +42,8 @@ namespace Domain.CVS.Domain
 
         //public virtual ICollection<DriversLicence> DriversLicences { get; set; } = new List<DriversLicence>();
 
-        public List<DriversLicence> DriversLicences { get; } = new();
+        public List<DriversLicence> DriversLicences { get; set; } = new();
         
-
         public virtual ICollection<EmergencyPerson> EmergencyPeople { get; set; } = new List<EmergencyPerson>();
 
         public virtual ICollection<Diagnosis> Diagnoses { get; set; } = new List<Diagnosis>();
