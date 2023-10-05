@@ -76,7 +76,7 @@ namespace Infrastructure.Persistence.CVS
                     TelephoneNumber = "0623456789",
                     DateOfBirth = new DateOnly(1990, 5, 14),
                     EmailAddress = "a@b.com",
-                    MaritalStatus = MaritalStatus.Unmarried,
+                   // MaritalStatus = MaritalStatus.Unmarried,
                     DriversLicences =
                     {
                         new DriversLicence
