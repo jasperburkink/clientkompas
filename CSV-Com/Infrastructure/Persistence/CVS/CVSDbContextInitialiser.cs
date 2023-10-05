@@ -53,11 +53,11 @@ namespace Infrastructure.Persistence.CVS
         }
 
         public async Task TrySeedAsync()
-        {   
+        {
             // Default data
             // Seed, if necessary
             // TODO: Maybe only when debugging
-            if (!_context.Clients.Any())
+            /*if (!_context.Clients.Any())
             {
                 _context.Clients.Add(new Client
                 {
@@ -76,7 +76,7 @@ namespace Infrastructure.Persistence.CVS
                     TelephoneNumber = "0623456789",
                     DateOfBirth = new DateOnly(1990, 5, 14),
                     EmailAddress = "a@b.com",
-                   // MaritalStatus = MaritalStatus.Unmarried,
+                    //MaritalStatus = 1,
                     DriversLicences =
                     {
                         new DriversLicence
@@ -124,7 +124,7 @@ namespace Infrastructure.Persistence.CVS
                 });
 
                 await _context.SaveChangesAsync();
-            }
+            }*/
         }
     }
 }

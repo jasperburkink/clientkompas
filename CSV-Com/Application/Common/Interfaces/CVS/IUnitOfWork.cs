@@ -13,6 +13,7 @@ namespace Application.Common.Interfaces.CVS
 
         IRepository<Client> ClientRepository { get; }
 
+        IRepository<MaritalStatus> MaritalStatusRepository { get; }
         public void Save();
 
         public Task SaveAsync(CancellationToken cancellationToken = default);
