@@ -42,7 +42,7 @@ namespace Application.Clients.Commands.CreateClient
 
         public string EmailAddress { get; set; }
 
-        //public MaritalStatus MaritalStatus { get; set; }
+        public int MaritalStatusid { get; set; }
 
         public BenefitForm BenefitForm { get; set; }
 
@@ -76,7 +76,7 @@ namespace Application.Clients.Commands.CreateClient
                 TelephoneNumber = request.TelephoneNumber,
                 DateOfBirth = request.DateOfBirth,
                 EmailAddress = request.EmailAddress,
-               // MaritalStatus = request.MaritalStatus,
+                MaritalStatusid = request.MaritalStatusid,
                 BenefitForm = request.BenefitForm,
                 Remarks = request.Remarks
             };

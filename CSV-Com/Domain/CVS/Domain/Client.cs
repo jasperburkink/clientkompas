@@ -36,7 +36,9 @@ namespace Domain.CVS.Domain
         
         public DateOnly DateOfBirth { get; set; }
 
-        public string EmailAddress { get; set; }        
+        public string EmailAddress { get; set; }
+
+        public int MaritalStatusid { get; set; }
 
         public MaritalStatus MaritalStatus { get; set; }
 
