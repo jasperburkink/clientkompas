@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans&display=swap');
+
+@layer components {
+    div.copyright{
+        @apply font-primary hidden md:block fixed right-1/2 w-[375px] -mr-[175px] bottom-0 z-50 text-subGray2;
+    }
+}

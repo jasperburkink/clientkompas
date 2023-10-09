@@ -1,1 +1,0 @@
-All stylesheet files that are global and not directly linked to a page or control, are added to this folder.

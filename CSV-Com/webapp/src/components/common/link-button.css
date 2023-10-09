@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    a.button {
+        @apply w-200px h-50px font-medium text-sm rounded-lg flex;
+    }
+
+    p.button {
+        @apply m-auto;
+    }
+
+    a.button-solid {
+        @apply bg-mainBlue text-white;
+    }
+
+    a.button-not-solid {
+        @apply text-mainBlue border-4 border-mainBlue;
+    }
+
+    a.button-underline {
+        @apply text-mainBlue underline;
+    }
+}
