@@ -14,9 +14,7 @@ namespace Application.Diagnoses.Commands.CreateDiagnosis
 {
     public record CreateDiagnosisCommand : IRequest<int>
         {
-            public int Id { get; init; }
-
-            public int Clientid { get; init; }  
+            public int Id { get; init; } 
 
             public string Name { get; init; }
 
@@ -36,7 +34,6 @@ namespace Application.Diagnoses.Commands.CreateDiagnosis
                 var diagnosis = new Diagnosis
                 {
                     Id = request.Id,
-                    Clientid = request.Clientid,
                     Name = request.Name
                 };
 

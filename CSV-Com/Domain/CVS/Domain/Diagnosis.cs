@@ -9,8 +9,8 @@ namespace Domain.CVS.Domain
 {
     public class Diagnosis : BaseAuditableEntity
     {
-        public virtual Client Client { get; set; }
-
         public string Name { get; set; }
+
+        public List<Client> Clients { get; } = new();
     }
 }
