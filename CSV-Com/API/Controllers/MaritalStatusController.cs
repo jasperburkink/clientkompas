@@ -45,24 +45,36 @@ namespace API.Controllers
                 var result = await Mediator.Send(command);
                 return Ok("Updated MaritalStatus with an id of " + result);
             }
+            catch (NotFoundException ex)
+            {
+                return StatusCode(404, ex);
+            }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, ex);
             }
         }
 
         //TODO: implement with new Mediator structure
         [HttpDelete]
-        public async Task<ActionResult<int>> Delete(DeleteMaritalStatusCommand command)
+        public async Task<ActionResult<MaritalStatus>> Delete(DeleteMaritalStatusCommand command)
         {
             try
             {
                 var result = await Mediator.Send(command);
-                return Ok("Deleted MaritalStatus with an id of " + result);
+                return Ok(result);
+            }
+            catch (DomainObjectInUseExeption ex)
+            {
+                return StatusCode(409, ex);
+            }
+            catch (NotFoundException ex)
+            {
+                return StatusCode(404, ex);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, ex);
             }
         }
 
