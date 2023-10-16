@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.CVS.Enums
 {
-    public enum BenefitForm
+    public enum BenefitFormenum
     {
         WW,
         Wia,

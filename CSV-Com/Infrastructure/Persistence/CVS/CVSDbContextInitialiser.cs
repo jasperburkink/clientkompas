@@ -107,7 +107,7 @@ namespace Infrastructure.Persistence.CVS
                             Name = "Autismespectrumstoornis (ASS)"
                         }
                     },
-                    BenefitForm = BenefitForm.Bijstand,
+                    //BenefitForm = BenefitForm.Bijstand,
                     WorkingContracts =
                     {
                         new WorkingContract

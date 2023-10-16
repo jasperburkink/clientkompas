@@ -13,6 +13,8 @@ namespace Infrastructure.Persistence.CVS
         private CVSDbContext context;
         private GenericRepository<User> userRepository;
         private GenericRepository<Client> clientRepository;
+        private GenericRepository<BenefitForm> benefitFormRepository;
+        
 
         public UnitOfWork(CVSDbContext context)
         {
@@ -43,6 +45,20 @@ namespace Infrastructure.Persistence.CVS
                 return clientRepository;
             }
         }
+
+        public IRepository<BenefitForm> BenefitFormRepository
+        {
+            get
+            {
+                if (benefitFormRepository == null)
+                {
+                    benefitFormRepository = new GenericRepository<BenefitForm>(context);
+                }
+                return benefitFormRepository;
+            }
+        }
+
+        
 
         public void Save()
         {

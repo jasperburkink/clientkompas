@@ -1,0 +1,54 @@
+﻿using Application.Clients.Commands.CreateClient;
+using Application.Clients.Queries.GetClients;
+using Application.Common.Exceptions;
+using Application.Common.Interfaces.CVS;
+using AutoMapper.QueryableExtensions;
+using Domain.CVS.Domain;
+using Domain.CVS.Enums;
+using Domain.CVS.Events;
+using FluentValidation.Internal;
+using MediatR;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Application.BenefitForms.Commands.DeleteBenefitForm
+{
+    public record DeleteBenefitFormCommand : IRequest<BenefitForm>
+    {
+        public int Id { get; init; }
+    }
+    public class DeleteMaritalStatusCommandHandler : IRequestHandler<DeleteBenefitFormCommand, BenefitForm>
+    {
+        private readonly IUnitOfWork _unitOfWork;
+        public DeleteMaritalStatusCommandHandler(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
+
+        public async Task<BenefitForm> Handle(DeleteBenefitFormCommand request, CancellationToken cancellationToken)
+        {
+            // Check if maritalstatus exists in the database
+            var benefitForm = await _unitOfWork.BenefitFormRepository.GetByIDAsync(request.Id, cancellationToken);
+            if (benefitForm == null)
+            {
+                throw new NotFoundException(nameof(MaritalStatus), request.Id);
+            }
+
+            // Check if there's any client that uses the maritalstatus
+            var clients = await _unitOfWork.ClientRepository.GetAsync(c => c.BenefitForm.Id.Equals(request.Id));
+
+            if (clients.Any())
+            {
+                //throw new DomainObjectInUseExeption(nameof(BenefitForm), request.Id, nameof(Client), clients.Select(c => (object)c.Id));
+            }
+
+            await _unitOfWork.BenefitFormRepository.DeleteAsync(benefitForm);
+            await _unitOfWork.SaveAsync(cancellationToken);
+            return benefitForm;
+        }
+    }
+}
+
