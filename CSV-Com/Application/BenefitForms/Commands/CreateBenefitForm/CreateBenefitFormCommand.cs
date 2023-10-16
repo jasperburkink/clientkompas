@@ -1,5 +1,5 @@
 ﻿using Application.Common.Interfaces.CVS;
-//using Application.BenefitForms.Queries.GetMaritalStatus;
+using Application.BenefitForms.Queries.GetBenefitForm;
 using Domain.CVS.Domain;
 using Domain.CVS.Enums;
 using Domain.CVS.Events;

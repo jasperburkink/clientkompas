@@ -53,10 +53,32 @@ namespace Infrastructure.Persistence.CVS
         }
 
         public async Task TrySeedAsync()
-        {   
+        {
             // Default data
             // Seed, if necessary
             // TODO: Maybe only when debugging
+            BenefitForm benefitForm;
+            int benefitFormId = 1;
+
+            if (!_context.BenefitForm.Any(ms => ms.Id.Equals(benefitFormId)))
+            {
+                benefitForm = new BenefitForm
+                {
+                    Id = benefitFormId,
+                    Name = "Bijstand"
+                };
+
+                _context.BenefitForm.Add(benefitForm);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                benefitForm = _context.BenefitForm.First(ms => ms.Id.Equals(benefitFormId));
+            }
+
+
+
+
             if (!_context.Clients.Any())
             {
                 _context.Clients.Add(new Client
@@ -107,7 +129,7 @@ namespace Infrastructure.Persistence.CVS
                             Name = "Autismespectrumstoornis (ASS)"
                         }
                     },
-                    //BenefitForm = BenefitForm.Bijstand,
+                    BenefitForm = benefitForm,
                     WorkingContracts =
                     {
                         new WorkingContract

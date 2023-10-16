@@ -64,10 +64,10 @@ namespace API.Controllers
                     var result = await Mediator.Send(command);
                     return Ok(new { id = result.Id, name = result.Name });
                 }
-               /* catch (DomainObjectInUseExeption ex)
+                catch (DomainObjectInUseExeption ex)
                 {
                     return StatusCode(409, ex);
-                }*/
+                }
                 catch (NotFoundException ex)
                 {
                     return StatusCode(404, ex);

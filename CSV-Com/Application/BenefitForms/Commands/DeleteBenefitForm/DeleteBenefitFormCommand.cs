@@ -13,7 +13,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 namespace Application.BenefitForms.Commands.DeleteBenefitForm
 {
     public record DeleteBenefitFormCommand : IRequest<BenefitForm>
@@ -36,15 +35,12 @@ namespace Application.BenefitForms.Commands.DeleteBenefitForm
             {
                 throw new NotFoundException(nameof(MaritalStatus), request.Id);
             }
-
             // Check if there's any client that uses the maritalstatus
             var clients = await _unitOfWork.ClientRepository.GetAsync(c => c.BenefitForm.Id.Equals(request.Id));
-
             if (clients.Any())
             {
-                //throw new DomainObjectInUseExeption(nameof(BenefitForm), request.Id, nameof(Client), clients.Select(c => (object)c.Id));
+                throw new DomainObjectInUseExeption(nameof(BenefitForm), request.Id, nameof(Client), clients.Select(c => (object)c.Id));
             }
-
             await _unitOfWork.BenefitFormRepository.DeleteAsync(benefitForm);
             await _unitOfWork.SaveAsync(cancellationToken);
             return benefitForm;
