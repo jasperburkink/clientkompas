@@ -7,39 +7,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 namespace Application.Diagnoses.Commands.UpdateDiagnosis
 {
-    public record UpdateDiagnosisCommand : IRequest<int>
+    public record UpdateDiagnosisCommand : IRequest<Diagnosis>
         {
             public int Id { get; init; }
             public string Name { get; set; }
-
         }
-
-        public class UpdateDiagnosisCommandHandler : IRequestHandler<UpdateDiagnosisCommand, int>
+        public class UpdateDiagnosisCommandHandler : IRequestHandler<UpdateDiagnosisCommand, Diagnosis>
         {
             private readonly IUnitOfWork _unitOfWork;
-
             public UpdateDiagnosisCommandHandler(IUnitOfWork unitOfWork)
             {
                 _unitOfWork = unitOfWork;
             }
-
-            public async Task<int> Handle(UpdateDiagnosisCommand request, CancellationToken cancellationToken)
+            public async Task<Diagnosis> Handle(UpdateDiagnosisCommand request, CancellationToken cancellationToken)
             {
                 var diagnosis = await _unitOfWork.DiagnosisRepository.GetByIDAsync(request.Id, cancellationToken);
                 if (diagnosis == null)
                 {
                     throw new NotFoundException(nameof(Diagnosis), request.Id);
                 }
-
-            diagnosis.Name = request.Name;
-
-
+                diagnosis.Name = request.Name;
                 await _unitOfWork.SaveAsync(cancellationToken);
-
-                return diagnosis.Id;
+                return diagnosis;
             }
         }
     }

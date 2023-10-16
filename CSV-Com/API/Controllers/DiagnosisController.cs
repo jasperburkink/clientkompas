@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Application.Diagnoses.Commands.DeleteDiagnosis;
 using Application.Diagnoses.Commands.UpdateDiagnosis;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using Application.Common.Exceptions;
 
 namespace API.Controllers
 {
@@ -16,12 +17,12 @@ namespace API.Controllers
     public class DiagnosisController : ApiControllerBase
     {
         [HttpPost]
-        public async Task<ActionResult<int>> Create(CreateDiagnosisCommand command)
+        public async Task<ActionResult<Diagnosis>> Create(CreateDiagnosisCommand command)
         {
             try
             {
                 var result = await Mediator.Send(command);
-                return Ok("Created Diagnosis with an id of " + result);
+                return Ok(new { id = result.Id, name = result.Name});
             }
             catch (Exception ex)
             {
@@ -35,14 +36,17 @@ namespace API.Controllers
             return await Mediator.Send(query);
         }
 
-        
         [HttpPut]
-        public async Task<ActionResult<int>> Put(UpdateDiagnosisCommand command)
+        public async Task<ActionResult<Diagnosis>> Put(UpdateDiagnosisCommand command)
         {
             try
             {
                 var result = await Mediator.Send(command);
-                return Ok("Updated Diagnosis with an id of " + result);
+                return Ok(new { id = result.Id, name = result.Name});
+            }
+            catch (NotFoundException ex)
+            {
+                return StatusCode(404, ex);
             }
             catch (Exception ex)
             {
@@ -52,12 +56,16 @@ namespace API.Controllers
 
        
         [HttpDelete]
-        public async Task<ActionResult<int>> Delete(DeleteDiagnosisCommand command)
+        public async Task<ActionResult<Diagnosis>> Delete(DeleteDiagnosisCommand command)
         {
             try
             {
                 var result = await Mediator.Send(command);
-                return Ok("Deleted Diagnosis with an id of " + result);
+                return Ok(new { id = result.Id, name = result.Name});
+            }
+            catch (NotFoundException ex)
+            {
+                return StatusCode(404, ex);
             }
             catch (Exception ex)
             {
