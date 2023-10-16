@@ -13,8 +13,6 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-
-
 namespace Application.MaritalStatuses.Queries.GetMaritalStatus
 {
     public record GetMaritalStatusQuery : IRequest<IEnumerable<MaritalStatusDto>> { }
@@ -23,27 +21,16 @@ namespace Application.MaritalStatuses.Queries.GetMaritalStatus
         {
             private readonly IUnitOfWork _unitOfWork;
             private readonly IMapper _mapper;
-
             public GetMaritalStatusQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
             {
                 _unitOfWork = unitOfWork;
                 _mapper = mapper;
             }
-
-        /// <summary>
-        /// Get all driverslicences
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
         public async Task<IEnumerable<MaritalStatusDto>> Handle(GetMaritalStatusQuery request, CancellationToken cancellationToken)
         {
-
                 return (await _unitOfWork.MaritalStatusRepository.GetAsync())
                    .AsQueryable()
                    .ProjectTo<MaritalStatusDto>(_mapper.ConfigurationProvider);
-
-
             }
         }
 }

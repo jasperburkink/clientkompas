@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Application.MaritalStatuses.Commands.DeleteMaritalStatus;
 using Application.MaritalStatuses.Commands.UpdateMaritalStatus;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using Application.Common.Exceptions;
 
 namespace API.Controllers
 {
@@ -16,16 +17,16 @@ namespace API.Controllers
     public class MaritalStatusController : ApiControllerBase
     {
         [HttpPost]
-        public async Task<ActionResult<int>> Create(CreateMaritalStatusCommand command)
+        public async Task<ActionResult<IEnumerable<MaritalStatusDto>>> Create(CreateMaritalStatusCommand command)
         {
             try
             {
                 var result = await Mediator.Send(command);
-                return Ok("Created MaritalStatus with an id of " + result);
+                return Ok(result);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -46,7 +47,7 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -61,7 +62,7 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex);
+                return StatusCode(500, ex.Message);
             }
         }
 

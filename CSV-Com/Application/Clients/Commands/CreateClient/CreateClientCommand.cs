@@ -1,4 +1,5 @@
-﻿using Application.Common.Interfaces.CVS;
+﻿using Application.Common.Exceptions;
+using Application.Common.Interfaces.CVS;
 using Domain.CVS.Domain;
 using Domain.CVS.Enums;
 using Domain.CVS.Events;
@@ -60,6 +61,12 @@ namespace Application.Clients.Commands.CreateClient
 
         public async Task<int> Handle(CreateClientCommand request, CancellationToken cancellationToken)
         {
+            var maritalStatus = await _unitOfWork.MaritalStatusRepository.GetByIDAsync(request.MaritalStatusid, cancellationToken);
+            if (maritalStatus == null)
+            {
+                throw new NotFoundException(nameof(MaritalStatus), request.MaritalStatusid);
+            }
+
             var client = new Client
             {
                 IdentificationNumber = request.IdentificationNumber,
@@ -76,7 +83,7 @@ namespace Application.Clients.Commands.CreateClient
                 TelephoneNumber = request.TelephoneNumber,
                 DateOfBirth = request.DateOfBirth,
                 EmailAddress = request.EmailAddress,
-                MaritalStatusid = request.MaritalStatusid,
+                MaritalStatus = maritalStatus,
                 BenefitForm = request.BenefitForm,
                 Remarks = request.Remarks
             };

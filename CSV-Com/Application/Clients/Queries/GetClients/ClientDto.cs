@@ -16,10 +16,8 @@ using System.Threading.Tasks;
 
 namespace Application.Clients.Queries.GetClients
 {
-
     public class ClientDto : IMapFrom<Client>
     {
-      
         private const char SeperatorChar = ',';
 
         public int IdentificationNumber { get; set; }

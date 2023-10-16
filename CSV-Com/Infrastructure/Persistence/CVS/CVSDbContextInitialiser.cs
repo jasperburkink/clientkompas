@@ -57,7 +57,26 @@ namespace Infrastructure.Persistence.CVS
             // Default data
             // Seed, if necessary
             // TODO: Maybe only when debugging
-            /*if (!_context.Clients.Any())
+            MaritalStatus martitalStatus;
+            int maritalStatusId = 1;
+
+            if (!_context.MaritalStatus.Any(ms => ms.Id.Equals(maritalStatusId)))
+            {
+                martitalStatus = new MaritalStatus
+                {
+                    Id = maritalStatusId,
+                    Name = "Unmarried"
+                };
+
+                _context.MaritalStatus.Add(martitalStatus);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                martitalStatus = _context.MaritalStatus.First(ms => ms.Id.Equals(maritalStatusId));
+            }
+
+            if (!_context.Clients.Any())
             {
                 _context.Clients.Add(new Client
                 {
@@ -76,55 +95,55 @@ namespace Infrastructure.Persistence.CVS
                     TelephoneNumber = "0623456789",
                     DateOfBirth = new DateOnly(1990, 5, 14),
                     EmailAddress = "a@b.com",
-                    //MaritalStatus = 1,
+                    MaritalStatus = martitalStatus,
                     DriversLicences =
-                    {
-                        new DriversLicence
-                        {
-                            Id = 1,
-                            DriversLicenceCode = DriversLicenceEnum.B
-                        }
-                    },
+                            {
+                                new DriversLicence
+                                {
+                                    Id = 1,
+                                    DriversLicenceCode = DriversLicenceEnum.B
+                                }
+                            },
                     EmergencyPeople =
-                    {
-                        new EmergencyPerson
-                        {
-                            Id = 1,
-                            Name = "Piet Pietersen",
-                            TelephoneNumber = "0123456789"
-                        }
-                    },
+                            {
+                                new EmergencyPerson
+                                {
+                                    Id = 1,
+                                    Name = "Piet Pietersen",
+                                    TelephoneNumber = "0123456789"
+                                }
+                            },
                     Diagnoses =
-                    {
-                        new Diagnosis
-                        {
-                            Id = 1,
-                            Name = "ADHD"
-                        },
-                        new Diagnosis
-                        {
-                            Id = 2,
-                            Name = "Autismespectrumstoornis (ASS)"
-                        }
-                    },
+                            {
+                                new Diagnosis
+                                {
+                                    Id = 1,
+                                    Name = "ADHD"
+                                },
+                                new Diagnosis
+                                {
+                                    Id = 2,
+                                    Name = "Autismespectrumstoornis (ASS)"
+                                }
+                            },
                     BenefitForm = BenefitForm.Bijstand,
                     WorkingContracts =
-                    {
-                        new WorkingContract
-                        {
-                            Id = 1,
-                            CompanyName = "SBICT",
-                            Function = "Directeur",
-                            ContractType = ContractType.Temporary,
-                            FromDate = new DateOnly(2023, 1, 1),
-                            ToDate = new DateOnly(2024, 1, 1)
-                        }
-                    },
+                            {
+                                new WorkingContract
+                                {
+                                    Id = 1,
+                                    CompanyName = "SBICT",
+                                    Function = "Directeur",
+                                    ContractType = ContractType.Temporary,
+                                    FromDate = new DateOnly(2023, 1, 1),
+                                    ToDate = new DateOnly(2024, 1, 1)
+                                }
+                            },
                     Remarks = "Jan is een geweldig persoon om mee samen te werken."
                 });
 
                 await _context.SaveChangesAsync();
-            }*/
+            }
         }
     }
 }
