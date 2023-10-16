@@ -1,13 +1,95 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600&display=swap');
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+@layer components {
+    .inputFieldDropDown {
+        @apply bg-mainLightGray border-2 border-subGray2 text-gray-900 outline-none text-sm rounded-lg block w-full p-2.5;
+    }    
+
+    .logoBar {
+        @apply bg-mainBlue lg:bg-transparent w-full lg:w-sidebarBlue h-100px lg:h-fit lg:mt-50px flex justify-between lg:justify-center content-center flex-wrap px-2 lg:px-50px absolute z-30
+    }
+    /* Blue sidebar */
+    .sidebar {
+        @apply bg-mainBlue w-full lg:w-sidebarBlue lg:min-w-sidebarBlue h-0 lg:block lg:h-sidebar lg:-mt-15px overflow-hidden lg:rounded-tr-sidebarT lg:rounded-br-sidebarB ease-in-out duration-500
+    }
+
+    .sidebarLine {
+        @apply hidden lg:block bg-subBlue1 h-48 rounded-50% w-50rem mt-line rotate-line -ml-250px
+    }
+
+    .sidebarDarkLine {
+        @apply hidden lg:block bg-subBlue2 h-48 rounded-50% w-50rem rotate-darkLine -mt-darkLine -ml-250px
+    }
+    /* Gray sidebar */
+    .sidebarGray {
+        @apply bg-white lg:bg-mainGray border-mainGray border-b-2 lg:border-none w-full lg:w-sidebarGray lg:min-w-sidebarGray h-fit lg:h-sidebar max-h-10 lg:max-h-none pb-10 mt-100px lg:-ml-sidebarGray lg:-mt-15px overflow-hidden lg:rounded-tr-sidebarT lg:rounded-br-sidebarB relative ease-in-out duration-500
+    }
+
+    .sidebarLineGray {
+        @apply hidden lg:block bg-subGray1 h-48 rounded-50% w-50rem mt-line rotate-line -ml-150px
+    }
+
+    .sidebarDarkLineGray {
+        @apply hidden lg:block bg-subGray2 h-48 rounded-50% w-50rem rotate-darkLine -mt-darkLine -ml-150px
+    }
+
+    .sidebarArrow {
+        @apply ease-in-out duration-500 absolute right-1/2 bottom-0 lg:right-0 lg:bottom-1/2 lg:cursor-pointer h-8 lg:h-12
+    }
+    /* Line for empty sidebar(no navBtnsContainer) */
+    .sidebarEmptyLine {
+        @apply hidden lg:block bg-subBlue1 h-48 rounded-50% w-50rem mt-lineEmptySidebar rotate-line -ml-250px
+    }
+
+    .sidebarEmptyLineGray {
+        @apply hidden lg:block bg-subGray1 h-48 rounded-50% w-50rem mt-lineEmptySidebar rotate-line -ml-150px
+    }
+    /* Empty Sidebar Example
+    
+    <div class="sidebar">
+        <div class="sidebarEmptyLine"></div>
+        <div class="sidebarDarkLine"></div>
+    </div>
+    <div class="sidebarGray">
+        <div class="sidebarEmptyLineGray"></div>
+        <div class="sidebarDarkLineGray"></div>
+    </div>
+    */
+    /* Navigation for blue sidebar */
+    .navBtnsContainer {
+        @apply flex flex-col justify-between h-2/3 w-11/12 md:h-400px md:w-60 mt-100px md:mt-200px mx-auto
+    }
+
+    .navBtn {
+        @apply text-white w-11/12 md:w-60 h-65px cursor-pointer rounded-md flex justify-between content-center p-2 flex-wrap md:hover:bg-gradient-to-l md:hover:from-subBlue2
+        /*also add class "group" in the html file*/
+    }
+    /* Navigation for gray sidebar */
+    .navBtnsContainerGray {
+        @apply h-2/3 w-11/12 lg:h-500px lg:w-64 mt-1 mx-auto lg:mt-100px lg:ml-150px ease-in-out duration-700
+    }
+
+    .navBtnGray {
+        @apply text-black w-11/12 md:w-64 h-fit cursor-pointer rounded-md flex justify-between content-center px-1 py-2 flex-wrap
+        /*also add class "group" in the html file*/
+    }
+
+    .navBtnArrow {
+        @apply invisible md:group-hover:visible h-4 my-auto
+    }
+
+    .infoBox {
+        @apply flex flex-col relative h-full md:h-fit w-full md:max-h-[330px] ease-in-out duration-500
+    }
+
+    .twoSpaceUlBox {
+        @apply grid grid-cols-1 md:grid-cols-2 shrink-0 gap-3
+    }
+
+    .pieceTitle {
+        @apply md:col-span-2 text-lg font-bold underline underline-offset-3 decoration-gray-400 decoration-2 py-3 md:p-0 list-none
+    }
 }
