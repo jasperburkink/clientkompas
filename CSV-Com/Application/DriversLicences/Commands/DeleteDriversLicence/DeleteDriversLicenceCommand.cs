@@ -11,37 +11,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 namespace Application.Clients.Commands.DeleteClientDriversLicences
 {
-    public record DeleteDriversLicenceCommand : IRequest<int>
+    public record DeleteDriversLicenceCommand : IRequest<DriversLicence>
     {
         public int DriversLicenceId { get; init; }
     }
-
-    public class DeleteDriversLicenceCommandHandler : IRequestHandler<DeleteDriversLicenceCommand, int>
+    public class DeleteDriversLicenceCommandHandler : IRequestHandler<DeleteDriversLicenceCommand, DriversLicence>
     {
         private readonly IUnitOfWork _unitOfWork;
-        
         public DeleteDriversLicenceCommandHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
-
-        public async Task<int> Handle(DeleteDriversLicenceCommand request, CancellationToken cancellationToken)
+        public async Task<DriversLicence> Handle(DeleteDriversLicenceCommand request, CancellationToken cancellationToken)
         {        
-
             var driversLicence = await _unitOfWork.DriversLicenceRepository.GetByIDAsync(request.DriversLicenceId, cancellationToken);
             if (driversLicence == null)
             {
                 throw new NotFoundException(nameof(DriversLicences), request.DriversLicenceId);
             }
-
             await _unitOfWork.DriversLicenceRepository.DeleteAsync(driversLicence);
-
             await _unitOfWork.SaveAsync(cancellationToken);
-
-            return driversLicence.Id;
+            return driversLicence;
         }
     }
 }

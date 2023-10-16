@@ -4,6 +4,7 @@ using Application.Clients.Commands.CreateClient;
 using Application.Clients.Commands.DeleteClientDriversLicence;
 using Application.Clients.Commands.DeleteClientDriversLicences;
 using Application.Clients.Queries;
+using Application.Common.Exceptions;
 using Application.Common.Interfaces.CVS;
 using Application.DriversLicences.Commands.CreateDriversLicences;
 using Application.DriversLicences.Commands.UpdateDriversLicence;
@@ -26,46 +27,54 @@ namespace API.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<int>> CreateDriversLicence(CreateDriversLicenceCommand command)
+        public async Task<ActionResult<DriversLicence>> CreateDriversLicence(CreateDriversLicenceCommand command)
         {
             try
             {
                 var result = await Mediator.Send(command);
-                return Ok(new { Waarde = "Waarde", Waarde2 = 1 });
+                return Ok(new { id = result.Id, category = result.Category, description = result.Description, created = result.Created });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, ex);
             }
         }
 
 
 
         [HttpPut]
-        public async Task<ActionResult<int>>  Put(UpdateDriversLicenceCommand command)
+        public async Task<ActionResult<DriversLicence>>  Put(UpdateDriversLicenceCommand command)
         {
             try
             {
                 var result = await Mediator.Send(command);
-                return Ok("Updated DriversLicence with an id of " + result);
+                return Ok(new { id = result.Id, category = result.Category, description = result.Description, created = result.Created });
+            }
+            catch (NotFoundException ex)
+            {
+                return StatusCode(404, ex);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, ex);
             }
         }
 
         [HttpDelete]
-        public async Task<ActionResult<int>> DeleteDriversLicence(DeleteDriversLicenceCommand command)
+        public async Task<ActionResult<DriversLicence>> DeleteDriversLicence(DeleteDriversLicenceCommand command)
         {
             try
             {
                 var result = await Mediator.Send(command);
-                return Ok("Deleted DriversLicence with an id of "+result);
+                return Ok(new { id = result.Id, category = result.Category, description = result.Description, created = result.Created });
             }
-            catch(Exception ex)
+            catch (NotFoundException ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(404, ex);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
             }
         }
     }

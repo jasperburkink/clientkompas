@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 namespace Infrastructure.Persistence.CVS
 {
     public class CVSDbContextInitialiser
@@ -21,7 +20,6 @@ namespace Infrastructure.Persistence.CVS
             _logger = logger;
             _context = context;
         }
-
         public async Task InitialiseAsync()
         {
             try
@@ -37,7 +35,6 @@ namespace Infrastructure.Persistence.CVS
                 throw;
             }
         }
-
         public async Task SeedAsync()
         {
             try
@@ -50,7 +47,6 @@ namespace Infrastructure.Persistence.CVS
                 throw;
             }
         }
-
         public async Task TrySeedAsync()
         {   
             //// Default data

@@ -12,37 +12,23 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-
 namespace Application.DriversLicences.Queries
 {
     public record GetDriversLicenceQuery : IRequest<IEnumerable<DriversLicenceDto>> { }
-
     public class GetDriversLicenceQueryHandler : IRequestHandler<GetDriversLicenceQuery, IEnumerable<DriversLicenceDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-
         public GetDriversLicenceQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-
-        /// <summary>
-        /// Get all driverslicences
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
         public async Task<IEnumerable<DriversLicenceDto>> Handle(GetDriversLicenceQuery request, CancellationToken cancellationToken)
         {
-            //var driversLicences = new List<DriversLicenceDto>();
-
             return (await _unitOfWork.DriversLicenceRepository.GetAsync())
                .AsQueryable()
                .ProjectTo<DriversLicenceDto>(_mapper.ConfigurationProvider);
-
-
         }
     }
 }
