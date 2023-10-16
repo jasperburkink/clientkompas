@@ -17,12 +17,12 @@ namespace API.Controllers
     public class MaritalStatusController : ApiControllerBase
     {
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<MaritalStatusDto>>> Create(CreateMaritalStatusCommand command)
+        public async Task<ActionResult<int>> Create(CreateMaritalStatusCommand command)
         {
             try
             {
                 var result = await Mediator.Send(command);
-                return Ok(result);
+                return Ok("Created MaritalStatus with an id of " + result);
             }
             catch (Exception ex)
             {

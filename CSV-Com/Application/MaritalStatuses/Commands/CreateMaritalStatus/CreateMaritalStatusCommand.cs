@@ -13,19 +13,19 @@ using System.Threading.Tasks;
 using System.Xml;
 namespace Application.MaritalStatuses.Commands.CreateMaritalStatus
 {
-    public record CreateMaritalStatusCommand : IRequest<MaritalStatus>
+    public record CreateMaritalStatusCommand : IRequest<int>
     {
         public int Id { get; init; }
         public string Name { get; init; }
     }
-    public class CreateMaritalStatusCommandHandler : IRequestHandler<CreateMaritalStatusCommand, MaritalStatus>
+    public class CreateMaritalStatusCommandHandler : IRequestHandler<CreateMaritalStatusCommand, int>
     {
         private readonly IUnitOfWork _unitOfWork;
         public CreateMaritalStatusCommandHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task<MaritalStatus> Handle(CreateMaritalStatusCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(CreateMaritalStatusCommand request, CancellationToken cancellationToken)
         {
             var maritalStatus = new MaritalStatus
             {
@@ -35,7 +35,7 @@ namespace Application.MaritalStatuses.Commands.CreateMaritalStatus
             maritalStatus.AddDomainEvent(new MaritalStatusCreatedEvent(maritalStatus));
             await _unitOfWork.MaritalStatusRepository.InsertAsync(maritalStatus, cancellationToken);
             await _unitOfWork.SaveAsync(cancellationToken);
-            return maritalStatus;
+            return maritalStatus.Id;
         }
     }
 }
