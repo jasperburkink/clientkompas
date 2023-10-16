@@ -17,12 +17,12 @@ namespace API.Controllers
     public class MaritalStatusController : ApiControllerBase
     {
         [HttpPost]
-        public async Task<ActionResult<int>> Create(CreateMaritalStatusCommand command)
+        public async Task<ActionResult<MaritalStatus>> Create(CreateMaritalStatusCommand command)
         {
             try
             {
                 var result = await Mediator.Send(command);
-                return Ok("Created MaritalStatus with an id of " + result);
+                return Ok(new { id = result.Id, name = result.Name, created = result.Created });
             }
             catch (Exception ex)
             {
@@ -38,12 +38,12 @@ namespace API.Controllers
 
         //TODO: implement with new Mediator structure
         [HttpPut]
-        public async Task<ActionResult<int>> Put(UpdateMaritalStatusCommand command)
+        public async Task<ActionResult<MaritalStatus>> Put(UpdateMaritalStatusCommand command)
         {
             try
             {
                 var result = await Mediator.Send(command);
-                return Ok("Updated MaritalStatus with an id of " + result);
+                return Ok(new { id = result.Id, name = result.Name, created = result.Created});
             }
             catch (NotFoundException ex)
             {
@@ -62,7 +62,7 @@ namespace API.Controllers
             try
             {
                 var result = await Mediator.Send(command);
-                return Ok(result);
+                return Ok(new { id = result.Id, name = result.Name, created = result.Created });
             }
             catch (DomainObjectInUseExeption ex)
             {

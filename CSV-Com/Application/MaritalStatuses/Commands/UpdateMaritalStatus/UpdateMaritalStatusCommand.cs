@@ -9,19 +9,19 @@ using System.Text;
 using System.Threading.Tasks;
 namespace Application.MaritalStatuses.Commands.UpdateMaritalStatus
 {
-    public record UpdateMaritalStatusCommand : IRequest<int>
+    public record UpdateMaritalStatusCommand : IRequest<MaritalStatus>
         {
             public int Id { get; init; }
             public string Name { get; set; }
         }
-        public class UpdateMaritalStatusCommandHandler : IRequestHandler<UpdateMaritalStatusCommand, int>
+        public class UpdateMaritalStatusCommandHandler : IRequestHandler<UpdateMaritalStatusCommand, MaritalStatus>
         {
             private readonly IUnitOfWork _unitOfWork;
             public UpdateMaritalStatusCommandHandler(IUnitOfWork unitOfWork)
             {
                 _unitOfWork = unitOfWork;
             }
-            public async Task<int> Handle(UpdateMaritalStatusCommand request, CancellationToken cancellationToken)
+            public async Task<MaritalStatus> Handle(UpdateMaritalStatusCommand request, CancellationToken cancellationToken)
             {
                 var maritalStatus = await _unitOfWork.MaritalStatusRepository.GetByIDAsync(request.Id, cancellationToken);
                 if (maritalStatus == null)
@@ -30,7 +30,7 @@ namespace Application.MaritalStatuses.Commands.UpdateMaritalStatus
                 }
                 maritalStatus.Name = request.Name;
                 await _unitOfWork.SaveAsync(cancellationToken);
-                return maritalStatus.Id;
+                return maritalStatus;
             }
         }
 }
