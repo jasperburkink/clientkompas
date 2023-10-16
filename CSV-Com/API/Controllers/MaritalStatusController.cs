@@ -22,7 +22,7 @@ namespace API.Controllers
             try
             {
                 var result = await Mediator.Send(command);
-                return Ok(new { id = result.Id, name = result.Name, created = result.Created });
+                return Ok(new { id = result.Id, name = result.Name});
             }
             catch (Exception ex)
             {
@@ -43,7 +43,7 @@ namespace API.Controllers
             try
             {
                 var result = await Mediator.Send(command);
-                return Ok(new { id = result.Id, name = result.Name, created = result.Created});
+                return Ok(new { id = result.Id, name = result.Name});
             }
             catch (NotFoundException ex)
             {
@@ -62,7 +62,7 @@ namespace API.Controllers
             try
             {
                 var result = await Mediator.Send(command);
-                return Ok(new { id = result.Id, name = result.Name, created = result.Created });
+                return Ok(new { id = result.Id, name = result.Name});
             }
             catch (DomainObjectInUseExeption ex)
             {
