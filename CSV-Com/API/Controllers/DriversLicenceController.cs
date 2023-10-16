@@ -31,11 +31,11 @@ namespace API.Controllers
             try
             {
                 var result = await Mediator.Send(command);
-                return Ok("Created DriversLicence with an id of " + result);
+                return Ok(new { Waarde = "Waarde", Waarde2 = 1 });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -51,7 +51,7 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -65,7 +65,7 @@ namespace API.Controllers
             }
             catch(Exception ex)
             {
-                return StatusCode(500, ex);
+                return StatusCode(500, ex.Message);
             }
         }
     }
