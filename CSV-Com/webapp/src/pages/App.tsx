@@ -13,10 +13,11 @@ import { InputField } from '../components/common/input-field';
 import { NavButtonGray } from '../components/nav/nav-button-gray';
 import { NavTitle } from '../components/nav/nav-title';
 import { InputFieldWithLabel } from '../components/common/input-field-with-label';
+import { DatePicker } from '../components/common/datepicker';
 
 function App() {
     return (
-        <div className="md:flex">
+        <div className="md:flex">    
             <div className='md:flex'>
                 <Sidebar>
                     <NavButton text="Cliënten" icon="Gebruikers" />
@@ -102,6 +103,9 @@ function App() {
 
                 <p>Inputfield required with label </p>
                 <InputFieldWithLabel text='TextField' inputFieldProps={{ required: true, placeholder:'Placeholder', inputFieldType:{ type:'text'} }} />
+
+                <p>Date picker</p>
+                <DatePicker text='Datum' />
 
                 <p>ProfilePicture empty</p>
                 <ProfilePicture />
