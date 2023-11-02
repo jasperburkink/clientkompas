@@ -105,7 +105,7 @@ function App() {
                 <InputFieldWithLabel text='TextField' inputFieldProps={{ required: true, placeholder:'Placeholder', inputFieldType:{ type:'text'} }} />
 
                 <p>Date picker</p>
-                <DatePicker text='Datum' />
+                <DatePicker placeholder='Selecteer een datum' />
 
                 <p>ProfilePicture empty</p>
                 <ProfilePicture />

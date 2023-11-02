@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {   
+    .datepicker div{
+        border-radius: 10px;        
+    }
+
+    .datepicker fieldset{
+        border-width: 2px;
+    }
+}
