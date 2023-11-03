@@ -2,6 +2,7 @@
 using Application.Clients.Commands.CreateClient;
 using Application.Clients.Commands.DeleteClientDriversLicence;
 using Application.Clients.Queries.GetClients;
+using Application.Clients.Queries.SearchClients;
 using Application.Common.Interfaces.CVS;
 using Domain.CVS.Domain;
 using Microsoft.AspNetCore.Mvc;
@@ -64,6 +65,21 @@ namespace API.Controllers
             await Mediator.Send(command);
 
             return NoContent();
+        }
+
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult<IEnumerable<SearchClientDto>>> SearchClients([FromQuery] SearchClientsQuery query)
+        {
+            try
+            {
+                var clients = await Mediator.Send(query);
+                return Ok(clients);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
         }
     }
 }
