@@ -1,39 +1,44 @@
-﻿using Application.Clients.Commands.CreateClient;
+﻿using Application.DriversLicences.Queries;
 using Application.Common.Interfaces.CVS;
-using Domain.CVS.Domain;
-using Domain.CVS.Enums;
 using Domain.CVS.Events;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AutoMapper;
+
 namespace Application.DriversLicences.Commands.CreateDriversLicences
 {
-    public record CreateDriversLicenceCommand : IRequest<DriversLicence>
+    public record CreateDriversLicenceCommand : IRequest<DriversLicenceDto>
     {
         public string Category { get; set; }
+
         public string Description { get; set; }
     }
-    public class CreateDriversLicenceCommandHandler : IRequestHandler<CreateDriversLicenceCommand, DriversLicence>
+
+    public class CreateDriversLicenceCommandHandler : IRequestHandler<CreateDriversLicenceCommand, DriversLicenceDto>
     {
         private readonly IUnitOfWork _unitOfWork;
-        public CreateDriversLicenceCommandHandler(IUnitOfWork unitOfWork)
+        private readonly IMapper _mapper;
+
+        public CreateDriversLicenceCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
-        public async Task<DriversLicence> Handle(CreateDriversLicenceCommand request, CancellationToken cancellationToken)
+
+        public async Task<DriversLicenceDto> Handle(CreateDriversLicenceCommand request, CancellationToken cancellationToken)
         {
             var driversLicence = new Domain.CVS.Domain.DriversLicence
             {
                 Category = request.Category,
                 Description = request.Description
             };
+
             driversLicence.AddDomainEvent(new DriversLicenceCreatedEvent(driversLicence));
+
             await _unitOfWork.DriversLicenceRepository.InsertAsync(driversLicence, cancellationToken);
+
             await _unitOfWork.SaveAsync(cancellationToken);
-            return driversLicence;
+
+            return _mapper.Map<DriversLicenceDto>(driversLicence);
         }
     }
 }

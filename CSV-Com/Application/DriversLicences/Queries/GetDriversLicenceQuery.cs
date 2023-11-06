@@ -1,17 +1,7 @@
-﻿using Application.Clients.Queries;
-using Application.Clients.Queries.GetClients;
-using Application.Common.Interfaces.CVS;
+﻿using Application.Common.Interfaces.CVS;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Domain.CVS.Enums;
 using MediatR;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 namespace Application.DriversLicences.Queries
 {
     public record GetDriversLicenceQuery : IRequest<IEnumerable<DriversLicenceDto>> { }
