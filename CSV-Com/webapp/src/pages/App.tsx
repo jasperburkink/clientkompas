@@ -13,8 +13,24 @@ import { InputField } from '../components/common/input-field';
 import { NavButtonGray } from '../components/nav/nav-button-gray';
 import { NavTitle } from '../components/nav/nav-title';
 import { InputFieldWithLabel } from '../components/common/input-field-with-label';
+import { Dropdown } from '../components/common/dropdown';
+import DropdownWithButton from "../components/common/dropdown-with-button"
 
 function App() {
+    const data = [
+        {
+            Label: "option 1",
+            Value: 3,
+        },
+        {
+            Label: "option 2",
+            Value: 3,
+        },
+        {
+            Label: "option 3",
+            Value: 3,
+        },
+    ];
     return (
         <div className="md:flex">
             <div className='md:flex'>
@@ -109,6 +125,19 @@ function App() {
                 <p>ProfilePicture Maurice</p>
                 <ProfilePicture pictureUrl='https://media.licdn.com/dms/image/C5603AQG1ibjUUZ7NFQ/profile-displayphoto-shrink_800_800/0/1655221337005?e=2147483647&v=beta&t=KKnYXDtk5PeT9utOaIAjUPjDLqk55-IrkCu1R5GuaRg' />
                 
+                
+              <form action="#">
+                <p>Dropdown</p>
+                <Dropdown  array={data} required={false}  />
+                
+
+                <p>Dropdown with button</p>
+                <DropdownWithButton array={data} required={false} />
+                
+                <input type="submit" value="submit" />
+              
+                </form>
+
             </div>
             <Copyright />
         </div>

@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans&display=swap');
+
+
+@layer components {
+    
+    .add-extra-dropdown-btn{
+        @apply w-12 h-12 bg-mainLightGray border-2 border-subGray2 placeholder-subGray2 focus:border-mainBlue focus:ring-1 ring-mainBlue outline-none text-sm rounded-lg block pl-[22px] pr-[22px] text-black font-primary ml-2 bg-[url('../img/plus.png')]  bg-no-repeat bg-[length:20px] bg-center;
+
+    }
+    .remove-extra-dropdown-btn{
+        @apply w-12 h-12 bg-mainLightGray border-2 border-subGray2 placeholder-subGray2 focus:border-mainBlue focus:ring-1 ring-mainBlue outline-none text-sm rounded-lg block pl-[22px] pr-[22px] text-black font-primary ml-2 bg-[url('../img/Xbutton.png')]  bg-no-repeat bg-[length:20px] bg-center;
+    } 
+    
+   
+}

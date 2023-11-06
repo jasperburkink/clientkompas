@@ -5,6 +5,9 @@ module.exports = {
     ],
     theme: {
         extend: {
+            backgroundSize:{
+                'size17':'17px'
+            },
             fontFamily:{
                 'primary': ['Work+Sans']
             },
