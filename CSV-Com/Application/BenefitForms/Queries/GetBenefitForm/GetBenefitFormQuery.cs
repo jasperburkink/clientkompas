@@ -12,6 +12,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+
 namespace Application.BenefitForms.Queries.GetBenefitForm
 {
     public record GetBenefitFormQuery : IRequest<IEnumerable<BenefitFormDto>> { }

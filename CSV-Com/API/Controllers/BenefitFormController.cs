@@ -17,12 +17,12 @@ namespace API.Controllers
     public class BenefitFormController : ApiControllerBase
         {
             [HttpPost]
-            public async Task<ActionResult<BenefitForm>> Create(CreateBenefitFormCommand command)
+            public async Task<ActionResult<BenefitFormDto>> Create(CreateBenefitFormCommand command)
             {
                 try
                 {
                     var result = await Mediator.Send(command);
-                    return Ok(new { id = result.Id, name = result.Name });
+                    return Ok(result);
                 }
                 catch (Exception ex)
                 {
@@ -31,19 +31,25 @@ namespace API.Controllers
             }
 
             [HttpGet]
-            public async Task<IEnumerable<BenefitFormDto>> Get([FromQuery] GetBenefitFormQuery query)
+            public async Task<ActionResult<IEnumerable<BenefitFormDto>>> Get([FromQuery] GetBenefitFormQuery query)
             {
-                return await Mediator.Send(query);
+                try
+                {
+                    return Ok(await Mediator.Send(query));
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(500, ex);
+                }
             }
 
-            //TODO: implement with new Mediator structure
             [HttpPut]
-            public async Task<ActionResult<BenefitForm>> Put(UpdateBenefitFormCommand command)
+            public async Task<ActionResult<BenefitFormDto>> Put(UpdateBenefitFormCommand command)
             {
                 try
                 {
                     var result = await Mediator.Send(command);
-                    return Ok(new { id = result.Id, name = result.Name });
+                    return Ok(result);
                 }
                 catch (NotFoundException ex)
                 {
@@ -55,14 +61,14 @@ namespace API.Controllers
                 }
             }
 
-            //TODO: implement with new Mediator structure
+            
             [HttpDelete]
-            public async Task<ActionResult<BenefitForm>> Delete(DeleteBenefitFormCommand command)
+            public async Task<ActionResult<BenefitFormDto>> Delete(DeleteBenefitFormCommand command)
             {
                 try
                 {
                     var result = await Mediator.Send(command);
-                    return Ok(new { id = result.Id, name = result.Name });
+                    return Ok(result);
                 }
                 catch (DomainObjectInUseExeption ex)
                 {

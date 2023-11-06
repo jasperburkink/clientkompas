@@ -11,32 +11,42 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using AutoMapper;
 
 namespace Application.BenefitForms.Commands.CreateBenefitForm
 {
-        public record CreateBenefitFormCommand : IRequest<BenefitForm>
+        public record CreateBenefitFormCommand : IRequest<BenefitFormDto>
         {
-            public int Id { get; init; }
             public string Name { get; init; }
         }
-        public class CreateMaritalStatusCommandHandler : IRequestHandler<CreateBenefitFormCommand, BenefitForm>
+
+        public class CreateMaritalStatusCommandHandler : IRequestHandler<CreateBenefitFormCommand, BenefitFormDto>
         {
             private readonly IUnitOfWork _unitOfWork;
-            public CreateMaritalStatusCommandHandler(IUnitOfWork unitOfWork)
+            private readonly IMapper _mapper;
+
+            public CreateMaritalStatusCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
             {
                 _unitOfWork = unitOfWork;
+                _mapper = mapper;
             }
-            public async Task<BenefitForm> Handle(CreateBenefitFormCommand request, CancellationToken cancellationToken)
+
+            public async Task<BenefitFormDto> Handle(CreateBenefitFormCommand request, CancellationToken cancellationToken)
             {
+
                 var benefitForm = new BenefitForm
                 {
-                    Id = request.Id,
                     Name = request.Name
                 };
+
+
                 benefitForm.AddDomainEvent(new BenefitFormCreatedEvent(benefitForm));
+
                 await _unitOfWork.BenefitFormRepository.InsertAsync(benefitForm, cancellationToken);
+
                 await _unitOfWork.SaveAsync(cancellationToken);
-                return benefitForm;
+
+                return _mapper.Map<BenefitFormDto>(benefitForm);
             }
         }
     }
