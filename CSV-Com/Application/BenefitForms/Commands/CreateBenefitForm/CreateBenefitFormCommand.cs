@@ -1,16 +1,8 @@
 ﻿using Application.Common.Interfaces.CVS;
 using Application.BenefitForms.Queries.GetBenefitForm;
 using Domain.CVS.Domain;
-using Domain.CVS.Enums;
 using Domain.CVS.Events;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
 using AutoMapper;
 
 namespace Application.BenefitForms.Commands.CreateBenefitForm
@@ -20,12 +12,12 @@ namespace Application.BenefitForms.Commands.CreateBenefitForm
             public string Name { get; init; }
         }
 
-        public class CreateMaritalStatusCommandHandler : IRequestHandler<CreateBenefitFormCommand, BenefitFormDto>
+        public class CreateBenefitFormCommandHandler : IRequestHandler<CreateBenefitFormCommand, BenefitFormDto>
         {
             private readonly IUnitOfWork _unitOfWork;
             private readonly IMapper _mapper;
 
-            public CreateMaritalStatusCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
+            public CreateBenefitFormCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
             {
                 _unitOfWork = unitOfWork;
                 _mapper = mapper;

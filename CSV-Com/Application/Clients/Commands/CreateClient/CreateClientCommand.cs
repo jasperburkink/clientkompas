@@ -1,19 +1,15 @@
-﻿using Application.Common.Exceptions;
+﻿using Application.Clients.Queries.GetClients;
+using Application.Common.Exceptions;
 using Application.Common.Interfaces.CVS;
+using AutoMapper;
 using Domain.CVS.Domain;
 using Domain.CVS.Enums;
 using Domain.CVS.Events;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Clients.Commands.CreateClient
 {
-    public record CreateClientCommand : IRequest<int>
+    public record CreateClientCommand : IRequest<ClientDto>
     {
         public int IdentificationNumber { get; init; }
 
@@ -50,16 +46,18 @@ namespace Application.Clients.Commands.CreateClient
         public string Remarks { get; set; }
     }
 
-    public class CreateClientCommandHandler : IRequestHandler<CreateClientCommand, int>
+    public class CreateClientCommandHandler : IRequestHandler<CreateClientCommand, ClientDto>
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public CreateClientCommandHandler(IUnitOfWork unitOfWork)
+        public CreateClientCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public async Task<int> Handle(CreateClientCommand request, CancellationToken cancellationToken)
+        public async Task<ClientDto> Handle(CreateClientCommand request, CancellationToken cancellationToken)
         {
 
             var benefitForm = await _unitOfWork.BenefitFormRepository.GetByIDAsync(request.BenefitFormid, cancellationToken);
@@ -94,7 +92,7 @@ namespace Application.Clients.Commands.CreateClient
 
             await _unitOfWork.SaveAsync(cancellationToken);
 
-            return client.Id;
+            return _mapper.Map<ClientDto>(client);
         }
     }
 }

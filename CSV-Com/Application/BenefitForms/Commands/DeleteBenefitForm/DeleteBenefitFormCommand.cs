@@ -1,41 +1,26 @@
-﻿using Application.Clients.Commands.CreateClient;
-using Application.Clients.Queries.GetClients;
-using Application.Common.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces.CVS;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Domain.CVS.Domain;
 using Domain.CVS.Enums;
-using Domain.CVS.Events;
-using FluentValidation.Internal;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
-using Application.BenefitForms.Queries.GetBenefitForm;
 
 namespace Application.BenefitForms.Commands.DeleteBenefitForm
 {
-    public record DeleteBenefitFormCommand : IRequest<BenefitFormDto>
+    public record DeleteBenefitFormCommand : IRequest
     {
         public int Id { get; init; }
     }
 
-    public class DeleteMaritalStatusCommandHandler : IRequestHandler<DeleteBenefitFormCommand, BenefitFormDto>
+    public class DeleteBenefitFormCommandHandler : IRequestHandler<DeleteBenefitFormCommand>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
 
-        public DeleteMaritalStatusCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        public DeleteBenefitFormCommandHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _mapper = mapper;
         }
 
-        public async Task<BenefitFormDto> Handle(DeleteBenefitFormCommand request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteBenefitFormCommand request, CancellationToken cancellationToken)
         {
 
             // Check if maritalstatus exists in the database
@@ -55,8 +40,6 @@ namespace Application.BenefitForms.Commands.DeleteBenefitForm
             await _unitOfWork.BenefitFormRepository.DeleteAsync(benefitForm);
 
             await _unitOfWork.SaveAsync(cancellationToken);
-
-            return _mapper.Map<BenefitFormDto>(benefitForm);
         }
     }
 }

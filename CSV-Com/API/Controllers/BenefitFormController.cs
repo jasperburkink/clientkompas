@@ -63,24 +63,24 @@ namespace API.Controllers
 
             
             [HttpDelete]
-            public async Task<ActionResult<BenefitFormDto>> Delete(DeleteBenefitFormCommand command)
+            public async Task Delete(DeleteBenefitFormCommand command)
             {
                 try
                 {
-                    var result = await Mediator.Send(command);
-                    return Ok(result);
+                    await Mediator.Send(command);
+                  
                 }
                 catch (DomainObjectInUseExeption ex)
                 {
-                    return StatusCode(409, ex);
+                    StatusCode(409, ex);
                 }
                 catch (NotFoundException ex)
                 {
-                    return StatusCode(404, ex);
+                    StatusCode(404, ex);
                 }
                 catch (Exception ex)
                 {
-                    return StatusCode(500, ex);
+                    StatusCode(500, ex);
                 }
             }
 
