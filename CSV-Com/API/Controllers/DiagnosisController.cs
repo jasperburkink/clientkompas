@@ -1,13 +1,8 @@
-﻿using Application.Diagnoses.Commands;
-using Application.Diagnoses.Commands.CreateDiagnosis;
-using Application.Diagnoses.Queries;
+﻿using Application.Diagnoses.Commands.CreateDiagnosis;
 using Application.Diagnoses.Queries.GetDiagnosis;
-using Application.Common.Interfaces.CVS;
-using Domain.CVS.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Application.Diagnoses.Commands.DeleteDiagnosis;
 using Application.Diagnoses.Commands.UpdateDiagnosis;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using Application.Common.Exceptions;
 
 namespace API.Controllers
@@ -17,12 +12,12 @@ namespace API.Controllers
     public class DiagnosisController : ApiControllerBase
     {
         [HttpPost]
-        public async Task<ActionResult<Diagnosis>> Create(CreateDiagnosisCommand command)
+        public async Task<ActionResult<DiagnosisDto>> Create(CreateDiagnosisCommand command)
         {
             try
             {
                 var result = await Mediator.Send(command);
-                return Ok(new { id = result.Id, name = result.Name});
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -31,18 +26,26 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<DiagnosisDto>> Get([FromQuery] GetDiagnosisQuery query)
+        public async Task<ActionResult<IEnumerable<DiagnosisDto>>> Get([FromQuery] GetDiagnosisQuery query)
         {
-            return await Mediator.Send(query);
+            try
+            {
+                var result = await Mediator.Send(query);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
         }
 
         [HttpPut]
-        public async Task<ActionResult<Diagnosis>> Put(UpdateDiagnosisCommand command)
+        public async Task<ActionResult<DiagnosisDto>> Put(UpdateDiagnosisCommand command)
         {
             try
             {
                 var result = await Mediator.Send(command);
-                return Ok(new { id = result.Id, name = result.Name});
+                return Ok(result);
             }
             catch (NotFoundException ex)
             {
@@ -56,20 +59,19 @@ namespace API.Controllers
 
        
         [HttpDelete]
-        public async Task<ActionResult<Diagnosis>> Delete(DeleteDiagnosisCommand command)
+        public async Task Delete(DeleteDiagnosisCommand command)
         {
             try
             {
-                var result = await Mediator.Send(command);
-                return Ok(new { id = result.Id, name = result.Name});
+                await Mediator.Send(command);
             }
             catch (NotFoundException ex)
             {
-                return StatusCode(404, ex);
+                StatusCode(404, ex);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex);
+                StatusCode(500, ex);
             }
         }
 

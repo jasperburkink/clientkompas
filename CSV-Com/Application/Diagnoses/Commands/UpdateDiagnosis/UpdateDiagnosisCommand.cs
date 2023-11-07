@@ -1,36 +1,42 @@
 ﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces.CVS;
+using Application.Diagnoses.Queries.GetDiagnosis;
+using AutoMapper;
 using Domain.CVS.Domain;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 namespace Application.Diagnoses.Commands.UpdateDiagnosis
 {
-    public record UpdateDiagnosisCommand : IRequest<Diagnosis>
+    public record UpdateDiagnosisCommand : IRequest<DiagnosisDto>
         {
             public int Id { get; init; }
+
             public string Name { get; set; }
         }
-        public class UpdateDiagnosisCommandHandler : IRequestHandler<UpdateDiagnosisCommand, Diagnosis>
+
+        public class UpdateDiagnosisCommandHandler : IRequestHandler<UpdateDiagnosisCommand, DiagnosisDto>
         {
             private readonly IUnitOfWork _unitOfWork;
-            public UpdateDiagnosisCommandHandler(IUnitOfWork unitOfWork)
+            private readonly IMapper _mapper;
+        public UpdateDiagnosisCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
             {
                 _unitOfWork = unitOfWork;
+                _mapper = mapper;
             }
-            public async Task<Diagnosis> Handle(UpdateDiagnosisCommand request, CancellationToken cancellationToken)
+
+            public async Task<DiagnosisDto> Handle(UpdateDiagnosisCommand request, CancellationToken cancellationToken)
             {
                 var diagnosis = await _unitOfWork.DiagnosisRepository.GetByIDAsync(request.Id, cancellationToken);
                 if (diagnosis == null)
                 {
                     throw new NotFoundException(nameof(Diagnosis), request.Id);
                 }
+
                 diagnosis.Name = request.Name;
+
                 await _unitOfWork.SaveAsync(cancellationToken);
-                return diagnosis;
+
+                return _mapper.Map<DiagnosisDto>(diagnosis);
             }
         }
     }

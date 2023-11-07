@@ -1,12 +1,6 @@
 ﻿using Domain.CVS.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Persistence.CVS.Configuration
 {
@@ -20,9 +14,6 @@ namespace Infrastructure.Persistence.CVS.Configuration
              * TODO: Maybe these foreign keys can be solved with conventions. Also maybe cascade delete is not wanted.
              * But it is needed in the current situation, because there are no repositories for diagnoses, driverslicences, etc.
              */
-           /* builder.HasMany(c => c.Diagnoses)
-                .WithOne(d => d.Client)
-                .OnDelete(DeleteBehavior.Cascade);*/
              
         builder.HasMany(c => c.Diagnoses)
                 .WithMany(dl => dl.Clients);
