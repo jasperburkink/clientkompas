@@ -1,41 +1,42 @@
 ﻿using Application.Common.Interfaces.CVS;
 using Application.MaritalStatuses.Queries.GetMaritalStatus;
+using AutoMapper;
 using Domain.CVS.Domain;
-using Domain.CVS.Enums;
 using Domain.CVS.Events;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
+
 namespace Application.MaritalStatuses.Commands.CreateMaritalStatus
 {
-    public record CreateMaritalStatusCommand : IRequest<MaritalStatus>
+    public record CreateMaritalStatusCommand : IRequest<MaritalStatusDto>
     {
-        public int Id { get; init; }
         public string Name { get; init; }
     }
-    public class CreateMaritalStatusCommandHandler : IRequestHandler<CreateMaritalStatusCommand, MaritalStatus>
+
+    public class CreateMaritalStatusCommandHandler : IRequestHandler<CreateMaritalStatusCommand, MaritalStatusDto>
     {
         private readonly IUnitOfWork _unitOfWork;
-        public CreateMaritalStatusCommandHandler(IUnitOfWork unitOfWork)
+        private readonly IMapper _mapper;
+
+        public CreateMaritalStatusCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
-        public async Task<MaritalStatus> Handle(CreateMaritalStatusCommand request, CancellationToken cancellationToken)
+
+        public async Task<MaritalStatusDto> Handle(CreateMaritalStatusCommand request, CancellationToken cancellationToken)
         {
             var maritalStatus = new MaritalStatus
             {
-                Id = request.Id,
                 Name = request.Name
             };
+
             maritalStatus.AddDomainEvent(new MaritalStatusCreatedEvent(maritalStatus));
+
             await _unitOfWork.MaritalStatusRepository.InsertAsync(maritalStatus, cancellationToken);
+
             await _unitOfWork.SaveAsync(cancellationToken);
-            return maritalStatus;
+
+            return _mapper.Map<MaritalStatusDto>(maritalStatus);
         }
     }
 }

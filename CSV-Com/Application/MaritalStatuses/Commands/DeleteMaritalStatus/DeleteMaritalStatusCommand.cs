@@ -1,32 +1,24 @@
-﻿using Application.Clients.Commands.CreateClient;
-using Application.Clients.Queries.GetClients;
-using Application.Common.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces.CVS;
-using AutoMapper.QueryableExtensions;
 using Domain.CVS.Domain;
-using Domain.CVS.Events;
-using FluentValidation.Internal;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 namespace Application.MaritalStatuses.Commands.DeleteMaritalStatus
 {
-        public record DeleteMaritalStatusCommand : IRequest<MaritalStatus>
+        public record DeleteMaritalStatusCommand : IRequest
         {
             public int Id { get; init; }
         }
-        public class DeleteMaritalStatusCommandHandler : IRequestHandler<DeleteMaritalStatusCommand, MaritalStatus>
+        public class DeleteMaritalStatusCommandHandler : IRequestHandler<DeleteMaritalStatusCommand>
         {
             private readonly IUnitOfWork _unitOfWork;
-            public DeleteMaritalStatusCommandHandler(IUnitOfWork unitOfWork)
+
+        public DeleteMaritalStatusCommandHandler(IUnitOfWork unitOfWork)
             {
                 _unitOfWork = unitOfWork;
             }
 
-            public async Task<MaritalStatus> Handle(DeleteMaritalStatusCommand request, CancellationToken cancellationToken)
+            public async Task Handle(DeleteMaritalStatusCommand request, CancellationToken cancellationToken)
             {
                 // Check if maritalstatus exists in the database
                 var maritalStatus = await _unitOfWork.MaritalStatusRepository.GetByIDAsync(request.Id, cancellationToken);
@@ -44,8 +36,8 @@ namespace Application.MaritalStatuses.Commands.DeleteMaritalStatus
                 }
             
                 await _unitOfWork.MaritalStatusRepository.DeleteAsync(maritalStatus);
+
                 await _unitOfWork.SaveAsync(cancellationToken);
-                return maritalStatus;
             }
         }
 }

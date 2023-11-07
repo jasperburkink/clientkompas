@@ -1,36 +1,43 @@
 ﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces.CVS;
+using Application.MaritalStatuses.Queries.GetMaritalStatus;
+using AutoMapper;
 using Domain.CVS.Domain;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 namespace Application.MaritalStatuses.Commands.UpdateMaritalStatus
 {
-    public record UpdateMaritalStatusCommand : IRequest<MaritalStatus>
+    public record UpdateMaritalStatusCommand : IRequest<MaritalStatusDto>
         {
             public int Id { get; init; }
+
             public string Name { get; set; }
         }
-        public class UpdateMaritalStatusCommandHandler : IRequestHandler<UpdateMaritalStatusCommand, MaritalStatus>
+
+        public class UpdateMaritalStatusCommandHandler : IRequestHandler<UpdateMaritalStatusCommand, MaritalStatusDto>
         {
             private readonly IUnitOfWork _unitOfWork;
-            public UpdateMaritalStatusCommandHandler(IUnitOfWork unitOfWork)
+            private readonly IMapper _mapper;
+
+        public UpdateMaritalStatusCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
             {
                 _unitOfWork = unitOfWork;
+                _mapper = mapper;
             }
-            public async Task<MaritalStatus> Handle(UpdateMaritalStatusCommand request, CancellationToken cancellationToken)
+
+            public async Task<MaritalStatusDto> Handle(UpdateMaritalStatusCommand request, CancellationToken cancellationToken)
             {
                 var maritalStatus = await _unitOfWork.MaritalStatusRepository.GetByIDAsync(request.Id, cancellationToken);
                 if (maritalStatus == null)
                 {
                     throw new NotFoundException(nameof(MaritalStatus), request.Id);
                 }
+
                 maritalStatus.Name = request.Name;
+
                 await _unitOfWork.SaveAsync(cancellationToken);
-                return maritalStatus;
+
+                return _mapper.Map<MaritalStatusDto>(maritalStatus);
             }
         }
 }
