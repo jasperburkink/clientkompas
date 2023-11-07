@@ -20,11 +20,11 @@ function App() {
     const data = [
         {
             Label: "option 1",
-            Value: 3,
+            Value: 1,
         },
         {
             Label: "option 2",
-            Value: 3,
+            Value: 2,
         },
         {
             Label: "option 3",
@@ -126,17 +126,13 @@ function App() {
                 <ProfilePicture pictureUrl='https://media.licdn.com/dms/image/C5603AQG1ibjUUZ7NFQ/profile-displayphoto-shrink_800_800/0/1655221337005?e=2147483647&v=beta&t=KKnYXDtk5PeT9utOaIAjUPjDLqk55-IrkCu1R5GuaRg' />
                 
                 
-              <form action="#">
+             
                 <p>Dropdown</p>
                 <Dropdown  array={data} required={false}  />
                 
 
                 <p>Dropdown with button</p>
                 <DropdownWithButton array={data} required={false} />
-                
-                <input type="submit" value="submit" />
-              
-                </form>
 
             </div>
             <Copyright />

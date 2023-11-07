@@ -18,30 +18,42 @@ interface IDropDownProps extends React.HTMLProps<HTMLSelectElement> {
  
 const DropdownWithButton = (props: IDropDownProps) => {
     const newArray = props.array;
-    const [badge, setDropdowns] = useState<JSX.Element[]>([]);
+    const [badge, setBadge] = useState<JSX.Element[]>([]);
+    const [option, setoption] = useState<JSX.Element[]>([]);
+    const [value,setselect] = useState('');
+    
 
-    const removerExtraDropdown = () => {
-        const newDropdowns = badge.slice();
-        const newElement = (
-          <p></p>
-        );
-        newDropdowns.push(newElement);
-        setDropdowns(newDropdowns);
+
+
+
+    const removebadge = (index: number) => {
+        const removebadge = badge.filter((_, i) => i !== index);
+        setBadge(removebadge);
     };
 
-    const addExtraDropdown = () => {
-        const newbadge = badge.slice();
-        const newElement = (
-           <p>text</p>
-        );
-        newbadge.push(newElement);
-        setDropdowns(newbadge);
+    const addbadge = () => {
+        const id = parseInt(value);
+        let label = ""
+        newArray.map((item, index) => {
+            if (item.Value === id) {
+                label = item.Label;
+            }
+        });
+        if (value !== '') {
+            const newbadge = badge.slice();
+            const newElement = (
+                <p className='mx-1'>{label}</p>
+            );
+            newbadge.push(newElement);
+            setBadge(newbadge);
+        }
+       
     };
-
+    const ar = ['1','2'];
     return (
         <div className='input-field flex-col '>
             <div className='flex'>
-            <select name="" id="" className='dropdown' required={props.required}>
+            <select name="" id="" className='dropdown'defaultValue={ar} onChange={event => setselect(event.target.value)} required={props.required}>
             <option value="" disabled selected>
                 Kies uit de lijst
             </option>
@@ -49,16 +61,17 @@ const DropdownWithButton = (props: IDropDownProps) => {
                 <option key={index} value={item.Value}>
                     {item.Label}
                 </option>
+                
             ))}
         </select>
-        <button className='add-extra-dropdown-btn' type='button'  onClick={addExtraDropdown}></button>
+        <button className='add-extra-dropdown-btn' type='button'  onClick={addbadge}></button>
         {props.required === true && <FontAwesomeIcon icon={faAsterisk} className="fa-solid fa-1x"/>}
             </div>
             <div className='flex flex-wrap max-w-[100%]'>
         {badge.map((badge, index) => (
-        <div key={index} className='flex'>
+        <div key={index} className='dropdownbadge'>
             {badge}
-            <button type='button'>X</button>
+            <button type='button' className='badgeBtn' onClick={() => removebadge(index)}></button>
             </div>      
     ))}
     </div>
