@@ -1,14 +1,8 @@
 ﻿using Application.Common.Interfaces.CVS;
-using Application.Common.Security;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Application.Clients.Queries.GetClients
 {

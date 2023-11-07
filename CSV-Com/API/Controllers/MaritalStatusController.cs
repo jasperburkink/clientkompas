@@ -1,15 +1,9 @@
-﻿using Application.MaritalStatuses.Commands;
-using Application.MaritalStatuses.Commands.CreateMaritalStatus;
-using Application.MaritalStatuses.Queries;
+﻿using Application.MaritalStatuses.Commands.CreateMaritalStatus;
 using Application.MaritalStatuses.Queries.GetMaritalStatus;
-using Application.Common.Interfaces.CVS;
-using Domain.CVS.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Application.MaritalStatuses.Commands.DeleteMaritalStatus;
 using Application.MaritalStatuses.Commands.UpdateMaritalStatus;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using Application.Common.Exceptions;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace API.Controllers
 {
