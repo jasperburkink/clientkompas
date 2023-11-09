@@ -21,10 +21,5 @@ namespace Application.Clients.Queries.SearchClients
         public string PrefixLastName { get; set; }
 
         public string LastName { get; set; }
-
-        public void Mapping(Profile profile)
-        {
-            profile.CreateMap<Client, SearchClientDto>();
-        }
     }
 }
