@@ -8,6 +8,9 @@ import 'moment/locale/nl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 
+const LOCALE_PROVIDER = "nl";
+const MOBILE_BREAKPOINT = 640;
+
 interface DatePickerProps {
     placeholder: string
 }
@@ -15,9 +18,6 @@ interface DatePickerProps {
 function GenerateAwesomeFontCalendarIcon() {
   return <FontAwesomeIcon icon={faCalendar} className="fa my-auto cursor-pointer" />;
 }
-
-const localeProvider = "nl";
-const MOBILE_BREAKPOINT = 640;
 
 export const DatePicker = (props: DatePickerProps) => {
   const [isMobileView, setIsMobileView] = useState<boolean>(false);
@@ -40,7 +40,7 @@ export const DatePicker = (props: DatePickerProps) => {
   }, []);
 
   return (
-  <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale={localeProvider}>
+  <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale={LOCALE_PROVIDER}>
     {isMobileView ? (
       <MobileDatePickerControl.MobileDatePicker label={props.placeholder} className='bg-mainLightGray datepicker' />
     ): (
