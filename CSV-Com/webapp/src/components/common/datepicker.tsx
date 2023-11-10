@@ -19,23 +19,25 @@ function GenerateAwesomeFontCalendarIcon() {
   return <FontAwesomeIcon icon={faCalendar} className="fa my-auto cursor-pointer" />;
 }
 
+const handleResize = (setIsMobileView: React.Dispatch<React.SetStateAction<boolean>>) => {
+    setIsMobileView(window.innerWidth <= MOBILE_BREAKPOINT);
+};
+
 export const DatePicker = (props: DatePickerProps) => {
   const [isMobileView, setIsMobileView] = useState<boolean>(false);
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobileView(window.innerWidth <= MOBILE_BREAKPOINT);
-    };
+    const handleResizeCallback = () => handleResize(setIsMobileView);
 
     // Eventlistener when changing screen size
-    window.addEventListener('resize', handleResize);
+      window.addEventListener('resize', handleResizeCallback);
 
     // Initialize when loading the page
-    handleResize();
+      handleResizeCallback();
 
     // Remove eventlistener when component is disposed
     return () => {
-      window.removeEventListener('resize', handleResize);
+        window.removeEventListener('resize', handleResizeCallback);
     };
   }, []);
 
