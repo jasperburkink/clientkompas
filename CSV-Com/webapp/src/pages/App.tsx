@@ -19,15 +19,15 @@ import DropdownWithButton from "../components/common/dropdown-with-button"
 function App() {
     const data = [
         {
-            Label: "option 1",
+            Label: "ADHD",
             Value: 1,
         },
         {
-            Label: "option 2",
+            Label: "Asperger",
             Value: 2,
         },
         {
-            Label: "option 3",
+            Label: "SBICT",
             Value: 3,
         },
     ];
@@ -130,10 +130,12 @@ function App() {
                 <p>Dropdown</p>
                 <Dropdown  array={data} required={false}  />
                 
-
+             <form action="#">
                 <p>Dropdown with button</p>
-                <DropdownWithButton array={data} required={false} />
-
+                <DropdownWithButton options={data} required={true} inputfieldname='nameinput' />
+                <input type="submit" value="eeee" />
+                </form>
+               
             </div>
             <Copyright />
         </div>

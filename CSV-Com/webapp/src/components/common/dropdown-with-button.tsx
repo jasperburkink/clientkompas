@@ -1,83 +1,99 @@
-import React, { useState } from 'react';
-import ReactDOM from 'react-dom';
+import React, { useState, useEffect } from 'react';
 import './dropdown-with-button.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAsterisk } from "@fortawesome/free-solid-svg-icons";
+import { faAsterisk , faPlus,faXmark,faAngleDown} from "@fortawesome/free-solid-svg-icons";
 
 interface DropdownObject {
     Value: number;
     Label: string;
-}
 
+}
 
 interface IDropDownProps extends React.HTMLProps<HTMLSelectElement> {
-    array: DropdownObject[];
+    options: DropdownObject[];
     required: boolean;
+    inputfieldname: string;
    
 }
- 
+
+interface IBadge{
+    id: number;
+    text: string;
+}
+
 const DropdownWithButton = (props: IDropDownProps) => {
-    const newArray = props.array;
-    const [badge, setBadge] = useState<JSX.Element[]>([]);
-    const [option, setoption] = useState<JSX.Element[]>([]);
-    const [value,setselect] = useState('');
     
+    const [badges, setBadges] = useState<IBadge[]>([]);
+    const [currentoptions, setcurentoptions] = useState<IBadge[]>([]);
+    const [value,setselect] = useState('');
 
-
-
-
-    const removebadge = (index: number) => {
-        const removebadge = badge.filter((_, i) => i !== index);
-        setBadge(removebadge);
+    const removebadge = (badge: IBadge) => {
+        setcurentoptions(currentoptions.concat(badge));    
+        setBadges(badges.filter(a => a.id !== badge.id));
     };
 
     const addbadge = () => {
-        const id = parseInt(value);
-        let label = ""
-        newArray.map((item, index) => {
-            if (item.Value === id) {
-                label = item.Label;
+        const val = parseInt(value);
+        let id = 0;
+        let text = ""
+
+        props.options.forEach((item, index) => {
+            if (item.Value === val) {
+                id = item.Value;
+                text = item.Label;
             }
         });
+
         if (value !== '') {
-            const newbadge = badge.slice();
-            const newElement = (
-                <p className='mx-1'>{label}</p>
-            );
-            newbadge.push(newElement);
-            setBadge(newbadge);
+            const newBadge: IBadge = {
+                id,
+                text,
+            }
+            setBadges(badges.concat(newBadge)); 
+            setcurentoptions(currentoptions.filter(badge => badge.id !== id));
+            setselect('');
         }
-       
     };
-    const ar = ['1','2'];
+
+    useEffect(() => {
+        let newoptions: IBadge[] = [];
+        props.options.forEach((item, index) => {
+            const id = item.Value;
+            const text = item.Label;
+            newoptions.push({id: id, text: text});
+        });
+        setcurentoptions(newoptions);
+      }, [props.options]);
+
     return (
-        <div className='input-field flex-col '>
-            <div className='flex'>
-            <select name="" id="" className='dropdown'defaultValue={ar} onChange={event => setselect(event.target.value)} required={props.required}>
-            <option value="" disabled selected>
-                Kies uit de lijst
-            </option>
-            {newArray.map((item, index) => (
-                <option key={index} value={item.Value}>
-                    {item.Label}
-                </option>
-                
-            ))}
-        </select>
-        <button className='add-extra-dropdown-btn' type='button'  onClick={addbadge}></button>
-        {props.required === true && <FontAwesomeIcon icon={faAsterisk} className="fa-solid fa-1x"/>}
-            </div>
+    <div className='input-field flex-col '>
+        <div className='flex'>
+                    <select id="" className='dropdown' onChange={event => {setselect(event.target.value)}} required={props.required}>
+                        <option value="">Kies uit de lijst</option>
+                        {currentoptions.map((currentoption, index) => (
+                            <option key={currentoption.id} value={currentoption.id}>{currentoption.text}</option>
+                        ))};    
+                        <FontAwesomeIcon icon={faAngleDown} size="sm" style={{color: "#000000",}} />
+                    </select>
+                <button className='add-extra-dropdown-btn' type='button'  onClick={addbadge}>
+                <FontAwesomeIcon className='ml-[0]' icon={faPlus} size="xl" style={{color: "#000000",}} />
+                </button>
+                {props.required === true && <FontAwesomeIcon icon={faAsterisk} className="fa-solid fa-1x"/>}
+        </div>
             <div className='flex flex-wrap max-w-[100%]'>
-        {badge.map((badge, index) => (
-        <div key={index} className='dropdownbadge'>
-            {badge}
-            <button type='button' className='badgeBtn' onClick={() => removebadge(index)}></button>
-            </div>      
-    ))}
+                {badges.map((badge, index) => (  
+                    <div key={badge.id} className='dropdownbadge'>
+                            <div>
+                                <p className='mx-1'>{badge.text}</p>
+                                <input name={props.inputfieldname} type="hidden" value={badge.id} />
+                            </div>
+                        <button type='button' className='badgeBtn' onClick={() => removebadge(badge)}><FontAwesomeIcon icon={faXmark} size="sm" style={{color: "#000000",}} /></button>
+                    </div>      
+                ))}
+            </div>
     </div>
-    </div>
-    
     );
 };
 
 export default DropdownWithButton;
+
