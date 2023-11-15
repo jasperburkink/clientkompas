@@ -1,7 +1,9 @@
 ﻿using Application.Clients.Commands.AddClientDriversLicence;
 using Application.Clients.Commands.CreateClient;
 using Application.Clients.Commands.DeleteClientDriversLicence;
+using Application.Clients.Commands.UpdateClient;
 using Application.Clients.Queries.GetClients;
+using Application.Common.Exceptions;
 using Application.Common.Interfaces.CVS;
 using Domain.CVS.Domain;
 using Microsoft.AspNetCore.Mvc;
@@ -40,11 +42,22 @@ namespace API.Controllers
             return await Mediator.Send(command);
         }
 
-        //TODO: implement with new Mediator structure
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Client value)
+        [HttpPut]
+        public async Task<ActionResult<ClientDto>> Put(UpdateClientCommand command)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var result = await Mediator.Send(command);
+                return Ok(result);
+            }
+            catch (NotFoundException ex)
+            {
+                return StatusCode(404, ex);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
         }
 
         //TODO: implement with new Mediator structure
