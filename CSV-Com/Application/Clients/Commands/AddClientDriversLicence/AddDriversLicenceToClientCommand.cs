@@ -1,6 +1,8 @@
 ﻿using Application.Clients.Commands.CreateClient;
+using Application.Clients.Queries.GetClients;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces.CVS;
+using AutoMapper;
 using Domain.CVS.Domain;
 using Domain.CVS.Enums;
 using Domain.CVS.Events;
@@ -13,23 +15,26 @@ using System.Threading.Tasks;
 
 namespace Application.Clients.Commands.AddClientDriversLicence
 {
-    public class AddClientDriversLicenceCommand : IRequest<int>
+    public class AddDriversLicenceToClientCommand : IRequest<ClientDto>
     {
         public int ClientId { get; set; }
+
         public int DriversLicenceId { get; set; }
 
     }
 
-    public class AddClientDriversLicenceCommandHandler : IRequestHandler<AddClientDriversLicenceCommand, int>
+    public class AddDriversLicenceToClientCommandHandler : IRequestHandler<AddDriversLicenceToClientCommand, ClientDto>
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public AddClientDriversLicenceCommandHandler(IUnitOfWork unitOfWork)
+        public AddDriversLicenceToClientCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public async Task<int> Handle(AddClientDriversLicenceCommand request, CancellationToken cancellationToken)
+        public async Task<ClientDto> Handle(AddDriversLicenceToClientCommand request, CancellationToken cancellationToken)
         {
             var client = await _unitOfWork.ClientRepository.GetByIDAsync(request.ClientId, cancellationToken);
 
@@ -44,18 +49,6 @@ namespace Application.Clients.Commands.AddClientDriversLicence
                 throw new NotFoundException(nameof(Client), request.DriversLicenceId);
             }
 
-       
-
-            
-            
-
-            
-
-           /* await _unitOfWork.ClientRepository.UpdateAsync(client, cancellationToken);
-
-            await _unitOfWork.SaveAsync(cancellationToken);
-
-            return driversLicence.Id;*/
             throw new NotImplementedException();
         }
     }

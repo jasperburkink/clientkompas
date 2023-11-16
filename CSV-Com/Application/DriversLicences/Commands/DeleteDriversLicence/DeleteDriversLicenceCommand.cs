@@ -1,39 +1,40 @@
-﻿using Application.Clients.Commands.CreateClient;
-using Application.Clients.Queries.GetClients;
+﻿using Application.DriversLicences.Queries;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces.CVS;
-using AutoMapper.QueryableExtensions;
-using Domain.CVS.Domain;
-using Domain.CVS.Events;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AutoMapper;
+using Application.Extensions;
+
 namespace Application.Clients.Commands.DeleteClientDriversLicences
 {
-    public record DeleteDriversLicenceCommand : IRequest<DriversLicence>
+    public record DeleteDriversLicenceCommand : IRequest
     {
         public int DriversLicenceId { get; init; }
     }
-    public class DeleteDriversLicenceCommandHandler : IRequestHandler<DeleteDriversLicenceCommand, DriversLicence>
+
+    public class DeleteDriversLicenceCommandHandler : IRequestHandler<DeleteDriversLicenceCommand>
     {
         private readonly IUnitOfWork _unitOfWork;
-        public DeleteDriversLicenceCommandHandler(IUnitOfWork unitOfWork)
+        private readonly IMapper _mapper;
+
+        public DeleteDriversLicenceCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
-        public async Task<DriversLicence> Handle(DeleteDriversLicenceCommand request, CancellationToken cancellationToken)
+
+        public async Task Handle(DeleteDriversLicenceCommand request, CancellationToken cancellationToken)
         {        
+
             var driversLicence = await _unitOfWork.DriversLicenceRepository.GetByIDAsync(request.DriversLicenceId, cancellationToken);
-            if (driversLicence == null)
-            {
-                throw new NotFoundException(nameof(DriversLicences), request.DriversLicenceId);
-            }
+
+            driversLicence.AssertNotNull();
+
             await _unitOfWork.DriversLicenceRepository.DeleteAsync(driversLicence);
+
             await _unitOfWork.SaveAsync(cancellationToken);
-            return driversLicence;
+
+            
         }
     }
 }

@@ -54,3 +54,5 @@ obj/
 /POC css framework/tailwind-react/node_modules
 *.user
 /CSV-Com/API/API.csproj.user
+/CSV-Com/UpgradeLog3.htm
+/CSV-Com/UpgradeLog2.htm

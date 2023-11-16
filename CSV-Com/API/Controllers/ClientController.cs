@@ -35,7 +35,7 @@ namespace API.Controllers
 
         [Route("[action]")]
         [HttpPost]
-        public async Task<ActionResult<int>> AddDriversLicence(AddClientDriversLicenceCommand command)
+        public async Task<ActionResult<ClientDto>> AddDriversLicence(AddDriversLicenceToClientCommand command)
         {
             return await Mediator.Send(command);
         }

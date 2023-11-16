@@ -26,7 +26,6 @@ namespace Infrastructure.Persistence.CVS.Configuration
 
             builder.HasMany(c => c.DriversLicences)
                 .WithMany(dl => dl.Clients);
-               
 
             builder.HasMany(c => c.EmergencyPeople)
                 .WithOne(ep => ep.Client)
