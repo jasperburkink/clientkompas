@@ -1,4 +1,4 @@
-﻿using Application.Clients.Commands.AddClientDriversLicence;
+﻿using Application.Clients.Commands.AddDriversLicenceToClient;
 using Application.Clients.Commands.CreateClient;
 using Application.Clients.Commands.DeleteClientDriversLicence;
 using Application.Clients.Queries.GetClients;

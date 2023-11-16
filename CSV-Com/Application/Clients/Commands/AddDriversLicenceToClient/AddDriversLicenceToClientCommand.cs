@@ -13,7 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Clients.Commands.AddClientDriversLicence
+namespace Application.Clients.Commands.AddDriversLicenceToClient
 {
     public class AddDriversLicenceToClientCommand : IRequest<ClientDto>
     {
