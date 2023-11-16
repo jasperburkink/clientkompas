@@ -22,15 +22,12 @@ namespace Application.BenefitForms.Commands.DeleteBenefitForm
 
         public async Task Handle(DeleteBenefitFormCommand request, CancellationToken cancellationToken)
         {
-
-            // Check if maritalstatus exists in the database
             var benefitForm = await _unitOfWork.BenefitFormRepository.GetByIDAsync(request.Id, cancellationToken);
             if (benefitForm == null)
             {
                 throw new NotFoundException(nameof(MaritalStatus), request.Id);
             }
 
-            // Check if there's any client that uses the maritalstatus
             var clients = await _unitOfWork.ClientRepository.GetAsync(c => c.BenefitForm.Id.Equals(request.Id));
             if (clients.Any())
             {

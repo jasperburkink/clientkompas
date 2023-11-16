@@ -25,12 +25,10 @@ namespace Application.BenefitForms.Commands.CreateBenefitForm
 
             public async Task<BenefitFormDto> Handle(CreateBenefitFormCommand request, CancellationToken cancellationToken)
             {
-
                 var benefitForm = new BenefitForm
                 {
                     Name = request.Name
                 };
-
 
                 benefitForm.AddDomainEvent(new BenefitFormCreatedEvent(benefitForm));
 
