@@ -60,11 +60,8 @@ namespace Application.Clients.Commands.CreateClient
 
         public async Task<ClientDto> Handle(CreateClientCommand request, CancellationToken cancellationToken)
         {
-            var maritalStatus = await _unitOfWork.MaritalStatusRepository.GetByIDAsync(request.MaritalStatusid, cancellationToken);
-            if (maritalStatus == null)
-            {
-                throw new NotFoundException(nameof(MaritalStatus), request.MaritalStatusid);
-            }
+            var maritalStatus = await _unitOfWork.MaritalStatusRepository.GetByIDAsync(request.MaritalStatusid, cancellationToken) 
+                ?? throw new NotFoundException(nameof(MaritalStatus), request.MaritalStatusid);
 
             var client = new Client
             {
