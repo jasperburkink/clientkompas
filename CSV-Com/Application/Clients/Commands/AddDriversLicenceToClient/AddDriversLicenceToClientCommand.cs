@@ -36,18 +36,10 @@ namespace Application.Clients.Commands.AddDriversLicenceToClient
 
         public async Task<ClientDto> Handle(AddDriversLicenceToClientCommand request, CancellationToken cancellationToken)
         {
-            var client = await _unitOfWork.ClientRepository.GetByIDAsync(request.ClientId, cancellationToken);
-
-            if (client == null)
-            {
-                throw new NotFoundException(nameof(Client), request.ClientId);
-            }
-            var driversLicence = await _unitOfWork.DriversLicenceRepository.GetByIDAsync(request.DriversLicenceId, cancellationToken);
-
-            if (driversLicence == null)
-            {
-                throw new NotFoundException(nameof(Client), request.DriversLicenceId);
-            }
+            var client = await _unitOfWork.ClientRepository.GetByIDAsync(request.ClientId, cancellationToken) ?? throw new NotFoundException(nameof(Client), request.ClientId);
+            
+            var driversLicence = await _unitOfWork.DriversLicenceRepository.GetByIDAsync(request.DriversLicenceId, cancellationToken) ?? throw new NotFoundException(nameof(Client), request.DriversLicenceId);
+            
 
             throw new NotImplementedException();
         }
