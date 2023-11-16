@@ -130,11 +130,10 @@ function App() {
                 <p>Dropdown</p>
                 <Dropdown  array={data} required={false}  />
                 
-             <form action="#">
+             
                 <p>Dropdown with button</p>
-                <DropdownWithButton options={data} required={true} inputfieldname='nameinput' />
-                <input type="submit" value="eeee" />
-                </form>
+                <DropdownWithButton options={data} required={false} inputfieldname='nameinput' />
+                
                
             </div>
             <Copyright />
