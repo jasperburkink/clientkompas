@@ -20,11 +20,7 @@ namespace Application.Diagnoses.Commands.DeleteDiagnosis
 
             public async Task Handle(DeleteDiagnosisCommand request, CancellationToken cancellationToken)
             {
-                var diagnosis = await _unitOfWork.DiagnosisRepository.GetByIDAsync(request.Id, cancellationToken);
-                if (diagnosis == null)
-                {
-                    throw new NotFoundException(nameof(Diagnosis), request.Id);
-                }
+                var diagnosis = await _unitOfWork.DiagnosisRepository.GetByIDAsync(request.Id, cancellationToken) ?? throw new NotFoundException(nameof(Diagnosis), request.Id);
 
                 await _unitOfWork.DiagnosisRepository.DeleteAsync(diagnosis);
 

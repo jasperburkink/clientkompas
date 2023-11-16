@@ -26,11 +26,7 @@ namespace Application.Diagnoses.Commands.UpdateDiagnosis
 
             public async Task<DiagnosisDto> Handle(UpdateDiagnosisCommand request, CancellationToken cancellationToken)
             {
-                var diagnosis = await _unitOfWork.DiagnosisRepository.GetByIDAsync(request.Id, cancellationToken);
-                if (diagnosis == null)
-                {
-                    throw new NotFoundException(nameof(Diagnosis), request.Id);
-                }
+                var diagnosis = await _unitOfWork.DiagnosisRepository.GetByIDAsync(request.Id, cancellationToken) ?? throw new NotFoundException(nameof(Diagnosis), request.Id);
 
                 diagnosis.Name = request.Name;
 
