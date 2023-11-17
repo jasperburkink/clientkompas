@@ -23,7 +23,7 @@ stages:
 trigger_DevPipelineTest:
     stage: triggers
     trigger:
-        include: DevPipeline.yml
+        include: Pipelines/DevPipeline.yml
 
 #trigger_ReleasePipeline:
 #    stage: triggers
