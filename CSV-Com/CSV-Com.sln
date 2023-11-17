@@ -13,10 +13,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CVSInfrastructurePoC", "CVS
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pipelines", "Pipelines", "{80BDF1C2-D40E-4C0A-9240-9FA5ECCFEF4F}"
 	ProjectSection(SolutionItems) = preProject
-		Pipelines\Configuration.yml = Pipelines\Configuration.yml
-		Pipelines\DevPipeline.yml = Pipelines\DevPipeline.yml
-		Pipelines\FeaturePipeline.yml = Pipelines\FeaturePipeline.yml
-		Pipelines\ReleasePipeline.yml = Pipelines\ReleasePipeline.yml
+		Configuration.yml = Configuration.yml
+		DevPipeline.yml = DevPipeline.yml
+		FeaturePipeline.yml = FeaturePipeline.yml
+		ReleasePipeline.yml = ReleasePipeline.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{1953885C-BBB1-4B8D-B5AC-0DF78EDCDCD9}"
