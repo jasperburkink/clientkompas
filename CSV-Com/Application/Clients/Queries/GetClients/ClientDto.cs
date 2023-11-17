@@ -15,7 +15,7 @@ namespace Application.Clients.Queries.GetClients
     {
         private const char SeperatorChar = ',';
 
-        public int IdentificationNumber { get; set; }
+        public int Id { get; set; }
 
         public string FirstName { get; set; }
 

@@ -12,8 +12,6 @@ namespace Application.Clients.Commands.UpdateClient
         {
         public int Id { get; init; }
 
-        public int IdentificationNumber { get; init; }
-
         public string FirstName { get; init; }
 
         public string Initials { get; init; }
@@ -66,8 +64,6 @@ namespace Application.Clients.Commands.UpdateClient
                     throw new NotFoundException(nameof(Client), request.Id);
                 }
 
-                client.IdentificationNumber = request.IdentificationNumber;
-
                 client.FirstName = request.FirstName;
 
                 client.Initials = request.Initials;
@@ -96,10 +92,8 @@ namespace Application.Clients.Commands.UpdateClient
 
                 client.MaritalStatus = request.MaritalStatus;
 
-                client.BenefitForm = request.BenefitForm;
-
                 client.Remarks = request.Remarks;
-                
+
 
                 await _unitOfWork.SaveAsync(cancellationToken);
 

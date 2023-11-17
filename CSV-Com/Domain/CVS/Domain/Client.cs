@@ -10,8 +10,6 @@ namespace Domain.CVS.Domain
 {
     public class Client : BaseAuditableEntity
     {
-        public int IdentificationNumber { get; set; }
-
         public string FirstName { get; set; }
 
         public string Initials { get; set; }

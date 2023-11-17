@@ -62,7 +62,6 @@ namespace Application.Clients.Commands.CreateClient
         {
             var client = new Client
             {
-                IdentificationNumber = request.IdentificationNumber,
                 FirstName = request.FirstName,
                 Initials = request.Initials,
                 PrefixLastName = request.PrefixLastName,
