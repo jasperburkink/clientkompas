@@ -6,7 +6,7 @@ trigger_DevPipeline:
     stage: triggers
     trigger:
         include:             
-            - local: DevPipeline.yml
+            - local: Pipelines/DevPipeline.yml
     only: 
         - merge_requests
 
@@ -15,7 +15,7 @@ trigger_FeaturePipeline:
     stage: triggers
     trigger:
         include:
-          - local: FeaturePipeline.yml
+          - local: Pipelines/FeaturePipeline.yml
     only:
       - /^Feature[0-9]*_*//i 
 #TODO: Hier moeten we nog bepalen hoe we de naamgeving van een feature branch doen. Voor nu is het een regex pattern "Feature[Featurenummer]_". Dus bijv. "feature25_Beschrijving-van-een-feature".
