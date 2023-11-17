@@ -1,95 +1,35 @@
-# This file is a template, and might need editing before it works on your project.
-# This is a sample GitLab CI/CD configuration file that should run without any modifications.
-# It demonstrates a basic 3 stage CI/CD pipeline. Instead of real tests or scripts,
-# it uses echo commands to simulate the pipeline execution.
-#
-# A pipeline is composed of independent jobs that run scripts, grouped into stages.
-# Stages run in sequential order, but jobs within stages run in parallel.
-#
-# For more information, see: https://docs.gitlab.com/ee/ci/yaml/index.html#stages
-#
-# You can copy and paste this template into a new `.gitlab-ci.yml` file.
-# You should not add this template to an existing `.gitlab-ci.yml` file by using the `include:` keyword.
-#
-# To contribute improvements to CI/CD templates, please follow the Development guide at:
-# https://docs.gitlab.com/ee/development/cicd/templates.html
-# This specific template is located at:
-# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
+workflow:
+  rules:
+    - when: always
 
-stages:          # List of stages for jobs, and their order of execution
+variables:
+  BUILD_CONFIGURATION: "Debug"
+  COVERAGE_FLAG: "XPlat Code Coverage"
+  LOGGER_FLAG: "junit;LogFilePath=$CI_PROJECT_DIR/junit/junit-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose"
+
+stages:
   - build
   - test
-  - deploy
 
-debug-job:
+build-job:
   stage: build
   script:
-    - echo "Listing Directories to get an idea of what the runner is working with"
-    - ls -R
+    #Build
+    - dotnet build -c $BUILD_CONFIGURATION #dotnet build does also restore
 
-format-job:
-  stage: build
-  variables: 
-    LINT_COMMIT_MESSAGE: "style: lint code by bot"
+test-job-unittests:
+  stage: test
   before_script:
-    - 'which ssh-agent || ( apt-get update -y )'
-    - 'which ssh-agent || ( apt-get install openssh-client -y )'
-    - eval "$(ssh-agent -s)"
-    - echo "$CI_SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - git config --global user.email "cibot@example.com"
-    - git config --global user.name "CI Bot"
+    - 'echo | dotnet --version' # must be v 2.2.300 or later for reporter tool to work
   script:
-    - echo "Formatting code"
-    - git remote set-url origin git@$CI_SERVER_HOST:$CI_PROJECT_PATH.git
-    - git fetch
-    - git checkout -B $CI_COMMIT_REF_NAME
-    - |
-      if [ "$CI_COMMIT_MESSAGE" == "$LINT_COMMIT_MESSAGE" ] ; then
-          echo "Formatting code is not required. Skipping this job!"
-          exit ${CI_JOB_SKIP_EXIT_CODE:-0}
-      fi
-    - dotnet format
-    - |
-      if GIT_CHANGES=$(git status --porcelain) && [ -z "$GIT_CHANGES" ]; then
-          echo "Nothing to format. Skipping this job!"
-          exit ${CI_JOB_SKIP_EXIT_CODE:-0}
-      fi
-    - git add .
-    - git commit -m "$LINT_COMMIT_MESSAGE" -n
-    - git push -u origin $CI_COMMIT_REF_NAME
-
-build-job:       # This job runs in the build stage, which runs first.
-  stage: build
-  variables: 
-    LINT_COMMIT_MESSAGE: "style: lint code by bot"
-  before_script:
-    - git config --global user.email "cibot@example.com"
-    - git config --global user.name "CI Bot"
-  script:
-    - echo "Restoring NuGet packages"
-    - dotnet restore
-    - echo "Compiling the code..."
-    - dotnet build
-    - echo "Compile complete."
-
-unit-test-job:   # This job runs in the test stage.
-  stage: test    # It only starts when the job in the build stage completes successfully.
-  script:
-    - echo "Running unit tests..."
-    - dotnet test
-
-lint-test-job:   # This job also runs in the test stage.
-  stage: test    # It can run at the same time as unit-test-job (in parallel).
-  script:
-    - echo "Linting code... This will take about 10 seconds."
-    - sleep 10
-    - echo "No lint issues found."
-
-deploy-job:      # This job runs in the deploy stage.
-  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
-  environment: production
-  script:
-    - echo "Deploying application..."
-    - echo "Application successfully deployed."
+    #Test
+    - 'dotnet test -c $BUILD_CONFIGURATION
+      --test-adapter-path:.
+      --logger:"junit;LogFilePath=..\artifacts\{assembly}-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose"'
+  artifacts:
+    when: always
+    paths:
+      - ./**/*test-result.xml
+    reports:
+      junit:
+        - ./**/*test-result.xml
