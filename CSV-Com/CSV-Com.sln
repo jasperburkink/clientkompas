@@ -37,6 +37,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArchitectureTests", "Archit
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "webapp", "webapp\webapp.esproj", "{CEA3D538-AECC-4268-995A-9067DAAEAFD9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pipelines", "Pipelines", "{EDF5B816-384D-4A95-94A9-FA60B8DDC488}"
+	ProjectSection(SolutionItems) = preProject
+		Pipelines\Configuration.yml = Pipelines\Configuration.yml
+		Pipelines\DevPipeline.yml = Pipelines\DevPipeline.yml
+		Pipelines\FeaturePipeline.yml = Pipelines\FeaturePipeline.yml
+		Pipelines\ReleasePipeline.yml = Pipelines\ReleasePipeline.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

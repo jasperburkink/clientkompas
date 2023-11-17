@@ -1,0 +1,11 @@
+workflow:
+  rules:
+    - when: always
+
+stages:
+    - build
+
+release_debug-job:
+  stage: build
+  script:
+    - echo "Executing release pipeline"
