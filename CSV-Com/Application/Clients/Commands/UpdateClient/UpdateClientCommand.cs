@@ -40,7 +40,15 @@ namespace Application.Clients.Commands.UpdateClient
 
         public MaritalStatus MaritalStatus { get; set; }
 
+        public ICollection<EmergencyPerson> EmergencyPeople { get; set; }
+
+        public ICollection<Domain.CVS.Domain.DriversLicence> DriversLicences { get; set; }
+
+        public ICollection<Diagnosis> Diagnoses { get; set; }
+
         public BenefitForm BenefitForm { get; set; }
+
+        public ICollection<WorkingContract> WorkingContracts { get; set; }
 
         public string Remarks { get; set; }
     }
@@ -90,10 +98,17 @@ namespace Application.Clients.Commands.UpdateClient
 
                 client.EmailAddress = request.EmailAddress;
 
+                client.BenefitForm = request.BenefitForm;
+
+                client.EmergencyPeople = request.EmergencyPeople;
+
                 client.MaritalStatus = request.MaritalStatus;
 
                 client.Remarks = request.Remarks;
 
+                client.DriversLicences = request.DriversLicences;
+
+                client.Diagnoses = request.Diagnoses;
 
                 await _unitOfWork.SaveAsync(cancellationToken);
 
