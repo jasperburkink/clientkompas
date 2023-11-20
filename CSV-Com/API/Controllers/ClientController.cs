@@ -3,10 +3,8 @@ using Application.Clients.Commands.CreateClient;
 using Application.Clients.Commands.DeleteClientDriversLicence;
 using Application.Clients.Queries.GetClients;
 using Application.Clients.Queries.SearchClients;
-using Application.Common.Interfaces.CVS;
 using Domain.CVS.Domain;
 using Microsoft.AspNetCore.Mvc;
-using System.Web.Http.Cors;
 
 namespace API.Controllers
 {
@@ -76,7 +74,7 @@ namespace API.Controllers
                 var clients = await Mediator.Send(query);
                 return Ok(clients);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex);
             }

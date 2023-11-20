@@ -1,6 +1,6 @@
-﻿using API.Models;
+﻿using System.Net;
+using API.Models;
 using Microsoft.AspNetCore.Diagnostics;
-using System.Net;
 
 namespace API.Extensions
 {

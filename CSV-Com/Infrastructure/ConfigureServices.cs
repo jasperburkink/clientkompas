@@ -1,20 +1,12 @@
-﻿using Application.Common.Interfaces.Authentication;
-using Application.Common.Interfaces.CVS;
-using Infrastructure.Identity;
-using Infrastructure.Persistence.Authentication;
+﻿using Application.Common.Interfaces.CVS;
 using Infrastructure.Persistence.CVS;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
+#pragma warning disable IDE0130 // Namespace does not match folder structure
 namespace Microsoft.Extensions.DependencyInjection
+#pragma warning restore IDE0130 // Namespace does not match folder structure
 {
     public static class ConfigureServices
     {
