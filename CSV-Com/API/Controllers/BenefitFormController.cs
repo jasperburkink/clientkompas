@@ -1,13 +1,8 @@
-﻿using Application.BenefitForms.Commands;
-using Application.BenefitForms.Commands.CreateBenefitForm;
-using Application.BenefitForms.Queries;
+﻿using Application.BenefitForms.Commands.CreateBenefitForm;
 using Application.BenefitForms.Queries.GetBenefitForm;
-using Application.Common.Interfaces.CVS;
-using Domain.CVS.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Application.BenefitForms.Commands.DeleteBenefitForm;
 using Application.BenefitForms.Commands.UpdateBenefitForm;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using Application.Common.Exceptions;
 
 namespace API.Controllers
@@ -63,24 +58,24 @@ namespace API.Controllers
 
             
             [HttpDelete]
-            public async Task Delete(DeleteBenefitFormCommand command)
+            public async Task<ActionResult> Delete(DeleteBenefitFormCommand command)
             {
                 try
                 {
                     await Mediator.Send(command);
-                  
+                    return Ok();
                 }
                 catch (DomainObjectInUseExeption ex)
                 {
-                    StatusCode(409, ex);
+                    return StatusCode(400, ex);
                 }
                 catch (NotFoundException ex)
                 {
-                    StatusCode(404, ex);
+                    return StatusCode(404, ex);
                 }
                 catch (Exception ex)
                 {
-                    StatusCode(500, ex);
+                    return StatusCode(500, ex);
                 }
             }
 

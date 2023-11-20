@@ -28,11 +28,9 @@ namespace Application.BenefitForms.Commands.UpdateBenefitForm
         public async Task<BenefitFormDto> Handle(UpdateBenefitFormCommand request, CancellationToken cancellationToken)
         {
 
-            var benefitForm = await _unitOfWork.BenefitFormRepository.GetByIDAsync(request.Id, cancellationToken);
-            if (benefitForm == null)
-            {
-                throw new NotFoundException(nameof(BenefitForm), request.Id);
-            }
+            var benefitForm = await _unitOfWork.BenefitFormRepository.GetByIDAsync(request.Id, cancellationToken) 
+                ?? throw new NotFoundException(nameof(BenefitForm), request.Id);
+            
 
             benefitForm.Name = request.Name;
 
