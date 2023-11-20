@@ -1,12 +1,7 @@
-﻿using Application.Common.Interfaces.Authentication;
+﻿using System.Diagnostics;
+using Application.Common.Interfaces.Authentication;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Common.Behaviours
 {

@@ -1,16 +1,10 @@
-﻿using Application.Clients.Queries.GetClients;
-using Application.Common.Interfaces.CVS;
+﻿using Application.Common.Interfaces.CVS;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Clients.Queries.SearchClients
-{    
+{
     public class SearchClientsQuery : IRequest<IEnumerable<SearchClientDto>>
     {
         public string SearchTerm { get; init; }
@@ -28,7 +22,7 @@ namespace Application.Clients.Queries.SearchClients
         }
 
         public async Task<IEnumerable<SearchClientDto>> Handle(SearchClientsQuery request, CancellationToken cancellationToken)
-        {            
+        {
             return (await _unitOfWork.ClientRepository.GetAsync())
                 .AsQueryable()
                 .Where(c => // TODO: Welke stringcomparison is het beste voor het vergelijken van strings in een collectie?

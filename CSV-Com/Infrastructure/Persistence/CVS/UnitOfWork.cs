@@ -1,23 +1,20 @@
 ﻿using Application.Common.Interfaces.CVS;
 using Domain.CVS.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Persistence.CVS
 {
     //TODO: Wijziging
     public class UnitOfWork : IUnitOfWork
     {
-        private CVSDbContext context;
+        private readonly CVSDbContext _context;
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
         private GenericRepository<User> userRepository;
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
         private GenericRepository<Client> clientRepository;
 
         public UnitOfWork(CVSDbContext context)
         {
-            this.context = context;
+            _context = context;
         }
 
         public IRepository<User> UserRepository
@@ -25,10 +22,7 @@ namespace Infrastructure.Persistence.CVS
             get
             {
 
-                if (userRepository == null)
-                {
-                    userRepository = new GenericRepository<User>(context);
-                }
+                userRepository ??= new GenericRepository<User>(_context);
                 return userRepository;
             }
         }
@@ -37,36 +31,33 @@ namespace Infrastructure.Persistence.CVS
         {
             get
             {
-                if (clientRepository == null)
-                {
-                    clientRepository = new GenericRepository<Client>(context);
-                }
+                clientRepository ??= new GenericRepository<Client>(_context);
                 return clientRepository;
             }
         }
 
         public void Save()
         {
-            context.SaveChanges();
+            _context.SaveChanges();
         }
 
         public async Task SaveAsync(CancellationToken cancellationToken = default)
         {
-            await context.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
-        private bool disposed = false;        
+        private bool _disposed = false;
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!this.disposed)
+            if (!_disposed)
             {
                 if (disposing)
                 {
-                    context.Dispose();
+                    _context.Dispose();
                 }
             }
-            this.disposed = true;
+            _disposed = true;
         }
 
         public void Dispose()

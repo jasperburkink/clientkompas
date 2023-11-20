@@ -1,12 +1,5 @@
-﻿using Application.Clients.Queries.GetClients;
-using Application.Common.Mappings;
-using AutoMapper;
+﻿using Application.Common.Mappings;
 using Domain.CVS.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Clients.Queries.SearchClients
 {
