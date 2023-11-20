@@ -69,7 +69,7 @@ namespace API.Controllers
             }
             catch (DomainObjectInUseExeption ex)
             {
-                return StatusCode(409, ex);
+                return StatusCode(400, ex);
             }
             catch (NotFoundException ex)
             {
