@@ -8,31 +8,32 @@ using MediatR;
 namespace Application.Diagnoses.Commands.UpdateDiagnosis
 {
     public record UpdateDiagnosisCommand : IRequest<DiagnosisDto>
-        {
-            public int Id { get; init; }
+    {
+        public int Id { get; init; }
 
-            public string Name { get; set; }
+        public string Name { get; set; }
+    }
+
+    public class UpdateDiagnosisCommandHandler : IRequestHandler<UpdateDiagnosisCommand, DiagnosisDto>
+    {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+        public UpdateDiagnosisCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        {
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public class UpdateDiagnosisCommandHandler : IRequestHandler<UpdateDiagnosisCommand, DiagnosisDto>
+        public async Task<DiagnosisDto> Handle(UpdateDiagnosisCommand request, CancellationToken cancellationToken)
         {
-            private readonly IUnitOfWork _unitOfWork;
-            private readonly IMapper _mapper;
-        public UpdateDiagnosisCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
-            {
-                _unitOfWork = unitOfWork;
-                _mapper = mapper;
-            }
+            var diagnosis = await _unitOfWork.DiagnosisRepository.GetByIDAsync(request.Id, cancellationToken) 
+                ?? throw new NotFoundException(nameof(Diagnosis), request.Id);
 
-            public async Task<DiagnosisDto> Handle(UpdateDiagnosisCommand request, CancellationToken cancellationToken)
-            {
-                var diagnosis = await _unitOfWork.DiagnosisRepository.GetByIDAsync(request.Id, cancellationToken) ?? throw new NotFoundException(nameof(Diagnosis), request.Id);
+            diagnosis.Name = request.Name;
 
-                diagnosis.Name = request.Name;
+            await _unitOfWork.SaveAsync(cancellationToken);
 
-                await _unitOfWork.SaveAsync(cancellationToken);
-
-                return _mapper.Map<DiagnosisDto>(diagnosis);
-            }
+            return _mapper.Map<DiagnosisDto>(diagnosis);
         }
     }
+}

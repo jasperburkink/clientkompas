@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Application.Diagnoses.Commands.DeleteDiagnosis;
 using Application.Diagnoses.Commands.UpdateDiagnosis;
 using Application.Common.Exceptions;
+using Application.Common.Models;
 
 namespace API.Controllers
 {
@@ -59,19 +60,20 @@ namespace API.Controllers
 
        
         [HttpDelete]
-        public async Task Delete(DeleteDiagnosisCommand command)
+        public async Task<ActionResult> Delete(DeleteDiagnosisCommand command)
         {
             try
             {
                 await Mediator.Send(command);
+                return Ok();
             }
             catch (NotFoundException ex)
             {
-                StatusCode(404, ex);
+                return StatusCode(404, ex);
             }
             catch (Exception ex)
             {
-                StatusCode(500, ex);
+                return StatusCode(500, ex);
             }
         }
 

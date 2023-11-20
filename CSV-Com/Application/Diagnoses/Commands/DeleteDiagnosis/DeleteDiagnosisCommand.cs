@@ -6,26 +6,27 @@ using MediatR;
 namespace Application.Diagnoses.Commands.DeleteDiagnosis
 {
     public record DeleteDiagnosisCommand : IRequest
+    {
+        public int Id { get; init; }
+    }
+
+    public class DeleteDiagnosisCommandHandler : IRequestHandler<DeleteDiagnosisCommand>
+    {
+        private readonly IUnitOfWork _unitOfWork;
+        public DeleteDiagnosisCommandHandler(IUnitOfWork unitOfWork)
         {
-            public int Id { get; init; }
+            _unitOfWork = unitOfWork;
         }
 
-        public class DeleteDiagnosisCommandHandler : IRequestHandler<DeleteDiagnosisCommand>
+        public async Task Handle(DeleteDiagnosisCommand request, CancellationToken cancellationToken)
         {
-            private readonly IUnitOfWork _unitOfWork;
-            public DeleteDiagnosisCommandHandler(IUnitOfWork unitOfWork)
-            {
-                _unitOfWork = unitOfWork;
-            }
+            var diagnosis = await _unitOfWork.DiagnosisRepository.GetByIDAsync(request.Id, cancellationToken) 
+                ?? throw new NotFoundException(nameof(Diagnosis), request.Id);
 
-            public async Task Handle(DeleteDiagnosisCommand request, CancellationToken cancellationToken)
-            {
-                var diagnosis = await _unitOfWork.DiagnosisRepository.GetByIDAsync(request.Id, cancellationToken) ?? throw new NotFoundException(nameof(Diagnosis), request.Id);
+            await _unitOfWork.DiagnosisRepository.DeleteAsync(diagnosis);
 
-                await _unitOfWork.DiagnosisRepository.DeleteAsync(diagnosis);
-
-                await _unitOfWork.SaveAsync(cancellationToken);
-            }
+            await _unitOfWork.SaveAsync(cancellationToken);
         }
     }
+}
 

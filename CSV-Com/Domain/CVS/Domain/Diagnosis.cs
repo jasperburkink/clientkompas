@@ -11,6 +11,6 @@ namespace Domain.CVS.Domain
     {
         public string Name { get; set; }
 
-        public List<Client> Clients { get; } = new();
+        public ICollection<Client> Clients { get; } = Array.Empty<Client>();
     }
 }
