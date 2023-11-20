@@ -9,7 +9,8 @@ module.exports = {
                 'size17':'17px'
             },
             fontFamily:{
-                'primary': ['Work+Sans']
+                'primary': ['Work+Sans'],
+                'workSans': ['"WorkSans"']
             },
             colors: {
                 'mainBlue': '#148CB8',

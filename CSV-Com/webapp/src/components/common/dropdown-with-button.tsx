@@ -3,37 +3,32 @@ import './dropdown-with-button.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAsterisk , faPlus,faXmark,faAngleDown} from "@fortawesome/free-solid-svg-icons";
 
-interface DropdownObject {
+interface iDropdownObject {
     Value: number;
     Label: string;
 }
 
-interface IDropDownProps extends React.HTMLProps<HTMLSelectElement> {
-    options: DropdownObject[];
+interface iDropDownProps extends React.HTMLProps<HTMLSelectElement> {
+    options: iDropdownObject[];
     required: boolean;
     inputfieldname: string;
 }
 
-interface IBadge{
+interface iBadge{
     id: number;
     text: string;
 }
 
 const OPTION_TEXT = 'Kies uit de lijst'
 
-const DropdownWithButton = (props: IDropDownProps) => {
-    const [badges, setBadges] = useState<IBadge[]>([]);
-    const [currentOptions, setCurentOptions] = useState<IBadge[]>([]);
+const DropdownWithButton = (props: iDropDownProps) => {
+    const [badges, setBadges] = useState<iBadge[]>([]);
+    const [currentOptions, setCurentOptions] = useState<iBadge[]>([]);
     const [value,setSelect] = useState('');
 
-    const sortByName = (array: IBadge[]) => {
-        
-    };
-
-    const removeBadge = (badge: IBadge) => {
-        let arr = currentOptions.concat(badge);
-        arr.sort();
-        setCurentOptions(arr);    
+    const removeBadge = (badge: iBadge) => {
+        let newcurrentOptions = currentOptions.concat(badge);
+        setCurentOptions(newcurrentOptions);    
         setBadges(badges.filter(a => a.id !== badge.id));
     };
 
@@ -51,18 +46,19 @@ const DropdownWithButton = (props: IDropDownProps) => {
         });
 
         if (value !== '') {
-            const newBadge: IBadge = {
+            const newBadge: iBadge = {
                 id,
                 text,
             }
-            setBadges(badges.concat(newBadge).sort()); 
+            const newbadges = badges.concat(newBadge);
+            setBadges(newbadges); 
             setCurentOptions(currentOptions.filter(badge => badge.id !== id));
             setSelect('');
         }
     };
 
     useEffect(() => {
-        let newOptions: IBadge[] = [];
+        let newOptions: iBadge[] = [];
         props.options.forEach((item, index) => {
             const id = item.Value;
             const text = item.Label;
