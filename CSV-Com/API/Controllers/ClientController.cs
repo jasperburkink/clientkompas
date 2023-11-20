@@ -1,7 +1,9 @@
 ﻿using Application.Clients.Commands.AddClientDriversLicence;
 using Application.Clients.Commands.CreateClient;
+using Application.Clients.Commands.DeactiverenClient;
 using Application.Clients.Commands.DeleteClientDriversLicence;
 using Application.Clients.Queries.GetClients;
+using Application.Common.Exceptions;
 using Application.Common.Interfaces.CVS;
 using Domain.CVS.Domain;
 using Microsoft.AspNetCore.Mvc;
@@ -45,6 +47,23 @@ namespace API.Controllers
         public void Put(int id, [FromBody] Client value)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<ActionResult<ClientDto>> Put(DeactiverenClientCommand command)
+        {
+            try
+            {
+                var result = await Mediator.Send(command);
+                return Ok(result);
+            }
+            catch (NotFoundException ex)
+            {
+                return StatusCode(404, ex);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
         }
 
         //TODO: implement with new Mediator structure
