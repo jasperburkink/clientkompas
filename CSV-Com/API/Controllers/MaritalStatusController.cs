@@ -60,24 +60,24 @@ namespace API.Controllers
 
         //TODO: implement with new Mediator structure
         [HttpDelete]
-        public async Task Delete(DeleteMaritalStatusCommand command)
+        public async Task<ActionResult> Delete(DeleteMaritalStatusCommand command)
         {
             try
             {
                 await Mediator.Send(command);
-                
+                return Ok();
             }
             catch (DomainObjectInUseExeption ex)
             {
-                StatusCode(409, ex);
+                return StatusCode(409, ex);
             }
             catch (NotFoundException ex)
             {
-                StatusCode(404, ex);
+                return StatusCode(404, ex);
             }
             catch (Exception ex)
             {
-                StatusCode(500, ex);
+                return StatusCode(500, ex);
             }
         }
 

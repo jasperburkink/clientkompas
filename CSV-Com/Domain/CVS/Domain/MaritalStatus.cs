@@ -8,7 +8,7 @@ namespace Domain.CVS.Domain
 
         public string Name { get; set; }
 
-        public virtual ICollection<Client> Client { get; set; } = new List<Client>();
+        public ICollection<Client> Clients { get; } = Array.Empty<Client>();
 
     }
 }
