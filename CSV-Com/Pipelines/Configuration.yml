@@ -9,6 +9,7 @@ trigger_DevPipeline:
             - local: CSV-Com/Pipelines/DevPipeline.yml
     only: 
         - merge_requests
+        - web
 
 ## Trigger feature pipeline when pushing to feature branch
 trigger_FeaturePipeline:    
