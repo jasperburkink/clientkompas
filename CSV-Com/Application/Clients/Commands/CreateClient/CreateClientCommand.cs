@@ -1,7 +1,6 @@
 ﻿using Application.Clients.Queries.GetClients;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces.CVS;
-using Application.MaritalStatuses.Queries.GetMaritalStatus;
 using AutoMapper;
 using Domain.CVS.Domain;
 using Domain.CVS.Enums;
@@ -60,7 +59,7 @@ namespace Application.Clients.Commands.CreateClient
 
         public async Task<ClientDto> Handle(CreateClientCommand request, CancellationToken cancellationToken)
         {
-            var maritalStatus = await _unitOfWork.MaritalStatusRepository.GetByIDAsync(request.MaritalStatusid, cancellationToken) 
+            var maritalStatus = await _unitOfWork.MaritalStatusRepository.GetByIDAsync(request.MaritalStatusid, cancellationToken)
                 ?? throw new NotFoundException(nameof(MaritalStatus), request.MaritalStatusid);
 
             var client = new Client
