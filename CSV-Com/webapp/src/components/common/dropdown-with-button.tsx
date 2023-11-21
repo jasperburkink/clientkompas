@@ -71,7 +71,7 @@ const DropdownWithButton = (props: iDropDownProps) => {
     <div className='input-field flex-col '>
         <div className='flex'>
                     <select id="" className='dropdown' onChange={event => {setSelect(event.target.value)}} required={props.required}>
-                        <option value="">{OPTION_TEXT}</option>
+                        <option value=''>{OPTION_TEXT}</option>
                         {currentOptions.map((currentOption, index) => (
                             <option key={currentOption.id} value={currentOption.id}>{currentOption.text}</option>
                         ))};    

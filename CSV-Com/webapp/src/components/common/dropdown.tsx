@@ -19,7 +19,7 @@ export const Dropdown = (props: idropDownProps) => (
   
     <div className='input-field'>
         <select name="" id=""  className='dropdown'  required={props.required} >
-            <option value='' disabled selected>{OPTION_TEXT}</option>
+            <option value=''>{OPTION_TEXT}</option>
             {props.array.map((item) => (
           <option value={item.Value} >{item.Label}</option>
         ))}   
