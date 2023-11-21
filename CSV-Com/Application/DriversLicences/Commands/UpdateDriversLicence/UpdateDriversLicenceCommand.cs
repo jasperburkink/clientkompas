@@ -1,10 +1,8 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Interfaces.CVS;
+﻿using Application.Common.Interfaces.CVS;
 using Application.DriversLicences.Queries;
 using Application.Extensions;
 using AutoMapper;
 using MediatR;
-
 
 namespace Application.DriversLicences.Commands.UpdateDriversLicence
 {
@@ -43,5 +41,5 @@ namespace Application.DriversLicences.Commands.UpdateDriversLicence
 
             return _mapper.Map<DriversLicenceDto>(driversLicence);
         }
-    } 
+    }
 }

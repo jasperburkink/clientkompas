@@ -1,11 +1,9 @@
-﻿using Application.DriversLicences.Queries;
-using Application.Common.Exceptions;
-using Application.Common.Interfaces.CVS;
-using MediatR;
-using AutoMapper;
+﻿using Application.Common.Interfaces.CVS;
 using Application.Extensions;
+using AutoMapper;
+using MediatR;
 
-namespace Application.Clients.Commands.DeleteClientDriversLicences
+namespace Application.DriversLicences.Commands.DeleteDriversLicence
 {
     public record DeleteDriversLicenceCommand : IRequest
     {
@@ -24,7 +22,7 @@ namespace Application.Clients.Commands.DeleteClientDriversLicences
         }
 
         public async Task Handle(DeleteDriversLicenceCommand request, CancellationToken cancellationToken)
-        {        
+        {
 
             var driversLicence = await _unitOfWork.DriversLicenceRepository.GetByIDAsync(request.DriversLicenceId, cancellationToken);
 
@@ -34,7 +32,7 @@ namespace Application.Clients.Commands.DeleteClientDriversLicences
 
             await _unitOfWork.SaveAsync(cancellationToken);
 
-            
+
         }
     }
 }

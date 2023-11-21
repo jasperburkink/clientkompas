@@ -27,7 +27,7 @@ namespace Application.Clients.Commands.DeleteClientDriversLicence
                 ?? throw new NotFoundException(nameof(Client), request.ClientId);
 
             var driversLicence = client.DriversLicences.FirstOrDefault(dl => dl.Id.Equals(request.DriversLicenceId))
-                ?? throw new NotFoundException(nameof(Domain.CVS.Domain.DriversLicence), request.DriversLicenceId);
+                ?? throw new NotFoundException(nameof(DriversLicence), request.DriversLicenceId);
 
             client.DriversLicences.Remove(driversLicence);
 

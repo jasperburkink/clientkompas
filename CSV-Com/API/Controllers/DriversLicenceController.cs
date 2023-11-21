@@ -1,6 +1,6 @@
-﻿using Application.Clients.Commands.DeleteClientDriversLicences;
-using Application.Common.Exceptions;
-using Application.DriversLicences.Commands.CreateDriversLicences;
+﻿using Application.Common.Exceptions;
+using Application.DriversLicences.Commands.CreateDriversLicence;
+using Application.DriversLicences.Commands.DeleteDriversLicence;
 using Application.DriversLicences.Commands.UpdateDriversLicence;
 using Application.DriversLicences.Queries;
 using Microsoft.AspNetCore.Mvc;

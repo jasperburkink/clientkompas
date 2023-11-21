@@ -1,10 +1,10 @@
-﻿using Application.DriversLicences.Queries;
-using Application.Common.Interfaces.CVS;
+﻿using Application.Common.Interfaces.CVS;
+using Application.DriversLicences.Queries;
+using AutoMapper;
 using Domain.CVS.Events;
 using MediatR;
-using AutoMapper;
 
-namespace Application.DriversLicences.Commands.CreateDriversLicences
+namespace Application.DriversLicences.Commands.CreateDriversLicence
 {
     public record CreateDriversLicenceCommand : IRequest<DriversLicenceDto>
     {
