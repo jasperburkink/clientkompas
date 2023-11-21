@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Application.Common.Security
+﻿namespace Application.Common.Security
 {
     /// <summary>
     /// Specifies the class this attribute is applied to requires authorization.

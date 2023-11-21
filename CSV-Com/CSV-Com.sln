@@ -11,14 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CVSModelPoC", "CVSModelPoC\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CVSInfrastructurePoC", "CVSInfrastructurePoC\CVSInfrastructurePoC.csproj", "{1467BEC5-553E-429C-BE6B-42826B369B2E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pipelines", "Pipelines", "{80BDF1C2-D40E-4C0A-9240-9FA5ECCFEF4F}"
-	ProjectSection(SolutionItems) = preProject
-		Pipelines\Configuration.yml = Pipelines\Configuration.yml
-		Pipelines\DevPipeline.yml = Pipelines\DevPipeline.yml
-		Pipelines\FeaturePipeline.yml = Pipelines\FeaturePipeline.yml
-		Pipelines\ReleasePipeline.yml = Pipelines\ReleasePipeline.yml
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{1953885C-BBB1-4B8D-B5AC-0DF78EDCDCD9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{B267B4AA-C5BE-4127-8346-451A8C5506F7}"
@@ -43,6 +35,14 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArchitectureTests", "ArchitectureTests\ArchitectureTests.csproj", "{B5949667-F430-4D84-B971-AF47A65E3971}"
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "webapp", "webapp\webapp.esproj", "{CEA3D538-AECC-4268-995A-9067DAAEAFD9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pipelines", "Pipelines", "{EDF5B816-384D-4A95-94A9-FA60B8DDC488}"
+	ProjectSection(SolutionItems) = preProject
+		Pipelines\Configuration.yml = Pipelines\Configuration.yml
+		Pipelines\DevPipeline.yml = Pipelines\DevPipeline.yml
+		Pipelines\FeaturePipeline.yml = Pipelines\FeaturePipeline.yml
+		Pipelines\ReleasePipeline.yml = Pipelines\ReleasePipeline.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

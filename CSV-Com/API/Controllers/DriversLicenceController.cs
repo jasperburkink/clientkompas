@@ -1,8 +1,4 @@
-﻿using Application.Clients.Commands;
-using Application.Clients.Queries;
-using Application.Common.Interfaces.CVS;
-using Application.DriversLicence.Queries;
-using Domain.CVS.Domain;
+﻿using Application.DriversLicence.Queries;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
