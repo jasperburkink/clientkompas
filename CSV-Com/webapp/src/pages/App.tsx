@@ -128,16 +128,12 @@ function App() {
 
                 <p>ProfilePicture Maurice</p>
                 <ProfilePicture pictureUrl='https://media.licdn.com/dms/image/C5603AQG1ibjUUZ7NFQ/profile-displayphoto-shrink_800_800/0/1655221337005?e=2147483647&v=beta&t=KKnYXDtk5PeT9utOaIAjUPjDLqk55-IrkCu1R5GuaRg' />
-                
-                
              
                 <p>Dropdown</p>
-                <Dropdown  array={data} required={false}  />
-                
+                <Dropdown  array={data} required={false} inputfieldname='dropdown' />
              
                 <p>Dropdown with button</p>
-                <DropdownWithButton options={data} required={false} inputfieldname='nameinput' />
-                
+                <DropdownWithButton options={data} required={false} inputfieldname='dropdownWithButton' />
                
             </div>
             <Copyright />

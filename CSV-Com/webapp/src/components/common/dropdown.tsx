@@ -9,8 +9,9 @@ interface DropdownObject {
 }
 
 interface idropDownProps extends React.HtmlHTMLAttributes<HTMLElement> {
-    array: Array<DropdownObject>,
-    required: boolean
+    array: Array<DropdownObject>;
+    required: boolean;
+    inputfieldname: string;
 }
 
 const OPTION_TEXT = 'Kies uit de lijst'
@@ -18,7 +19,7 @@ const OPTION_TEXT = 'Kies uit de lijst'
 export const Dropdown = (props: idropDownProps) => (  
   
     <div className='input-field'>
-        <select name="" id=""  className='dropdown'  required={props.required} >
+        <select name={props.inputfieldname} id=""  className='dropdown'  required={props.required} >
             <option value=''>{OPTION_TEXT}</option>
             {props.array.map((item) => (
           <option value={item.Value} >{item.Label}</option>
