@@ -1,16 +1,6 @@
-﻿using Application.Common.Interfaces.CVS;
+﻿using System.Reflection;
 using Domain.CVS.Domain;
-using Domain.CVS.Enums;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Persistence.CVS
 {

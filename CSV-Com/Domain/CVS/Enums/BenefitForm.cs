@@ -4,7 +4,7 @@
     {
         WW,
         Wia,
-        WaJong,        
+        WaJong,
         Bijstand,
         Geen
     }
