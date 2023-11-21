@@ -51,7 +51,7 @@ namespace Infrastructure.Persistence.CVS
             // Seed, if necessary
             // TODO: Maybe only when debugging
             MaritalStatus martitalStatus;
-            int maritalStatusId = 1;
+            var maritalStatusId = 1;
 
             if (!_context.MaritalStatus.Any(ms => ms.Id.Equals(maritalStatusId)))
             {

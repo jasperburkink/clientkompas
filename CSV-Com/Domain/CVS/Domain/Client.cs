@@ -13,7 +13,7 @@ namespace Domain.CVS.Domain
 
         public string PrefixLastName { get; set; }
 
-        public string LastName{ get; set; }
+        public string LastName { get; set; }
 
         public Gender Gender { get; set; }
 
@@ -28,7 +28,7 @@ namespace Domain.CVS.Domain
         public string Residence { get; set; }
 
         public string TelephoneNumber { get; set; }
-        
+
         public DateOnly DateOfBirth { get; set; }
 
         public string EmailAddress { get; set; }

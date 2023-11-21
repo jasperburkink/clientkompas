@@ -27,11 +27,8 @@ namespace Application.MaritalStatuses.Commands.UpdateMaritalStatus
 
         public async Task<MaritalStatusDto> Handle(UpdateMaritalStatusCommand request, CancellationToken cancellationToken)
         {
-            var maritalStatus = await _unitOfWork.MaritalStatusRepository.GetByIDAsync(request.Id, cancellationToken);
-            if (maritalStatus == null)
-            {
-                throw new NotFoundException(nameof(MaritalStatus), request.Id);
-            }
+            var maritalStatus = await _unitOfWork.MaritalStatusRepository.GetByIDAsync(request.Id, cancellationToken)
+                ?? throw new NotFoundException(nameof(MaritalStatus), request.Id);
 
             maritalStatus.Name = request.Name;
 
