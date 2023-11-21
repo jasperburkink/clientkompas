@@ -1,6 +1,5 @@
-using Domain.Common;
+﻿using System.Reflection;
 using NetArchTest.Rules;
-using System.Reflection;
 
 namespace ArchitectureTests
 {
@@ -10,7 +9,7 @@ namespace ArchitectureTests
         private const string ApplicationProjectName = "Application";
         private const string InfrastructureProjectName = "Infrastructure";
 
-        private BaseTestFixture _testFixture;
+        private readonly BaseTestFixture _testFixture;
 
         public CleanArchitectureTests(BaseTestFixture testFixture)
         {
@@ -20,7 +19,7 @@ namespace ArchitectureTests
         private Assembly DomainAssembly => _testFixture.GetAssemblyByName(DomainProjectName);
 
         private Assembly ApplicationAssembly => _testFixture.GetAssemblyByName(ApplicationProjectName);
-        
+
         [Fact]
         public void DomainNotDependendOfAnyOtherProject()
         {

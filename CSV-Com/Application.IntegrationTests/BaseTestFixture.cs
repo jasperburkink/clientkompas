@@ -1,4 +1,5 @@
-﻿using Infrastructure.Identity;
+﻿using System.Data.Common;
+using Infrastructure.Identity;
 using Infrastructure.Persistence.Authentication;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -8,7 +9,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MySql.Data.MySqlClient;
 using Respawn;
-using System.Data.Common;
 
 namespace Application.IntegrationTests
 {
@@ -153,7 +153,7 @@ namespace Application.IntegrationTests
 
         public void Dispose()
         {
-            
+
         }
     }
 }
