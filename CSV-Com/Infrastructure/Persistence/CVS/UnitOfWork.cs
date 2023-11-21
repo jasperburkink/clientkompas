@@ -1,10 +1,5 @@
 ﻿using Application.Common.Interfaces.CVS;
 using Domain.CVS.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Persistence.CVS
 {
@@ -69,7 +64,7 @@ namespace Infrastructure.Persistence.CVS
             await context.SaveChangesAsync(cancellationToken);
         }
 
-        private bool disposed = false;        
+        private bool disposed = false;
 
         protected virtual void Dispose(bool disposing)
         {
