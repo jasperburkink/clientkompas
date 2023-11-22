@@ -1,10 +1,6 @@
+﻿using System.Text.Json.Serialization;
 using API.Policies;
-using Application.Common.Interfaces.CVS;
-using Infrastructure.Persistence.Authentication;
 using Infrastructure.Persistence.CVS;
-using Microsoft.DotNet.Scaffolding.Shared.ProjectModel;
-using Microsoft.EntityFrameworkCore;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,17 +41,15 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 
     // Initialise and seed database
-    using (var scope = app.Services.CreateScope())
-    {
-        // TODO: Uncomment for authentication
-        //var initialiserAuthentication = scope.ServiceProvider.GetRequiredService<AuthenticationDbContextInitialiser>();        
-        //await initialiserAuthentication.InitialiseAsync();
-        //await initialiserAuthentication.SeedAsync();
+    using var scope = app.Services.CreateScope();
+    // TODO: Uncomment for authentication
+    //var initialiserAuthentication = scope.ServiceProvider.GetRequiredService<AuthenticationDbContextInitialiser>();        
+    //await initialiserAuthentication.InitialiseAsync();
+    //await initialiserAuthentication.SeedAsync();
 
-        var initialiserCVS = scope.ServiceProvider.GetRequiredService<CVSDbContextInitialiser>();
-        await initialiserCVS.InitialiseAsync();
-        await initialiserCVS.SeedAsync();
-    }    
+    var initialiserCVS = scope.ServiceProvider.GetRequiredService<CVSDbContextInitialiser>();
+    await initialiserCVS.InitialiseAsync();
+    await initialiserCVS.SeedAsync();
 }
 
 app.UseSwagger();

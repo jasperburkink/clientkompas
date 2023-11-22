@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 
 namespace ArchitectureTests
 {
     public class BaseTestFixture : IDisposable
     {
-        private List<Assembly> _assemblies;
+        private readonly List<Assembly> _assemblies;
 
         public BaseTestFixture()
         {
@@ -21,7 +15,7 @@ namespace ArchitectureTests
         {
             var assymbly = _assemblies.FirstOrDefault(assembly => assembly.GetName().Name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
-            if(assymbly == null)
+            if (assymbly == null)
             {
                 assymbly = Assembly.Load(name);
                 _assemblies.Add(assymbly);

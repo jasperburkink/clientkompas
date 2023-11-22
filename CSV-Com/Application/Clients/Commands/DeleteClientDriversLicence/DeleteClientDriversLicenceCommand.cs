@@ -3,7 +3,6 @@ using Application.Common.Interfaces.CVS;
 using Domain.CVS.Domain;
 using MediatR;
 
-
 namespace Application.Clients.Commands.DeleteClientDriversLicence
 {
     public record DeleteClientDriversLicenceCommand : IRequest
@@ -24,17 +23,11 @@ namespace Application.Clients.Commands.DeleteClientDriversLicence
 
         public async Task Handle(DeleteClientDriversLicenceCommand request, CancellationToken cancellationToken)
         {
-            var client = await _unitOfWork.ClientRepository.GetByIDAsync(request.ClientId, "DriversLicences", cancellationToken);
-            if (client == null)
-            {
-                throw new NotFoundException(nameof(Client), request.ClientId);
-            }
+            var client = await _unitOfWork.ClientRepository.GetByIDAsync(request.ClientId, "DriversLicences", cancellationToken)
+                ?? throw new NotFoundException(nameof(Client), request.ClientId);
 
-            var driversLicence = client.DriversLicences.FirstOrDefault(dl => dl.Id.Equals(request.DriversLicenceId));
-            if (driversLicence == null)
-            {
-                throw new NotFoundException(nameof(Domain.CVS.Domain.DriversLicence), request.DriversLicenceId);
-            }
+            var driversLicence = client.DriversLicences.FirstOrDefault(dl => dl.Id.Equals(request.DriversLicenceId))
+                ?? throw new NotFoundException(nameof(Domain.CVS.Domain.DriversLicence), request.DriversLicenceId);
 
             client.DriversLicences.Remove(driversLicence);
 
