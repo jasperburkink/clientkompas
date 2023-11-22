@@ -1,13 +1,6 @@
-﻿using Application.Clients.Queries;
-using Application.Common.Mappings;
+﻿using Application.Common.Mappings;
 using AutoMapper;
-using Domain.CVS.Domain;
 using Domain.CVS.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.DriversLicence.Queries
 {

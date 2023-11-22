@@ -1,10 +1,5 @@
-﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
+using AutoMapper;
 
 namespace Application.Common.Mappings
 {
@@ -21,7 +16,10 @@ namespace Application.Common.Mappings
 
             var mappingMethodName = nameof(IMapFrom<object>.Mapping);
 
-            bool HasInterface(Type t) => t.IsGenericType && t.GetGenericTypeDefinition() == mapFromType;
+            bool HasInterface(Type t)
+            {
+                return t.IsGenericType && t.GetGenericTypeDefinition() == mapFromType;
+            }
 
             var types = assembly.GetExportedTypes().Where(t => t.GetInterfaces().Any(HasInterface)).ToList();
 

@@ -1,5 +1,4 @@
 ﻿using Application.Common.Interfaces.CVS;
-using AutoMapper;
 using Domain.CVS.Domain;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,12 +16,12 @@ namespace API.Controllers
         public UserController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-        }    
+        }
 
         [HttpGet]
         public IEnumerable<User> Get()
         {
-            var users = _unitOfWork.UserRepository.Get().ToList();            
+            var users = _unitOfWork.UserRepository.Get().ToList();
 
             return users;
         }
