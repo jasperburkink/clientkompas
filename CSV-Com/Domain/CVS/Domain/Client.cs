@@ -1,10 +1,5 @@
 ﻿using Domain.Common;
 using Domain.CVS.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Domain.CVS.Domain
 {
@@ -16,7 +11,7 @@ namespace Domain.CVS.Domain
 
         public string PrefixLastName { get; set; }
 
-        public string LastName{ get; set; }
+        public string LastName { get; set; }
 
         public Gender Gender { get; set; }
 
@@ -31,10 +26,10 @@ namespace Domain.CVS.Domain
         public string Residence { get; set; }
 
         public string TelephoneNumber { get; set; }
-        
+
         public DateOnly DateOfBirth { get; set; }
 
-        public string EmailAddress { get; set; }        
+        public string EmailAddress { get; set; }
 
         public MaritalStatus MaritalStatus { get; set; }
 
