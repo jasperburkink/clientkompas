@@ -1,16 +1,4 @@
-﻿using Infrastructure.Identity;
-using Infrastructure.Persistence;
-using Infrastructure.Persistence.Authentication;
-using MediatR;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
-using Respawn;
-
-namespace Application.IntegrationTests
+﻿namespace Application.IntegrationTests
 {
     //internal partial class Testing : IClassFixture<TestFixture>
     //{

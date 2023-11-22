@@ -3,33 +3,23 @@ workflow:
     - when: always
 
 variables:
-  BUILD_CONFIGURATION: "Debug"
-  COVERAGE_FLAG: "XPlat Code Coverage"
-  LOGGER_FLAG: "junit;LogFilePath=$CI_PROJECT_DIR/junit/junit-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose"
+  SOLUTION: "CSV-Com/CSV-Com.sln"
+  BUILD_PATH: "Debug"
 
-stages:
+  stages:
   - build
   - test
+
+  before_script:
+  - 'dotnet restore $BUILD_PATH' # dotnet build does also restore but a explicit restore is better when using gitlab for caching purposes
 
 build-job:
   stage: build
   script:
     #Build
-    - dotnet build -c $BUILD_CONFIGURATION #dotnet build does also restore
+    - dotnet build $BUILD_PATH -c $BUILD_CONFIGURATION #dotnet build does also restore
 
-test-job-unittests:
+test:
   stage: test
-  before_script:
-    - 'echo | dotnet --version' # must be v 2.2.300 or later for reporter tool to work
   script:
-    #Test
-    - 'dotnet test -c $BUILD_CONFIGURATION
-      --test-adapter-path:.
-      --logger:"junit;LogFilePath=..\artifacts\{assembly}-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose"'
-  artifacts:
-    when: always
-    paths:
-      - ./**/*test-result.xml
-    reports:
-      junit:
-        - ./**/*test-result.xml
+    - 'dotnet test $BUILD_PATH --configuration $BUILD_CONFIGURATION'
