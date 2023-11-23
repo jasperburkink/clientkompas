@@ -4,27 +4,26 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAsterisk } from "@fortawesome/free-solid-svg-icons";
 
 interface DropdownObject {
-    Label: string;
-    Value: number;
+    label: string;
+    value: number;
 }
 
-interface idropDownProps extends React.HtmlHTMLAttributes<HTMLElement> {
-    array: Array<DropdownObject>;
+interface IDropDownProps extends React.HtmlHTMLAttributes<HTMLElement> {
+    options: Array<DropdownObject>;
     required: boolean;
     inputfieldname: string;
 }
 
 const OPTION_TEXT = 'Kies uit de lijst'
 
-export const Dropdown = (props: idropDownProps) => (  
-  
+export const Dropdown = (props: IDropDownProps) => (  
     <div className='input-field'>
         <select name={props.inputfieldname} id=""  className='dropdown'  required={props.required} >
             <option value=''>{OPTION_TEXT}</option>
-            {props.array.map((item) => (
-          <option value={item.Value} >{item.Label}</option>
-        ))}   
+            {props.options.map((item) => (
+                <option value={item.value} >{item.label}</option>
+            ))}   
         </select>
         {props.required === true && <FontAwesomeIcon icon={faAsterisk} className="fa-solid fa-1x"/>}
-     </div>
+    </div>
 );

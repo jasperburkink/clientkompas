@@ -3,30 +3,30 @@ import './dropdown-with-button.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAsterisk , faPlus,faXmark,faAngleDown} from "@fortawesome/free-solid-svg-icons";
 
-interface iDropdownObject {
-    Value: number;
-    Label: string;
+interface IDropdownObject {
+    value: number;
+    label: string;
 }
 
-interface iDropDownProps extends React.HTMLProps<HTMLSelectElement> {
-    options: iDropdownObject[];
+interface IDropDownProps extends React.HTMLProps<HTMLSelectElement> {
+    options: IDropdownObject[];
     required: boolean;
     inputfieldname: string;
 }
 
-interface iBadge{
+interface IBadge{
     id: number;
     text: string;
 }
 
 const OPTION_TEXT = 'Kies uit de lijst'
 
-const DropdownWithButton = (props: iDropDownProps) => {
-    const [badges, setBadges] = useState<iBadge[]>([]);
-    const [currentOptions, setCurentOptions] = useState<iBadge[]>([]);
+const DropdownWithButton = (props: IDropDownProps) => {
+    const [badges, setBadges] = useState<IBadge[]>([]);
+    const [currentOptions, setCurentOptions] = useState<IBadge[]>([]);
     const [value,setSelect] = useState('');
 
-    const removeBadge = (badge: iBadge) => {
+    const removeBadge = (badge: IBadge) => {
         let newcurrentOptions = currentOptions.concat(badge);
         setCurentOptions(newcurrentOptions);    
         setBadges(badges.filter(a => a.id !== badge.id));
@@ -38,15 +38,15 @@ const DropdownWithButton = (props: iDropDownProps) => {
         let text = ""
 
         props.options.forEach((item, index) => {
-            if (item.Value === val) {
-                id = item.Value;
-                text = item.Label;
+            if (item.value === val) {
+                id = item.value;
+                text = item.label;
                 return;
             }
         });
 
         if (value !== '') {
-            const newBadge: iBadge = {
+            const newBadge: IBadge = {
                 id,
                 text,
             }
@@ -58,42 +58,42 @@ const DropdownWithButton = (props: iDropDownProps) => {
     };
 
     useEffect(() => {
-        let newOptions: iBadge[] = [];
-        props.options.forEach((item, index) => {
-            const id = item.Value;
-            const text = item.Label;
+        let newOptions: IBadge[] = [];
+        props.options.map((item, index) => {
+            const id = item.value;
+            const text = item.label;
             newOptions.push({id: id, text: text});
         });
         setCurentOptions(newOptions);
-      }, [props.options]);
+    }, [props.options]);
 
     return (
-    <div className='input-field flex-col '>
-        <div className='flex'>
-                    <select id="" className='dropdown' onChange={event => {setSelect(event.target.value)}} required={props.required}>
-                        <option value=''>{OPTION_TEXT}</option>
-                        {currentOptions.map((currentOption, index) => (
-                            <option key={currentOption.id} value={currentOption.id}>{currentOption.text}</option>
-                        ))};    
-                        <FontAwesomeIcon icon={faAngleDown} size="sm" style={{color: "#000000",}} />
-                    </select>
+        <div className='input-field flex-col '>
+            <div className='flex'>
+                <select id="" className='dropdown' onChange={event => {setSelect(event.target.value)}} required={props.required}>
+                    <option value=''>{OPTION_TEXT}</option>
+                    {currentOptions.map((currentOption, index) => (
+                        <option key={currentOption.id} value={currentOption.id}>{currentOption.text}</option>
+                    ))};    
+                    <FontAwesomeIcon icon={faAngleDown} size="sm" style={{color: "#000000",}} />
+                </select>
                 <button className='add-extra-dropdown-btn' type='button'  onClick={addBadge}>
-                <FontAwesomeIcon className='ml-[0]' icon={faPlus} size="xl" style={{color: "#000000",}} />
+                    <FontAwesomeIcon className='ml-[0]' icon={faPlus} size="xl" style={{color: "#000000",}} />
                 </button>
                 {props.required === true && <FontAwesomeIcon icon={faAsterisk} className="fa-solid fa-1x"/>}
-        </div>
+            </div>
             <div className='flex flex-wrap max-w-[100%]'>
                 {badges.map((badge, index) => (  
                     <div key={badge.id} className='dropdownbadge'>
-                            <div>
-                                <p className='mx-1'>{badge.text}</p>
-                                <input name={props.inputfieldname} type="hidden" value={badge.id} />
-                            </div>
+                        <div>
+                            <p className='mx-1'>{badge.text}</p>
+                            <input name={props.inputfieldname} type="hidden" value={badge.id} />
+                        </div>
                         <button type='button' className='badgeBtn' onClick={() => removeBadge(badge)}><FontAwesomeIcon icon={faXmark} size="sm" style={{color: "#000000",}} /></button>
                     </div>      
-                ))}
+                ))};
             </div>
-    </div>
+        </div>
     );
 };
 

@@ -20,16 +20,16 @@ import DropdownWithButton from "../components/common/dropdown-with-button"
 function App() {
     const data = [
         {
-            Label: "ADHD",
-            Value: 1,
+            label: "ADHD",
+            value: 1,
         },
         {
-            Label: "Asperger",
-            Value: 2,
+            label: "Asperger",
+            value: 2,
         },
         {
-            Label: "SBICT",
-            Value: 3,
+            label: "SBICT",
+            value: 3,
         },
     ];
     return (
@@ -130,7 +130,7 @@ function App() {
                 <ProfilePicture pictureUrl='https://media.licdn.com/dms/image/C5603AQG1ibjUUZ7NFQ/profile-displayphoto-shrink_800_800/0/1655221337005?e=2147483647&v=beta&t=KKnYXDtk5PeT9utOaIAjUPjDLqk55-IrkCu1R5GuaRg' />
              
                 <p>Dropdown</p>
-                <Dropdown  array={data} required={false} inputfieldname='dropdown' />
+                <Dropdown  options={data} required={false} inputfieldname='dropdown' />
              
                 <p>Dropdown with button</p>
                 <DropdownWithButton options={data} required={false} inputfieldname='dropdownWithButton' />
