@@ -34,27 +34,22 @@ const DropdownWithButton = (props: IDropDownProps) => {
 
     const addBadge = () => {
         const val = parseInt(value);
-        let id = 0;
-        let text = ""
 
-        props.options.forEach((item, index) => {
-            if (item.value === val) {
-                id = item.value;
-                text = item.label;
-                return;
-            }
-        });
+        const option =props.options.find((element) => element.value = val);
 
-        if (value !== '') {
-            const newBadge: IBadge = {
-                id,
-                text,
-            }
-            const newbadges = badges.concat(newBadge);
-            setBadges(newbadges); 
-            setCurentOptions(currentOptions.filter(badge => badge.id !== id));
-            setSelect('');
+        const id = option!.value;
+        const text = option!.label;
+        console.log(option);
+        if (value === '') return;
+
+        const newBadge: IBadge = {
+          id,
+          text  
         }
+        const newbadges = badges.concat(newBadge);
+        setBadges(newbadges);
+        setCurentOptions(currentOptions.filter(badge => badge.id !== option?.value));
+        setSelect('');
     };
 
     useEffect(() => {
@@ -91,7 +86,7 @@ const DropdownWithButton = (props: IDropDownProps) => {
                         </div>
                         <button type='button' className='badgeBtn' onClick={() => removeBadge(badge)}><FontAwesomeIcon icon={faXmark} size="sm" style={{color: "#000000",}} /></button>
                     </div>      
-                ))};
+                ))}
             </div>
         </div>
     );
