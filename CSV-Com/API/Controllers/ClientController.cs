@@ -3,7 +3,8 @@ using Application.Clients.Commands.CreateClient;
 using Application.Clients.Commands.DeactiverenClient;
 using Application.Clients.Commands.DeleteClientDriversLicence;
 using Application.Clients.Queries.GetClients;
-using Application.Common.Interfaces.CVS;
+using Application.Clients.Queries.SearchClients;
+using Application.Common.Exceptions;
 using Domain.CVS.Domain;
 using Microsoft.AspNetCore.Mvc;
 
@@ -47,6 +48,7 @@ namespace API.Controllers
             throw new NotImplementedException();
         }
 
+        [HttpPut("DeactiverenCliënt")]
         public async Task<ActionResult<ClientDto>> Put(DeactiverenClientCommand command)
         {
             try
