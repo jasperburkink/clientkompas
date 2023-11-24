@@ -1,9 +1,9 @@
-﻿using Application.Common.Exceptions;
+﻿using Application.BenefitForms.Queries.GetBenefitForm;
+using Application.Common.Exceptions;
 using Application.Common.Interfaces.CVS;
-using Application.BenefitForms.Queries.GetBenefitForm;
+using AutoMapper;
 using Domain.CVS.Domain;
 using MediatR;
-using AutoMapper;
 
 namespace Application.BenefitForms.Commands.UpdateBenefitForm
 {
@@ -28,9 +28,9 @@ namespace Application.BenefitForms.Commands.UpdateBenefitForm
         public async Task<BenefitFormDto> Handle(UpdateBenefitFormCommand request, CancellationToken cancellationToken)
         {
 
-            var benefitForm = await _unitOfWork.BenefitFormRepository.GetByIDAsync(request.Id, cancellationToken) 
+            var benefitForm = await _unitOfWork.BenefitFormRepository.GetByIDAsync(request.Id, cancellationToken)
                 ?? throw new NotFoundException(nameof(BenefitForm), request.Id);
-            
+
 
             benefitForm.Name = request.Name;
 

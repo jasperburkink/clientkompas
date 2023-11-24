@@ -1,14 +1,7 @@
 ﻿using Domain.CVS.Domain;
 using Domain.CVS.Enums;
-using Infrastructure.Identity;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Persistence.CVS
 {
@@ -58,7 +51,7 @@ namespace Infrastructure.Persistence.CVS
             // Seed, if necessary
             // TODO: Maybe only when debugging
             BenefitForm benefitForm;
-            int benefitFormId = 1;
+            var benefitFormId = 1;
 
             if (!_context.BenefitForm.Any(ms => ms.Id.Equals(benefitFormId)))
             {

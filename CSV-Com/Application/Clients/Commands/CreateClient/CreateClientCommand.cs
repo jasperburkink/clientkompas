@@ -60,11 +60,8 @@ namespace Application.Clients.Commands.CreateClient
         public async Task<ClientDto> Handle(CreateClientCommand request, CancellationToken cancellationToken)
         {
 
-            var benefitForm = await _unitOfWork.BenefitFormRepository.GetByIDAsync(request.BenefitFormid, cancellationToken);
-            if (benefitForm == null)
-            {
-                throw new NotFoundException(nameof(BenefitForm), request.BenefitFormid);
-            }
+            var benefitForm = await _unitOfWork.BenefitFormRepository.GetByIDAsync(request.BenefitFormid, cancellationToken)
+                ?? throw new NotFoundException(nameof(BenefitForm), request.BenefitFormid);
             var client = new Client
             {
                 IdentificationNumber = request.IdentificationNumber,

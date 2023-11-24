@@ -22,9 +22,9 @@ namespace Application.BenefitForms.Commands.DeleteBenefitForm
 
         public async Task Handle(DeleteBenefitFormCommand request, CancellationToken cancellationToken)
         {
-            var benefitForm = await _unitOfWork.BenefitFormRepository.GetByIDAsync(request.Id, cancellationToken) 
+            var benefitForm = await _unitOfWork.BenefitFormRepository.GetByIDAsync(request.Id, cancellationToken)
                 ?? throw new NotFoundException(nameof(MaritalStatus), request.Id);
-            
+
 
             var clients = await _unitOfWork.ClientRepository.GetAsync(c => c.BenefitForm.Id.Equals(request.Id));
             if (clients.Any())
