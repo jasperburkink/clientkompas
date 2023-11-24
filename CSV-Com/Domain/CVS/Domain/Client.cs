@@ -40,7 +40,6 @@ namespace Domain.CVS.Domain
         public virtual ICollection<EmergencyPerson> EmergencyPeople { get; set; } = new List<EmergencyPerson>();
 
         public List<Diagnosis> Diagnoses { get; } = new();
-        
 
         public BenefitForm BenefitForm { get; set; }
 

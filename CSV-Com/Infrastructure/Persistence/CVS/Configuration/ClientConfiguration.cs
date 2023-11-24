@@ -14,13 +14,12 @@ namespace Infrastructure.Persistence.CVS.Configuration
              * TODO: Maybe these foreign keys can be solved with conventions. Also maybe cascade delete is not wanted.
              * But it is needed in the current situation, because there are no repositories for diagnoses, driverslicences, etc.
              */
-             
-        builder.HasMany(c => c.Diagnoses)
-                .WithMany(dl => dl.Clients);
+            builder.HasMany(c => c.Diagnoses)
+                    .WithMany(dl => dl.Clients);
 
-        builder.HasMany(c => c.DriversLicences)
-                .WithOne(dl => dl.Client)
-                .OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(c => c.DriversLicences)
+                    .WithOne(dl => dl.Client)
+                    .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(c => c.EmergencyPeople)
                 .WithOne(ep => ep.Client)
