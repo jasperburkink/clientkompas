@@ -23,7 +23,7 @@ namespace Infrastructure.Persistence.CVS.Configuration
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(c => c.BenefitForm)
-                .WithMany(d => d.Client)
+                .WithMany(d => d.Clients)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(c => c.EmergencyPeople)
