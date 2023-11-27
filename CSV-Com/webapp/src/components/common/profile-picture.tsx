@@ -17,7 +17,7 @@ export function ProfilePicture(props: ProfilePictureProps){
             <div className='profile-picture-box'>
                 {
                     pictureUrl === undefined &&
-                    <FontAwesomeIcon icon={faCircleUser} className="fa-sollid fa-10x text-white"/>
+                    <FontAwesomeIcon icon={faCircleUser} className="fa-sollid fa-5x md:fa-10x text-white"/>
                 }
                 {
                     pictureUrl !== null &&

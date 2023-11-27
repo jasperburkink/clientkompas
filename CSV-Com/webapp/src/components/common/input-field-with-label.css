@@ -5,10 +5,16 @@
 
 @layer components {
     div.input-field-with-label{
-        @apply font-primary flex justify-between py-4;
+        @apply 
+        font-primary 
+        flex 
+        justify-between 
+        py-4;
     }
 
     div.input-field-with-label label{
-        @apply mr-5 mt-3;
+        @apply 
+        mr-5 
+        mt-3;
     }
 }
