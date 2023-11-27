@@ -33,17 +33,15 @@ const DropdownWithButton = (props: IDropDownProps) => {
     };
 
     const addBadge = () => {
-        const val = parseInt(value);
-
-        const option = props.options.find((element) => element.value = val);
-        
-        console.log(option);
         if (value === '') return;
+
+        const option = props.options.find((element) => element.value = parseInt(value));
 
         const newBadge: IBadge = {
           id: option!.value,
           text: option!.label  
         }
+        
         const newbadges = badges.concat(newBadge);
         setBadges(newbadges);
         setCurentOptions(currentOptions.filter(badge => badge.id !== option?.value));
@@ -51,12 +49,7 @@ const DropdownWithButton = (props: IDropDownProps) => {
     };
 
     useEffect(() => {
-        let newOptions: IBadge[] = [];
-        props.options.map((item, index) => {
-            const id = item.value;
-            const text = item.label;
-            newOptions.push({id: id, text: text});
-        });
+        const newOptions: IBadge[] = props.options.map(item => ({id: item.value, text: item.label}));
         setCurentOptions(newOptions);
     }, [props.options]);
 

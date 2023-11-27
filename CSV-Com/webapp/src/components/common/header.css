@@ -5,10 +5,16 @@
 
 @layer components {
     .header{
-        @apply m-auto;
+        @apply 
+        m-auto;
     }
 
     .header p{ 
-        @apply font-primary font-semibold text-black text-lg underline underline-offset-4;
+        @apply 
+        font-primary 
+        font-semibold 
+        text-black 
+        underline 
+        underline-offset-4;
     }
 }

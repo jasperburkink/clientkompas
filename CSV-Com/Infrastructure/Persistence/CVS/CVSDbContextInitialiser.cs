@@ -76,6 +76,11 @@ namespace Infrastructure.Persistence.CVS
                         {
                             Id = 1,
                             DriversLicenceCode = DriversLicenceEnum.B
+                        },
+                        new DriversLicence
+                        {
+                            Id = 2,
+                            DriversLicenceCode = DriversLicenceEnum.BE
                         }
                     },
                     EmergencyPeople =
@@ -85,6 +90,12 @@ namespace Infrastructure.Persistence.CVS
                             Id = 1,
                             Name = "Piet Pietersen",
                             TelephoneNumber = "0123456789"
+                        },
+                        new EmergencyPerson
+                        {
+                            Id = 2,
+                            Name = "Frans Duits",
+                            TelephoneNumber = "098765321"
                         }
                     },
                     Diagnoses =
@@ -111,6 +122,15 @@ namespace Infrastructure.Persistence.CVS
                             ContractType = ContractType.Temporary,
                             FromDate = new DateOnly(2023, 1, 1),
                             ToDate = new DateOnly(2024, 1, 1)
+                        },
+                        new WorkingContract
+                        {
+                            Id = 2,
+                            CompanyName = "De Nederlandse regering",
+                            Function = "Minister president",
+                            ContractType = ContractType.Permanent,
+                            FromDate = new DateOnly(2010, 1, 1),
+                            ToDate = new DateOnly(2023, 1, 1)
                         }
                     },
                     Remarks = "Jan is een geweldig persoon om mee samen te werken."
