@@ -29,6 +29,11 @@ namespace Microsoft.Extensions.DependencyInjection
                             mySqlOptions =>
                             {
                                 mySqlOptions.MigrationsAssembly(typeof(CVSDbContext).Assembly.FullName); // Migrations in class library
+#if DEBUG
+                                mySqlOptions.EnableRetryOnFailure(maxRetryCount: 5,
+                    maxRetryDelay: TimeSpan.FromSeconds(10),
+                    errorNumbersToAdd: null);
+#endif
                             })
                             // The following three options help with debugging, but should
                             // be changed or removed for production.
