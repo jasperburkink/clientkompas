@@ -35,16 +35,14 @@ const DropdownWithButton = (props: IDropDownProps) => {
     const addBadge = () => {
         const val = parseInt(value);
 
-        const option =props.options.find((element) => element.value = val);
-
-        const id = option!.value;
-        const text = option!.label;
+        const option = props.options.find((element) => element.value = val);
+        
         console.log(option);
         if (value === '') return;
 
         const newBadge: IBadge = {
-          id,
-          text  
+          id: option!.value,
+          text: option!.label  
         }
         const newbadges = badges.concat(newBadge);
         setBadges(newbadges);
