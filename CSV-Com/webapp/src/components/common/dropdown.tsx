@@ -19,10 +19,10 @@ const OPTION_TEXT = 'Kies uit de lijst'
 export const Dropdown = (props: IDropDownProps) => (  
     <div className='input-field'>
         <select name={props.inputfieldname} id=""  className='dropdown'  required={props.required} >
-            <option value=''>{OPTION_TEXT}</option>
+            <option key={0} value=''>{OPTION_TEXT}</option>
             {props.options.map((item) => (
-                <option value={item.value} >{item.label}</option>
-            ))}   
+                <option key={item.value} value={item.value} >{item.label}</option>
+            ))}
         </select>
         {props.required === true && <FontAwesomeIcon icon={faAsterisk} className="fa-solid fa-1x"/>}
     </div>

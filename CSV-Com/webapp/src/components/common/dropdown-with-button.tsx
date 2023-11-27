@@ -33,10 +33,11 @@ const DropdownWithButton = (props: IDropDownProps) => {
     };
 
     const addBadge = () => {
+        console.log(parseInt(value));
         if (value === '') return;
 
-        const option = props.options.find((element) => element.value = parseInt(value));
-
+        const option = props.options.find(element => element.value === parseInt(value));
+        console.log(option, props.options);
         const newBadge: IBadge = {
           id: option!.value,
           text: option!.label  
@@ -61,7 +62,6 @@ const DropdownWithButton = (props: IDropDownProps) => {
                     {currentOptions.map((currentOption, index) => (
                         <option key={currentOption.id} value={currentOption.id}>{currentOption.text}</option>
                     ))};    
-                    <FontAwesomeIcon icon={faAngleDown} size="sm" style={{color: "#000000",}} />
                 </select>
                 <button className='add-extra-dropdown-btn' type='button'  onClick={addBadge}>
                     <FontAwesomeIcon className='ml-[0]' icon={faPlus} size="xl" style={{color: "#000000",}} />
