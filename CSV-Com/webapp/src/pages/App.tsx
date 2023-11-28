@@ -16,7 +16,8 @@ import { NavTitle } from '../components/nav/nav-title';
 import { InputFieldWithLabel } from '../components/common/input-field-with-label';
 import { SlideToggleLabel } from '../components/common/slide-toggle-label';
 import { DatePicker } from '../components/common/datepicker';
-import Textarea from "../components/common/Textarea"
+import Textarea from "../components/common/Textarea";
+import PopUp from "../components/common/PopUp";
 
 function App() {
     return (
@@ -158,7 +159,9 @@ function App() {
                 
                 <p>Textarea component</p>
                 <Textarea text="Voeg een opmerking toe"/>
-
+                
+                <p>PopUp component</p>
+                <PopUp/>           
             </div>
             <Copyright />
         </div>
