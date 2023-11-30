@@ -3,7 +3,6 @@ using Domain.CVS.Domain;
 
 namespace Infrastructure.Persistence.CVS
 {
-    //TODO: Wijziging
     public class UnitOfWork : IUnitOfWork
     {
         private readonly CVSDbContext _context;
@@ -15,6 +14,8 @@ namespace Infrastructure.Persistence.CVS
         private GenericRepository<DriversLicence> driversLicenceRepository;
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
         private GenericRepository<Diagnosis> diagnosisRepository;
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
+        private GenericRepository<MaritalStatus> maritalStatusRepository;
 
         public UnitOfWork(CVSDbContext context)
         {
@@ -55,6 +56,17 @@ namespace Infrastructure.Persistence.CVS
             {
                 driversLicenceRepository ??= new GenericRepository<DriversLicence>(_context);
                 return driversLicenceRepository;
+            }
+        }
+
+
+
+        public IRepository<MaritalStatus> MaritalStatusRepository
+        {
+            get
+            {
+                maritalStatusRepository ??= new GenericRepository<MaritalStatus>(_context);
+                return maritalStatusRepository;
             }
         }
 

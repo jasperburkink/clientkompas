@@ -10,6 +10,8 @@ namespace Application.Common.Interfaces.CVS
 
         IRepository<DriversLicence> DriversLicenceRepository { get; }
 
+        IRepository<MaritalStatus> MaritalStatusRepository { get; }
+
         IRepository<Diagnosis> DiagnosisRepository { get; }
 
         public void Save();

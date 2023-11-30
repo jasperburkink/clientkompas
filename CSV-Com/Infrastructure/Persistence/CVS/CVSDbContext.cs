@@ -1,6 +1,6 @@
-﻿using System.Reflection;
-using Domain.CVS.Domain;
+﻿using Domain.CVS.Domain;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace Infrastructure.Persistence.CVS
 {
@@ -12,6 +12,8 @@ namespace Infrastructure.Persistence.CVS
         public DbSet<DriversLicence> DriversLicence { get; set; }
 
         public DbSet<Diagnosis> Diagnosis { get; set; }
+
+        public DbSet<MaritalStatus> MaritalStatus { get; set; }
 
         public CVSDbContext(DbContextOptions<CVSDbContext> options) : base(options) { }
 

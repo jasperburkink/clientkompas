@@ -1,12 +1,11 @@
-﻿using Application.Common.Interfaces.CVS;
-using Application.Clients.Queries.GetClients;
+﻿using Application.Clients.Queries.GetClients;
+using Application.Common.Exceptions;
+using Application.Common.Interfaces.CVS;
+using AutoMapper;
 using Domain.CVS.Domain;
 using Domain.CVS.Enums;
 using Domain.CVS.Events;
 using MediatR;
-using AutoMapper;
-
-
 
 namespace Application.Clients.Commands.CreateClient
 {
@@ -40,7 +39,7 @@ namespace Application.Clients.Commands.CreateClient
 
         public string EmailAddress { get; set; }
 
-        public MaritalStatus MaritalStatus { get; set; }
+        public int MaritalStatusid { get; set; }
 
         public BenefitForm BenefitForm { get; set; }
 
@@ -60,6 +59,9 @@ namespace Application.Clients.Commands.CreateClient
 
         public async Task<ClientDto> Handle(CreateClientCommand request, CancellationToken cancellationToken)
         {
+            var maritalStatus = await _unitOfWork.MaritalStatusRepository.GetByIDAsync(request.MaritalStatusid, cancellationToken)
+                ?? throw new NotFoundException(nameof(MaritalStatus), request.MaritalStatusid);
+
             var client = new Client
             {
                 IdentificationNumber = request.IdentificationNumber,
@@ -76,7 +78,7 @@ namespace Application.Clients.Commands.CreateClient
                 TelephoneNumber = request.TelephoneNumber,
                 DateOfBirth = request.DateOfBirth,
                 EmailAddress = request.EmailAddress,
-                MaritalStatus = request.MaritalStatus,
+                MaritalStatus = maritalStatus,
                 BenefitForm = request.BenefitForm,
                 Remarks = request.Remarks
             };
