@@ -40,8 +40,6 @@ namespace Application.Clients.Queries.GetClients
 
         public string MaritalStatus { get; set; }
 
-        public string DriversLicences { get; set; }
-
         public virtual ICollection<EmergencyPersonDto> EmergencyPeople { get; set; }
 
         public virtual string Diagnoses { get; set; }
@@ -57,7 +55,6 @@ namespace Application.Clients.Queries.GetClients
             profile.CreateMap<Client, ClientDto>()
                 .ForMember(cDto => cDto.MaritalStatus, ms => ms.MapFrom(c => c.MaritalStatus.Name))
                 .ForMember(cDto => cDto.Gender, s => s.MapFrom(c => Enum.GetName(typeof(Gender), c.Gender)))
-                .ForMember(cDto => cDto.DriversLicences, dl => dl.MapFrom(c => string.Join(SeperatorChar, c.DriversLicences.Select(dl => Enum.GetName(typeof(DriversLicenceEnum), dl.DriversLicenceCode)))))
                 .ForMember(cDto => cDto.BenefitForm, bf => bf.MapFrom(c => Enum.GetName(typeof(BenefitForm), c.BenefitForm)))
                 .ForMember(cDto => cDto.Diagnoses, dDto => dDto.MapFrom(c => string.Join(SeperatorChar, c.Diagnoses.Select(d => d.Name))));
         }

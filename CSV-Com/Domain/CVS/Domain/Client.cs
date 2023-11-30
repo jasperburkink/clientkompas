@@ -35,7 +35,7 @@ namespace Domain.CVS.Domain
 
         public MaritalStatus MaritalStatus { get; set; }
 
-        public virtual ICollection<DriversLicence> DriversLicences { get; set; } = new List<DriversLicence>();
+        public List<DriversLicence> DriversLicences { get; set; } = new();
 
         public virtual ICollection<EmergencyPerson> EmergencyPeople { get; set; } = new List<EmergencyPerson>();
 

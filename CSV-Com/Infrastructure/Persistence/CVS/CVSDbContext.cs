@@ -9,6 +9,7 @@ namespace Infrastructure.Persistence.CVS
         public DbSet<User> Users { get; set; }
 
         public DbSet<Client> Clients { get; set; }
+        public DbSet<DriversLicence> DriversLicence { get; set; }
 
         public DbSet<Diagnosis> Diagnosis { get; set; }
 

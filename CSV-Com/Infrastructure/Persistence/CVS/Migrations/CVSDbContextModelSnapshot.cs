@@ -34,6 +34,21 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     b.ToTable("ClientDiagnosis");
                 });
 
+            modelBuilder.Entity("ClientDriversLicence", b =>
+                {
+                    b.Property<int>("ClientsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DriversLicencesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ClientsId", "DriversLicencesId");
+
+                    b.HasIndex("DriversLicencesId");
+
+                    b.ToTable("ClientDriversLicence");
+                });
+
             modelBuilder.Entity("Domain.CVS.Domain.Client", b =>
                 {
                     b.Property<int>("Id")
@@ -159,8 +174,9 @@ namespace Infrastructure.Persistence.CVS.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime(6)");
@@ -168,8 +184,9 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("DriversLicenceCode")
-                        .HasColumnType("int");
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime(6)");
@@ -178,8 +195,6 @@ namespace Infrastructure.Persistence.CVS.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ClientId");
 
                     b.ToTable("DriversLicence");
                 });
@@ -327,18 +342,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     b.ToTable("WorkingContract");
                 });
 
-            modelBuilder.Entity("Domain.CVS.Domain.Client", b =>
-                {
-                    b.HasOne("Domain.CVS.Domain.MaritalStatus", "MaritalStatus")
-                        .WithMany("Client")
-                        .HasForeignKey("MaritalStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MaritalStatus");
-                });
-
-            modelBuilder.Entity("Domain.CVS.Domain.Diagnosis", b =>
+            modelBuilder.Entity("ClientDiagnosis", b =>
                 {
                     b.HasOne("Domain.CVS.Domain.Client", null)
                         .WithMany()
@@ -353,15 +357,30 @@ namespace Infrastructure.Persistence.CVS.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.CVS.Domain.DriversLicence", b =>
+            modelBuilder.Entity("ClientDriversLicence", b =>
                 {
-                    b.HasOne("Domain.CVS.Domain.Client", "Client")
-                        .WithMany("DriversLicences")
-                        .HasForeignKey("ClientId")
+                    b.HasOne("Domain.CVS.Domain.Client", null)
+                        .WithMany()
+                        .HasForeignKey("ClientsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Client");
+                    b.HasOne("Domain.CVS.Domain.DriversLicence", null)
+                        .WithMany()
+                        .HasForeignKey("DriversLicencesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.CVS.Domain.Client", b =>
+                {
+                    b.HasOne("Domain.CVS.Domain.MaritalStatus", "MaritalStatus")
+                        .WithMany("Clients")
+                        .HasForeignKey("MaritalStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MaritalStatus");
                 });
 
             modelBuilder.Entity("Domain.CVS.Domain.EmergencyPerson", b =>
@@ -388,8 +407,6 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
             modelBuilder.Entity("Domain.CVS.Domain.Client", b =>
                 {
-                    b.Navigation("DriversLicences");
-
                     b.Navigation("EmergencyPeople");
 
                     b.Navigation("WorkingContracts");
@@ -397,7 +414,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
             modelBuilder.Entity("Domain.CVS.Domain.MaritalStatus", b =>
                 {
-                    b.Navigation("Client");
+                    b.Navigation("Clients");
                 });
 #pragma warning restore 612, 618
         }

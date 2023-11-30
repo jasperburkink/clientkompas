@@ -11,6 +11,8 @@ namespace Infrastructure.Persistence.CVS
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
         private GenericRepository<Client> clientRepository;
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
+        private GenericRepository<DriversLicence> driversLicenceRepository;
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
         private GenericRepository<Diagnosis> diagnosisRepository;
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
         private GenericRepository<MaritalStatus> maritalStatusRepository;
@@ -46,6 +48,14 @@ namespace Infrastructure.Persistence.CVS
             {
                 clientRepository ??= new GenericRepository<Client>(_context);
                 return clientRepository;
+            }
+        }
+        public IRepository<DriversLicence> DriversLicenceRepository
+        {
+            get
+            {
+                driversLicenceRepository ??= new GenericRepository<DriversLicence>(_context);
+                return driversLicenceRepository;
             }
         }
 
