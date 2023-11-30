@@ -10,6 +10,8 @@ namespace Application.Common.Interfaces.CVS
 
         IRepository<Diagnosis> DiagnosisRepository { get; }
 
+        IRepository<EmergencyPerson> EmergencyPersonRepository { get; }
+
         public void Save();
 
         public Task SaveAsync(CancellationToken cancellationToken = default);

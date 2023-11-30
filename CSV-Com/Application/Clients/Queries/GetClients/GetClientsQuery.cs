@@ -1,4 +1,5 @@
-﻿using Application.Common.Interfaces.CVS;
+﻿using Application.Clients.Dtos;
+using Application.Common.Interfaces.CVS;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;

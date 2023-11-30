@@ -13,6 +13,8 @@ namespace Infrastructure.Persistence.CVS
         private GenericRepository<Client> clientRepository;
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
         private GenericRepository<Diagnosis> diagnosisRepository;
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
+        private GenericRepository<EmergencyPerson> emergencyPersonRepository;
 
         public UnitOfWork(CVSDbContext context)
         {
@@ -45,6 +47,15 @@ namespace Infrastructure.Persistence.CVS
             {
                 clientRepository ??= new GenericRepository<Client>(_context);
                 return clientRepository;
+            }
+        }
+
+        public IRepository<EmergencyPerson> EmergencyPersonRepository
+        {
+            get
+            {
+                emergencyPersonRepository ??= new GenericRepository<EmergencyPerson>(_context);
+                return emergencyPersonRepository;
             }
         }
 

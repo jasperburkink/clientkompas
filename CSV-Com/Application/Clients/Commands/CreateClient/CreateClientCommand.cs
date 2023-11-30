@@ -1,10 +1,10 @@
-﻿using Application.Common.Interfaces.CVS;
-using Application.Clients.Queries.GetClients;
+﻿using Application.Clients.Dtos;
+using Application.Common.Interfaces.CVS;
+using AutoMapper;
 using Domain.CVS.Domain;
 using Domain.CVS.Enums;
 using Domain.CVS.Events;
 using MediatR;
-using AutoMapper;
 
 
 

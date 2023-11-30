@@ -2,6 +2,7 @@
 using Application.Clients.Commands.CreateClient;
 using Application.Clients.Commands.DeleteClientDriversLicence;
 using Application.Clients.Commands.UpdateClient;
+using Application.Clients.Dtos;
 using Application.Clients.Queries.GetClients;
 using Application.Common.Exceptions;
 using Microsoft.AspNetCore.Mvc;

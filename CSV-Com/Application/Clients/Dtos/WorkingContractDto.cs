@@ -1,7 +1,7 @@
 ﻿using Application.Common.Mappings;
 using Domain.CVS.Domain;
 
-namespace Application.Clients.Queries.GetClients
+namespace Application.Clients.Dtos
 {
     public class WorkingContractDto : IMapFrom<WorkingContract>
     {

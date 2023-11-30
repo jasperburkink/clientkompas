@@ -3,7 +3,7 @@ using AutoMapper;
 using Domain.CVS.Domain;
 using Domain.CVS.Enums;
 
-namespace Application.Clients.Queries.GetClients
+namespace Application.Clients.Dtos
 {
     public class ClientDto : IMapFrom<Client>
     {

@@ -1,9 +1,8 @@
-﻿using Application.Clients.Queries.GetClients;
+﻿using Application.Clients.Dtos;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces.CVS;
 using AutoMapper;
 using Domain.CVS.Domain;
-using Domain.CVS.Enums;
 using MediatR;
 
 namespace Application.Clients.Commands.UpdateClient
@@ -12,7 +11,7 @@ namespace Application.Clients.Commands.UpdateClient
     {
         public int Id { get; init; }
 
-        public string FirstName { get; init; }
+        /*public string FirstName { get; init; }
 
         public string Initials { get; init; }
 
@@ -38,19 +37,17 @@ namespace Application.Clients.Commands.UpdateClient
 
         public string EmailAddress { get; set; }
 
-        public MaritalStatus MaritalStatus { get; set; }
+        public MaritalStatus MaritalStatus { get; set; }*/
 
-        public ICollection<EmergencyPerson> EmergencyPeople { get; set; }
+        public ICollection<EmergencyPersonDto> EmergencyPeople { get; set; }
 
-        public ICollection<Domain.CVS.Domain.DriversLicence> DriversLicences { get; set; }
+        /*  public ICollection<DriversLicenceEnum> DriversLicences { get; set; }
 
-        public ICollection<Diagnosis> Diagnoses { get; set; }
+          public BenefitForm BenefitForm { get; set; }
 
-        public BenefitForm BenefitForm { get; set; }
+          public ICollection<WorkingContractDto> WorkingContracts { get; set; }
 
-        public ICollection<WorkingContract> WorkingContracts { get; set; }
-
-        public string Remarks { get; set; }
+          public string Remarks { get; set; }*/
     }
 
     public class UpdateClientCommandHandler : IRequestHandler<UpdateClientCommand, ClientDto>
@@ -69,7 +66,8 @@ namespace Application.Clients.Commands.UpdateClient
             var client = await _unitOfWork.ClientRepository.GetByIDAsync(request.Id, cancellationToken)
                 ?? throw new NotFoundException(nameof(Client), request.Id);
 
-            client.FirstName = request.FirstName;
+
+            /*client.FirstName = request.FirstName;
 
             client.Initials = request.Initials;
 
@@ -95,17 +93,17 @@ namespace Application.Clients.Commands.UpdateClient
 
             client.EmailAddress = request.EmailAddress;
 
-            client.BenefitForm = request.BenefitForm;
+            client.BenefitForm = request.BenefitForm;*/
 
-            client.EmergencyPeople = request.EmergencyPeople;
+            client.EmergencyPeople = (ICollection<EmergencyPerson>)request.EmergencyPeople;
 
-            client.MaritalStatus = request.MaritalStatus;
+            //client.WorkingContracts = (ICollection<WorkingContract>)request.WorkingContracts;
+
+            /*client.MaritalStatus = request.MaritalStatus;
 
             client.Remarks = request.Remarks;
 
-            client.DriversLicences = request.DriversLicences;
-
-            client.Diagnoses = request.Diagnoses;
+            client.DriversLicences = (ICollection<Domain.CVS.Domain.DriversLicence>)request.DriversLicences;*/
 
             await _unitOfWork.SaveAsync(cancellationToken);
 
