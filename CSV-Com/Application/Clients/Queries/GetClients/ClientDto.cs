@@ -40,8 +40,6 @@ namespace Application.Clients.Queries.GetClients
 
         public string MaritalStatus { get; set; }
 
-        public string DriversLicences { get; set; }
-
         public virtual ICollection<EmergencyPersonDto> EmergencyPeople { get; set; }
 
         public virtual string Diagnoses { get; set; }

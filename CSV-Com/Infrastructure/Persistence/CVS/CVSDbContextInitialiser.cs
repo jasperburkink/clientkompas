@@ -43,6 +43,24 @@ namespace Infrastructure.Persistence.CVS
         }
         public async Task TrySeedAsync()
         {
+            MaritalStatus martitalStatus;
+            var maritalStatusId = 1;
+
+            if (!_context.MaritalStatus.Any(ms => ms.Id.Equals(maritalStatusId)))
+            {
+                martitalStatus = new MaritalStatus
+                {
+                    Id = maritalStatusId,
+                    Name = "Unmarried"
+                };
+
+                _context.MaritalStatus.Add(martitalStatus);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                martitalStatus = _context.MaritalStatus.First(ms => ms.Id.Equals(maritalStatusId));
+            }
 
             if (!_context.Clients.Any())
             {
@@ -63,7 +81,7 @@ namespace Infrastructure.Persistence.CVS
                     TelephoneNumber = "0623456789",
                     DateOfBirth = new DateOnly(1990, 5, 14),
                     EmailAddress = "a@b.com",
-                    //MaritalStatus = 
+                    MaritalStatus = martitalStatus,
                     EmergencyPeople =
                     {
                         new EmergencyPerson
