@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600&display=swap');
+
+@layer components {
+
+    
+    .toggle-button {
+        @apply 
+        relative 
+        text-mainBlue 
+        px-3 
+        h-50px 
+        font-medium 
+        text-xl 
+        rounded-lg;
+    }
+
+    .toggle-button-underline{
+        @apply 
+        absolute 
+        inset-x-0 
+        bottom-0 
+        h-0.5 
+        bg-mainBlue 
+        mb-[14px] 
+        mx-3;
+    }
+
+    .toggle-animation{
+        @apply 
+        duration-500 
+        ease-in-out;
+    }
+}
