@@ -5,6 +5,16 @@
 
 @layer components {
     div.copyright{
-        @apply font-primary hidden md:block fixed right-1/2 w-[375px] -mr-[175px] bottom-0 z-50 text-subGray2;
+        @apply 
+        font-primary 
+        hidden 
+        lg:block 
+        fixed 
+        right-1/2 
+        w-[375px] 
+        -mr-[175px] 
+        bottom-0 
+        z-50 
+        text-subGray2;
     }
 }

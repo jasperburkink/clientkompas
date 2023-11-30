@@ -19,11 +19,18 @@ namespace API.Controllers
             return await Mediator.Send(query);
         }
 
-        //TODO: implement with new Mediator structure
         [HttpGet("{id}")]
-        public Client Get(int id)
+        public async Task<ActionResult<ClientDto>> Get(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var client = await Mediator.Send(new GetClientQuery { ClientId = id });
+                return Ok(client);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
         }
 
         [HttpPost]

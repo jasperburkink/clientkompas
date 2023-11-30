@@ -2,6 +2,7 @@ import './App.css';
 import '../index.css';
 
 import { Header } from '../components/common/header';
+import { Label } from '../components/common/label';
 import { Button } from '../components/common/button';
 import { LinkButton } from '../components/common/link-button';
 import { Sidebar } from '../components/sidebar/sidebar';
@@ -13,6 +14,7 @@ import { InputField } from '../components/common/input-field';
 import { NavButtonGray } from '../components/nav/nav-button-gray';
 import { NavTitle } from '../components/nav/nav-title';
 import { InputFieldWithLabel } from '../components/common/input-field-with-label';
+import { SlideToggleLabel } from '../components/common/slide-toggle-label';
 import { DatePicker } from '../components/common/datepicker';
 
 function App() {
@@ -40,6 +42,41 @@ function App() {
             <div className='grid grid-cols-2 gap-10 m-5'>
                 <p>Header</p>
                 <Header text="Dit zijn alle beschikbare componenten." />
+
+                <p>Label</p>         
+                <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr className='class="px-6 py-3'>
+                            <th scope="col" className="px-6 py-3">Style</th>
+                            <th scope="col" className="px-6 py-3">Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <th><p>Standard:</p></th>
+                            <td><Label text='Dit is een label!' /></td>
+                        </tr>
+                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <th><p>Strong:</p></th>
+                            <td><Label text='Dit is een label!' strong={true} /></td>
+                        </tr>
+                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <th><p>Underline:</p></th>
+                            <td><Label text='Dit is een label!' underline={true} /></td>
+                        </tr>
+                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">                            
+                            <th><p>Cursive:</p></th>
+                            <td><Label text='Dit is een label!' cursive={true} /></td>
+                        </tr>
+                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <th><p>Strong, Underline, Cursive:</p></th>
+                            <td><Label text='Dit is een label!' strong={true} underline={true} cursive={true} /></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p>Inputfield text empty</p>                
+                <InputField inputFieldType={{type:'text'}} required={false} placeholder='Placeholder' />
 
                 <p>Button</p>
                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -104,6 +141,11 @@ function App() {
                 <p>Inputfield required with label </p>
                 <InputFieldWithLabel text='TextField' inputFieldProps={{ required: true, placeholder:'Placeholder', inputFieldType:{ type:'text'} }} />
 
+                <p>Slide toggle label</p>
+                <SlideToggleLabel textColapsed='Klap uit!' textExpanded='Klap in!' >
+                    <div className='p-5 bg-mainGray text-mainBlue rounded-2xl border-2 border-black w-full h-44'>Dit is een paneel wat inklapbaar is!!!</div>
+                </SlideToggleLabel>
+
                 <p>Date picker</p>
                 <DatePicker placeholder='Selecteer een datum' />
 
@@ -111,8 +153,7 @@ function App() {
                 <ProfilePicture />
 
                 <p>ProfilePicture Maurice</p>
-                <ProfilePicture pictureUrl='https://media.licdn.com/dms/image/C5603AQG1ibjUUZ7NFQ/profile-displayphoto-shrink_800_800/0/1655221337005?e=2147483647&v=beta&t=KKnYXDtk5PeT9utOaIAjUPjDLqk55-IrkCu1R5GuaRg' />
-                
+                <ProfilePicture pictureUrl='https://media.licdn.com/dms/image/C5603AQG1ibjUUZ7NFQ/profile-displayphoto-shrink_800_800/0/1655221337005?e=2147483647&v=beta&t=KKnYXDtk5PeT9utOaIAjUPjDLqk55-IrkCu1R5GuaRg' />                
             </div>
             <Copyright />
         </div>
