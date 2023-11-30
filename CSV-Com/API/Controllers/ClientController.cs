@@ -34,7 +34,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> Create(CreateClientCommand command)
+        public async Task<ActionResult<ClientDto>> Create(CreateClientCommand command)
         {
             return await Mediator.Send(command);
         }
