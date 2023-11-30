@@ -8,6 +8,8 @@ namespace Application.Common.Interfaces.CVS
 
         IRepository<Client> ClientRepository { get; }
 
+        IRepository<MaritalStatus> MaritalStatusRepository { get; }
+
         IRepository<Diagnosis> DiagnosisRepository { get; }
 
         public void Save();

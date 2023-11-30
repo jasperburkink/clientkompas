@@ -3,11 +3,12 @@ using AutoMapper;
 using Domain.CVS.Domain;
 using Domain.CVS.Enums;
 
+
 namespace Application.Clients.Queries.GetClients
 {
     public class ClientDto : IMapFrom<Client>
     {
-        private const string SeperatorString = ", ";
+        private const char SeperatorChar = ',';
 
         public int IdentificationNumber { get; set; }
 
@@ -50,16 +51,15 @@ namespace Application.Clients.Queries.GetClients
         public virtual ICollection<WorkingContractDto> WorkingContracts { get; set; }
 
         public string Remarks { get; set; }
-
         public void Mapping(Profile profile)
         {
             // TODO: Get the right text value for the enum values. Depends on language user.
             profile.CreateMap<Client, ClientDto>()
+                .ForMember(cDto => cDto.MaritalStatus, ms => ms.MapFrom(c => c.MaritalStatus.Name))
                 .ForMember(cDto => cDto.Gender, s => s.MapFrom(c => Enum.GetName(typeof(Gender), c.Gender)))
-                .ForMember(cDto => cDto.MaritalStatus, ms => ms.MapFrom(c => Enum.GetName(typeof(MaritalStatus), c.MaritalStatus)))
-                .ForMember(cDto => cDto.DriversLicences, dl => dl.MapFrom(c => string.Join(SeperatorString, c.DriversLicences.Select(dl => Enum.GetName(typeof(DriversLicenceEnum), dl.DriversLicenceCode)))))
+                .ForMember(cDto => cDto.DriversLicences, dl => dl.MapFrom(c => string.Join(SeperatorChar, c.DriversLicences.Select(dl => Enum.GetName(typeof(DriversLicenceEnum), dl.DriversLicenceCode)))))
                 .ForMember(cDto => cDto.BenefitForm, bf => bf.MapFrom(c => Enum.GetName(typeof(BenefitForm), c.BenefitForm)))
-                .ForMember(cDto => cDto.Diagnoses, dDto => dDto.MapFrom(c => string.Join(SeperatorString, c.Diagnoses.Select(d => d.Name))));
+                .ForMember(cDto => cDto.Diagnoses, dDto => dDto.MapFrom(c => string.Join(SeperatorChar, c.Diagnoses.Select(d => d.Name))));
         }
     }
 }

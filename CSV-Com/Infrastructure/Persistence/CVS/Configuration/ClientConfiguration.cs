@@ -17,6 +17,10 @@ namespace Infrastructure.Persistence.CVS.Configuration
             builder.HasMany(c => c.Diagnoses)
                     .WithMany(dl => dl.Clients);
 
+            builder.HasOne(c => c.MaritalStatus)
+               .WithMany(d => d.Clients)
+               .OnDelete(DeleteBehavior.Cascade);
+
             builder.HasMany(c => c.DriversLicences)
                     .WithOne(dl => dl.Client)
                     .OnDelete(DeleteBehavior.Cascade);

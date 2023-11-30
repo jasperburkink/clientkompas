@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Persistence.CVS;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,29 +11,16 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.CVS.Migrations
 {
     [DbContext(typeof(CVSDbContext))]
-    partial class CVSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231006094053_MartialStatusRename")]
+    partial class MartialStatusRename
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
-
-            modelBuilder.Entity("ClientDiagnosis", b =>
-                {
-                    b.Property<int>("ClientsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DiagnosesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ClientsId", "DiagnosesId");
-
-                    b.HasIndex("DiagnosesId");
-
-                    b.ToTable("ClientDiagnosis");
-                });
 
             modelBuilder.Entity("Domain.CVS.Domain.Client", b =>
                 {
@@ -132,6 +120,9 @@ namespace Infrastructure.Persistence.CVS.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime(6)");
 
@@ -149,6 +140,8 @@ namespace Infrastructure.Persistence.CVS.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
 
                     b.ToTable("Diagnosis");
                 });
@@ -340,17 +333,13 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
             modelBuilder.Entity("Domain.CVS.Domain.Diagnosis", b =>
                 {
-                    b.HasOne("Domain.CVS.Domain.Client", null)
-                        .WithMany()
-                        .HasForeignKey("ClientsId")
+                    b.HasOne("Domain.CVS.Domain.Client", "Client")
+                        .WithMany("Diagnoses")
+                        .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.CVS.Domain.Diagnosis", null)
-                        .WithMany()
-                        .HasForeignKey("DiagnosesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("Domain.CVS.Domain.DriversLicence", b =>
@@ -388,6 +377,8 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
             modelBuilder.Entity("Domain.CVS.Domain.Client", b =>
                 {
+                    b.Navigation("Diagnoses");
+
                     b.Navigation("DriversLicences");
 
                     b.Navigation("EmergencyPeople");

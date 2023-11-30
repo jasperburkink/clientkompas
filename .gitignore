@@ -53,4 +53,5 @@ obj/
 /CSV-Com/UpgradeLog.htm
 /POC css framework/tailwind-react/node_modules
 *.user
+/CSV-Com/UpgradeLog2.htm
 .vscode/settings.json
