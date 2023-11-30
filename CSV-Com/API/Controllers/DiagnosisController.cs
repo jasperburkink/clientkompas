@@ -1,10 +1,9 @@
-﻿using Application.Diagnoses.Commands.CreateDiagnosis;
-using Application.Diagnoses.Queries.GetDiagnosis;
-using Microsoft.AspNetCore.Mvc;
+﻿using Application.Common.Exceptions;
+using Application.Diagnoses.Commands.CreateDiagnosis;
 using Application.Diagnoses.Commands.DeleteDiagnosis;
 using Application.Diagnoses.Commands.UpdateDiagnosis;
-using Application.Common.Exceptions;
-using Application.Common.Models;
+using Application.Diagnoses.Queries.GetDiagnosis;
+using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
@@ -58,7 +57,6 @@ namespace API.Controllers
             }
         }
 
-       
         [HttpDelete]
         public async Task<ActionResult> Delete(DeleteDiagnosisCommand command)
         {
@@ -76,6 +74,5 @@ namespace API.Controllers
                 return StatusCode(500, ex);
             }
         }
-
     }
 }
