@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Persistence.CVS;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.CVS.Migrations
 {
     [DbContext(typeof(CVSDbContext))]
-    partial class CVSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231012121120_Updated-Diagnosis-table")]
+    partial class UpdatedDiagnosistable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -89,7 +92,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
-                    b.Property<int>("MaritalStatusId")
+                    b.Property<int>("MaritalStatus")
                         .HasColumnType("int");
 
                     b.Property<string>("PostalCode")
@@ -120,8 +123,6 @@ namespace Infrastructure.Persistence.CVS.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MaritalStatusId");
 
                     b.ToTable("Clients");
                 });
@@ -220,33 +221,6 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     b.ToTable("EmergencyPerson");
                 });
 
-            modelBuilder.Entity("Domain.CVS.Domain.MaritalStatus", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("MaritalStatus");
-                });
-
             modelBuilder.Entity("Domain.CVS.Domain.User", b =>
                 {
                     b.Property<int>("Id")
@@ -327,18 +301,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     b.ToTable("WorkingContract");
                 });
 
-            modelBuilder.Entity("Domain.CVS.Domain.Client", b =>
-                {
-                    b.HasOne("Domain.CVS.Domain.MaritalStatus", "MaritalStatus")
-                        .WithMany("Client")
-                        .HasForeignKey("MaritalStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MaritalStatus");
-                });
-
-            modelBuilder.Entity("Domain.CVS.Domain.Diagnosis", b =>
+            modelBuilder.Entity("ClientDiagnosis", b =>
                 {
                     b.HasOne("Domain.CVS.Domain.Client", null)
                         .WithMany()
@@ -393,11 +356,6 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     b.Navigation("EmergencyPeople");
 
                     b.Navigation("WorkingContracts");
-                });
-
-            modelBuilder.Entity("Domain.CVS.Domain.MaritalStatus", b =>
-                {
-                    b.Navigation("Client");
                 });
 #pragma warning restore 612, 618
         }
