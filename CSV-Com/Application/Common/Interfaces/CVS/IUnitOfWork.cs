@@ -8,6 +8,8 @@ namespace Application.Common.Interfaces.CVS
 
         IRepository<Client> ClientRepository { get; }
 
+        IRepository<Diagnosis> DiagnosisRepository { get; }
+
         public void Save();
 
         public Task SaveAsync(CancellationToken cancellationToken = default);

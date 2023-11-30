@@ -15,12 +15,11 @@ namespace Infrastructure.Persistence.CVS.Configuration
              * But it is needed in the current situation, because there are no repositories for diagnoses, driverslicences, etc.
              */
             builder.HasMany(c => c.Diagnoses)
-                .WithOne(d => d.Client)
-                .OnDelete(DeleteBehavior.Cascade);
+                    .WithMany(dl => dl.Clients);
 
             builder.HasMany(c => c.DriversLicences)
-                .WithOne(dl => dl.Client)
-                .OnDelete(DeleteBehavior.Cascade);
+                    .WithOne(dl => dl.Client)
+                    .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(c => c.EmergencyPeople)
                 .WithOne(ep => ep.Client)
