@@ -4,10 +4,7 @@ using Application.Clients.Commands.DeleteClientDriversLicence;
 using Application.Clients.Commands.UpdateClient;
 using Application.Clients.Queries.GetClients;
 using Application.Common.Exceptions;
-using Application.Common.Interfaces.CVS;
-using Domain.CVS.Domain;
 using Microsoft.AspNetCore.Mvc;
-using System.Web.Http.Cors;
 
 namespace API.Controllers
 {

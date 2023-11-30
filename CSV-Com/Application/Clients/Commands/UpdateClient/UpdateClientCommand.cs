@@ -1,15 +1,15 @@
-﻿using Application.Common.Exceptions;
+﻿using Application.Clients.Queries.GetClients;
+using Application.Common.Exceptions;
 using Application.Common.Interfaces.CVS;
-using Application.Clients.Queries.GetClients;
 using AutoMapper;
 using Domain.CVS.Domain;
-using MediatR;
 using Domain.CVS.Enums;
+using MediatR;
 
 namespace Application.Clients.Commands.UpdateClient
 {
-        public record UpdateClientCommand : IRequest<ClientDto>
-        {
+    public record UpdateClientCommand : IRequest<ClientDto>
+    {
         public int Id { get; init; }
 
         public string FirstName { get; init; }
@@ -53,67 +53,64 @@ namespace Application.Clients.Commands.UpdateClient
         public string Remarks { get; set; }
     }
 
-        public class UpdateClientCommandHandler : IRequestHandler<UpdateClientCommand, ClientDto>
+    public class UpdateClientCommandHandler : IRequestHandler<UpdateClientCommand, ClientDto>
+    {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+
+        public UpdateClientCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            private readonly IUnitOfWork _unitOfWork;
-            private readonly IMapper _mapper;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+        }
 
-            public UpdateClientCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
-            {
-                _unitOfWork = unitOfWork;
-                _mapper = mapper;
-            }
+        public async Task<ClientDto> Handle(UpdateClientCommand request, CancellationToken cancellationToken)
+        {
+            var client = await _unitOfWork.ClientRepository.GetByIDAsync(request.Id, cancellationToken)
+                ?? throw new NotFoundException(nameof(Client), request.Id);
 
-            public async Task<ClientDto> Handle(UpdateClientCommand request, CancellationToken cancellationToken)
-            {
-                var client = await _unitOfWork.ClientRepository.GetByIDAsync(request.Id, cancellationToken);
-                if (client == null)
-                {
-                    throw new NotFoundException(nameof(Client), request.Id);
-                }
+            client.FirstName = request.FirstName;
 
-                client.FirstName = request.FirstName;
+            client.Initials = request.Initials;
 
-                client.Initials = request.Initials;
+            client.PrefixLastName = request.PrefixLastName;
 
-                client.PrefixLastName = request.PrefixLastName;
+            client.LastName = request.LastName;
 
-                client.LastName = request.LastName;
+            client.Gender = request.Gender;
 
-                client.Gender = request.Gender;
+            client.StreetName = request.StreetName;
 
-                client.StreetName = request.StreetName;
+            client.HouseNumber = request.HouseNumber;
 
-                client.HouseNumber = request.HouseNumber;
+            client.HouseNumberAddition = request.HouseNumberAddition;
 
-                client.HouseNumberAddition = request.HouseNumberAddition;
+            client.PostalCode = request.PostalCode;
 
-                client.PostalCode = request.PostalCode;
+            client.Residence = request.Residence;
 
-                client.Residence = request.Residence;
+            client.TelephoneNumber = request.TelephoneNumber;
 
-                client.TelephoneNumber = request.TelephoneNumber;
+            client.DateOfBirth = request.DateOfBirth;
 
-                client.DateOfBirth = request.DateOfBirth;
+            client.EmailAddress = request.EmailAddress;
 
-                client.EmailAddress = request.EmailAddress;
+            client.BenefitForm = request.BenefitForm;
 
-                client.BenefitForm = request.BenefitForm;
+            client.EmergencyPeople = request.EmergencyPeople;
 
-                client.EmergencyPeople = request.EmergencyPeople;
+            client.MaritalStatus = request.MaritalStatus;
 
-                client.MaritalStatus = request.MaritalStatus;
+            client.Remarks = request.Remarks;
 
-                client.Remarks = request.Remarks;
+            client.DriversLicences = request.DriversLicences;
 
-                client.DriversLicences = request.DriversLicences;
+            client.Diagnoses = request.Diagnoses;
 
-                client.Diagnoses = request.Diagnoses;
+            await _unitOfWork.SaveAsync(cancellationToken);
 
-                await _unitOfWork.SaveAsync(cancellationToken);
-
-                return _mapper.Map<ClientDto>(client);
-            }
+            return _mapper.Map<ClientDto>(client);
         }
     }
+}
 
