@@ -10,6 +10,8 @@ namespace Application.Common.Interfaces.CVS
 
         IRepository<DriversLicence> DriversLicenceRepository { get; }
 
+        IRepository<Diagnosis> DiagnosisRepository { get; }
+
         public void Save();
 
         public Task SaveAsync(CancellationToken cancellationToken = default);

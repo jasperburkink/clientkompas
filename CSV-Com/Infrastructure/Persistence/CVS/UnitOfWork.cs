@@ -13,6 +13,9 @@ namespace Infrastructure.Persistence.CVS
         private GenericRepository<Client> clientRepository;
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
         private GenericRepository<DriversLicence> driversLicenceRepository;
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
+        private GenericRepository<Diagnosis> diagnosisRepository;
+
         public UnitOfWork(CVSDbContext context)
         {
             _context = context;
@@ -25,6 +28,16 @@ namespace Infrastructure.Persistence.CVS
 
                 userRepository ??= new GenericRepository<User>(_context);
                 return userRepository;
+            }
+        }
+
+        public IRepository<Diagnosis> DiagnosisRepository
+        {
+            get
+            {
+
+                diagnosisRepository ??= new GenericRepository<Diagnosis>(_context);
+                return diagnosisRepository;
             }
         }
 

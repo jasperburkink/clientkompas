@@ -63,6 +63,27 @@ namespace Infrastructure.Persistence.CVS.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "Diagnosis",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Created = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    LastModified = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModifiedBy = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Diagnosis", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "DriversLicence",
                 columns: table => new
                 {
@@ -70,7 +91,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Category = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Omschrijving = table.Column<string>(type: "longtext", nullable: false)
+                    Description = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Created = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     CreatedBy = table.Column<string>(type: "longtext", nullable: true)
@@ -107,34 +128,6 @@ namespace Infrastructure.Persistence.CVS.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Diagnosis",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ClientId = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Created = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    CreatedBy = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    LastModified = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    LastModifiedBy = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Diagnosis", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Diagnosis_Clients_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "Clients",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -202,6 +195,31 @@ namespace Infrastructure.Persistence.CVS.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "ClientDiagnosis",
+                columns: table => new
+                {
+                    ClientsId = table.Column<int>(type: "int", nullable: false),
+                    DiagnosesId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClientDiagnosis", x => new { x.ClientsId, x.DiagnosesId });
+                    table.ForeignKey(
+                        name: "FK_ClientDiagnosis_Clients_ClientsId",
+                        column: x => x.ClientsId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ClientDiagnosis_Diagnosis_DiagnosesId",
+                        column: x => x.DiagnosesId,
+                        principalTable: "Diagnosis",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "ClientDriversLicence",
                 columns: table => new
                 {
@@ -227,14 +245,14 @@ namespace Infrastructure.Persistence.CVS.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ClientDiagnosis_DiagnosesId",
+                table: "ClientDiagnosis",
+                column: "DiagnosesId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ClientDriversLicence_DriversLicencesId",
                 table: "ClientDriversLicence",
                 column: "DriversLicencesId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Diagnosis_ClientId",
-                table: "Diagnosis",
-                column: "ClientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EmergencyPerson_ClientId",
@@ -251,10 +269,10 @@ namespace Infrastructure.Persistence.CVS.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ClientDriversLicence");
+                name: "ClientDiagnosis");
 
             migrationBuilder.DropTable(
-                name: "Diagnosis");
+                name: "ClientDriversLicence");
 
             migrationBuilder.DropTable(
                 name: "EmergencyPerson");
@@ -264,6 +282,9 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
             migrationBuilder.DropTable(
                 name: "WorkingContract");
+
+            migrationBuilder.DropTable(
+                name: "Diagnosis");
 
             migrationBuilder.DropTable(
                 name: "DriversLicence");
