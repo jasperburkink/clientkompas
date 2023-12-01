@@ -16,6 +16,7 @@ import { NavTitle } from '../components/nav/nav-title';
 import { InputFieldWithLabel } from '../components/common/input-field-with-label';
 import { SlideToggleLabel } from '../components/common/slide-toggle-label';
 import { DatePicker } from '../components/common/datepicker';
+import Textarea from "../components/common/Textarea"
 import { Dropdown } from '../components/common/dropdown';
 import DropdownWithButton from "../components/common/dropdown-with-button"
 
@@ -170,6 +171,11 @@ function App() {
 
                 <p>ProfilePicture Maurice</p>
                 <ProfilePicture pictureUrl='https://media.licdn.com/dms/image/C5603AQG1ibjUUZ7NFQ/profile-displayphoto-shrink_800_800/0/1655221337005?e=2147483647&v=beta&t=KKnYXDtk5PeT9utOaIAjUPjDLqk55-IrkCu1R5GuaRg' />
+                
+                <p>Textarea component</p>
+                <Textarea text="Voeg een opmerking toe"/>
+
+
              
                 <p>Dropdown</p>
                 <Dropdown  options={data} required={false} inputfieldname='dropdown' />

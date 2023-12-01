@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import './dropdown.css';
 import './dropdown-with-button.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAsterisk , faPlus,faXmark,faAngleDown} from "@fortawesome/free-solid-svg-icons";
+import { faAsterisk , faPlus,faXmark} from "@fortawesome/free-solid-svg-icons";
 
 interface IDropdownObject {
     value: number;
@@ -66,7 +67,6 @@ const DropdownWithButton = (props: IDropDownProps) => {
                 <button className='add-extra-dropdown-btn' type='button'  onClick={addBadge}>
                     <FontAwesomeIcon className='ml-[0]' icon={faPlus} size="xl" style={{color: "#000000",}} />
                 </button>
-                {props.required === true && <FontAwesomeIcon icon={faAsterisk} className="fa-solid fa-1x"/>}
             </div>
             <div className='flex flex-wrap max-w-[100%]'>
                 {badges.map((badge, index) => (  

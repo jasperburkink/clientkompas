@@ -1,4 +1,4 @@
-﻿using Application.Clients.Commands.AddClientDriversLicence;
+﻿using Application.Clients.Commands.AddDriversLicenceToClient;
 using Application.Clients.Commands.CreateClient;
 using Application.Clients.Commands.DeleteClientDriversLicence;
 using Application.Clients.Queries.GetClients;
@@ -34,14 +34,14 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> Create(CreateClientCommand command)
+        public async Task<ActionResult<ClientDto>> Create(CreateClientCommand command)
         {
             return await Mediator.Send(command);
         }
 
         [Route("[action]")]
         [HttpPost]
-        public async Task<ActionResult<int>> AddDriversLicence(AddClientDriversLicenceCommand command)
+        public async Task<ActionResult<ClientDto>> AddDriversLicence(AddDriversLicenceToClientCommand command)
         {
             return await Mediator.Send(command);
         }
