@@ -17,6 +17,7 @@ import Client from '../types/model/Client';
 import '../utils/Utilities';
 import Moment from 'moment';
 import { fetchClient } from '../utils/api';
+import SearchClients from '../components/clients/search-clients';
 
 let noInfo = 'Geen informatie beschikbaar';
 let dateFormat = 'DD-MM-yyyy';
@@ -70,14 +71,14 @@ function Clients() {
                         <NavButton text="Uitloggen" icon="Uitloggen" />
                     </Sidebar>
                     <SidebarGray>
-                        <NavTitle lijstNaam="Naam Lijst" />
-                        {/* <SearchInputField /> */}
-                        <div className="h-fit">
+                        <NavTitle lijstNaam="Cliënten" />
+                        <SearchClients />
+                        {/* <div className="h-fit">
                             <NavButtonGray text="Onderdeel lijst" />
                             <NavButtonGray text="Placeholder" />
                             <NavButtonGray text="HolderPlace" />
                             <NavButtonGray text="Placie Holderie" />
-                        </div>
+                        </div> */}
                     </SidebarGray>    
                 </div>
                 <div className="clients">
