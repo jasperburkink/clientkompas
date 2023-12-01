@@ -1,6 +1,6 @@
-﻿using System.Reflection;
-using Domain.CVS.Domain;
+﻿using Domain.CVS.Domain;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace Infrastructure.Persistence.CVS
 {
@@ -9,6 +9,11 @@ namespace Infrastructure.Persistence.CVS
         public DbSet<User> Users { get; set; }
 
         public DbSet<Client> Clients { get; set; }
+        public DbSet<DriversLicence> DriversLicence { get; set; }
+
+        public DbSet<Diagnosis> Diagnosis { get; set; }
+
+        public DbSet<MaritalStatus> MaritalStatus { get; set; }
 
         public DbSet<BenefitForm> BenefitForm { get; set; }
 

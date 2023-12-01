@@ -56,7 +56,6 @@ namespace API.Controllers
             }
         }
 
-
         [HttpDelete]
         public async Task<ActionResult> Delete(DeleteBenefitFormCommand command)
         {
@@ -78,6 +77,5 @@ namespace API.Controllers
                 return StatusCode(500, ex);
             }
         }
-
     }
 }

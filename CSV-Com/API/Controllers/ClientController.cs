@@ -1,4 +1,4 @@
-﻿using Application.Clients.Commands.AddClientDriversLicence;
+﻿using Application.Clients.Commands.AddDriversLicenceToClient;
 using Application.Clients.Commands.CreateClient;
 using Application.Clients.Commands.DeleteClientDriversLicence;
 using Application.Clients.Queries.GetClients;
@@ -19,11 +19,18 @@ namespace API.Controllers
             return await Mediator.Send(query);
         }
 
-        //TODO: implement with new Mediator structure
         [HttpGet("{id}")]
-        public Client Get(int id)
+        public async Task<ActionResult<ClientDto>> Get(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var client = await Mediator.Send(new GetClientQuery { ClientId = id });
+                return Ok(client);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
         }
 
         [HttpPost]
@@ -34,7 +41,7 @@ namespace API.Controllers
 
         [Route("[action]")]
         [HttpPost]
-        public async Task<ActionResult<int>> AddDriversLicence(AddClientDriversLicenceCommand command)
+        public async Task<ActionResult<ClientDto>> AddDriversLicence(AddDriversLicenceToClientCommand command)
         {
             return await Mediator.Send(command);
         }

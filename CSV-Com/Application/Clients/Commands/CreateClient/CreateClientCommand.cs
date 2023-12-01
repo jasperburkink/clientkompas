@@ -39,7 +39,7 @@ namespace Application.Clients.Commands.CreateClient
 
         public string EmailAddress { get; set; }
 
-        public MaritalStatus MaritalStatus { get; set; }
+        public int MaritalStatusid { get; set; }
 
         public int BenefitFormid { get; set; }
 
@@ -62,6 +62,9 @@ namespace Application.Clients.Commands.CreateClient
 
             var benefitForm = await _unitOfWork.BenefitFormRepository.GetByIDAsync(request.BenefitFormid, cancellationToken)
                 ?? throw new NotFoundException(nameof(BenefitForm), request.BenefitFormid);
+            var maritalStatus = await _unitOfWork.MaritalStatusRepository.GetByIDAsync(request.MaritalStatusid, cancellationToken)
+                ?? throw new NotFoundException(nameof(MaritalStatus), request.MaritalStatusid);
+
             var client = new Client
             {
                 IdentificationNumber = request.IdentificationNumber,
@@ -78,8 +81,9 @@ namespace Application.Clients.Commands.CreateClient
                 TelephoneNumber = request.TelephoneNumber,
                 DateOfBirth = request.DateOfBirth,
                 EmailAddress = request.EmailAddress,
-                MaritalStatus = request.MaritalStatus,
                 BenefitForm = benefitForm,
+                MaritalStatus = maritalStatus,
+
                 Remarks = request.Remarks
             };
 

@@ -9,13 +9,11 @@ namespace Infrastructure.Persistence.CVS
     {
         private readonly ILogger<CVSDbContextInitialiser> _logger;
         private readonly CVSDbContext _context;
-
         public CVSDbContextInitialiser(ILogger<CVSDbContextInitialiser> logger, CVSDbContext context)
         {
             _logger = logger;
             _context = context;
         }
-
         public async Task InitialiseAsync()
         {
             try
@@ -31,7 +29,6 @@ namespace Infrastructure.Persistence.CVS
                 throw;
             }
         }
-
         public async Task SeedAsync()
         {
             try
@@ -44,7 +41,6 @@ namespace Infrastructure.Persistence.CVS
                 throw;
             }
         }
-
         public async Task TrySeedAsync()
         {
             // Default data
@@ -72,6 +68,25 @@ namespace Infrastructure.Persistence.CVS
 
 
 
+            MaritalStatus martitalStatus;
+            var maritalStatusId = 1;
+
+            if (!_context.MaritalStatus.Any(ms => ms.Id.Equals(maritalStatusId)))
+            {
+                martitalStatus = new MaritalStatus
+                {
+                    Id = maritalStatusId,
+                    Name = "Unmarried"
+                };
+
+                _context.MaritalStatus.Add(martitalStatus);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                martitalStatus = _context.MaritalStatus.First(ms => ms.Id.Equals(maritalStatusId));
+            }
+
             if (!_context.Clients.Any())
             {
                 _context.Clients.Add(new Client
@@ -91,15 +106,7 @@ namespace Infrastructure.Persistence.CVS
                     TelephoneNumber = "0623456789",
                     DateOfBirth = new DateOnly(1990, 5, 14),
                     EmailAddress = "a@b.com",
-                    MaritalStatus = MaritalStatus.Unmarried,
-                    DriversLicences =
-                    {
-                        new DriversLicence
-                        {
-                            Id = 1,
-                            DriversLicenceCode = DriversLicenceEnum.B
-                        }
-                    },
+                    MaritalStatus = martitalStatus,
                     EmergencyPeople =
                     {
                         new EmergencyPerson
@@ -107,19 +114,12 @@ namespace Infrastructure.Persistence.CVS
                             Id = 1,
                             Name = "Piet Pietersen",
                             TelephoneNumber = "0123456789"
-                        }
-                    },
-                    Diagnoses =
-                    {
-                        new Diagnosis
-                        {
-                            Id = 1,
-                            Name = "ADHD"
                         },
-                        new Diagnosis
+                        new EmergencyPerson
                         {
                             Id = 2,
-                            Name = "Autismespectrumstoornis (ASS)"
+                            Name = "Frans Duits",
+                            TelephoneNumber = "098765321"
                         }
                     },
                     BenefitForm = benefitForm,
@@ -133,11 +133,19 @@ namespace Infrastructure.Persistence.CVS
                             ContractType = ContractType.Temporary,
                             FromDate = new DateOnly(2023, 1, 1),
                             ToDate = new DateOnly(2024, 1, 1)
+                        },
+                        new WorkingContract
+                        {
+                            Id = 2,
+                            CompanyName = "De Nederlandse regering",
+                            Function = "Minister president",
+                            ContractType = ContractType.Permanent,
+                            FromDate = new DateOnly(2010, 1, 1),
+                            ToDate = new DateOnly(2023, 1, 1)
                         }
                     },
                     Remarks = "Jan is een geweldig persoon om mee samen te werken."
                 });
-
                 await _context.SaveChangesAsync();
             }
         }
