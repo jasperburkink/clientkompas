@@ -5,8 +5,6 @@ namespace Domain.CVS.Domain
 {
     public class Client : BaseAuditableEntity
     {
-        public int IdentificationNumber { get; set; }
-
         public string FirstName { get; set; }
 
         public string Initials { get; set; }
@@ -44,6 +42,8 @@ namespace Domain.CVS.Domain
         public BenefitForm BenefitForm { get; set; }
 
         public virtual ICollection<WorkingContract> WorkingContracts { get; set; } = new List<WorkingContract>();
+
+        public DateTime? DeactivationDateAndTime { get; set; }
 
         public string Remarks { get; set; }
     }

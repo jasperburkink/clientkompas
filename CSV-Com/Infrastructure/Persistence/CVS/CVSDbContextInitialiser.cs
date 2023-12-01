@@ -92,7 +92,6 @@ namespace Infrastructure.Persistence.CVS
                 _context.Clients.Add(new Client
                 {
                     Id = 1,
-                    IdentificationNumber = 123456789,
                     FirstName = "Jan",
                     Initials = "J",
                     PrefixLastName = "",

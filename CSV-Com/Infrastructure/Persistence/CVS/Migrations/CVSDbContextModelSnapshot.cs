@@ -94,6 +94,9 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     b.Property<DateOnly>("DateOfBirth")
                         .HasColumnType("date");
 
+                    b.Property<DateTime?>("DeactivationDateAndTime")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("EmailAddress")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -112,9 +115,6 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     b.Property<string>("HouseNumberAddition")
                         .IsRequired()
                         .HasColumnType("longtext");
-
-                    b.Property<int>("IdentificationNumber")
-                        .HasColumnType("int");
 
                     b.Property<string>("Initials")
                         .IsRequired()
