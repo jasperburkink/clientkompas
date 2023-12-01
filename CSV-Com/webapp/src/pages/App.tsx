@@ -17,8 +17,24 @@ import { InputFieldWithLabel } from '../components/common/input-field-with-label
 import { SlideToggleLabel } from '../components/common/slide-toggle-label';
 import { DatePicker } from '../components/common/datepicker';
 import Textarea from "../components/common/Textarea"
+import { Dropdown } from '../components/common/dropdown';
+import DropdownWithButton from "../components/common/dropdown-with-button"
 
 function App() {
+    const data = [
+        {
+            label: "ADHD",
+            value: 1,
+        },
+        {
+            label: "Asperger",
+            value: 2,
+        },
+        {
+            label: "SBICT",
+            value: 3,
+        },
+    ];
     return (
         <div className="md:flex">    
             <div className='md:flex'>
@@ -159,6 +175,14 @@ function App() {
                 <p>Textarea component</p>
                 <Textarea text="Voeg een opmerking toe"/>
 
+
+             
+                <p>Dropdown</p>
+                <Dropdown  options={data} required={false} inputfieldname='dropdown' />
+             
+                <p>Dropdown with button</p>
+                <DropdownWithButton options={data} required={false} inputfieldname='dropdownWithButton' />
+                            
             </div>
             <Copyright />
         </div>
