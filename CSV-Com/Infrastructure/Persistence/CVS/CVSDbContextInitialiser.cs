@@ -43,6 +43,31 @@ namespace Infrastructure.Persistence.CVS
         }
         public async Task TrySeedAsync()
         {
+            // Default data
+            // Seed, if necessary
+            // TODO: Maybe only when debugging
+            BenefitForm benefitForm;
+            var benefitFormId = 1;
+
+            if (!_context.BenefitForm.Any(ms => ms.Id.Equals(benefitFormId)))
+            {
+                benefitForm = new BenefitForm
+                {
+                    Id = benefitFormId,
+                    Name = "Bijstand"
+                };
+
+                _context.BenefitForm.Add(benefitForm);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                benefitForm = _context.BenefitForm.First(ms => ms.Id.Equals(benefitFormId));
+            }
+
+
+
+
             MaritalStatus martitalStatus;
             var maritalStatusId = 1;
 
@@ -97,20 +122,7 @@ namespace Infrastructure.Persistence.CVS
                             TelephoneNumber = "098765321"
                         }
                     },
-                    Diagnoses =
-                    {
-                        new Diagnosis
-                        {
-                            Id = 1,
-                            Name = "ADHD"
-                        },
-                        new Diagnosis
-                        {
-                            Id = 2,
-                            Name = "Autismespectrumstoornis (ASS)"
-                        }
-                    },
-                    BenefitForm = BenefitForm.Bijstand,
+                    BenefitForm = benefitForm,
                     WorkingContracts =
                     {
                         new WorkingContract

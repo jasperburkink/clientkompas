@@ -14,6 +14,8 @@ namespace Application.Common.Interfaces.CVS
 
         IRepository<Diagnosis> DiagnosisRepository { get; }
 
+        IRepository<BenefitForm> BenefitFormRepository { get; }
+
         public void Save();
 
         public Task SaveAsync(CancellationToken cancellationToken = default);

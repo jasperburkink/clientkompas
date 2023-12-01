@@ -16,6 +16,8 @@ namespace Infrastructure.Persistence.CVS
         private GenericRepository<Diagnosis> diagnosisRepository;
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
         private GenericRepository<MaritalStatus> maritalStatusRepository;
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
+        private GenericRepository<BenefitForm> benefitFormRepository;
 
         public UnitOfWork(CVSDbContext context)
         {
@@ -69,6 +71,17 @@ namespace Infrastructure.Persistence.CVS
                 return maritalStatusRepository;
             }
         }
+
+        public IRepository<BenefitForm> BenefitFormRepository
+        {
+            get
+            {
+                benefitFormRepository ??= new GenericRepository<BenefitForm>(_context);
+                return benefitFormRepository;
+            }
+        }
+
+
 
         public void Save()
         {

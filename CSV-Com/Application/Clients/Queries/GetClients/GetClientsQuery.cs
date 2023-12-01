@@ -3,7 +3,6 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
 
-
 namespace Application.Clients.Queries.GetClients
 {
     //[Authorize]
@@ -29,7 +28,7 @@ namespace Application.Clients.Queries.GetClients
         public async Task<IEnumerable<ClientDto>> Handle(GetClientsQuery request, CancellationToken cancellationToken)
         {
             // TODO: Find a better solution for including properties.
-            return (await _unitOfWork.ClientRepository.GetAsync(includeProperties: "MaritalStatus,DriversLicences,Diagnoses,EmergencyPeople,WorkingContracts"))
+            return (await _unitOfWork.ClientRepository.GetAsync(includeProperties: "MaritalStatus,BenefitForm,DriversLicences,Diagnoses,EmergencyPeople,WorkingContracts"))
                 .AsQueryable()
                 .ProjectTo<ClientDto>(_mapper.ConfigurationProvider)
                 .OrderBy(c => c.LastName)

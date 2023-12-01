@@ -24,6 +24,10 @@ namespace Infrastructure.Persistence.CVS.Configuration
             builder.HasMany(c => c.DriversLicences)
                 .WithMany(dl => dl.Clients);
 
+            builder.HasOne(c => c.BenefitForm)
+                .WithMany(d => d.Clients)
+                .OnDelete(DeleteBehavior.Cascade);
+
             builder.HasMany(c => c.EmergencyPeople)
                 .WithOne(ep => ep.Client)
                 .OnDelete(DeleteBehavior.Cascade);

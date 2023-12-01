@@ -15,6 +15,27 @@ namespace Infrastructure.Persistence.CVS.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "BenefitForm",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Created = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    LastModified = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModifiedBy = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BenefitForm", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "Diagnosis",
                 columns: table => new
                 {
@@ -135,7 +156,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     EmailAddress = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     MaritalStatusId = table.Column<int>(type: "int", nullable: false),
-                    BenefitForm = table.Column<int>(type: "int", nullable: false),
+                    BenefitFormId = table.Column<int>(type: "int", nullable: false),
                     Remarks = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Created = table.Column<DateTime>(type: "datetime(6)", nullable: false),
@@ -148,6 +169,12 @@ namespace Infrastructure.Persistence.CVS.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Clients", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Clients_BenefitForm_BenefitFormId",
+                        column: x => x.BenefitFormId,
+                        principalTable: "BenefitForm",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Clients_MaritalStatus_MaritalStatusId",
                         column: x => x.MaritalStatusId,
@@ -281,6 +308,11 @@ namespace Infrastructure.Persistence.CVS.Migrations
                 column: "DriversLicencesId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Clients_BenefitFormId",
+                table: "Clients",
+                column: "BenefitFormId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Clients_MaritalStatusId",
                 table: "Clients",
                 column: "MaritalStatusId");
@@ -322,6 +354,9 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
             migrationBuilder.DropTable(
                 name: "Clients");
+
+            migrationBuilder.DropTable(
+                name: "BenefitForm");
 
             migrationBuilder.DropTable(
                 name: "MaritalStatus");

@@ -15,6 +15,8 @@ namespace Infrastructure.Persistence.CVS
 
         public DbSet<MaritalStatus> MaritalStatus { get; set; }
 
+        public DbSet<BenefitForm> BenefitForm { get; set; }
+
         public CVSDbContext(DbContextOptions<CVSDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder builder)

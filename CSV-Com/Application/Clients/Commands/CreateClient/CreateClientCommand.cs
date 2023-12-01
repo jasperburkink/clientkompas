@@ -41,7 +41,7 @@ namespace Application.Clients.Commands.CreateClient
 
         public int MaritalStatusid { get; set; }
 
-        public BenefitForm BenefitForm { get; set; }
+        public int BenefitFormid { get; set; }
 
         public string Remarks { get; set; }
     }
@@ -59,6 +59,9 @@ namespace Application.Clients.Commands.CreateClient
 
         public async Task<ClientDto> Handle(CreateClientCommand request, CancellationToken cancellationToken)
         {
+
+            var benefitForm = await _unitOfWork.BenefitFormRepository.GetByIDAsync(request.BenefitFormid, cancellationToken)
+                ?? throw new NotFoundException(nameof(BenefitForm), request.BenefitFormid);
             var maritalStatus = await _unitOfWork.MaritalStatusRepository.GetByIDAsync(request.MaritalStatusid, cancellationToken)
                 ?? throw new NotFoundException(nameof(MaritalStatus), request.MaritalStatusid);
 
@@ -78,8 +81,9 @@ namespace Application.Clients.Commands.CreateClient
                 TelephoneNumber = request.TelephoneNumber,
                 DateOfBirth = request.DateOfBirth,
                 EmailAddress = request.EmailAddress,
+                BenefitForm = benefitForm,
                 MaritalStatus = maritalStatus,
-                BenefitForm = request.BenefitForm,
+
                 Remarks = request.Remarks
             };
 
