@@ -1,6 +1,6 @@
-﻿using Application.Clients.Commands.AddClientDriversLicence;
+﻿using Application.Clients.Commands.AddDriversLicenceToClient;
 using Application.Clients.Commands.CreateClient;
-using Application.Clients.Commands.DeactiverenClient;
+using Application.Clients.Commands.DeactivateClient;
 using Application.Clients.Commands.DeleteClientDriversLicence;
 using Application.Clients.Queries.GetClients;
 using Application.Clients.Queries.SearchClients;
@@ -21,22 +21,29 @@ namespace API.Controllers
             return await Mediator.Send(query);
         }
 
-        //TODO: implement with new Mediator structure
         [HttpGet("{id}")]
-        public Client Get(int id)
+        public async Task<ActionResult<ClientDto>> Get(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var client = await Mediator.Send(new GetClientQuery { ClientId = id });
+                return Ok(client);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> Create(CreateClientCommand command)
+        public async Task<ActionResult<ClientDto>> Create(CreateClientCommand command)
         {
             return await Mediator.Send(command);
         }
 
         [Route("[action]")]
         [HttpPost]
-        public async Task<ActionResult<int>> AddDriversLicence(AddClientDriversLicenceCommand command)
+        public async Task<ActionResult<ClientDto>> AddDriversLicence(AddDriversLicenceToClientCommand command)
         {
             return await Mediator.Send(command);
         }
@@ -48,8 +55,8 @@ namespace API.Controllers
             throw new NotImplementedException();
         }
 
-        [HttpPut("DeactiverenCliënt")]
-        public async Task<ActionResult<ClientDto>> Put(DeactiverenClientCommand command)
+        [HttpPut("DeactivateCliënt")]
+        public async Task<ActionResult<ClientDto>> Put(DeactivateClientCommand command)
         {
             try
             {
