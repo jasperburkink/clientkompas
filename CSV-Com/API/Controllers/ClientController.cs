@@ -55,7 +55,7 @@ namespace API.Controllers
             throw new NotImplementedException();
         }
 
-        [HttpPut("DeactivateCliënt")]
+        [HttpPut("DeactivateClient")]
         public async Task<ActionResult<ClientDto>> Put(DeactivateClientCommand command)
         {
             try
