@@ -1,9 +1,11 @@
-﻿using Application.Clients.Commands.AddClientDriversLicence;
+﻿using Application.Clients.Commands.AddDriversLicenceToClient;
 using Application.Clients.Commands.CreateClient;
+using Application.Clients.Commands.DeactivateClient;
 using Application.Clients.Commands.DeleteClientDriversLicence;
 using Application.Clients.Commands.UpdateClient;
 using Application.Clients.Dtos;
 using Application.Clients.Queries.GetClients;
+using Application.Clients.Queries.SearchClients;
 using Application.Common.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -42,13 +44,31 @@ namespace API.Controllers
 
         [Route("[action]")]
         [HttpPost]
-        public async Task<ActionResult<int>> AddDriversLicence(AddClientDriversLicenceCommand command)
+        public async Task<ActionResult<ClientDto>> AddDriversLicence(AddDriversLicenceToClientCommand command)
         {
             return await Mediator.Send(command);
         }
 
         [HttpPut]
         public async Task<ActionResult<ClientDto>> Put(UpdateClientCommand command)
+        {
+            try
+            {
+                var result = await Mediator.Send(command);
+                return Ok(result);
+            }
+            catch (NotFoundException ex)
+            {
+                return StatusCode(404, ex);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
+        }
+
+        [HttpPut("DeactivateClient")]
+        public async Task<ActionResult<ClientDto>> Put(DeactivateClientCommand command)
         {
             try
             {
@@ -82,6 +102,21 @@ namespace API.Controllers
             await Mediator.Send(command);
 
             return NoContent();
+        }
+
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult<IEnumerable<SearchClientDto>>> SearchClients([FromQuery] SearchClientsQuery query)
+        {
+            try
+            {
+                var clients = await Mediator.Send(query);
+                return Ok(clients);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
         }
     }
 }

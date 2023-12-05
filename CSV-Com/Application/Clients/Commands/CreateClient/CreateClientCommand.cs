@@ -1,4 +1,5 @@
 ﻿using Application.Clients.Dtos;
+using Application.Common.Exceptions;
 using Application.Common.Interfaces.CVS;
 using AutoMapper;
 using Domain.CVS.Domain;
@@ -6,14 +7,10 @@ using Domain.CVS.Enums;
 using Domain.CVS.Events;
 using MediatR;
 
-
-
 namespace Application.Clients.Commands.CreateClient
 {
     public record CreateClientCommand : IRequest<ClientDto>
     {
-        public int IdentificationNumber { get; init; }
-
         public string FirstName { get; init; }
 
         public string Initials { get; init; }
@@ -40,9 +37,9 @@ namespace Application.Clients.Commands.CreateClient
 
         public string EmailAddress { get; set; }
 
-        public MaritalStatus MaritalStatus { get; set; }
+        public string MaritalStatus { get; set; }
 
-        public BenefitForm BenefitForm { get; set; }
+        public string BenefitForm { get; set; }
 
         public string Remarks { get; set; }
     }
@@ -60,6 +57,13 @@ namespace Application.Clients.Commands.CreateClient
 
         public async Task<ClientDto> Handle(CreateClientCommand request, CancellationToken cancellationToken)
         {
+
+            var benefitForm = (await _unitOfWork.BenefitFormRepository.GetAsync(a => a.Name.Equals(request.BenefitForm, StringComparison.OrdinalIgnoreCase)))?.SingleOrDefault()
+                ?? throw new NotFoundException(nameof(BenefitForm), request.BenefitForm);
+
+            var maritalStatus = (await _unitOfWork.MaritalStatusRepository.GetAsync(a => a.Name.Equals(request.MaritalStatus, StringComparison.OrdinalIgnoreCase)))?.SingleOrDefault()
+              ?? throw new NotFoundException(nameof(BenefitForm), request.BenefitForm);
+
             var client = new Client
             {
                 FirstName = request.FirstName,
@@ -75,8 +79,9 @@ namespace Application.Clients.Commands.CreateClient
                 TelephoneNumber = request.TelephoneNumber,
                 DateOfBirth = request.DateOfBirth,
                 EmailAddress = request.EmailAddress,
-                MaritalStatus = request.MaritalStatus,
-                BenefitForm = request.BenefitForm,
+                BenefitForm = benefitForm,
+                MaritalStatus = maritalStatus,
+
                 Remarks = request.Remarks
             };
 

@@ -5,7 +5,7 @@ namespace Application.Clients.Queries.SearchClients
 {
     public class SearchClientDto : IMapFrom<Client>
     {
-        public int IdentificationNumber { get; set; }
+        public int Id { get; set; }
 
         public string FirstName { get; set; }
 

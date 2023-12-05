@@ -67,6 +67,7 @@ namespace Infrastructure.Persistence.CVS
             {
                 _dbSet.Attach(entityToDelete);
             }
+
             _dbSet.Remove(entityToDelete);
         }
 
@@ -142,6 +143,7 @@ namespace Infrastructure.Persistence.CVS
                 {
                     _dbSet.Attach(entityToDelete);
                 }
+
                 _dbSet.Remove(entityToDelete);
             }, cancellationToken);
         }

@@ -9,13 +9,11 @@ namespace Infrastructure.Persistence.CVS
     {
         private readonly ILogger<CVSDbContextInitialiser> _logger;
         private readonly CVSDbContext _context;
-
         public CVSDbContextInitialiser(ILogger<CVSDbContextInitialiser> logger, CVSDbContext context)
         {
             _logger = logger;
             _context = context;
         }
-
         public async Task InitialiseAsync()
         {
             try
@@ -31,7 +29,6 @@ namespace Infrastructure.Persistence.CVS
                 throw;
             }
         }
-
         public async Task SeedAsync()
         {
             try
@@ -44,12 +41,52 @@ namespace Infrastructure.Persistence.CVS
                 throw;
             }
         }
-
         public async Task TrySeedAsync()
         {
             // Default data
             // Seed, if necessary
             // TODO: Maybe only when debugging
+            BenefitForm benefitForm;
+            var benefitFormId = 1;
+
+            if (!_context.BenefitForm.Any(ms => ms.Id.Equals(benefitFormId)))
+            {
+                benefitForm = new BenefitForm
+                {
+                    Id = benefitFormId,
+                    Name = "Bijstand"
+                };
+
+                _context.BenefitForm.Add(benefitForm);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                benefitForm = _context.BenefitForm.First(ms => ms.Id.Equals(benefitFormId));
+            }
+
+
+
+
+            MaritalStatus martitalStatus;
+            var maritalStatusId = 1;
+
+            if (!_context.MaritalStatus.Any(ms => ms.Id.Equals(maritalStatusId)))
+            {
+                martitalStatus = new MaritalStatus
+                {
+                    Id = maritalStatusId,
+                    Name = "Unmarried"
+                };
+
+                _context.MaritalStatus.Add(martitalStatus);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                martitalStatus = _context.MaritalStatus.First(ms => ms.Id.Equals(maritalStatusId));
+            }
+
             if (!_context.Clients.Any())
             {
                 _context.Clients.Add(new Client
@@ -59,7 +96,7 @@ namespace Infrastructure.Persistence.CVS
                     Initials = "J",
                     PrefixLastName = "",
                     LastName = "Jansen",
-                    Gender = Gender.Men,
+                    Gender = Gender.Man,
                     StreetName = "Dorpstraat",
                     HouseNumber = 1,
                     HouseNumberAddition = "a",
@@ -68,20 +105,7 @@ namespace Infrastructure.Persistence.CVS
                     TelephoneNumber = "0623456789",
                     DateOfBirth = new DateOnly(1990, 5, 14),
                     EmailAddress = "a@b.com",
-                    MaritalStatus = MaritalStatus.Unmarried,
-                    DriversLicences =
-                    {
-                        new DriversLicence
-                        {
-                            Id = 1,
-                            DriversLicenceCode = DriversLicenceEnum.B
-                        },
-                        new DriversLicence
-                        {
-                            Id = 2,
-                            DriversLicenceCode = DriversLicenceEnum.BE
-                        }
-                    },
+                    MaritalStatus = martitalStatus,
                     EmergencyPeople =
                     {
                         new EmergencyPerson
@@ -97,20 +121,7 @@ namespace Infrastructure.Persistence.CVS
                             TelephoneNumber = "098765321"
                         }
                     },
-                    Diagnoses =
-                    {
-                        new Diagnosis
-                        {
-                            Id = 1,
-                            Name = "ADHD"
-                        },
-                        new Diagnosis
-                        {
-                            Id = 2,
-                            Name = "Autismespectrumstoornis (ASS)"
-                        }
-                    },
-                    BenefitForm = BenefitForm.Bijstand,
+                    BenefitForm = benefitForm,
                     WorkingContracts =
                     {
                         new WorkingContract
@@ -134,7 +145,6 @@ namespace Infrastructure.Persistence.CVS
                     },
                     Remarks = "Jan is een geweldig persoon om mee samen te werken."
                 });
-
                 await _context.SaveChangesAsync();
             }
         }

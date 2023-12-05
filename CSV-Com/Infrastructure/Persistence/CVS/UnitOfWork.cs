@@ -3,7 +3,6 @@ using Domain.CVS.Domain;
 
 namespace Infrastructure.Persistence.CVS
 {
-    //TODO: Wijziging
     public class UnitOfWork : IUnitOfWork
     {
         private readonly CVSDbContext _context;
@@ -12,9 +11,13 @@ namespace Infrastructure.Persistence.CVS
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
         private GenericRepository<Client> clientRepository;
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
+        private GenericRepository<DriversLicence> driversLicenceRepository;
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
         private GenericRepository<Diagnosis> diagnosisRepository;
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
-        private GenericRepository<EmergencyPerson> emergencyPersonRepository;
+        private GenericRepository<MaritalStatus> maritalStatusRepository;
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
+        private GenericRepository<BenefitForm> benefitFormRepository;
 
         public UnitOfWork(CVSDbContext context)
         {
@@ -49,15 +52,36 @@ namespace Infrastructure.Persistence.CVS
                 return clientRepository;
             }
         }
-
-        public IRepository<EmergencyPerson> EmergencyPersonRepository
+        public IRepository<DriversLicence> DriversLicenceRepository
         {
             get
             {
-                emergencyPersonRepository ??= new GenericRepository<EmergencyPerson>(_context);
-                return emergencyPersonRepository;
+                driversLicenceRepository ??= new GenericRepository<DriversLicence>(_context);
+                return driversLicenceRepository;
             }
         }
+
+
+
+        public IRepository<MaritalStatus> MaritalStatusRepository
+        {
+            get
+            {
+                maritalStatusRepository ??= new GenericRepository<MaritalStatus>(_context);
+                return maritalStatusRepository;
+            }
+        }
+
+        public IRepository<BenefitForm> BenefitFormRepository
+        {
+            get
+            {
+                benefitFormRepository ??= new GenericRepository<BenefitForm>(_context);
+                return benefitFormRepository;
+            }
+        }
+
+
 
         public void Save()
         {

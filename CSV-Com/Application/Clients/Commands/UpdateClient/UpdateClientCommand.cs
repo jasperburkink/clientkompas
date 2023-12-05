@@ -1,8 +1,11 @@
 ﻿using Application.Clients.Dtos;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces.CVS;
+using Application.Diagnoses.Queries.GetDiagnosis;
+using Application.DriversLicences.Queries;
 using AutoMapper;
 using Domain.CVS.Domain;
+using Domain.CVS.Enums;
 using MediatR;
 
 namespace Application.Clients.Commands.UpdateClient
@@ -11,7 +14,7 @@ namespace Application.Clients.Commands.UpdateClient
     {
         public int Id { get; init; }
 
-        /*public string FirstName { get; init; }
+        public string FirstName { get; init; }
 
         public string Initials { get; init; }
 
@@ -37,17 +40,19 @@ namespace Application.Clients.Commands.UpdateClient
 
         public string EmailAddress { get; set; }
 
-        public MaritalStatus MaritalStatus { get; set; }*/
+        public string MaritalStatus { get; set; }
+
+        public ICollection<DriversLicenceDto> DriversLicences { get; set; }
+
+        public ICollection<DiagnosisDto> Diagnoses { get; set; }
 
         public ICollection<EmergencyPersonDto> EmergencyPeople { get; set; }
 
-        /*  public ICollection<DriversLicenceEnum> DriversLicences { get; set; }
+        public string BenefitForm { get; set; }
 
-          public BenefitForm BenefitForm { get; set; }
+        public ICollection<WorkingContractDto> WorkingContracts { get; set; }
 
-          public ICollection<WorkingContractDto> WorkingContracts { get; set; }
-
-          public string Remarks { get; set; }*/
+        public string Remarks { get; set; }
     }
 
     public class UpdateClientCommandHandler : IRequestHandler<UpdateClientCommand, ClientDto>
@@ -63,11 +68,16 @@ namespace Application.Clients.Commands.UpdateClient
 
         public async Task<ClientDto> Handle(UpdateClientCommand request, CancellationToken cancellationToken)
         {
-            var client = await _unitOfWork.ClientRepository.GetByIDAsync(request.Id, cancellationToken)
+            var client = await _unitOfWork.ClientRepository.GetByIDAsync(request.Id, includeProperties: "EmergencyPeople,WorkingContracts", cancellationToken)
                 ?? throw new NotFoundException(nameof(Client), request.Id);
 
+            var benefitForm = (await _unitOfWork.BenefitFormRepository.GetAsync(a => a.Name == request.BenefitForm))?.SingleOrDefault()
+                ?? throw new NotFoundException(nameof(BenefitForm), request.BenefitForm);
 
-            /*client.FirstName = request.FirstName;
+            var maritalStatus = (await _unitOfWork.MaritalStatusRepository.GetAsync(a => a.Name == request.MaritalStatus))?.SingleOrDefault()
+              ?? throw new NotFoundException(nameof(BenefitForm), request.BenefitForm);
+
+            client.FirstName = request.FirstName;
 
             client.Initials = request.Initials;
 
@@ -93,17 +103,19 @@ namespace Application.Clients.Commands.UpdateClient
 
             client.EmailAddress = request.EmailAddress;
 
-            client.BenefitForm = request.BenefitForm;*/
+            client.BenefitForm = benefitForm;
 
-            client.EmergencyPeople = (ICollection<EmergencyPerson>)request.EmergencyPeople;
+            client.DriversLicences = request.DriversLicences.Select(a => a.ToDomainModel(_mapper, client)).ToList();
 
-            //client.WorkingContracts = (ICollection<WorkingContract>)request.WorkingContracts;
+            client.Diagnoses = request.Diagnoses.Select(a => a.ToDomainModel(_mapper, client)).ToList();
 
-            /*client.MaritalStatus = request.MaritalStatus;
+            client.EmergencyPeople = request.EmergencyPeople.Select(a => a.ToDomainModel(_mapper, client)).ToList();
+
+            client.WorkingContracts = request.WorkingContracts.Select(a => a.ToDomainModel(_mapper, client)).ToList();
+
+            client.MaritalStatus = maritalStatus;
 
             client.Remarks = request.Remarks;
-
-            client.DriversLicences = (ICollection<Domain.CVS.Domain.DriversLicence>)request.DriversLicences;*/
 
             await _unitOfWork.SaveAsync(cancellationToken);
 
