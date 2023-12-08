@@ -1,16 +1,14 @@
 import './search-form.css';
-
 import React, { useState } from "react";
-import { Button } from './button';
 import { InputField } from './input-field';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 interface SearchFormProps {
-    onSearchSubmit: (searchTerm: string) => void;
+    onSearchChange: (searchTerm: string) => void;
   }
 
-const SearchForm: React.FC<SearchFormProps> = ({ onSearchSubmit }) => {
+const SearchForm: React.FC<SearchFormProps> = ({ onSearchChange: onSearchSubmit }) => {
     const [searchTerm, setSearchTerm] = useState<string>('');
   
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

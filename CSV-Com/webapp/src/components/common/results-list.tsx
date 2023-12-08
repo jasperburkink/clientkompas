@@ -1,15 +1,34 @@
 import './results-list.css';
 import ResultItem  from '../../types/common/ResultItem';
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 interface ResultsListProps {
   results: ResultItem[];
+  noResultsText: string;
+  loading: boolean;
 }
 
-const ResultsList: React.FC<ResultsListProps> = ({ results }) => {
-  return (
+const ResultsList: React.FC<ResultsListProps> = (props) => {
+  
+    if(props.loading){
+      return (
+        <div className='w-full content-center'>
+          <FontAwesomeIcon icon={faSpinner} className="fa fa-2x fa-refresh fa-spin" />
+        </div>
+      );
+    }
+
+    if(!props.results || props.results.length <= 0){
+      return (
+        <div>{props.noResultsText}</div>
+      );
+    }
+    
+    return (
     <ul>
-      {results.map((result) => (
+      {props.results.map((result) => (
         <li key={result.id}>{result.name}</li>
       ))}
     </ul>

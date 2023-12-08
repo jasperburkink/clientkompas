@@ -26,6 +26,7 @@ namespace Application.Clients.Queries.SearchClients
             return (await _unitOfWork.ClientRepository.GetAsync())
                 .AsQueryable()
                 .Where(c => // TODO: Welke stringcomparison is het beste voor het vergelijken van strings in een collectie?
+                    string.IsNullOrEmpty(request.SearchTerm) || // TODO: Toevoegen van unittest voor deze situatie, wanneer er geen zoekterm is meegegeven.
                     c.LastName.Contains(request.SearchTerm, StringComparison.OrdinalIgnoreCase) ||
                     c.FirstName.Contains(request.SearchTerm, StringComparison.OrdinalIgnoreCase) ||
                     c.PrefixLastName.Contains(request.SearchTerm, StringComparison.OrdinalIgnoreCase) ||
