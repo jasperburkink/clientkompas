@@ -20,6 +20,12 @@ import Textarea from "../components/common/Textarea";
 import PopUp from "../components/common/PopUp";
 
 function App() {
+    const handleClick = () => {
+    };
+        const handleCancelClick = () => {
+        };
+
+
     return (
         <div className="md:flex">    
             <div className='md:flex'>
@@ -161,8 +167,14 @@ function App() {
                 <Textarea text="Voeg een opmerking toe"/>
                 
                 <p>PopUp component</p>
-                <PopUp/>           
-            </div>
+                <PopUp
+                handleClick={handleClick}
+                handleCancelClick={handleCancelClick} 
+                buttonText="placeholder1" 
+                text="placeholder2"
+                />    
+             </div>
+             
             <Copyright />
         </div>
     );
