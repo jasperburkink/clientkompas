@@ -50,7 +50,7 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<ClientDto>> Put(UpdateClientCommand command)
+        public async Task<ActionResult<ClientDto>> Updateclient(UpdateClientCommand command)
         {
             try
             {
@@ -68,7 +68,7 @@ namespace API.Controllers
         }
 
         [HttpPut("DeactivateClient")]
-        public async Task<ActionResult<ClientDto>> Put(DeactivateClientCommand command)
+        public async Task<ActionResult<ClientDto>> DeactivateClient(DeactivateClientCommand command)
         {
             try
             {
