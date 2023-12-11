@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using API.Policies;
-using Application;
+using Infrastructure;
 using Infrastructure.Persistence.CVS;
 
 var builder = WebApplication.CreateBuilder(args);
