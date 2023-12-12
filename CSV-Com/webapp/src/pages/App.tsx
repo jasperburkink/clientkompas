@@ -18,6 +18,8 @@ import { SlideToggleLabel } from '../components/common/slide-toggle-label';
 import { DatePicker } from '../components/common/datepicker';
 import Textarea from "../components/common/Textarea";
 import PopUp from "../components/common/PopUp";
+import SaveButton from '../components/common/SaveButton';
+
 
 function App() {
     const handleClick = () => {
@@ -173,6 +175,8 @@ function App() {
                 buttonText="placeholder1" 
                 text="placeholder2"
                 />    
+                <p>Save button component</p>
+                <SaveButton/>
              </div>
              
             <Copyright />
