@@ -10,11 +10,13 @@ export function SidebarGray(props) {
 
       if(rotatedeg === "180deg")
         {
+            document.getElementById("staticSidebar").style.marginLeft = "0px"
             document.getElementById("sidebarGray").style.marginLeft = "-430px"
             document.getElementById("sidebarArrow").style.rotate = "0deg";
         }
         else
         {
+            document.getElementById("staticSidebar").style.marginLeft = "430px";
             document.getElementById("sidebarGray").style.marginLeft = "-100px";
             document.getElementById("sidebarArrow").style.rotate = "180deg";
         }

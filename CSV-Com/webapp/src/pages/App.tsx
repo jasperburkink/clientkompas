@@ -16,30 +16,35 @@ import { NavTitle } from '../components/nav/nav-title';
 import { InputFieldWithLabel } from '../components/common/input-field-with-label';
 import { SlideToggleLabel } from '../components/common/slide-toggle-label';
 import { DatePicker } from '../components/common/datepicker';
-import Textarea from "../components/common/Textarea"
+import Textarea from "../components/common/Textarea";
 import { Dropdown } from '../components/common/dropdown';
-import DropdownWithButton from "../components/common/dropdown-with-button"
+import DropdownWithButton from "../components/common/dropdown-with-button";
 
 function App() {
     const data = [
         {
-            label: "ADHD",
-            value: 1,
+            id: 1,
+            name: "ADHD",
+           
         },
         {
-            label: "Asperger",
-            value: 2,
+            id: 2,
+            name: "Asperger",
+    
         },
         {
-            label: "SBICT",
-            value: 3,
+            id: 3,
+            name: "SBICT",
+            
         },
     ];
     return (
-        <div className="md:flex">    
-            <div className='md:flex'>
+        <div className="md:flex">   
+
+            <div id='staticSidebar' className='lg:h-full lg:w-[610px] ease-in-out duration-500'></div>  
+            <div className='md:flex fixed'>
                 <Sidebar>
-                    <NavButton text="Cliënten" icon="Gebruikers" />
+                    <NavButton text="CliÃ«nten" icon="Gebruikers" />
                     <NavButton text="Uren registratie" icon="Klok" />
                     <NavButton text="Organistatie" icon="Gebouw" />
                     <NavButton text="Gebruiker" icon="Gebruiker" />
@@ -175,8 +180,6 @@ function App() {
                 <p>Textarea component</p>
                 <Textarea text="Voeg een opmerking toe"/>
 
-
-             
                 <p>Dropdown</p>
                 <Dropdown  options={data} required={false} inputfieldname='dropdown' />
              
