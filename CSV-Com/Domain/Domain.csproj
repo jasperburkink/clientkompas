@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -8,8 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="CVS\Exceptions\" />
-    <Folder Include="CVS\ValueObjects\" />
+    <Compile Remove="CVS\Exceptions\**" />
+    <Compile Remove="CVS\ValueObjects\**" />
+    <EmbeddedResource Remove="CVS\Exceptions\**" />
+    <EmbeddedResource Remove="CVS\ValueObjects\**" />
+    <None Remove="CVS\Exceptions\**" />
+    <None Remove="CVS\ValueObjects\**" />
   </ItemGroup>
 
   <ItemGroup>
