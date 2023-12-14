@@ -156,5 +156,13 @@ namespace Infrastructure.Persistence.CVS
                 Context.Entry(entityToUpdate).State = EntityState.Modified;
             }, cancellationToken);
         }
+
+        public async Task<IEnumerable<TEntity>> TextSearchAsync(string searchTerm, CancellationToken cancellationToken = default, params string[] properties)
+        {
+            return await Task.Run(() =>
+            {
+                return _dbSet.Where(e => EF.Functions.Match(properties, searchTerm, MySqlMatchSearchMode.NaturalLanguage)); // NOTE: This is a MySql function. When switching provider, this code will need to be changed.
+            }, cancellationToken);
+        }
     }
 }

@@ -26,5 +26,5 @@ export default interface Client {
 }
 
 export function getCompleteClientName(client: Client): string {
-    return `${client.firstname}${client.prefixlastname ? ` ${client.prefixlastname}` : ''} ${client.lastname}`;
+    return `${client.prefixlastname ? `${client.prefixlastname} ` : ''}${client.lastname}, ${client.firstname}`;
 };

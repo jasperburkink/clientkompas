@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+
+    .spinner{
+        @apply w-full content-center;
+    }
+
+    .result-item{
+        @apply my-2 hover:underline;
+    }
+}

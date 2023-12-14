@@ -13,8 +13,7 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearchChange }) => {
   
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const newSearchTerm = e.target.value;
-        setSearchTerm(newSearchTerm);
-
+        setSearchTerm(newSearchTerm);        
         onSearchChange(newSearchTerm);
       };  
   

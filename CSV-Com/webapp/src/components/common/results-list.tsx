@@ -3,6 +3,7 @@ import ResultItem  from '../../types/common/ResultItem';
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { LinkButton } from '../common/link-button'
 
 interface ResultsListProps {
   results: ResultItem[];
@@ -14,7 +15,7 @@ const ResultsList: React.FC<ResultsListProps> = (props) => {
   
     if(props.loading){
       return (
-        <div className='w-full content-center'>
+        <div className='spinner'>
           <FontAwesomeIcon icon={faSpinner} className="fa fa-2x fa-refresh fa-spin" />
         </div>
       );
@@ -29,7 +30,7 @@ const ResultsList: React.FC<ResultsListProps> = (props) => {
     return (
     <ul>
       {props.results.map((result) => (
-        <li key={result.id}>{result.name}</li>
+        <li className='result-item' key={result.id}><a href={'../clients/' + result.id}>{result.name}</a></li>
       ))}
     </ul>
   );
