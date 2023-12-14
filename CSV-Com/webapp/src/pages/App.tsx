@@ -23,18 +23,18 @@ import DropdownWithButton from "../components/common/dropdown-with-button";
 function App() {
     const data = [
         {
-            id: 1,
-            name: "ADHD",
+            value: 1,
+            label: "ADHD",
            
         },
         {
-            id: 2,
-            name: "Asperger",
+            value: 2,
+            label: "Asperger",
     
         },
         {
-            id: 3,
-            name: "SBICT",
+            value: 3,
+            label: "SBICT",
             
         },
     ];

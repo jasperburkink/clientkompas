@@ -60,8 +60,9 @@ function Clients() {
     return (
         <div className="flex flex-col lg:flex-row h-screen lg:h-auto">
             <div className='lg:flex w-full'>
+            <div id='staticSidebar' className='lg:h-full lg:w-[610px] ease-in-out duration-500'></div>
                 {/* TODO: Move menu to own control. Is already a task on the backlog. */}
-                <div className='header-menu'>
+                <div className='header-menu fixed'>
                     <Sidebar>
                         <NavButton text="Cliënten" icon="Gebruikers" />
                         <NavButton text="Uren registratie" icon="Klok" />
