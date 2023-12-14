@@ -47,6 +47,10 @@
     .sidebarEmptyLineGray {
         @apply hidden lg:block bg-subGray1 h-48 rounded-50% w-50rem mt-lineEmptySidebar rotate-line -ml-150px
     }
+    .sidebarContentPush{
+        @apply lg:h-full lg:w-[610px] ease-in-out duration-500;
+    }
+
     /* Empty Sidebar Example
     
     <div class="sidebar">
@@ -92,4 +96,5 @@
     .pieceTitle {
         @apply md:col-span-2 text-lg font-bold underline underline-offset-3 decoration-gray-400 decoration-2 py-3 md:p-0 list-none
     }
+
 }
