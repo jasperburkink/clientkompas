@@ -40,11 +40,10 @@ function App() {
     ];
     return (
         <div className="md:flex">   
-
-            <div id='staticSidebar' className='lg:h-full lg:w-[610px] ease-in-out duration-500'></div>  
+            <div id='staticSidebar' className='sidebarContentPush'></div>  
             <div className='md:flex fixed'>
                 <Sidebar>
-                    <NavButton text="CliÃ«nten" icon="Gebruikers" />
+                    <NavButton text="Cliënten" icon="Gebruikers" />
                     <NavButton text="Uren registratie" icon="Klok" />
                     <NavButton text="Organistatie" icon="Gebouw" />
                     <NavButton text="Gebruiker" icon="Gebruiker" />
