@@ -75,7 +75,7 @@ namespace Application.Clients.Commands.UpdateClient
                 ?? throw new NotFoundException(nameof(BenefitForm), request.BenefitForm);
 
             var maritalStatus = (await _unitOfWork.MaritalStatusRepository.GetAsync(a => a.Name == request.MaritalStatus))?.SingleOrDefault()
-              ?? throw new NotFoundException(nameof(BenefitForm), request.BenefitForm);
+              ?? throw new NotFoundException(nameof(MaritalStatus), request.MaritalStatus);
 
             client.FirstName = request.FirstName;
 
@@ -105,9 +105,11 @@ namespace Application.Clients.Commands.UpdateClient
 
             client.BenefitForm = benefitForm;
 
-            client.DriversLicences = request.DriversLicences.Select(a => a.ToDomainModel(_mapper, client)).ToList();
+            //client.DriversLicences = request.DriversLicences.Select(a => a.ToDomainModel(_mapper, client)).ToList();
+            // Update the relationship with DriversLicences
+            UpdateDriversLicenceRelationship(client, request.DriversLicences);
 
-            client.Diagnoses = request.Diagnoses.Select(a => a.ToDomainModel(_mapper, client)).ToList();
+            //client.Diagnoses = request.Diagnoses.Select(a => a.ToDomainModel(_mapper, client)).ToList();
 
             client.EmergencyPeople = request.EmergencyPeople.Select(a => a.ToDomainModel(_mapper, client)).ToList();
 
@@ -121,6 +123,36 @@ namespace Application.Clients.Commands.UpdateClient
 
             return _mapper.Map<ClientDto>(client);
         }
+
+        private void UpdateDriversLicenceRelationship(Client client, ICollection<DriversLicenceDto> updatedDriversLicences)
+        {
+            var existingDriversLicences = client.DriversLicences.ToList();
+
+            foreach (var existingDriversLicence in existingDriversLicences)
+            {
+                var matchingDto = updatedDriversLicences.FirstOrDefault(dto => dto.Id == existingDriversLicence.Id);
+
+                if (matchingDto == null)
+                {
+                    client.DriversLicences.Remove(existingDriversLicence);
+                }
+            }
+
+            foreach (var updatedDriversLicence in updatedDriversLicences)
+            {
+                var existingDriversLicence = client.DriversLicences.FirstOrDefault(dl => dl.Id == updatedDriversLicence.Id);
+
+                if (existingDriversLicence != null)
+                {
+                    _mapper.Map(updatedDriversLicence, existingDriversLicence);
+                }
+                else
+                {
+                    client.DriversLicences.Add(updatedDriversLicence.ToDomainModel(_mapper, client));
+                }
+            }
+        }
+
     }
 }
 
