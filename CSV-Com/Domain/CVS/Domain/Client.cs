@@ -15,6 +15,8 @@ namespace Domain.CVS.Domain
 
         public string LastName { get; set; }
 
+        public string FullName { get; private set; }
+
         public Gender Gender { get; set; }
 
         public string StreetName { get; set; }
@@ -46,5 +48,12 @@ namespace Domain.CVS.Domain
         public virtual ICollection<WorkingContract> WorkingContracts { get; set; } = new List<WorkingContract>();
 
         public string Remarks { get; set; }
+
+        public Client()
+        {
+
+            // TODO: onderstaande werkt nog niet. Dit moet ergens anders de waarde verschijnt niet in de database.
+            FullName = string.Join(' ', FirstName, string.IsNullOrEmpty(PrefixLastName) ? "" : PrefixLastName, LastName);
+        }
     }
 }

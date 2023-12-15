@@ -4,20 +4,18 @@ import ResultItem  from '../../types/common/ResultItem';
 import ResultsList from '../common/results-list';
 import { searchClients } from '../../utils/api';
 import Client, { getCompleteClientName } from '../../types/model/Client';
-import { Console } from 'console';
+import StatusEnum from '../../types/common/StatusEnum';
 
 const NO_RESULT_TEXT = 'Er zijn geen cliënten gevonden die aan de zoekcriteria voldoen.';
 const TYPEING_TIMEOUT = 500;
 
 const SearchClients: React.FC = () => {
   const [searchResults, setSearchResults] = useState<ResultItem[]>([]);
-
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [debounceTimeout, setDebounceTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [status, setStatus] = useState(StatusEnum.IDLE);
 
-  const handleSearchChange = async (searchTerm: string) => {      
-    
+  const handleSearchChange = async (searchTerm: string) => {
     // Cancel previous timeouts
     if (debounceTimeout) {
       clearTimeout(debounceTimeout);
@@ -33,10 +31,12 @@ const SearchClients: React.FC = () => {
 
   const updateSearchResults = async (searchTerm: string) => {
     try{
-      setLoading(true);
-      const clients = await searchClients(searchTerm);
 
-      if(!clients){
+      setStatus(StatusEnum.PENDING);
+      const clients = await searchClients(searchTerm);
+      setStatus(StatusEnum.SUCCESSFUL);
+
+      if(!clients){        
         return;
       }
 
@@ -47,11 +47,10 @@ const SearchClients: React.FC = () => {
       })));
     }
     catch(err) {
+      setStatus(StatusEnum.REJECTED);
+
       // TODO: handle error
       setError(null);
-    }
-    finally{
-      setLoading(false);
     }
   };
 
@@ -62,7 +61,7 @@ const SearchClients: React.FC = () => {
   return (
     <div>
       <SearchForm onSearchChange={handleSearchChange} />
-      <ResultsList results={searchResults} noResultsText={NO_RESULT_TEXT} loading={loading} />
+      <ResultsList results={searchResults} noResultsText={NO_RESULT_TEXT} loading={status === StatusEnum.IDLE || status === StatusEnum.PENDING} />
     </div>
   );
 };

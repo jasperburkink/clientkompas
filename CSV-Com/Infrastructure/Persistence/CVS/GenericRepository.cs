@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using Application.Common.Interfaces.CVS;
 using Domain.Common;
 using Microsoft.EntityFrameworkCore;
@@ -157,11 +158,15 @@ namespace Infrastructure.Persistence.CVS
             }, cancellationToken);
         }
 
-        public async Task<IEnumerable<TEntity>> TextSearchAsync(string searchTerm, CancellationToken cancellationToken = default, params string[] properties)
+        public async Task<IEnumerable<TEntity>> FullTextSearch(string searchTerm, CancellationToken cancellationToken = default, params string[] propertyNames)
         {
+            //TODO: dynamisch tabelnaam en dynamisch propertyveld
             return await Task.Run(() =>
             {
-                return _dbSet.Where(e => EF.Functions.Match(properties, searchTerm, MySqlMatchSearchMode.NaturalLanguage)); // NOTE: This is a MySql function. When switching provider, this code will need to be changed.
+                var tableName = typeof(TEntity);
+                var query = $@"SELECT * FROM Clients WHERE MATCH(FullName) AGAINST ('{searchTerm}' IN BOOLEAN MODE) OR {string.IsNullOrEmpty(searchTerm)}";
+
+                return _dbSet.FromSqlInterpolated(FormattableStringFactory.Create(query));
             }, cancellationToken);
         }
     }

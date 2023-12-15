@@ -23,27 +23,23 @@ namespace Application.Clients.Queries.SearchClients
 
         public async Task<IEnumerable<SearchClientDto>> Handle(SearchClientsQuery request, CancellationToken cancellationToken)
         {
-
-
-            return (await _unitOfWork.ClientRepository.TextSearchAsync(request.SearchTerm, cancellationToken, "FirstName", "LastName", "PrefixLastName"))
+            return (await _unitOfWork.ClientRepository.FullTextSearch(request.SearchTerm, cancellationToken))
                 .AsQueryable()
                 .ProjectTo<SearchClientDto>(_mapper.ConfigurationProvider)
                 .OrderBy(sc => sc.LastName)
                 .ThenBy(sc => sc.FirstName);
 
-            /*
-                        return (await _unitOfWork.ClientRepository.GetAsync())
-                            .AsQueryable()
-                            .Where(c => // TODO: Welke stringcomparison is het beste voor het vergelijken van strings in een collectie?
-                                string.IsNullOrEmpty(request.SearchTerm) || // TODO: Toevoegen van unittest voor deze situatie, wanneer er geen zoekterm is meegegeven.
-                                _unitOfWork.
-                                c.LastName.Contains(request.SearchTerm, StringComparison.OrdinalIgnoreCase) ||
-                                c.FirstName.Contains(request.SearchTerm, StringComparison.OrdinalIgnoreCase) ||
-                                c.PrefixLastName.Contains(request.SearchTerm, StringComparison.OrdinalIgnoreCase) ||
-                                c.Initials.Contains(request.SearchTerm, StringComparison.OrdinalIgnoreCase))
-                            .ProjectTo<SearchClientDto>(_mapper.ConfigurationProvider)
-                            .OrderBy(sc => sc.LastName)
-                            .ThenBy(sc => sc.FirstName);*/
+            return (await _unitOfWork.ClientRepository.GetAsync())
+                .AsQueryable()
+                .Where(c => // TODO: Welke stringcomparison is het beste voor het vergelijken van strings in een collectie?
+                    string.IsNullOrEmpty(request.SearchTerm) || // TODO: Toevoegen van unittest voor deze situatie, wanneer er geen zoekterm is meegegeven.                    
+                    c.LastName.Contains(request.SearchTerm, StringComparison.OrdinalIgnoreCase) ||
+                    c.FirstName.Contains(request.SearchTerm, StringComparison.OrdinalIgnoreCase) ||
+                    c.PrefixLastName.Contains(request.SearchTerm, StringComparison.OrdinalIgnoreCase) ||
+                    c.Initials.Contains(request.SearchTerm, StringComparison.OrdinalIgnoreCase))
+                .ProjectTo<SearchClientDto>(_mapper.ConfigurationProvider)
+                .OrderBy(sc => sc.LastName)
+                .ThenBy(sc => sc.FirstName);
         }
     }
 }

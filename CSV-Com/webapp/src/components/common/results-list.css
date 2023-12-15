@@ -4,11 +4,16 @@
 
 @layer components {
 
-    .spinner{
-        @apply w-full content-center;
+    .results-spinner{
+        @apply 
+        flex
+        items-center
+        justify-center;
     }
 
-    .result-item{
-        @apply my-2 hover:underline;
+    .results-item{
+        @apply
+        my-2
+        hover:underline;
     }
 }

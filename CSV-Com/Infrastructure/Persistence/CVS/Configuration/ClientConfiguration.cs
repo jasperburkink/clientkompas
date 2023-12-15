@@ -54,6 +54,12 @@ namespace Infrastructure.Persistence.CVS.Configuration
             builder.Property(c => c.Residence)
                 .HasMaxLength(50)
                 .IsRequired();
+
+            builder.Property(c => c.FullName)
+                .HasMaxLength(120);
+
+            builder.HasIndex(c => c.FullName)
+                .IsFullText();
         }
     }
 }
