@@ -2,7 +2,7 @@ import EmergencyPerson from "./EmergencyPerson";
 import WorkingContract from "./WorkingContract";
 
 export default interface Client {
-    identificationnumber: number;
+    id: number;
     firstname: string;
     initials: string;
     prefixlastname?: string;

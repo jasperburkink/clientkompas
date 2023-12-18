@@ -42,7 +42,7 @@ const SearchClients: React.FC = () => {
 
       setSearchResults(clients.map((client) => (          
       {          
-        id: client.identificationnumber,
+        id: client.id,
         name: getCompleteClientName(client)
       })));
     }

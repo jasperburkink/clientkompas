@@ -116,7 +116,7 @@ function Clients() {
                     {/* Client number */}                    
                     <div className='client-number client-label-value'>
                         <Label text='Cliëntnummer: ' />
-                        <Label text={client.identificationnumber+''} />
+                        <Label text={client.id+''} />
                     </div>
                     
                     {/* Client main info 2 */}

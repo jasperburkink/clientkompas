@@ -149,7 +149,6 @@ namespace Infrastructure.Persistence.CVS
                 _context.Clients.Add(new Client
                 {
                     Id = 2,
-                    IdentificationNumber = 123456780,
                     FirstName = "Prince-Fritz-Cruene-August-Willem-Jan-Hendrik-Dick",
                     Initials = "P.F.C.A.W.J.H.D",
                     PrefixLastName = "van den",
