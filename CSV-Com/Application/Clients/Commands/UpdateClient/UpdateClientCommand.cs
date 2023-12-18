@@ -68,7 +68,7 @@ namespace Application.Clients.Commands.UpdateClient
 
         public async Task<ClientDto> Handle(UpdateClientCommand request, CancellationToken cancellationToken)
         {
-            var client = await _unitOfWork.ClientRepository.GetByIDAsync(request.Id, includeProperties: "EmergencyPeople,WorkingContracts", cancellationToken)
+            var client = await _unitOfWork.ClientRepository.GetByIDAsync(request.Id, includeProperties: "EmergencyPeople,WorkingContracts,DriversLicences,Diagnoses", cancellationToken)
                 ?? throw new NotFoundException(nameof(Client), request.Id);
 
             var benefitForm = (await _unitOfWork.BenefitFormRepository.GetAsync(a => a.Name == request.BenefitForm))?.SingleOrDefault()
@@ -105,11 +105,9 @@ namespace Application.Clients.Commands.UpdateClient
 
             client.BenefitForm = benefitForm;
 
-            //client.DriversLicences = request.DriversLicences.Select(a => a.ToDomainModel(_mapper, client)).ToList();
-            // Update the relationship with DriversLicences
-            UpdateDriversLicenceRelationship(client, request.DriversLicences);
+            client.DriversLicences = request.DriversLicences.Select(a => a.ToDomainModel(_mapper, client)).ToList();
 
-            //client.Diagnoses = request.Diagnoses.Select(a => a.ToDomainModel(_mapper, client)).ToList();
+            client.Diagnoses = request.Diagnoses.Select(a => a.ToDomainModel(_mapper, client)).ToList();
 
             client.EmergencyPeople = request.EmergencyPeople.Select(a => a.ToDomainModel(_mapper, client)).ToList();
 
@@ -119,40 +117,12 @@ namespace Application.Clients.Commands.UpdateClient
 
             client.Remarks = request.Remarks;
 
+            _unitOfWork.ClientRepository.Update(client);
+
             await _unitOfWork.SaveAsync(cancellationToken);
 
             return _mapper.Map<ClientDto>(client);
         }
-
-        private void UpdateDriversLicenceRelationship(Client client, ICollection<DriversLicenceDto> updatedDriversLicences)
-        {
-            var existingDriversLicences = client.DriversLicences.ToList();
-
-            foreach (var existingDriversLicence in existingDriversLicences)
-            {
-                var matchingDto = updatedDriversLicences.FirstOrDefault(dto => dto.Id == existingDriversLicence.Id);
-
-                if (matchingDto == null)
-                {
-                    client.DriversLicences.Remove(existingDriversLicence);
-                }
-            }
-
-            foreach (var updatedDriversLicence in updatedDriversLicences)
-            {
-                var existingDriversLicence = client.DriversLicences.FirstOrDefault(dl => dl.Id == updatedDriversLicence.Id);
-
-                if (existingDriversLicence != null)
-                {
-                    _mapper.Map(updatedDriversLicence, existingDriversLicence);
-                }
-                else
-                {
-                    client.DriversLicences.Add(updatedDriversLicence.ToDomainModel(_mapper, client));
-                }
-            }
-        }
-
     }
 }
 

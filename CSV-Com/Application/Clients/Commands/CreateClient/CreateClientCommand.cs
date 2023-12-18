@@ -58,11 +58,11 @@ namespace Application.Clients.Commands.CreateClient
         public async Task<ClientDto> Handle(CreateClientCommand request, CancellationToken cancellationToken)
         {
 
-            var benefitForm = (await _unitOfWork.BenefitFormRepository.GetAsync(a => a.Name.Equals(request.BenefitForm, StringComparison.OrdinalIgnoreCase)))?.SingleOrDefault()
+            var benefitForm = (await _unitOfWork.BenefitFormRepository.GetAsync(a => a.Name == request.BenefitForm))?.SingleOrDefault()
                 ?? throw new NotFoundException(nameof(BenefitForm), request.BenefitForm);
 
-            var maritalStatus = (await _unitOfWork.MaritalStatusRepository.GetAsync(a => a.Name.Equals(request.MaritalStatus, StringComparison.OrdinalIgnoreCase)))?.SingleOrDefault()
-              ?? throw new NotFoundException(nameof(BenefitForm), request.BenefitForm);
+            var maritalStatus = (await _unitOfWork.MaritalStatusRepository.GetAsync(a => a.Name == request.MaritalStatus))?.SingleOrDefault()
+              ?? throw new NotFoundException(nameof(MaritalStatus), request.MaritalStatus);
 
             var client = new Client
             {
