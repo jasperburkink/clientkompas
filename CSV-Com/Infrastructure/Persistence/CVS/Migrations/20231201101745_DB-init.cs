@@ -131,7 +131,6 @@ namespace Infrastructure.Persistence.CVS.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    IdentificationNumber = table.Column<int>(type: "int", nullable: false),
                     FirstName = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Initials = table.Column<string>(type: "longtext", nullable: false)
@@ -157,6 +156,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     MaritalStatusId = table.Column<int>(type: "int", nullable: false),
                     BenefitFormId = table.Column<int>(type: "int", nullable: false),
+                    DeactivationDateAndTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     Remarks = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Created = table.Column<DateTime>(type: "datetime(6)", nullable: false),

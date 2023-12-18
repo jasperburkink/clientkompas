@@ -2,17 +2,36 @@ workflow:
   rules:
     - when: always
 
+variables:  
+  DOTNET_IMAGE: "mcr.microsoft.com/dotnet/sdk:7.0" # Default image for gitlabrunner
+  NODE_IMAGE: "node:18"  
+  SOLUTION_FOLDER: "CSV-Com"
+  SOLUTION: "$SOLUTION_FOLDER/CSV-Com.sln"
+  NODE_FOLDER: "webapp"
+  BUILD_CONFIGURATION: "Debug"
+
 stages:
-    - test
-    - build
+  - build
 
-feature_build-job:
+dotnet-build:
+  before_script:
+  - 'dotnet restore $SOLUTION' # dotnet build does also restore but an explicit restore is better when using GitLab for caching purposes
+  - shopt -s globstar # setting for enabling wildcards in bash **/*.csproj
   stage: build
-  needs: [feature_test-job]
   script:
-    - echo "Build feature pipeline"
+    # Build all .NET projects
+    - | 
+      for project in **/*.csproj; do
+        dotnet build "$project" -c $BUILD_CONFIGURATION --no-restore
+      done
+  image: $DOTNET_IMAGE
 
-feature_test-job:
-  stage: test
+node-build:
+  before_script:
+  - cd $SOLUTION_FOLDER/$NODE_FOLDER
+  - npm install
+  - export CI=false
+  stage: build
   script:
-    - echo "Test feature pipeline"
+  - npm run build
+  image: $NODE_IMAGE

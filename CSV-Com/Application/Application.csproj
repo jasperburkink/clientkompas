@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -8,14 +8,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Clients\Commands\DeleteClient\" />
-    <Folder Include="Clients\Commands\UpdateClient\" />
+    <Compile Remove="Clients\Commands\DeleteClient\**" />
+    <Compile Remove="Clients\Commands\UpdateClient\**" />
+    <Compile Remove="Users\**" />
+    <EmbeddedResource Remove="Clients\Commands\DeleteClient\**" />
+    <EmbeddedResource Remove="Clients\Commands\UpdateClient\**" />
+    <EmbeddedResource Remove="Users\**" />
+    <None Remove="Clients\Commands\DeleteClient\**" />
+    <None Remove="Clients\Commands\UpdateClient\**" />
+    <None Remove="Users\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="MaritalStatuses\Commands\DeleteMaritalStatus\" />
     <Folder Include="MaritalStatuses\Commands\UpdateMaritalStatus\" />
     <Folder Include="MaritalStatuses\Queries\" />
-    <Folder Include="Users\Commands\" />
-    <Folder Include="Users\EventHandlers\" />
-    <Folder Include="Users\Queries\GetUsers\" />
   </ItemGroup>
 
   <ItemGroup>

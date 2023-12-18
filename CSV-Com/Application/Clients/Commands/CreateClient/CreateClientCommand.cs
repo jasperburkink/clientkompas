@@ -11,8 +11,6 @@ namespace Application.Clients.Commands.CreateClient
 {
     public record CreateClientCommand : IRequest<ClientDto>
     {
-        public int IdentificationNumber { get; init; }
-
         public string FirstName { get; init; }
 
         public string Initials { get; init; }
@@ -67,7 +65,6 @@ namespace Application.Clients.Commands.CreateClient
 
             var client = new Client
             {
-                IdentificationNumber = request.IdentificationNumber,
                 FirstName = request.FirstName,
                 Initials = request.Initials,
                 PrefixLastName = request.PrefixLastName,

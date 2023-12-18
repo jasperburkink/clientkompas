@@ -9,8 +9,6 @@ namespace Domain.CVS.Domain
         private string _prefixLastName;
         private string _lastName;
 
-        public int IdentificationNumber { get; set; }
-
         public string FirstName
         {
             get => _firstName;
@@ -74,6 +72,8 @@ namespace Domain.CVS.Domain
         public BenefitForm BenefitForm { get; set; }
 
         public virtual ICollection<WorkingContract> WorkingContracts { get; set; } = new List<WorkingContract>();
+
+        public DateTime? DeactivationDateAndTime { get; set; }
 
         public string Remarks { get; set; }
 

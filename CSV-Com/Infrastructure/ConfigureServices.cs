@@ -2,11 +2,10 @@
 using Infrastructure.Persistence.CVS;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-#pragma warning disable IDE0130 // Namespace does not match folder structure
-namespace Microsoft.Extensions.DependencyInjection
-#pragma warning restore IDE0130 // Namespace does not match folder structure
+namespace Infrastructure
 {
     public static class ConfigureServices
     {
@@ -35,8 +34,6 @@ namespace Microsoft.Extensions.DependencyInjection
                     errorNumbersToAdd: null);
 #endif
                             })
-                            // The following three options help with debugging, but should
-                            // be changed or removed for production.
                             .LogTo(Console.WriteLine, LogLevel.Information)
                             .EnableSensitiveDataLogging()
             .EnableDetailedErrors());

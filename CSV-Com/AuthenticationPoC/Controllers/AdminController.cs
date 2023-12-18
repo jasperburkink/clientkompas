@@ -2,34 +2,31 @@
 using AuthenticationPoC.ViewModels;
 using CVSInfrastructurePoC.Repositories;
 using CVSModelPoC;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client;
-using System.Data;
 
 namespace AuthenticationPoC.Controllers
 {
     public class AdminController : Controller
     {
-        private UserManager<AppUser> userManager;
-        private IPasswordHasher<AppUser> passwordHasher;
-        private IPasswordValidator<AppUser> passwordValidator;
-        private IUserValidator<AppUser> userValidator;
-        private readonly IGebruikerRepository gebruikerRepository;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly IPasswordHasher<AppUser> _passwordHasher;
+        private readonly IPasswordValidator<AppUser> _passwordValidator;
+        private readonly IUserValidator<AppUser> _userValidator;
+        private readonly IGebruikerRepository _gebruikerRepository;
 
         public AdminController(UserManager<AppUser> usrMgr, IPasswordHasher<AppUser> passwordHash, IPasswordValidator<AppUser> passwordVal, IUserValidator<AppUser> userValid, IGebruikerRepository gebruikerRepository)
         {
-            userManager = usrMgr;
-            passwordHasher = passwordHash;
-            passwordValidator = passwordVal;
-            userValidator = userValid;
-            this.gebruikerRepository = gebruikerRepository;
+            _userManager = usrMgr;
+            _passwordHasher = passwordHash;
+            _passwordValidator = passwordVal;
+            _userValidator = userValid;
+            _gebruikerRepository = gebruikerRepository;
         }
-        
+
         public IActionResult Index()
         {
-            return View(userManager.Users);
+            return View(_userManager.Users);
         }
 
         public ViewResult Create() => View();
@@ -46,25 +43,25 @@ namespace AuthenticationPoC.Controllers
                     Achternaam = gebruiker.Achternaam,
                     Email = gebruiker.Email
                 };
-                await gebruikerRepository.InsertGebruikerAsync(cvsGebruiker);
-                await gebruikerRepository.SaveAsync();
-                cvsGebruiker =  await gebruikerRepository.GetGebruikerByEmailAsync(cvsGebruiker.Email);
+                await _gebruikerRepository.InsertGebruikerAsync(cvsGebruiker);
+                await _gebruikerRepository.SaveAsync();
+                cvsGebruiker = await _gebruikerRepository.GetGebruikerByEmailAsync(cvsGebruiker.Email);
 
                 // Authentication gebruiker
-                AppUser appUser = new AppUser
+                var appUser = new AppUser
                 {
                     CVSUserId = cvsGebruiker.Id,
                     UserName = gebruiker.Gebruikersnaam,
                     Email = gebruiker.Email,
                     TwoFactorEnabled = true
                 };
-                IdentityResult result = await userManager.CreateAsync(appUser, gebruiker.Wachtwoord);
+                var result = await _userManager.CreateAsync(appUser, gebruiker.Wachtwoord);
 
                 if (result.Succeeded)
                     return RedirectToAction("Index");
                 else
                 {
-                    foreach (IdentityError error in result.Errors)
+                    foreach (var error in result.Errors)
                         ModelState.AddModelError("", error.Description);
                 }
             }
@@ -73,8 +70,8 @@ namespace AuthenticationPoC.Controllers
 
         public async Task<IActionResult> Update(string id)
         {
-            AppUser user = await userManager.FindByIdAsync(id);
-            Gebruiker cvsGebruiker = await gebruikerRepository.GetGebruikerAsync(user.CVSUserId);
+            var user = await _userManager.FindByIdAsync(id);
+            var cvsGebruiker = await _gebruikerRepository.GetGebruikerAsync(user.CVSUserId);
 
             if (user == null || cvsGebruiker == null)
             {
@@ -82,7 +79,7 @@ namespace AuthenticationPoC.Controllers
             }
             else
             {
-                GebruikerViewModel gebruikerViewModel = new GebruikerViewModel
+                var gebruikerViewModel = new GebruikerViewModel
                 {
                     Id = user.Id,
                     Achternaam = cvsGebruiker.Achternaam,
@@ -100,7 +97,7 @@ namespace AuthenticationPoC.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(string id, string email, string voornaam, string achternaam, string password)
         {
-            AppUser user = await userManager.FindByIdAsync(id);
+            var user = await _userManager.FindByIdAsync(id);
             if (user != null)
             {
                 user.TwoFactorEnabled = true;
@@ -108,7 +105,7 @@ namespace AuthenticationPoC.Controllers
                 IdentityResult validEmail = null;
                 if (!string.IsNullOrEmpty(email))
                 {
-                    validEmail = await userValidator.ValidateAsync(userManager, user);
+                    validEmail = await _userValidator.ValidateAsync(_userManager, user);
                     if (validEmail.Succeeded)
                         user.Email = email;
                     else
@@ -120,9 +117,9 @@ namespace AuthenticationPoC.Controllers
                 IdentityResult validPass = null;
                 if (!string.IsNullOrEmpty(password))
                 {
-                    validPass = await passwordValidator.ValidateAsync(userManager, user, password);
+                    validPass = await _passwordValidator.ValidateAsync(_userManager, user, password);
                     if (validPass.Succeeded)
-                        user.PasswordHash = passwordHasher.HashPassword(user, password);
+                        user.PasswordHash = _passwordHasher.HashPassword(user, password);
                     else
                         Errors(validPass);
                 }
@@ -131,14 +128,14 @@ namespace AuthenticationPoC.Controllers
 
                 if (validEmail != null && validPass != null && validEmail.Succeeded && validPass.Succeeded)
                 {
-                    IdentityResult result = await userManager.UpdateAsync(user);
+                    var result = await _userManager.UpdateAsync(user);
                     if (result.Succeeded)
                         return RedirectToAction("Index");
                     else
                         Errors(result);
                 }
 
-                var cvsUser = await gebruikerRepository.GetGebruikerAsync(user.CVSUserId);
+                var cvsUser = await _gebruikerRepository.GetGebruikerAsync(user.CVSUserId);
 
                 if (cvsUser == null)
                 {
@@ -151,7 +148,7 @@ namespace AuthenticationPoC.Controllers
                     cvsUser.Achternaam = achternaam;
                     cvsUser.Voornaam = voornaam;
 
-                    await gebruikerRepository.UpdateGebruikerAsync(cvsUser);
+                    await _gebruikerRepository.UpdateGebruikerAsync(cvsUser);
                 }
             }
             else
@@ -163,10 +160,10 @@ namespace AuthenticationPoC.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(string id)
         {
-            AppUser user = await userManager.FindByIdAsync(id);
+            var user = await _userManager.FindByIdAsync(id);
             if (user != null)
             {
-                IdentityResult result = await userManager.DeleteAsync(user);
+                var result = await _userManager.DeleteAsync(user);
                 if (result.Succeeded)
                     return RedirectToAction("Index");
                 else
@@ -174,12 +171,12 @@ namespace AuthenticationPoC.Controllers
             }
             else
                 ModelState.AddModelError("", "User Not Found");
-            return View("Index", userManager.Users);
+            return View("Index", _userManager.Users);
         }
 
         private void Errors(IdentityResult result)
         {
-            foreach (IdentityError error in result.Errors)
+            foreach (var error in result.Errors)
                 ModelState.AddModelError("", error.Description);
         }
     }
