@@ -5,17 +5,45 @@ namespace Domain.CVS.Domain
 {
     public class Client : BaseAuditableEntity
     {
+        private string _firstName;
+        private string _prefixLastName;
+        private string _lastName;
+
         public int IdentificationNumber { get; set; }
 
-        public string FirstName { get; set; }
+        public string FirstName
+        {
+            get => _firstName;
+            set
+            {
+                _firstName = value;
+                SetFullName();
+            }
+        }
 
         public string Initials { get; set; }
 
-        public string PrefixLastName { get; set; }
+        public string PrefixLastName
+        {
+            get => _prefixLastName;
+            set
+            {
+                _prefixLastName = value;
+                SetFullName();
+            }
+        }
 
-        public string LastName { get; set; }
+        public string LastName
+        {
+            get => _lastName;
+            set
+            {
+                _lastName = value;
+                SetFullName();
+            }
+        }
 
-        public string FullName { get; private set; }
+        public string FullName { get; set; }
 
         public Gender Gender { get; set; }
 
@@ -49,11 +77,10 @@ namespace Domain.CVS.Domain
 
         public string Remarks { get; set; }
 
-        public Client()
+        private void SetFullName()
         {
-
-            // TODO: onderstaande werkt nog niet. Dit moet ergens anders de waarde verschijnt niet in de database.
-            FullName = string.Join(' ', FirstName, string.IsNullOrEmpty(PrefixLastName) ? "" : PrefixLastName, LastName);
+            var fieldValues = new string[] { FirstName, PrefixLastName, LastName };
+            FullName = string.Join(' ', fieldValues.Where(fv => !string.IsNullOrEmpty(fv)).Select(s => s.Trim()));
         }
     }
 }

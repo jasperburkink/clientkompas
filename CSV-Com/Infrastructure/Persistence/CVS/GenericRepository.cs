@@ -160,11 +160,11 @@ namespace Infrastructure.Persistence.CVS
 
         public async Task<IEnumerable<TEntity>> FullTextSearch(string searchTerm, CancellationToken cancellationToken = default, params string[] propertyNames)
         {
-            //TODO: dynamisch tabelnaam en dynamisch propertyveld
             return await Task.Run(() =>
             {
-                var tableName = typeof(TEntity);
-                var query = $@"SELECT * FROM Clients WHERE MATCH(FullName) AGAINST ('{searchTerm}' IN BOOLEAN MODE) OR {string.IsNullOrEmpty(searchTerm)}";
+                var tableName = ContextExtensions.GetTableName(Context, typeof(TEntity));
+                // NOTE: This is specific MySql related functionality for full text seacrhing on a fulltext index. So if the database provider is changed, this functionality has to be changed!
+                var query = $@"SELECT * FROM {tableName} WHERE MATCH({string.Join(',', propertyNames)}) AGAINST ('""{searchTerm}""' IN BOOLEAN MODE) OR {string.IsNullOrEmpty(searchTerm)}";
 
                 return _dbSet.FromSqlInterpolated(FormattableStringFactory.Create(query));
             }, cancellationToken);
