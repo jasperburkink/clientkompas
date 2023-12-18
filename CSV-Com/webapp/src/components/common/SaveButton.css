@@ -10,8 +10,6 @@
         font-medium
         text-sm
         rounded-lg;
-        /* bg-mainBlue ; */
-
     }
 }
 
@@ -26,79 +24,82 @@
         text-sm
         rounded-lg;
     }
+    
     .erorr.succes{
         @apply w-48 h-10 text-lg text-white font-medium rounded focus:outline-none ;
-      
-    }}
-.save-button {
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
-  }
-
-  .save-button.loading {
-    background-color: #4299e1; 
-    color: white; 
-    opacity: 0.7; 
-    pointer-events: none; 
-  }
-
-
-  .save-button.success {
-    background-color: #48bb78; 
-    color: white; 
-  }
-
-  
-  .save-button.error {
-    background-color: #f56565; 
-    color: white;
-  }
-
-
-
-
-  .success-icon {
-    color: #10b981; 
-    display: none;
-    margin-right: 10px;
-  }
-
-  .save-button.success .success-icon {
-    display: inline-block;
-  }
-  .spinner {
-    margin: 0 auto;
-    width: 30px;
-    height: 30px;
-    border: 5px solid #f3f3f3;
-    border-top: 5px solid #213547;
-    border-radius: 50%;
-    animation: spin 1s infinite linear;
-    margin-top: 15px;
-  }
-  
-  @keyframes spin {
-    0% {
-      transform: rotate(0turn); /* Changed deg to turn */
-    }
-    100% {
-      transform: rotate(1turn); /* Changed deg to turn */
     }
   }
-  .loader {
-    font-size: 4px;
-    width: 1em;
-    height: 1em;
-    border-radius: 100%;
-    position: absolute;
-    text-indent: -9999em;
-    animation: mulShdSpin 1.6s infinite ease;
-    transform: translateZ(0);
-  }
- 
+
+  .before.button{
+    @apply 
+    w-48 h-12 rounded-lg
+    }
+
+    .error {
+     @apply
+    bg-mainBlue     
+    }
+
+    .success {
+    @apply
+    bg-green-600    
+    }
+
+    .succes-stil{
+     @apply
+     bg-mainBlue
+    }
+
+    .default {
+     @apply
+     bg-mainBlue     
+    }
+
+    .icon{
+      font-size:20px;
+      color: #fff;
+    }
+
+  .save-button {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .save-button.loading {
+      background-color: #4299e1; 
+      color: white; 
+      opacity: 0.7; 
+      pointer-events: none; 
+    }
+
+    .save-button.success {
+      background-color: #48bb78; 
+      color: white; 
+    }
+
+    .save-button.error {
+      background-color: #f56565; 
+      color: white;
+    }
+
+    .actionTrigger{
+      color:#ffffff;
+    }
+
+    .loader {
+      font-size: 4px;
+      width: 1em;
+      height: 1em;
+      border-radius: 100%;
+      position: absolute;
+      text-indent: -9999em;
+      animation: mulShdSpin 1.6s infinite ease;
+      transform: translateZ(0);
+    }
+    
 
   @keyframes mulShdSpin {
     0%,
