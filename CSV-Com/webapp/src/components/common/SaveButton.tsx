@@ -3,9 +3,9 @@ import Spinner from './Spinner';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 
-const SUCCESS_TIMEOUT = 2000;
+const SUCCESS_TIMEOUT = 3000;
 const ERROR_TIMEOUT = 4000;
-const LOADING_TIMEOUT = 1500; 
+const LOADING_TIMEOUT = 3000; 
 
 interface SaveButtonProps {
   buttonText: string;
@@ -64,23 +64,31 @@ const SaveButton: React.FC<SaveButtonProps> = ({
       >
         {loading && <Spinner data-testid="spinner"/>}
         {success && (
-          <FontAwesomeIcon
-            className='icon'
-            icon={faCheck}
-            data-testid="icon"
-          />
+          <div>
+            <FontAwesomeIcon
+              className='icon'
+              icon={faCheck}
+              data-testid="icon"
+            />
+            <span className ="text">
+            {successText}
+            </span>
+          </div>
         )}
+
         {error && (
           <FontAwesomeIcon
             className='icon'
             icon={faTimes}
           />
         )}
+
         {showText && !loading && !success && !error && (
           <span className="actionTrigger">
             {loading ? loadingText : success ? successText : buttonText}
           </span>
         )}
+        
       </button>
     </div>
   );

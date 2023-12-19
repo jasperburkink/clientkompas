@@ -42,12 +42,12 @@
 
     .success {
     @apply
-    bg-green-600    
+    bg-greensucces
     }
 
     .succes-stil{
      @apply
-     bg-mainBlue
+     bg-greensucces
     }
 
     .default {
@@ -87,6 +87,9 @@
 
     .actionTrigger{
       color:#ffffff;
+    }
+    .text{
+      color: white;
     }
 
     .loader {
