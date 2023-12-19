@@ -5,7 +5,6 @@
 @layer components {
     .popup-inner {
         @apply 
-    
         rounded-tl-2xl 
         rounded-tr-2xl 
         rounded-br-2xl 
@@ -14,24 +13,97 @@
         bg-white  
         rounded-lg 
         h-48  
-    
       }
     }
     .popup-top{
-      @apply fixed top-0 left-0 w-full h-full bg-slate-900 bg-opacity-25 flex justify-center items-center z-50;
+      @apply 
+      fixed 
+      top-0 
+      left-0 
+      w-full 
+      h-full 
+      bg-slate-900 
+      bg-opacity-25 
+      flex justify-center 
+      items-center 
+      z-50;
     }
+
       .popup-justify {
-        @apply flex justify-between ml-2;
+        @apply 
+        flex justify-between 
+        ml-2;
       }
+
       .popup-text {
-        @apply mr-2	ml-5 text-lg mt-5;
+        @apply 
+        mr-2	
+        ml-5 
+        text-lg 
+        mt-5;
       }
+
       .popup-content {
-        @apply fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2;
+        @apply 
+        fixed top-1/2 left-1/2 
+        transform 
+        -translate-x-1/2 
+        -translate-y-1/2;
       }
+
       .popup-buttonX{
-       @apply mr-3 ml-10 h-10 text-lg justify-end;
+       @apply 
+       mr-3 
+       ml-10 
+       h-10 
+       text-lg 
+       justify-end;
       }
+
       .popup-center{
-        @apply space-x-9 ml-6 py-1 ms-6 mr-5 flex justify-start mt-12 h-[3rem] ;
+        @apply 
+        space-x-9 
+        ml-6 
+        py-1 
+        ms-6 
+        mr-5 
+        flex justify-start 
+        mt-12 
+        h-[3rem] ;
       }
+
+      .popUp-btnLeft{
+        @apply
+        w-48 
+        text-lg 
+        border-4 
+        border-mainBlue 
+        bg-mainBlue 
+        rounded-lg 
+        text-white 
+        font-medium;
+      }
+
+      .popUp-btnRight{
+        @apply
+        w-48 
+        text-lg 
+        border-4 
+        border-mainBlue 
+        bg-white rounded-lg 
+        text-mainBlue 
+        font-medium
+    }
+        .icon-size{
+        @apply
+        text-lg
+    }
+        .btn-first{
+        @apply
+        w-64 
+        text-lg 
+        py-3 
+        bg-mainBlue 
+        rounded-lg 
+        text-white
+    }

@@ -24,8 +24,6 @@ function App() {
     };
         const handleCancelClick = () => {
         };
-
-
     return (
         <div className="md:flex">    
             <div className='md:flex'>
@@ -170,11 +168,10 @@ function App() {
                 <PopUp
                 handleClick={handleClick}
                 handleCancelClick={handleCancelClick} 
-                buttonText="placeholder1" 
-                text="placeholder2"
+                confirmButtonText1="placeholder1" 
+                cancelButtonText2="placeholder2"
                 />    
              </div>
-             
             <Copyright />
         </div>
     );
