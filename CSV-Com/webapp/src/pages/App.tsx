@@ -19,8 +19,6 @@ import { DatePicker } from '../components/common/datepicker';
 import Textarea from "../components/common/Textarea";
 import PopUp from "../components/common/PopUp";
 import SaveButton from '../components/common/SaveButton';
-import ButtonText from '../components/common/ButtonText';
-import ButtonDesgin from '../components/common/ButtonDesgin';
 
 function App() {
     const handleClick = () => {
@@ -184,23 +182,6 @@ function App() {
                  successText = "placeholder 3"
                  errorText = "placeholder 4"
                 />
-
-        	    <p> button with text component</p>
-                <ButtonText
-                 buttonText= "placeholder 1"
-                 loadingText = "placeholder 2"
-                 successText = "placeholder 3"
-                 errorText = "placeholder 4"
-                />
-
-                <p> button with other desgin component</p>
-                <ButtonDesgin
-                 buttonText= "placeholder 1"
-                 loadingText = "placeholder 2"
-                 successText = "placeholder 3"
-                 errorText = "placeholder 4"
-                />
-                
              </div>
              
             <Copyright />
