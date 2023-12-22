@@ -5,43 +5,28 @@ namespace Domain.CVS.Domain
 {
     public class Client : BaseAuditableEntity
     {
-        private string _firstName;
-        private string _prefixLastName;
-        private string _lastName;
-
         public string FirstName
         {
-            get => _firstName;
-            set
-            {
-                _firstName = value;
-                SetFullName();
-            }
+            get; set;
         }
 
         public string Initials { get; set; }
 
         public string PrefixLastName
         {
-            get => _prefixLastName;
-            set
-            {
-                _prefixLastName = value;
-                SetFullName();
-            }
+            get; set;
         }
 
         public string LastName
         {
-            get => _lastName;
-            set
-            {
-                _lastName = value;
-                SetFullName();
-            }
+            get; set;
         }
 
-        public string FullName { get; set; }
+        public string FullName
+        {
+            get => string.Join(' ', (new string[] { FirstName, PrefixLastName, LastName }).Where(fv => !string.IsNullOrEmpty(fv)).Select(s => s.Trim()));
+            set => _ = value;
+        }
 
         public Gender Gender { get; set; }
 
@@ -76,11 +61,5 @@ namespace Domain.CVS.Domain
         public DateTime? DeactivationDateAndTime { get; set; }
 
         public string Remarks { get; set; }
-
-        private void SetFullName()
-        {
-            var fieldValues = new string[] { FirstName, PrefixLastName, LastName };
-            FullName = string.Join(' ', fieldValues.Where(fv => !string.IsNullOrEmpty(fv)).Select(s => s.Trim()));
-        }
     }
 }
