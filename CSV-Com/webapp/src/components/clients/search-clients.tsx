@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import SearchForm from '../common/search-form';
 import ResultItem  from '../../types/common/ResultItem';
 import ResultsList from '../common/results-list';
@@ -11,14 +11,15 @@ const TYPEING_TIMEOUT = 500;
 
 const SearchClients: React.FC = () => {
   const [searchResults, setSearchResults] = useState<ResultItem[]>([]);
-  const [error, setError] = useState(null);
-  const [debounceTimeout, setDebounceTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [error, setError] = useState<string|null>(null);      
   const [status, setStatus] = useState(StatusEnum.IDLE);
+
+  const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleSearchChange = async (searchTerm: string) => {
     // Cancel previous timeouts
-    if (debounceTimeout) {
-      clearTimeout(debounceTimeout);
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
     }
 
     // Start new timeout for debouncing (don't start api call until user stops typeing)
@@ -26,7 +27,7 @@ const SearchClients: React.FC = () => {
       updateSearchResults(searchTerm);
     }, TYPEING_TIMEOUT);
 
-    setDebounceTimeout(timeout);
+    debounceTimeoutRef.current = timeout;
   };
 
   const updateSearchResults = async (searchTerm: string) => {
@@ -53,6 +54,14 @@ const SearchClients: React.FC = () => {
       setError(null);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     updateSearchResults('');
