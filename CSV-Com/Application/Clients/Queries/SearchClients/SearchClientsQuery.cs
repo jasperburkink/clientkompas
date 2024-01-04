@@ -23,7 +23,7 @@ namespace Application.Clients.Queries.SearchClients
 
         public async Task<IEnumerable<SearchClientDto>> Handle(SearchClientsQuery request, CancellationToken cancellationToken)
         {
-            return (await _unitOfWork.ClientRepository.FullTextSearch(request.SearchTerm, cancellationToken, "FullName"))
+            return (await _unitOfWork.ClientRepository.FullTextSearch(request.SearchTerm, cancellationToken, client => client.FullName))
                 .AsQueryable()
                 .Where(c => c.DeactivationDateAndTime == null)
                 .ProjectTo<SearchClientDto>(_mapper.ConfigurationProvider)
