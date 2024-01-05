@@ -1,11 +1,6 @@
-﻿using Domain.Common;
+﻿using System.Reflection;
+using Domain.Common;
 using NetArchTest.Rules;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ArchitectureTests
 {

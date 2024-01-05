@@ -5,6 +5,7 @@ using AutoMapper;
 using Domain.CVS.Domain;
 using Domain.CVS.Enums;
 using Domain.CVS.Events;
+using Domain.CVS.ValueObjects;
 using MediatR;
 
 namespace Application.Clients.Commands.CreateClient
@@ -57,11 +58,23 @@ namespace Application.Clients.Commands.CreateClient
 
         public async Task<ClientDto> Handle(CreateClientCommand request, CancellationToken cancellationToken)
         {
+            var benefitFormTask = _unitOfWork.BenefitFormRepository.GetByIDAsync(request.BenefitFormid, cancellationToken);
+            var maritalStatusTask = _unitOfWork.MaritalStatusRepository.GetByIDAsync(request.MaritalStatusid, cancellationToken);
 
-            var benefitForm = await _unitOfWork.BenefitFormRepository.GetByIDAsync(request.BenefitFormid, cancellationToken)
-                ?? throw new NotFoundException(nameof(BenefitForm), request.BenefitFormid);
-            var maritalStatus = await _unitOfWork.MaritalStatusRepository.GetByIDAsync(request.MaritalStatusid, cancellationToken)
-                ?? throw new NotFoundException(nameof(MaritalStatus), request.MaritalStatusid);
+            await Task.WhenAll(benefitFormTask, maritalStatusTask);
+
+            var benefitForm = benefitFormTask.Result;
+            var maritalStatus = maritalStatusTask.Result;
+
+            if (benefitForm == null)
+            {
+                throw new NotFoundException(nameof(BenefitForm), request.BenefitFormid);
+            }
+
+            if (maritalStatus == null)
+            {
+                throw new NotFoundException(nameof(MaritalStatus), request.MaritalStatusid);
+            }
 
             var client = new Client
             {
@@ -70,11 +83,7 @@ namespace Application.Clients.Commands.CreateClient
                 PrefixLastName = request.PrefixLastName,
                 LastName = request.LastName,
                 Gender = request.Gender,
-                StreetName = request.StreetName,
-                HouseNumber = request.HouseNumber,
-                HouseNumberAddition = request.HouseNumberAddition,
-                PostalCode = request.PostalCode,
-                Residence = request.Residence,
+                Address = Address.From(request.StreetName, request.HouseNumber, request.HouseNumberAddition, request.PostalCode, request.Residence),
                 TelephoneNumber = request.TelephoneNumber,
                 DateOfBirth = request.DateOfBirth,
                 EmailAddress = request.EmailAddress,

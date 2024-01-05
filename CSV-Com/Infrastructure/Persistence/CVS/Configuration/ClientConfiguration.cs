@@ -47,11 +47,11 @@ namespace Infrastructure.Persistence.CVS.Configuration
                 .HasMaxLength(50)
                 .IsRequired();
 
-            builder.Property(c => c.StreetName)
+            builder.Property(c => c.Address.StreetName)
                 .HasMaxLength(100)
                 .IsRequired();
 
-            builder.Property(c => c.Residence)
+            builder.Property(c => c.Address.Residence)
                 .HasMaxLength(50)
                 .IsRequired();
         }

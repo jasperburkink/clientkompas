@@ -1,6 +1,4 @@
 ﻿using Application.Common.Exceptions;
-using FluentAssertions;
-using FluentValidation.Results;
 
 namespace Application.UnitTests.Common.Exceptions
 {

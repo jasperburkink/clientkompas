@@ -1,5 +1,6 @@
 ﻿using Domain.CVS.Domain;
 using Domain.CVS.Enums;
+using Domain.CVS.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -97,11 +98,7 @@ namespace Infrastructure.Persistence.CVS
                     PrefixLastName = "",
                     LastName = "Jansen",
                     Gender = Gender.Men,
-                    StreetName = "Dorpstraat",
-                    HouseNumber = 1,
-                    HouseNumberAddition = "a",
-                    PostalCode = "1234AB",
-                    Residence = "Amsterdam",
+                    Address = Address.From("Dorpstraat", 1, "a", "1234AB", "Amsterdam"),
                     TelephoneNumber = "0623456789",
                     DateOfBirth = new DateOnly(1990, 5, 14),
                     EmailAddress = "a@b.com",
