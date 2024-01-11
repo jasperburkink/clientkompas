@@ -11,7 +11,8 @@ namespace Application.FunctionalTests
     [SetUpFixture]
     public partial class Testing
     {
-        private static ITestDatabase _database;
+        private static ITestDatabase databaseCSV;
+        private static ITestDatabase databaseAuthentication;
         private static CustomWebApplicationFactory _factory = null!;
         private static IServiceScopeFactory _scopeFactory = null!;
         private static string? _userId;
@@ -19,9 +20,13 @@ namespace Application.FunctionalTests
         [OneTimeSetUp]
         public async Task RunBeforeAnyTests()
         {
-            _database = await TestDatabaseFactory.CreateAsync();
 
-            _factory = new CustomWebApplicationFactory(_database.GetConnection());
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+            databaseCSV = await TestDatabaseFactory.CreateAsync();
+            databaseAuthentication = await TestDatabaseFactory.CreateAsync();
+
+            _factory = new CustomWebApplicationFactory(databaseCSV.GetConnection());
 
             _scopeFactory = _factory.Services.GetRequiredService<IServiceScopeFactory>();
         }
@@ -97,7 +102,7 @@ namespace Application.FunctionalTests
         {
             try
             {
-                await _database.ResetAsync();
+                await databaseCSV.ResetAsync();
             }
             catch (Exception)
             {
@@ -140,7 +145,7 @@ namespace Application.FunctionalTests
         [OneTimeTearDown]
         public async Task RunAfterAnyTests()
         {
-            await _database.DisposeAsync();
+            await databaseCSV.DisposeAsync();
             await _factory.DisposeAsync();
         }
     }

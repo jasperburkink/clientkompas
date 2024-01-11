@@ -6,20 +6,18 @@ using Respawn;
 
 namespace Application.FunctionalTests
 {
-    public class SqlServerTestDatabase : ITestDatabase
+    public class MySqlTestDatabase : ITestDatabase
     {
         private readonly string _connectionString = null!;
         private SqlConnection _connection = null!;
         private Respawner _respawner = null!;
 
-        public SqlServerTestDatabase()
+        public MySqlTestDatabase(string connectionString)
         {
             var configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .AddEnvironmentVariables()
                 .Build();
-
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
 
             Guard.Against.Null(connectionString);
 
@@ -30,11 +28,11 @@ namespace Application.FunctionalTests
         {
             _connection = new SqlConnection(_connectionString);
 
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+            var options = new DbContextOptionsBuilder<DbContext>()
                 .UseSqlServer(_connectionString)
                 .Options;
 
-            var context = new ApplicationDbContext(options);
+            var context = new DbContext(options);
 
             context.Database.Migrate();
 

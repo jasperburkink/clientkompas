@@ -9,7 +9,7 @@ namespace ArchitectureTests
         private static Assembly DomainAssembly => typeof(ValueObject).Assembly;
 
         [Fact]
-        public void ValueObjects_Should_Be_Immutable()
+        public void ValueObjects_ShouldBe_Immutable()
         {
             var result = Types.InAssembly(DomainAssembly)
                 .That()

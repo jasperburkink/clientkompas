@@ -1,9 +1,7 @@
-﻿
-
-using Domain.CVS.Exceptions;
+﻿using Domain.CVS.Exceptions;
 using Domain.CVS.ValueObjects;
 
-namespace Domain.UnitTests.ValueObjects
+namespace Domain.UnitTests.CVS.ValueObjects
 {
     public class AddressTests
     {
