@@ -4,6 +4,7 @@ using Infrastructure.Persistence.CVS;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application.FunctionalTests
@@ -11,29 +12,34 @@ namespace Application.FunctionalTests
     [SetUpFixture]
     public partial class Testing
     {
-        private static ITestDatabase databaseCSV;
-        private static ITestDatabase databaseAuthentication;
-        private static CustomWebApplicationFactory _factory = null!;
-        private static IServiceScopeFactory _scopeFactory = null!;
-        private static string? _userId;
+        private static ITestDatabase s_databaseCSV;
+        private static ITestDatabase s_databaseAuthentication;
+        private static CustomWebApplicationFactory s_factory = null!;
+        private static IServiceScopeFactory s_scopeFactory = null!;
+        private static string? s_userId;
 
         [OneTimeSetUp]
         public async Task RunBeforeAnyTests()
         {
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .AddEnvironmentVariables()
+                .Build();
 
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
+            var authenticationConnectionString = configuration.GetConnectionString("AuthenticationConnectionString");
+            var csvConnectionString = configuration.GetConnectionString("CVSConnectionString");
 
-            databaseCSV = await TestDatabaseFactory.CreateAsync();
-            databaseAuthentication = await TestDatabaseFactory.CreateAsync();
+            s_databaseCSV = await TestDatabaseFactory.CreateAsync(csvConnectionString);
+            s_databaseAuthentication = await TestDatabaseFactory.CreateAsync(authenticationConnectionString);
 
-            _factory = new CustomWebApplicationFactory(databaseCSV.GetConnection());
+            s_factory = new CustomWebApplicationFactory(s_databaseCSV.GetConnection());
 
-            _scopeFactory = _factory.Services.GetRequiredService<IServiceScopeFactory>();
+            s_scopeFactory = s_factory.Services.GetRequiredService<IServiceScopeFactory>();
         }
 
         public static async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
         {
-            using var scope = _scopeFactory.CreateScope();
+            using var scope = s_scopeFactory.CreateScope();
 
             var mediator = scope.ServiceProvider.GetRequiredService<ISender>();
 
@@ -42,7 +48,7 @@ namespace Application.FunctionalTests
 
         public static async Task SendAsync(IBaseRequest request)
         {
-            using var scope = _scopeFactory.CreateScope();
+            using var scope = s_scopeFactory.CreateScope();
 
             var mediator = scope.ServiceProvider.GetRequiredService<ISender>();
 
@@ -51,7 +57,7 @@ namespace Application.FunctionalTests
 
         public static string? GetUserId()
         {
-            return _userId;
+            return s_userId;
         }
 
         public static async Task<string> RunAsDefaultUserAsync()
@@ -66,7 +72,7 @@ namespace Application.FunctionalTests
 
         public static async Task<string> RunAsUserAsync(string userName, string password, string[] roles)
         {
-            using var scope = _scopeFactory.CreateScope();
+            using var scope = s_scopeFactory.CreateScope();
 
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
@@ -88,9 +94,9 @@ namespace Application.FunctionalTests
 
             if (result.Succeeded)
             {
-                _userId = user.Id;
+                s_userId = user.Id;
 
-                return _userId;
+                return s_userId;
             }
 
             var errors = string.Join(Environment.NewLine, result.ToApplicationResult().Errors);
@@ -102,19 +108,19 @@ namespace Application.FunctionalTests
         {
             try
             {
-                await databaseCSV.ResetAsync();
+                await s_databaseCSV.ResetAsync();
             }
             catch (Exception)
             {
             }
 
-            _userId = null;
+            s_userId = null;
         }
 
         public static async Task<TEntity?> FindAsync<TEntity>(params object[] keyValues)
             where TEntity : class
         {
-            using var scope = _scopeFactory.CreateScope();
+            using var scope = s_scopeFactory.CreateScope();
 
             var context = scope.ServiceProvider.GetRequiredService<CVSDbContext>();
 
@@ -124,7 +130,7 @@ namespace Application.FunctionalTests
         public static async Task AddAsync<TEntity>(TEntity entity)
             where TEntity : class
         {
-            using var scope = _scopeFactory.CreateScope();
+            using var scope = s_scopeFactory.CreateScope();
 
             var context = scope.ServiceProvider.GetRequiredService<CVSDbContext>();
 
@@ -135,7 +141,7 @@ namespace Application.FunctionalTests
 
         public static async Task<int> CountAsync<TEntity>() where TEntity : class
         {
-            using var scope = _scopeFactory.CreateScope();
+            using var scope = s_scopeFactory.CreateScope();
 
             var context = scope.ServiceProvider.GetRequiredService<CVSDbContext>();
 
@@ -145,8 +151,8 @@ namespace Application.FunctionalTests
         [OneTimeTearDown]
         public async Task RunAfterAnyTests()
         {
-            await databaseCSV.DisposeAsync();
-            await _factory.DisposeAsync();
+            await s_databaseCSV.DisposeAsync();
+            await s_factory.DisposeAsync();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using API.Policies;
 using Infrastructure;
+using Infrastructure.Persistence.Authentication;
 using Infrastructure.Persistence.CVS;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -44,9 +45,9 @@ if (app.Environment.IsDevelopment())
     // Initialise and seed database
     using var scope = app.Services.CreateScope();
     // TODO: Uncomment for authentication
-    //var initialiserAuthentication = scope.ServiceProvider.GetRequiredService<AuthenticationDbContextInitialiser>();        
-    //await initialiserAuthentication.InitialiseAsync();
-    //await initialiserAuthentication.SeedAsync();
+    var initialiserAuthentication = scope.ServiceProvider.GetRequiredService<AuthenticationDbContextInitialiser>();
+    await initialiserAuthentication.InitialiseAsync();
+    await initialiserAuthentication.SeedAsync();
 
     var initialiserCVS = scope.ServiceProvider.GetRequiredService<CVSDbContextInitialiser>();
     await initialiserCVS.InitialiseAsync();

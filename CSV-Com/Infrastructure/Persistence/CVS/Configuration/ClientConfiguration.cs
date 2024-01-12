@@ -4,8 +4,13 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Persistence.CVS.Configuration
 {
-    public class ClientConfiguration : IEntityTypeConfiguration<Client>
+    public class ClientConfiguration : IEntityTypeConfiguration<Client>, ICVSEntityTypeConfiguration
     {
+        public void Configure(ModelBuilder modelBuilder)
+        {
+            Configure(modelBuilder.Entity<Client>());
+        }
+
         public void Configure(EntityTypeBuilder<Client> builder)
         {
             // NOTE: Don't use keys configurations etc. which you can solve with EF conventions. https://youtu.be/dK4Yb6-LxAk?t=2210
@@ -36,6 +41,13 @@ namespace Infrastructure.Persistence.CVS.Configuration
                 .WithOne(wc => wc.Client)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            builder.OwnsOne(c => c.Address, cs =>
+            {
+                cs.OwnsOne(s => s.Residence);
+                cs.OwnsOne(s => s.PostalCode);
+                cs.OwnsOne(s => s.StreetName);
+            });
+
             builder.Property(c => c.FirstName)
                 .HasMaxLength(50)
                 .IsRequired();
@@ -45,15 +57,7 @@ namespace Infrastructure.Persistence.CVS.Configuration
 
             builder.Property(c => c.LastName)
                 .HasMaxLength(50)
-                .IsRequired();
-
-            builder.Property(c => c.Address.StreetName)
-                .HasMaxLength(100)
-                .IsRequired();
-
-            builder.Property(c => c.Address.Residence)
-                .HasMaxLength(50)
-                .IsRequired();
+            .IsRequired();
         }
     }
 }

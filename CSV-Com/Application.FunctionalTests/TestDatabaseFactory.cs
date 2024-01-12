@@ -2,12 +2,10 @@
 {
     public static class TestDatabaseFactory
     {
-        public static async Task<ITestDatabase> CreateAsync()
+        public static async Task<ITestDatabase> CreateAsync(string connectionString)
         {
-
-
 #if DEBUG
-            var database = new MySqlTestDatabase();
+            var database = new MySqlTestDatabase(connectionString);
 #else
         var database = new TestcontainersTestDatabase();
 #endif

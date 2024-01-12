@@ -66,9 +66,6 @@ namespace Infrastructure.Persistence.CVS
                 benefitForm = _context.BenefitForm.First(ms => ms.Id.Equals(benefitFormId));
             }
 
-
-
-
             MaritalStatus martitalStatus;
             var maritalStatusId = 1;
 

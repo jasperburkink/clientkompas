@@ -2,7 +2,6 @@
 using Domain.CVS.Domain;
 using Domain.CVS.Enums;
 using Domain.CVS.ValueObjects;
-using FluentAssertions;
 using static Application.FunctionalTests.Testing;
 
 namespace Application.FunctionalTests.Clients.Queries.GetClients
@@ -31,6 +30,7 @@ namespace Application.FunctionalTests.Clients.Queries.GetClients
                     Name = "Gehuwd"
                 }
             };
+
             await AddAsync(client);
 
             var query = new GetClientsQuery();

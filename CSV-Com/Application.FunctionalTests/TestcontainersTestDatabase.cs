@@ -1,26 +1,32 @@
 ﻿using System.Data.Common;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using MySqlConnector;
 using Respawn;
+using Testcontainers.MySql;
 
 namespace Application.FunctionalTests
 {
-    public class MySqlTestDatabase : ITestDatabase
+    public class TestcontainersTestDatabase : ITestDatabase
     {
-        private readonly string _connectionString = null!;
-        private MySqlConnection _connection = null!;
+        private readonly MySqlContainer _container;
+        private DbConnection _connection = null!;
+        private string _connectionString = null!;
         private Respawner _respawner = null!;
 
-        public MySqlTestDatabase(string connectionString)
+        public TestcontainersTestDatabase()
         {
-            Guard.Against.Null(connectionString);
-
-            _connectionString = connectionString;
+            _container = new MySqlBuilder()
+                .WithAutoRemove(true)
+                .Build();
         }
 
         public async Task InitialiseAsync()
         {
-            _connection = new MySqlConnection(_connectionString);
+            await _container.StartAsync();
+
+            _connectionString = _container.GetConnectionString();
+
+            _connection = new SqlConnection(_connectionString);
 
             var options = new DbContextOptionsBuilder<DbContext>()
                 .UseMySql(_connectionString, MySqlServerVersion.LatestSupportedServerVersion)
@@ -30,9 +36,7 @@ namespace Application.FunctionalTests
 
             context.Database.Migrate();
 
-            _connection.Open();
-
-            _respawner = await Respawner.CreateAsync(_connection, new RespawnerOptions
+            _respawner = await Respawner.CreateAsync(_connectionString, new RespawnerOptions
             {
                 TablesToIgnore = new Respawn.Graph.Table[] { "__EFMigrationsHistory" }
             });
@@ -45,12 +49,13 @@ namespace Application.FunctionalTests
 
         public async Task ResetAsync()
         {
-            await _respawner.ResetAsync(_connection);
+            await _respawner.ResetAsync(_connectionString);
         }
 
         public async Task DisposeAsync()
         {
             await _connection.DisposeAsync();
+            await _container.DisposeAsync();
         }
     }
 }
