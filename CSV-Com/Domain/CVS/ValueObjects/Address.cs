@@ -5,15 +5,15 @@ namespace Domain.CVS.ValueObjects
 {
     public class Address : ValueObject
     {
-        public string StreetName { get; set; }
+        public string StreetName { get; } = "";
 
-        public int HouseNumber { get; set; }
+        public int HouseNumber { get; } = 0;
 
-        public string HouseNumberAddition { get; set; }
+        public string HouseNumberAddition { get; } = "";
 
-        public string PostalCode { get; set; }
+        public string PostalCode { get; } = "";
 
-        public string Residence { get; set; }
+        public string Residence { get; } = "";
 
         static Address() { }
 
@@ -32,14 +32,7 @@ namespace Domain.CVS.ValueObjects
 
         public static Address From(string streetName, int houseNumber, string houseNumberAddition, string postalCode, string residence)
         {
-            var address = new Address
-            {
-                StreetName = streetName,
-                HouseNumber = houseNumber,
-                HouseNumberAddition = houseNumberAddition,
-                PostalCode = postalCode,
-                Residence = residence
-            };
+            var address = new Address(streetName, houseNumber, houseNumberAddition, postalCode, residence);
 
             if (!address.IsValid())
             {

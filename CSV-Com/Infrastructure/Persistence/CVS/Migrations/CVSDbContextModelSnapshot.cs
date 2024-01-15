@@ -399,25 +399,6 @@ namespace Infrastructure.Persistence.CVS.Migrations
                             b1.Property<int>("ClientId")
                                 .HasColumnType("int");
 
-                            b1.Property<int>("HouseNumber")
-                                .HasColumnType("int");
-
-                            b1.Property<string>("HouseNumberAddition")
-                                .IsRequired()
-                                .HasColumnType("longtext");
-
-                            b1.Property<string>("PostalCode")
-                                .IsRequired()
-                                .HasColumnType("longtext");
-
-                            b1.Property<string>("Residence")
-                                .IsRequired()
-                                .HasColumnType("longtext");
-
-                            b1.Property<string>("StreetName")
-                                .IsRequired()
-                                .HasColumnType("longtext");
-
                             b1.HasKey("ClientId");
 
                             b1.ToTable("Clients");

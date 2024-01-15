@@ -5,7 +5,7 @@ using Respawn;
 
 namespace Application.FunctionalTests
 {
-    public class MySqlTestDatabase : ITestDatabase
+    public class MySqlTestDatabase<TContext> : ITestDatabase where TContext : DbContext
     {
         private readonly string _connectionString = null!;
         private MySqlConnection _connection = null!;
@@ -20,13 +20,19 @@ namespace Application.FunctionalTests
 
         public async Task InitialiseAsync()
         {
-            _connection = new MySqlConnection(_connectionString);
+            var mySqlConnectionStringBuilder = new MySqlConnectionStringBuilder(_connectionString)
+            {
+                AllowUserVariables = true,
+                UseAffectedRows = false
+            };
 
-            var options = new DbContextOptionsBuilder<DbContext>()
+            _connection = new MySqlConnection(mySqlConnectionStringBuilder.ConnectionString);
+
+            var options = new DbContextOptionsBuilder<TContext>()
                 .UseMySql(_connectionString, MySqlServerVersion.LatestSupportedServerVersion)
                 .Options;
 
-            var context = new DbContext(options);
+            var context = (DbContext)Activator.CreateInstance(typeof(TContext), options);
 
             context.Database.Migrate();
 
@@ -34,7 +40,8 @@ namespace Application.FunctionalTests
 
             _respawner = await Respawner.CreateAsync(_connection, new RespawnerOptions
             {
-                TablesToIgnore = new Respawn.Graph.Table[] { "__EFMigrationsHistory" }
+                DbAdapter = DbAdapter.MySql,
+                TablesToIgnore = new Respawn.Graph.Table[] { "__EFMigrationsHistory" },
             });
         }
 

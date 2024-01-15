@@ -1,5 +1,6 @@
 ﻿using Domain.Constants;
 using Infrastructure.Identity;
+using Infrastructure.Persistence.Authentication;
 using Infrastructure.Persistence.CVS;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -29,8 +30,8 @@ namespace Application.FunctionalTests
             var authenticationConnectionString = configuration.GetConnectionString("AuthenticationConnectionString");
             var csvConnectionString = configuration.GetConnectionString("CVSConnectionString");
 
-            s_databaseCSV = await TestDatabaseFactory.CreateAsync(csvConnectionString);
-            s_databaseAuthentication = await TestDatabaseFactory.CreateAsync(authenticationConnectionString);
+            s_databaseAuthentication = await TestDatabaseFactory<AuthenticationDbContext>.CreateAsync(authenticationConnectionString!);
+            s_databaseCSV = await TestDatabaseFactory<CVSDbContext>.CreateAsync(csvConnectionString!);
 
             s_factory = new CustomWebApplicationFactory(s_databaseCSV.GetConnection());
 

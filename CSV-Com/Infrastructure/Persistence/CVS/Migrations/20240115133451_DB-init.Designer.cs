@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.CVS.Migrations
 {
     [DbContext(typeof(CVSDbContext))]
-    [Migration("20240115093901_DB-init")]
+    [Migration("20240115133451_DB-init")]
     partial class DBinit
     {
         /// <inheritdoc />
@@ -401,25 +401,6 @@ namespace Infrastructure.Persistence.CVS.Migrations
                         {
                             b1.Property<int>("ClientId")
                                 .HasColumnType("int");
-
-                            b1.Property<int>("HouseNumber")
-                                .HasColumnType("int");
-
-                            b1.Property<string>("HouseNumberAddition")
-                                .IsRequired()
-                                .HasColumnType("longtext");
-
-                            b1.Property<string>("PostalCode")
-                                .IsRequired()
-                                .HasColumnType("longtext");
-
-                            b1.Property<string>("Residence")
-                                .IsRequired()
-                                .HasColumnType("longtext");
-
-                            b1.Property<string>("StreetName")
-                                .IsRequired()
-                                .HasColumnType("longtext");
 
                             b1.HasKey("ClientId");
 
