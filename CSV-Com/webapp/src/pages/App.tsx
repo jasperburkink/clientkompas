@@ -17,17 +17,37 @@ import { InputFieldWithLabel } from '../components/common/input-field-with-label
 import { SlideToggleLabel } from '../components/common/slide-toggle-label';
 import { DatePicker } from '../components/common/datepicker';
 import Textarea from "../components/common/Textarea";
+import { Dropdown } from '../components/common/dropdown';
+import DropdownWithButton from "../components/common/dropdown-with-button";
 import PopUp from "../components/common/PopUp";
 
 function App() {
+    const data = [
+        {
+            value: 1,
+            label: "ADHD",
+           
+        },
+        {
+            value: 2,
+            label: "Asperger",
+    
+        },
+        {
+            value: 3,
+            label: "SBICT",
+            
+        },
+    ];
     const handleClick = () => {
     };
         const handleCancelClick = () => {
         };
           
     return (
-        <div className="md:flex">    
-            <div className='md:flex'>
+        <div className="md:flex">   
+            <div id='staticSidebar' className='sidebarContentPush'></div>  
+            <div className='md:flex fixed'>
                 <Sidebar>
                     <NavButton text="Cliënten" icon="Gebruikers" />
                     <NavButton text="Uren registratie" icon="Klok" />
@@ -164,7 +184,13 @@ function App() {
                 
                 <p>Textarea component</p>
                 <Textarea text="Voeg een opmerking toe"/>
-                
+
+                <p>Dropdown</p>
+                <Dropdown  options={data} required={false} inputfieldname='dropdown' />
+             
+                <p>Dropdown with button</p>
+                <DropdownWithButton options={data} required={false} inputfieldname='dropdownWithButton' />
+
                 <p>PopUp component</p>
                 <PopUp
                 handleClick={handleClick}
@@ -174,7 +200,8 @@ function App() {
                 insidePopUpText="The Text inside popUp placeholder"
                 buttonType='backitupanddoitagain'
                 text='babadapalaeËeeeë'
-                />    
+                />  
+                            
              </div>
             <Copyright />
         </div>

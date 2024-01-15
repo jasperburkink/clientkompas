@@ -5,8 +5,6 @@ namespace Domain.CVS.Domain
 {
     public class Client : BaseAuditableEntity
     {
-        public int IdentificationNumber { get; set; }
-
         public string FirstName { get; set; }
 
         public string Initials { get; set; }
@@ -35,15 +33,17 @@ namespace Domain.CVS.Domain
 
         public MaritalStatus MaritalStatus { get; set; }
 
-        public virtual ICollection<DriversLicence> DriversLicences { get; set; } = new List<DriversLicence>();
+        public List<DriversLicence> DriversLicences { get; set; } = new();
 
         public virtual ICollection<EmergencyPerson> EmergencyPeople { get; set; } = new List<EmergencyPerson>();
 
-        public virtual ICollection<Diagnosis> Diagnoses { get; set; } = new List<Diagnosis>();
+        public List<Diagnosis> Diagnoses { get; } = new();
 
         public BenefitForm BenefitForm { get; set; }
 
         public virtual ICollection<WorkingContract> WorkingContracts { get; set; } = new List<WorkingContract>();
+
+        public DateTime? DeactivationDateAndTime { get; set; }
 
         public string Remarks { get; set; }
     }

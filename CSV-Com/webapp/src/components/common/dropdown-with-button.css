@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer components {
+    
+    .add-extra-dropdown-btn{
+        @apply 
+            w-12 
+            h-12 
+            bg-mainLightGray 
+            border-2 
+            border-subGray2 
+            placeholder-subGray2 
+            focus:border-mainBlue 
+            focus:ring-1 
+            ring-mainBlue 
+            outline-none 
+            text-sm 
+            rounded-lg 
+            block 
+            pl-[22px] 
+            pr-[22px] 
+            text-black 
+            font-primary 
+            ml-2 
+            bg-no-repeat 
+            bg-[length:20px] 
+            bg-center 
+            flex 
+            items-center 
+            justify-center;
+    }
+
+    .dropdownbadge{
+        @apply 
+            border-2 
+            border-subGray2 
+            bg-mainLightGray 
+            flex 
+            rounded-lg 
+            mt-1 
+            mr-1;
+    }
+    .badgeBtn{
+        @apply 
+            w-3 
+            h-3 
+            mr-1 
+            my-auto 
+            bg-no-repeat 
+            bg-[length:7px] 
+            bg-center 
+            flex items-center 
+            justify-center;
+    }
+   
+}

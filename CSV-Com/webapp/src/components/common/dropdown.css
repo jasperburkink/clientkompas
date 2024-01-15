@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    font-family: "work-sans";
+    src: url("../../assets/fonts/work-sans-v19-latin-regular.woff2");
+  }
+
+
+@layer components {
+   
+    .dropdown{
+       font-family: work-sans;
+        @apply 
+            w-4/5 
+            h-12 
+            bg-mainLightGray 
+            border-2 
+            border-subGray2 
+            placeholder-subGray2 
+            focus:border-mainBlue 
+            focus:ring-1 
+            ring-mainBlue 
+            outline-none 
+            text-sm 
+            rounded-lg 
+            block w-full 
+            p-2.5 
+            text-gray-400
+            font-normal;
+        @apply 
+            appearance-none 
+            bg-[url(../../assets/angle-down-solid.svg)]  
+            bg-no-repeat 
+            bg-[95%] 
+            bg-[length:20px];
+    }
+    option{
+        @apply text-black; 
+    }
+   
+}

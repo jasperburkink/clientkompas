@@ -1,8 +1,10 @@
-﻿using Application.Clients.Commands.AddClientDriversLicence;
+﻿using Application.Clients.Commands.AddDriversLicenceToClient;
 using Application.Clients.Commands.CreateClient;
+using Application.Clients.Commands.DeactivateClient;
 using Application.Clients.Commands.DeleteClientDriversLicence;
 using Application.Clients.Queries.GetClients;
 using Application.Clients.Queries.SearchClients;
+using Application.Common.Exceptions;
 using Domain.CVS.Domain;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,14 +36,14 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> Create(CreateClientCommand command)
+        public async Task<ActionResult<ClientDto>> Create(CreateClientCommand command)
         {
             return await Mediator.Send(command);
         }
 
         [Route("[action]")]
         [HttpPost]
-        public async Task<ActionResult<int>> AddDriversLicence(AddClientDriversLicenceCommand command)
+        public async Task<ActionResult<ClientDto>> AddDriversLicence(AddDriversLicenceToClientCommand command)
         {
             return await Mediator.Send(command);
         }
@@ -51,6 +53,24 @@ namespace API.Controllers
         public void Put(int id, [FromBody] Client value)
         {
             throw new NotImplementedException();
+        }
+
+        [HttpPut("DeactivateClient")]
+        public async Task<ActionResult<ClientDto>> Put(DeactivateClientCommand command)
+        {
+            try
+            {
+                var result = await Mediator.Send(command);
+                return Ok(result);
+            }
+            catch (NotFoundException ex)
+            {
+                return StatusCode(404, ex);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
         }
 
         //TODO: implement with new Mediator structure
