@@ -13,15 +13,13 @@ namespace Infrastructure.Persistence.Authentication
         protected override void OnModelCreating(ModelBuilder builder)
         {
             var configurations = GetType().Assembly.GetTypes()
-            .Where(type => type.GetInterfaces().Any(interfaceType =>
-                interfaceType.IsGenericType &&
-                interfaceType.GetGenericTypeDefinition() == typeof(IAuthenticationEntityTypeConfiguration)))
-            .Select(Activator.CreateInstance)
-            .Cast<IAuthenticationEntityTypeConfiguration>();
+                .Where(type => type.GetInterfaces().Any(interfaceType =>
+                    interfaceType == typeof(IAuthenticationEntityTypeConfiguration)))
+                .Select(type => Activator.CreateInstance(type) as IAuthenticationEntityTypeConfiguration);
 
             foreach (var configuration in configurations)
             {
-                configuration.Configure(builder);
+                configuration!.Configure(builder);
             }
 
             base.OnModelCreating(builder);

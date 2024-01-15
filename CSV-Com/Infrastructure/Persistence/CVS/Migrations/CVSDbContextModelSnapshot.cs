@@ -109,13 +109,6 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     b.Property<int>("Gender")
                         .HasColumnType("int");
 
-                    b.Property<int>("HouseNumber")
-                        .HasColumnType("int");
-
-                    b.Property<string>("HouseNumberAddition")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<string>("Initials")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -134,10 +127,6 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     b.Property<int>("MaritalStatusId")
                         .HasColumnType("int");
 
-                    b.Property<string>("PostalCode")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<string>("PrefixLastName")
                         .IsRequired()
                         .HasMaxLength(10)
@@ -146,16 +135,6 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     b.Property<string>("Remarks")
                         .IsRequired()
                         .HasColumnType("longtext");
-
-                    b.Property<string>("Residence")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("StreetName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("TelephoneNumber")
                         .IsRequired()
@@ -413,6 +392,41 @@ namespace Infrastructure.Persistence.CVS.Migrations
                         .WithMany("Clients")
                         .HasForeignKey("MaritalStatusId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("Domain.CVS.ValueObjects.Address", "Address", b1 =>
+                        {
+                            b1.Property<int>("ClientId")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("HouseNumber")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("HouseNumberAddition")
+                                .IsRequired()
+                                .HasColumnType("longtext");
+
+                            b1.Property<string>("PostalCode")
+                                .IsRequired()
+                                .HasColumnType("longtext");
+
+                            b1.Property<string>("Residence")
+                                .IsRequired()
+                                .HasColumnType("longtext");
+
+                            b1.Property<string>("StreetName")
+                                .IsRequired()
+                                .HasColumnType("longtext");
+
+                            b1.HasKey("ClientId");
+
+                            b1.ToTable("Clients");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ClientId");
+                        });
+
+                    b.Navigation("Address")
                         .IsRequired();
 
                     b.Navigation("BenefitForm");

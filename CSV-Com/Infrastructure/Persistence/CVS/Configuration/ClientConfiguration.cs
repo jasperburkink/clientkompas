@@ -41,12 +41,7 @@ namespace Infrastructure.Persistence.CVS.Configuration
                 .WithOne(wc => wc.Client)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.OwnsOne(c => c.Address, cs =>
-            {
-                cs.OwnsOne(s => s.Residence);
-                cs.OwnsOne(s => s.PostalCode);
-                cs.OwnsOne(s => s.StreetName);
-            });
+            builder.OwnsOne(c => c.Address);
 
             builder.Property(c => c.FirstName)
                 .HasMaxLength(50)

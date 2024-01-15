@@ -22,15 +22,13 @@ namespace Infrastructure.Persistence.CVS
         protected override void OnModelCreating(ModelBuilder builder)
         {
             var configurations = GetType().Assembly.GetTypes()
-            .Where(type => type.GetInterfaces().Any(interfaceType =>
-                interfaceType.IsGenericType &&
-                interfaceType.GetGenericTypeDefinition() == typeof(ICVSEntityTypeConfiguration)))
-            .Select(Activator.CreateInstance)
-            .Cast<ICVSEntityTypeConfiguration>();
+                .Where(type => type.GetInterfaces().Any(interfaceType =>
+                    interfaceType == typeof(ICVSEntityTypeConfiguration)))
+                .Select(type => Activator.CreateInstance(type) as ICVSEntityTypeConfiguration);
 
             foreach (var configuration in configurations)
             {
-                configuration.Configure(builder);
+                configuration!.Configure(builder);
             }
 
             base.OnModelCreating(builder);

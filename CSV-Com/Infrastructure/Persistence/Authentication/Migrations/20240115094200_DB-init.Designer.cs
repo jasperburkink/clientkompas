@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.Authentication.Migrations
 {
     [DbContext(typeof(AuthenticationDbContext))]
-    [Migration("20240112131816_DB-init")]
+    [Migration("20240115094200_DB-init")]
     partial class DBinit
     {
         /// <inheritdoc />
