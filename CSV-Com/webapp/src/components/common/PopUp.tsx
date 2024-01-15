@@ -10,15 +10,22 @@ import ButtonForPopup from './ButtonForPopup';
 interface PopUpProps {
   handleClick: () => void;
   handleCancelClick: () => void;
-  cancelButtonText2: string;
-  confirmButtonText1: string;
+  cancelButtonText: string;
+  confirmButtonText: string;
+  insidePopUpText: string;
+  text: string;
+  buttonType: string
 }
 
+let string = "text" as const
 const PopUp: React.FC<PopUpProps> = ({
   handleClick,
   handleCancelClick,
-  cancelButtonText2,
-  confirmButtonText1,
+  cancelButtonText,
+  confirmButtonText,
+  insidePopUpText,
+  text,
+  buttonType,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const popupRef = useRef<HTMLDivElement>(null);
@@ -47,6 +54,7 @@ const PopUp: React.FC<PopUpProps> = ({
    <div> 
 
     <ButtonForPopup
+    openbutton='placeholder'
      isOpen={isOpen} 
      setIsOpen={setIsOpen} 
     />
@@ -56,7 +64,7 @@ const PopUp: React.FC<PopUpProps> = ({
           <div className ="popup-content" ref={popupRef} >
             <div className ="popup-inner">
               <div className ="popup-justify">
-                 <p className ="popup-text ">Weet u zeker dat u de cliënt <br />  wilt deactiveren?</p>
+                 <p className ="popup-text ">{insidePopUpText}</p>
                  <button 
                   className ="popup-buttonX"
                   onClick={() => setIsOpen(false)}
@@ -69,7 +77,7 @@ const PopUp: React.FC<PopUpProps> = ({
                 <button 
                   onClick = {handleClick} 
                   className ="popUp-btnLeft">
-                  {confirmButtonText1}
+                  {confirmButtonText}
                 </button>
 
                 <button
@@ -79,7 +87,7 @@ const PopUp: React.FC<PopUpProps> = ({
                    }}
                   className="popUp-btnRight"
                 >
-                    {cancelButtonText2}
+                    {cancelButtonText}
                  </button>
                </div>
              </div>
@@ -92,8 +100,10 @@ const PopUp: React.FC<PopUpProps> = ({
 PopUp.propTypes = {
   handleClick: PropTypes.func.isRequired,
   handleCancelClick: PropTypes.func.isRequired,
-  confirmButtonText1: PropTypes.string.isRequired,
-  cancelButtonText2: PropTypes.string.isRequired,
+  confirmButtonText: PropTypes.string.isRequired,
+  cancelButtonText: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired,
+  buttonType: PropTypes.string.isRequired,
 };
  
 export default PopUp;
