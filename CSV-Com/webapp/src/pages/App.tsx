@@ -187,7 +187,7 @@ function App() {
                 <DropdownWithButton options={data} required={false} inputfieldname='dropdownWithButton' />
 
                 <p>Wachtwoord input</p>
-                <PasswordFieldField inputfieldname='password' />
+                <PasswordField inputfieldname='password' />
                             
             </div>
             <Copyright />
