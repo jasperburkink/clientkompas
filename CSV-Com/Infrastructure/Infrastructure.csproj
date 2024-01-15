@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -6,6 +6,12 @@
     <Nullable>enable</Nullable>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Persistence\CVS\ValueComparers\**" />
+    <EmbeddedResource Remove="Persistence\CVS\ValueComparers\**" />
+    <None Remove="Persistence\CVS\ValueComparers\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="7.0.5" />
@@ -19,7 +25,6 @@
 
   <ItemGroup>
     <Folder Include="Persistence\CVS\Migrations\" />
-    <Folder Include="Persistence\CVS\ValueComparers\" />
   </ItemGroup>
 
 </Project>

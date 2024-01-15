@@ -19,6 +19,8 @@ import { DatePicker } from '../components/common/datepicker';
 import Textarea from "../components/common/Textarea";
 import PopUp from "../components/common/PopUp";
 import SaveButton from '../components/common/SaveButton';
+import { Dropdown } from '../components/common/dropdown';
+import DropdownWithButton from "../components/common/dropdown-with-button";
 
 function App() {
     const handleClick = () => {
@@ -27,9 +29,27 @@ function App() {
         };
 
 
+    const data = [
+        {
+            value: 1,
+            label: "ADHD",
+           
+        },
+        {
+            value: 2,
+            label: "Asperger",
+    
+        },
+        {
+            value: 3,
+            label: "SBICT",
+            
+        },
+    ];
     return (
-        <div className="md:flex">    
-            <div className='md:flex'>
+        <div className="md:flex">   
+            <div id='staticSidebar' className='sidebarContentPush'></div>  
+            <div className='md:flex fixed'>
                 <Sidebar>
                     <NavButton text="Cliënten" icon="Gebruikers" />
                     <NavButton text="Uren registratie" icon="Klok" />

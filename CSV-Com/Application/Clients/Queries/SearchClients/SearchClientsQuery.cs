@@ -25,6 +25,7 @@ namespace Application.Clients.Queries.SearchClients
         {
             return (await _unitOfWork.ClientRepository.GetAsync())
                 .AsQueryable()
+                .Where(c => c.DeactivationDateAndTime == null)
                 .Where(c => // TODO: Welke stringcomparison is het beste voor het vergelijken van strings in een collectie?
                     c.LastName.Contains(request.SearchTerm, StringComparison.OrdinalIgnoreCase) ||
                     c.FirstName.Contains(request.SearchTerm, StringComparison.OrdinalIgnoreCase) ||
