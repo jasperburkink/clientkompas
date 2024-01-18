@@ -57,7 +57,7 @@ dotnet-publish:
   - name: docker:20.10.16-dind
     command:
       [
-        '--insecure-registry=gitlab.sbict.local'
+        '--insecure-registry=registry.sbict.local'
       ]
   before_script:
   - ls
