@@ -4,15 +4,18 @@ workflow:
 
 variables:  
   DOTNET_IMAGE: "mcr.microsoft.com/dotnet/sdk:7.0" # Default image for gitlabrunner
+  DOCKER_IMAGE: "docker:20.10.16"
   NODE_IMAGE: "node:18"  
   SOLUTION_FOLDER: "CSV-Com"
   SOLUTION: "$SOLUTION_FOLDER/CSV-Com.sln"
   NODE_FOLDER: "webapp"
   BUILD_CONFIGURATION: "Debug"
+  DOTNET_DOCKER_IMAGE_NAME: "sbict-cvs-com"
 
 stages:
   - build
   - test
+  - publish
 
 dotnet-build:
   before_script:
@@ -48,6 +51,18 @@ dotnet-test:
     when: always  # Keep result files. Even when tests fail.
   dependencies:
     - dotnet-build
+    
+dotnet-publish:
+  services:
+  - docker:20.10.16-dind
+  before_script:
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  stage: publish
+  script:
+    - cd CSV-com
+    - docker build -t $DOTNET_DOCKER_IMAGE_NAME -f "./API/Dockerfile" "."
+    - docker push $DOTNET_DOCKER_IMAGE_NAME
+  image: $DOCKER_IMAGE
 
 node-build:
   before_script:
