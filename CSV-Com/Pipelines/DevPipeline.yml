@@ -10,7 +10,7 @@ variables:
   SOLUTION: "$SOLUTION_FOLDER/CSV-Com.sln"
   NODE_FOLDER: "webapp"
   BUILD_CONFIGURATION: "Debug"
-  DOTNET_DOCKER_IMAGE_NAME: "sbict-cvs-com"
+  DOTNET_DOCKER_IMAGE_NAME: "registry.sbict.local/client-volgsysteem/cvs-com"
 
 stages:
   - publish
