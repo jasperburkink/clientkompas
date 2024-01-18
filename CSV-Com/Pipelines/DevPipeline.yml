@@ -13,9 +13,9 @@ variables:
   DOTNET_DOCKER_IMAGE_NAME: "sbict-cvs-com"
 
 stages:
+  - publish
   - build
   - test
-  - publish
 
 dotnet-build:
   before_script:
