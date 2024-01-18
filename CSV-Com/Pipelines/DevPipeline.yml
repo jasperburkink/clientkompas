@@ -64,7 +64,7 @@ dotnet-publish:
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   stage: publish
   script:
-    - cd CSV-com
+    - cd CSV-Com
     - docker build -t $DOTNET_DOCKER_IMAGE_NAME -f "./API/Dockerfile" "."
     - docker push $DOTNET_DOCKER_IMAGE_NAME
   image: $DOCKER_IMAGE
