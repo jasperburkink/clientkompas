@@ -10,7 +10,7 @@ variables:
   SOLUTION: "$SOLUTION_FOLDER/CSV-Com.sln"
   NODE_FOLDER: "webapp"
   BUILD_CONFIGURATION: "Debug"
-  DOTNET_DOCKER_IMAGE_NAME: "registry.sbict.local/client-volgsysteem/cvs-com"
+  DOTNET_DOCKER_IMAGE_NAME: "gitlab.sbict.local/client-volgsysteem/cvs-com"
 
 stages: 
   - publish
@@ -65,8 +65,8 @@ dotnet-publish:
   stage: publish
   script:
     - cd CSV-Com
-    - docker build -t gitlab.sbict.local -f "./API/Dockerfile" "."
-    - docker push gitlab.sbict.local
+    - docker build -t $DOTNET_DOCKER_IMAGE_NAME -f "./API/Dockerfile" "."
+    - docker push $DOTNET_DOCKER_IMAGE_NAME
   image: $DOCKER_IMAGE
 
 node-build:
