@@ -148,11 +148,7 @@ namespace Infrastructure.Persistence.CVS
                     PrefixLastName = "van den",
                     LastName = "Heuvel tot Beichlingen, gezegd Bartolotti Rijnders",
                     Gender = Gender.NonBinary,
-                    StreetName = "Kerkstraat",
-                    HouseNumber = 2,
-                    HouseNumberAddition = "",
-                    PostalCode = "1234BA",
-                    Residence = "Rotterdam",
+                    Address = Address.From("Kerkstraat", 2, "", "1234AB", "Rotterdam"),
                     TelephoneNumber = "0623456789",
                     DateOfBirth = new DateOnly(1950, 12, 1),
                     EmailAddress = "b@a.com",
@@ -181,7 +177,6 @@ namespace Infrastructure.Persistence.CVS
                     },
                     Remarks = "Deze persoon heeft wel een heel erg lange naam."
                 });
-
 
                 await _context.SaveChangesAsync();
             }

@@ -2,7 +2,7 @@
 import Client from '../../../types/model/Client';
 
 export const mockClientData: Client = {
-    identificationnumber: 1,
+    id: 1,
     firstname: 'John',
     lastname: 'Smith',
     emailaddress: 'test@example.com',
