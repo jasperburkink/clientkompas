@@ -6,13 +6,28 @@ namespace Domain.CVS.Domain
 {
     public class Client : BaseAuditableEntity
     {
-        public string FirstName { get; set; }
+        public string FirstName
+        {
+            get; set;
+        }
 
         public string Initials { get; set; }
 
-        public string PrefixLastName { get; set; }
+        public string PrefixLastName
+        {
+            get; set;
+        }
 
-        public string LastName { get; set; }
+        public string LastName
+        {
+            get; set;
+        }
+
+        public string FullName
+        {
+            get => string.Join(' ', (new string[] { FirstName, PrefixLastName, LastName }).Where(fv => !string.IsNullOrEmpty(fv)).Select(s => s.Trim()));
+            set => _ = value;
+        }
 
         public Gender Gender { get; set; }
 
