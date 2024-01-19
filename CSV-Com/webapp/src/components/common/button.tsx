@@ -3,9 +3,11 @@ import './button.css';
 import { ButtonType } from '../../types/common/ButtonComponentType';
 import { getClassNameButtonType } from '../../types/common/ButtonComponentType';
 
-interface ButtonProps extends React.HtmlHTMLAttributes<HTMLButtonElement> {
-    text: string,
-    buttonType: ButtonType
+interface ButtonProps {
+    text: string;
+    buttonType: ButtonType;
+    onClick: () => void;
+    className?: string;
 }
 
 export const Button = (props: ButtonProps) => (

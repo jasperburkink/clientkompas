@@ -8,4 +8,3 @@ test('renders components header', () => {
     const linkElement = screen.getByText('Dit zijn alle beschikbare componenten.');
     expect(linkElement).toBeInTheDocument();
 });
-
