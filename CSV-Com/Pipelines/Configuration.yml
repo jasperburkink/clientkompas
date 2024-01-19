@@ -16,6 +16,9 @@ trigger_FeaturePipeline:
     stage: triggers
     trigger:
         include: CSV-Com/Pipelines/FeaturePipeline.yml
+    rules:
+      - if: $CI_PIPELINE_SOURCE == "web"
+        when: never
     only:
       - /^Feature[0-9]*_*//i # See naming conventions for features https://sbict.atlassian.net/wiki/spaces/CVS/pages/7241742/GIT-Flow#Naamgeving
 
