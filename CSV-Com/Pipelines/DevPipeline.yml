@@ -12,7 +12,7 @@ variables:
   BUILD_CONFIGURATION: "Debug"
   DOTNET_DOCKER_IMAGE_NAME: "registry.sbict.local/client-volgsysteem/cvs-com"
 
-stages:
+stages: 
   - publish
   - build
   - test
@@ -57,10 +57,11 @@ dotnet-publish:
   - name: docker:20.10.16-dind
     command:
       [
-        '--insecure-registry=registry.sbict.local'
+        '--insecure-registry=registry.sbict.local',
+        '--insecure-registry=gitlab.sbict.local'
       ]
   before_script:
-  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD gitlab.sbict.local
   stage: publish
   script:
     - cd CSV-Com
