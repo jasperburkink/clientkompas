@@ -5,7 +5,7 @@ import Clients from '../../../pages/Clients';
 import { mockClientData } from '../../../tests/unit-tests/mocks/apiMock';
 import * as ApiModule from '../../../utils/api';
 
-jest.mock('../utils/api', () => ({
+jest.mock('../../../utils/api', () => ({
     fetchClient: jest.fn(),
   }));
 
@@ -43,7 +43,7 @@ describe('ClientPage', () => {
         
         // Wait for the data to be loaded
         await waitFor(() => {
-          expect(getByText('')).toBeInTheDocument();
+          expect(screen.getByText('')).toBeInTheDocument();
         });
       });
 
