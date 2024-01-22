@@ -1,4 +1,4 @@
-﻿using Application.Clients.Queries.GetClients;
+﻿using Application.Clients.Dtos;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces.CVS;
 using AutoMapper;
@@ -37,9 +37,9 @@ namespace Application.Clients.Commands.CreateClient
 
         public string EmailAddress { get; set; }
 
-        public int MaritalStatusid { get; set; }
+        public string MaritalStatus { get; set; }
 
-        public int BenefitFormid { get; set; }
+        public string BenefitForm { get; set; }
 
         public string Remarks { get; set; }
     }
@@ -58,10 +58,11 @@ namespace Application.Clients.Commands.CreateClient
         public async Task<ClientDto> Handle(CreateClientCommand request, CancellationToken cancellationToken)
         {
 
-            var benefitForm = await _unitOfWork.BenefitFormRepository.GetByIDAsync(request.BenefitFormid, cancellationToken)
-                ?? throw new NotFoundException(nameof(BenefitForm), request.BenefitFormid);
-            var maritalStatus = await _unitOfWork.MaritalStatusRepository.GetByIDAsync(request.MaritalStatusid, cancellationToken)
-                ?? throw new NotFoundException(nameof(MaritalStatus), request.MaritalStatusid);
+            var benefitForm = (await _unitOfWork.BenefitFormRepository.GetAsync(a => a.Name == request.BenefitForm))?.SingleOrDefault()
+                ?? throw new NotFoundException(nameof(BenefitForm), request.BenefitForm);
+
+            var maritalStatus = (await _unitOfWork.MaritalStatusRepository.GetAsync(a => a.Name == request.MaritalStatus))?.SingleOrDefault()
+              ?? throw new NotFoundException(nameof(MaritalStatus), request.MaritalStatus);
 
             var client = new Client
             {

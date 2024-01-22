@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.CVS.Migrations
 {
     [DbContext(typeof(CVSDbContext))]
-    [Migration("20231201101745_DB-init")]
+    [Migration("20231204084658_DB-init")]
     partial class DBinit
     {
         /// <inheritdoc />

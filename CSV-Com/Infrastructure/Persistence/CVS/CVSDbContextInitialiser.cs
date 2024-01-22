@@ -96,7 +96,7 @@ namespace Infrastructure.Persistence.CVS
                     Initials = "J",
                     PrefixLastName = "",
                     LastName = "Jansen",
-                    Gender = Gender.Men,
+                    Gender = Gender.Man,
                     StreetName = "Dorpstraat",
                     HouseNumber = 1,
                     HouseNumberAddition = "a",
@@ -106,6 +106,34 @@ namespace Infrastructure.Persistence.CVS
                     DateOfBirth = new DateOnly(1990, 5, 14),
                     EmailAddress = "a@b.com",
                     MaritalStatus = martitalStatus,
+                    DriversLicences =
+                    {
+                        new DriversLicence
+                        {
+                            Id = 1,
+                            Category = "B",
+                            Description = "Auto"
+                        },
+                          new DriversLicence
+                        {
+                            Id = 2,
+                            Category = "A",
+                            Description = "Motor"
+                        }
+                    },
+                    Diagnoses =
+                    {
+                        new Diagnosis
+                        {
+                            Id = 1,
+                            Name = "Dyslexia"
+                        },
+                        new Diagnosis
+                        {
+                            Id = 2,
+                            Name = "Depression"
+                        }
+                    },
                     EmergencyPeople =
                     {
                         new EmergencyPerson

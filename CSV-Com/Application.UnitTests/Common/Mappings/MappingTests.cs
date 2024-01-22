@@ -1,4 +1,5 @@
-﻿using Application.Clients.Queries.GetClients;
+﻿using Application.Clients.Dtos;
+using Application.Clients.Queries.GetClients;
 using Application.Common.Mappings;
 using AutoMapper;
 using Domain.CVS.Domain;

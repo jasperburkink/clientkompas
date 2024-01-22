@@ -1,10 +1,11 @@
 ﻿using Application.Common.Mappings;
+using Application.Diagnoses.Queries.GetDiagnosis;
+using Application.DriversLicences.Queries;
 using AutoMapper;
 using Domain.CVS.Domain;
 using Domain.CVS.Enums;
 
-
-namespace Application.Clients.Queries.GetClients
+namespace Application.Clients.Dtos
 {
     public class ClientDto : IMapFrom<Client>
     {
@@ -39,6 +40,10 @@ namespace Application.Clients.Queries.GetClients
         public string EmailAddress { get; set; }
 
         public string MaritalStatus { get; set; }
+
+        public virtual ICollection<DriversLicenceDto> DriversLicences { get; set; }
+
+        public virtual ICollection<DiagnosisDto> Diagnoses { get; set; }
 
         public virtual ICollection<EmergencyPersonDto> EmergencyPeople { get; set; }
 
