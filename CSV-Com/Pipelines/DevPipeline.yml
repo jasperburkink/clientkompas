@@ -10,7 +10,7 @@ variables:
   SOLUTION: "$SOLUTION_FOLDER/CSV-Com.sln"
   NODE_FOLDER: "webapp"
   BUILD_CONFIGURATION: "Debug"
-  DOTNET_DOCKER_IMAGE_NAME: "gitlab.sbict.local/client-volgsysteem/cvs-com"
+  DOTNET_DOCKER_IMAGE_NAME: "registry.sbict.local/client-volgsysteem/cvs-com"
 
 stages: 
   - publish
@@ -61,7 +61,7 @@ dotnet-publish:
         '--insecure-registry=gitlab.sbict.local'
       ]
   before_script:
-  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD gitlab.sbict.local
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD registry.sbict.local
   stage: publish
   script:
     - cd CSV-Com
