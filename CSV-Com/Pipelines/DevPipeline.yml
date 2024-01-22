@@ -10,7 +10,7 @@ variables:
   SOLUTION: "$SOLUTION_FOLDER/CSV-Com.sln"
   NODE_FOLDER: "webapp"
   BUILD_CONFIGURATION: "Debug"
-  DOTNET_DOCKER_IMAGE_NAME: "registry.sbict.local/client-volgsysteem/cvs-com"
+  DOTNET_DOCKER_IMAGE_NAME: "gitlab.sbict.local/client-volgsysteem/cvs-com"
 
 stages: 
   - publish
@@ -19,8 +19,8 @@ stages:
 
 dotnet-build:
   before_script:
-  - 'dotnet restore $SOLUTION' # dotnet build does also restore but an explicit restore is better when using GitLab for caching purposes
   - shopt -s globstar # setting for enabling wildcards in bash **/*.csproj
+  - 'dotnet restore $SOLUTION' # dotnet build does also restore but an explicit restore is better when using GitLab for caching purposes
   stage: build
   script:
     # Build all .NET projects
@@ -61,7 +61,7 @@ dotnet-publish:
         '--insecure-registry=gitlab.sbict.local'
       ]
   before_script:
-  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD registry.sbict.local
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD gitlab.sbict.local
   stage: publish
   script:
     - cd CSV-Com
