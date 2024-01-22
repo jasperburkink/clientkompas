@@ -7,19 +7,19 @@ interface IPasswordFieldProps extends React.HtmlHTMLAttributes<HTMLElement> {
     inputfieldname: string;
     placeholder: string;
 }
-const type1 = 'password';
-const type2 = 'text';
+const INPUTFIELDTYPE_PASSWORD = 'password';
+const INPUTFIELDTYPE_TEXT = 'text';
 
 const PasswordField = (props: IPasswordFieldProps) => {
     const [icon,setIcon] = useState(<FontAwesomeIcon icon={faEyeSlash} size="lg" style={{color: "#000000",}} />);
-    const [type,setType] = useState(type1);
+    const [type,setType] = useState(INPUTFIELDTYPE_PASSWORD);
     
     function visibility() {
-        if (type === type1) {
-            setType(type2);
+        if (type === INPUTFIELDTYPE_PASSWORD) {
+            setType(INPUTFIELDTYPE_TEXT);
             setIcon(<FontAwesomeIcon icon={faEye} size="lg" style={{color: "#000000",}} />);
         } else {
-            setType(type1);
+            setType(INPUTFIELDTYPE_PASSWORD);
             setIcon(<FontAwesomeIcon icon={faEyeSlash} size="lg" style={{color: "#000000",}} />)
         }
         
