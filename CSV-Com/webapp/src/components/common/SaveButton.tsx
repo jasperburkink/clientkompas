@@ -12,6 +12,8 @@ interface SaveButtonProps {
   loadingText: string;
   successText: string;
   errorText: string;
+  onSave: () => void;          
+  onError: () => void;  
 }
 
 const SaveButton: React.FC<SaveButtonProps> = ({
@@ -19,7 +21,10 @@ const SaveButton: React.FC<SaveButtonProps> = ({
   loadingText,
   successText,
   errorText,
+  onSave,
+  onError,
 }) => {
+
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
@@ -38,6 +43,7 @@ const SaveButton: React.FC<SaveButtonProps> = ({
         setTimeout(() => {
           setSuccess(false);
           setShowText(true);
+          onSave();
         }, SUCCESS_TIMEOUT);
       } 
       else {
@@ -46,6 +52,7 @@ const SaveButton: React.FC<SaveButtonProps> = ({
         setTimeout(() => {
           setError(false);
           setShowText(true);
+          onError();
         }, ERROR_TIMEOUT);
       }
     }, LOADING_TIMEOUT);

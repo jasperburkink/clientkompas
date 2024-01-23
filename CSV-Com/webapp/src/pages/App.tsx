@@ -201,6 +201,8 @@ function App() {
                  loadingText = "placeholder 2"
                  successText = "placeholder 3"
                  errorText = "placeholder 4"
+                 onSave={() => console.log('Save successful')}
+                 onError={() => console.error('Error saving')}
                 />
              </div>
              
