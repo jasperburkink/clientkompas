@@ -2,13 +2,15 @@ import { render, screen, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import Clients from '../../../pages/Clients';
-import { mockClientData } from '../../../tests/unit-tests/mocks/apiMock';
+//import { mockClientData } from '../../../utils/mocks/api';
 import * as ApiModule from '../../../utils/api';
 import { Console } from 'console';
 
-jest.mock('../../../utils/api', () => ({
-    fetchClient: jest.fn(),
-  }));
+// jest.mock('../../../utils/api', () => ({
+//     fetchClient: jest.fn(),
+//   }));
+
+jest.mock('../../../utils/api.ts');
 
 describe('ClientPage', () => {
     beforeEach(() => {
@@ -19,20 +21,22 @@ describe('ClientPage', () => {
         render(<Clients />);
     });
 
-    // test('Clients_InsertParam_RendersWithCorrectId', () => {
+//TODO: Onderstaande tests doorspreken met Maurice. Hoe mock je de calls naar de database? 
+
+    // test('Clients_InsertParam_RendersWithCorrectId', async () => {
     //     const clientId = '1';
+        
     //     render(
-          
     //       <MemoryRouter initialEntries={[`/Clients/${clientId}`]}>
     //         <Routes>
     //           <Route path='/Clients/:id' element={<Clients />} />
     //         </Routes>
     //       </MemoryRouter>
-    //     );
+    //     );              
 
-    //     const { getByText } = render(<Clients />);
-      
-    //     expect(getByText(`Cliëntnummer: ${clientId}`)).toBeInTheDocument();
+    //     await waitFor(() => {
+    //         expect(screen.getByTestId('client-number-value')).toBeInTheDocument();            
+    //       });
     //   });
 
     // test('renders loading state while fetching data', async () => {

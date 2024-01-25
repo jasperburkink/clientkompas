@@ -11,8 +11,7 @@ interface ButtonProps {
 }
 
 export const Button = (props: ButtonProps) => (
-  <button
-    className={props.className + ' ' + getClassNameButtonType(props.buttonType.type)} >
-      {props.text}
+  <button data-testid='button_test' onClick={props.onClick} className={getClassNameButtonType(props.buttonType.type) + (props.className ? ` ${props.className}` : '')}>
+    {props.text}
   </button>
 );

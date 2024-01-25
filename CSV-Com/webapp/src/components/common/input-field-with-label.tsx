@@ -14,6 +14,6 @@ export const InputFieldWithLabel = (props: InputFieldWithLabelProps) => (
         value={props.inputFieldProps.value}
         placeholder={props.inputFieldProps.placeholder}
         required={props.inputFieldProps.required}
-        inputFieldType={props.inputFieldProps.inputFieldType} />
+        inputfieldtype={props.inputFieldProps.inputfieldtype} />
     </div>
 );

@@ -45,7 +45,7 @@ function Clients() {
 
           setClient(fetchedClient);
           
-          var rowSpanProfilePic = fetchedClient.emergencypeople != null ? fetchedClient.emergencypeople.length + profilePicRowSpanValueDefault : profilePicRowSpanValueDefault;
+          var rowSpanProfilePic = fetchedClient && fetchedClient.emergencypeople ? fetchedClient.emergencypeople.length + profilePicRowSpanValueDefault : profilePicRowSpanValueDefault;
           setProfilePicSpanValue(rowSpanProfilePic);
         } catch (e) {
           // TODO: error handling
