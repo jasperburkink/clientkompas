@@ -2,7 +2,7 @@ import EmergencyPerson from "./EmergencyPerson";
 import WorkingContract from "./WorkingContract";
 
 export default interface Client {
-    identificationnumber: number;
+    id: number;
     firstname: string;
     initials: string;
     prefixlastname?: string;
@@ -24,3 +24,7 @@ export default interface Client {
     emergencypeople?: EmergencyPerson[];
     workingcontracts?: WorkingContract[];
 }
+
+export function getCompleteClientName(client: Client): string {
+    return `${client.prefixlastname ? `${client.prefixlastname} ` : ''}${client.lastname}, ${client.firstname}`;
+};

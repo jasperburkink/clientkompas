@@ -13,6 +13,12 @@ namespace Domain.CVS.Domain
 
         public string LastName { get; set; }
 
+        public string FullName
+        {
+            get => string.Join(' ', (new string[] { FirstName, PrefixLastName, LastName }).Where(fv => !string.IsNullOrEmpty(fv)).Select(s => s.Trim()));
+            set => _ = value;
+        }
+
         public Gender Gender { get; set; }
 
         public string StreetName { get; set; }
