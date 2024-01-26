@@ -1,6 +1,8 @@
 ﻿using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using Application.Common.Interfaces.CVS;
 using Domain.Common;
+using Infrastructure.Common;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.CVS
@@ -154,6 +156,18 @@ namespace Infrastructure.Persistence.CVS
             {
                 _dbSet.Attach(entityToUpdate);
                 Context.Entry(entityToUpdate).State = EntityState.Modified;
+            }, cancellationToken);
+        }
+
+        public async Task<IEnumerable<TEntity>> FullTextSearch(string searchTerm, CancellationToken cancellationToken = default, params Expression<Func<TEntity, object>>[] properties)
+        {
+            return await Task.Run(() =>
+            {
+                var tableName = ContextExtensions.GetTableName(Context, typeof(TEntity));
+                // NOTE: This is specific MySql related functionality for full text seacrhing on a fulltext index. So if the database provider is changed, this functionality has to be changed!
+                var query = $@"SELECT * FROM {tableName} WHERE MATCH({string.Join(',', properties.Select(o => PropertyInfoHelper.GetPropertyInfo(o).Name))}) AGAINST ('""{searchTerm}""' IN BOOLEAN MODE) OR {string.IsNullOrEmpty(searchTerm)}";
+
+                return _dbSet.FromSqlInterpolated(FormattableStringFactory.Create(query));
             }, cancellationToken);
         }
     }

@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Persistence.CVS;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.CVS.Migrations
 {
     [DbContext(typeof(CVSDbContext))]
-    partial class CVSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231215134451_AddFullTextIndexClientName")]
+    partial class AddFullTextIndexClientName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,9 +97,6 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     b.Property<DateOnly>("DateOfBirth")
                         .HasColumnType("date");
 
-                    b.Property<DateTime?>("DeactivationDateAndTime")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<string>("EmailAddress")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -120,6 +120,9 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     b.Property<string>("HouseNumberAddition")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<int>("IdentificationNumber")
+                        .HasColumnType("int");
 
                     b.Property<string>("Initials")
                         .IsRequired()

@@ -15,3 +15,7 @@ async function fetchAPI<T>(url: string): Promise<T> {
 export const fetchClient = async (clientId: string): Promise<Client> => {
     return fetchAPI<Client>(`${apiUrl}Client/${clientId}`);
 }
+
+export const searchClients = async (searchTerm: string): Promise<Client[]> => {
+    return fetchAPI<Client[]>(`${apiUrl}Client/SearchClients?SearchTerm=${searchTerm}`);
+}
