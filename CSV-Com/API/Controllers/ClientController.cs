@@ -17,13 +17,13 @@ namespace API.Controllers
     public class ClientController : ApiControllerBase
     {
         [HttpGet]
-        public async Task<IEnumerable<ClientDto>> Get([FromQuery] GetClientsQuery query)
+        public async Task<IEnumerable<GetClientDto>> Get([FromQuery] GetClientsQuery query)
         {
             return await Mediator.Send(query);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ClientDto>> Get(int id)
+        public async Task<ActionResult<GetClientDto>> Get(int id)
         {
             try
             {
