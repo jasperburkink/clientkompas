@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -138,6 +139,8 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     PrefixLastName = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     LastName = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    FullName = table.Column<string>(type: "varchar(120)", maxLength: 120, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Gender = table.Column<int>(type: "int", nullable: false),
                     StreetName = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
@@ -311,6 +314,12 @@ namespace Infrastructure.Persistence.CVS.Migrations
                 name: "IX_Clients_BenefitFormId",
                 table: "Clients",
                 column: "BenefitFormId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Clients_FullName",
+                table: "Clients",
+                column: "FullName")
+                .Annotation("MySql:FullTextIndex", true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Clients_MaritalStatusId",

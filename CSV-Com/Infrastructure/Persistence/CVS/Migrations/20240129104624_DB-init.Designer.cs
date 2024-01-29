@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.CVS.Migrations
 {
     [DbContext(typeof(CVSDbContext))]
-    [Migration("20231204084658_DB-init")]
+    [Migration("20240129104624_DB-init")]
     partial class DBinit
     {
         /// <inheritdoc />
@@ -109,6 +109,11 @@ namespace Infrastructure.Persistence.CVS.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120)");
+
                     b.Property<int>("Gender")
                         .HasColumnType("int");
 
@@ -167,6 +172,9 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BenefitFormId");
+
+                    b.HasIndex("FullName")
+                        .HasAnnotation("MySql:FullTextIndex", true);
 
                     b.HasIndex("MaritalStatusId");
 
