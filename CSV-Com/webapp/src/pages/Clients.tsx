@@ -20,6 +20,7 @@ import SearchClients from '../components/clients/search-clients';
 import StatusEnum from '../types/common/StatusEnum';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { DatePicker } from '../components/common/datepicker';
 
 const NO_INFO = 'Geen informatie beschikbaar';
 const DATE_FORMAT = 'DD-MM-yyyy';

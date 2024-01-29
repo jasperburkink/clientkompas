@@ -20,6 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="Clients\Commands\UpdateClient\UpdateClientCommand.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="MaritalStatuses\Commands\DeleteMaritalStatus\" />
     <Folder Include="MaritalStatuses\Commands\UpdateMaritalStatus\" />
     <Folder Include="MaritalStatuses\Queries\" />
