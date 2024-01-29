@@ -12,10 +12,14 @@ namespace Infrastructure.Persistence.CVS.Migrations
 {
     [DbContext(typeof(CVSDbContext))]
 <<<<<<<< HEAD:CSV-Com/Infrastructure/Persistence/CVS/Migrations/20240129091540_DB-init.Designer.cs
+<<<<<<<< HEAD:CSV-Com/Infrastructure/Persistence/CVS/Migrations/20240129091540_DB-init.Designer.cs
     [Migration("20240129091540_DB-init")]
 ========
     [Migration("20231204084658_DB-init")]
 >>>>>>>> develop:CSV-Com/Infrastructure/Persistence/CVS/Migrations/20231204084658_DB-init.Designer.cs
+========
+    [Migration("20240129104624_DB-init")]
+>>>>>>>> develop:CSV-Com/Infrastructure/Persistence/CVS/Migrations/20240129104624_DB-init.Designer.cs
     partial class DBinit
     {
         /// <inheritdoc />
@@ -121,6 +125,16 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     b.Property<int>("Gender")
                         .HasColumnType("int");
 
+<<<<<<<< HEAD:CSV-Com/Infrastructure/Persistence/CVS/Migrations/20240129091540_DB-init.Designer.cs
+========
+                    b.Property<int>("HouseNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("HouseNumberAddition")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+>>>>>>>> develop:CSV-Com/Infrastructure/Persistence/CVS/Migrations/20240129104624_DB-init.Designer.cs
                     b.Property<string>("Initials")
                         .IsRequired()
                         .HasColumnType("longtext");
