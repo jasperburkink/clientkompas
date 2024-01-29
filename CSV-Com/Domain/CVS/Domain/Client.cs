@@ -6,22 +6,13 @@ namespace Domain.CVS.Domain
 {
     public class Client : BaseAuditableEntity
     {
-        public string FirstName
-        {
-            get; set;
-        }
+        public string FirstName { get; set; }
 
         public string Initials { get; set; }
 
-        public string PrefixLastName
-        {
-            get; set;
-        }
+        public string PrefixLastName { get; set; }
 
-        public string LastName
-        {
-            get; set;
-        }
+        public string LastName { get; set; }
 
         public string FullName
         {
@@ -45,7 +36,7 @@ namespace Domain.CVS.Domain
 
         public virtual ICollection<EmergencyPerson> EmergencyPeople { get; set; } = new List<EmergencyPerson>();
 
-        public List<Diagnosis> Diagnoses { get; } = new();
+        public List<Diagnosis> Diagnoses { get; set; } = new();
 
         public BenefitForm BenefitForm { get; set; }
 

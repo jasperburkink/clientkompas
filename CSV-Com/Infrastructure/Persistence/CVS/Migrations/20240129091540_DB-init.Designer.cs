@@ -11,7 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.CVS.Migrations
 {
     [DbContext(typeof(CVSDbContext))]
+<<<<<<<< HEAD:CSV-Com/Infrastructure/Persistence/CVS/Migrations/20240129091540_DB-init.Designer.cs
     [Migration("20240129091540_DB-init")]
+========
+    [Migration("20231204084658_DB-init")]
+>>>>>>>> develop:CSV-Com/Infrastructure/Persistence/CVS/Migrations/20231204084658_DB-init.Designer.cs
     partial class DBinit
     {
         /// <inheritdoc />

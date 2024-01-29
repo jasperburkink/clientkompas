@@ -19,6 +19,7 @@ import { DatePicker } from '../components/common/datepicker';
 import Textarea from "../components/common/Textarea";
 import { Dropdown } from '../components/common/dropdown';
 import DropdownWithButton from "../components/common/dropdown-with-button";
+import PasswordField from '../components/common/password-field';
 
 function App() {
     const data = [
@@ -184,6 +185,9 @@ function App() {
              
                 <p>Dropdown with button</p>
                 <DropdownWithButton options={data} required={false} inputfieldname='dropdownWithButton' />
+
+                <p>Wachtwoord input</p>
+                <PasswordField inputfieldname='password' placeholder='Wachtwoord' />
                             
             </div>
             <Copyright />

@@ -9,25 +9,18 @@ namespace Infrastructure.Common
         {
             if (propertyLambda.Body is not MemberExpression member)
             {
-                throw new ArgumentException(string.Format(
-                    "Expression '{0}' refers to a method, not a property.",
-                    propertyLambda.ToString()));
+                throw new ArgumentException($"Expression '{propertyLambda}' refers to a method, not a property.");
             }
 
             if (member.Member is not PropertyInfo propInfo)
             {
-                throw new ArgumentException(string.Format(
-                    "Expression '{0}' refers to a field, not a property.",
-                    propertyLambda.ToString()));
+                throw new ArgumentException($"Expression '{propertyLambda}' refers to a field, not a property.");
             }
 
             var type = typeof(TSource);
             if (propInfo.ReflectedType != null && type != propInfo.ReflectedType && !type.IsSubclassOf(propInfo.ReflectedType))
             {
-                throw new ArgumentException(string.Format(
-                    "Expression '{0}' refers to a property that is not from type {1}.",
-                    propertyLambda.ToString(),
-                    type));
+                throw new ArgumentException($"Expression '{propertyLambda}' refers to a property that is not from type {type}.");
             }
 
             return propInfo;
