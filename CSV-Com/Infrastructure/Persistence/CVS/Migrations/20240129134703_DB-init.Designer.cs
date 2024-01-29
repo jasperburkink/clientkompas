@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.CVS.Migrations
 {
     [DbContext(typeof(CVSDbContext))]
-    [Migration("20240129104624_DB-init")]
+    [Migration("20240129134703_DB-init")]
     partial class DBinit
     {
         /// <inheritdoc />
@@ -116,13 +116,6 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
                     b.Property<int>("Gender")
                         .HasColumnType("int");
-
-                    b.Property<int>("HouseNumber")
-                        .HasColumnType("int");
-
-                    b.Property<string>("HouseNumberAddition")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.Property<string>("Initials")
                         .IsRequired()

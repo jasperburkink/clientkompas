@@ -1,4 +1,5 @@
-﻿using Application.Clients.Commands.CreateClient;
+﻿using System.Linq.Expressions;
+using Application.Clients.Commands.CreateClient;
 using Application.Clients.Dtos;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces.CVS;
@@ -25,8 +26,23 @@ namespace Application.UnitTests.Clients.Commands
             // Arrange
             var command = new CreateClientCommand();
             var handler = new CreateClientCommandHandler(_unitOfWorkMock.Object, _mapperMock.Object);
-            _unitOfWorkMock.Setup(uw => uw.BenefitFormRepository.GetByIDAsync(It.IsAny<object>(), default)).Returns(Task.FromResult<BenefitForm>(null));
-            _unitOfWorkMock.Setup(uw => uw.MaritalStatusRepository.GetByIDAsync(It.IsAny<object>(), default)).Returns(Task.FromResult(new MaritalStatus()));
+
+            _unitOfWorkMock.Setup(uw => uw.BenefitFormRepository.GetAsync(
+               It.IsAny<Expression<Func<BenefitForm, bool>>>(),
+               It.IsAny<Func<IQueryable<BenefitForm>, IOrderedQueryable<BenefitForm>>>(),
+               It.IsAny<string>(),
+               It.IsAny<CancellationToken>()
+           ))
+           .ReturnsAsync(new List<BenefitForm>());
+
+            _unitOfWorkMock.Setup(uw => uw.MaritalStatusRepository.GetAsync(
+                It.IsAny<Expression<Func<MaritalStatus, bool>>>(),
+                It.IsAny<Func<IQueryable<MaritalStatus>, IOrderedQueryable<MaritalStatus>>>(),
+                It.IsAny<string>(),
+                It.IsAny<CancellationToken>()
+            ))
+            .ReturnsAsync(new List<MaritalStatus> { new() });
+
 
             // Act
             var act = () => handler.Handle(command, default);
@@ -41,8 +57,23 @@ namespace Application.UnitTests.Clients.Commands
             // Arrange
             var command = new CreateClientCommand();
             var handler = new CreateClientCommandHandler(_unitOfWorkMock.Object, _mapperMock.Object);
-            _unitOfWorkMock.Setup(uw => uw.BenefitFormRepository.GetByIDAsync(It.IsAny<object>(), default)).Returns(Task.FromResult(new BenefitForm()));
-            _unitOfWorkMock.Setup(uw => uw.MaritalStatusRepository.GetByIDAsync(It.IsAny<object>(), default)).Returns(Task.FromResult<MaritalStatus>(null));
+
+            _unitOfWorkMock.Setup(uw => uw.BenefitFormRepository.GetAsync(
+               It.IsAny<Expression<Func<BenefitForm, bool>>>(),
+               It.IsAny<Func<IQueryable<BenefitForm>, IOrderedQueryable<BenefitForm>>>(),
+               It.IsAny<string>(),
+               It.IsAny<CancellationToken>()
+           ))
+           .ReturnsAsync(new List<BenefitForm> { new() });
+
+            _unitOfWorkMock.Setup(uw => uw.MaritalStatusRepository.GetAsync(
+                It.IsAny<Expression<Func<MaritalStatus, bool>>>(),
+                It.IsAny<Func<IQueryable<MaritalStatus>, IOrderedQueryable<MaritalStatus>>>(),
+                It.IsAny<string>(),
+                It.IsAny<CancellationToken>()
+            ))
+            .ReturnsAsync(new List<MaritalStatus>());
+
 
             // Act
             var act = () => handler.Handle(command, default);
@@ -77,7 +108,23 @@ namespace Application.UnitTests.Clients.Commands
             };
 
             var handler = new CreateClientCommandHandler(_unitOfWorkMock.Object, _mapperMock.Object);
-            _unitOfWorkMock.Setup(uw => uw.BenefitFormRepository.GetByIDAsync(It.IsAny<object>(), default)).Returns(Task.FromResult(new BenefitForm()));
+
+            _unitOfWorkMock.Setup(uw => uw.BenefitFormRepository.GetAsync(
+                It.IsAny<Expression<Func<BenefitForm, bool>>>(),
+                It.IsAny<Func<IQueryable<BenefitForm>, IOrderedQueryable<BenefitForm>>>(),
+                It.IsAny<string>(),
+                It.IsAny<CancellationToken>()
+            ))
+            .ReturnsAsync(new List<BenefitForm> { new() });
+
+            _unitOfWorkMock.Setup(uw => uw.MaritalStatusRepository.GetAsync(
+                It.IsAny<Expression<Func<MaritalStatus, bool>>>(),
+                It.IsAny<Func<IQueryable<MaritalStatus>, IOrderedQueryable<MaritalStatus>>>(),
+                It.IsAny<string>(),
+                It.IsAny<CancellationToken>()
+            ))
+            .ReturnsAsync(new List<MaritalStatus> { new() });
+
             _unitOfWorkMock.Setup(uw => uw.MaritalStatusRepository.GetByIDAsync(It.IsAny<object>(), default)).Returns(Task.FromResult(new MaritalStatus()));
             _unitOfWorkMock.Setup(uw => uw.ClientRepository.InsertAsync(It.IsAny<Client>(), default));
             _unitOfWorkMock.Setup(uw => uw.SaveAsync(default));

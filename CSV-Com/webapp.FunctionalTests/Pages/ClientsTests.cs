@@ -42,7 +42,7 @@ namespace WebApp.FunctionalTests.Pages
         public async Task SearchClients_SearchForNamesWithNonExistingValue_ShouldReturnNoClientsFound()
         {
             // Arrange
-            var searchTerm = "Search for client that doesn't exists";
+            var searchTerm = "Search for client that does not exists";
             var resultText = "Er zijn geen cliënten gevonden die aan de zoekcriteria voldoen.";
 
             // Act
