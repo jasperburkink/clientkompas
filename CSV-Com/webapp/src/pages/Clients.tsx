@@ -101,9 +101,6 @@ function Clients() {
                 {/* {Client main info 1 */}           
                     <Header text="Cliënt info" />
 
-                    <p>Date picker</p>
-                    <DatePicker placeholder='Selecteer een datum' />
-
                     {/* Profile picture */}
                     <div className={`client-profile-picture`} style={{ 
                         gridRowStart: "span " + profilePicSpanValue,
