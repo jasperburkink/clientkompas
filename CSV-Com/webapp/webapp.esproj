@@ -13,5 +13,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="src\components\workhistory-list\" />
+    <Folder Include="src\tests\functional-tests\" />
+    <Folder Include="src\tests\unit-tests\mocks\" />
   </ItemGroup>
 </Project>

@@ -1,6 +1,6 @@
 import Client from "../types/model/Client";
 
-const apiUrl = 'https://localhost:32772/api/';
+const apiUrl = 'https://localhost:32774/api/';
 
 async function fetchAPI<T>(url: string): Promise<T> {
     const response = await fetch(url);

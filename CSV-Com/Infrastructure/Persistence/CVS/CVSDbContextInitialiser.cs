@@ -1,5 +1,6 @@
 ﻿using Domain.CVS.Domain;
 using Domain.CVS.Enums;
+using Domain.CVS.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -65,9 +66,6 @@ namespace Infrastructure.Persistence.CVS
                 benefitForm = _context.BenefitForm.First(ms => ms.Id.Equals(benefitFormId));
             }
 
-
-
-
             MaritalStatus martitalStatus;
             var maritalStatusId = 1;
 
@@ -97,11 +95,7 @@ namespace Infrastructure.Persistence.CVS
                     PrefixLastName = "",
                     LastName = "Jansen",
                     Gender = Gender.Man,
-                    StreetName = "Dorpstraat",
-                    HouseNumber = 1,
-                    HouseNumberAddition = "a",
-                    PostalCode = "1234AB",
-                    Residence = "Amsterdam",
+                    Address = Address.From("Dorpstraat", 1, "a", "1234AB", "Amsterdam"),
                     TelephoneNumber = "0623456789",
                     DateOfBirth = new DateOnly(1990, 5, 14),
                     EmailAddress = "a@b.com",
@@ -182,11 +176,7 @@ namespace Infrastructure.Persistence.CVS
                     PrefixLastName = "van den",
                     LastName = "Heuvel tot Beichlingen, gezegd Bartolotti Rijnders",
                     Gender = Gender.NonBinary,
-                    StreetName = "Kerkstraat",
-                    HouseNumber = 2,
-                    HouseNumberAddition = "",
-                    PostalCode = "1234BA",
-                    Residence = "Rotterdam",
+                    Address = Address.From("Kerkstraat", 2, "", "1234AB", "Rotterdam"),
                     TelephoneNumber = "0623456789",
                     DateOfBirth = new DateOnly(1950, 12, 1),
                     EmailAddress = "b@a.com",
@@ -215,7 +205,6 @@ namespace Infrastructure.Persistence.CVS
                     },
                     Remarks = "Deze persoon heeft wel een heel erg lange naam."
                 });
-
 
                 await _context.SaveChangesAsync();
             }

@@ -98,7 +98,7 @@ function App() {
                 </table>
 
                 <p>Inputfield text empty</p>                
-                <InputField inputFieldType={{type:'text'}} required={false} placeholder='Placeholder' />
+                <InputField inputfieldtype={{type:'text'}} required={false} placeholder='Placeholder' />
 
                 <p>Button</p>
                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -149,19 +149,19 @@ function App() {
                 </table>
 
                 <p>Inputfield text empty</p>                
-                <InputField inputFieldType={{type:'text'}} required={false} placeholder='Placeholder' />
+                <InputField inputfieldtype={{type:'text'}} required={false} placeholder='Placeholder' />
 
                 <p>Inputfield text with value</p>
-                <InputField inputFieldType={{type:'text'}} required={false} value='Test' placeholder='Placeholder' />
+                <InputField inputfieldtype={{type:'text'}} required={false} value='Test' placeholder='Placeholder' />
 
                 <p>Inputfield required</p>
-                <InputField inputFieldType={{type:'text'}} required={true} placeholder='Placeholder' />
+                <InputField inputfieldtype={{type:'text'}} required={true} placeholder='Placeholder' />
 
                 <p>Inputfield with label</p>
-                <InputFieldWithLabel text='TextField' inputFieldProps={{ required: false, placeholder:'Placeholder', inputFieldType:{ type:'text'} }} />
+                <InputFieldWithLabel text='TextField' inputFieldProps={{ required: false, placeholder:'Placeholder', inputfieldtype:{ type:'text'} }} />
 
                 <p>Inputfield required with label </p>
-                <InputFieldWithLabel text='TextField' inputFieldProps={{ required: true, placeholder:'Placeholder', inputFieldType:{ type:'text'} }} />
+                <InputFieldWithLabel text='TextField' inputFieldProps={{ required: true, placeholder:'Placeholder', inputfieldtype:{ type:'text'} }} />
 
                 <p>Slide toggle label</p>
                 <SlideToggleLabel textColapsed='Klap uit!' textExpanded='Klap in!' >

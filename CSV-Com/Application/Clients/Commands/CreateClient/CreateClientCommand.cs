@@ -5,6 +5,7 @@ using AutoMapper;
 using Domain.CVS.Domain;
 using Domain.CVS.Enums;
 using Domain.CVS.Events;
+using Domain.CVS.ValueObjects;
 using MediatR;
 
 namespace Application.Clients.Commands.CreateClient
@@ -57,7 +58,6 @@ namespace Application.Clients.Commands.CreateClient
 
         public async Task<ClientDto> Handle(CreateClientCommand request, CancellationToken cancellationToken)
         {
-
             var benefitForm = (await _unitOfWork.BenefitFormRepository.GetAsync(a => a.Name == request.BenefitForm))?.SingleOrDefault()
                 ?? throw new NotFoundException(nameof(BenefitForm), request.BenefitForm);
 
@@ -71,11 +71,7 @@ namespace Application.Clients.Commands.CreateClient
                 PrefixLastName = request.PrefixLastName,
                 LastName = request.LastName,
                 Gender = request.Gender,
-                StreetName = request.StreetName,
-                HouseNumber = request.HouseNumber,
-                HouseNumberAddition = request.HouseNumberAddition,
-                PostalCode = request.PostalCode,
-                Residence = request.Residence,
+                Address = Address.From(request.StreetName, request.HouseNumber, request.HouseNumberAddition, request.PostalCode, request.Residence),
                 TelephoneNumber = request.TelephoneNumber,
                 DateOfBirth = request.DateOfBirth,
                 EmailAddress = request.EmailAddress,

@@ -8,17 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="CVS\Exceptions\**" />
-    <Compile Remove="CVS\ValueObjects\**" />
-    <EmbeddedResource Remove="CVS\Exceptions\**" />
-    <EmbeddedResource Remove="CVS\ValueObjects\**" />
-    <None Remove="CVS\Exceptions\**" />
-    <None Remove="CVS\ValueObjects\**" />
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>$(AssemblyName).UnitTests</_Parameter1>
+    </AssemblyAttribute>
+    <PackageReference Include="MediatR" Version="12.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="7.0.10" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MediatR" Version="12.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="7.0.10" />
+    <Folder Include="CVS\NewFolder\" />
   </ItemGroup>
 
 </Project>

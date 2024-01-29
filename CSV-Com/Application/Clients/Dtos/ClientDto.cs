@@ -58,7 +58,12 @@ namespace Application.Clients.Dtos
             profile.CreateMap<Client, ClientDto>()
                 .ForMember(cDto => cDto.MaritalStatus, ms => ms.MapFrom(c => c.MaritalStatus.Name))
                 .ForMember(cDto => cDto.Gender, s => s.MapFrom(c => Enum.GetName(typeof(Gender), c.Gender)))
-                .ForMember(cDto => cDto.BenefitForm, ms => ms.MapFrom(c => c.BenefitForm.Name));
+                .ForMember(cDto => cDto.BenefitForm, ms => ms.MapFrom(c => c.BenefitForm.Name))
+                .ForMember(cDto => cDto.StreetName, address => address.MapFrom(c => c.Address.StreetName))
+                .ForMember(cDto => cDto.HouseNumber, address => address.MapFrom(c => c.Address.HouseNumber))
+                .ForMember(cDto => cDto.HouseNumberAddition, address => address.MapFrom(c => c.Address.HouseNumberAddition))
+                .ForMember(cDto => cDto.PostalCode, address => address.MapFrom(c => c.Address.PostalCode))
+                .ForMember(cDto => cDto.Residence, address => address.MapFrom(c => c.Address.Residence));
         }
     }
 }

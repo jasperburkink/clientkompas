@@ -1,5 +1,6 @@
 ﻿using Domain.Common;
 using Domain.CVS.Enums;
+using Domain.CVS.ValueObjects;
 
 namespace Domain.CVS.Domain
 {
@@ -21,15 +22,7 @@ namespace Domain.CVS.Domain
 
         public Gender Gender { get; set; }
 
-        public string StreetName { get; set; }
-
-        public int HouseNumber { get; set; }
-
-        public string HouseNumberAddition { get; set; }
-
-        public string PostalCode { get; set; }
-
-        public string Residence { get; set; }
+        public Address Address { get; set; }
 
         public string TelephoneNumber { get; set; }
 

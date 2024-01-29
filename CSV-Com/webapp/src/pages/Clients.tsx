@@ -46,7 +46,7 @@ function Clients() {
 
           setClient(fetchedClient);
           
-          var rowSpanProfilePic = fetchedClient.emergencypeople != null ? fetchedClient.emergencypeople.length + profilePicRowSpanValueDefault : profilePicRowSpanValueDefault;
+          var rowSpanProfilePic = fetchedClient && fetchedClient.emergencypeople ? fetchedClient.emergencypeople.length + profilePicRowSpanValueDefault : profilePicRowSpanValueDefault;
           setProfilePicSpanValue(rowSpanProfilePic);
         } catch (e) {
           // TODO: error handling
@@ -117,7 +117,7 @@ function Clients() {
                     {/* Client number */}                    
                     <div className='client-number client-label-value'>
                         <Label text='Cliëntnummer: ' />
-                        <Label text={client.id+''} />
+                        <Label data-testid="client-number-value" text={client.id+''} />
                     </div>
                     
                     {/* Client main info 2 */}
