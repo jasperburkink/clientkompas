@@ -1,5 +1,5 @@
 ﻿using Application.Clients.Commands.CreateClient;
-using Application.Clients.Queries.GetClients;
+using Application.Clients.Dtos;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces.CVS;
 using AutoMapper;

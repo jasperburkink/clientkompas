@@ -94,7 +94,7 @@ namespace Infrastructure.Persistence.CVS
                     Initials = "J",
                     PrefixLastName = "",
                     LastName = "Jansen",
-                    Gender = Gender.Men,
+                    Gender = Gender.Man,
                     Address = Address.From("Dorpstraat", 1, "a", "1234AB", "Amsterdam"),
                     TelephoneNumber = "0623456789",
                     DateOfBirth = new DateOnly(1990, 5, 14),

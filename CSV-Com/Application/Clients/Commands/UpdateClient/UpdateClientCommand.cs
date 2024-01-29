@@ -6,6 +6,7 @@ using Application.DriversLicences.Queries;
 using AutoMapper;
 using Domain.CVS.Domain;
 using Domain.CVS.Enums;
+using Domain.CVS.ValueObjects;
 using MediatR;
 
 namespace Application.Clients.Commands.UpdateClient
@@ -87,15 +88,7 @@ namespace Application.Clients.Commands.UpdateClient
 
             client.Gender = request.Gender;
 
-            client.StreetName = request.StreetName;
-
-            client.HouseNumber = request.HouseNumber;
-
-            client.HouseNumberAddition = request.HouseNumberAddition;
-
-            client.PostalCode = request.PostalCode;
-
-            client.Residence = request.Residence;
+            client.Address = Address.From(request.StreetName, request.HouseNumber, request.HouseNumberAddition, request.PostalCode, request.Residence);
 
             client.TelephoneNumber = request.TelephoneNumber;
 

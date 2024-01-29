@@ -58,15 +58,6 @@ namespace Application.Clients.Commands.CreateClient
 
         public async Task<ClientDto> Handle(CreateClientCommand request, CancellationToken cancellationToken)
         {
-            var benefitFormTask = _unitOfWork.BenefitFormRepository.GetByIDAsync(request.BenefitFormid, cancellationToken);
-            var maritalStatusTask = _unitOfWork.MaritalStatusRepository.GetByIDAsync(request.MaritalStatusid, cancellationToken);
-
-            await Task.WhenAll(benefitFormTask, maritalStatusTask);
-
-            var benefitForm = benefitFormTask.Result;
-            var maritalStatus = maritalStatusTask.Result;
-
-            
             var benefitForm = (await _unitOfWork.BenefitFormRepository.GetAsync(a => a.Name == request.BenefitForm))?.SingleOrDefault()
                 ?? throw new NotFoundException(nameof(BenefitForm), request.BenefitForm);
 

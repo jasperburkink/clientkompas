@@ -28,7 +28,7 @@ namespace Application.FunctionalTests.Clients.Queries.GetClients
                 Address = Address.From("Dorpstraat", 1, string.Empty, "1234AB", "Amsterdam"),
                 TelephoneNumber = "0123456789",
                 PrefixLastName = "",
-                Gender = Gender.Men,
+                Gender = Gender.Man,
                 EmailAddress = "a@b.com",
                 Initials = "J.W.C.",
                 Remarks = "Jan is geweldig",
