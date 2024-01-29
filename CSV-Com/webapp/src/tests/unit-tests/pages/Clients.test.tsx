@@ -13,9 +13,9 @@ import { Console } from 'console';
 jest.mock('../../../utils/api.ts');
 
 describe('ClientPage', () => {
-    beforeEach(() => {
-        jest.clearAllMocks();
-    });
+    // beforeEach(() => {
+    //     jest.clearAllMocks();
+    // });
 
     test("Clients_RenderingPage_RendersCorrect", () => {
         render(<Clients />);
@@ -32,7 +32,7 @@ describe('ClientPage', () => {
     //           <Route path='/Clients/:id' element={<Clients />} />
     //         </Routes>
     //       </MemoryRouter>
-    //     );              
+    //     );
 
     //     await waitFor(() => {
     //         expect(screen.getByTestId('client-number-value')).toBeInTheDocument();            

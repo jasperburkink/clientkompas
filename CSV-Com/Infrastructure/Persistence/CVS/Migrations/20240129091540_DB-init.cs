@@ -140,6 +140,8 @@ namespace Infrastructure.Persistence.CVS.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     LastName = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    FullName = table.Column<string>(type: "varchar(120)", maxLength: 120, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Gender = table.Column<int>(type: "int", nullable: false),
                     TelephoneNumber = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -303,6 +305,12 @@ namespace Infrastructure.Persistence.CVS.Migrations
                 name: "IX_Clients_BenefitFormId",
                 table: "Clients",
                 column: "BenefitFormId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Clients_FullName",
+                table: "Clients",
+                column: "FullName")
+                .Annotation("MySql:FullTextIndex", true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Clients_MaritalStatusId",

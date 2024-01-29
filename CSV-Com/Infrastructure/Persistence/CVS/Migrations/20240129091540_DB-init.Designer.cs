@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.CVS.Migrations
 {
     [DbContext(typeof(CVSDbContext))]
-    [Migration("20231215134451_AddFullTextIndexClientName")]
-    partial class AddFullTextIndexClientName
+    [Migration("20240129091540_DB-init")]
+    partial class DBinit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -97,6 +97,9 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     b.Property<DateOnly>("DateOfBirth")
                         .HasColumnType("date");
 
+                    b.Property<DateTime?>("DeactivationDateAndTime")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("EmailAddress")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -112,16 +115,6 @@ namespace Infrastructure.Persistence.CVS.Migrations
                         .HasColumnType("varchar(120)");
 
                     b.Property<int>("Gender")
-                        .HasColumnType("int");
-
-                    b.Property<int>("HouseNumber")
-                        .HasColumnType("int");
-
-                    b.Property<string>("HouseNumberAddition")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("IdentificationNumber")
                         .HasColumnType("int");
 
                     b.Property<string>("Initials")
@@ -142,10 +135,6 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     b.Property<int>("MaritalStatusId")
                         .HasColumnType("int");
 
-                    b.Property<string>("PostalCode")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<string>("PrefixLastName")
                         .IsRequired()
                         .HasMaxLength(10)
@@ -154,16 +143,6 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     b.Property<string>("Remarks")
                         .IsRequired()
                         .HasColumnType("longtext");
-
-                    b.Property<string>("Residence")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("StreetName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("TelephoneNumber")
                         .IsRequired()
@@ -424,6 +403,22 @@ namespace Infrastructure.Persistence.CVS.Migrations
                         .WithMany("Clients")
                         .HasForeignKey("MaritalStatusId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("Domain.CVS.ValueObjects.Address", "Address", b1 =>
+                        {
+                            b1.Property<int>("ClientId")
+                                .HasColumnType("int");
+
+                            b1.HasKey("ClientId");
+
+                            b1.ToTable("Clients");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ClientId");
+                        });
+
+                    b.Navigation("Address")
                         .IsRequired();
 
                     b.Navigation("BenefitForm");
