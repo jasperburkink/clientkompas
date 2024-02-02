@@ -1,15 +1,16 @@
 import React, { useState, useRef, useEffect} from 'react';
 import './button.css';
-import './PopUp.css'; 
+import './Popup.css'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faTimes  } from '@fortawesome/free-solid-svg-icons'
 import { Button } from './button';
 import PropTypes from 'prop-types';
-import ButtonForPopup from './ButtonForPopup';
+import Buttonforpopup from './Buttonforpopup';
 
 interface PopUpProps {
   handleClick: () => void;
   handleCancelClick: () => void;
+  // handleClickOutside: () => void;
   cancelButtonText: string;
   confirmButtonText: string;
   insidePopUpText: string;
@@ -27,37 +28,54 @@ const PopUp: React.FC<PopUpProps> = ({
   text,
   buttonType,
 }) => {
+
   const [isOpen, setIsOpen] = useState(false);
   const popupRef = useRef<HTMLDivElement>(null);
-
-  const handleToggle = () => {
-    setIsOpen(prevState => !prevState);
-  };
 
   const handleClickOutside = (event: MouseEvent) => {
     if (
       popupRef.current &&
-      !popupRef.current.contains(event.target as Node)
+      !popupRef.current.contains(event.target as Node) &&
+      event.target instanceof HTMLElement &&
+      !event.target.closest('.popup-buttonX') // Check if the clicked element is not the "X" button
     ) {
       setIsOpen(false);
     }
   };
 
+  // const handleToggle = () => {
+  //   setIsOpen(prevState => !prevState);
+  // };
+
+  // const handleClickOutside = (event: MouseEvent) => {
+  //   if (
+  //     popupRef.current &&
+  //     !popupRef.current.contains(event.target as Node)
+  //   ) {
+  //     setIsOpen(false);
+  //   }
+  // };
+
+  
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+    document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
   return (
    <div> 
 
-    <ButtonForPopup
-    openbutton='placeholder'
-     isOpen={isOpen} 
-     setIsOpen={setIsOpen} 
-    />
+      <Buttonforpopup
+        openbutton='placeholder'
+        isOpen={isOpen} 
+        setIsOpen={setIsOpen} 
+        onClick={() => {
+        console.log('Button clicked!');
+        setIsOpen(!isOpen);
+        }}
+      />
 
       {isOpen && (
         <div className ="popup-top">

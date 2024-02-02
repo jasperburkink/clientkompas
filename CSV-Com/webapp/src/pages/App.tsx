@@ -19,7 +19,7 @@ import { DatePicker } from '../components/common/datepicker';
 import Textarea from "../components/common/Textarea";
 import { Dropdown } from '../components/common/dropdown';
 import DropdownWithButton from "../components/common/dropdown-with-button";
-import PopUp from "../components/common/PopUp";
+import Popup from "../components/common/Popup";
 
 function App() {
     const data = [
@@ -192,7 +192,7 @@ function App() {
                 <DropdownWithButton options={data} required={false} inputfieldname='dropdownWithButton' />
 
                 <p>PopUp component</p>
-                <PopUp
+                <Popup
                 handleClick={handleClick}
                 handleCancelClick={handleCancelClick} 
                 confirmButtonText="placeholder1" 

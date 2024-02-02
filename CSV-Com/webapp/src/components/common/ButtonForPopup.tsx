@@ -1,18 +1,19 @@
 import React from "react";
-import './PopUp.css';
+import './Popup.css';
 import { Button } from './button';
 
-interface ButtonForPopupProps {
+interface buttonforpopupProps {
   isOpen: boolean;
   openbutton: string;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onClick: () => void;
 }
 
-const ButtonForPopup: React.FC<ButtonForPopupProps> = ({ isOpen, setIsOpen }) => {
+const buttonforpopup: React.FC<buttonforpopupProps> = ({ isOpen, setIsOpen, onClick}) => {
 
   const handleButtonClick = () => {
     setIsOpen(!isOpen);
-    alert('Button1 clicked!');
+    onClick();
   };
 
   return (
@@ -27,4 +28,4 @@ const ButtonForPopup: React.FC<ButtonForPopupProps> = ({ isOpen, setIsOpen }) =>
   );
 };
 
-export default ButtonForPopup;
+export default buttonforpopup;
