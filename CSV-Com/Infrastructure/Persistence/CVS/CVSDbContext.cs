@@ -19,6 +19,14 @@ namespace Infrastructure.Persistence.CVS
 
         public CVSDbContext(DbContextOptions<CVSDbContext> options) : base(options) { }
 
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    // Schakel lazy loading in
+        //    optionsBuilder.UseLazyLoadingProxies();
+
+        //    base.OnConfiguring(optionsBuilder);
+        //}
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             var configurations = GetType().Assembly.GetTypes()
