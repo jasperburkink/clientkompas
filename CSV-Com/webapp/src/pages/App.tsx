@@ -20,7 +20,7 @@ import Textarea from "../components/common/Textarea";
 import { Dropdown } from '../components/common/dropdown';
 import DropdownWithButton from "../components/common/dropdown-with-button";
 import PasswordField from '../components/common/password-field';
-import Popup from "../components/common/Popup";
+import Popup from "../components/common/popup";
 
 function App() {
     const data = [
@@ -41,8 +41,10 @@ function App() {
         },
     ];
     const handleClick = () => {
+        alert('click');
     };
         const handleCancelClick = () => {
+            alert('click');
         };
           
     return (

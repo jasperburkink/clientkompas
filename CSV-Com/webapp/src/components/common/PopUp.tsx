@@ -1,16 +1,14 @@
 import React, { useState, useRef, useEffect} from 'react';
 import './button.css';
-import './Popup.css'; 
+import './popup.css'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmark, faTimes  } from '@fortawesome/free-solid-svg-icons'
-import { Button } from './button';
+import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from 'prop-types';
-import Buttonforpopup from './Buttonforpopup';
+import Buttonforpopup from './buttonforpopup';
 
 interface PopUpProps {
   handleClick: () => void;
   handleCancelClick: () => void;
-  // handleClickOutside: () => void;
   cancelButtonText: string;
   confirmButtonText: string;
   insidePopUpText: string;
@@ -24,9 +22,7 @@ const PopUp: React.FC<PopUpProps> = ({
   handleCancelClick,
   cancelButtonText,
   confirmButtonText,
-  insidePopUpText,
-  text,
-  buttonType,
+  insidePopUpText
 }) => {
 
   const [isOpen, setIsOpen] = useState(false);
@@ -37,25 +33,11 @@ const PopUp: React.FC<PopUpProps> = ({
       popupRef.current &&
       !popupRef.current.contains(event.target as Node) &&
       event.target instanceof HTMLElement &&
-      !event.target.closest('.popup-buttonX') // Check if the clicked element is not the "X" button
+      !event.target.closest('.popup-buttonX')
     ) {
       setIsOpen(false);
     }
   };
-
-  // const handleToggle = () => {
-  //   setIsOpen(prevState => !prevState);
-  // };
-
-  // const handleClickOutside = (event: MouseEvent) => {
-  //   if (
-  //     popupRef.current &&
-  //     !popupRef.current.contains(event.target as Node)
-  //   ) {
-  //     setIsOpen(false);
-  //   }
-  // };
-
   
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
@@ -93,7 +75,10 @@ const PopUp: React.FC<PopUpProps> = ({
                 
               <div className ="popup-center">
                 <button 
-                  onClick = {handleClick} 
+                  onClick = {() => {
+                    handleClick();
+                    setIsOpen(false);
+                  }}
                   className ="popUp-btnLeft">
                   {confirmButtonText}
                 </button>
