@@ -106,15 +106,13 @@ namespace Infrastructure.Persistence.CVS.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120)");
+
                     b.Property<int>("Gender")
                         .HasColumnType("int");
-
-                    b.Property<int>("HouseNumber")
-                        .HasColumnType("int");
-
-                    b.Property<string>("HouseNumberAddition")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.Property<string>("Initials")
                         .IsRequired()
@@ -134,10 +132,6 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     b.Property<int>("MaritalStatusId")
                         .HasColumnType("int");
 
-                    b.Property<string>("PostalCode")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<string>("PrefixLastName")
                         .IsRequired()
                         .HasMaxLength(10)
@@ -147,16 +141,6 @@ namespace Infrastructure.Persistence.CVS.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Residence")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("StreetName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
                     b.Property<string>("TelephoneNumber")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -164,6 +148,9 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BenefitFormId");
+
+                    b.HasIndex("FullName")
+                        .HasAnnotation("MySql:FullTextIndex", true);
 
                     b.HasIndex("MaritalStatusId");
 
@@ -413,6 +400,22 @@ namespace Infrastructure.Persistence.CVS.Migrations
                         .WithMany("Clients")
                         .HasForeignKey("MaritalStatusId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("Domain.CVS.ValueObjects.Address", "Address", b1 =>
+                        {
+                            b1.Property<int>("ClientId")
+                                .HasColumnType("int");
+
+                            b1.HasKey("ClientId");
+
+                            b1.ToTable("Clients");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ClientId");
+                        });
+
+                    b.Navigation("Address")
                         .IsRequired();
 
                     b.Navigation("BenefitForm");

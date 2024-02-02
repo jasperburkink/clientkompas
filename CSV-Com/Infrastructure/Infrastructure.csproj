@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Persistence\Authentication\Migrations\" />
     <Folder Include="Persistence\CVS\Migrations\" />
   </ItemGroup>
 

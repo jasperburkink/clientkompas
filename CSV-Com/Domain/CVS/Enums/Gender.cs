@@ -2,7 +2,7 @@
 {
     public enum Gender
     {
-        Men,
+        Man,
         Woman,
         NonBinary
     }

@@ -12,7 +12,8 @@ const LOCALE_PROVIDER = "nl";
 const MOBILE_BREAKPOINT = 640;
 
 interface DatePickerProps {
-    placeholder: string
+    placeholder: string,
+    className?: string
 }
 
 function GenerateAwesomeFontCalendarIcon() {
@@ -44,12 +45,12 @@ export const DatePicker = (props: DatePickerProps) => {
   return (
   <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale={LOCALE_PROVIDER}>
     {isMobileView ? (
-      <MobileDatePickerControl.MobileDatePicker label={props.placeholder} className='bg-mainLightGray datepicker' />
+      <MobileDatePickerControl.MobileDatePicker label={props.placeholder} className={`datepicker ${props.className}`} />
     ): (
       <DatePickerControl.DatePicker 
         label={props.placeholder} 
-        className='bg-mainLightGray datepicker' 
-        slots={{ openPickerIcon: GenerateAwesomeFontCalendarIcon }}
+        className={`datepicker ${props.className}`}
+        slots={{ openPickerIcon: GenerateAwesomeFontCalendarIcon }}        
         sx={{      
           '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': { border: '2px solid b3b3b3' }, //Init state
           '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': { border: '2px solid #b3b3b3' },  // at hover state

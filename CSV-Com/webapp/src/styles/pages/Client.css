@@ -169,7 +169,16 @@
             text-xs 
             lg:text-lg;
         }
-    }     
+    }
+
+    .clients-spinner{
+        @apply 
+        flex
+        items-center
+        justify-center
+        h-screen
+        w-full;
+    }
     
     .header-menu{
         @apply 

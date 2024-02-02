@@ -1,5 +1,6 @@
 ﻿using Domain.CVS.Domain;
 using Domain.CVS.Enums;
+using Domain.CVS.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -65,9 +66,6 @@ namespace Infrastructure.Persistence.CVS
                 benefitForm = _context.BenefitForm.First(ms => ms.Id.Equals(benefitFormId));
             }
 
-
-
-
             MaritalStatus martitalStatus;
             var maritalStatusId = 1;
 
@@ -96,16 +94,40 @@ namespace Infrastructure.Persistence.CVS
                     Initials = "J",
                     PrefixLastName = "",
                     LastName = "Jansen",
-                    Gender = Gender.Men,
-                    StreetName = "Dorpstraat",
-                    HouseNumber = 1,
-                    HouseNumberAddition = "a",
-                    PostalCode = "1234AB",
-                    Residence = "Amsterdam",
+                    Gender = Gender.Man,
+                    Address = Address.From("Dorpstraat", 1, "a", "1234AB", "Amsterdam"),
                     TelephoneNumber = "0623456789",
                     DateOfBirth = new DateOnly(1990, 5, 14),
                     EmailAddress = "a@b.com",
                     MaritalStatus = martitalStatus,
+                    DriversLicences =
+                    {
+                        new DriversLicence
+                        {
+                            Id = 1,
+                            Category = "B",
+                            Description = "Auto"
+                        },
+                          new DriversLicence
+                        {
+                            Id = 2,
+                            Category = "A",
+                            Description = "Motor"
+                        }
+                    },
+                    Diagnoses =
+                    {
+                        new Diagnosis
+                        {
+                            Id = 1,
+                            Name = "Dyslexia"
+                        },
+                        new Diagnosis
+                        {
+                            Id = 2,
+                            Name = "Depression"
+                        }
+                    },
                     EmergencyPeople =
                     {
                         new EmergencyPerson
@@ -145,6 +167,45 @@ namespace Infrastructure.Persistence.CVS
                     },
                     Remarks = "Jan is een geweldig persoon om mee samen te werken."
                 });
+
+                _context.Clients.Add(new Client
+                {
+                    Id = 2,
+                    FirstName = "Prince-Fritz-Cruene-August-Willem-Jan-Hendrik-Dick",
+                    Initials = "P.F.C.A.W.J.H.D",
+                    PrefixLastName = "van den",
+                    LastName = "Heuvel tot Beichlingen, gezegd Bartolotti Rijnders",
+                    Gender = Gender.NonBinary,
+                    Address = Address.From("Kerkstraat", 2, "", "1234AB", "Rotterdam"),
+                    TelephoneNumber = "0623456789",
+                    DateOfBirth = new DateOnly(1950, 12, 1),
+                    EmailAddress = "b@a.com",
+                    MaritalStatus = martitalStatus,
+                    EmergencyPeople =
+                    {
+                        new EmergencyPerson
+                        {
+                            Id = 3,
+                            Name = "Jan Pietersen",
+                            TelephoneNumber = "0123456789"
+                        }
+                    },
+                    BenefitForm = benefitForm,
+                    WorkingContracts =
+                    {
+                        new WorkingContract
+                        {
+                            Id = 3,
+                            CompanyName = "De Nederlandse regering",
+                            Function = "Minister president",
+                            ContractType = ContractType.Permanent,
+                            FromDate = new DateOnly(1980, 1, 1),
+                            ToDate = new DateOnly(2000, 1, 1)
+                        }
+                    },
+                    Remarks = "Deze persoon heeft wel een heel erg lange naam."
+                });
+
                 await _context.SaveChangesAsync();
             }
         }

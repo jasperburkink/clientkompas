@@ -4,25 +4,32 @@ import { ButtonType } from '../../types/common/ButtonComponentType';
 import { getClassNameButtonType } from '../../types/common/ButtonComponentType';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  text: string;
-  buttonType: ButtonType;
-  isOpen?: boolean; 
-  setIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+    text: string;
+    buttonType: ButtonType;
+    isOpen?: boolean;
+    setIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const Button = (props: ButtonProps) => {
-  const handleClick = () => {
-    if (props.setIsOpen) {
-      props.setIsOpen((prevIsOpen) => !prevIsOpen);
-    }
-  };
+    const handleClick = () => {
+        if (props.setIsOpen) {
+            props.setIsOpen((prevIsOpen) => !prevIsOpen);
+        }
 
-  return (
-    <button
-      className={props.className + ' ' + getClassNameButtonType(props.buttonType.type)}
-      onClick={handleClick} // Add the click handler
-    >
-      {props.text}
-    </button>
-  );
+        if (props.onClick) {
+            props.onClick();
+        }
+    };
+
+    const combinedClassName = getClassNameButtonType(props.buttonType.type) + (props.className ? ` ${props.className}` : '');
+
+    return (
+        <button
+            data-testid='button_test'
+            onClick={handleClick}
+            className={combinedClassName}
+        >
+            {props.text}
+        </button>
+    );
 };

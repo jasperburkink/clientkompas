@@ -33,5 +33,7 @@ namespace Application.Common.Interfaces.CVS
         Task DeleteAsync(TEntity entityToDelete, CancellationToken cancellationToken = default);
 
         Task UpdateAsync(TEntity entityToUpdate, CancellationToken cancellationToken = default);
+
+        Task<IEnumerable<TEntity>> FullTextSearch(string searchTerm, CancellationToken cancellationToken = default, params Expression<Func<TEntity, object>>[] properties);
     }
 }

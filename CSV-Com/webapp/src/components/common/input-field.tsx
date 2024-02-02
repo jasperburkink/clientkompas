@@ -8,14 +8,14 @@ export interface InputFieldProps extends React.HtmlHTMLAttributes<HTMLInputEleme
     value?: string,
     placeholder: string,
     required: boolean,
-    inputFieldType: InputFieldType
+    inputfieldtype: InputFieldType
 }
 
 export const InputField = (props: InputFieldProps) => (  
     <div className='input-field'>
         <input {...props}
         value={props.value} 
-        type={props.inputFieldType.type}         
+        type={props.inputfieldtype.type}         
         placeholder={props.placeholder} 
         required={props.required} /> 
         {props.required === true &&
