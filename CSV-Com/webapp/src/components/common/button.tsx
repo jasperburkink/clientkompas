@@ -11,13 +11,13 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export const Button = (props: ButtonProps) => {
-    const handleClick = () => {
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         if (props.setIsOpen) {
             props.setIsOpen((prevIsOpen) => !prevIsOpen);
         }
 
         if (props.onClick) {
-            props.onClick();
+            props.onClick(event);
         }
     };
 
