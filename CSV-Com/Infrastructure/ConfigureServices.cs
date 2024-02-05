@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces.CVS;
+using Infrastructure.Persistence.Authentication;
 using Infrastructure.Persistence.CVS;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -16,12 +17,6 @@ namespace Infrastructure
 
             var serverVersion = MySqlServerVersion.LatestSupportedServerVersion;
 
-            // TODO: in memory database when debugging or configuration parameter
-            //if (configuration.GetValue<bool>("UseInMemoryDatabase"))
-            //{
-            //    services.AddDbContext<ApplicationDbContext>(options =>
-            //        options.UseInMemoryDatabase("CleanArchitectureDb"));
-            //}
             services.AddDbContext<CVSDbContext>(
             dbContextOptions => dbContextOptions
                             .UseMySql(connectionStringCVS, serverVersion,
@@ -39,18 +34,35 @@ namespace Infrastructure
             .EnableDetailedErrors());
 
             services.AddScoped<CVSDbContextInitialiser>();
+
+            services.AddDbContext<AuthenticationDbContext>(
+            dbContextOptions => dbContextOptions
+                .UseMySql(connectionStringAuthentication, serverVersion,
+                mySqlOptions =>
+                {
+                    mySqlOptions.MigrationsAssembly(typeof(AuthenticationDbContext).Assembly.FullName); // Migrations in class library
+#if DEBUG
+                    mySqlOptions.EnableRetryOnFailure(maxRetryCount: 5,
+        maxRetryDelay: TimeSpan.FromSeconds(10),
+        errorNumbersToAdd: null);
+#endif
+                })
+                .LogTo(Console.WriteLine, LogLevel.Information)
+                .EnableSensitiveDataLogging()
+.EnableDetailedErrors());
+
+            //services.AddScoped<AuthenticationDbContextInitialiser>();
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             // TODO: Identity implementation
-            //services.AddScoped<AuthenticationDbContextInitialiser>();
-
             //services
             //    .AddDefaultIdentity<ApplicationUser>()
             //    .AddRoles<IdentityRole>()
-            //    .AddEntityFrameworkStores<ApplicationDbContext>();
+            //    .AddEntityFrameworkStores<AuthenticationDbContext>();
 
-            //services.AddIdentityServer()
-            //    .AddApiAuthorization<ApplicationUser, AuthenticationDbContext>();
+            ////services.AddIdentityServer()
+            ////    .AddApiAuthorization<ApplicationUser, AuthenticationDbContext>();
 
             //services.AddTransient<IIdentityService, IdentityService>();
 

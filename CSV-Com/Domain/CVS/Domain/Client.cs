@@ -1,5 +1,6 @@
 ﻿using Domain.Common;
 using Domain.CVS.Enums;
+using Domain.CVS.ValueObjects;
 
 namespace Domain.CVS.Domain
 {
@@ -13,17 +14,15 @@ namespace Domain.CVS.Domain
 
         public string LastName { get; set; }
 
+        public string FullName
+        {
+            get => string.Join(' ', (new string[] { FirstName, PrefixLastName, LastName }).Where(fv => !string.IsNullOrEmpty(fv)).Select(s => s.Trim()));
+            set => _ = value;
+        }
+
         public Gender Gender { get; set; }
 
-        public string StreetName { get; set; }
-
-        public int HouseNumber { get; set; }
-
-        public string HouseNumberAddition { get; set; }
-
-        public string PostalCode { get; set; }
-
-        public string Residence { get; set; }
+        public Address Address { get; set; }
 
         public string TelephoneNumber { get; set; }
 
@@ -35,13 +34,13 @@ namespace Domain.CVS.Domain
 
         public List<DriversLicence> DriversLicences { get; set; } = new();
 
-        public virtual ICollection<EmergencyPerson> EmergencyPeople { get; set; } = new List<EmergencyPerson>();
+        public ICollection<EmergencyPerson> EmergencyPeople { get; set; } = new List<EmergencyPerson>();
 
-        public List<Diagnosis> Diagnoses { get; } = new();
+        public List<Diagnosis> Diagnoses { get; set; } = new();
 
         public BenefitForm BenefitForm { get; set; }
 
-        public virtual ICollection<WorkingContract> WorkingContracts { get; set; } = new List<WorkingContract>();
+        public ICollection<WorkingContract> WorkingContracts { get; set; } = new List<WorkingContract>();
 
         public DateTime? DeactivationDateAndTime { get; set; }
 

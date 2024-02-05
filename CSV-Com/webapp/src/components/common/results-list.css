@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+
+    .results-spinner{
+        @apply 
+        flex
+        items-center
+        justify-center;
+    }
+
+    .results-item{
+        @apply
+        my-2
+        hover:underline;
+    }
+}

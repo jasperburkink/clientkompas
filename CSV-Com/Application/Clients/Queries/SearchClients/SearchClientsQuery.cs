@@ -23,14 +23,9 @@ namespace Application.Clients.Queries.SearchClients
 
         public async Task<IEnumerable<SearchClientDto>> Handle(SearchClientsQuery request, CancellationToken cancellationToken)
         {
-            return (await _unitOfWork.ClientRepository.GetAsync())
+            return (await _unitOfWork.ClientRepository.FullTextSearch(request.SearchTerm, cancellationToken, client => client.FullName))
                 .AsQueryable()
                 .Where(c => c.DeactivationDateAndTime == null)
-                .Where(c => // TODO: Welke stringcomparison is het beste voor het vergelijken van strings in een collectie?
-                    c.LastName.Contains(request.SearchTerm, StringComparison.OrdinalIgnoreCase) ||
-                    c.FirstName.Contains(request.SearchTerm, StringComparison.OrdinalIgnoreCase) ||
-                    c.PrefixLastName.Contains(request.SearchTerm, StringComparison.OrdinalIgnoreCase) ||
-                    c.Initials.Contains(request.SearchTerm, StringComparison.OrdinalIgnoreCase))
                 .ProjectTo<SearchClientDto>(_mapper.ConfigurationProvider)
                 .OrderBy(sc => sc.LastName)
                 .ThenBy(sc => sc.FirstName);
