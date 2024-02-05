@@ -23,7 +23,9 @@ module.exports = {
                 'subGray2': '#B3B3B3',
 
                 'redRequired': '#C41E3A',
-                'redError': '#D2042D'
+                'redError': '#D2042D',
+
+                'greensucces' : '#129000',
             },
             width: {
                 '50px': '50px',
