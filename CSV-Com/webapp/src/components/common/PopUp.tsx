@@ -47,7 +47,7 @@ const PopUp: React.FC<PopUpProps> = ({
   }, []);
 
   return (
-   <div> 
+   <div className="grid place-items-center"> 
 
       <Buttonforpopup
         openbutton='placeholder'
@@ -60,6 +60,7 @@ const PopUp: React.FC<PopUpProps> = ({
       />
 
       {isOpen && (
+        <div>
         <div className ="popup-top">
           <div className ="popup-content" ref={popupRef} >
             <div className ="popup-inner">
@@ -95,6 +96,7 @@ const PopUp: React.FC<PopUpProps> = ({
                </div>
              </div>
           </div>
+        </div>
         </div>
        )}
      </div>
