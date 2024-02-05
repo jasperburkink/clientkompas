@@ -29,7 +29,7 @@ namespace Application.Clients.Queries.GetClients
         public async Task<GetClientDto> Handle(GetClientQuery request, CancellationToken cancellationToken)
         {
             // TODO: Find a better solution for including properties.
-            var client = await _unitOfWork.ClientRepository.GetByIDAsync(request.ClientId, includeProperties: "DriversLicences,Diagnoses,EmergencyPeople,WorkingContracts");
+            var client = await _unitOfWork.ClientRepository.GetByIDAsync(request.ClientId, cancellationToken: cancellationToken, includeProperties: "DriversLicences,Diagnoses,EmergencyPeople,WorkingContracts,MaritalStatus");
             return _mapper.Map<GetClientDto>(client);
         }
     }

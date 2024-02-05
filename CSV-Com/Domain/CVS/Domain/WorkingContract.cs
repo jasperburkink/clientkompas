@@ -7,7 +7,7 @@ namespace Domain.CVS.Domain
     {
         public int Id { get; set; }
 
-        public virtual Client Client { get; set; }
+        public Client Client { get; set; }
 
         public string CompanyName { get; set; }
 
