@@ -26,7 +26,7 @@
         flex-col
         md:flex-row
         justify-between 
-        ml-2
+        ml-10
       }
 
       .popup-text {
@@ -34,7 +34,7 @@
         mr-2	
         ml-5 
         text-lg 
-        mt-5
+        mt-3
       }
 
       .popup-content {
@@ -52,10 +52,8 @@
        @apply 
        mr-3 
        ml-10 
-       h-10 
        text-lg 
        justify-end
-       
       }
 
       .popup-center {
@@ -65,18 +63,21 @@
         py-1
         ms-2
         mr-5
-        flex
-        justify-start
+        md:mb-4
+        /* flex */
+        /* md:justify-start */
         mt-12
-        h-[3rem]
+        /* md:h-[6rem] */
         fixed
         bottom-4
         left-4 
+        md:flex-col
+        md:space-y-4
       }
 
       .popUp-btnLeft{
         @apply
-        w-full
+        w-2/3
         text-lg 
         border-4 
         border-mainBlue 
@@ -85,11 +86,15 @@
         text-white 
         font-medium
         md:w-48
+        md:ml-0   
+        md:mr-auto 
+        ml-9
+        h-11
       }
 
       .popUp-btnRight{
         @apply
-        w-full 
+        w-2/3
         text-lg 
         border-4 
         border-mainBlue 
@@ -97,10 +102,13 @@
         rounded-lg 
         text-mainBlue 
         font-medium
+        mt-2
         md:w-48
-        md:ml-4
-        md:mt-0
-    }
+        md:ml-0
+        md:mr-3
+        mr-6
+        h-11
+    }                                                       
 
       .icon-size {
         @apply
@@ -134,3 +142,4 @@
         h-48;
     }
 }
+

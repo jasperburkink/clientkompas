@@ -20,8 +20,10 @@ import Textarea from "../components/common/Textarea";
 import { Dropdown } from '../components/common/dropdown';
 import DropdownWithButton from "../components/common/dropdown-with-button";
 import PasswordField from '../components/common/password-field';
-import Popup from "../components/common/popup";
+// import Popup from '../components/common/PopUp';
+import Popup from '../components/common/Popup';
 
+ 
 function App() {
     const data = [
         {

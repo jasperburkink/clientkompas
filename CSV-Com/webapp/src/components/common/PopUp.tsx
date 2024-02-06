@@ -1,10 +1,12 @@
 import React, { useState, useRef, useEffect} from 'react';
 import './button.css';
-import './popup.css'; 
+import './Popup.css'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from 'prop-types';
-import Buttonforpopup from './buttonforpopup';
+// import Buttonforpopup from './buttonforpopup';
+import Buttonforpopup from './ButtonForPopup';
+
 
 interface PopUpProps {
   handleClick: () => void;
@@ -62,7 +64,7 @@ const PopUp: React.FC<PopUpProps> = ({
       {isOpen && (
         <div>
         <div className ="popup-top">
-          <div className ="popup-content" ref={popupRef} >
+          <div className ="popup-content " ref={popupRef} >
             <div className ="popup-inner">
               <div className ="popup-justify">
                  <p className ="popup-text ">{insidePopUpText}</p>
