@@ -47,7 +47,7 @@ function App() {
         },
     ];
 
-    const [isErrorPopupOpen, setErrorPopupOpen] = useState(false);
+    const [isErrorPopupOpen, setErrorPopupOpen] = useState<boolean>(false);
     const cvsError: CvsError = {
         id: 1,
         errorcode: 'E12345',
