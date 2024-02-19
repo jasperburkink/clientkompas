@@ -1,6 +1,6 @@
 import './App.css';
 import '../index.css';
-
+import { useState } from 'react';
 import { Header } from '../components/common/header';
 import { Label } from '../components/common/label';
 import { Button } from '../components/common/button';
@@ -22,6 +22,8 @@ import SaveButton from '../components/common/SaveButton';
 import { Dropdown } from '../components/common/dropdown';
 import DropdownWithButton from "../components/common/dropdown-with-button";
 import PasswordField from '../components/common/password-field';
+import ErrorPopup from '../components/common/error-popup';
+import CvsError from '../types/common/cvs-error';
 
 function App() {
     const handleClick = () => {
@@ -34,19 +36,24 @@ function App() {
         {
             value: 1,
             label: "ADHD",
-           
         },
         {
             value: 2,
             label: "Asperger",
-    
         },
         {
             value: 3,
             label: "SBICT",
-            
         },
     ];
+
+    const [isErrorPopupOpen, setErrorPopupOpen] = useState<boolean>(false);
+    const cvsError: CvsError = {
+        id: 1,
+        errorcode: 'E12345',
+        message: "Dit is een foutmelding."
+    };
+
     return (
         <div className="md:flex">   
             <div id='staticSidebar' className='sidebarContentPush'></div>  
@@ -189,7 +196,7 @@ function App() {
                 <Textarea text="Voeg een opmerking toe"/>
 
                 <p>Dropdown</p>
-                <Dropdown  options={data} required={false} inputfieldname='dropdown' />
+                <Dropdown options={data} required={false} inputfieldname='dropdown' />
              
                 <p>Dropdown with button</p>
                 <DropdownWithButton options={data} required={false} inputfieldname='dropdownWithButton' />
@@ -213,9 +220,17 @@ function App() {
                  errorText = "placeholder 4"
                  onSave={() => console.log('Save successful')}
                  onError={() => console.error('Error saving')}
-                />
-             </div>
-             
+                />             
+
+                <p>Foutmelding pop-up</p>
+                <Button buttonType={{type:"Solid"}} text="Toon foutmelding" className='w-200px h-50px' 
+                onClick=
+                {
+                    ()=> {setErrorPopupOpen(true);}
+                } />
+                <ErrorPopup isErrorPopupOpen={isErrorPopupOpen} setErrorPopupOpen={setErrorPopupOpen} error={cvsError} />
+
+            </div>
             <Copyright />
         </div>
     );
