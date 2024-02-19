@@ -17,6 +17,8 @@ import { InputFieldWithLabel } from '../components/common/input-field-with-label
 import { SlideToggleLabel } from '../components/common/slide-toggle-label';
 import { DatePicker } from '../components/common/datepicker';
 import Textarea from "../components/common/Textarea";
+import PopUp from "../components/common/PopUp";
+import SaveButton from '../components/common/SaveButton';
 import { Dropdown } from '../components/common/dropdown';
 import DropdownWithButton from "../components/common/dropdown-with-button";
 import PasswordField from '../components/common/password-field';
@@ -24,6 +26,12 @@ import ErrorPopup from '../components/common/error-popup';
 import CvsError from '../types/common/cvs-error';
 
 function App() {
+    const handleClick = () => {
+    };
+        const handleCancelClick = () => {
+        };
+
+
     const data = [
         {
             value: 1,
@@ -195,6 +203,24 @@ function App() {
 
                 <p>Wachtwoord input</p>
                 <PasswordField inputfieldname='password' placeholder='Wachtwoord' />
+                                            
+                <p>PopUp component</p>
+                <PopUp
+                handleClick={handleClick}
+                handleCancelClick={handleCancelClick} 
+                buttonText="placeholder1" 
+                text="placeholder2"
+                />    
+
+                <p>Save button component</p>
+                <SaveButton
+                 buttonText= "placeholder 1"
+                 loadingText = "placeholder 2"
+                 successText = "placeholder 3"
+                 errorText = "placeholder 4"
+                 onSave={() => console.log('Save successful')}
+                 onError={() => console.error('Error saving')}
+                />             
 
                 <p>Foutmelding pop-up</p>
                 <Button buttonType={{type:"Solid"}} text="Toon foutmelding" className='w-200px h-50px' 
