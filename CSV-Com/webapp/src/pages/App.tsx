@@ -1,6 +1,6 @@
 import './App.css';
 import '../index.css';
-
+import { useState } from 'react';
 import { Header } from '../components/common/header';
 import { Label } from '../components/common/label';
 import { Button } from '../components/common/button';
@@ -17,37 +17,43 @@ import { InputFieldWithLabel } from '../components/common/input-field-with-label
 import { SlideToggleLabel } from '../components/common/slide-toggle-label';
 import { DatePicker } from '../components/common/datepicker';
 import Textarea from "../components/common/Textarea";
+import PopUp from "../components/common/PopUp";
+import SaveButton from '../components/common/SaveButton';
 import { Dropdown } from '../components/common/dropdown';
 import DropdownWithButton from "../components/common/dropdown-with-button";
 import PasswordField from '../components/common/password-field';
-// import Popup from '../components/common/PopUp';
+import ErrorPopup from '../components/common/error-popup';
+import CvsError from '../types/common/cvs-error';
 import Popup from '../components/common/Popup';
 
- 
 function App() {
+    const handleClick = () => {
+    };
+        const handleCancelClick = () => {
+        };
+
+
     const data = [
         {
             value: 1,
             label: "ADHD",
-           
         },
         {
             value: 2,
             label: "Asperger",
-    
         },
         {
             value: 3,
             label: "SBICT",
-            
         },
     ];
-    const handleClick = () => {
-        alert('click');
+
+    const [isErrorPopupOpen, setErrorPopupOpen] = useState<boolean>(false);
+    const cvsError: CvsError = {
+        id: 1,
+        errorcode: 'E12345',
+        message: "Dit is een foutmelding."
     };
-        const handleCancelClick = () => {
-            alert('click');
-        };
           
     return (
         <div className="md:flex">   
@@ -191,26 +197,41 @@ function App() {
                 <Textarea text="Voeg een opmerking toe"/>
 
                 <p>Dropdown</p>
-                <Dropdown  options={data} required={false} inputfieldname='dropdown' />
+                <Dropdown options={data} required={false} inputfieldname='dropdown' />
              
                 <p>Dropdown with button</p>
                 <DropdownWithButton options={data} required={false} inputfieldname='dropdownWithButton' />
 
                 <p>Wachtwoord input</p>
                 <PasswordField inputfieldname='password' placeholder='Wachtwoord' />
-                    
+                                            
                 <p>PopUp component</p>
-                <Popup
+                <PopUp
                 handleClick={handleClick}
                 handleCancelClick={handleCancelClick} 
-                confirmButtonText="placeholder1" 
-                cancelButtonText="placeholder2"
-                insidePopUpText="The Text inside popUp placeholder"
-                buttonType='backitupanddoitagain'
-                text='babadapalaeËeeeë'
-                />  
-                            
-             </div>
+                buttonText="placeholder1" 
+                text="placeholder2"
+                />    
+
+                <p>Save button component</p>
+                <SaveButton
+                 buttonText= "placeholder 1"
+                 loadingText = "placeholder 2"
+                 successText = "placeholder 3"
+                 errorText = "placeholder 4"
+                 onSave={() => console.log('Save successful')}
+                 onError={() => console.error('Error saving')}
+                />             
+
+                <p>Foutmelding pop-up</p>
+                <Button buttonType={{type:"Solid"}} text="Toon foutmelding" className='w-200px h-50px' 
+                onClick=
+                {
+                    ()=> {setErrorPopupOpen(true);}
+                } />
+                <ErrorPopup isErrorPopupOpen={isErrorPopupOpen} setErrorPopupOpen={setErrorPopupOpen} error={cvsError} />
+
+            </div>
             <Copyright />
         </div>
     );
