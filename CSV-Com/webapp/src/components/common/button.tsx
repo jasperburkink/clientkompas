@@ -3,7 +3,7 @@ import './button.css';
 import { ButtonType } from '../../types/common/ButtonComponentType';
 import { getClassNameButtonType } from '../../types/common/ButtonComponentType';
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     text: string;
     buttonType: ButtonType;
     isOpen?: boolean;

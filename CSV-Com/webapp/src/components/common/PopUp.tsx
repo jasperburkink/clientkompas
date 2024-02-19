@@ -1,21 +1,16 @@
 import React, { useState, useRef, useEffect} from 'react';
 import './button.css';
-import './Popup.css'; 
+import './PopUp.css'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from 'prop-types';
-// import Buttonforpopup from './buttonforpopup';
-import Buttonforpopup from './ButtonForPopup';
-
 
 interface PopUpProps {
   handleClick: () => void;
   handleCancelClick: () => void;
-  cancelButtonText: string;
+  cancelButtonText?: string;
   confirmButtonText: string;
   insidePopUpText: string;
-  text: string;
-  buttonType: string
 }
 
 let string = "text" as const
@@ -49,17 +44,7 @@ const PopUp: React.FC<PopUpProps> = ({
   }, []);
 
   return (
-   <div className="grid place-items-center"> 
-
-      <Buttonforpopup
-        openbutton='placeholder'
-        isOpen={isOpen} 
-        setIsOpen={setIsOpen} 
-        onClick={() => {
-        console.log('Button clicked!');
-        setIsOpen(!isOpen);
-        }}
-      />
+   <div className="grid place-items-center">      
 
       {isOpen && (
         <div>
@@ -86,6 +71,7 @@ const PopUp: React.FC<PopUpProps> = ({
                   {confirmButtonText}
                 </button>
 
+                {cancelButtonText &&
                 <button
                   onClick = {() => {
                     handleCancelClick();
@@ -94,7 +80,7 @@ const PopUp: React.FC<PopUpProps> = ({
                   className="popUp-btnRight"
                 >
                     {cancelButtonText}
-                 </button>
+                 </button>}
                </div>
              </div>
           </div>
@@ -108,9 +94,7 @@ PopUp.propTypes = {
   handleClick: PropTypes.func.isRequired,
   handleCancelClick: PropTypes.func.isRequired,
   confirmButtonText: PropTypes.string.isRequired,
-  cancelButtonText: PropTypes.string.isRequired,
-  text: PropTypes.string.isRequired,
-  buttonType: PropTypes.string.isRequired,
+  cancelButtonText: PropTypes.string.isRequired
 };
  
 export default PopUp;

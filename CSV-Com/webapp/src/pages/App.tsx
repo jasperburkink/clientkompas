@@ -24,15 +24,8 @@ import DropdownWithButton from "../components/common/dropdown-with-button";
 import PasswordField from '../components/common/password-field';
 import ErrorPopup from '../components/common/error-popup';
 import CvsError from '../types/common/cvs-error';
-import Popup from '../components/common/Popup';
 
 function App() {
-    const handleClick = () => {
-    };
-        const handleCancelClick = () => {
-        };
-
-
     const data = [
         {
             value: 1,
@@ -48,6 +41,15 @@ function App() {
         },
     ];
 
+    const [isConfirmPopupOneButtonOpen, setConfirmPopupOneButtonOpen] = useState<boolean>(false);
+    const handlePopUpConfirmClick = () => {
+        alert('Comfirm popup');
+    };
+
+    const handlePopUpCancelClick = () => {
+        alert('Cancel popup');
+    };
+    
     const [isErrorPopupOpen, setErrorPopupOpen] = useState<boolean>(false);
     const cvsError: CvsError = {
         id: 1,
@@ -205,12 +207,13 @@ function App() {
                 <p>Wachtwoord input</p>
                 <PasswordField inputfieldname='password' placeholder='Wachtwoord' />
                                             
-                <p>PopUp component</p>
+                <p>PopUp component twee buttons</p>
                 <PopUp
-                handleClick={handleClick}
-                handleCancelClick={handleCancelClick} 
-                buttonText="placeholder1" 
-                text="placeholder2"
+                handleClick={handlePopUpConfirmClick}
+                handleCancelClick={handlePopUpCancelClick} 
+                confirmButtonText='Confirm'
+                cancelButtonText='Cancel' 
+                insidePopUpText='Dit is een pop up met twee knoppen'
                 />    
 
                 <p>Save button component</p>
@@ -221,16 +224,32 @@ function App() {
                  errorText = "placeholder 4"
                  onSave={() => console.log('Save successful')}
                  onError={() => console.error('Error saving')}
-                />             
+                />                             
 
                 <p>Foutmelding pop-up</p>
                 <Button buttonType={{type:"Solid"}} text="Toon foutmelding" className='w-200px h-50px' 
-                onClick=
-                {
-                    ()=> {setErrorPopupOpen(true);}
-                } />
-                <ErrorPopup isErrorPopupOpen={isErrorPopupOpen} setErrorPopupOpen={setErrorPopupOpen} error={cvsError} />
+                onClick={() => setErrorPopupOpen(true)} />
+                <ErrorPopup 
+                error={cvsError} 
+                isOpen={isErrorPopupOpen}
+                onClose={() => setErrorPopupOpen(false)} />
 
+                <p>Bevestigings pop-up met één button</p>
+                <Button buttonType={{type:"Solid"}} text="Toon pop-up met één button" className='w-200px h-50px' 
+                onClick={() => setErrorPopupOpen(true)} />
+                <ErrorPopup 
+                error={cvsError} 
+                isOpen={isErrorPopupOpen}
+                onClose={() => setErrorPopupOpen(false)} />
+
+                <p>Bevestigings pop-up met twee buttons</p>
+                <PopUp
+                handleClick={handlePopUpConfirmClick}
+                handleCancelClick={handlePopUpCancelClick} 
+                confirmButtonText='Confirm'
+                cancelButtonText='Cancel' 
+                insidePopUpText='Dit is een pop up met twee knoppen'
+                />  
             </div>
             <Copyright />
         </div>
