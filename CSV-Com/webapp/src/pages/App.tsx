@@ -202,7 +202,7 @@ function App() {
                 {
                     ()=> {setErrorPopupOpen(true);}
                 } />
-                <ErrorPopup isOpen={isErrorPopupOpen} className='sd' error={cvsError} />
+                <ErrorPopup isErrorPopupOpen={isErrorPopupOpen} setErrorPopupOpen={setErrorPopupOpen} error={cvsError} />
 
             </div>
             <Copyright />
