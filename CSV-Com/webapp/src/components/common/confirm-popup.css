@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans&display=swap');
+
+@layer components {
+    .confirm-popup{
+        @apply
+            fixed
+            flex
+            flex-wrap            
+            rounded-lg
+            font-primary
+            top-1/2
+            left-1/2
+            transform
+            -translate-x-1/2
+            -translate-y-1/2
+            bg-white
+            w-auto
+            lg:w-1/4
+            px-6
+            py-2
+            z-50;
+
+        .confirm-message{
+            @apply
+            w-4/5
+            my-3;
+        }
+
+        .confirm-button-container{
+            @apply            
+            flex
+            flex-col
+            lg:flex-row
+            items-center 
+            justify-center
+            w-full
+            py-2;
+        }
+
+        .confirm-button{
+            @apply
+            flex-initial
+            w-32
+            h-10
+            mx-4
+            my-1;
+        }
+
+        .close-icon{
+            @apply
+            absolute 
+            top-2
+            right-2
+            h-5
+            w-5
+            cursor-pointer;
+        }
+    }
+}

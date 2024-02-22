@@ -18,12 +18,14 @@ const ConfirmPopup = (props: IConfirmPopupProps) => {
         <div>
             <div className='fixed inset-0 bg-gray-800 bg-opacity-50 z-50"' onClick={props.onClose} />
 
-            <div className={`error-popup ${props.className}`}>
+            <div className={`confirm-popup ${props.className}`}>
                 <FontAwesomeIcon icon={faXmark} className="flex-none fa-solid fa-xl close-icon" onClick={props.onClose} />
                 <p className='confirm-message'>{props.message}</p>
-                {props.buttons.map((buttonComponent, index) => (
-                    <Button key={index} {...buttonComponent}/>
-                ))}                
+                <div className='confirm-button-container'>
+                    {props.buttons.map((buttonComponent, index) => (
+                        <Button key={index} {...buttonComponent} className='confirm-button'/>
+                    ))}
+                </div>
             </div>
         </div>
         )}

@@ -34,6 +34,13 @@
             my-5;
         }
 
+        .confirm-button{
+            @apply
+            ml-auto
+            w-32
+            h-10;
+        }
+
         .close-icon{
             @apply
             absolute 

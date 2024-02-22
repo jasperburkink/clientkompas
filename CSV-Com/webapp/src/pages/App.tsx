@@ -42,14 +42,17 @@ function App() {
     ];
 
     const [isConfirmPopupOneButtonOpen, setConfirmPopupOneButtonOpen] = useState<boolean>(false);
+    const [isConfirmPopupTwoButtonsOpen, setConfirmPopupTwoButtonsOpen] = useState<boolean>(false);
     const handlePopUpConfirmClick = () => {
         alert('Comfirm popup');
-        setConfirmPopupOneButtonOpen(false)
+        setConfirmPopupOneButtonOpen(false);
+        setConfirmPopupTwoButtonsOpen(false);
     };
 
     const handlePopUpCancelClick = () => {
         alert('Cancel popup');
-        setConfirmPopupOneButtonOpen(false)
+        setConfirmPopupOneButtonOpen(false);
+        setConfirmPopupTwoButtonsOpen(false);
     };
     
     const [isErrorPopupOpen, setErrorPopupOpen] = useState<boolean>(false);
@@ -225,20 +228,20 @@ function App() {
                 <ConfirmPopup
                 message="Dit is een bevestigings pop-up met één knop"
                 isOpen={isConfirmPopupOneButtonOpen}
-                onClose={() => setConfirmPopupOneButtonOpen(false)}
+                onClose={handlePopUpCancelClick}
                 buttons={[{ text: 'Bevestigen', onClick: handlePopUpConfirmClick, buttonType: {type:"Solid"}}]} />
 
                 <p>Bevestigings pop-up met twee buttons</p>
                 <Button buttonType={{type:"Solid"}} text="Toon pop-up met twee buttons" className='w-200px h-50px' 
-                onClick={() => setConfirmPopupOneButtonOpen(true)} />
+                onClick={() => setConfirmPopupTwoButtonsOpen(true)} />
                 <ConfirmPopup
                 message="Dit is een bevestigings pop-up met twee knoppen"
-                isOpen={isConfirmPopupOneButtonOpen}
-                onClose={() => setConfirmPopupOneButtonOpen(false)}
+                isOpen={isConfirmPopupTwoButtonsOpen}
+                onClose={handlePopUpCancelClick}
                 buttons={
                     [
                         { text: 'Bevestigen', onClick: handlePopUpConfirmClick, buttonType: {type:"Solid"}},
-                        { text: 'Annuleren', onClick: handlePopUpCancelClick, buttonType: {type:"Solid"}},
+                        { text: 'Annuleren', onClick: handlePopUpCancelClick, buttonType: {type:"NotSolid"}},
                     ]} />
 
                 <p>Foutmelding pop-up</p>
