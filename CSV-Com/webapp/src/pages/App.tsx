@@ -24,6 +24,9 @@ import DropdownWithButton from "../components/common/dropdown-with-button";
 import PasswordField from '../components/common/password-field';
 import ErrorPopup from '../components/common/error-popup';
 import CvsError from '../types/common/cvs-error';
+import DomainObjectInput from '../components/common/domain-object-input';
+import EmergencyPerson from '../types/model/EmergencyPerson';
+import WorkingContract from '../types/model/WorkingContract';
 
 function App() {
     const handleClick = () => {
@@ -53,6 +56,44 @@ function App() {
         errorcode: 'E12345',
         message: "Dit is een foutmelding."
     };
+
+    const [emergencyPerson, setEmergencyPerson] = useState<EmergencyPerson>({
+        name: 'Jasper Burkink',
+        telephonenumber: '0123456789'
+      });
+
+      const [emergencyPerson2, setEmergencyPerson2] = useState<EmergencyPerson>({
+        name: 'Jan Jansen',
+        telephonenumber: '0123456789'
+      });
+
+      const emergencyPersons : EmergencyPerson[] = []
+      {
+        emergencyPerson;
+        emergencyPerson2
+      }
+
+    const handleEmergencyPersonChange = (fieldName: keyof EmergencyPerson, value: string | Date, index: number) => {
+            setEmergencyPerson(prevState => ({
+            ...prevState,
+            [fieldName]: value
+        }));
+    };
+
+    const [workingContract, setWorkingContract] = useState<WorkingContract>({
+        companyname: 'SB-ICT',
+        contracttype: 'Tijdelijk',
+        fromdate: new Date('2020-01-01'),
+        todate: new Date('2021-01-01'),
+        function: 'Programmeur'
+      });
+
+    const handleWorkingContractChange = (fieldName: keyof WorkingContract, value: string | Date, index: number) => {
+        setWorkingContract(prevState => ({
+        ...prevState,
+        [fieldName]: value
+    }));
+};
 
     return (
         <div className="md:flex">   
@@ -220,7 +261,7 @@ function App() {
                  errorText = "placeholder 4"
                  onSave={() => console.log('Save successful')}
                  onError={() => console.error('Error saving')}
-                />             
+                />
 
                 <p>Foutmelding pop-up</p>
                 <Button buttonType={{type:"Solid"}} text="Toon foutmelding" className='w-200px h-50px' 
@@ -230,6 +271,28 @@ function App() {
                 } />
                 <ErrorPopup isErrorPopupOpen={isErrorPopupOpen} setErrorPopupOpen={setErrorPopupOpen} error={cvsError} />
 
+                <p>Inputvelden voor contactpersoon</p>                
+                <DomainObjectInput domainObject={emergencyPersons} onChange={handleEmergencyPersonChange} />
+
+                <p>Inputvelden voor werkervaring</p>
+                <DomainObjectInput domainObject={workingContract} onChange={handleWorkingContractChange} />
+
+
+                <Button buttonType={{type:"Solid"}} text="Pas datum aan" className='w-200px h-50px' onClick=
+                {
+                    ()=> {
+                        let w1: WorkingContract = {
+                            companyname: 'Belastingdienst',
+                            contracttype: 'Vast',
+                            fromdate: new Date('1999-01-01'),
+                            todate: new Date('2008-01-01'),
+                            function: 'Schoonmaker'
+                          };
+                    
+setWorkingContract(w1);
+
+                    }
+                } />
             </div>
             <Copyright />
         </div>

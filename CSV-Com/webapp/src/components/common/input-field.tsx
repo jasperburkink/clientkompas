@@ -4,16 +4,19 @@ import { InputFieldType } from '../../types/common/InputFieldComponentType';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAsterisk } from "@fortawesome/free-solid-svg-icons";
 
-export interface InputFieldProps extends React.HtmlHTMLAttributes<HTMLInputElement> {
+export interface InputFieldProps {
     value?: string,
     placeholder: string,
     required: boolean,
-    inputfieldtype: InputFieldType
+    inputfieldtype: InputFieldType,
+    className?: string,
+    onChange?: (value: string) => void;
 }
 
 export const InputField = (props: InputFieldProps) => (  
-    <div className='input-field'>
-        <input {...props}
+    <div className={'input-field ' + props.className}>
+        <input
+        onChange={(e) => props.onChange?.(e.target.value)}
         value={props.value} 
         type={props.inputfieldtype.type}         
         placeholder={props.placeholder} 

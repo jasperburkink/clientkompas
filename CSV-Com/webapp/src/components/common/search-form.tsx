@@ -11,8 +11,7 @@ interface SearchFormProps {
 const SearchForm: React.FC<SearchFormProps> = ({ onSearchChange }) => {
     const [searchTerm, setSearchTerm] = useState<string>('');
   
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const newSearchTerm = e.target.value;
+    const handleInputChange = (newSearchTerm: string) => {      
         setSearchTerm(newSearchTerm);        
         onSearchChange(newSearchTerm);
       };  
