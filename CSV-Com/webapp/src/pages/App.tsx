@@ -67,18 +67,7 @@ function App() {
         telephonenumber: '0123456789'
       });
 
-      const emergencyPersons : EmergencyPerson[] = []
-      {
-        emergencyPerson;
-        emergencyPerson2
-      }
-
-    const handleEmergencyPersonChange = (fieldName: keyof EmergencyPerson, value: string | Date, index: number) => {
-            setEmergencyPerson(prevState => ({
-            ...prevState,
-            [fieldName]: value
-        }));
-    };
+      const emergencyPersons : EmergencyPerson[] = [emergencyPerson, emergencyPerson2];
 
     const [workingContract, setWorkingContract] = useState<WorkingContract>({
         companyname: 'SB-ICT',
@@ -88,12 +77,15 @@ function App() {
         function: 'Programmeur'
       });
 
-    const handleWorkingContractChange = (fieldName: keyof WorkingContract, value: string | Date, index: number) => {
-        setWorkingContract(prevState => ({
-        ...prevState,
-        [fieldName]: value
-    }));
-};
+      const [workingContract2, setWorkingContract2] = useState<WorkingContract>({
+        companyname: 'Welkoop',
+        contracttype: 'Tijdelijk',
+        fromdate: new Date('1995-01-01'),
+        todate: new Date('1998-01-01'),
+        function: 'Verkoper'
+      });
+
+      const workingContracts : WorkingContract[] = [workingContract, workingContract2];
 
     return (
         <div className="md:flex">   
@@ -272,10 +264,10 @@ function App() {
                 <ErrorPopup isErrorPopupOpen={isErrorPopupOpen} setErrorPopupOpen={setErrorPopupOpen} error={cvsError} />
 
                 <p>Inputvelden voor contactpersoon</p>                
-                <DomainObjectInput domainObject={emergencyPersons} onChange={handleEmergencyPersonChange} />
+                <DomainObjectInput domainObjects={emergencyPersons} />
 
                 <p>Inputvelden voor werkervaring</p>
-                <DomainObjectInput domainObject={workingContract} onChange={handleWorkingContractChange} />
+                <DomainObjectInput domainObjects={workingContracts} />
 
 
                 <Button buttonType={{type:"Solid"}} text="Pas datum aan" className='w-200px h-50px' onClick=
@@ -289,10 +281,12 @@ function App() {
                             function: 'Schoonmaker'
                           };
                     
-setWorkingContract(w1);
+                    setWorkingContract(w1);
 
                     }
                 } />
+
+
             </div>
             <Copyright />
         </div>

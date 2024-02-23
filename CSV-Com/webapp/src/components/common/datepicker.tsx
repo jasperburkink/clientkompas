@@ -15,8 +15,7 @@ const MOBILE_BREAKPOINT = 640;
 interface DatePickerProps {
     placeholder: string,
     value?: Date,
-    className?: string,
-    onChange?: (value: Date | null) => void
+    className?: string
 }
 
 function GenerateAwesomeFontCalendarIcon() {
@@ -53,26 +52,12 @@ export const DatePicker = (props: DatePickerProps) => {
   return (
   <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale={LOCALE_PROVIDER}>
     {isMobileView ? (
-      <MobileDatePickerControl.MobileDatePicker 
-      onChange={(date) => {
-        if (date === null) {
-          props.onChange?.(null);
-        } else {
-          props.onChange?.(date.toDate());
-        }
-      }}
+      <MobileDatePickerControl.MobileDatePicker       
       label={props.placeholder} 
       className={`datepicker ${props.className}`}
       value={props.value ? Moment(props.value) : null} />      
     ): (
-      <DatePickerControl.DatePicker 
-      onChange={(date) => {
-        if (date === null) {
-          props.onChange?.(null);
-        } else {
-          props.onChange?.(date.toDate());
-        }
-      }}
+      <DatePickerControl.DatePicker       
         label={props.placeholder}
         className={`datepicker ${props.className}`}
         value={props.value ? Moment(props.value) : null}

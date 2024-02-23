@@ -4,13 +4,9 @@ import { InputFieldWithLabel } from '../../components/common/input-field-with-la
 
 interface DomainObjectInputProps<T>{
     domainObjects: T[];
-    onChange: (fieldName: keyof T, value: string | Date, index: number) => void;
 }
 
-const DomainObjectInput = <T extends Record<string, any>>(props: DomainObjectInputProps<T>) => {
-    const handleChange = (fieldName: keyof T, value: string | Date, index: number) => {
-        props.onChange(fieldName, value, index);
-    };
+const DomainObjectInput = <T extends Record<string, any>>(props: DomainObjectInputProps<T>) => {    
 
       const inputFields = props.domainObjects.map((domainObject, index) => {
         return (
@@ -28,7 +24,6 @@ const DomainObjectInput = <T extends Record<string, any>>(props: DomainObjectInp
                                         key={key}
                                         value={value}
                                         placeholder='Selecteer een datum'
-                                        onChange={(date: Date | null) => handleChange(key as keyof T, date || new Date(), index)}
                                     />
                                 </div>
                             ) : (
@@ -39,9 +34,7 @@ const DomainObjectInput = <T extends Record<string, any>>(props: DomainObjectInp
                                             required: false,
                                             placeholder: 'Placeholder',
                                             inputfieldtype: { type: 'text' },
-                                            value: value as string,
-                                            onChange: (newValue: string) =>
-                                                handleChange(key as keyof T, newValue, index),
+                                            value: value as string
                                         }}
                                     />
                                 </div>
