@@ -12,7 +12,7 @@ import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 const LOCALE_PROVIDER = "nl";
 const MOBILE_BREAKPOINT = 640;
 
-interface DatePickerProps {
+export interface DatePickerProps {
     placeholder: string,
     value?: Date,
     className?: string

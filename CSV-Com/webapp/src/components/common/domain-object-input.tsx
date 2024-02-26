@@ -1,29 +1,43 @@
-import React from 'react';
-import { DatePicker } from '../../components/common/datepicker';
+import { useState }  from 'react';
+import { Label } from '../../components/common/label';
+import { Button } from '../../components/common/button';
+import { DatePickerWithLabel } from '../../components/common/datepicker-with-label';
 import { InputFieldWithLabel } from '../../components/common/input-field-with-label';
+import './domain-object-input.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXmark} from "@fortawesome/free-solid-svg-icons";
 
 interface DomainObjectInputProps<T>{
+    label: string;
     domainObjects: T[];
+    // emptyObject: T;
+    numMinimalRequired?: number;
+    addObject: void;
+    removeObject: void;
 }
 
 const DomainObjectInput = <T extends Record<string, any>>(props: DomainObjectInputProps<T>) => {    
 
-      const inputFields = props.domainObjects.map((domainObject, index) => {
+      const [domainObjects, setDomainObjects] = useState<T[]>(props.domainObjects);
+
+      const inputFields = domainObjects.map((domainObject, index) => {
         return (
+            <>
             <div key={index} className='domain-object-container'>
                 {Object.entries(domainObject).map(([key, value]) => {
                     let inputType: string = 'text';
                     inputType = getInputFieldType(value, inputType);
 
-                    return (
+                    return (                        
                         <div key={key}>
                             {inputType === 'date' ? (
                                 <div>
-                                    <label htmlFor={key}>{key}</label>
-                                    <DatePicker
-                                        key={key}
-                                        value={value}
-                                        placeholder='Selecteer een datum'
+                                    <DatePickerWithLabel 
+                                        text={key}
+                                        datePickerProps={{                         
+                                            value: value as Date,
+                                            placeholder:'Selecteer een datum'//TODO: required
+                                        }}
                                     />
                                 </div>
                             ) : (
@@ -37,16 +51,24 @@ const DomainObjectInput = <T extends Record<string, any>>(props: DomainObjectInp
                                             value: value as string
                                         }}
                                     />
-                                </div>
+                                </div>                                
                             )}
                         </div>
                     );
                 })}
+                {/* <div className='p-3 border-2 rounded-lg float-right w-12 h-12 mt-4 border-subGray2 bg-mainLightGray cursor-pointer' onClick={() => props.removeObject}>
+                    <FontAwesomeIcon icon={faXmark} className="domain-object-remove-button flex-none fa-solid fa-xl"  />
+                </div> */}
             </div>
+            </>
         );
     });
 
-    return <>{inputFields}</>;
+    return <>
+        <Label text={props.label} className='domain-object-label' strong={true} />
+        {inputFields}
+        {/* <Button buttonType={{type:"Underline"}} text={`Voeg nog een ${typeof props.domainObjects} toe`} className='domain-object-add-button' onClick={()=> {props.addObject}} /> */}
+        </>;
 };
 
 export default DomainObjectInput;

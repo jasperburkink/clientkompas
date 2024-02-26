@@ -4,8 +4,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Work+Sans&display=swap');
 
 @layer components {
+    .domain-object-label{
+        @apply
+        col-span-2
+        grid-cols-2;
+    }
+
+
     .domain-object-container{
         @apply 
         bg-red-500;
     }
+
+    .domain-object-add-button{
+        @apply
+        w-200px 
+        h-50px;
+    }
+    
 }

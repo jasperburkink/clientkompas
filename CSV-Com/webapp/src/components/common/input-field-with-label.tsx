@@ -10,7 +10,7 @@ interface InputFieldWithLabelProps{
 
 export const InputFieldWithLabel = (props: InputFieldWithLabelProps) => (
     <div className={'input-field-with-label ' + props.className}>
-        <label htmlFor={props.text}>{props.text}</label>
+        <label htmlFor={props.text}>{`${props.text}:`}</label>
         <InputField
         value={props.inputFieldProps.value}
         placeholder={props.inputFieldProps.placeholder}
