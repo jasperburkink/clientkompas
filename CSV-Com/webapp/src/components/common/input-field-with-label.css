@@ -8,9 +8,9 @@
         @apply 
         font-primary 
         flex 
-        justify-between 
+        /* justify-between  */
         /* float-left */
-        py-4;
+        py-1;
     
         label{
             @apply 

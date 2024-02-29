@@ -58,48 +58,52 @@ function App() {
         message: "Dit is een foutmelding."
     };
 
+    const emergencyPerson: EmergencyPerson = {
+        name: 'Jasper Burkink',
+        telephonenumber: '0123456789'
+      };
+
+      const emergencyPerson2: EmergencyPerson = {
+        name: 'Jan Jansen',
+        telephonenumber: '0123456789'
+      };
+
+    const emergencyPersons : EmergencyPerson[] = [emergencyPerson, emergencyPerson2];
+
     const addEmergencyPerson = ():EmergencyPerson => {
         return {
             name: '',
             telephonenumber: ''
         };
     };
-
-    const removeEmergencyPerson = () => {
-        emergencyPersons.slice(0 ,1);
-    };
-
-    const [emergencyPerson, setEmergencyPerson] = useState<EmergencyPerson>({
-        name: 'Jasper Burkink',
-        telephonenumber: '0123456789'
-      });
-
-      const [emergencyPerson2, setEmergencyPerson2] = useState<EmergencyPerson>({
-        name: 'Jan Jansen',
-        telephonenumber: '0123456789'
-      });
-
-      const emergencyPersons : EmergencyPerson[] = [emergencyPerson, emergencyPerson2];
-
       
-
-    const [workingContract, setWorkingContract] = useState<WorkingContract>({
+    const workingContract: WorkingContract = {
         companyname: 'SB-ICT',
         contracttype: 'Tijdelijk',
         fromdate: new Date('2020-01-01'),
         todate: new Date('2021-01-01'),
         function: 'Programmeur'
-      });
+      };
 
-      const [workingContract2, setWorkingContract2] = useState<WorkingContract>({
+      const workingContract2: WorkingContract = {
         companyname: 'Welkoop',
         contracttype: 'Tijdelijk',
         fromdate: new Date('1995-01-01'),
         todate: new Date('1998-01-01'),
         function: 'Verkoper'
-      });
+      };
 
       const workingContracts : WorkingContract[] = [workingContract, workingContract2];
+
+      const addWorkingContract = ():WorkingContract => {
+        return {
+            companyname: '',
+            contracttype: '',
+            fromdate: new Date(),
+            todate: new Date(),
+            function: ''
+        };
+    };
 
     return (
         <div className="flex flex-col lg:flex-row h-screen lg:h-auto">
@@ -279,24 +283,9 @@ function App() {
                     } />
                     <ErrorPopup isErrorPopupOpen={isErrorPopupOpen} setErrorPopupOpen={setErrorPopupOpen} error={cvsError} />
               
-                    <DomainObjectInput label='Inputvelden voor contactpersoon' addObject={addEmergencyPerson} domainObjects={emergencyPersons} />
+                    <DomainObjectInput label='Inputvelden voor contactpersoon' addObject={addEmergencyPerson} domainObjects={emergencyPersons} typeName='contactpersoon' />
 
-                    {/* <DomainObjectInput label='Inputvelden voor werkervaring' domainObjects={workingContracts} /> */}
-
-                    <Button buttonType={{type:"Solid"}} text="Pas datum aan" className='w-200px h-50px' onClick=
-                    {
-                        ()=> {
-                            let w1: WorkingContract = {
-                                companyname: 'Belastingdienst',
-                                contracttype: 'Vast',
-                                fromdate: new Date('1999-01-01'),
-                                todate: new Date('2008-01-01'),
-                                function: 'Schoonmaker'
-                            };
-                        
-                            setWorkingContract(w1);
-                        }
-                    } />
+                    <DomainObjectInput label='Inputvelden voor werkervaring' addObject={addWorkingContract} domainObjects={workingContracts} typeName='werkervaring' />                    
 
                 </div>
             <Copyright />
