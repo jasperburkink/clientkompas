@@ -10,17 +10,27 @@ import { faXmark} from "@fortawesome/free-solid-svg-icons";
 interface DomainObjectInputProps<T>{
     label: string;
     domainObjects: T[];
-    // emptyObject: T;
-    numMinimalRequired?: number;
-    addObject: void;
-    removeObject: void;
+    numMinimalRequired?: number;    
+    addObject: () => T;
 }
 
 const DomainObjectInput = <T extends Record<string, any>>(props: DomainObjectInputProps<T>) => {    
 
-      const [domainObjects, setDomainObjects] = useState<T[]>(props.domainObjects);
+        const [domainObjects, setDomainObjects] = useState<T[]>(props.domainObjects);
 
-      const inputFields = domainObjects.map((domainObject, index) => {
+        const handleAddObject = () => {
+            const newDomainObject: T = props.addObject();
+            setDomainObjects([...domainObjects, newDomainObject]);
+        };
+
+        const handleRemoveObject = (domainObjectToRemove: T) => {
+            const updatedDomainObjects: T[] = domainObjects.filter(obj => obj !== domainObjectToRemove);
+            setDomainObjects(updatedDomainObjects);
+        };
+
+        const inputFields = domainObjects.map((domainObject, index) => {
+        let requiredDomainObject: boolean = props.numMinimalRequired !== null && index <= props.numMinimalRequired!;
+
         return (
             <>
             <div key={index} className='domain-object-container'>
@@ -45,7 +55,7 @@ const DomainObjectInput = <T extends Record<string, any>>(props: DomainObjectInp
                                     <InputFieldWithLabel
                                         text={key}
                                         inputFieldProps={{
-                                            required: false,
+                                            required: requiredDomainObject,
                                             placeholder: 'Placeholder',
                                             inputfieldtype: { type: 'text' },
                                             value: value as string
@@ -56,9 +66,9 @@ const DomainObjectInput = <T extends Record<string, any>>(props: DomainObjectInp
                         </div>
                     );
                 })}
-                {/* <div className='p-3 border-2 rounded-lg float-right w-12 h-12 mt-4 border-subGray2 bg-mainLightGray cursor-pointer' onClick={() => props.removeObject}>
+                <div className='p-3 border-2 rounded-lg float-right w-12 h-12 mt-4 border-subGray2 bg-mainLightGray cursor-pointer' onClick={() => {handleRemoveObject(domainObject);}}>
                     <FontAwesomeIcon icon={faXmark} className="domain-object-remove-button flex-none fa-solid fa-xl"  />
-                </div> */}
+                </div>
             </div>
             </>
         );
@@ -67,7 +77,7 @@ const DomainObjectInput = <T extends Record<string, any>>(props: DomainObjectInp
     return <>
         <Label text={props.label} className='domain-object-label' strong={true} />
         {inputFields}
-        {/* <Button buttonType={{type:"Underline"}} text={`Voeg nog een ${typeof props.domainObjects} toe`} className='domain-object-add-button' onClick={()=> {props.addObject}} /> */}
+        <Button buttonType={{type:"Underline"}} text={`Voeg nog een ${typeof props.domainObjects} toe`} className='domain-object-add-button' onClick={handleAddObject} />
         </>;
 };
 

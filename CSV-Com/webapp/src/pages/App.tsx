@@ -58,13 +58,11 @@ function App() {
         message: "Dit is een foutmelding."
     };
 
-    const emergencyPersonEmpty: EmergencyPerson = {
-        name: '',
-        telephonenumber: ''
-    };
-
-    const addEmergencyPerson = () => {
-        emergencyPersons.push(emergencyPersonEmpty)
+    const addEmergencyPerson = ():EmergencyPerson => {
+        return {
+            name: '',
+            telephonenumber: ''
+        };
     };
 
     const removeEmergencyPerson = () => {
@@ -281,7 +279,7 @@ function App() {
                     } />
                     <ErrorPopup isErrorPopupOpen={isErrorPopupOpen} setErrorPopupOpen={setErrorPopupOpen} error={cvsError} />
               
-                    <DomainObjectInput label='Inputvelden voor contactpersoon' addObject={addEmergencyPerson()} removeObject={removeEmergencyPerson()} domainObjects={emergencyPersons} />
+                    <DomainObjectInput label='Inputvelden voor contactpersoon' addObject={addEmergencyPerson} domainObjects={emergencyPersons} />
 
                     {/* <DomainObjectInput label='Inputvelden voor werkervaring' domainObjects={workingContracts} /> */}
 
