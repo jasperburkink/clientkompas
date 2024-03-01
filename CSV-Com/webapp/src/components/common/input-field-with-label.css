@@ -7,9 +7,7 @@
     div.input-field-with-label{
         @apply 
         font-primary 
-        flex 
-        /* justify-between  */
-        /* float-left */
+        flex
         py-1;
     
         label{

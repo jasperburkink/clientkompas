@@ -229,13 +229,14 @@ function App() {
                     </SlideToggleLabel>
 
                     <p>Date picker</p>                    
-                    <DatePicker placeholder='Selecteer een datum' />
+                    <DatePicker placeholder='Selecteer een datum' required={true} />
 
                     <p>Date picker met label</p>
                     <DatePickerWithLabel
                         text='Datepicker met label'
                         datePickerProps={{
-                            placeholder:'Selecteer een datum'
+                            placeholder:'Selecteer een datum',
+                            required: true
                         }}
                     />
 
@@ -283,9 +284,9 @@ function App() {
                     } />
                     <ErrorPopup isErrorPopupOpen={isErrorPopupOpen} setErrorPopupOpen={setErrorPopupOpen} error={cvsError} />
               
-                    <DomainObjectInput label='Inputvelden voor contactpersoon' addObject={addEmergencyPerson} domainObjects={emergencyPersons} typeName='contactpersoon' />
+                    <DomainObjectInput label='Inputvelden voor contactpersoon' addObject={addEmergencyPerson} domainObjects={emergencyPersons} labelType='contactpersoon' typeName='EmergencyPerson' numMinimalRequired={1} />
 
-                    <DomainObjectInput label='Inputvelden voor werkervaring' addObject={addWorkingContract} domainObjects={workingContracts} typeName='werkervaring' />                    
+                    <DomainObjectInput label='Inputvelden voor werkervaring' addObject={addWorkingContract} domainObjects={workingContracts} labelType='werkervaring' typeName='WorkingContract' numMinimalRequired={2} />
 
                 </div>
             <Copyright />

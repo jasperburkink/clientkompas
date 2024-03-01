@@ -6,13 +6,16 @@ import { InputFieldWithLabel } from '../../components/common/input-field-with-la
 import './domain-object-input.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark} from "@fortawesome/free-solid-svg-icons";
+import CustomLabels from '../../types/common/labels';
 
 interface DomainObjectInputProps<T>{
     label: string;
+    labelType: string;
     domainObjects: T[];
     numMinimalRequired?: number;    
     addObject: () => T;
-    typeName: string;
+
+    typeName: keyof typeof CustomLabels;
 }
 
 const DomainObjectInput = <T extends Record<string, any>>(props: DomainObjectInputProps<T>) => {
@@ -28,15 +31,17 @@ const DomainObjectInput = <T extends Record<string, any>>(props: DomainObjectInp
             setDomainObjects(updatedDomainObjects);
         };
 
-        const inputFields = domainObjects.map((domainObject, index) => {
-            let requiredDomainObject: boolean = props.numMinimalRequired !== null && index <= props.numMinimalRequired!;
+        const inputFields = domainObjects.map((domainObject, index) => {            
+            const customLabelsForInterface = CustomLabels[props.typeName] as { [key: string]: string };
+            let requiredDomainObject: boolean = props.numMinimalRequired !== null && index < props.numMinimalRequired!;
             const objectEntries = Object.entries(domainObject);
             const isOddNumberOfFields = objectEntries.length % 2 !== 0;
 
             return (
-                <div key={index} className='domain-object-container flex flex-col lg:col-span-2'>
-                    <div className="grid grid-cols-1 lg:grid-cols-2">
+                <div key={index} className='domain-object-container'>
+                    <div className="domain-object-container-item">
                     {objectEntries.map(([key, value], idx) => {
+                        let textValue: string  = customLabelsForInterface[key] ? customLabelsForInterface[key] : key;
                         let inputType: string = 'text';
                         inputType = getInputFieldType(value, inputType);
 
@@ -44,39 +49,7 @@ const DomainObjectInput = <T extends Record<string, any>>(props: DomainObjectInp
                         const isLastField = idx === objectEntries.length - 1;
 
                         return (     
-                            <>                   
-                            <div key={key} className="flex items-center">
-                                {inputType === 'date' ? (
-                                    <div>
-                                        <DatePickerWithLabel 
-                                            text={key}
-                                            datePickerProps={{                         
-                                                value: value as Date,
-                                                placeholder:'Selecteer een datum'//TODO: required
-                                            }}
-                                        />
-                                    </div>
-                                ) : (
-                                    <div className="flex-grow">
-                                        <InputFieldWithLabel
-                                            text={key}
-                                            inputFieldProps={{
-                                                required: requiredDomainObject,
-                                                placeholder: 'Placeholder',
-                                                inputfieldtype: { type: 'text' },
-                                                value: value as string
-                                            }}
-                                        />
-                                    </div>                                
-                                )}
-                                {isLastField && (
-                                    <div className='p-3 mr-2 border-2 rounded-lg w-12 h-12 border-subGray2 bg-mainLightGray cursor-pointer' onClick={() => {handleRemoveObject(domainObject);}}>
-                                        <FontAwesomeIcon icon={faXmark} className="domain-object-remove-button flex-none fa-solid fa-xl"  />
-                                    </div>
-                                )}                                
-                            </div>
-                            {isOddNumberOfFields && isFirstField && <div></div>}
-                            </>
+                            getDomainObjectField<T>(key, inputType, textValue, value, requiredDomainObject, isLastField, handleRemoveObject, domainObject, isOddNumberOfFields, isFirstField)
                         );
                     })}
                     </div>              
@@ -88,11 +61,50 @@ const DomainObjectInput = <T extends Record<string, any>>(props: DomainObjectInp
     return <>
         <Label text={props.label} className='domain-object-label' strong={true} />
         {inputFields}
-        <Button buttonType={{type:"Underline"}} text={`Voeg nog een ${props.typeName} toe`} className='domain-object-add-button' onClick={handleAddObject} />
+        <Button buttonType={{type:"Underline"}} text={`Voeg nog een ${props.labelType} toe`} className='domain-object-add-button' onClick={handleAddObject} />
         </>;
 };
 
 export default DomainObjectInput;
+
+function getDomainObjectField<T extends Record<string, any>>(key: string, inputType: string, textValue: string, value: any, requiredDomainObject: boolean, isLastField: boolean, handleRemoveObject: (domainObjectToRemove: T) => void, domainObject: T, isOddNumberOfFields: boolean, isFirstField: boolean) {
+    return <>
+        <div key={key} className="domain-object-field">
+            {inputType === 'date' ? getDateField(textValue, requiredDomainObject, value) : getTextField(textValue, requiredDomainObject, value)}
+            {isLastField && !requiredDomainObject && (
+                <div className='domain-object-remove-button' onClick={() => { handleRemoveObject(domainObject); } }>
+                    <FontAwesomeIcon icon={faXmark} className="fa-solid fa-xl" />
+                </div>
+            )}
+        </div>
+        {isOddNumberOfFields && isFirstField && <div></div>}
+    </>;
+}
+
+function getDateField(textValue: string, requiredDomainObject: boolean, value: Date) {
+    return <div>
+        <DatePickerWithLabel
+            text={textValue}
+            datePickerProps={{
+                value: value,
+                placeholder: 'Selecteer een datum',
+                required: requiredDomainObject
+            }} />
+    </div>;
+}
+
+function getTextField(textValue: string, requiredDomainObject: boolean, value: string) {
+    return <div className="flex-grow">
+        <InputFieldWithLabel
+            text={textValue}
+            inputFieldProps={{
+                required: requiredDomainObject,
+                placeholder: 'Placeholder',
+                inputfieldtype: { type: 'text' },
+                value: value
+            }} />
+    </div>;
+}
 
 function getInputFieldType(value: any, inputType: string) {
     switch (typeof value) {

@@ -15,6 +15,7 @@ const MOBILE_BREAKPOINT = 640;
 export interface DatePickerProps {
     placeholder: string,
     value?: Date,
+    required: boolean,
     className?: string
 }
 
@@ -61,7 +62,11 @@ export const DatePicker = (props: DatePickerProps) => {
         label={props.placeholder}
         className={`datepicker ${props.className}`}
         value={props.value ? Moment(props.value) : null}
-        slots={{ openPickerIcon: GenerateAwesomeFontCalendarIcon }}
+        slots={{openPickerIcon: GenerateAwesomeFontCalendarIcon}}
+        slotProps={{textField: {
+          required: props.required
+        }}}
+        
         sx={{      
           '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': { border: '2px solid b3b3b3' }, //Init state
           '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': { border: '2px solid #b3b3b3' },  // at hover state

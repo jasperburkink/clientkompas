@@ -4,21 +4,50 @@
 @import url('https://fonts.googleapis.com/css2?family=Work+Sans&display=swap');
 
 @layer components {
-    .domain-object-label{
-        @apply
-        col-span-2
-        grid-cols-2;
-    }
+    
 
     .domain-object-container{
         @apply 
-        bg-red-500
-        ;
-    }
+        flex
+        flex-col
+        lg:col-span-2;
 
-    .domain-object-add-button{
-        @apply
-        w-200px 
-        h-50px;
+        .domain-object-container-item {
+            @apply
+            grid
+            grid-cols-1
+            lg:grid-cols-2;
+        }
+
+        .domain-object-field {
+            @apply            
+            flex
+            items-center;
+        }
+
+        .domain-object-label{
+            @apply
+            col-span-2
+            grid-cols-2;
+        }
+
+        .domain-object-add-button{
+            @apply
+            w-200px 
+            h-50px;
+        }
+
+        .domain-object-remove-button{
+            @apply
+            p-3
+            mr-2
+            border-2
+            rounded-lg
+            w-12
+            h-12
+            border-subGray2
+            bg-mainLightGray
+            cursor-pointer;
+        }
     }
 }
