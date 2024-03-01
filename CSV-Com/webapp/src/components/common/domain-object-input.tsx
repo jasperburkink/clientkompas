@@ -14,7 +14,6 @@ interface DomainObjectInputProps<T>{
     domainObjects: T[];
     numMinimalRequired?: number;    
     addObject: () => T;
-
     typeName: keyof typeof CustomLabels;
 }
 
