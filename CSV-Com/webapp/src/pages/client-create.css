@@ -1,0 +1,96 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600&display=swap');
+
+@layer components {
+    .client-create-container {
+        @apply
+        flex
+        flex-col
+        px-5
+        pt-[140px]
+        pb-[90px]
+        mt-4
+        lg:mt-20
+        lg:grid-cols-3
+        lg:w-full
+        lg:p-0
+        lg:h-full
+        lg:px-12
+        bg-red-500;
+
+        .client-create-header{
+            @apply
+            items-center
+            flex
+            flex-row
+            my-6;
+
+            .client-create-header-main{
+                @apply
+                flex-none
+                text-xl;
+            }
+
+            .client-create-header-sub{
+                @apply
+                px-1
+                text-sm
+                grow;
+            }
+        }
+
+        .client-create-subheader {
+            @apply
+            my-2;
+        }
+
+        .client-create-fields{
+            @apply            
+            h-full
+            bg-blue-500;
+        }
+    }
+
+    .button-container{
+        @apply
+        flex
+        justify-center
+        flex-row
+        w-full
+        fixed
+        bottom-0
+        h-[90px]
+        bg-mainLightGray
+        p-5
+        shadow-2xl
+        shadow-black
+        lg:relative
+        lg:bg-transparent
+        lg:w-full
+        lg:h-auto
+        lg:shadow-none
+        lg:justify-items-end
+        lg:gap-0
+        lg:p-0;
+
+        .button{
+            @apply
+            text-base
+            lg:w-52
+            lg:text-center
+            lg:col-span-2;
+        }
+    }
+
+    .header-menu{
+        @apply
+        fixed
+        lg:flex
+        lg:static
+        h-[140px]
+        w-full
+        lg:w-auto;
+    }
+}
