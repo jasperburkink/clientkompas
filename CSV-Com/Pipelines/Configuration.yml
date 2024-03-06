@@ -5,8 +5,8 @@ stages:
 trigger_DevPipeline:
    stage: triggers
    trigger:
-       include:             
-           - local: CSV-Com/Pipelines/DevPipeline.yml
+       include: CSV-Com/Pipelines/DevPipeline.yml
+       strategy: depend
    only: 
        - merge_requests
        - web
@@ -28,5 +28,6 @@ trigger_ReleasePipeline:
    stage: triggers
    trigger:
        include: ReleasePipeline.yml
+       strategy: depend
    only:
       - /^Release[0-9]*_*//i # See naming conventions for features https://sbict.atlassian.net/wiki/spaces/CVS/pages/7241742/GIT-Flow#Naamgeving
