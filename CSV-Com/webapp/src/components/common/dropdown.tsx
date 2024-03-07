@@ -2,7 +2,7 @@ import React from 'react';
 import './dropdown.css';
 
 
-interface DropdownObject {
+export interface DropdownObject {
     label: string;
     value: number;
 }

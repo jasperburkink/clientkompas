@@ -1,4 +1,5 @@
 import Client from "../types/model/Client";
+import BenefitForm from "../types/model/BenefitForm";
 
 const apiUrl = 'https://localhost:32768/api/';
 
@@ -18,4 +19,8 @@ export const fetchClient = async (clientId: string): Promise<Client> => {
 
 export const searchClients = async (searchTerm: string): Promise<Client[]> => {
     return fetchAPI<Client[]>(`${apiUrl}Client/SearchClients?SearchTerm=${searchTerm}`);
+}
+
+export const getBenefitForms = async (): Promise<BenefitForm[]> => {
+    return fetchAPI<BenefitForm[]>(`${apiUrl}BenefitForm`);
 }
