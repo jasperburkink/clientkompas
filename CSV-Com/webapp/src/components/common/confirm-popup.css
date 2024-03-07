@@ -4,11 +4,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Work+Sans&display=swap');
 
 @layer components {
-    .error-popup{
+    .confirm-popup{
         @apply
             fixed
             flex
-            flex-wrap
+            flex-wrap            
             rounded-lg
             font-primary
             top-1/2
@@ -17,28 +17,36 @@
             -translate-x-1/2
             -translate-y-1/2
             bg-white
-            w-80
-            p-6
+            w-auto
+            lg:w-1/4
+            px-6
+            py-2
             z-50;
 
-        .error-message{
+        .confirm-message{
             @apply
-            w-full
+            w-4/5
             my-3;
         }
 
-        .error-code{
-            @apply
+        .confirm-button-container{
+            @apply            
+            flex
+            flex-col
+            lg:flex-row
+            items-center 
+            justify-center
             w-full
-            text-xs
-            my-5;
+            py-2;
         }
 
         .confirm-button{
             @apply
-            ml-auto
+            flex-initial
             w-32
-            h-10;
+            h-10
+            mx-4
+            my-1;
         }
 
         .close-icon{

@@ -5,14 +5,17 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import * as DatePickerControl from '@mui/x-date-pickers/DatePicker';
 import * as MobileDatePickerControl from '@mui/x-date-pickers/MobileDatePicker';
 import 'moment/locale/nl';
+import Moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 
 const LOCALE_PROVIDER = "nl";
 const MOBILE_BREAKPOINT = 640;
 
-interface DatePickerProps {
+export interface DatePickerProps {
     placeholder: string,
+    value?: Date,
+    required: boolean,
     className?: string
 }
 
@@ -24,8 +27,13 @@ const handleResize = (setIsMobileView: React.Dispatch<React.SetStateAction<boole
     setIsMobileView(window.innerWidth <= MOBILE_BREAKPOINT);
 };
 
+const DATE_FORMAT = 'DD-MM-yyyy';
+
 export const DatePicker = (props: DatePickerProps) => {
   const [isMobileView, setIsMobileView] = useState<boolean>(false);
+
+  // Show dates in local format
+  Moment.locale('nl');
 
   useEffect(() => {
     const handleResizeCallback = () => handleResize(setIsMobileView);
@@ -45,12 +53,20 @@ export const DatePicker = (props: DatePickerProps) => {
   return (
   <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale={LOCALE_PROVIDER}>
     {isMobileView ? (
-      <MobileDatePickerControl.MobileDatePicker label={props.placeholder} className={`datepicker ${props.className}`} />
+      <MobileDatePickerControl.MobileDatePicker       
+      label={props.placeholder} 
+      className={`datepicker ${props.className}`}
+      value={props.value ? Moment(props.value) : null} />      
     ): (
-      <DatePickerControl.DatePicker 
-        label={props.placeholder} 
+      <DatePickerControl.DatePicker       
+        label={props.placeholder}
         className={`datepicker ${props.className}`}
-        slots={{ openPickerIcon: GenerateAwesomeFontCalendarIcon }}        
+        value={props.value ? Moment(props.value) : null}
+        slots={{openPickerIcon: GenerateAwesomeFontCalendarIcon}}
+        slotProps={{textField: {
+          required: props.required
+        }}}
+        
         sx={{      
           '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': { border: '2px solid b3b3b3' }, //Init state
           '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': { border: '2px solid #b3b3b3' },  // at hover state

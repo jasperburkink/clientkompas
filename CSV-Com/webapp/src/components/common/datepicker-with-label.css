@@ -4,11 +4,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Work+Sans&display=swap');
 
 @layer components {
-    div.input-field-with-label{
+    div.datepicker-with-label{
         @apply 
         font-primary 
-        flex
-        py-1;
+        flex 
+        justify-between 
+        py-4;
     
         label{
             @apply 
@@ -16,14 +17,14 @@
             flex-none
             w-24
             mt-3
-            mx-1;
+            mx-3;
         }
 
-        .input-field{
+        .datepicker {
             @apply
             w-full
             flex-auto
-            mx-2;
+            mx-3;
         }
     }
 }
