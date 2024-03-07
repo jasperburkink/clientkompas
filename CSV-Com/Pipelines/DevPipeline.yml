@@ -11,6 +11,7 @@ variables:
   NODE_FOLDER: "webapp"
   BUILD_CONFIGURATION: "Debug"
   DOTNET_DOCKER_IMAGE_NAME: "$CI_REGISTRY/client-volgsysteem/cvs-com/api"
+  NODE_DOCKER_IMAGE_NAME: "$CI_REGISTRY/client-volgsysteem/cvs-com/webapp"
 
 stages: 
   - publish
@@ -69,6 +70,23 @@ dotnet-publish:
     - docker push $DOTNET_DOCKER_IMAGE_NAME
   image: $DOCKER_IMAGE
 
+node-publish:
+  services:
+  - name: docker:20.10.16-dind
+    command:
+      [
+        '--insecure-registry=registry.sbict.local',
+        '--insecure-registry=gitlab.sbict.local'
+      ]
+  before_script:
+  - "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
+  stage: publish
+  script:
+    - cd CSV-Com/webapp
+    - docker build -t $NODE_DOCKER_IMAGE_NAME -f "./Dockerfile" "."
+    - docker push $NODE_DOCKER_IMAGE_NAME
+  image: $DOCKER_IMAGE
+
 node-build:
   before_script:
   - cd $SOLUTION_FOLDER/$NODE_FOLDER
@@ -76,7 +94,7 @@ node-build:
   - export CI=false
   stage: build
   script:
-  - npm run build
+  - yarn build
   image: $NODE_IMAGE
   artifacts:
     paths:
