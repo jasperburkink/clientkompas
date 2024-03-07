@@ -17,7 +17,7 @@ import { InputFieldWithLabel } from '../components/common/input-field-with-label
 import { SlideToggleLabel } from '../components/common/slide-toggle-label';
 import { DatePicker } from '../components/common/datepicker';
 import Textarea from "../components/common/Textarea";
-import PopUp from "../components/common/PopUp";
+import ConfirmPopup from "../components/common/confirm-popup";
 import SaveButton from '../components/common/SaveButton';
 import { Dropdown } from '../components/common/dropdown';
 import DropdownWithButton from "../components/common/dropdown-with-button";
@@ -30,12 +30,6 @@ import WorkingContract from '../types/model/WorkingContract';
 import { DatePickerWithLabel } from '../components/common/datepicker-with-label';
 
 function App() {
-    const handleClick = () => {
-    };
-        const handleCancelClick = () => {
-        };
-
-
     const data = [
         {
             value: 1,
@@ -51,6 +45,20 @@ function App() {
         },
     ];
 
+    const [isConfirmPopupOneButtonOpen, setConfirmPopupOneButtonOpen] = useState<boolean>(false);
+    const [isConfirmPopupTwoButtonsOpen, setConfirmPopupTwoButtonsOpen] = useState<boolean>(false);
+    const handlePopUpConfirmClick = () => {
+        alert('Comfirm popup');
+        setConfirmPopupOneButtonOpen(false);
+        setConfirmPopupTwoButtonsOpen(false);
+    };
+
+    const handlePopUpCancelClick = () => {
+        alert('Cancel popup');
+        setConfirmPopupOneButtonOpen(false);
+        setConfirmPopupTwoButtonsOpen(false);
+    };
+    
     const [isErrorPopupOpen, setErrorPopupOpen] = useState<boolean>(false);
     const cvsError: CvsError = {
         id: 1,
@@ -288,6 +296,35 @@ function App() {
 
                     <DomainObjectInput label='Inputvelden voor werkervaring' addObject={addWorkingContract} domainObjects={workingContracts} labelType='werkervaring' typeName='WorkingContract' numMinimalRequired={2} />
 
+                    <p>Bevestigings pop-up met één button</p>
+                    <Button buttonType={{type:"Solid"}} text="Toon pop-up met één button" className='w-200px h-50px' 
+                    onClick={() => setConfirmPopupOneButtonOpen(true)} />
+                    <ConfirmPopup
+                    message="Dit is een bevestigings pop-up met één knop"
+                    isOpen={isConfirmPopupOneButtonOpen}
+                    onClose={handlePopUpCancelClick}
+                    buttons={[{ text: 'Bevestigen', onClick: handlePopUpConfirmClick, buttonType: {type:"Solid"}}]} />
+
+                    <p>Bevestigings pop-up met twee buttons</p>
+                    <Button buttonType={{type:"Solid"}} text="Toon pop-up met twee buttons" className='w-200px h-50px' 
+                    onClick={() => setConfirmPopupTwoButtonsOpen(true)} />
+                    <ConfirmPopup
+                    message="Dit is een bevestigings pop-up met twee knoppen"
+                    isOpen={isConfirmPopupTwoButtonsOpen}
+                    onClose={handlePopUpCancelClick}
+                    buttons={
+                        [
+                            { text: 'Bevestigen', onClick: handlePopUpConfirmClick, buttonType: {type:"Solid"}},
+                            { text: 'Annuleren', onClick: handlePopUpCancelClick, buttonType: {type:"NotSolid"}},
+                        ]} />
+
+                    <p>Foutmelding pop-up</p>
+                    <Button buttonType={{type:"Solid"}} text="Toon foutmelding" className='w-200px h-50px' 
+                    onClick={() => setErrorPopupOpen(true)} />
+                    <ErrorPopup 
+                    error={cvsError} 
+                    isOpen={isErrorPopupOpen}
+                    onClose={() => setErrorPopupOpen(false)} />  
                 </div>
             <Copyright />
         </div>
