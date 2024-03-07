@@ -13,6 +13,7 @@ import SaveButton from '../components/common/SaveButton';
 import { InputFieldWithLabel } from '../components/common/input-field-with-label';
 import { Dropdown, DropdownObject } from '../components/common/dropdown';
 import { DatePicker } from '../components/common/datepicker';
+import { DatePickerWithLabel } from '../components/common/datepicker-with-label';
 
 function ClientCreate() {
     const [client, setClient] = useState<Client | null>(null);    
@@ -72,9 +73,13 @@ function ClientCreate() {
                         <InputFieldWithLabel text='Woonplaats' inputFieldProps={{ required: true, placeholder:'Woonplaats', inputfieldtype:{ type:'text'} }}  />
                         <InputFieldWithLabel text='Telefoon' inputFieldProps={{ required: true, placeholder:'b.v. 0543-123456', inputfieldtype:{ type:'text'} }}  />                        
                         <InputFieldWithLabel text='E-mail' inputFieldProps={{ required: true, placeholder:'b.v. mail@mailbox.com', inputfieldtype:{ type:'text'} }}  />
-                        <div>
-                            <Label text='Geboortedatum*' /><DatePicker placeholder='Selecteer een datum' />
-                        </div>
+                        <DatePickerWithLabel
+                            text='Geboortedatum'
+                            datePickerProps={{
+                                placeholder:'Selecteer een datum',
+                                required: true                                
+                            }}
+                        />
                         <div>
                             <Label text='Geslacht*' /><Dropdown options={genders} required={true} inputfieldname='dropdown' />
                         </div>
