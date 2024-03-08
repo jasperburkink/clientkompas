@@ -76,30 +76,10 @@ image-build-sync-job:
     # Docker push
     - docker push $DOTNET_DOCKER_IMAGE_NAME
     - docker push $NODE_DOCKER_IMAGE_NAME
-    # - docker push $DOTNET_DOCKER_IMAGE_NAME
   image: $DOCKER_IMAGE
   artifacts:
     paths:
       - image
-
-# image-publish-job:
-#   services:
-#   - name: docker:20.10.16-dind
-#     command:
-#       [
-#         '--insecure-registry=docker-registry.sbict.local',
-#         '--insecure-registry=registry.sbict.local',
-#         '--insecure-registry=gitlab.sbict.local'
-#       ]
-#   before_script:
-#   - "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
-#   stage: image-publish
-#   script:
-#     - docker load -i image/${DOTNET_DOCKER_IMAGE_FILENAME}.tar
-#     - docker load -i image/${NODE_DOCKER_IMAGE_FILENAME}.tar
-#     - docker push $DOTNET_DOCKER_IMAGE_NAME
-#     - docker push $NODE_DOCKER_IMAGE_NAME
-#   image: $DOCKER_IMAGE
 
 node-build:
   before_script:

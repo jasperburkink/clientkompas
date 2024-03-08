@@ -1,0 +1,88 @@
+workflow:
+  rules:
+    - when: always
+
+variables:  
+  DOTNET_IMAGE: "mcr.microsoft.com/dotnet/sdk:7.0" # Default image   for gitlabrunner
+  DOCKER_IMAGE: "docker:stable"
+  NODE_IMAGE: "node:18"  
+  SOLUTION_FOLDER: "CSV-Com"
+  SOLUTION: "$SOLUTION_FOLDER/CSV-Com.sln"
+  NODE_FOLDER: "webapp"
+  BUILD_CONFIGURATION: "Debug"
+
+stages: 
+  - build
+  - test
+
+dotnet-build:
+  before_script:
+  - shopt -s globstar # setting for enabling wildcards in bash **/*.csproj
+  - 'dotnet restore $SOLUTION' # dotnet build does also restore but an explicit restore is better when using GitLab for caching purposes
+  stage: build
+  script:
+    # Build all .NET projects
+    - | 
+      for project in **/*.csproj; do
+        dotnet build "$project" -c $BUILD_CONFIGURATION --no-restore
+      done
+  image: $DOTNET_IMAGE
+  artifacts:
+    paths:
+      - '**/bin'
+
+dotnet-test:
+  stage: test
+  script:
+    - dotnet test $SOLUTION -c $BUILD_CONFIGURATION --collect:"XPlat Code Coverage" --logger "junit;LogFileName=TestResults.xml" # Run and publish testresults with junit to gitlab
+  image: $DOTNET_IMAGE
+  artifacts:
+    paths:
+      - '**/TestResults.xml'
+      - '**/coverage.cobertura.xml'
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: '**/coverage.cobertura.xml'
+      junit: 
+        - '**/TestResults.xml'
+    when: always  # Keep result files. Even when tests fail.
+  dependencies:
+    - dotnet-build
+
+node-build:
+  before_script:
+  - cd $SOLUTION_FOLDER/$NODE_FOLDER
+  - npm install
+  - export CI=false
+  stage: build
+  script:
+  - yarn build
+  image: $NODE_IMAGE
+  artifacts:
+    paths:
+      - '$SOLUTION_FOLDER/$NODE_FOLDER/build/'
+
+node-test:
+  before_script:
+    - cd $SOLUTION_FOLDER/$NODE_FOLDER
+    - yarn install
+  stage: test
+  script:
+    - npx nyc --reporter=cobertura npm run test:ci
+  coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
+  artifacts:
+    paths: # NOTE: Is it even necessary to artifact these files if their already being used in the reports? Keep this until we are sure that codecoverage is working
+      - '**/junit.xml'
+      - '**/coverage/'
+      - '**/coverage-final.json'
+    when: always
+    reports:
+      junit:
+        - '**/junit.xml'
+      coverage_report:
+        coverage_format: cobertura
+        path: '**/coverage-final.json'
+  image: $NODE_IMAGE
+  dependencies:
+    - node-build

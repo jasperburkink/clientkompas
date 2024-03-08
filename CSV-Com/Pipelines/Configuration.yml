@@ -2,14 +2,25 @@ stages:
     - triggers
 
 # Trigger development pipeline when creating a mergerequest
-trigger_DevPipeline:
+trigger_MergeRequestPipeline:
    stage: triggers
    trigger:
-       include: CSV-Com/Pipelines/DevPipeline.yml
+       include: CSV-Com/Pipelines/Pipeline_OnMergeRequest.yml
        strategy: depend
    only: 
        - merge_requests
-       - web
+ #      - web
+
+trigger_DeployToDevPipeline:
+    stage: triggers
+    trigger:
+        include: CSV-Com/Pipelines/Pipeline_DeployToDev.yml
+    rules:
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "develop"
+      when: always
+    - if: $CI_PIPELINE_SOURCE == "web"
+      when: always
+    - when: never
 
 # Trigger feature pipeline when pushing to feature branch
 # trigger_FeaturePipeline:    
