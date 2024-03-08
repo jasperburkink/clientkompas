@@ -117,7 +117,7 @@ node-build:
 node-test:
   before_script:
     - cd $SOLUTION_FOLDER/$NODE_FOLDER
-    - npm install
+    - yarn install
   stage: test
   script:
     - npx nyc --reporter=cobertura npm run test:ci
