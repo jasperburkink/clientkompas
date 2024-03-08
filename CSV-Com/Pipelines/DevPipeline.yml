@@ -66,7 +66,7 @@ dotnet-publish:
     - docker build -t $DOTNET_DOCKER_IMAGE_NAME -f "./API/Dockerfile" "."
     - cd ..
     - mkdir image
-    - docker save $DOTNET_DOCKER_IMAGE_FILENAME > image/${DOTNET_DOCKER_IMAGE_FILENAME}.tar
+    - docker save $DOTNET_DOCKER_IMAGE_NAME > image/${DOTNET_DOCKER_IMAGE_FILENAME}.tar
 #    - docker push $DOTNET_DOCKER_IMAGE_NAME
   image: $DOCKER_IMAGE
   artifacts:
@@ -84,7 +84,7 @@ node-publish:
     - docker build -t $NODE_DOCKER_IMAGE_NAME -f "./Dockerfile" "."
     - cd ../..
     - mkdir image
-    - docker save $NODE_DOCKER_IMAGE_FILENAME > image/${NODE_DOCKER_IMAGE_FILENAME}.tar
+    - docker save $NODE_DOCKER_IMAGE_NAME > image/${NODE_DOCKER_IMAGE_FILENAME}.tar
 #    - docker push $NODE_DOCKER_IMAGE_NAME
   image: $DOCKER_IMAGE
   artifacts:
