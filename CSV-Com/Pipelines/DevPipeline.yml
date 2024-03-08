@@ -61,7 +61,7 @@ image-build-job:
   - name: docker:20.10.16-dind
   # before_script:
   # - "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
-  stage: image-publish
+  stage: image-build
   script:
     # Dotnet build  
     - cd CSV-Com
