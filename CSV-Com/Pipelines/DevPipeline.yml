@@ -16,7 +16,8 @@ variables:
   NODE_DOCKER_IMAGE_FILENAME: "node_docker_image"
 
 stages: 
-  - image-create
+  - image-build    
+  - image-publish
   - build
   - test
 
@@ -55,41 +56,42 @@ dotnet-test:
   dependencies:
     - dotnet-build
     
-dotnet-publish:
+image-build-job:
   services:
   - name: docker:20.10.16-dind
   # before_script:
   # - "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
-  stage: image-create
+  stage: image-publish
   script:
+    # Dotnet build  
     - cd CSV-Com
     - docker build -t $DOTNET_DOCKER_IMAGE_NAME -f "./API/Dockerfile" "."
     - cd ..
     - mkdir image
     - docker save $DOTNET_DOCKER_IMAGE_NAME > image/${DOTNET_DOCKER_IMAGE_FILENAME}.tar
-#    - docker push $DOTNET_DOCKER_IMAGE_NAME
+    # Node build
+    - cd CSV-Com/webapp
+    - docker build -t $NODE_DOCKER_IMAGE_NAME -f "./Dockerfile" "."
+    - cd ../..
+    - docker save $NODE_DOCKER_IMAGE_NAME > image/${NODE_DOCKER_IMAGE_FILENAME}.tar
+    # - docker push $DOTNET_DOCKER_IMAGE_NAME
   image: $DOCKER_IMAGE
   artifacts:
     paths:
       - image
 
-node-publish:
+image-publish-job:
   services:
   - name: docker:20.10.16-dind
-  # before_script:
-  # - "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
-  stage: image-create
+  before_script:
+  - "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
+  stage: image-publish
   script:
-    - cd CSV-Com/webapp
-    - docker build -t $NODE_DOCKER_IMAGE_NAME -f "./Dockerfile" "."
-    - cd ../..
-    - mkdir image
-    - docker save $NODE_DOCKER_IMAGE_NAME > image/${NODE_DOCKER_IMAGE_FILENAME}.tar
-#    - docker push $NODE_DOCKER_IMAGE_NAME
+    - docker load -i image/${DOTNET_DOCKER_IMAGE_FILENAME}.tar
+    - docker load -i image/${NODE_DOCKER_IMAGE_FILENAME}.tar
+    - docker push $DOTNET_DOCKER_IMAGE_NAME
+    - docker push $NODE_DOCKER_IMAGE_NAME
   image: $DOCKER_IMAGE
-  artifacts:
-    paths:
-      - image
 
 node-build:
   before_script:
