@@ -16,8 +16,7 @@ variables:
   NODE_DOCKER_IMAGE_FILENAME: "node_docker_image"
 
 stages: 
-  - image-build    
-  - image-publish
+  - image-build-sync    
   - build
   - test
 
@@ -56,12 +55,12 @@ dotnet-test:
   dependencies:
     - dotnet-build
     
-image-build-job:
+image-build-sync-job:
   services:
   - name: docker:20.10.16-dind
-  # before_script:
-  # - "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
-  stage: image-build
+  before_script:
+  - "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
+  stage: image-build-sync  
   script:
     # Dotnet build  
     - cd CSV-Com
@@ -74,30 +73,33 @@ image-build-job:
     - docker build -t $NODE_DOCKER_IMAGE_NAME -f "./Dockerfile" "."
     - cd ../..
     - docker save $NODE_DOCKER_IMAGE_NAME > image/${NODE_DOCKER_IMAGE_FILENAME}.tar
+    # Docker push
+    - docker push $DOTNET_DOCKER_IMAGE_NAME
+    - docker push $NODE_DOCKER_IMAGE_NAME
     # - docker push $DOTNET_DOCKER_IMAGE_NAME
   image: $DOCKER_IMAGE
   artifacts:
     paths:
       - image
 
-image-publish-job:
-  services:
-  - name: docker:20.10.16-dind
-    command:
-      [
-        '--insecure-registry=docker-registry.sbict.local',
-        '--insecure-registry=registry.sbict.local',
-        '--insecure-registry=gitlab.sbict.local'
-      ]
-  before_script:
-  - "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
-  stage: image-publish
-  script:
-    - docker load -i image/${DOTNET_DOCKER_IMAGE_FILENAME}.tar
-    - docker load -i image/${NODE_DOCKER_IMAGE_FILENAME}.tar
-    - docker push $DOTNET_DOCKER_IMAGE_NAME
-    - docker push $NODE_DOCKER_IMAGE_NAME
-  image: $DOCKER_IMAGE
+# image-publish-job:
+#   services:
+#   - name: docker:20.10.16-dind
+#     command:
+#       [
+#         '--insecure-registry=docker-registry.sbict.local',
+#         '--insecure-registry=registry.sbict.local',
+#         '--insecure-registry=gitlab.sbict.local'
+#       ]
+#   before_script:
+#   - "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
+#   stage: image-publish
+#   script:
+#     - docker load -i image/${DOTNET_DOCKER_IMAGE_FILENAME}.tar
+#     - docker load -i image/${NODE_DOCKER_IMAGE_FILENAME}.tar
+#     - docker push $DOTNET_DOCKER_IMAGE_NAME
+#     - docker push $NODE_DOCKER_IMAGE_NAME
+#   image: $DOCKER_IMAGE
 
 node-build:
   before_script:
