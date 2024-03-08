@@ -1,12 +1,12 @@
 import Client from "../types/model/Client";
 
-const apiUrl = 'https://localhost:32774/api/';
+const apiUrl = process.env.REACT_APP_API_URL;
 
 async function fetchAPI<T>(url: string): Promise<T> {
     const response = await fetch(url);
     
     if (!response.ok) {
-        throw new Error('Netwerkrespons was niet ok.');
+        throw new Error('Netwerkrespons was not ok.');
     }
     
     return response.json() as Promise<T>;
