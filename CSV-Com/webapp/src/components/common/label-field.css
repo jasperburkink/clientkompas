@@ -4,7 +4,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Work+Sans&display=swap');
 
 @layer components {
-    div.input-field-with-label{
+    div.label-field{
         @apply 
         font-primary 
         flex
@@ -19,7 +19,7 @@
             mx-1;
         }
 
-        .input-field{
+        .field-container{
             @apply
             w-full
             flex-auto

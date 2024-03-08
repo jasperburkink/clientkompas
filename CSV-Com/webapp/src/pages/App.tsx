@@ -13,7 +13,6 @@ import { Copyright } from '../components/common/copyright';
 import { InputField } from '../components/common/input-field';
 import { NavButtonGray } from '../components/nav/nav-button-gray';
 import { NavTitle } from '../components/nav/nav-title';
-import { InputFieldWithLabel } from '../components/common/input-field-with-label';
 import { SlideToggleLabel } from '../components/common/slide-toggle-label';
 import { DatePicker } from '../components/common/datepicker';
 import Textarea from "../components/common/Textarea";
@@ -27,7 +26,7 @@ import CvsError from '../types/common/cvs-error';
 import DomainObjectInput from '../components/common/domain-object-input';
 import EmergencyPerson from '../types/model/EmergencyPerson';
 import WorkingContract from '../types/model/WorkingContract';
-import { DatePickerWithLabel } from '../components/common/datepicker-with-label';
+import LabelField from '../components/common/label-field';
 
 function App() {
     const data = [
@@ -225,11 +224,10 @@ function App() {
                     <p>Inputfield required</p>
                     <InputField inputfieldtype={{type:'text'}} required={true} placeholder='Placeholder' />
 
-                    <p>Inputfield with label</p>
-                    <InputFieldWithLabel text='TextField' inputFieldProps={{ required: false, placeholder:'Placeholder', inputfieldtype:{ type:'text'} }} />
-
-                    <p>Inputfield required with label </p>
-                    <InputFieldWithLabel text='TextField' inputFieldProps={{ required: true, placeholder:'Placeholder', inputfieldtype:{ type:'text'} }} />
+                    <p>LabelField with inputfield</p>
+                    <LabelField text='LabelField inputfield' required={true}>
+                        <InputField inputfieldtype={{type:'text'}} required={true} placeholder='Placeholder' />
+                    </LabelField>                    
 
                     <p>Slide toggle label</p>
                     <SlideToggleLabel textColapsed='Klap uit!' textExpanded='Klap in!' >
@@ -239,14 +237,10 @@ function App() {
                     <p>Date picker</p>                    
                     <DatePicker placeholder='Selecteer een datum' required={true} />
 
-                    <p>Date picker met label</p>
-                    <DatePickerWithLabel
-                        text='Datepicker met label'
-                        datePickerProps={{
-                            placeholder:'Selecteer een datum',
-                            required: true
-                        }}
-                    />
+                    <p>LabelField with datepicker</p>
+                    <LabelField text='LabelField datepicker' required={true}>
+                        <DatePicker placeholder='Selecteer een datum' required={true} />
+                    </LabelField>
 
                     <p>ProfilePicture empty</p>
                     <ProfilePicture />
@@ -259,6 +253,11 @@ function App() {
 
                     <p>Dropdown</p>
                     <Dropdown options={data} required={false} inputfieldname='dropdown' />
+
+                    <p>LabelField with dropdownlist</p>
+                    <LabelField text='LabelField dropdownlist' required={true}>
+                        <Dropdown options={data} required={false} inputfieldname='dropdown' />
+                    </LabelField>
                 
                     <p>Dropdown with button</p>
                     <DropdownWithButton options={data} required={false} inputfieldname='dropdownWithButton' />
@@ -299,24 +298,24 @@ function App() {
 
                     <p>Bevestigings pop-up met twee buttons</p>
                     <Button buttonType={{type:"Solid"}} text="Toon pop-up met twee buttons" className='w-200px h-50px' 
-                    onClick={() => setConfirmPopupTwoButtonsOpen(true)} />
-                    <ConfirmPopup
-                    message="Dit is een bevestigings pop-up met twee knoppen"
-                    isOpen={isConfirmPopupTwoButtonsOpen}
-                    onClose={handlePopUpCancelClick}
-                    buttons={
-                        [
-                            { text: 'Bevestigen', onClick: handlePopUpConfirmClick, buttonType: {type:"Solid"}},
-                            { text: 'Annuleren', onClick: handlePopUpCancelClick, buttonType: {type:"NotSolid"}},
-                        ]} />
+                        onClick={() => setConfirmPopupTwoButtonsOpen(true)} />
+                        <ConfirmPopup
+                        message="Dit is een bevestigings pop-up met twee knoppen"
+                        isOpen={isConfirmPopupTwoButtonsOpen}
+                        onClose={handlePopUpCancelClick}
+                        buttons={
+                            [
+                                { text: 'Bevestigen', onClick: handlePopUpConfirmClick, buttonType: {type:"Solid"}},
+                                { text: 'Annuleren', onClick: handlePopUpCancelClick, buttonType: {type:"NotSolid"}},
+                            ]} />
 
                     <p>Foutmelding pop-up</p>
                     <Button buttonType={{type:"Solid"}} text="Toon foutmelding" className='w-200px h-50px' 
-                    onClick={() => setErrorPopupOpen(true)} />
-                    <ErrorPopup 
-                    error={cvsError} 
-                    isOpen={isErrorPopupOpen}
-                    onClose={() => setErrorPopupOpen(false)} />  
+                        onClick={() => setErrorPopupOpen(true)} />
+                        <ErrorPopup 
+                        error={cvsError} 
+                        isOpen={isErrorPopupOpen}
+                        onClose={() => setErrorPopupOpen(false)} />  
                 </div>
             <Copyright />
         </div>

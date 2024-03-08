@@ -1,8 +1,9 @@
 import { useState }  from 'react';
 import { Label } from '../../components/common/label';
 import { Button } from '../../components/common/button';
-import { DatePickerWithLabel } from '../../components/common/datepicker-with-label';
-import { InputFieldWithLabel } from '../../components/common/input-field-with-label';
+import LabelField from '../../components/common/label-field';
+import { InputField } from '../../components/common/input-field';
+import { DatePicker } from '../../components/common/datepicker';
 import './domain-object-input.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark} from "@fortawesome/free-solid-svg-icons";
@@ -29,6 +30,8 @@ const DomainObjectInput = <T extends Record<string, any>>(props: DomainObjectInp
             const updatedDomainObjects: T[] = domainObjects.filter(obj => obj !== domainObjectToRemove);
             setDomainObjects(updatedDomainObjects);
         };
+
+        // if(domainObjects.length <= )
 
         const inputFields = domainObjects.map((domainObject, index) => {            
             const customLabelsForInterface = CustomLabels[props.typeName] as { [key: string]: string };
@@ -82,26 +85,17 @@ function getDomainObjectField<T extends Record<string, any>>(key: string, inputT
 
 function getDateField(textValue: string, requiredDomainObject: boolean, value: Date) {
     return <div>
-        <DatePickerWithLabel
-            text={textValue}
-            datePickerProps={{
-                value: value,
-                placeholder: 'Selecteer een datum',
-                required: requiredDomainObject
-            }} />
+        <LabelField text={textValue} required={requiredDomainObject}>
+            <DatePicker placeholder='Selecteer een datum' required={requiredDomainObject} value={value} />
+        </LabelField>        
     </div>;
 }
 
 function getTextField(textValue: string, requiredDomainObject: boolean, value: string) {
     return <div className="flex-grow">
-        <InputFieldWithLabel
-            text={textValue}
-            inputFieldProps={{
-                required: requiredDomainObject,
-                placeholder: 'Placeholder',
-                inputfieldtype: { type: 'text' },
-                value: value
-            }} />
+        <LabelField text={textValue} required={requiredDomainObject}>
+            <InputField inputfieldtype={{type:'text'}} value={value} required={requiredDomainObject} placeholder='TODO:placeholder' />
+        </LabelField>
     </div>;
 }
 

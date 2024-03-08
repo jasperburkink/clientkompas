@@ -17,8 +17,7 @@
         lg:w-full
         lg:p-0
         lg:h-full
-        lg:px-12
-        bg-red-500;
+        lg:px-12;
 
         .client-create-header{
             @apply
@@ -48,8 +47,24 @@
 
         .client-create-fields{
             @apply            
-            h-full
-            bg-blue-500;
+            h-full;
+
+            .house-number{
+                @apply
+                w-16
+                float-left;
+            }
+
+            .house-number-addition label{
+                @apply
+                text-sm
+                w-12;
+            }
+
+            .house-number-addition-field{
+                @apply
+                w-16;
+            }
         }
     }
 

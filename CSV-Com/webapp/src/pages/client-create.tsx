@@ -10,14 +10,19 @@ import { Copyright } from '../components/common/copyright';
 import { Header } from '../components/common/header';
 import { Label } from '../components/common/label';
 import SaveButton from '../components/common/SaveButton';
-import { InputFieldWithLabel } from '../components/common/input-field-with-label';
+import LabelField from '../components/common/label-field';
+import { InputField } from '../components/common/input-field';
 import { Dropdown, DropdownObject } from '../components/common/dropdown';
 import { DatePicker } from '../components/common/datepicker';
-import { DatePickerWithLabel } from '../components/common/datepicker-with-label';
+import DomainObjectInput from '../components/common/domain-object-input';
+import EmergencyPerson from '../types/model/EmergencyPerson';
+import WorkingContract from '../types/model/WorkingContract';
 
 function ClientCreate() {
-    const [client, setClient] = useState<Client | null>(null);    
+    const [client, setClient] = useState<Client | null>(null);
     const [error, setError] = useState<string | null>(null);
+
+    const emergencyPersons : EmergencyPerson[] = [];
 
     // const genders:  =
     const [genders, setGenders] = useState<DropdownObject[]>([
@@ -34,6 +39,13 @@ function ClientCreate() {
             value: 2   
         } // TODO: replace to contants file
     ]); // TODO: maybe make dynamic in the future
+
+    const addEmergencyPerson = ():EmergencyPerson => {
+        return {
+            name: '',
+            telephonenumber: ''
+        };
+    };
 
     return(
         <div className="flex flex-col lg:flex-row h-screen lg:h-auto">
@@ -61,29 +73,62 @@ function ClientCreate() {
 
                     <Label text='Cliëntgegevens' strong={true} className='client-create-subheader' />
 
-                    <div className='client-create-fields grid'>
-                        <InputFieldWithLabel text='Voornaam' inputFieldProps={{ required: true, placeholder:'Voornaam', inputfieldtype:{ type:'text'} }}  />
-                        <InputFieldWithLabel text='Voorletters' inputFieldProps={{ required: true, placeholder:'b.v. A B', inputfieldtype:{ type:'text'} }}  />
-                        <InputFieldWithLabel text='Tussenvoegsel' inputFieldProps={{ required: false, placeholder:'b.v. de', inputfieldtype:{ type:'text'} }}  />
-                        <InputFieldWithLabel text='Achternaam' inputFieldProps={{ required: true, placeholder:'Achternaam', inputfieldtype:{ type:'text'} }}  />
-                        <InputFieldWithLabel text='Straatadres' inputFieldProps={{ required: true, placeholder:'Adres', inputfieldtype:{ type:'text'} }}  />
-                        <InputFieldWithLabel text='Huisnummer' inputFieldProps={{ required: true, placeholder:'b.v. 11', inputfieldtype:{ type:'text'} }}  />
-                        <InputFieldWithLabel text='Toevoeging' inputFieldProps={{ required: false, placeholder:'b.v. A', inputfieldtype:{ type:'text'} }}  />
-                        <InputFieldWithLabel text='Postcode' inputFieldProps={{ required: true, placeholder:'b.v. 1234 AA', inputfieldtype:{ type:'text'} }}  />
-                        <InputFieldWithLabel text='Woonplaats' inputFieldProps={{ required: true, placeholder:'Woonplaats', inputfieldtype:{ type:'text'} }}  />
-                        <InputFieldWithLabel text='Telefoon' inputFieldProps={{ required: true, placeholder:'b.v. 0543-123456', inputfieldtype:{ type:'text'} }}  />                        
-                        <InputFieldWithLabel text='E-mail' inputFieldProps={{ required: true, placeholder:'b.v. mail@mailbox.com', inputfieldtype:{ type:'text'} }}  />
-                        <DatePickerWithLabel
-                            text='Geboortedatum'
-                            datePickerProps={{
-                                placeholder:'Selecteer een datum',
-                                required: true                                
-                            }}
-                        />
-                        <div>
-                            <Label text='Geslacht*' /><Dropdown options={genders} required={true} inputfieldname='dropdown' />
-                        </div>
+                    <div className='client-create-fields'>
+                        <LabelField text='Voornaam' required={true}>
+                            <InputField inputfieldtype={{type:'text'}} required={true} placeholder='Voornaam' />
+                        </LabelField>
+
+                        <LabelField text='Voorletters' required={true}>
+                            <InputField inputfieldtype={{type:'text'}} required={true} placeholder='b.v. A B' />
+                        </LabelField>
+
+                        <LabelField text='Tussenvoegsel' required={false}>
+                            <InputField inputfieldtype={{type:'text'}} required={false} placeholder='b.v. de' />
+                        </LabelField>
+
+                        <LabelField text='Achternaam' required={true}>
+                            <InputField inputfieldtype={{type:'text'}} required={true} placeholder='Achternaam' />
+                        </LabelField>
+
+                        <LabelField text='Straatadres' required={true}>
+                            <InputField inputfieldtype={{type:'text'}} required={true} placeholder='Adres' />
+                        </LabelField>
+
+                        <LabelField text='Huisnummer' required={true}>
+                            <InputField inputfieldtype={{type:'text'}} required={true} placeholder='b.v. 11' className='house-number' />
+                            <LabelField text='Toevoeging' required={false} className='house-number-addition'>
+                                <InputField inputfieldtype={{type:'text'}} required={false} placeholder='b.v. A' className='house-number-addition-field' />
+                            </LabelField>
+                        </LabelField>
+
+                        <LabelField text='Postcode' required={true}>
+                            <InputField inputfieldtype={{type:'text'}} required={true} placeholder='b.v. 1234 AA' />
+                        </LabelField>
+
+                        <LabelField text='Woonplaats' required={true}>
+                            <InputField inputfieldtype={{type:'text'}} required={true} placeholder='Woonplaats' />
+                        </LabelField>
+
+                        <LabelField text='Telefoon' required={true}>
+                            <InputField inputfieldtype={{type:'text'}} required={true} placeholder='b.v. 0543-123456' />
+                        </LabelField>
+
+                        <LabelField text='E-mail' required={true}>
+                            <InputField inputfieldtype={{type:'text'}} required={true} placeholder='b.v. mail@mailbox.com' />
+                        </LabelField>
+
+                        <LabelField text='Geboortedatum' required={true}>
+                            <DatePicker required={true} placeholder='Selecteer een datum' />
+                        </LabelField>
+
+                        <LabelField text='Geslacht' required={true}>
+                            <Dropdown options={genders} required={true} inputfieldname='geslacht' />
+                        </LabelField>                       
                     </div>
+
+                    <Label text='In geval van nood' strong={true} className='client-create-subheader' />
+
+                    <DomainObjectInput label='Inputvelden voor contactpersoon' addObject={addEmergencyPerson} domainObjects={emergencyPersons} labelType='contactpersoon' typeName='EmergencyPerson' numMinimalRequired={1} />
 
                 </div>
                 <div className='button-container'>
