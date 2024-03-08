@@ -12,6 +12,8 @@ variables:
   BUILD_CONFIGURATION: "Debug"
   DOTNET_DOCKER_IMAGE_NAME: "$CI_REGISTRY/client-volgsysteem/cvs-com/api"
   NODE_DOCKER_IMAGE_NAME: "$CI_REGISTRY/client-volgsysteem/cvs-com/webapp"
+  DOTNET_DOCKER_IMAGE_FILENAME: "dotnet_docker_image"
+  NODE_DOCKER_IMAGE_FILENAME: "node_docker_image"
 
 stages: 
   - image-create
