@@ -21,6 +21,7 @@ stages:
   - build
   - test    
   - image-build-sync-dev    
+  - image-build-sync-test
 
 dotnet-build:
   before_script:
