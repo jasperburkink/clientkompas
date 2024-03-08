@@ -4,7 +4,7 @@ COPY package.json .
 COPY yarn.lock .
 RUN yarn install
 COPY . .
-RUN yarn build
+RUN npm run build:test
 
 FROM nginx:1.25.4
 WORKDIR /usr/share/nginx/html
