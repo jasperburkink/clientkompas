@@ -1,6 +1,6 @@
 ﻿using Domain.CVS.Domain;
+using Infrastructure.Persistence.CVS.Configuration;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
 
 namespace Infrastructure.Persistence.CVS
 {
@@ -9,6 +9,7 @@ namespace Infrastructure.Persistence.CVS
         public DbSet<User> Users { get; set; }
 
         public DbSet<Client> Clients { get; set; }
+
         public DbSet<DriversLicence> DriversLicence { get; set; }
 
         public DbSet<Diagnosis> Diagnosis { get; set; }
@@ -21,8 +22,15 @@ namespace Infrastructure.Persistence.CVS
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            // Execute configurations
-            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            var configurations = GetType().Assembly.GetTypes()
+                .Where(type => type.GetInterfaces().Any(interfaceType =>
+                    interfaceType == typeof(ICVSEntityTypeConfiguration)))
+                .Select(type => Activator.CreateInstance(type) as ICVSEntityTypeConfiguration);
+
+            foreach (var configuration in configurations)
+            {
+                configuration!.Configure(builder);
+            }
 
             base.OnModelCreating(builder);
         }

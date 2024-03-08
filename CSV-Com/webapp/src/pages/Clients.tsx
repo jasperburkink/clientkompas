@@ -10,16 +10,20 @@ import { NavButton } from '../components/nav/nav-button';
 import { SidebarGray } from '../components/sidebar/sidebar-gray';
 import { ProfilePicture } from '../components/common/profile-picture';
 import { Copyright } from '../components/common/copyright';
-import { NavButtonGray } from '../components/nav/nav-button-gray';
 import { NavTitle } from '../components/nav/nav-title';
 import { SlideToggleLabel } from '../components/common/slide-toggle-label';
 import Client from '../types/model/Client';
 import '../utils/Utilities';
 import Moment from 'moment';
 import { fetchClient } from '../utils/api';
+import SearchClients from '../components/clients/search-clients';
+import StatusEnum from '../types/common/StatusEnum';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { DatePicker } from '../components/common/datepicker';
 
-let noInfo = 'Geen informatie beschikbaar';
-let dateFormat = 'DD-MM-yyyy';
+const NO_INFO = 'Geen informatie beschikbaar';
+const DATE_FORMAT = 'DD-MM-yyyy';
 
 function Clients() {
     const profilePicRowSpanValueDefault = 4;
@@ -27,35 +31,40 @@ function Clients() {
     const [client, setClient] = useState<Client | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [profilePicSpanValue, setProfilePicSpanValue] = useState(profilePicRowSpanValueDefault);
+    const [status, setStatus] = useState(StatusEnum.IDLE);
     
     var { id } = useParams();
 
     // Show dates in local format
-    Moment.locale('nl');
+    Moment.locale('nl');    
+
+    const fetchClientById = async () => {
+        try {
+          setStatus(StatusEnum.PENDING);
+          const fetchedClient: Client = await fetchClient(id!);
+          setStatus(StatusEnum.SUCCESSFUL);
+
+          setClient(fetchedClient);
+          
+          var rowSpanProfilePic = fetchedClient && fetchedClient.emergencypeople ? fetchedClient.emergencypeople.length + profilePicRowSpanValueDefault : profilePicRowSpanValueDefault;
+          setProfilePicSpanValue(rowSpanProfilePic);
+        } catch (e) {
+          // TODO: error handling
+          console.error(e);
+          setStatus(StatusEnum.REJECTED);
+          //setError(e);
+        }
+      };
 
     // Get client by id
     useEffect(() => {
-        const getClient = async () => {
-          try {
-            const fetchedClient: Client = await fetchClient(id!);
-            setClient(fetchedClient);
-
-            var rowSpanProfilePic = fetchedClient.emergencypeople != null ? fetchedClient.emergencypeople.length + profilePicRowSpanValueDefault : profilePicRowSpanValueDefault;
-            setProfilePicSpanValue(rowSpanProfilePic);
-          } catch (e) {
-            // TODO: error handling
-            console.error(e);
-            //setError(e);
-          }
-        };
+        if(!id) {
+            setStatus(StatusEnum.REJECTED);
+            return;
+        }
     
-        getClient();
-      }, [id]);    
-
-    if (!client) {
-        // TODO:  show loading status correctly
-        return <div>Loading...</div>;
-      }    
+        fetchClientById();
+      }, [id]);           
 
     return (
         <div className="flex flex-col lg:flex-row h-screen lg:h-auto">
@@ -71,16 +80,23 @@ function Clients() {
                         <NavButton text="Uitloggen" icon="Uitloggen" />
                     </Sidebar>
                     <SidebarGray>
-                        <NavTitle lijstNaam="Naam Lijst" />
-                        {/* <SearchInputField /> */}
-                        <div className="h-fit">
-                            <NavButtonGray text="Onderdeel lijst" />
-                            <NavButtonGray text="Placeholder" />
-                            <NavButtonGray text="HolderPlace" />
-                            <NavButtonGray text="Placie Holderie" />
-                        </div>
+                        <NavTitle lijstNaam="Cliënten" />
+                        <SearchClients />
                     </SidebarGray>    
                 </div>
+
+                {status === StatusEnum.REJECTED && id && !client &&
+                    // TODO: Client should be shown, but is not found. Show error message.
+                    <div>Client with client id ${id} not found!</div>
+                }
+
+                {(status === StatusEnum.IDLE || status === StatusEnum.PENDING) &&
+                    <div className='clients-spinner'>
+                    <FontAwesomeIcon icon={faSpinner} className="fa fa-3x fa-refresh fa-spin" />
+                    </div>
+                }
+
+                {status === StatusEnum.SUCCESSFUL && client &&
                 <div className="clients">
                 {/* {Client main info 1 */}           
                     <Header text="Cliënt info" />
@@ -101,7 +117,7 @@ function Clients() {
                     {/* Client number */}                    
                     <div className='client-number client-label-value'>
                         <Label text='Cliëntnummer: ' />
-                        <Label text={client.identificationnumber+''} />
+                        <Label data-testid="client-number-value" text={client.id+''} />
                     </div>
                     
                     {/* Client main info 2 */}
@@ -118,7 +134,7 @@ function Clients() {
 
                         <div className='client-label-value'>
                             <Label text='Geboortedatum: ' />
-                            <Label text={Moment(client.dateofbirth).format(dateFormat)} />
+                            <Label text={Moment(client.dateofbirth).format(DATE_FORMAT)} />
                         </div>                        
                     </div>
 
@@ -141,7 +157,7 @@ function Clients() {
                         <div className='client-additional-info-container'>
                             <div className='client-label-value '>
                                 <Label text='Diagnose(s): ' />
-                                <Label text={client.diagnoses ? client.diagnoses : noInfo} />
+                                <Label text={client.diagnoses ? client.diagnoses : NO_INFO} />
                             </div>
 
                             <div className='client-label-value'>
@@ -156,11 +172,11 @@ function Clients() {
 
                             <div className='client-label-value client-socialbenefit-form'>
                                 <Label text='Uitkeringsvorm: ' />
-                                <Label text={client.benefitform ? client.benefitform : noInfo} />
+                                <Label text={client.benefitform ? client.benefitform : NO_INFO} />
                             </div>
 
                             {!client.workingcontracts &&
-                            <Label text={noInfo} className='col-span-2' />}
+                            <Label text={NO_INFO} className='col-span-2' />}
                             {client.workingcontracts &&
                                 client.workingcontracts!.map((workingContract, i) =>
                                     <div key={i} className='col-span-2 lg:grid lg:grid-cols-2 mt-5'>
@@ -178,11 +194,11 @@ function Clients() {
                                         </div>
                                         <div className='client-label-value'>
                                             <Label text='Van: ' />
-                                            <Label text={Moment(workingContract.fromdate).format(dateFormat)} />
+                                            <Label text={Moment(workingContract.fromdate).format(DATE_FORMAT)} />
                                         </div>
                                         <div className='client-label-value'>
                                             <Label text='Tot: ' />
-                                            <Label text={Moment(workingContract.todate).format(dateFormat)} />
+                                            <Label text={Moment(workingContract.todate).format(DATE_FORMAT)} />
                                         </div>
                                 </div>)
                             }
@@ -190,16 +206,17 @@ function Clients() {
 
                         <div className='client-remarks'>
                             <Label text='Opmerkingen' className='client-subheader' strong={true} />
-                            <Label text={client.remarks ? client.remarks : noInfo} className='col-span-2' />
+                            <Label text={client.remarks ? client.remarks : NO_INFO} className='col-span-2' />
                         </div>
 
                     </SlideToggleLabel>
                     
                     <div className='button-container'>
-                        <LinkButton buttonType={{type:"Solid"}} text="Cliënt aanpassen" href="../pages/client-edit" />
-                        <LinkButton buttonType={{type:"NotSolid"}} text="Urenoverzicht" href="../pages/client-hours" />
+                        <LinkButton buttonType={{type:"Solid"}} text="Cliënt aanpassen" href="../client-edit" />
+                        <LinkButton buttonType={{type:"NotSolid"}} text="Urenoverzicht" href="../client-hours" />
                     </div>
                 </div>
+                }
             </div>
             <Copyright />
         </div>

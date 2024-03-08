@@ -20,12 +20,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="Clients\Commands\UpdateClient\UpdateClientCommand.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="MaritalStatuses\Commands\DeleteMaritalStatus\" />
     <Folder Include="MaritalStatuses\Commands\UpdateMaritalStatus\" />
     <Folder Include="MaritalStatuses\Queries\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Ardalis.GuardClauses" Version="4.3.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="FluentValidation" Version="11.7.1" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.7.1" />

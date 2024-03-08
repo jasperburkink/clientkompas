@@ -1,6 +1,6 @@
 import './App.css';
 import '../index.css';
-
+import { useState } from 'react';
 import { Header } from '../components/common/header';
 import { Label } from '../components/common/label';
 import { Button } from '../components/common/button';
@@ -17,27 +17,43 @@ import { InputFieldWithLabel } from '../components/common/input-field-with-label
 import { SlideToggleLabel } from '../components/common/slide-toggle-label';
 import { DatePicker } from '../components/common/datepicker';
 import Textarea from "../components/common/Textarea";
+import PopUp from "../components/common/PopUp";
+import SaveButton from '../components/common/SaveButton';
 import { Dropdown } from '../components/common/dropdown';
 import DropdownWithButton from "../components/common/dropdown-with-button";
+import PasswordField from '../components/common/password-field';
+import ErrorPopup from '../components/common/error-popup';
+import CvsError from '../types/common/cvs-error';
 
 function App() {
+    const handleClick = () => {
+    };
+        const handleCancelClick = () => {
+        };
+
+
     const data = [
         {
             value: 1,
             label: "ADHD",
-           
         },
         {
             value: 2,
             label: "Asperger",
-    
         },
         {
             value: 3,
             label: "SBICT",
-            
         },
     ];
+
+    const [isErrorPopupOpen, setErrorPopupOpen] = useState<boolean>(false);
+    const cvsError: CvsError = {
+        id: 1,
+        errorcode: 'E12345',
+        message: "Dit is een foutmelding."
+    };
+
     return (
         <div className="md:flex">   
             <div id='staticSidebar' className='sidebarContentPush'></div>  
@@ -97,7 +113,7 @@ function App() {
                 </table>
 
                 <p>Inputfield text empty</p>                
-                <InputField inputFieldType={{type:'text'}} required={false} placeholder='Placeholder' />
+                <InputField inputfieldtype={{type:'text'}} required={false} placeholder='Placeholder' />
 
                 <p>Button</p>
                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -148,19 +164,19 @@ function App() {
                 </table>
 
                 <p>Inputfield text empty</p>                
-                <InputField inputFieldType={{type:'text'}} required={false} placeholder='Placeholder' />
+                <InputField inputfieldtype={{type:'text'}} required={false} placeholder='Placeholder' />
 
                 <p>Inputfield text with value</p>
-                <InputField inputFieldType={{type:'text'}} required={false} value='Test' placeholder='Placeholder' />
+                <InputField inputfieldtype={{type:'text'}} required={false} value='Test' placeholder='Placeholder' />
 
                 <p>Inputfield required</p>
-                <InputField inputFieldType={{type:'text'}} required={true} placeholder='Placeholder' />
+                <InputField inputfieldtype={{type:'text'}} required={true} placeholder='Placeholder' />
 
                 <p>Inputfield with label</p>
-                <InputFieldWithLabel text='TextField' inputFieldProps={{ required: false, placeholder:'Placeholder', inputFieldType:{ type:'text'} }} />
+                <InputFieldWithLabel text='TextField' inputFieldProps={{ required: false, placeholder:'Placeholder', inputfieldtype:{ type:'text'} }} />
 
                 <p>Inputfield required with label </p>
-                <InputFieldWithLabel text='TextField' inputFieldProps={{ required: true, placeholder:'Placeholder', inputFieldType:{ type:'text'} }} />
+                <InputFieldWithLabel text='TextField' inputFieldProps={{ required: true, placeholder:'Placeholder', inputfieldtype:{ type:'text'} }} />
 
                 <p>Slide toggle label</p>
                 <SlideToggleLabel textColapsed='Klap uit!' textExpanded='Klap in!' >
@@ -180,11 +196,40 @@ function App() {
                 <Textarea text="Voeg een opmerking toe"/>
 
                 <p>Dropdown</p>
-                <Dropdown  options={data} required={false} inputfieldname='dropdown' />
+                <Dropdown options={data} required={false} inputfieldname='dropdown' />
              
                 <p>Dropdown with button</p>
                 <DropdownWithButton options={data} required={false} inputfieldname='dropdownWithButton' />
-                            
+
+                <p>Wachtwoord input</p>
+                <PasswordField inputfieldname='password' placeholder='Wachtwoord' />
+                                            
+                <p>PopUp component</p>
+                <PopUp
+                handleClick={handleClick}
+                handleCancelClick={handleCancelClick} 
+                buttonText="placeholder1" 
+                text="placeholder2"
+                />    
+
+                <p>Save button component</p>
+                <SaveButton
+                 buttonText= "placeholder 1"
+                 loadingText = "placeholder 2"
+                 successText = "placeholder 3"
+                 errorText = "placeholder 4"
+                 onSave={() => console.log('Save successful')}
+                 onError={() => console.error('Error saving')}
+                />             
+
+                <p>Foutmelding pop-up</p>
+                <Button buttonType={{type:"Solid"}} text="Toon foutmelding" className='w-200px h-50px' 
+                onClick=
+                {
+                    ()=> {setErrorPopupOpen(true);}
+                } />
+                <ErrorPopup isErrorPopupOpen={isErrorPopupOpen} setErrorPopupOpen={setErrorPopupOpen} error={cvsError} />
+
             </div>
             <Copyright />
         </div>

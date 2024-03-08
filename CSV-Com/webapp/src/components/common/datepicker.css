@@ -4,10 +4,11 @@
 
 @layer components {   
     .datepicker div{
-        border-radius: 10px;        
+        border-radius: 10px;
     }
 
     .datepicker fieldset{
-        border-width: 2px;
+        @apply
+        border-2;
     }
 }

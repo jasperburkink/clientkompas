@@ -16,6 +16,7 @@ builder.Services.AddControllers(options =>
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
         options.JsonSerializerOptions.WriteIndented = true;
         options.JsonSerializerOptions.PropertyNamingPolicy = new LowerCaseNamingPolicy();
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -44,7 +45,7 @@ if (app.Environment.IsDevelopment())
     // Initialise and seed database
     using var scope = app.Services.CreateScope();
     // TODO: Uncomment for authentication
-    //var initialiserAuthentication = scope.ServiceProvider.GetRequiredService<AuthenticationDbContextInitialiser>();        
+    //var initialiserAuthentication = scope.ServiceProvider.GetRequiredService<AuthenticationDbContextInitialiser>();
     //await initialiserAuthentication.InitialiseAsync();
     //await initialiserAuthentication.SeedAsync();
 
