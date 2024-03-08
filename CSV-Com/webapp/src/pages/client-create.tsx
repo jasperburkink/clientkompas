@@ -21,19 +21,32 @@ import { SlideToggleLabel } from '../components/common/slide-toggle-label';
 import EmergencyPerson from '../types/model/EmergencyPerson';
 import WorkingContract from '../types/model/WorkingContract';
 import Diagnosis from '../types/model/Diagnosis';
-import { fetchBenefitForms, fetchDiagnosis, fetchMaritalStatuses } from '../utils/api';
+import ConfirmPopup from "../components/common/confirm-popup";
+import ErrorPopup from '../components/common/error-popup';
+import CvsError from '../types/common/cvs-error';
+import { fetchBenefitForms, fetchDiagnosis, fetchMaritalStatuses, fetchDriversLicences, saveClient } from '../utils/api';
 
 const ClientCreate = () => {
-    const [client, setClient] = useState<Client | null>(null);
+    const [client, setClient] = useState<Client>();
     const [error, setError] = useState<string | null>(null);
+
+    const [isErrorPopupOpen, setErrorPopupOpen] = useState<boolean>(false);
+    const [cvsError, setCvsError] = useState<CvsError>(() => {
+        return {
+            id: 1,
+            errorcode: 'E12345',
+            message: "Dit is een foutmelding"
+        }
+    });
 
     const emergencyPersons : EmergencyPerson[] = [];
     const [diagnoses, setDiagnoses] = useState<IDropdownObject[]>([]);
     const [benefitForms, setBenefitForms] = useState<IDropdownObject[]>([]);
     const [maritalStatuses, setMaritalStatuses] = useState<DropdownObject[]>([]);
+    const [driversLicences, setDriversLicences] = useState<DropdownObject[]>([]);
+    const workingContracts : WorkingContract[] = [];
 
-    // const genders:  =
-    const [genders, setGenders] = useState<DropdownObject[]>([
+    const gendersDropdownOptions: DropdownObject[] = [
         {
             label: 'Man',
             value: 0
@@ -46,12 +59,33 @@ const ClientCreate = () => {
             label: 'Non-binair',
             value: 2   
         } // TODO: replace to contants file
-    ]); // TODO: maybe make dynamic in the future
+    ]; // TODO: maybe make dynamic in the future
+
+    const doelgroepDropdownOptions: DropdownObject[] = [
+        {
+            label: 'Nee',
+            value: 0
+        },
+        {
+            label: 'Ja',
+            value: 1
+        } // TODO: replace to contants file
+    ];
 
     const addEmergencyPerson = ():EmergencyPerson => {
         return {
             name: '',
             telephonenumber: ''
+        };
+    };
+
+    const addWorkingContract = ():WorkingContract => {
+        return {
+            companyname: '',
+            fromdate: new Date(),
+            todate: new Date(),
+            contracttype: '',
+            function: ''
         };
     };
 
@@ -64,8 +98,15 @@ const ClientCreate = () => {
                     label: diagnosis.name
                 }));
                 setDiagnoses(formattedDiagnoses);
+                throw new Error('TEsterdetest');
             } catch (error) {
                 console.error('Error loading diagnoses:', error);
+                setCvsError({
+                    errorcode: 'TEST',
+                    id: 1,
+                    message: 'Er is iets fout gegaan!'
+                });
+                setErrorPopupOpen(true);
                 //tODO: show errormessage popup
             }
         };
@@ -98,10 +139,25 @@ const ClientCreate = () => {
             }
         };
 
+        const loadDriversLicences = async () => { 
+            try {
+                const apiDriversLicences = await fetchDriversLicences();
+                const formattedDriversLicences = apiDriversLicences.map(driverLicence => ({
+                    value: driverLicence.id,
+                    label: `${driverLicence.category} (${driverLicence.description})`
+                }));
+                setDriversLicences(formattedDriversLicences);
+            } catch (error) {
+                console.error('Error loading drivers licences:', error);
+                //tODO: show errormessage popup
+            }
+        };
+
         loadDiagnoses();
         loadBenifitForms();
         loadMaritalStatuses();
-    }, []);
+        loadDriversLicences();
+    }, []);    
 
     return(
         <div className="flex flex-col lg:flex-row h-screen lg:h-auto">
@@ -178,7 +234,7 @@ const ClientCreate = () => {
                         </LabelField>
 
                         <LabelField text='Geslacht' required={true}>
-                            <Dropdown options={genders} required={true} inputfieldname='geslacht' />
+                            <Dropdown options={gendersDropdownOptions} required={true} inputfieldname='geslacht' />
                         </LabelField>                       
                     </div>
 
@@ -200,23 +256,47 @@ const ClientCreate = () => {
                             </LabelField>
 
                             <LabelField text='Burgerlijke staat' required={false}>
-                                <Dropdown options={maritalStatuses} required={false} inputfieldname='burgerlijkestaat' />
+                                <Dropdown options={maritalStatuses} required={false} inputfieldname='maritalstatuses' />
+                            </LabelField>
+
+                            <LabelField text='Rijbewijs' required={false}>
+                                <DropdownWithButton options={driversLicences} required={false} inputfieldname='driverslicences' />
+                            </LabelField>
+
+                            <LabelField text='Doelgroepregister' required={false}>
+                                <Dropdown options={doelgroepDropdownOptions} required={false} inputfieldname='doelgroepregister' />
                             </LabelField>
                         </div>
+
+                        <DomainObjectInput label='Werkervaring' addObject={addWorkingContract} domainObjects={workingContracts} labelType='werkervaring' typeName='WorkingContract' numMinimalRequired={1} />
                     </SlideToggleLabel>
 
                 </div>
                 <div className='button-container'>
                     <SaveButton
-                    buttonText= "placeholder 1"
-                    loadingText = "placeholder 2"
-                    successText = "placeholder 3"
-                    errorText = "placeholder 4"
-                    onSave={() => console.log('Save successful')}
+                    buttonText= "Opslaan"
+                    loadingText = "Bezig met oplaan"
+                    successText = "Cliënt opgeslagen"
+                    errorText = "Fout tijdens opslaan"
+                    onSave={() => {
+                        try {
+                            saveClient(client!);
+                        } catch (error) {
+                            //tODO show errors!
+                            alert('Error while saving a client!!!');
+                        }
+                        
+                        console.log('Save successful')
+                    }}
                     onError={() => console.error('Error saving')}
                     />
                 </div>
             </div>
+
+            <ErrorPopup 
+                error={cvsError} 
+                isOpen={isErrorPopupOpen}
+                onClose={() => setErrorPopupOpen(false)} />  
             <Copyright />
         </div>
     );
