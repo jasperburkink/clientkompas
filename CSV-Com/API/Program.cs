@@ -38,7 +38,7 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || true) // <- for now we want this scope to be executed for the test and dev environment as well
 {
     app.UseDeveloperExceptionPage();
 
