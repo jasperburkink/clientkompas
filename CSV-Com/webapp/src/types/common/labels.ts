@@ -1,7 +1,7 @@
 const CustomLabels = {
     EmergencyPerson: {
         name: 'Naam',
-        telephonenumber: 'Telefoonnummer'
+        telephonenumber: 'Telefoonnr.'
     },
     WorkingContract: {
         companyname: 'Werkt bij',

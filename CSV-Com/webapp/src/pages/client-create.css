@@ -66,6 +66,16 @@
                 w-16;
             }
         }
+
+        .client-remarks{
+            @apply
+            my-2;
+
+            textarea{
+                @apply
+                w-full;
+            }
+        }
     }
 
     .button-container{

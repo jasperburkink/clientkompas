@@ -13,16 +13,24 @@ import SaveButton from '../components/common/SaveButton';
 import LabelField from '../components/common/label-field';
 import { InputField } from '../components/common/input-field';
 import { Dropdown, DropdownObject } from '../components/common/dropdown';
+import DropdownWithButton, { IDropdownObject } from "../components/common/dropdown-with-button";
 import { DatePicker } from '../components/common/datepicker';
+import Textarea from "../components/common/Textarea";
 import DomainObjectInput from '../components/common/domain-object-input';
+import { SlideToggleLabel } from '../components/common/slide-toggle-label';
 import EmergencyPerson from '../types/model/EmergencyPerson';
 import WorkingContract from '../types/model/WorkingContract';
+import Diagnosis from '../types/model/Diagnosis';
+import { fetchBenefitForms, fetchDiagnosis, fetchMaritalStatuses } from '../utils/api';
 
-function ClientCreate() {
+const ClientCreate = () => {
     const [client, setClient] = useState<Client | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     const emergencyPersons : EmergencyPerson[] = [];
+    const [diagnoses, setDiagnoses] = useState<IDropdownObject[]>([]);
+    const [benefitForms, setBenefitForms] = useState<IDropdownObject[]>([]);
+    const [maritalStatuses, setMaritalStatuses] = useState<DropdownObject[]>([]);
 
     // const genders:  =
     const [genders, setGenders] = useState<DropdownObject[]>([
@@ -46,6 +54,54 @@ function ClientCreate() {
             telephonenumber: ''
         };
     };
+
+    useEffect(() => {
+        const loadDiagnoses = async () => { 
+            try {
+                const apiDiagnoses = await fetchDiagnosis();
+                const formattedDiagnoses = apiDiagnoses.map(diagnosis => ({
+                    value: diagnosis.id,
+                    label: diagnosis.name
+                }));
+                setDiagnoses(formattedDiagnoses);
+            } catch (error) {
+                console.error('Error loading diagnoses:', error);
+                //tODO: show errormessage popup
+            }
+        };
+
+        const loadBenifitForms = async () => { 
+            try {
+                const apiBenefitForms = await fetchBenefitForms();
+                const formattedBenefitForms = apiBenefitForms.map(benefitForm => ({
+                    value: benefitForm.id,
+                    label: benefitForm.name
+                }));
+                setBenefitForms(formattedBenefitForms);
+            } catch (error) {
+                console.error('Error loading benefitforms:', error);
+                //tODO: show errormessage popup
+            }
+        };
+
+        const loadMaritalStatuses = async () => { 
+            try {
+                const apiMaritalStatuses = await fetchMaritalStatuses();
+                const formattedMaritalStatuses = apiMaritalStatuses.map(maritalStatus => ({
+                    value: maritalStatus.id,
+                    label: maritalStatus.name
+                }));
+                setMaritalStatuses(formattedMaritalStatuses);
+            } catch (error) {
+                console.error('Error loading marital statuses:', error);
+                //tODO: show errormessage popup
+            }
+        };
+
+        loadDiagnoses();
+        loadBenifitForms();
+        loadMaritalStatuses();
+    }, []);
 
     return(
         <div className="flex flex-col lg:flex-row h-screen lg:h-auto">
@@ -126,9 +182,28 @@ function ClientCreate() {
                         </LabelField>                       
                     </div>
 
-                    <Label text='In geval van nood' strong={true} className='client-create-subheader' />
+                    <DomainObjectInput label='In geval van nood' addObject={addEmergencyPerson} domainObjects={emergencyPersons} labelType='contactpersoon' typeName='EmergencyPerson' numMinimalRequired={1} />
 
-                    <DomainObjectInput label='Inputvelden voor contactpersoon' addObject={addEmergencyPerson} domainObjects={emergencyPersons} labelType='contactpersoon' typeName='EmergencyPerson' numMinimalRequired={1} />
+                    <div className='client-remarks'>
+                        <Label text='Opmerkingen' />
+                        <Textarea text="Voeg opmerkingen toe" />
+                    </div>
+
+                    <SlideToggleLabel textColapsed='Klap uit voor meer opties' textExpanded='Klap in' >
+                        <div className='client-extra-info'>
+                            <LabelField text='Diagnose(s)' required={false}>
+                                <DropdownWithButton options={diagnoses} required={false} inputfieldname='diagnoses' />
+                            </LabelField>
+
+                            <LabelField text='Uitkeringsvorm' required={false}>
+                                <DropdownWithButton options={benefitForms} required={false} inputfieldname='benefitforms' />
+                            </LabelField>
+
+                            <LabelField text='Burgerlijke staat' required={false}>
+                                <Dropdown options={maritalStatuses} required={false} inputfieldname='burgerlijkestaat' />
+                            </LabelField>
+                        </div>
+                    </SlideToggleLabel>
 
                 </div>
                 <div className='button-container'>

@@ -19,7 +19,18 @@ interface DomainObjectInputProps<T>{
 }
 
 const DomainObjectInput = <T extends Record<string, any>>(props: DomainObjectInputProps<T>) => {
-        const [domainObjects, setDomainObjects] = useState<T[]>(props.domainObjects);
+        const [domainObjects, setDomainObjects] = useState<T[]>(() => {
+            const defaultObjects:T[] = props.domainObjects;
+
+            if(props.numMinimalRequired) {
+                for (let i = 0; defaultObjects.length < props.numMinimalRequired && i < props.numMinimalRequired; i++) {
+                    const newObject: T = props.addObject();
+                    defaultObjects.push(newObject);
+                }
+            }
+
+            return defaultObjects;
+        });
 
         const handleAddObject = () => {
             const newDomainObject: T = props.addObject();
@@ -31,7 +42,7 @@ const DomainObjectInput = <T extends Record<string, any>>(props: DomainObjectInp
             setDomainObjects(updatedDomainObjects);
         };
 
-        // if(domainObjects.length <= )
+        // if(numMinimalRequired && domainObjects.length <= numMinimalRequired)
 
         const inputFields = domainObjects.map((domainObject, index) => {            
             const customLabelsForInterface = CustomLabels[props.typeName] as { [key: string]: string };
