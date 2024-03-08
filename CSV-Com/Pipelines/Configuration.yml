@@ -15,6 +15,7 @@ trigger_DeployToDevPipeline:
     stage: triggers
     trigger:
         include: CSV-Com/Pipelines/Pipeline_DeployToDev.yml
+        strategy: depend
     rules:
     - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "develop"
       when: always

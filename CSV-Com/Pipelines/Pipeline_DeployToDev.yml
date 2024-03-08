@@ -10,15 +10,17 @@ variables:
   SOLUTION: "$SOLUTION_FOLDER/CSV-Com.sln"
   NODE_FOLDER: "webapp"
   BUILD_CONFIGURATION: "Debug"
-  DOTNET_DOCKER_IMAGE_NAME: "$CI_REGISTRY/client-volgsysteem/cvs-com/api"
-  NODE_DOCKER_IMAGE_NAME: "$CI_REGISTRY/client-volgsysteem/cvs-com/webapp"
+  DOTNET_DOCKER_IMAGE_NAME_DEV: "$CI_REGISTRY/client-volgsysteem/cvs-com/dev-api"
+  NODE_DOCKER_IMAGE_NAME_DEV: "$CI_REGISTRY/client-volgsysteem/cvs-com/dev-webapp"
+  DOTNET_DOCKER_IMAGE_NAME_TEST: "$CI_REGISTRY/client-volgsysteem/cvs-com/test-api"
+  NODE_DOCKER_IMAGE_NAME_TEST: "$CI_REGISTRY/client-volgsysteem/cvs-com/test-webapp"
   DOTNET_DOCKER_IMAGE_FILENAME: "dotnet_docker_image"
   NODE_DOCKER_IMAGE_FILENAME: "node_docker_image"
 
 stages: 
-  - image-build-sync    
   - build
-  - test
+  - test    
+  - image-build-sync-dev    
 
 dotnet-build:
   before_script:
@@ -54,32 +56,6 @@ dotnet-test:
     when: always  # Keep result files. Even when tests fail.
   dependencies:
     - dotnet-build
-    
-image-build-sync-job:
-  services:
-  - name: docker:20.10.16-dind
-  before_script:
-  - "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
-  stage: image-build-sync  
-  script:
-    # Dotnet build  
-    - cd CSV-Com
-    - docker build -t $DOTNET_DOCKER_IMAGE_NAME -f "./API/Dockerfile" "."
-    - cd ..
-    - mkdir image
-    - docker save $DOTNET_DOCKER_IMAGE_NAME > image/${DOTNET_DOCKER_IMAGE_FILENAME}.tar
-    # Node build
-    - cd CSV-Com/webapp
-    - docker build -t $NODE_DOCKER_IMAGE_NAME -f "./Dockerfile" "."
-    - cd ../..
-    - docker save $NODE_DOCKER_IMAGE_NAME > image/${NODE_DOCKER_IMAGE_FILENAME}.tar
-    # Docker push
-    - docker push $DOTNET_DOCKER_IMAGE_NAME
-    - docker push $NODE_DOCKER_IMAGE_NAME
-  image: $DOCKER_IMAGE
-  artifacts:
-    paths:
-      - image
 
 node-build:
   before_script:
@@ -117,3 +93,51 @@ node-test:
   image: $NODE_IMAGE
   dependencies:
     - node-build
+    
+image-build-sync-dev-job:
+  services:
+  - name: docker:20.10.16-dind
+  before_script:
+  - "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
+  stage: image-build-sync-dev  
+  script:
+    # Dotnet build  
+    - cd CSV-Com
+    - docker build -t $DOTNET_DOCKER_IMAGE_NAME_DEV -f "./API/Dockerfile" "."
+    - cd ..
+    - mkdir image
+    - docker save $DOTNET_DOCKER_IMAGE_NAME_DEV > image/${DOTNET_DOCKER_IMAGE_FILENAME}.tar
+    # Node build
+    - cd CSV-Com/webapp
+    - docker build -t $NODE_DOCKER_IMAGE_NAME_DEV -f "./Dockerfile" "."
+    - cd ../..
+    - docker save $NODE_DOCKER_IMAGE_NAME_DEV > image/${NODE_DOCKER_IMAGE_FILENAME}.tar
+    # Docker push
+    - docker push $DOTNET_DOCKER_IMAGE_NAME_DEV
+    - docker push $NODE_DOCKER_IMAGE_NAME_DEV
+  image: $DOCKER_IMAGE
+  artifacts:
+    paths:
+      - image
+
+image-build-sync-test-job:
+  services:
+  - name: docker:20.10.16-dind
+  before_script:
+  - "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
+  stage: image-build-sync-test  
+  script:
+    # Dotnet build  
+    - cd CSV-Com
+    - docker build -t $DOTNET_DOCKER_IMAGE_NAME_TEST -f "./API/Dockerfile" "."
+    - cd ..
+    # Node build
+    - cd CSV-Com/webapp
+    - docker build -t $NODE_DOCKER_IMAGE_NAME_TEST -f "./Dockerfile" "."
+    - cd ../..
+    # Docker push
+    - docker push $DOTNET_DOCKER_IMAGE_NAME_TEST
+    - docker push $NODE_DOCKER_IMAGE_NAME_TEST
+  image: $DOCKER_IMAGE
+  rules:
+  - when: manual  
