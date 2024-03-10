@@ -142,6 +142,6 @@ image-build-sync-test-job:
     - docker push $NODE_DOCKER_IMAGE_NAME_TEST
   image: $DOCKER_IMAGE
   retry: 2
+  allow_failure: true
   rules:
   - when: manual  
-  - allow_failure: true
