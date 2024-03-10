@@ -1,15 +1,14 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
-ARG ENVIRONMENT_NAME=Development
-
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
-
-RUN echo Using Environment: ${ENVIRONMENT_NAME}
-
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+
+ARG ENVIRONMENT_NAME=Development
+RUN echo Using Environment (build stage): ${ENVIRONMENT_NAME}
+
 WORKDIR /src
 COPY ["API/API.csproj", "API/"]
 RUN dotnet restore "API/API.csproj"
@@ -18,6 +17,9 @@ WORKDIR "/src/API"
 RUN dotnet build /p:EnvironmentName=${ENVIRONMENT_NAME} "API.csproj" -c Release -o /app/build
 
 FROM build AS publish
+ARG ENVIRONMENT_NAME=Development
+RUN echo Using Environment (publish stage): ${ENVIRONMENT_NAME}
+
 RUN dotnet publish /p:EnvironmentName=${ENVIRONMENT_NAME} "API.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final

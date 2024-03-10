@@ -1,7 +1,6 @@
-ARG ENVIRONMENT_NAME=ocdev
-
 FROM node:21-alpine as builder
 
+ARG ENVIRONMENT_NAME=ocdev
 RUN echo Using Environment: ${ENVIRONMENT_NAME}
 
 WORKDIR /app
