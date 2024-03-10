@@ -15,7 +15,7 @@ namespace Infrastructure
             var connectionStringAuthentication = configuration.GetValue<string>("ConnectionStrings:AuthenticationConnectionString");
             var connectionStringCVS = configuration.GetValue<string>("ConnectionStrings:CVSConnectionString");
 
-            Console.WriteLine("Connecting with connectionstring: " + connectionStringCVS);
+            System.Diagnostics.Debug.WriteLine("Connecting with connectionstring: " + connectionStringCVS);
 
             var serverVersion = MySqlServerVersion.LatestSupportedServerVersion;
 
