@@ -3,7 +3,7 @@ ARG ENVIRONMENT_NAME=Development
 
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 
-RUN echo Environmen: ${ENVIRONMENT_NAME}
+RUN echo Using Environment: ${ENVIRONMENT_NAME}
 
 WORKDIR /app
 EXPOSE 80

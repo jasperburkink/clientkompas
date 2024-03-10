@@ -2,7 +2,7 @@ ARG ENVIRONMENT_NAME=ocdev
 
 FROM node:21-alpine as builder
 
-RUN echo environment: ${ENVIRONMENT_NAME}
+RUN echo Using Environment: ${ENVIRONMENT_NAME}
 
 WORKDIR /app
 COPY package.json .
