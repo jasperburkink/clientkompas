@@ -104,13 +104,13 @@ image-build-sync-dev-job:
   script:
     # Dotnet build  
     - cd CSV-Com
-    - docker build --build-arg ENVIRONMENT_NAME=OcDev -t $DOTNET_DOCKER_IMAGE_NAME_DEV -f "./API/Dockerfile" "."
+    - docker build --build-arg ENVIRONMENT_NAME=ocdev -t $DOTNET_DOCKER_IMAGE_NAME_DEV -f "./API/Dockerfile" "."
     - cd ..
     - mkdir image
     - docker save $DOTNET_DOCKER_IMAGE_NAME_DEV > image/${DOTNET_DOCKER_IMAGE_FILENAME}.tar
     # Node build
     - cd CSV-Com/webapp
-    - docker build --build-arg ENVIRONMENT_NAME=OcDev -t $NODE_DOCKER_IMAGE_NAME_DEV -f "./Dockerfile" "."
+    - docker build --build-arg ENVIRONMENT_NAME=ocdev -t $NODE_DOCKER_IMAGE_NAME_DEV -f "./Dockerfile" "."
     - cd ../..
     - docker save $NODE_DOCKER_IMAGE_NAME_DEV > image/${NODE_DOCKER_IMAGE_FILENAME}.tar
     # Docker push
@@ -131,11 +131,11 @@ image-build-sync-test-job:
   script:
     # Dotnet build  
     - cd CSV-Com
-    - docker build --build-arg ENVIRONMENT_NAME=Test -t $DOTNET_DOCKER_IMAGE_NAME_TEST -f "./API/Dockerfile" "."
+    - docker build --build-arg ENVIRONMENT_NAME=test -t $DOTNET_DOCKER_IMAGE_NAME_TEST -f "./API/Dockerfile" "."
     - cd ..
     # Node build
     - cd CSV-Com/webapp
-    - docker build --build-arg ENVIRONMENT_NAME=Test -t $NODE_DOCKER_IMAGE_NAME_TEST -f "./Dockerfile" "."
+    - docker build --build-arg ENVIRONMENT_NAME=test -t $NODE_DOCKER_IMAGE_NAME_TEST -f "./Dockerfile" "."
     - cd ../..
     # Docker push
     - docker push $DOTNET_DOCKER_IMAGE_NAME_TEST
