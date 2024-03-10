@@ -37,7 +37,9 @@
     "eject": "react-scripts eject",
     "test:ci": "npm run test -- --testResultsProcessor=\"jest-junit\" --watchAll=false --ci --coverage",
     "build:test": "REACT_APP_ENV=test npm run build",
-    "start:test": "REACT_APP_ENV=test npm run start"
+    "start:test": "REACT_APP_ENV=test npm run start",
+    "build:ocdev": "REACT_APP_ENV=ocdev npm run build",
+    "start:ocdev": "REACT_APP_ENV=ocdev npm run start"
   },
   "eslintConfig": {
     "extends": [
