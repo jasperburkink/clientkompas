@@ -29,4 +29,4 @@ RUN echo Setting DOTNET_ENVIRONMENT_NAME variable to: $DOTNET_ENVIRONMENT_NAME
 
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "API.dll", "environment=$DOTNET_ENVIRONMENT_NAME"]
+ENTRYPOINT dotnet API.dll environment=$DOTNET_ENVIRONMENT_NAME
