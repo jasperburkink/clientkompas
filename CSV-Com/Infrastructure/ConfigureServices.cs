@@ -15,6 +15,8 @@ namespace Infrastructure
             var connectionStringAuthentication = configuration.GetValue<string>("ConnectionStrings:AuthenticationConnectionString");
             var connectionStringCVS = configuration.GetValue<string>("ConnectionStrings:CVSConnectionString");
 
+            Console.WriteLine("Connecting with connectionstring: " + connectionStringCVS);
+
             var serverVersion = MySqlServerVersion.LatestSupportedServerVersion;
 
             services.AddDbContext<CVSDbContext>(
@@ -24,9 +26,9 @@ namespace Infrastructure
                             {
                                 mySqlOptions.MigrationsAssembly(typeof(CVSDbContext).Assembly.FullName); // Migrations in class library
 #if DEBUG
-                                mySqlOptions.EnableRetryOnFailure(maxRetryCount: 5,
-                    maxRetryDelay: TimeSpan.FromSeconds(10),
-                    errorNumbersToAdd: null);
+                                //            mySqlOptions.EnableRetryOnFailure(maxRetryCount: 5,
+                                //maxRetryDelay: TimeSpan.FromSeconds(10),
+                                //errorNumbersToAdd: null);
 #endif
                             })
                             .LogTo(Console.WriteLine, LogLevel.Information)
