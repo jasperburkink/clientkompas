@@ -7,7 +7,7 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 
 ARG ENVIRONMENT_NAME=Development
-RUN echo Using Environment (build stage): ${ENVIRONMENT_NAME}
+RUN echo Using Environment for build stage: ${ENVIRONMENT_NAME}
 
 WORKDIR /src
 COPY ["API/API.csproj", "API/"]
@@ -18,7 +18,7 @@ RUN dotnet build /p:EnvironmentName=${ENVIRONMENT_NAME} "API.csproj" -c Release 
 
 FROM build AS publish
 ARG ENVIRONMENT_NAME=Development
-RUN echo Using Environment (publish stage): ${ENVIRONMENT_NAME}
+RUN echo Using Environment for publish stage: ${ENVIRONMENT_NAME}
 
 RUN dotnet publish /p:EnvironmentName=${ENVIRONMENT_NAME} "API.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
