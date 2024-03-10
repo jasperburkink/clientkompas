@@ -116,6 +116,8 @@ image-build-sync-dev-job:
     # Docker push
     - docker push $DOTNET_DOCKER_IMAGE_NAME_DEV
     - docker push $NODE_DOCKER_IMAGE_NAME_DEV
+    - echo refreshing environments
+    - curl http://192.168.1.15:6012/environment_refresh
   image: $DOCKER_IMAGE
   retry: 2
   artifacts:
@@ -140,6 +142,8 @@ image-build-sync-test-job:
     # Docker push
     - docker push $DOTNET_DOCKER_IMAGE_NAME_TEST
     - docker push $NODE_DOCKER_IMAGE_NAME_TEST
+    - echo refreshing environments
+    - curl http://192.168.1.15:6012/environment_refresh
   image: $DOCKER_IMAGE
   retry: 2
   allow_failure: true
