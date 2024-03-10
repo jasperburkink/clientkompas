@@ -20,7 +20,7 @@ root.render(
                 </Routes>
             </BrowserRouter>
         </React.StrictMode>
-        <span>Build Date: {preval`module.exports = new Date().toLocaleString();`}.</span>
+        <span>Build Date: {preval`module.exports = new Date().toLocaleString();`}</span>
     </>
 );
 
