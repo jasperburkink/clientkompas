@@ -1,12 +1,15 @@
 ARG ENVIRONMENT_NAME=ocdev
 
 FROM node:21-alpine as builder
+
+RUN echo environment: ${ENVIRONMENT_NAME}
+
 WORKDIR /app
 COPY package.json .
 COPY yarn.lock .
 RUN yarn install
 COPY . .
-RUN npm run build:$ENVIRONMENT_NAME
+RUN npm run build:${ENVIRONMENT_NAME}
 
 FROM nginx:1.25.4
 WORKDIR /usr/share/nginx/html
