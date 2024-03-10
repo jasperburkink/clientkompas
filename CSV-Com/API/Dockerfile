@@ -24,7 +24,9 @@ RUN dotnet publish /p:EnvironmentName=${ENVIRONMENT_NAME} "API.csproj" -c Releas
 FROM base AS final
 ARG ENVIRONMENT_NAME=Development
 RUN echo Using Environment for final stage: ${ENVIRONMENT_NAME}
+ENV DOTNET_ENVIRONMENT_NAME=${ENVIRONMENT_NAME}
+RUN echo Setting DOTNET_ENVIRONMENT_NAME variable to: $DOTNET_ENVIRONMENT_NAME
 
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "API.dll", "environment=${ENVIRONMENT_NAME}"]
+ENTRYPOINT ["dotnet", "API.dll", "environment=$DOTNET_ENVIRONMENT_NAME"]
