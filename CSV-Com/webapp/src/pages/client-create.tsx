@@ -23,11 +23,36 @@ import WorkingContract from '../types/model/WorkingContract';
 import Diagnosis from '../types/model/Diagnosis';
 import ConfirmPopup from "../components/common/confirm-popup";
 import ErrorPopup from '../components/common/error-popup';
+import {keyof} from "ts-keyof";
 import CvsError from '../types/common/cvs-error';
 import { fetchBenefitForms, fetchDiagnosis, fetchMaritalStatuses, fetchDriversLicences, saveClient } from '../utils/api';
 
 const ClientCreate = () => {
-    const [client, setClient] = useState<Client>();
+    const initialClient: Client = { 
+        id: 0,
+        firstname: '',
+        initials: '',
+        lastname: '',
+        gender: '',
+        streetname: '',
+        housenumber: '',
+        postalcode: '',
+        residence: '',
+        telephonenumber: '',
+        dateofbirth: new Date(),
+        emailaddress: '',
+        maritalstatus: '',
+        driverslicences: ''
+    };
+
+    const handleClientInputChange = (fieldName: string, value: string) => {
+        setClient(prevClient => ({
+            ...prevClient,
+            [fieldName]: value
+        }));
+    };
+
+    const [client, setClient] = useState<Client>(initialClient);
     const [error, setError] = useState<string | null>(null);
 
     const [isErrorPopupOpen, setErrorPopupOpen] = useState<boolean>(false);
@@ -98,7 +123,6 @@ const ClientCreate = () => {
                     label: diagnosis.name
                 }));
                 setDiagnoses(formattedDiagnoses);
-                throw new Error('TEsterdetest');
             } catch (error) {
                 console.error('Error loading diagnoses:', error);
                 setCvsError({
@@ -187,54 +211,64 @@ const ClientCreate = () => {
 
                     <div className='client-create-fields'>
                         <LabelField text='Voornaam' required={true}>
-                            <InputField inputfieldtype={{type:'text'}} required={true} placeholder='Voornaam' />
+                            <InputField 
+                                inputfieldtype={{type:'text'}} 
+                                required={true} 
+                                placeholder='Voornaam' 
+                                value={client.firstname} 
+                                onChange={(value) => handleClientInputChange(keyof(client.firstname), value)} />
                         </LabelField>
 
                         <LabelField text='Voorletters' required={true}>
-                            <InputField inputfieldtype={{type:'text'}} required={true} placeholder='b.v. A B' />
+                            <InputField 
+                                inputfieldtype={{type:'text'}} 
+                                required={true} 
+                                placeholder='b.v. A B' 
+                                value={client.initials}
+                                onChange={(value) => handleClientInputChange('initials', value)} />
                         </LabelField>
 
                         <LabelField text='Tussenvoegsel' required={false}>
-                            <InputField inputfieldtype={{type:'text'}} required={false} placeholder='b.v. de' />
+                            <InputField inputfieldtype={{type:'text'}} required={false} placeholder='b.v. de' value={client.prefixlastname} />
                         </LabelField>
 
                         <LabelField text='Achternaam' required={true}>
-                            <InputField inputfieldtype={{type:'text'}} required={true} placeholder='Achternaam' />
+                            <InputField inputfieldtype={{type:'text'}} required={true} placeholder='Achternaam' value={client.lastname} />
                         </LabelField>
 
                         <LabelField text='Straatadres' required={true}>
-                            <InputField inputfieldtype={{type:'text'}} required={true} placeholder='Adres' />
+                            <InputField inputfieldtype={{type:'text'}} required={true} placeholder='Adres' value={client.streetname} />
                         </LabelField>
 
                         <LabelField text='Huisnummer' required={true}>
-                            <InputField inputfieldtype={{type:'text'}} required={true} placeholder='b.v. 11' className='house-number' />
+                            <InputField inputfieldtype={{type:'text'}} required={true} placeholder='b.v. 11' className='house-number' value={client.housenumber} />
                             <LabelField text='Toevoeging' required={false} className='house-number-addition'>
-                                <InputField inputfieldtype={{type:'text'}} required={false} placeholder='b.v. A' className='house-number-addition-field' />
+                                <InputField inputfieldtype={{type:'text'}} required={false} placeholder='b.v. A' className='house-number-addition-field' value={client.housenumberaddition} />
                             </LabelField>
                         </LabelField>
 
                         <LabelField text='Postcode' required={true}>
-                            <InputField inputfieldtype={{type:'text'}} required={true} placeholder='b.v. 1234 AA' />
+                            <InputField inputfieldtype={{type:'text'}} required={true} placeholder='b.v. 1234 AA' value={client.postalcode} />
                         </LabelField>
 
                         <LabelField text='Woonplaats' required={true}>
-                            <InputField inputfieldtype={{type:'text'}} required={true} placeholder='Woonplaats' />
+                            <InputField inputfieldtype={{type:'text'}} required={true} placeholder='Woonplaats' value={client.residence} />
                         </LabelField>
 
                         <LabelField text='Telefoon' required={true}>
-                            <InputField inputfieldtype={{type:'text'}} required={true} placeholder='b.v. 0543-123456' />
+                            <InputField inputfieldtype={{type:'text'}} required={true} placeholder='b.v. 0543-123456' value={client.telephonenumber} />
                         </LabelField>
 
                         <LabelField text='E-mail' required={true}>
-                            <InputField inputfieldtype={{type:'text'}} required={true} placeholder='b.v. mail@mailbox.com' />
+                            <InputField inputfieldtype={{type:'text'}} required={true} placeholder='b.v. mail@mailbox.com' value={client.emailaddress} />
                         </LabelField>
 
                         <LabelField text='Geboortedatum' required={true}>
-                            <DatePicker required={true} placeholder='Selecteer een datum' />
+                            <DatePicker required={true} placeholder='Selecteer een datum' value={client.dateofbirth} />
                         </LabelField>
 
                         <LabelField text='Geslacht' required={true}>
-                            <Dropdown options={gendersDropdownOptions} required={true} inputfieldname='geslacht' />
+                            <Dropdown options={gendersDropdownOptions} required={true} inputfieldname='geslacht'  />
                         </LabelField>                       
                     </div>
 
