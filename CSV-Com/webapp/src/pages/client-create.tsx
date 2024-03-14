@@ -1,5 +1,4 @@
 import './client-create.css';
-import Client from '../types/model/Client';
 import React, { useEffect, useState } from "react";
 import { Sidebar } from '../components/sidebar/sidebar';
 import { NavButton } from '../components/nav/nav-button';
@@ -23,33 +22,29 @@ import WorkingContract from '../types/model/WorkingContract';
 import Diagnosis from '../types/model/Diagnosis';
 import ConfirmPopup from "../components/common/confirm-popup";
 import ErrorPopup from '../components/common/error-popup';
-import {keyof} from "ts-keyof";
 import CvsError from '../types/common/cvs-error';
 import { fetchBenefitForms, fetchDiagnosis, fetchMaritalStatuses, fetchDriversLicences, saveClient } from '../utils/api';
+import Client from '../types/model/Client';
+import { Moment } from 'moment';
 
 const ClientCreate = () => {
     const initialClient: Client = { 
         id: 0,
         firstname: '',
+        dateofbirth: new Date(),
         initials: '',
         lastname: '',
-        gender: '',
+        gender: 0,
         streetname: '',
         housenumber: '',
         postalcode: '',
         residence: '',
-        telephonenumber: '',
-        dateofbirth: new Date(),
+        telephonenumber: '',        
         emailaddress: '',
         maritalstatus: '',
-        driverslicences: ''
-    };
-
-    const handleClientInputChange = (fieldName: string, value: string) => {
-        setClient(prevClient => ({
-            ...prevClient,
-            [fieldName]: value
-        }));
+        driverslicences: [],
+        emergencypeople: [],
+        workingcontracts: [],
     };
 
     const [client, setClient] = useState<Client>(initialClient);
@@ -64,12 +59,32 @@ const ClientCreate = () => {
         }
     });
 
-    const emergencyPersons : EmergencyPerson[] = [];
     const [diagnoses, setDiagnoses] = useState<IDropdownObject[]>([]);
     const [benefitForms, setBenefitForms] = useState<IDropdownObject[]>([]);
     const [maritalStatuses, setMaritalStatuses] = useState<DropdownObject[]>([]);
     const [driversLicences, setDriversLicences] = useState<DropdownObject[]>([]);
     const workingContracts : WorkingContract[] = [];
+    
+    const handleClientInputChange = (fieldName: string, value: string) => {
+        setClient(prevClient => ({
+            ...prevClient,
+            [fieldName]: value
+        }));
+    };
+
+    const handleClientDatePickerChange = (fieldName: string, value: Moment | null) => {
+        setClient(prevClient => ({
+            ...prevClient,
+            [fieldName]: value
+        }));
+    };
+
+    const handleDropdownChange = (fieldName: string, value: string | number) => {
+        setClient(prevClient => ({
+            ...prevClient,
+            [fieldName]: value
+        }));
+    };
 
     const gendersDropdownOptions: DropdownObject[] = [
         {
@@ -98,11 +113,36 @@ const ClientCreate = () => {
     ];
 
     const addEmergencyPerson = ():EmergencyPerson => {
-        return {
+        const newEmergencyPerson: EmergencyPerson = {
             name: '',
             telephonenumber: ''
         };
+        setClient(prevClient => ({
+            ...prevClient,
+            emergencypeople: [...prevClient.emergencypeople!, newEmergencyPerson]
+        }));
+        return newEmergencyPerson;
     };
+
+    const handleEmergencyPersonChange = (updatedPerson: EmergencyPerson, index: number) => {
+        const updatedClient = { ...client };    
+        const updatedEmergencyPeople = [...updatedClient.emergencypeople!];
+    
+        updatedEmergencyPeople[index] = updatedPerson;
+        updatedClient.emergencypeople = updatedEmergencyPeople;
+    
+        setClient(updatedClient);
+    };
+
+    const onRemoveEmergencyPerson = (emergencyPerson: EmergencyPerson):void => {
+        let emergencyPeople: EmergencyPerson[] = client.emergencypeople ?? [];
+        emergencyPeople = emergencyPeople.filter(ep => ep !== emergencyPerson);
+
+        setClient(prevClient => ({
+            ...prevClient,
+            ["emergencypeople"]: emergencyPeople
+        }));
+    }
 
     const addWorkingContract = ():WorkingContract => {
         return {
@@ -113,6 +153,26 @@ const ClientCreate = () => {
             function: ''
         };
     };
+
+    const handleWorkingContractChange = (updatedWorkingContract: WorkingContract, index: number) => {
+        const updatedClient = { ...client };    
+        const updatedWorkingContracts = [...updatedClient.workingcontracts!];
+    
+        updatedWorkingContracts[index] = updatedWorkingContract;
+        updatedClient.workingcontracts = updatedWorkingContracts;
+    
+        setClient(updatedClient);
+    };
+
+    const onRemoveWorkingContract = (workingContract: WorkingContract):void => {
+        let workingContracts: WorkingContract[] = client.workingcontracts ?? [];
+        workingContracts = workingContracts.filter(wc => wc !== workingContract);
+
+        setClient(prevClient => ({
+            ...prevClient,
+            ["workingcontracts"]: workingContracts
+        }));
+    }
 
     useEffect(() => {
         const loadDiagnoses = async () => { 
@@ -216,7 +276,7 @@ const ClientCreate = () => {
                                 required={true} 
                                 placeholder='Voornaam' 
                                 value={client.firstname} 
-                                onChange={(value) => handleClientInputChange(keyof(client.firstname), value)} />
+                                onChange={(value) => handleClientInputChange('firstname', value)} />
                         </LabelField>
 
                         <LabelField text='Voorletters' required={true}>
@@ -229,50 +289,114 @@ const ClientCreate = () => {
                         </LabelField>
 
                         <LabelField text='Tussenvoegsel' required={false}>
-                            <InputField inputfieldtype={{type:'text'}} required={false} placeholder='b.v. de' value={client.prefixlastname} />
+                            <InputField 
+                                inputfieldtype={{type:'text'}} 
+                                required={false} 
+                                placeholder='b.v. de' 
+                                value={client.prefixlastname} 
+                                onChange={(value) => handleClientInputChange('prefixlastname', value)} />
                         </LabelField>
 
                         <LabelField text='Achternaam' required={true}>
-                            <InputField inputfieldtype={{type:'text'}} required={true} placeholder='Achternaam' value={client.lastname} />
+                            <InputField 
+                                inputfieldtype={{type:'text'}} 
+                                required={true} 
+                                placeholder='Achternaam' 
+                                value={client.lastname} 
+                                onChange={(value) => handleClientInputChange('lastname', value)} />
                         </LabelField>
 
                         <LabelField text='Straatadres' required={true}>
-                            <InputField inputfieldtype={{type:'text'}} required={true} placeholder='Adres' value={client.streetname} />
+                            <InputField 
+                                inputfieldtype={{type:'text'}} 
+                                required={true} 
+                                placeholder='Adres' 
+                                value={client.streetname} 
+                                onChange={(value) => handleClientInputChange('streetname', value)} />
                         </LabelField>
 
                         <LabelField text='Huisnummer' required={true}>
-                            <InputField inputfieldtype={{type:'text'}} required={true} placeholder='b.v. 11' className='house-number' value={client.housenumber} />
+                            <InputField 
+                                inputfieldtype={{type:'text'}} 
+                                required={true} 
+                                placeholder='b.v. 11' 
+                                className='house-number' 
+                                value={client.housenumber}
+                                onChange={(value) => handleClientInputChange('housenumber', value)} />
                             <LabelField text='Toevoeging' required={false} className='house-number-addition'>
-                                <InputField inputfieldtype={{type:'text'}} required={false} placeholder='b.v. A' className='house-number-addition-field' value={client.housenumberaddition} />
+                                <InputField 
+                                    inputfieldtype={{type:'text'}} 
+                                    required={false} 
+                                    placeholder='b.v. A' 
+                                    className='house-number-addition-field' 
+                                    value={client.housenumberaddition}
+                                    onChange={(value) => handleClientInputChange('housenumberaddition', value)} />
                             </LabelField>
                         </LabelField>
 
                         <LabelField text='Postcode' required={true}>
-                            <InputField inputfieldtype={{type:'text'}} required={true} placeholder='b.v. 1234 AA' value={client.postalcode} />
+                            <InputField 
+                                inputfieldtype={{type:'text'}} 
+                                required={true} 
+                                placeholder='b.v. 1234 AA' 
+                                value={client.postalcode}
+                                onChange={(value) => handleClientInputChange('postalcode', value)} />
                         </LabelField>
 
                         <LabelField text='Woonplaats' required={true}>
-                            <InputField inputfieldtype={{type:'text'}} required={true} placeholder='Woonplaats' value={client.residence} />
+                            <InputField 
+                                inputfieldtype={{type:'text'}} 
+                                required={true} 
+                                placeholder='Woonplaats' 
+                                value={client.residence}
+                                onChange={(value) => handleClientInputChange('residence', value)} />
                         </LabelField>
 
                         <LabelField text='Telefoon' required={true}>
-                            <InputField inputfieldtype={{type:'text'}} required={true} placeholder='b.v. 0543-123456' value={client.telephonenumber} />
+                            <InputField 
+                                inputfieldtype={{type:'text'}} 
+                                required={true} 
+                                placeholder='b.v. 0543-123456' 
+                                value={client.telephonenumber}
+                                onChange={(value) => handleClientInputChange('telephonenumber', value)} />
                         </LabelField>
 
                         <LabelField text='E-mail' required={true}>
-                            <InputField inputfieldtype={{type:'text'}} required={true} placeholder='b.v. mail@mailbox.com' value={client.emailaddress} />
+                            <InputField 
+                                inputfieldtype={{type:'text'}} 
+                                required={true} 
+                                placeholder='b.v. mail@mailbox.com' 
+                                value={client.emailaddress}
+                                onChange={(value) => handleClientInputChange('emailaddress', value)} />
                         </LabelField>
 
                         <LabelField text='Geboortedatum' required={true}>
-                            <DatePicker required={true} placeholder='Selecteer een datum' value={client.dateofbirth} />
+                            <DatePicker 
+                                required={true} 
+                                placeholder='Selecteer een datum' 
+                                value={client.dateofbirth}
+                                onChange={(value) => handleClientDatePickerChange('dateofbirth', value)} />
                         </LabelField>
 
                         <LabelField text='Geslacht' required={true}>
-                            <Dropdown options={gendersDropdownOptions} required={true} inputfieldname='geslacht'  />
+                            <Dropdown 
+                                options={gendersDropdownOptions} 
+                                required={true} 
+                                inputfieldname='geslacht'
+                                value={client.gender}
+                                onChange={(value) => handleDropdownChange('gender', value)} />
                         </LabelField>                       
                     </div>
 
-                    <DomainObjectInput label='In geval van nood' addObject={addEmergencyPerson} domainObjects={emergencyPersons} labelType='contactpersoon' typeName='EmergencyPerson' numMinimalRequired={1} />
+                    <DomainObjectInput 
+                        label='In geval van nood' 
+                        addObject={addEmergencyPerson} 
+                        domainObjects={client.emergencypeople!} 
+                        labelType='contactpersoon' 
+                        typeName='EmergencyPerson' 
+                        numMinimalRequired={1}
+                        onRemoveObject={onRemoveEmergencyPerson}
+                        onChangeObject={handleEmergencyPersonChange} />
 
                     <div className='client-remarks'>
                         <Label text='Opmerkingen' />
@@ -302,7 +426,16 @@ const ClientCreate = () => {
                             </LabelField>
                         </div>
 
-                        <DomainObjectInput label='Werkervaring' addObject={addWorkingContract} domainObjects={workingContracts} labelType='werkervaring' typeName='WorkingContract' numMinimalRequired={1} />
+                        <DomainObjectInput 
+                            label='Werkervaring' 
+                            addObject={addWorkingContract} 
+                            domainObjects={workingContracts} 
+                            labelType='werkervaring' 
+                            typeName='WorkingContract' 
+                            numMinimalRequired={1}
+                            onRemoveObject={onRemoveWorkingContract}
+                            onChangeObject={handleWorkingContractChange} />
+
                     </SlideToggleLabel>
 
                 </div>

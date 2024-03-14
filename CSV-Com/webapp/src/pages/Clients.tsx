@@ -12,7 +12,7 @@ import { ProfilePicture } from '../components/common/profile-picture';
 import { Copyright } from '../components/common/copyright';
 import { NavTitle } from '../components/nav/nav-title';
 import { SlideToggleLabel } from '../components/common/slide-toggle-label';
-import Client from '../types/model/Client';
+import ClientQuery from '../types/model/ClientQuery';
 import '../utils/Utilities';
 import Moment from 'moment';
 import { fetchClient } from '../utils/api';
@@ -28,7 +28,7 @@ const DATE_FORMAT = 'DD-MM-yyyy';
 function Clients() {
     const profilePicRowSpanValueDefault = 4;
 
-    const [client, setClient] = useState<Client | null>(null);
+    const [client, setClient] = useState<ClientQuery | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [profilePicSpanValue, setProfilePicSpanValue] = useState(profilePicRowSpanValueDefault);
     const [status, setStatus] = useState(StatusEnum.IDLE);
@@ -41,7 +41,7 @@ function Clients() {
     const fetchClientById = async () => {
         try {
           setStatus(StatusEnum.PENDING);
-          const fetchedClient: Client = await fetchClient(id!);
+          const fetchedClient: ClientQuery = await fetchClient(id!);
           setStatus(StatusEnum.SUCCESSFUL);
 
           setClient(fetchedClient);

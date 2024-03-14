@@ -14,9 +14,10 @@ const MOBILE_BREAKPOINT = 640;
 
 export interface DatePickerProps {
     placeholder: string,
-    value?: Date,
+    value?: Date | null,
     required: boolean,
-    className?: string
+    className?: string,
+    onChange?: (value: Moment.Moment | null) => void;
 }
 
 function GenerateAwesomeFontCalendarIcon() {
@@ -50,13 +51,22 @@ export const DatePicker = (props: DatePickerProps) => {
     };
   }, []);
 
+  const handleDateChange = (date: Moment.Moment | null) => {
+    if (date !== null) {
+      props.onChange?.(Moment(date));
+    } else {
+      props.onChange?.(null);
+    }
+  };
+
   return (
   <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale={LOCALE_PROVIDER}>
     {isMobileView ? (
       <MobileDatePickerControl.MobileDatePicker       
       label={props.placeholder} 
       className={`datepicker ${props.className}`}
-      value={props.value ? Moment(props.value) : null} />      
+      value={props.value ? Moment(props.value) : null}
+      onChange={handleDateChange} />
     ): (
       <DatePickerControl.DatePicker       
         label={props.placeholder}
@@ -66,7 +76,7 @@ export const DatePicker = (props: DatePickerProps) => {
         slotProps={{textField: {
           required: props.required
         }}}
-        
+        onChange={handleDateChange}
         sx={{      
           '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': { border: '2px solid b3b3b3' }, //Init state
           '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': { border: '2px solid #b3b3b3' },  // at hover state

@@ -1,7 +1,7 @@
 // apiMock.ts
-import Client from '../../types/model/Client';
+import ClientQuery from '../../types/model/ClientQuery';
 
-export const mockClient: Client = {
+export const mockClient: ClientQuery = {
     id: 1,
     firstname: 'John',
     lastname: 'Smith',
@@ -18,7 +18,7 @@ export const mockClient: Client = {
     driverslicences: 'A, B, BE'
 };
 
-export const fetchClient = async (clientId: string): Promise<Client> => {
+export const fetchClient = async (clientId: string): Promise<ClientQuery> => {
   console.log('API-mock wordt uitgevoerd');
   return Promise.resolve(mockClient);
 };

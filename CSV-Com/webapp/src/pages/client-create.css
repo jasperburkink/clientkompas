@@ -54,16 +54,21 @@
                 w-16
                 float-left;
             }
-
-            .house-number-addition label{
+        
+            .house-number-addition{
                 @apply
-                text-sm
-                w-12;
-            }
+                py-0;
 
-            .house-number-addition-field{
-                @apply
-                w-16;
+                label{
+                    @apply
+                    text-sm
+                    w-12;
+                }
+
+                .house-number-addition-field{
+                    @apply
+                    w-16;
+                }
             }
         }
 

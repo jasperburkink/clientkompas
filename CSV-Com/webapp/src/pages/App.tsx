@@ -75,7 +75,7 @@ function App() {
         telephonenumber: '0123456789'
       };
 
-    const emergencyPersons : EmergencyPerson[] = [emergencyPerson, emergencyPerson2];
+    const [emergencyPeople, setEmergencyPeople] = useState<EmergencyPerson[]>([emergencyPerson, emergencyPerson2]);
 
     const addEmergencyPerson = ():EmergencyPerson => {
         return {
@@ -83,6 +83,16 @@ function App() {
             telephonenumber: ''
         };
     };
+
+    const handleEmergencyPersonChange = (updatedEmergencyPerson: EmergencyPerson, index: number) => {
+        const updatedEmergencyPeople = emergencyPeople;    
+        updatedEmergencyPeople[index] = updatedEmergencyPerson;
+        setEmergencyPeople(updatedEmergencyPeople);
+    };
+
+    const onRemoveEmergencyPerson = (emergencyPerson: EmergencyPerson):void => {
+        console.log(`onRemoveObject`);
+    }
       
     const workingContract: WorkingContract = {
         companyname: 'SB-ICT',
@@ -100,7 +110,7 @@ function App() {
         function: 'Verkoper'
       };
 
-      const workingContracts : WorkingContract[] = [workingContract, workingContract2];
+      const [workingContracts, setWorkingContracts] = useState<WorkingContract[]>([workingContract, workingContract2]);
 
       const addWorkingContract = ():WorkingContract => {
         return {
@@ -111,6 +121,16 @@ function App() {
             function: ''
         };
     };
+
+    const handleWorkingContractChange = (updatedWorkingContract: WorkingContract, index: number) => {
+        const updatedWorkingContracts = workingContracts;    
+        updatedWorkingContracts[index] = updatedWorkingContract;
+        setWorkingContracts(updatedWorkingContracts);
+    };
+
+    const onRemoveWorkingContract = (workingContract: WorkingContract):void => {
+        console.log(`onRemoveObject`);
+    }
 
     return (
         <div className="flex flex-col lg:flex-row h-screen lg:h-auto">
@@ -283,9 +303,25 @@ function App() {
                     } />
                     <ErrorPopup isOpen={isErrorPopupOpen} onClose={() => {}} error={cvsError} />
               
-                    <DomainObjectInput label='Inputvelden voor contactpersoon' addObject={addEmergencyPerson} domainObjects={emergencyPersons} labelType='contactpersoon' typeName='EmergencyPerson' numMinimalRequired={1} />
+                    <DomainObjectInput                    
+                        label='Inputvelden voor contactpersoon' 
+                        addObject={addEmergencyPerson} 
+                        domainObjects={emergencyPeople} 
+                        labelType='contactpersoon' 
+                        typeName='EmergencyPerson' 
+                        numMinimalRequired={1}
+                        onRemoveObject={onRemoveEmergencyPerson}
+                        onChangeObject={handleEmergencyPersonChange} />
 
-                    <DomainObjectInput label='Inputvelden voor werkervaring' addObject={addWorkingContract} domainObjects={workingContracts} labelType='werkervaring' typeName='WorkingContract' numMinimalRequired={2} />
+                    <DomainObjectInput 
+                        label='Inputvelden voor werkervaring' 
+                        addObject={addWorkingContract} 
+                        domainObjects={workingContracts} 
+                        labelType='werkervaring' 
+                        typeName='WorkingContract' 
+                        numMinimalRequired={2}
+                        onRemoveObject={onRemoveWorkingContract}
+                        onChangeObject={handleWorkingContractChange} />
 
                     <p>Bevestigings pop-up met één button</p>
                     <Button buttonType={{type:"Solid"}} text="Toon pop-up met één button" className='w-200px h-50px' 
