@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import SearchForm from '../common/search-form';
-import ResultItem  from '../../types/common/ResultItem';
-import ResultsList from '../common/results-list';
-import { searchClients } from '../../utils/api';
-import ClientQuery, { getCompleteClientName } from '../../types/model/ClientQuery';
-import StatusEnum from '../../types/common/StatusEnum';
+import SearchForm from 'components/common/search-form';
+import ResultItem  from 'types/common/ResultItem';
+import ResultsList from 'components/common/results-list';
+import { searchClients } from 'utils/api';
+import ClientQuery, { getCompleteClientName } from 'types/model/ClientQuery';
+import StatusEnum from 'types/common/StatusEnum';
 
 const NO_RESULT_TEXT = 'Er zijn geen cliënten gevonden die aan de zoekcriteria voldoen.';
 const TYPEING_TIMEOUT = 500;

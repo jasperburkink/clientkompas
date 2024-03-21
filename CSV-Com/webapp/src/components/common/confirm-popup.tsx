@@ -1,5 +1,5 @@
 import './confirm-popup.css';
-import { Button, ButtonProps } from '../../components/common/button';
+import { Button, ButtonProps } from 'components/common/button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark} from "@fortawesome/free-solid-svg-icons";
 

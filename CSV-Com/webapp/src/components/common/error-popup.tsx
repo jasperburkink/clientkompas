@@ -1,7 +1,7 @@
-import CvsError from '../../types/common/cvs-error';
+import CvsError from 'types/common/cvs-error';
 import './error-popup.css';
-import { Button } from '../../components/common/button';
-import { Header } from '../../components/common/header';
+import { Button } from 'components/common/button';
+import { Header } from 'components/common/header';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTriangleExclamation, faXmark} from "@fortawesome/free-solid-svg-icons";
 

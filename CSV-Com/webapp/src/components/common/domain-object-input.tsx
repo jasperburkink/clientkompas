@@ -1,13 +1,13 @@
 import { useState }  from 'react';
-import { Label } from '../../components/common/label';
-import { Button } from '../../components/common/button';
-import LabelField from '../../components/common/label-field';
-import { InputField } from '../../components/common/input-field';
-import { DatePicker } from '../../components/common/datepicker';
+import { Label } from 'components/common/label';
+import { Button } from 'components/common/button';
+import LabelField from 'components/common/label-field';
+import { InputField } from 'components/common/input-field';
+import { DatePicker } from 'components/common/datepicker';
 import './domain-object-input.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark} from "@fortawesome/free-solid-svg-icons";
-import CustomLabels from '../../types/common/labels';
+import CustomLabels from 'types/common/labels';
 
 interface DomainObjectInputProps<T>{
     label: string;

@@ -1,6 +1,6 @@
 import React from 'react';
 import './input-field.css';
-import { InputFieldType } from '../../types/common/InputFieldComponentType';
+import { InputFieldType } from 'types/common/InputFieldComponentType';
 
 export interface InputFieldProps {
     value?: string,
