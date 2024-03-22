@@ -13,7 +13,7 @@ import { Copyright } from 'components/common/copyright';
 import { NavTitle } from 'components/nav/nav-title';
 import { SlideToggleLabel } from 'components/common/slide-toggle-label';
 import ClientQuery from 'types/model/ClientQuery';
-import 'utils/Utilities';
+import 'utils/utilities';
 import Moment from 'moment';
 import { fetchClient } from 'utils/api';
 import SearchClients from 'components/clients/search-clients';

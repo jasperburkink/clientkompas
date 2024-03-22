@@ -20,6 +20,7 @@ import ConfirmPopup from "components/common/confirm-popup";
 import SaveButton from 'components/common/SaveButton';
 import { Dropdown } from 'components/common/dropdown';
 import DropdownWithButton from "components/common/dropdown-with-button";
+import DropdownBoolean from 'components/common/dropdown-boolean';
 import PasswordField from 'components/common/password-field';
 import ErrorPopup from 'components/common/error-popup';
 import CvsError from 'types/common/cvs-error';
