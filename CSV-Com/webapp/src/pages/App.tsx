@@ -21,6 +21,7 @@ import ConfirmPopup from "../components/common/confirm-popup";
 import SaveButton from '../components/common/SaveButton';
 import { Dropdown } from '../components/common/dropdown';
 import DropdownWithButton from "../components/common/dropdown-with-button";
+import DropdownBoolean from '../components/common/dropdown-boolean';
 import PasswordField from '../components/common/password-field';
 import ErrorPopup from '../components/common/error-popup';
 import CvsError from '../types/common/cvs-error';
@@ -263,17 +264,12 @@ function App() {
                     <p>Dropdown with button</p>
                     <DropdownWithButton options={data} required={false} inputfieldname='dropdownWithButton' />
 
+                    <p>Dropdown Boolean</p>
+                    <DropdownBoolean required={false} inputfieldname='dropdownboolean' />
+
                     <p>Wachtwoord input</p>
                     <PasswordField inputfieldname='password' placeholder='Wachtwoord' />
-                                                
-                    <p>PopUp component</p>
-                    <PopUp
-                    handleClick={handleClick}
-                    handleCancelClick={handleCancelClick} 
-                    buttonText="placeholder1" 
-                    text="placeholder2"
-                    />    
-
+                                            
                     <p>Save button component</p>
                     <SaveButton
                     buttonText= "placeholder 1"
@@ -290,7 +286,7 @@ function App() {
                     {
                         ()=> {setErrorPopupOpen(true);}
                     } />
-                    <ErrorPopup isErrorPopupOpen={isErrorPopupOpen} setErrorPopupOpen={setErrorPopupOpen} error={cvsError} />
+                    {/* <ErrorPopup isErrorPopupOpen={isErrorPopupOpen} setErrorPopupOpen={setErrorPopupOpen} error={cvsError} /> */}
               
                     <DomainObjectInput label='Inputvelden voor contactpersoon' addObject={addEmergencyPerson} domainObjects={emergencyPersons} labelType='contactpersoon' typeName='EmergencyPerson' numMinimalRequired={1} />
 
