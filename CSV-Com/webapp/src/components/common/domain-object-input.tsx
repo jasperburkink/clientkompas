@@ -1,12 +1,13 @@
 import { useState }  from 'react';
-import { Label } from '../../components/common/label';
-import { Button } from '../../components/common/button';
-import { DatePickerWithLabel } from '../../components/common/datepicker-with-label';
-import { InputFieldWithLabel } from '../../components/common/input-field-with-label';
+import { Label } from 'components/common/label';
+import { Button } from 'components/common/button';
+import LabelField from 'components/common/label-field';
+import { InputField } from 'components/common/input-field';
+import { DatePicker } from 'components/common/datepicker';
 import './domain-object-input.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark} from "@fortawesome/free-solid-svg-icons";
-import CustomLabels from '../../types/common/labels';
+import CustomLabels from 'types/common/labels';
 
 interface DomainObjectInputProps<T>{
     label: string;
@@ -15,10 +16,23 @@ interface DomainObjectInputProps<T>{
     numMinimalRequired?: number;    
     addObject: () => T;
     typeName: keyof typeof CustomLabels;
+    onRemoveObject: (removedObject: T) => void;
+    onChangeObject: (updatedObject: T, index: number) => void;
 }
 
 const DomainObjectInput = <T extends Record<string, any>>(props: DomainObjectInputProps<T>) => {
-        const [domainObjects, setDomainObjects] = useState<T[]>(props.domainObjects);
+        const [domainObjects, setDomainObjects] = useState<T[]>(() => {
+            const defaultObjects:T[] = props.domainObjects;
+
+            if(props.numMinimalRequired) {
+                for (let i = 0; defaultObjects.length < props.numMinimalRequired && i < props.numMinimalRequired; i++) {
+                    const newObject: T = props.addObject();
+                    defaultObjects.push(newObject);
+                }
+            }
+
+            return defaultObjects;
+        });
 
         const handleAddObject = () => {
             const newDomainObject: T = props.addObject();
@@ -28,6 +42,7 @@ const DomainObjectInput = <T extends Record<string, any>>(props: DomainObjectInp
         const handleRemoveObject = (domainObjectToRemove: T) => {
             const updatedDomainObjects: T[] = domainObjects.filter(obj => obj !== domainObjectToRemove);
             setDomainObjects(updatedDomainObjects);
+            props.onRemoveObject(domainObjectToRemove);
         };
 
         const inputFields = domainObjects.map((domainObject, index) => {            
@@ -48,7 +63,19 @@ const DomainObjectInput = <T extends Record<string, any>>(props: DomainObjectInp
                         const isLastField = idx === objectEntries.length - 1;
 
                         return (     
-                            getDomainObjectField<T>(key, inputType, textValue, value, requiredDomainObject, isLastField, handleRemoveObject, domainObject, isOddNumberOfFields, isFirstField)
+                            getDomainObjectField<T>(
+                                key, 
+                                inputType, 
+                                textValue, 
+                                value, 
+                                requiredDomainObject, 
+                                isLastField, 
+                                handleRemoveObject, 
+                                domainObject, 
+                                isOddNumberOfFields, 
+                                isFirstField,
+                                (updatedValue: string, index: number) => props.onChangeObject({...domainObject, [key]: updatedValue}, index),
+                                index)
                         );
                     })}
                     </div>              
@@ -66,10 +93,12 @@ const DomainObjectInput = <T extends Record<string, any>>(props: DomainObjectInp
 
 export default DomainObjectInput;
 
-function getDomainObjectField<T extends Record<string, any>>(key: string, inputType: string, textValue: string, value: any, requiredDomainObject: boolean, isLastField: boolean, handleRemoveObject: (domainObjectToRemove: T) => void, domainObject: T, isOddNumberOfFields: boolean, isFirstField: boolean) {
+function getDomainObjectField<T extends Record<string, any>>(key: string, inputType: string, textValue: string, value: any, requiredDomainObject: boolean, isLastField: boolean, handleRemoveObject: (domainObjectToRemove: T) => void, domainObject: T, isOddNumberOfFields: boolean, isFirstField: boolean, onChange: (updatedValue: string, index: number) => void, index: number) {
     return <>
         <div key={key} className="domain-object-field">
-            {inputType === 'date' ? getDateField(textValue, requiredDomainObject, value) : getTextField(textValue, requiredDomainObject, value)}
+            {inputType === 'date' 
+                ? getDateField(textValue, requiredDomainObject, value) 
+                : getTextField(textValue, requiredDomainObject, value, onChange, index)}
             {isLastField && !requiredDomainObject && (
                 <div className='domain-object-remove-button' onClick={() => { handleRemoveObject(domainObject); } }>
                     <FontAwesomeIcon icon={faXmark} className="fa-solid fa-xl" />
@@ -82,26 +111,30 @@ function getDomainObjectField<T extends Record<string, any>>(key: string, inputT
 
 function getDateField(textValue: string, requiredDomainObject: boolean, value: Date) {
     return <div>
-        <DatePickerWithLabel
-            text={textValue}
-            datePickerProps={{
-                value: value,
-                placeholder: 'Selecteer een datum',
-                required: requiredDomainObject
-            }} />
+        <LabelField text={textValue} required={requiredDomainObject}>
+            <DatePicker 
+                placeholder='Selecteer een datum' 
+                required={requiredDomainObject} 
+                value={value} />
+        </LabelField>        
     </div>;
 }
 
-function getTextField(textValue: string, requiredDomainObject: boolean, value: string) {
+function getTextField(
+    textValue: string, 
+    requiredDomainObject: boolean, 
+    value: string, 
+    onChange: (updatedValue: string, index: number) => void, 
+    index: number) {
     return <div className="flex-grow">
-        <InputFieldWithLabel
-            text={textValue}
-            inputFieldProps={{
-                required: requiredDomainObject,
-                placeholder: 'Placeholder',
-                inputfieldtype: { type: 'text' },
-                value: value
-            }} />
+        <LabelField text={textValue} required={requiredDomainObject}>
+            <InputField 
+                inputfieldtype={{type:'text'}} 
+                value={value} 
+                required={requiredDomainObject} 
+                placeholder='TODO:placeholder' 
+                onChange={(event) => onChange(event, index)} />
+        </LabelField>
     </div>;
 }
 

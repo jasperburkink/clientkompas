@@ -1,34 +1,33 @@
 import './App.css';
 import '../index.css';
 import { useState } from 'react';
-import { Header } from '../components/common/header';
-import { Label } from '../components/common/label';
-import { Button } from '../components/common/button';
-import { LinkButton } from '../components/common/link-button';
-import { Sidebar } from '../components/sidebar/sidebar';
-import { NavButton } from '../components/nav/nav-button';
-import { SidebarGray } from '../components/sidebar/sidebar-gray';
-import { ProfilePicture } from '../components/common/profile-picture';
-import { Copyright } from '../components/common/copyright';
-import { InputField } from '../components/common/input-field';
-import { NavButtonGray } from '../components/nav/nav-button-gray';
-import { NavTitle } from '../components/nav/nav-title';
-import { InputFieldWithLabel } from '../components/common/input-field-with-label';
-import { SlideToggleLabel } from '../components/common/slide-toggle-label';
-import { DatePicker } from '../components/common/datepicker';
-import Textarea from "../components/common/Textarea";
-import ConfirmPopup from "../components/common/confirm-popup";
-import SaveButton from '../components/common/SaveButton';
-import { Dropdown } from '../components/common/dropdown';
-import DropdownWithButton from "../components/common/dropdown-with-button";
-import DropdownBoolean from '../components/common/dropdown-boolean';
-import PasswordField from '../components/common/password-field';
-import ErrorPopup from '../components/common/error-popup';
-import CvsError from '../types/common/cvs-error';
-import DomainObjectInput from '../components/common/domain-object-input';
-import EmergencyPerson from '../types/model/EmergencyPerson';
-import WorkingContract from '../types/model/WorkingContract';
-import { DatePickerWithLabel } from '../components/common/datepicker-with-label';
+import { Header } from 'components/common/header';
+import { Label } from 'components/common/label';
+import { Button } from 'components/common/button';
+import { LinkButton } from 'components/common/link-button';
+import { Sidebar } from 'components/sidebar/sidebar';
+import { NavButton } from 'components/nav/nav-button';
+import { SidebarGray } from 'components/sidebar/sidebar-gray';
+import { ProfilePicture } from 'components/common/profile-picture';
+import { Copyright } from 'components/common/copyright';
+import { InputField } from 'components/common/input-field';
+import { NavButtonGray } from 'components/nav/nav-button-gray';
+import { NavTitle } from 'components/nav/nav-title';
+import { SlideToggleLabel } from 'components/common/slide-toggle-label';
+import { DatePicker } from 'components/common/datepicker';
+import Textarea from "components/common/Textarea";
+import ConfirmPopup from "components/common/confirm-popup";
+import SaveButton from 'components/common/SaveButton';
+import { Dropdown } from 'components/common/dropdown';
+import DropdownWithButton from "components/common/dropdown-with-button";
+import DropdownBoolean from 'components/common/dropdown-boolean';
+import PasswordField from 'components/common/password-field';
+import ErrorPopup from 'components/common/error-popup';
+import CvsError from 'types/common/cvs-error';
+import DomainObjectInput from 'components/common/domain-object-input';
+import EmergencyPerson from 'types/model/EmergencyPerson';
+import WorkingContract from 'types/model/WorkingContract';
+import LabelField from 'components/common/label-field';
 
 function App() {
     const data = [
@@ -77,7 +76,7 @@ function App() {
         telephonenumber: '0123456789'
       };
 
-    const emergencyPersons : EmergencyPerson[] = [emergencyPerson, emergencyPerson2];
+    const [emergencyPeople, setEmergencyPeople] = useState<EmergencyPerson[]>([emergencyPerson, emergencyPerson2]);
 
     const addEmergencyPerson = ():EmergencyPerson => {
         return {
@@ -85,6 +84,16 @@ function App() {
             telephonenumber: ''
         };
     };
+
+    const handleEmergencyPersonChange = (updatedEmergencyPerson: EmergencyPerson, index: number) => {
+        const updatedEmergencyPeople = emergencyPeople;    
+        updatedEmergencyPeople[index] = updatedEmergencyPerson;
+        setEmergencyPeople(updatedEmergencyPeople);
+    };
+
+    const onRemoveEmergencyPerson = (emergencyPerson: EmergencyPerson):void => {
+        console.log(`onRemoveObject`);
+    }
       
     const workingContract: WorkingContract = {
         companyname: 'SB-ICT',
@@ -102,7 +111,7 @@ function App() {
         function: 'Verkoper'
       };
 
-      const workingContracts : WorkingContract[] = [workingContract, workingContract2];
+      const [workingContracts, setWorkingContracts] = useState<WorkingContract[]>([workingContract, workingContract2]);
 
       const addWorkingContract = ():WorkingContract => {
         return {
@@ -113,6 +122,16 @@ function App() {
             function: ''
         };
     };
+
+    const handleWorkingContractChange = (updatedWorkingContract: WorkingContract, index: number) => {
+        const updatedWorkingContracts = workingContracts;    
+        updatedWorkingContracts[index] = updatedWorkingContract;
+        setWorkingContracts(updatedWorkingContracts);
+    };
+
+    const onRemoveWorkingContract = (workingContract: WorkingContract):void => {
+        console.log(`onRemoveObject`);
+    }
 
     return (
         <div className="flex flex-col lg:flex-row h-screen lg:h-auto">
@@ -226,11 +245,10 @@ function App() {
                     <p>Inputfield required</p>
                     <InputField inputfieldtype={{type:'text'}} required={true} placeholder='Placeholder' />
 
-                    <p>Inputfield with label</p>
-                    <InputFieldWithLabel text='TextField' inputFieldProps={{ required: false, placeholder:'Placeholder', inputfieldtype:{ type:'text'} }} />
-
-                    <p>Inputfield required with label </p>
-                    <InputFieldWithLabel text='TextField' inputFieldProps={{ required: true, placeholder:'Placeholder', inputfieldtype:{ type:'text'} }} />
+                    <p>LabelField with inputfield</p>
+                    <LabelField text='LabelField inputfield' required={true}>
+                        <InputField inputfieldtype={{type:'text'}} required={true} placeholder='Placeholder' />
+                    </LabelField>                    
 
                     <p>Slide toggle label</p>
                     <SlideToggleLabel textColapsed='Klap uit!' textExpanded='Klap in!' >
@@ -240,14 +258,10 @@ function App() {
                     <p>Date picker</p>                    
                     <DatePicker placeholder='Selecteer een datum' required={true} />
 
-                    <p>Date picker met label</p>
-                    <DatePickerWithLabel
-                        text='Datepicker met label'
-                        datePickerProps={{
-                            placeholder:'Selecteer een datum',
-                            required: true
-                        }}
-                    />
+                    <p>LabelField with datepicker</p>
+                    <LabelField text='LabelField datepicker' required={true}>
+                        <DatePicker placeholder='Selecteer een datum' required={true} />
+                    </LabelField>
 
                     <p>ProfilePicture empty</p>
                     <ProfilePicture />
@@ -260,6 +274,11 @@ function App() {
 
                     <p>Dropdown</p>
                     <Dropdown options={data} required={false} inputfieldname='dropdown' />
+
+                    <p>LabelField with dropdownlist</p>
+                    <LabelField text='LabelField dropdownlist' required={true}>
+                        <Dropdown options={data} required={false} inputfieldname='dropdown' />
+                    </LabelField>
                 
                     <p>Dropdown with button</p>
                     <DropdownWithButton options={data} required={false} inputfieldname='dropdownWithButton' />
@@ -288,9 +307,25 @@ function App() {
                     } />
                     {/* <ErrorPopup isErrorPopupOpen={isErrorPopupOpen} setErrorPopupOpen={setErrorPopupOpen} error={cvsError} /> */}
               
-                    <DomainObjectInput label='Inputvelden voor contactpersoon' addObject={addEmergencyPerson} domainObjects={emergencyPersons} labelType='contactpersoon' typeName='EmergencyPerson' numMinimalRequired={1} />
+                    <DomainObjectInput                    
+                        label='Inputvelden voor contactpersoon' 
+                        addObject={addEmergencyPerson} 
+                        domainObjects={emergencyPeople} 
+                        labelType='contactpersoon' 
+                        typeName='EmergencyPerson' 
+                        numMinimalRequired={1}
+                        onRemoveObject={onRemoveEmergencyPerson}
+                        onChangeObject={handleEmergencyPersonChange} />
 
-                    <DomainObjectInput label='Inputvelden voor werkervaring' addObject={addWorkingContract} domainObjects={workingContracts} labelType='werkervaring' typeName='WorkingContract' numMinimalRequired={2} />
+                    <DomainObjectInput 
+                        label='Inputvelden voor werkervaring' 
+                        addObject={addWorkingContract} 
+                        domainObjects={workingContracts} 
+                        labelType='werkervaring' 
+                        typeName='WorkingContract' 
+                        numMinimalRequired={2}
+                        onRemoveObject={onRemoveWorkingContract}
+                        onChangeObject={handleWorkingContractChange} />
 
                     <p>Bevestigings pop-up met één button</p>
                     <Button buttonType={{type:"Solid"}} text="Toon pop-up met één button" className='w-200px h-50px' 
@@ -303,24 +338,24 @@ function App() {
 
                     <p>Bevestigings pop-up met twee buttons</p>
                     <Button buttonType={{type:"Solid"}} text="Toon pop-up met twee buttons" className='w-200px h-50px' 
-                    onClick={() => setConfirmPopupTwoButtonsOpen(true)} />
-                    <ConfirmPopup
-                    message="Dit is een bevestigings pop-up met twee knoppen"
-                    isOpen={isConfirmPopupTwoButtonsOpen}
-                    onClose={handlePopUpCancelClick}
-                    buttons={
-                        [
-                            { text: 'Bevestigen', onClick: handlePopUpConfirmClick, buttonType: {type:"Solid"}},
-                            { text: 'Annuleren', onClick: handlePopUpCancelClick, buttonType: {type:"NotSolid"}},
-                        ]} />
+                        onClick={() => setConfirmPopupTwoButtonsOpen(true)} />
+                        <ConfirmPopup
+                        message="Dit is een bevestigings pop-up met twee knoppen"
+                        isOpen={isConfirmPopupTwoButtonsOpen}
+                        onClose={handlePopUpCancelClick}
+                        buttons={
+                            [
+                                { text: 'Bevestigen', onClick: handlePopUpConfirmClick, buttonType: {type:"Solid"}},
+                                { text: 'Annuleren', onClick: handlePopUpCancelClick, buttonType: {type:"NotSolid"}},
+                            ]} />
 
                     <p>Foutmelding pop-up</p>
                     <Button buttonType={{type:"Solid"}} text="Toon foutmelding" className='w-200px h-50px' 
-                    onClick={() => setErrorPopupOpen(true)} />
-                    <ErrorPopup 
-                    error={cvsError} 
-                    isOpen={isErrorPopupOpen}
-                    onClose={() => setErrorPopupOpen(false)} />  
+                        onClick={() => setErrorPopupOpen(true)} />
+                        <ErrorPopup 
+                        error={cvsError} 
+                        isOpen={isErrorPopupOpen}
+                        onClose={() => setErrorPopupOpen(false)} />  
                 </div>
             <Copyright />
         </div>

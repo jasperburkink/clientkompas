@@ -1,11 +1,11 @@
-import '../../index.css';
+import 'index.css';
 
 import { Sidebar } from './sidebar';
 import { SidebarGray } from './sidebar-gray';
-import { NavButton } from '../nav/nav-button';
-import { NavButtonGray } from '../nav/nav-button-gray';
+import { NavButton } from 'nav/nav-button';
+import { NavButtonGray } from 'nav/nav-button-gray';
 // import { SearchInputField } from '../common/search-input-field';
-import { NavTitle } from '../nav/nav-title';
+import { NavTitle } from 'nav/nav-title';
 
 export function SidebarFull(props) {  
   

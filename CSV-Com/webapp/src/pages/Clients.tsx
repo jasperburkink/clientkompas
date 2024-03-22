@@ -2,25 +2,25 @@ import '../styles/pages/Client.css';
 
 import React, { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom';
-import { Header } from '../components/common/header';
-import { Label } from '../components/common/label';
-import { LinkButton } from '../components/common/link-button';
-import { Sidebar } from '../components/sidebar/sidebar';
-import { NavButton } from '../components/nav/nav-button';
-import { SidebarGray } from '../components/sidebar/sidebar-gray';
-import { ProfilePicture } from '../components/common/profile-picture';
-import { Copyright } from '../components/common/copyright';
-import { NavTitle } from '../components/nav/nav-title';
-import { SlideToggleLabel } from '../components/common/slide-toggle-label';
-import Client from '../types/model/Client';
-import '../utils/utilities';
+import { Header } from 'components/common/header';
+import { Label } from 'components/common/label';
+import { LinkButton } from 'components/common/link-button';
+import { Sidebar } from 'components/sidebar/sidebar';
+import { NavButton } from 'components/nav/nav-button';
+import { SidebarGray } from 'components/sidebar/sidebar-gray';
+import { ProfilePicture } from 'components/common/profile-picture';
+import { Copyright } from 'components/common/copyright';
+import { NavTitle } from 'components/nav/nav-title';
+import { SlideToggleLabel } from 'components/common/slide-toggle-label';
+import ClientQuery from 'types/model/ClientQuery';
+import 'utils/utilities';
 import Moment from 'moment';
-import { fetchClient } from '../utils/api';
-import SearchClients from '../components/clients/search-clients';
-import StatusEnum from '../types/common/StatusEnum';
+import { fetchClient } from 'utils/api';
+import SearchClients from 'components/clients/search-clients';
+import StatusEnum from 'types/common/StatusEnum';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-import { DatePicker } from '../components/common/datepicker';
+import { DatePicker } from 'components/common/datepicker';
 
 const NO_INFO = 'Geen informatie beschikbaar';
 const DATE_FORMAT = 'DD-MM-yyyy';
@@ -28,7 +28,7 @@ const DATE_FORMAT = 'DD-MM-yyyy';
 function Clients() {
     const profilePicRowSpanValueDefault = 4;
 
-    const [client, setClient] = useState<Client | null>(null);
+    const [client, setClient] = useState<ClientQuery | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [profilePicSpanValue, setProfilePicSpanValue] = useState(profilePicRowSpanValueDefault);
     const [status, setStatus] = useState(StatusEnum.IDLE);
@@ -41,7 +41,7 @@ function Clients() {
     const fetchClientById = async () => {
         try {
           setStatus(StatusEnum.PENDING);
-          const fetchedClient: Client = await fetchClient(id!);
+          const fetchedClient: ClientQuery = await fetchClient(id!);
           setStatus(StatusEnum.SUCCESSFUL);
 
           setClient(fetchedClient);

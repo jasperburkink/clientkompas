@@ -1,16 +1,13 @@
-import BenefitForm from "./BenefitForm";
-import Diagnosis from "./Diagnosis";
-import DriversLicence from "./DriversLicence";
 import EmergencyPerson from "./EmergencyPerson";
 import WorkingContract from "./WorkingContract";
 
-export default interface Client {
+export default interface ClientQuery {
     id: number;
     firstname: string;
     initials: string;
     prefixlastname?: string;
     lastname: string;
-    gender: number;
+    gender: string;
     streetname: string;
     housenumber: string;
     housenumberaddition?: string;
@@ -20,10 +17,14 @@ export default interface Client {
     dateofbirth: Date;
     emailaddress: string;
     maritalstatus: string;
-    driverslicences: DriversLicence[];
-    diagnoses?: Diagnosis[];
-    benefitform?: BenefitForm[];
+    driverslicences: string;
+    diagnoses?: string;
+    benefitform?: string;
     remarks?: string;
     emergencypeople?: EmergencyPerson[];
     workingcontracts?: WorkingContract[];
 }
+
+export function getCompleteClientName(client: ClientQuery): string {
+    return `${client.prefixlastname ? `${client.prefixlastname} ` : ''}${client.lastname}, ${client.firstname}`;
+};
