@@ -1,16 +1,16 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
-import Clients from '../../../pages/Clients';
+import Clients from 'pages/Clients';
 //import { mockClientData } from '../../../utils/mocks/api';
-import * as ApiModule from '../../../utils/api';
+import * as ApiModule from 'utils/api';
 import { Console } from 'console';
 
 // jest.mock('../../../utils/api', () => ({
 //     fetchClient: jest.fn(),
 //   }));
 
-jest.mock('../../../utils/api.ts');
+jest.mock('utils/api.ts');
 
 describe('ClientPage', () => {
     // beforeEach(() => {

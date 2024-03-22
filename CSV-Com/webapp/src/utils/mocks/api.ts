@@ -1,5 +1,5 @@
 // apiMock.ts
-import ClientQuery from '../../types/model/ClientQuery';
+import ClientQuery from 'types/model/ClientQuery';
 
 export const mockClient: ClientQuery = {
     id: 1,

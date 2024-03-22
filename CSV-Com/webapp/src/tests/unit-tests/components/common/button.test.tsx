@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom'
-import { Button } from '../../../../components/common/button';
+import { Button } from 'components/common/button';
 
 
 test("Renders_MainFlow_RendersSuccessfully", () => {

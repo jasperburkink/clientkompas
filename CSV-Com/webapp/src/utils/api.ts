@@ -1,9 +1,9 @@
-import ClientQuery from "../types/model/ClientQuery";
-import BenefitForm from "../types/model/BenefitForm";
-import Diagnosis from "../types/model/Diagnosis";
-import MaritalStatus from "../types/model/MaritalStatus";
-import DriversLicence from "../types/model/DriversLicence";
-import Client from "../types/model/Client";
+import ClientQuery from "types/model/ClientQuery";
+import BenefitForm from "types/model/BenefitForm";
+import Diagnosis from "types/model/Diagnosis";
+import MaritalStatus from "types/model/MaritalStatus";
+import DriversLicence from "types/model/DriversLicence";
+import Client from "types/model/Client";
 
 const apiUrl = 'https://localhost:32768/api/';
 
