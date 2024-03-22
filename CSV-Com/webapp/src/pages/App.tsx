@@ -282,9 +282,12 @@ function App() {
                     <p>Dropdown with button</p>
                     <DropdownWithButton options={data} required={false} inputfieldname='dropdownWithButton' />
 
-                    <p>Wachtwoord input</p>
-                    <PasswordField inputfieldname='password' placeholder='Wachtwoord' />                                                                  
+                    <p>Dropdown Boolean</p>
+                    <DropdownBoolean required={false} inputfieldname='dropdownboolean' />
 
+                    <p>Wachtwoord input</p>
+                    <PasswordField inputfieldname='password' placeholder='Wachtwoord' />
+                                            
                     <p>Save button component</p>
                     <SaveButton
                     buttonText= "placeholder 1"
@@ -301,7 +304,7 @@ function App() {
                     {
                         ()=> {setErrorPopupOpen(true);}
                     } />
-                    <ErrorPopup isOpen={isErrorPopupOpen} onClose={() => {}} error={cvsError} />
+                    {/* <ErrorPopup isErrorPopupOpen={isErrorPopupOpen} setErrorPopupOpen={setErrorPopupOpen} error={cvsError} /> */}
               
                     <DomainObjectInput                    
                         label='Inputvelden voor contactpersoon' 
