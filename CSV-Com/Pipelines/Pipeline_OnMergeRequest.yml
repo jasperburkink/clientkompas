@@ -53,7 +53,7 @@ dotnet-test:
 node-build:
   before_script:
   - cd $SOLUTION_FOLDER/$NODE_FOLDER
-  - npm install
+  - yarn install
   - export CI=false
   stage: build
   script:

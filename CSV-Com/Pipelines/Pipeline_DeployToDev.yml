@@ -18,10 +18,10 @@ variables:
   NODE_DOCKER_IMAGE_FILENAME: "node_docker_image"
 
 stages: 
-  - image-build-sync-test      
-  - image-build-sync-dev      
   - build
-  - test      
+  - test     
+  - image-build-sync-dev
+  - image-build-sync-test
 
 dotnet-build:
   before_script:

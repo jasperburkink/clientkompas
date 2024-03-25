@@ -40,7 +40,8 @@
     "build:test": "REACT_APP_ENV=test npm run build",
     "start:test": "REACT_APP_ENV=test npm run start",
     "build:ocdev": "REACT_APP_ENV=ocdev npm run build",
-    "start:ocdev": "REACT_APP_ENV=ocdev npm run start"
+    "start:ocdev": "REACT_APP_ENV=ocdev npm run start",
+    "start:local": "REACT_APP_ENV=local npm run start" 
   },
   "eslintConfig": {
     "extends": [
