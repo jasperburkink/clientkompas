@@ -32,16 +32,20 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "env-cmd -f .env.${REACT_APP_ENV} react-scripts start",
-    "build": "env-cmd -f .env.${REACT_APP_ENV} react-scripts build",
+    "start": "npm run start:local",
+    "build": "npm run build:local",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "test:ci": "npm run test -- --testResultsProcessor=\"jest-junit\" --watchAll=false --ci --coverage",
-    "build:test": "REACT_APP_ENV=test npm run build",
-    "start:test": "REACT_APP_ENV=test npm run start",
-    "build:ocdev": "REACT_APP_ENV=ocdev npm run build",
-    "start:ocdev": "REACT_APP_ENV=ocdev npm run start",
-    "start:local": "REACT_APP_ENV=local npm run start" 
+    "build:test": "REACT_APP_ENV=test npm run internal-build",
+    "start:test": "REACT_APP_ENV=test npm run internal-start",
+    "build:ocdev": "REACT_APP_ENV=ocdev npm run internal-build",
+    "start:ocdev": "REACT_APP_ENV=ocdev npm run internal-start",
+    "start:local": "REACT_APP_ENV=local npm run internal-start",
+    "build:local": "REACT_APP_ENV=local npm run internal-start",
+    "internal-start": "env-cmd -f .env.${REACT_APP_ENV} react-scripts start",
+    "internal-build": "env-cmd -f .env.${REACT_APP_ENV} react-scripts build"
+
   },
   "eslintConfig": {
     "extends": [
