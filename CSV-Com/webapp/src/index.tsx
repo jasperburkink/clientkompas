@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './pages/App';
 import Clients from './pages/Clients';
+import ClientCreate from './pages/client-create';
 import reportWebVitals from './utils/reportWebVitals';
 import preval from 'preval.macro'
 
@@ -17,6 +18,7 @@ root.render(
                     <Route path='/' element={<App />} />
                     <Route  path='/Clients' element={<Clients />} />
                     <Route path='/Clients/:id' element={<Clients />} />
+                    <Route path='/client/new' element={<ClientCreate />} />
                 </Routes>
             </BrowserRouter>
         </React.StrictMode>

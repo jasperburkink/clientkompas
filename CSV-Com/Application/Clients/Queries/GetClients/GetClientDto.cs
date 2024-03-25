@@ -59,6 +59,7 @@ namespace Application.Clients.Queries.GetClients
                 .ForMember(cDto => cDto.Gender, s => s.MapFrom(c => Enum.GetName(typeof(Gender), c.Gender)))
                 .ForMember(cDto => cDto.DriversLicences, dl => dl.MapFrom(c => string.Join(SeperatorString, c.DriversLicences.Select(dl => dl.Category))))
                 .ForMember(cDto => cDto.Diagnoses, dDto => dDto.MapFrom(c => string.Join(SeperatorString, c.Diagnoses.Select(d => d.Name))))
+                .ForMember(cDto => cDto.BenefitForm, dDto => dDto.MapFrom(c => c.BenefitForm.Name))
                 .ForMember(cDto => cDto.StreetName, address => address.MapFrom(c => c.Address.StreetName))
                 .ForMember(cDto => cDto.HouseNumber, address => address.MapFrom(c => c.Address.HouseNumber))
                 .ForMember(cDto => cDto.HouseNumberAddition, address => address.MapFrom(c => c.Address.HouseNumberAddition))

@@ -4,7 +4,7 @@ import './dropdown-with-button.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAsterisk , faPlus,faXmark} from "@fortawesome/free-solid-svg-icons";
 
-interface IDropdownObject {
+export interface IDropdownObject {
     value: number;
     label: string;
 }
@@ -84,4 +84,3 @@ const DropdownWithButton = (props: IDropDownProps) => {
 };
 
 export default DropdownWithButton;
-

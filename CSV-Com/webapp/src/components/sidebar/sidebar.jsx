@@ -1,6 +1,6 @@
-import '../../index.css';
+import 'index.css';
 
-import logo from "../../assets/sprong_logo_svg.svg";
+import logo from "assets/sprong_logo_svg.svg";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from "@fortawesome/free-solid-svg-icons";
