@@ -6,7 +6,6 @@ using Infrastructure.Persistence.CVS;
 var builder = WebApplication.CreateBuilder(args);
 
 System.Diagnostics.Debug.WriteLine("Loading settings for environment: " + builder.Environment.EnvironmentName);
-Console.WriteLine("Loading settings for environment: " + builder.Environment.EnvironmentName);
 
 builder.Configuration.SetBasePath(builder.Environment.ContentRootPath)
         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
