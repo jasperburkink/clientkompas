@@ -18,6 +18,7 @@
     "@types/react": "^18.2.18",
     "@types/react-collapse": "^5.0.2",
     "@types/react-dom": "^18.2.7",
+    "cross-env": "^7.0.3",
     "dayjs": "^1.11.10",
     "env-cmd": "^10.1.0",
     "moment": "^2.29.4",
@@ -37,14 +38,14 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "test:ci": "npm run test -- --testResultsProcessor=\"jest-junit\" --watchAll=false --ci --coverage",
-    "build:test": "REACT_APP_ENV=test npm run internal-build",
-    "start:test": "REACT_APP_ENV=test npm run internal-start",
-    "build:ocdev": "REACT_APP_ENV=ocdev npm run internal-build",
-    "start:ocdev": "REACT_APP_ENV=ocdev npm run internal-start",
-    "start:local": "REACT_APP_ENV=local npm run internal-start",
-    "build:local": "REACT_APP_ENV=local npm run internal-build",
-    "internal-start": "env-cmd -f .env.${REACT_APP_ENV} react-scripts start",
-    "internal-build": "env-cmd -f .env.${REACT_APP_ENV} react-scripts build"
+    "build:test": "cross-env REACT_APP_ENV=test npm run internal-build",
+    "start:test": "cross-env REACT_APP_ENV=test npm run internal-start",
+    "build:ocdev": "cross-env REACT_APP_ENV=ocdev npm run internal-build",
+    "start:ocdev": "cross-env REACT_APP_ENV=ocdev npm run internal-start",
+    "start:local": "cross-env REACT_APP_ENV=local npm run internal-start",
+    "build:local": "cross-env REACT_APP_ENV=local npm run internal-build",
+    "internal-start": "cross-env-shell env-cmd -f .env.${REACT_APP_ENV} react-scripts start",
+    "internal-build": "cross-env-shell env-cmd -f .env.${REACT_APP_ENV} react-scripts build"
   },
   "eslintConfig": {
     "extends": [
