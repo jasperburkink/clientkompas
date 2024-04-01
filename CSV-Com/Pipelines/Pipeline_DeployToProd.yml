@@ -3,22 +3,29 @@ workflow:
     - when: always
 
 variables:  
-  DOTNET_IMAGE: "mcr.microsoft.com/dotnet/sdk:7.0" # Default image for gitlabrunner
+  DOTNET_IMAGE: "mcr.microsoft.com/dotnet/sdk:7.0" # Default image   for gitlabrunner
+  DOCKER_IMAGE: "docker:stable"
   NODE_IMAGE: "node:18"  
   SOLUTION_FOLDER: "CSV-Com"
   SOLUTION: "$SOLUTION_FOLDER/CSV-Com.sln"
   NODE_FOLDER: "webapp"
-  BUILD_CONFIGURATION: "Release"
+  BUILD_CONFIGURATION: "Debug"
+  DOTNET_DOCKER_IMAGE_NAME_DEV: "$CI_REGISTRY/client-volgsysteem/cvs-com/dev-api"
+  NODE_DOCKER_IMAGE_NAME_DEV: "$CI_REGISTRY/client-volgsysteem/cvs-com/dev-webapp"
+  DOTNET_DOCKER_IMAGE_NAME_TEST: "$CI_REGISTRY/client-volgsysteem/cvs-com/test-api"
+  NODE_DOCKER_IMAGE_NAME_TEST: "$CI_REGISTRY/client-volgsysteem/cvs-com/test-webapp"
+  DOTNET_DOCKER_IMAGE_FILENAME: "dotnet_docker_image"
+  NODE_DOCKER_IMAGE_FILENAME: "node_docker_image"
 
-stages:
+stages: 
   - build
-  - test
-  - deploy
+  - test     
+  - image-build-sync-test
 
 dotnet-build:
   before_script:
-  - 'dotnet restore $SOLUTION' # dotnet build does also restore but an explicit restore is better when using GitLab for caching purposes
   - shopt -s globstar # setting for enabling wildcards in bash **/*.csproj
+  - 'dotnet restore $SOLUTION' # dotnet build does also restore but an explicit restore is better when using GitLab for caching purposes
   stage: build
   script:
     # Build all .NET projects
@@ -50,22 +57,18 @@ dotnet-test:
   dependencies:
     - dotnet-build
 
-dotnet-deploy:
-  stage: deploy
-  script:
-    - echo "Deploy API, Database, etc."
-  image: $DOTNET_IMAGE
-  dependencies:
-    - dotnet-build
-
 node-build:
   before_script:
   - cd $SOLUTION_FOLDER/$NODE_FOLDER
-  - npm install
+  - if [ -f "package-lock.json" ]; then
+  - echo "Please remove package-lock.json and don't use 'npm install', use 'yarn install' and 'yarn add' instead."
+  - exit 1
+  - fi
+  - yarn cache clean && yarn install
   - export CI=false
   stage: build
   script:
-  - npm run build
+  - yarn build
   image: $NODE_IMAGE
   artifacts:
     paths:
@@ -74,7 +77,7 @@ node-build:
 node-test:
   before_script:
     - cd $SOLUTION_FOLDER/$NODE_FOLDER
-    - npm install
+    - yarn install
   stage: test
   script:
     - npx nyc --reporter=cobertura npm run test:ci
@@ -95,13 +98,29 @@ node-test:
   dependencies:
     - node-build
 
-node-deploy:
+image-build-sync-test-job:
+  services:
+  - name: docker:20.10.16-dind
   before_script:
-    - cd $SOLUTION_FOLDER/$NODE_FOLDER
-    - npm install
-  stage: deploy
+  - "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
+  - apk add --update curl
+  stage: image-build-sync-test  
   script:
-    - echo "Deploy node.js webapp"
-  image: $NODE_IMAGE
-  dependencies:
-    - node-build
+    # Dotnet build  
+    - cd CSV-Com
+    - docker build --build-arg ENVIRONMENT_NAME=test -t $DOTNET_DOCKER_IMAGE_NAME_TEST -f "./API/Dockerfile" "."
+    - cd ..
+    # Node build
+    - cd CSV-Com/webapp
+    - docker build --build-arg ENVIRONMENT_NAME=test -t $NODE_DOCKER_IMAGE_NAME_TEST -f "./Dockerfile" "."
+    - cd ../..
+    # Docker push
+    - docker push $DOTNET_DOCKER_IMAGE_NAME_TEST
+    - docker push $NODE_DOCKER_IMAGE_NAME_TEST
+    - echo refreshing environments
+    - curl -m 300 "http://192.168.1.15:6012/environment_refresh?s=${ENV_REFRESH_SECRET}"
+  image: $DOCKER_IMAGE
+  retry: 2
+  allow_failure: true
+  rules:
+  - when: manual  

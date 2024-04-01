@@ -21,7 +21,6 @@ stages:
   - build
   - test     
   - image-build-sync-dev
-  - image-build-sync-test
 
 dotnet-build:
   before_script:
@@ -128,30 +127,3 @@ image-build-sync-dev-job:
   artifacts:
     paths:
       - image
-
-image-build-sync-test-job:
-  services:
-  - name: docker:20.10.16-dind
-  before_script:
-  - "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
-  - apk add --update curl
-  stage: image-build-sync-test  
-  script:
-    # Dotnet build  
-    - cd CSV-Com
-    - docker build --build-arg ENVIRONMENT_NAME=test -t $DOTNET_DOCKER_IMAGE_NAME_TEST -f "./API/Dockerfile" "."
-    - cd ..
-    # Node build
-    - cd CSV-Com/webapp
-    - docker build --build-arg ENVIRONMENT_NAME=test -t $NODE_DOCKER_IMAGE_NAME_TEST -f "./Dockerfile" "."
-    - cd ../..
-    # Docker push
-    - docker push $DOTNET_DOCKER_IMAGE_NAME_TEST
-    - docker push $NODE_DOCKER_IMAGE_NAME_TEST
-    - echo refreshing environments
-    - curl -m 300 "http://192.168.1.15:6012/environment_refresh?s=${ENV_REFRESH_SECRET}"
-  image: $DOCKER_IMAGE
-  retry: 2
-  allow_failure: true
-  rules:
-  - when: manual  

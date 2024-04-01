@@ -22,6 +22,17 @@ trigger_DeployToDevPipeline:
     - if: $CI_PIPELINE_SOURCE == "web"
       when: always
     - when: never
+  
+trigger_DeployToProd:
+    stage: triggers
+    trigger:
+        include: CVS-Com/Pipelines/Pipeline_DeployToProd.yml
+        strategy: depend
+    only:
+        refs:
+        - tags
+        variables:
+        - $CI_COMMIT_TAG =~ /^[Rr]elease_.*/
 
 # Trigger feature pipeline when pushing to feature branch
 # trigger_FeaturePipeline:    
@@ -36,10 +47,10 @@ trigger_DeployToDevPipeline:
 #      - /^Feature[0-9]*_*//i # See naming conventions for features https://sbict.atlassian.net/wiki/spaces/CVS/pages/7241742/GIT-Flow#Naamgeving
 
 # Trigger release pipeline when pushing to release branch
-trigger_ReleasePipeline:
-   stage: triggers
-   trigger:
-       include: ReleasePipeline.yml
-       strategy: depend
-   only:
-      - /^Release[0-9]*_*//i # See naming conventions for features https://sbict.atlassian.net/wiki/spaces/CVS/pages/7241742/GIT-Flow#Naamgeving
+# trigger_ReleasePipeline:
+#    stage: triggers
+#    trigger:
+#        include: ReleasePipeline.yml
+#        strategy: depend
+#    only:
+#       - /^Release[0-9]*_*//i # See naming conventions for features https://sbict.atlassian.net/wiki/spaces/CVS/pages/7241742/GIT-Flow#Naamgeving
