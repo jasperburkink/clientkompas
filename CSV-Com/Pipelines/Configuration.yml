@@ -26,7 +26,7 @@ trigger_DeployToDevPipeline:
 trigger_DeployToProd:
     stage: triggers
     trigger:
-        include: CVS-Com/Pipelines/Pipeline_DeployToProd.yml
+        include: CSV-Com/Pipelines/Pipeline_DeployToProd.yml
         strategy: depend
     only:
         refs:
