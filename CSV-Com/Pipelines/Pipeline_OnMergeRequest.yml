@@ -55,6 +55,10 @@ node-build:
   - cd $SOLUTION_FOLDER/$NODE_FOLDER
   - yarn install
   - export CI=false
+  - if [ -f "package-lock.json" ]; then
+  - echo "Please remove package-lock.json and don't use 'npm install', use 'yarn install' and 'yarn add' instead"
+  - exit 1
+  - fi
   stage: build
   script:
   - yarn build
