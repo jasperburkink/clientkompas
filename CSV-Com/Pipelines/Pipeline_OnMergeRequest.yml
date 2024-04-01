@@ -53,12 +53,12 @@ dotnet-test:
 node-build:
   before_script:
   - cd $SOLUTION_FOLDER/$NODE_FOLDER
-  - yarn install
-  - export CI=false
   - if [ -f "package-lock.json" ]; then
-  - echo "Please remove package-lock.json and don't use 'npm install', use 'yarn install' and 'yarn add' instead"
+  - echo "Please remove package-lock.json and don't use 'npm install', use 'yarn install' and 'yarn add' instead."
   - exit 1
   - fi
+  - yarn install
+  - export CI=false
   stage: build
   script:
   - yarn build
