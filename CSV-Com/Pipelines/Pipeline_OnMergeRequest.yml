@@ -62,6 +62,7 @@ node-build:
   stage: build
   script:
   - yarn build
+  - echo "Done!"
   image: $NODE_IMAGE
   artifacts:
     paths:
