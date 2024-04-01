@@ -61,7 +61,11 @@ dotnet-test:
 node-build:
   before_script:
   - cd $SOLUTION_FOLDER/$NODE_FOLDER
-  - npm install
+  - if [ -f "package-lock.json" ]; then
+  - echo "Please remove package-lock.json and don't use 'npm install', use 'yarn install' and 'yarn add' instead."
+  - exit 1
+  - fi
+  - yarn cache clean && yarn install
   - export CI=false
   stage: build
   script:
