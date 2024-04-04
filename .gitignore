@@ -60,3 +60,5 @@ obj/
 /CSV-Com/webapp/junit.xml
 **/node_modules/ 
 node_modules/
+**/coverage.cobertura.xml
+**/TestResults.xml

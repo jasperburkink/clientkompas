@@ -3,21 +3,22 @@ workflow:
     - when: always
 
 variables:  
-  DOTNET_IMAGE: "mcr.microsoft.com/dotnet/sdk:7.0" # Default image for gitlabrunner
-  NODE_IMAGE: "node:18"  
+  DOTNET_IMAGE: "mcr.microsoft.com/dotnet/sdk:7.0" # Default image   for gitlabrunner
+  DOCKER_IMAGE: "docker:stable"
+  NODE_IMAGE: "node:21"  
   SOLUTION_FOLDER: "CSV-Com"
   SOLUTION: "$SOLUTION_FOLDER/CSV-Com.sln"
   NODE_FOLDER: "webapp"
   BUILD_CONFIGURATION: "Debug"
 
-stages:
+stages: 
   - build
   - test
 
 dotnet-build:
   before_script:
-  - 'dotnet restore $SOLUTION' # dotnet build does also restore but an explicit restore is better when using GitLab for caching purposes
   - shopt -s globstar # setting for enabling wildcards in bash **/*.csproj
+  - 'dotnet restore $SOLUTION' # dotnet build does also restore but an explicit restore is better when using GitLab for caching purposes
   stage: build
   script:
     # Build all .NET projects
@@ -33,7 +34,8 @@ dotnet-build:
 dotnet-test:
   stage: test
   script:
-    - dotnet test $SOLUTION -c $BUILD_CONFIGURATION --collect:"XPlat Code Coverage" --logger "junit;LogFileName=TestResults.xml" # Run and publish testresults with junit to gitlab
+    - cd CSV-Com  
+    - dotnet test -c $BUILD_CONFIGURATION --collect:"XPlat Code Coverage" # Run and publish testresults with junit to gitlab
   image: $DOTNET_IMAGE
   artifacts:
     paths:
@@ -52,11 +54,15 @@ dotnet-test:
 node-build:
   before_script:
   - cd $SOLUTION_FOLDER/$NODE_FOLDER
-  - npm install
+  - if [ -f "package-lock.json" ]; then
+  - echo "Please remove package-lock.json and don't use 'npm install', use 'yarn install' and 'yarn add' instead."
+  - exit 1
+  - fi
+  - yarn cache clean && yarn install
   - export CI=false
   stage: build
   script:
-  - npm run build
+  - yarn build
   image: $NODE_IMAGE
   artifacts:
     paths:
@@ -65,7 +71,7 @@ node-build:
 node-test:
   before_script:
     - cd $SOLUTION_FOLDER/$NODE_FOLDER
-    - npm install
+    - yarn install
   stage: test
   script:
     - npx nyc --reporter=cobertura npm run test:ci

@@ -25,8 +25,8 @@ namespace Infrastructure
                                 mySqlOptions.MigrationsAssembly(typeof(CVSDbContext).Assembly.FullName); // Migrations in class library
 #if DEBUG
                                 mySqlOptions.EnableRetryOnFailure(maxRetryCount: 5,
-                    maxRetryDelay: TimeSpan.FromSeconds(10),
-                    errorNumbersToAdd: null);
+                                    maxRetryDelay: TimeSpan.FromSeconds(10),
+                                    errorNumbersToAdd: null);
 #endif
                             })
                             .LogTo(Console.WriteLine, LogLevel.Information)

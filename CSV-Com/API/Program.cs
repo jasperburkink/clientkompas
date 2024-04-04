@@ -5,6 +5,13 @@ using Infrastructure.Persistence.CVS;
 
 var builder = WebApplication.CreateBuilder(args);
 
+System.Diagnostics.Debug.WriteLine("Loading settings for environment: " + builder.Environment.EnvironmentName);
+
+builder.Configuration.SetBasePath(builder.Environment.ContentRootPath)
+        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+        .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: false, reloadOnChange: true)
+        .AddEnvironmentVariables();
+
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 
@@ -38,7 +45,7 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || true) // <- TODO: for now we want this scope to be executed for the test and dev environment as well, later we want to conditionally create and/or fill the database with test data.
 {
     app.UseDeveloperExceptionPage();
 

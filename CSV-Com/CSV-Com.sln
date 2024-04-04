@@ -35,9 +35,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pipelines", "Pipelines", "{EDF5B816-384D-4A95-94A9-FA60B8DDC488}"
 	ProjectSection(SolutionItems) = preProject
 		Pipelines\Configuration.yml = Pipelines\Configuration.yml
-		Pipelines\DevPipeline.yml = Pipelines\DevPipeline.yml
-		Pipelines\FeaturePipeline.yml = Pipelines\FeaturePipeline.yml
-		Pipelines\ReleasePipeline.yml = Pipelines\ReleasePipeline.yml
+		Pipelines\Pipeline_DeployToDev.yml = Pipelines\Pipeline_DeployToDev.yml
+		Pipelines\Pipeline_OnMergeRequest.yml = Pipelines\Pipeline_OnMergeRequest.yml
+		Pipelines\Pipeline_DeployToProd.yml = Pipelines\Pipeline_DeployToProd.yml
 	EndProjectSection
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "webapp", "webapp\webapp.esproj", "{2D542BE9-B395-4F5A-A092-9C79CD226C0A}"
@@ -46,7 +46,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.UnitTests", "Domain.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.FunctionalTests", "Application.FunctionalTests\Application.FunctionalTests.csproj", "{61D56599-3825-4049-AB30-4010E72BD15F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp.FunctionalTests", "webapp.FunctionalTests\WebApp.FunctionalTests.csproj", "{DE1BB072-BAC1-4D6E-A98E-A68E581D7197}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApp.FunctionalTests", "webapp.FunctionalTests\WebApp.FunctionalTests.csproj", "{DE1BB072-BAC1-4D6E-A98E-A68E581D7197}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
