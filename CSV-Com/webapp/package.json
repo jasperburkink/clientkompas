@@ -3,11 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@emotion/react": "^11.11.1",
+    "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@mui/material": "^5.15.12",
     "@mui/x-date-pickers": "^6.17.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -17,23 +18,34 @@
     "@types/react": "^18.2.18",
     "@types/react-collapse": "^5.0.2",
     "@types/react-dom": "^18.2.7",
+    "cross-env": "^7.0.3",
     "dayjs": "^1.11.10",
+    "env-cmd": "^10.1.0",
     "moment": "^2.29.4",
+    "preval.macro": "^5.0.0",
     "react": "^18.2.0",
     "react-collapse": "^5.1.1",
     "react-dom": "^18.2.0",
     "react-modal": "^3.16.1",
     "react-router-dom": "^6.15.0",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "npm run start:local",
+    "build": "npm run build:local",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "test:ci": "npm run test -- --testResultsProcessor=\"jest-junit\" --watchAll=false --ci --coverage"
+    "test:ci": "npm run test -- --testResultsProcessor=\"jest-junit\" --watchAll=false --ci --coverage",
+    "build:test": "cross-env REACT_APP_ENV=test npm run internal-build",
+    "start:test": "cross-env REACT_APP_ENV=test npm run internal-start",
+    "build:ocdev": "cross-env REACT_APP_ENV=ocdev npm run internal-build",
+    "start:ocdev": "cross-env REACT_APP_ENV=ocdev npm run internal-start",
+    "start:local": "cross-env REACT_APP_ENV=local npm run internal-start",
+    "build:local": "cross-env REACT_APP_ENV=local npm run internal-build",
+    "internal-start": "cross-env-shell env-cmd -f .env.${REACT_APP_ENV} react-scripts start",
+    "internal-build": "cross-env-shell env-cmd -f .env.${REACT_APP_ENV} react-scripts build"
   },
   "eslintConfig": {
     "extends": [
@@ -55,10 +67,12 @@
   },
   "devDependencies": {
     "@types/node-sass": "^4.11.3",
+    "@types/preval.macro": "^3.0.2",
     "cobertura": "^1.0.1",
     "eslint-config-react-app": "^7.0.1",
     "jest": "^27.5.1",
     "jest-editor-support": "^31.1.0",
     "jest-junit": "^16.0.0"
-  }
+  },
+  "packageManager": "yarn@1.22.21"
 }
