@@ -34,13 +34,13 @@ namespace Domain.CVS.Domain
 
         public List<DriversLicence> DriversLicences { get; set; } = new();
 
-        public ICollection<EmergencyPerson> EmergencyPeople { get; set; } = new List<EmergencyPerson>();
+        public ICollection<EmergencyPerson> EmergencyPeople { get; set; } = Array.Empty<EmergencyPerson>();
 
         public List<Diagnosis> Diagnoses { get; set; } = new();
 
         public BenefitForm BenefitForm { get; set; }
 
-        public ICollection<WorkingContract> WorkingContracts { get; set; } = new List<WorkingContract>();
+        public ICollection<WorkingContract> WorkingContracts { get; set; } = Array.Empty<WorkingContract>();
 
         public DateTime? DeactivationDateAndTime { get; set; }
 
