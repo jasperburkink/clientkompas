@@ -1,8 +1,8 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 using Application.Common.Mappings;
 using AutoMapper;
 using Domain.CVS.Domain;
-using Domain.CVS.Enums;
 
 namespace Application.Clients.Dtos
 {
@@ -12,15 +12,28 @@ namespace Application.Clients.Dtos
 
         public string Function { get; set; }
 
-        public ContractType ContractType { get; set; }
+        public int ContractType { get; set; }
 
         public DateOnly FromDate { get; set; }
 
         public DateOnly ToDate { get; set; }
 
-        public WorkingContract ToDomainModel(IMapper mapper, Client client)
+        public void Mapping(Profile profile)
         {
-            var domainModel = JsonSerializer.Deserialize<WorkingContract>(JsonSerializer.Serialize(this));
+            profile.CreateMap<WorkingContract, WorkingContractDto>();
+        }
+
+        public WorkingContract ToDomainModel(IMapper mapper, Client client) // TODO: remove this method when upgrading to .net 8. Automapper issues have been solved in newer versions.
+        {
+            var converter = new JsonStringEnumConverter();
+
+            var domainModel = JsonSerializer.Deserialize<WorkingContract>(JsonSerializer.Serialize(this), new JsonSerializerOptions()
+            {
+
+                Converters = {
+                    converter
+                }
+            });
             domainModel.Client = client;
             return domainModel;
         }

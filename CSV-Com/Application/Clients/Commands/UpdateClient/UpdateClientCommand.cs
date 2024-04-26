@@ -49,7 +49,7 @@ namespace Application.Clients.Commands.UpdateClient
 
         public ICollection<EmergencyPersonDto> EmergencyPeople { get; set; }
 
-        public string BenefitForm { get; set; }
+        public int[] BenefitForms { get; set; }
 
         public ICollection<WorkingContractDto> WorkingContracts { get; set; }
 
@@ -72,8 +72,7 @@ namespace Application.Clients.Commands.UpdateClient
             var client = await _unitOfWork.ClientRepository.GetByIDAsync(request.Id, includeProperties: "EmergencyPeople,WorkingContracts,DriversLicences,Diagnoses", cancellationToken)
                 ?? throw new NotFoundException(nameof(Client), request.Id);
 
-            var benefitForm = (await _unitOfWork.BenefitFormRepository.GetAsync(a => a.Name == request.BenefitForm))?.SingleOrDefault()
-                ?? throw new NotFoundException(nameof(BenefitForm), request.BenefitForm);
+            var benefitForms = new List<BenefitForm>(await _unitOfWork.BenefitFormRepository.GetAsync(bf => request.BenefitForms.Contains(bf.Id)));
 
             var maritalStatus = (await _unitOfWork.MaritalStatusRepository.GetAsync(a => a.Name == request.MaritalStatus))?.SingleOrDefault()
               ?? throw new NotFoundException(nameof(MaritalStatus), request.MaritalStatus);
@@ -96,7 +95,7 @@ namespace Application.Clients.Commands.UpdateClient
 
             client.EmailAddress = request.EmailAddress;
 
-            client.BenefitForm = benefitForm;
+            client.BenefitForms = benefitForms;
 
             client.DriversLicences = request.DriversLicences.Select(a => a.ToDomainModel(_mapper, client)).ToList();
 

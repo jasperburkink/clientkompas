@@ -4,6 +4,7 @@ import Diagnosis from "types/model/Diagnosis";
 import MaritalStatus from "types/model/MaritalStatus";
 import DriversLicence from "types/model/DriversLicence";
 import Client from "types/model/Client";
+import moment from 'moment';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -41,7 +42,20 @@ export const fetchDriversLicences = async (): Promise<DriversLicence[]> => {
     return fetchAPI<DriversLicence[]>(`${apiUrl}DriversLicence`);
 }
 
-export const saveClient = async (client: Client): Promise<void> => {
+
+//TODO: move this to global file
+const DATE_FORMAT_JSON = 'yyyy-MM-DD';
+    
+moment.prototype.toJSON = function(){
+    return moment(this).format(DATE_FORMAT_JSON);
+}
+Date.prototype.toJSON = function(){
+    return moment(this).format(DATE_FORMAT_JSON);
+}
+
+export const saveClient = async (client: Client): Promise<void> => {    
+    let body = JSON.stringify(client);
+
     const requestOptions: RequestInit = {
         method: 'POST',
         headers: {
@@ -52,8 +66,11 @@ export const saveClient = async (client: Client): Promise<void> => {
 
     const response = await fetch(`${apiUrl}Client`, requestOptions);
 
+    let {title, errors} = await response.json();    
+
     if (!response.ok) {
-        // TODO: Log error to database and thow new CVSError
-        //throw new Error('Er is een fout opgetreden bij het opslaan van de cliënt.');
+        console.log(title, errors);
+        //TODO: Add all errors to error object, so caller can show errors!
+        throw new Error(title ?? 'Er is een fout opgetreden bij het opslaan van de cliënt.');
     }
 }

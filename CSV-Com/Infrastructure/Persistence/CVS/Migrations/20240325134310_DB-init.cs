@@ -134,9 +134,9 @@ namespace Infrastructure.Persistence.CVS.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     FirstName = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Initials = table.Column<string>(type: "longtext", nullable: false)
+                    Initials = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    PrefixLastName = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false)
+                    PrefixLastName = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     LastName = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -146,21 +146,20 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     StreetName = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     HouseNumber = table.Column<int>(type: "int", nullable: false),
-                    HouseNumberAddition = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false)
+                    HouseNumberAddition = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PostalCode = table.Column<string>(type: "varchar(7)", maxLength: 7, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Residence = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    TelephoneNumber = table.Column<string>(type: "longtext", nullable: false)
+                    TelephoneNumber = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     DateOfBirth = table.Column<DateOnly>(type: "date", nullable: false),
-                    EmailAddress = table.Column<string>(type: "longtext", nullable: false)
+                    EmailAddress = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     MaritalStatusId = table.Column<int>(type: "int", nullable: false),
-                    BenefitFormId = table.Column<int>(type: "int", nullable: false),
                     DeactivationDateAndTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    Remarks = table.Column<string>(type: "longtext", nullable: false)
+                    Remarks = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Created = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     CreatedBy = table.Column<string>(type: "longtext", nullable: true)
@@ -173,15 +172,34 @@ namespace Infrastructure.Persistence.CVS.Migrations
                 {
                     table.PrimaryKey("PK_Clients", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Clients_BenefitForm_BenefitFormId",
-                        column: x => x.BenefitFormId,
+                        name: "FK_Clients_MaritalStatus_MaritalStatusId",
+                        column: x => x.MaritalStatusId,
+                        principalTable: "MaritalStatus",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "ClientBenefitForm",
+                columns: table => new
+                {
+                    BenefitFormsId = table.Column<int>(type: "int", nullable: false),
+                    ClientsId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClientBenefitForm", x => new { x.BenefitFormsId, x.ClientsId });
+                    table.ForeignKey(
+                        name: "FK_ClientBenefitForm_BenefitForm_BenefitFormsId",
+                        column: x => x.BenefitFormsId,
                         principalTable: "BenefitForm",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Clients_MaritalStatus_MaritalStatusId",
-                        column: x => x.MaritalStatusId,
-                        principalTable: "MaritalStatus",
+                        name: "FK_ClientBenefitForm_Clients_ClientsId",
+                        column: x => x.ClientsId,
+                        principalTable: "Clients",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -301,6 +319,11 @@ namespace Infrastructure.Persistence.CVS.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ClientBenefitForm_ClientsId",
+                table: "ClientBenefitForm",
+                column: "ClientsId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ClientDiagnosis_DiagnosesId",
                 table: "ClientDiagnosis",
                 column: "DiagnosesId");
@@ -309,11 +332,6 @@ namespace Infrastructure.Persistence.CVS.Migrations
                 name: "IX_ClientDriversLicence_DriversLicencesId",
                 table: "ClientDriversLicence",
                 column: "DriversLicencesId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Clients_BenefitFormId",
-                table: "Clients",
-                column: "BenefitFormId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Clients_FullName",
@@ -341,6 +359,9 @@ namespace Infrastructure.Persistence.CVS.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "ClientBenefitForm");
+
+            migrationBuilder.DropTable(
                 name: "ClientDiagnosis");
 
             migrationBuilder.DropTable(
@@ -356,6 +377,9 @@ namespace Infrastructure.Persistence.CVS.Migrations
                 name: "WorkingContract");
 
             migrationBuilder.DropTable(
+                name: "BenefitForm");
+
+            migrationBuilder.DropTable(
                 name: "Diagnosis");
 
             migrationBuilder.DropTable(
@@ -363,9 +387,6 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
             migrationBuilder.DropTable(
                 name: "Clients");
-
-            migrationBuilder.DropTable(
-                name: "BenefitForm");
 
             migrationBuilder.DropTable(
                 name: "MaritalStatus");

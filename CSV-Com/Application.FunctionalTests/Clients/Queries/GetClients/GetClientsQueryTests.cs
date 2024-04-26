@@ -37,7 +37,10 @@ namespace Application.FunctionalTests.Clients.Queries.GetClients
                 {
                     Name = "Gehuwd"
                 },
-                BenefitForm = benefitForm
+                BenefitForms =
+                {
+                    benefitForm
+                }
             };
 
             await AddAsync(client);

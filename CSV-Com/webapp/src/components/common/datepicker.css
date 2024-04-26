@@ -3,12 +3,24 @@
 @tailwind utilities;
 
 @layer components {   
+    .datepicker{
+        @apply
+        bg-mainLightGray;
+    }
+
+    .datepicker input{
+        @apply
+        text-sm 
+        h-4;
+    }
+
     .datepicker div{
-        border-radius: 10px;
+        @apply
+        rounded-lg;
     }
 
     .datepicker fieldset{
         @apply
-        border-2;
+        border-2;        
     }
 }

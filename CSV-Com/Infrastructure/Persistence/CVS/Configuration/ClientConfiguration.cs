@@ -29,9 +29,9 @@ namespace Infrastructure.Persistence.CVS.Configuration
             builder.HasMany(c => c.DriversLicences)
                 .WithMany(dl => dl.Clients);
 
-            builder.HasOne(c => c.BenefitForm)
+            builder.HasMany(c => c.BenefitForms)
                 .WithMany(d => d.Clients)
-                .OnDelete(DeleteBehavior.Cascade);
+                .UsingEntity(join => join.ToTable("ClientBenefitForm"));
 
             builder.HasMany(c => c.EmergencyPeople)
                 .WithOne(ep => ep.Client)
@@ -40,6 +40,30 @@ namespace Infrastructure.Persistence.CVS.Configuration
             builder.HasMany(c => c.WorkingContracts)
                 .WithOne(wc => wc.Client)
                 .OnDelete(DeleteBehavior.Cascade);
+
+
+
+            builder.Property(c => c.FirstName)
+                .HasMaxLength(50)
+                .IsRequired();
+
+            builder.Property(c => c.PrefixLastName)
+                .HasMaxLength(15)
+                .IsRequired(false);
+
+            builder.Property(c => c.LastName)
+                .HasMaxLength(50)
+                .IsRequired();
+
+            builder.Property(c => c.Initials)
+                .HasMaxLength(15)
+                .IsRequired();
+
+            builder.Property(c => c.FullName)
+                .HasMaxLength(120);
+
+            builder.HasIndex(c => c.FullName)
+                .IsFullText();
 
             builder.OwnsOne(c => c.Address, a =>
             {
@@ -59,7 +83,8 @@ namespace Infrastructure.Persistence.CVS.Configuration
 
                 a.Property(p => p.HouseNumberAddition)
                 .HasColumnName("HouseNumberAddition")
-                .HasMaxLength(10);
+                .HasMaxLength(10)
+                .IsRequired(false);
 
                 a.Property(p => p.Residence)
                 .HasColumnName("Residence")
@@ -67,22 +92,19 @@ namespace Infrastructure.Persistence.CVS.Configuration
                 .IsRequired();
             });
 
-            builder.Property(c => c.FirstName)
-                .HasMaxLength(50)
+            builder.Property(c => c.TelephoneNumber)
+                .HasMaxLength(15)
                 .IsRequired();
 
-            builder.Property(c => c.PrefixLastName)
-                .HasMaxLength(10);
+            builder.Property(c => c.EmailAddress)
+                .HasMaxLength(250)
+                .IsRequired();
 
-            builder.Property(c => c.LastName)
-                .HasMaxLength(50)
-            .IsRequired();
+            builder.Property(c => c.DateOfBirth)
+                .IsRequired();
 
-            builder.Property(c => c.FullName)
-                .HasMaxLength(120);
-
-            builder.HasIndex(c => c.FullName)
-                .IsFullText();
+            builder.Property(c => c.Remarks)
+                .IsRequired(false);
         }
     }
 }

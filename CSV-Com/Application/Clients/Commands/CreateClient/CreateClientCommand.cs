@@ -1,5 +1,4 @@
 ﻿using Application.Clients.Dtos;
-using Application.Common.Exceptions;
 using Application.Common.Interfaces.CVS;
 using AutoMapper;
 using Domain.CVS.Domain;
@@ -38,9 +37,17 @@ namespace Application.Clients.Commands.CreateClient
 
         public string EmailAddress { get; set; }
 
-        public string MaritalStatus { get; set; }
+        public int? MaritalStatus { get; set; }
 
-        public string BenefitForm { get; set; }
+        public int[] BenefitForms { get; set; }
+
+        public int[] DriversLicences { get; set; }
+
+        public int[] Diagnoses { get; set; }
+
+        public EmergencyPersonDto[] EmergencyPeople { get; set; }
+
+        public WorkingContractDto[] WorkingContracts { get; set; }
 
         public string Remarks { get; set; }
     }
@@ -58,11 +65,15 @@ namespace Application.Clients.Commands.CreateClient
 
         public async Task<ClientDto> Handle(CreateClientCommand request, CancellationToken cancellationToken)
         {
-            var benefitForm = (await _unitOfWork.BenefitFormRepository.GetAsync(a => a.Name == request.BenefitForm))?.SingleOrDefault()
-                ?? throw new NotFoundException(nameof(BenefitForm), request.BenefitForm);
+            var benefitForms = new List<BenefitForm>(await _unitOfWork.BenefitFormRepository.GetAsync(bfdb => request.BenefitForms.Any(bfr => bfdb.Id.Equals(bfr))));
 
-            var maritalStatus = (await _unitOfWork.MaritalStatusRepository.GetAsync(a => a.Name == request.MaritalStatus))?.SingleOrDefault()
-              ?? throw new NotFoundException(nameof(MaritalStatus), request.MaritalStatus);
+            var maritalStatus = request.MaritalStatus != null
+                ? (await _unitOfWork.MaritalStatusRepository.GetAsync(a => a.Id == request.MaritalStatus))?.SingleOrDefault()
+                : null;
+
+            var driversLicences = new List<DriversLicence>(await _unitOfWork.DriversLicenceRepository.GetAsync(dldb => request.DriversLicences.Any(dlr => dldb.Id.Equals(dlr))));
+
+            var diagnoses = new List<Diagnosis>(await _unitOfWork.DiagnosisRepository.GetAsync(ddb => request.Diagnoses.Any(dr => ddb.Id.Equals(dr))));
 
             var client = new Client
             {
@@ -75,17 +86,29 @@ namespace Application.Clients.Commands.CreateClient
                 TelephoneNumber = request.TelephoneNumber,
                 DateOfBirth = request.DateOfBirth,
                 EmailAddress = request.EmailAddress,
-                BenefitForm = benefitForm,
+                BenefitForms = benefitForms,
                 MaritalStatus = maritalStatus,
-
+                DriversLicences = driversLicences,
+                Diagnoses = diagnoses,
                 Remarks = request.Remarks
             };
 
-            client.AddDomainEvent(new ClientCreatedEvent(client));
+            foreach (var emergencyPersonRequest in request.EmergencyPeople)
+            {
+                var emergencyPerson = emergencyPersonRequest.ToDomainModel(_mapper, client);
+                client.EmergencyPeople.Add(emergencyPerson);
+            }
+
+            foreach (var workingContractRequest in request.WorkingContracts)
+            {
+                var workingContract = workingContractRequest.ToDomainModel(_mapper, client);
+                client.WorkingContracts.Add(workingContract);
+            }
 
             await _unitOfWork.ClientRepository.InsertAsync(client, cancellationToken);
-
             await _unitOfWork.SaveAsync(cancellationToken);
+
+            client.AddDomainEvent(new ClientCreatedEvent(client));
 
             return _mapper.Map<ClientDto>(client);
         }

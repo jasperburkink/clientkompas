@@ -39,7 +39,14 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<ClientDto>> Create(CreateClientCommand command)
         {
-            return await Mediator.Send(command);
+            try
+            {
+                return await Mediator.Send(command);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
         }
 
         [Route("[action]")]
@@ -59,11 +66,11 @@ namespace API.Controllers
             }
             catch (NotFoundException ex)
             {
-                return StatusCode(404, ex);
+                return StatusCode(StatusCodes.Status404NotFound, ex);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
             }
         }
 
@@ -77,11 +84,11 @@ namespace API.Controllers
             }
             catch (NotFoundException ex)
             {
-                return StatusCode(404, ex);
+                return StatusCode(StatusCodes.Status404NotFound, ex);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
             }
         }
 

@@ -1,0 +1,1 @@
+export const FieldOrderWorkingContract = ['companyname', 'function', 'contracttype', 'fromdate', 'todate'];

@@ -9,10 +9,12 @@ export interface IDropdownObject {
     label: string;
 }
 
-interface IDropDownProps extends React.HTMLProps<HTMLSelectElement> {
+interface IDropDownProps {
     options: IDropdownObject[];
     required: boolean;
     inputfieldname: string;
+    value?: number[];
+    onChange?: (value: number[]) => void;
 }
 
 interface IBadge{
@@ -29,23 +31,27 @@ const DropdownWithButton = (props: IDropDownProps) => {
 
     const removeBadge = (badge: IBadge) => {
         let newcurrentOptions = currentOptions.concat(badge);
-        setCurentOptions(newcurrentOptions);    
-        setBadges(badges.filter(a => a.id !== badge.id));
+        setCurentOptions(newcurrentOptions); 
+        let newBadges = badges.filter(a => a.id !== badge.id);   
+        setBadges(newBadges);
+
+        onChangeBadges(newBadges, props);
     };
 
     const addBadge = () => {
-        console.log(parseInt(value));
         if (value === '') return;
 
         const option = props.options.find(element => element.value === parseInt(value));
-        console.log(option, props.options);
         const newBadge: IBadge = {
           id: option!.value,
-          text: option!.label  
+          text: option!.label
         }
         
         const newbadges = badges.concat(newBadge);
         setBadges(newbadges);
+
+        onChangeBadges(newbadges, props);
+
         setCurentOptions(currentOptions.filter(badge => badge.id !== option?.value));
         setSelect('');
     };
@@ -55,10 +61,12 @@ const DropdownWithButton = (props: IDropDownProps) => {
         setCurentOptions(newOptions);
     }, [props.options]);
 
+// TODO: Load current badges and according existing values
+
     return (
         <div className='input-field flex-col '>
             <div className='flex'>
-                <select id="" className='dropdown' onChange={event => {setSelect(event.target.value)}} required={props.required}>
+                <select id="" className='dropdown' onChange={event => {setSelect(event.target.value);}} required={props.required}>
                     <option value=''>{OPTION_TEXT}</option>
                     {currentOptions.map((currentOption, index) => (
                         <option key={currentOption.id} value={currentOption.id}>{currentOption.text}</option>
@@ -84,3 +92,8 @@ const DropdownWithButton = (props: IDropDownProps) => {
 };
 
 export default DropdownWithButton;
+
+function onChangeBadges(badges: IBadge[], props: IDropDownProps) {
+    let badgesIds = badges.map(badge => badge.id);
+    props.onChange?.(badgesIds);
+}

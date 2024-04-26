@@ -14,10 +14,10 @@ export interface InputFieldProps {
 export const InputField = (props: InputFieldProps) => (  
     <div className={'input-field ' + props.className}>
         <input
-        onChange={(e) => props.onChange?.(e.target.value)}
-        value={props.value} 
-        type={props.inputfieldtype.type}         
-        placeholder={props.placeholder} 
+        onChange={(e) => {props.onChange?.(e.target.value);}}
+        value={props.value}
+        type={props.inputfieldtype.type}
+        placeholder={props.placeholder}
         required={props.required} />
      </div>
 );
