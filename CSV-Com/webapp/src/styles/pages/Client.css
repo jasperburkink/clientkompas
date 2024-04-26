@@ -169,6 +169,21 @@
             text-xs 
             lg:text-lg;
         }
+
+        .client-deactivate-button{
+            @apply
+            col-span-2
+            my-20
+            mx-16
+            h-20
+            px-8
+            leading-4            
+            lg:col-end-4 
+            lg:col-span-1
+            lg:h-14
+            lg:w-52
+            text-lg;            
+        }
     }
 
     .clients-spinner{

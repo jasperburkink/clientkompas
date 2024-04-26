@@ -8,11 +8,19 @@ import moment from 'moment';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
-async function fetchAPI<T>(url: string): Promise<T> {
-    const response = await fetch(url);
+async function fetchAPI<T>(url: string, method: string = 'GET', body?: any): Promise<T> {
+    const options: RequestInit = {
+        method,
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: body ? JSON.stringify(body) : undefined,
+      };
+    
+    const response = await fetch(url, options);
     
     if (!response.ok) {
-        throw new Error('Netwerkrespons was not ok.');
+        throw new Error(`An error has occured while executing an API operation to '${url}'.`);
     }
     
     return response.json() as Promise<T>;
@@ -42,6 +50,9 @@ export const fetchDriversLicences = async (): Promise<DriversLicence[]> => {
     return fetchAPI<DriversLicence[]>(`${apiUrl}DriversLicence`);
 }
 
+export const deactivateClient = async (clientId: number): Promise<ClientQuery> => {
+    return fetchAPI<ClientQuery>(`${apiUrl}Client/DeactivateClient`, 'PUT', { id: clientId });
+}
 
 //TODO: move this to global file
 const DATE_FORMAT_JSON = 'yyyy-MM-DD';

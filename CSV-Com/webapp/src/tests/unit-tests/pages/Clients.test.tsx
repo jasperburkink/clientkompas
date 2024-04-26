@@ -18,7 +18,11 @@ describe('ClientPage', () => {
     // });
 
     test("Clients_RenderingPage_RendersCorrect", () => {
-        render(<Clients />);
+        render(
+            <MemoryRouter>
+                <Clients />
+            </MemoryRouter>
+        );
     });
 
 //TODO: Onderstaande tests doorspreken met Maurice. Hoe mock je de calls naar de database? 
