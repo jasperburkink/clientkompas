@@ -1,16 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import SearchForm from 'components/common/search-form';
 import ResultItem  from 'types/common/ResultItem';
 import ResultsList from 'components/common/results-list';
 import { searchClients } from 'utils/api';
 import ClientQuery, { getCompleteClientName } from 'types/model/ClientQuery';
 import StatusEnum from 'types/common/StatusEnum';
+import { ClientContext } from '../../pages/client-context';
 
 const NO_RESULT_TEXT = 'Er zijn geen cliënten gevonden die aan de zoekcriteria voldoen.';
 const TYPEING_TIMEOUT = 500;
 
 const SearchClients: React.FC = () => {
-  const [searchResults, setSearchResults] = useState<ResultItem[]>([]);
+  const clientContext = useContext(ClientContext);
   const [error, setError] = useState<string|null>(null);      
   const [status, setStatus] = useState(StatusEnum.IDLE);
 
@@ -37,11 +38,11 @@ const SearchClients: React.FC = () => {
       const clients = await searchClients(searchTerm);
       setStatus(StatusEnum.SUCCESSFUL);
 
-      if(!clients){        
+      if(!clients){
         return;
       }
 
-      setSearchResults(clients.map((client) => (          
+      clientContext.setAllClients(clients.map((client) => (          
       {          
         id: client.id,
         name: getCompleteClientName(client)
@@ -70,7 +71,7 @@ const SearchClients: React.FC = () => {
   return (
     <div>
       <SearchForm onSearchChange={handleSearchChange} />
-      <ResultsList results={searchResults} noResultsText={NO_RESULT_TEXT} loading={status === StatusEnum.IDLE || status === StatusEnum.PENDING} />
+      <ResultsList results={clientContext.allClients} noResultsText={NO_RESULT_TEXT} loading={status === StatusEnum.IDLE || status === StatusEnum.PENDING} />
     </div>
   );
 };

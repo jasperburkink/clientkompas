@@ -1,10 +1,11 @@
 import '../styles/pages/Client.css';
 
-import React, { useEffect, useState } from "react";
-import { useParams } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from 'react-router-dom';
 import { Header } from 'components/common/header';
 import { Label } from 'components/common/label';
 import { LinkButton } from 'components/common/link-button';
+import { Button } from 'components/common/button';
 import { Sidebar } from 'components/sidebar/sidebar';
 import { NavButton } from 'components/nav/nav-button';
 import { SidebarGray } from 'components/sidebar/sidebar-gray';
@@ -15,28 +16,38 @@ import { SlideToggleLabel } from 'components/common/slide-toggle-label';
 import ClientQuery from 'types/model/ClientQuery';
 import 'utils/utilities';
 import Moment from 'moment';
-import { fetchClient } from 'utils/api';
+import { fetchClient, deactivateClient } from 'utils/api';
 import SearchClients from 'components/clients/search-clients';
 import StatusEnum from 'types/common/StatusEnum';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { DatePicker } from 'components/common/datepicker';
+import { ClientContext, IClientContext } from './client-context';
+import ConfirmPopup from "components/common/confirm-popup";
+import Client from '../types/model/Client';
 
 const NO_INFO = 'Geen informatie beschikbaar';
 const DATE_FORMAT = 'DD-MM-yyyy';
 
 function Clients() {
-    const profilePicRowSpanValueDefault = 4;
+    const PROFILE_PIC_ROW_SPAN_DEFAULT_VALUE = 4;
+    const PATH_CLIENTS = '/Clients/';
 
+    const clientContext = useContext(ClientContext)
     const [client, setClient] = useState<ClientQuery | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const [profilePicSpanValue, setProfilePicSpanValue] = useState(profilePicRowSpanValueDefault);
+    const [profilePicSpanValue, setProfilePicSpanValue] = useState(PROFILE_PIC_ROW_SPAN_DEFAULT_VALUE);
     const [status, setStatus] = useState(StatusEnum.IDLE);
+    const [isDeactivateConfirmPopupOpen, setDeactivateConfirmPopupOpen] = useState<boolean>(false);
+    const [isDeactivateConfirmedPopupOpen, setDeactivateConfirmedPopupOpen] = useState<boolean>(false);
+    const [deactivatedClient, setDeactivatedClient] = useState<ClientQuery | null>(null);
     
     var { id } = useParams();
 
     // Show dates in local format
-    Moment.locale('nl');    
+    Moment.locale('nl');
+
+    const nav = useNavigate();        
 
     const fetchClientById = async () => {
         try {
@@ -46,7 +57,7 @@ function Clients() {
 
           setClient(fetchedClient);
           
-          var rowSpanProfilePic = fetchedClient && fetchedClient.emergencypeople ? fetchedClient.emergencypeople.length + profilePicRowSpanValueDefault : profilePicRowSpanValueDefault;
+          var rowSpanProfilePic = fetchedClient && fetchedClient.emergencypeople ? fetchedClient.emergencypeople.length + PROFILE_PIC_ROW_SPAN_DEFAULT_VALUE : PROFILE_PIC_ROW_SPAN_DEFAULT_VALUE;
           setProfilePicSpanValue(rowSpanProfilePic);
         } catch (e) {
           // TODO: error handling
@@ -56,6 +67,51 @@ function Clients() {
         }
       };
 
+    function deactivateClientClick(client: ClientQuery) {
+        try{
+            if (!client) {
+                throw new Error('Client not found!');
+            }
+    
+            setDeactivateConfirmPopupOpen(true);
+        }
+        catch(error){
+            if (error instanceof Error) {
+            // TODO: Show errormessage in popup window
+                console.error('An error has occured while confirming to deactivating an client:', error.message);
+            } else {
+                console.error('An unexpected error has occured.');
+            }
+        }
+    }
+
+    async function deactivateClientConfirmed(client: ClientQuery, context: IClientContext): Promise<ClientQuery | null> {
+        try{
+            const deactivatedClient: ClientQuery = await deactivateClient(client.id);
+            context.setAllClients(context.allClients.filter(c => c.id !== deactivatedClient.id));
+
+            return deactivatedClient;
+        }
+        catch(error){
+            if (error instanceof Error) {
+            // TODO: Show errormessage in popup window
+                console.error('An error has occured while deactivating an client:', error.message);
+            } else {
+                console.error('An unexpected error has occured.');
+            }
+        }
+
+        return null;
+    }
+    
+    function cancelDeactivateClient(){
+        setDeactivateConfirmPopupOpen(false);
+    }
+
+    function closeConfirmedDeactivateClientPopUp(){
+        setDeactivateConfirmedPopupOpen(false);
+    }
+
     // Get client by id
     useEffect(() => {
         if(!id) {
@@ -64,8 +120,8 @@ function Clients() {
         }
     
         fetchClientById();
-      }, [id]);           
-
+      }, [id]);
+      
     return (
         <div className="flex flex-col lg:flex-row h-screen lg:h-auto">
             <div className='lg:flex w-full'>
@@ -210,6 +266,38 @@ function Clients() {
                         </div>
 
                     </SlideToggleLabel>
+
+                    <Button buttonType={{type:"Solid"}} text="Deactivateer cliënt" className='client-deactivate-button' onClick={() => deactivateClientClick(client)} />
+                    <ConfirmPopup
+                    message="Weet u zeker dat u de cliënt wilt deactiveren?"
+                    isOpen={isDeactivateConfirmPopupOpen}
+                    onClose={cancelDeactivateClient}
+                    buttons={
+                        [
+                            { text: 'Bevestigen', onClick: async () => 
+                            {
+                                setDeactivatedClient(await deactivateClientConfirmed(client, clientContext));
+
+                                if(deactivateClient !== null){
+                                    setDeactivateConfirmedPopupOpen(true);
+                                }
+                            }, buttonType: {type:"Solid"}},
+                            { text: 'Annuleren', onClick: cancelDeactivateClient, buttonType: {type:"NotSolid"}},
+                        ]} />
+
+                    <ConfirmPopup
+                    message={`Cliënt met id '${deactivatedClient ? deactivatedClient!.id : ''}' is gedeactiveerd!`}
+                    isOpen={isDeactivateConfirmedPopupOpen}
+                    onClose={closeConfirmedDeactivateClientPopUp}
+                    buttons={
+                        [
+                            { text: 'Ok', onClick: () => 
+                            {
+                                if(deactivateClient !== null) {
+                                    nav(PATH_CLIENTS);
+                                }
+                            }, buttonType: {type:"Solid"}},
+                        ]} />
                     
                     <div className='button-container'>
                         <LinkButton buttonType={{type:"Solid"}} text="Cliënt aanpassen" href="../client-edit" />
