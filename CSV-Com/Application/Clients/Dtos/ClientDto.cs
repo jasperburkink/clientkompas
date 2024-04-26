@@ -1,4 +1,5 @@
-﻿using Application.Common.Mappings;
+﻿using Application.BenefitForms.Queries.GetBenefitForm;
+using Application.Common.Mappings;
 using Application.Diagnoses.Queries.GetDiagnosis;
 using Application.DriversLicences.Queries;
 using AutoMapper;
@@ -47,7 +48,7 @@ namespace Application.Clients.Dtos
 
         public virtual ICollection<EmergencyPersonDto> EmergencyPeople { get; set; }
 
-        public string BenefitForm { get; set; }
+        public virtual ICollection<BenefitFormDto> BenefitForms { get; set; }
 
         public virtual ICollection<WorkingContractDto> WorkingContracts { get; set; }
 
@@ -58,7 +59,6 @@ namespace Application.Clients.Dtos
             profile.CreateMap<Client, ClientDto>()
                 .ForMember(cDto => cDto.MaritalStatus, ms => ms.MapFrom(c => c.MaritalStatus.Name))
                 .ForMember(cDto => cDto.Gender, s => s.MapFrom(c => Enum.GetName(typeof(Gender), c.Gender)))
-                .ForMember(cDto => cDto.BenefitForm, ms => ms.MapFrom(c => c.BenefitForm.Name))
                 .ForMember(cDto => cDto.StreetName, address => address.MapFrom(c => c.Address.StreetName))
                 .ForMember(cDto => cDto.HouseNumber, address => address.MapFrom(c => c.Address.HouseNumber))
                 .ForMember(cDto => cDto.HouseNumberAddition, address => address.MapFrom(c => c.Address.HouseNumberAddition))

@@ -47,23 +47,31 @@ namespace Infrastructure.Persistence.CVS
             // Default data
             // Seed, if necessary
             // TODO: Maybe only when debugging
-            BenefitForm benefitForm;
-            var benefitFormId = 1;
+            BenefitForm benefitForm1, benefitForm2;
+            int benefitForm1Id = 1, benefitForm2Id = 2;
 
-            if (!_context.BenefitForm.Any(ms => ms.Id.Equals(benefitFormId)))
+            if (!_context.BenefitForm.Any())
             {
-                benefitForm = new BenefitForm
+                benefitForm1 = new BenefitForm
                 {
-                    Id = benefitFormId,
+                    Id = 1,
                     Name = "Bijstand"
                 };
+                _context.BenefitForm.Add(benefitForm1);
 
-                _context.BenefitForm.Add(benefitForm);
+                benefitForm2 = new BenefitForm
+                {
+                    Id = 2,
+                    Name = "WIA"
+                };
+                _context.BenefitForm.Add(benefitForm2);
+
                 await _context.SaveChangesAsync();
             }
             else
             {
-                benefitForm = _context.BenefitForm.First(ms => ms.Id.Equals(benefitFormId));
+                benefitForm1 = _context.BenefitForm.First(ms => ms.Id.Equals(benefitForm1Id));
+                benefitForm2 = _context.BenefitForm.First(ms => ms.Id.Equals(benefitForm2Id));
             }
 
             MaritalStatus martitalStatus;
@@ -143,7 +151,10 @@ namespace Infrastructure.Persistence.CVS
                             TelephoneNumber = "098765321"
                         }
                     },
-                    BenefitForm = benefitForm,
+                    BenefitForms =
+                    {
+                        benefitForm1
+                    },
                     WorkingContracts =
                     {
                         new WorkingContract
@@ -190,7 +201,11 @@ namespace Infrastructure.Persistence.CVS
                             TelephoneNumber = "0123456789"
                         }
                     },
-                    BenefitForm = benefitForm,
+                    BenefitForms =
+                    {
+                        benefitForm1,
+                        benefitForm2
+                    },
                     WorkingContracts =
                     {
                         new WorkingContract

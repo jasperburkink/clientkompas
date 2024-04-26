@@ -15,10 +15,10 @@ import { NavButtonGray } from 'components/nav/nav-button-gray';
 import { NavTitle } from 'components/nav/nav-title';
 import { SlideToggleLabel } from 'components/common/slide-toggle-label';
 import { DatePicker } from 'components/common/datepicker';
-import Textarea from "components/common/Textarea";
+import Textarea from "components/common/text-area";
 import ConfirmPopup from "components/common/confirm-popup";
 import SaveButton from 'components/common/SaveButton';
-import { Dropdown } from 'components/common/dropdown';
+import { Dropdown, DropdownObject } from 'components/common/dropdown';
 import DropdownWithButton from "components/common/dropdown-with-button";
 import DropdownBoolean from 'components/common/dropdown-boolean';
 import PasswordField from 'components/common/password-field';
@@ -97,30 +97,37 @@ function App() {
       
     const workingContract: WorkingContract = {
         companyname: 'SB-ICT',
-        contracttype: 'Tijdelijk',
+        contracttype: 0,
         fromdate: new Date('2020-01-01'),
         todate: new Date('2021-01-01'),
         function: 'Programmeur'
       };
 
-      const workingContract2: WorkingContract = {
+    const workingContract2: WorkingContract = {
         companyname: 'Welkoop',
-        contracttype: 'Tijdelijk',
+        contracttype: 1,
         fromdate: new Date('1995-01-01'),
         todate: new Date('1998-01-01'),
         function: 'Verkoper'
-      };
+    };
 
-      const [workingContracts, setWorkingContracts] = useState<WorkingContract[]>([workingContract, workingContract2]);
+    const [workingContracts, setWorkingContracts] = useState<WorkingContract[]>([workingContract, workingContract2]);
 
-      const addWorkingContract = ():WorkingContract => {
+    const addWorkingContract = ():WorkingContract => {
         return {
             companyname: '',
-            contracttype: '',
+            contracttype: 0,
             fromdate: new Date(),
             todate: new Date(),
             function: ''
         };
+    };
+
+    const optionsDictionaryWorkingContract: { [key: string]: DropdownObject[] } = {
+        "contracttype": [
+            { value: 0, label: "Tijdelijk" },
+            { value: 1, label: "Permanent" },
+        ]
     };
 
     const handleWorkingContractChange = (updatedWorkingContract: WorkingContract, index: number) => {
@@ -270,7 +277,7 @@ function App() {
                     <ProfilePicture pictureUrl='https://media.licdn.com/dms/image/C5603AQG1ibjUUZ7NFQ/profile-displayphoto-shrink_800_800/0/1655221337005?e=2147483647&v=beta&t=KKnYXDtk5PeT9utOaIAjUPjDLqk55-IrkCu1R5GuaRg' />
                     
                     <p>Textarea component</p>
-                    <Textarea text="Voeg een opmerking toe"/>
+                    <Textarea placeholder="Voeg een opmerking toe"/>
 
                     <p>Dropdown</p>
                     <Dropdown options={data} required={false} inputfieldname='dropdown' />
@@ -296,16 +303,16 @@ function App() {
                     successText = "placeholder 3"
                     errorText = "placeholder 4"
                     onSave={() => console.log('Save successful')}
-                    onError={() => console.error('Error saving')}
-                    />
+                    onError={() => console.error('Error saving')}/>
 
-                    <p>Foutmelding pop-up</p>
-                    <Button buttonType={{type:"Solid"}} text="Toon foutmelding" className='w-200px h-50px' 
+                    <ErrorPopup isOpen={isErrorPopupOpen} onClose={() => {}} error={cvsError} />
+
+                <p>Foutmelding pop-up</p>
+                <Button buttonType={{ type: "Solid" }} text="Toon foutmelding" className='w-200px h-50px'
                     onClick=
                     {
-                        ()=> {setErrorPopupOpen(true);}
+                        () => { setErrorPopupOpen(true); }
                     } />
-                    {/* <ErrorPopup isErrorPopupOpen={isErrorPopupOpen} setErrorPopupOpen={setErrorPopupOpen} error={cvsError} /> */}
               
                     <DomainObjectInput                    
                         label='Inputvelden voor contactpersoon' 
@@ -325,7 +332,8 @@ function App() {
                         typeName='WorkingContract' 
                         numMinimalRequired={2}
                         onRemoveObject={onRemoveWorkingContract}
-                        onChangeObject={handleWorkingContractChange} />
+                        onChangeObject={handleWorkingContractChange}
+                        optionsDictionary={optionsDictionaryWorkingContract} />
 
                     <p>Bevestigings pop-up met één button</p>
                     <Button buttonType={{type:"Solid"}} text="Toon pop-up met één button" className='w-200px h-50px' 

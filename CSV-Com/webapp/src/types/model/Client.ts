@@ -17,12 +17,13 @@ export default interface Client {
     postalcode: string;
     residence: string;
     telephonenumber: string;
-    dateofbirth: Date;
+    dateofbirth?: Date;
     emailaddress: string;
-    maritalstatus: string;
+    maritalstatus?: number;
     driverslicences: DriversLicence[];
+    doelgroepregister: boolean;
     diagnoses?: Diagnosis[];
-    benefitform?: BenefitForm[];
+    benefitforms?: BenefitForm[];
     remarks?: string;
     emergencypeople?: EmergencyPerson[];
     workingcontracts?: WorkingContract[];

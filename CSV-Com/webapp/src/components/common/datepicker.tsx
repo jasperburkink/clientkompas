@@ -62,14 +62,12 @@ export const DatePicker = (props: DatePickerProps) => {
   return (
   <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale={LOCALE_PROVIDER}>
     {isMobileView ? (
-      <MobileDatePickerControl.MobileDatePicker       
-      label={props.placeholder} 
-      className={`datepicker ${props.className}`}
+      <MobileDatePickerControl.MobileDatePicker
+      className={`datepicker ${props.className}`}      
       value={props.value ? Moment(props.value) : null}
       onChange={handleDateChange} />
     ): (
-      <DatePickerControl.DatePicker       
-        label={props.placeholder}
+      <DatePickerControl.DatePicker      
         className={`datepicker ${props.className}`}
         value={props.value ? Moment(props.value) : null}
         slots={{openPickerIcon: GenerateAwesomeFontCalendarIcon}}
@@ -77,7 +75,7 @@ export const DatePicker = (props: DatePickerProps) => {
           required: props.required
         }}}
         onChange={handleDateChange}
-        sx={{      
+        sx={{
           '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': { border: '2px solid b3b3b3' }, //Init state
           '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': { border: '2px solid #b3b3b3' },  // at hover state
           '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': { border: '2px solid #148CB8' }, // at focused state

@@ -14,7 +14,7 @@ import { InputField } from 'components/common/input-field';
 import { Dropdown, DropdownObject } from 'components/common/dropdown';
 import DropdownWithButton, { IDropdownObject } from "components/common/dropdown-with-button";
 import { DatePicker } from 'components/common/datepicker';
-import Textarea from "components/common/Textarea";
+import Textarea from "components/common/text-area";
 import DomainObjectInput from 'components/common/domain-object-input';
 import { SlideToggleLabel } from 'components/common/slide-toggle-label';
 import EmergencyPerson from 'types/model/EmergencyPerson';
@@ -26,12 +26,13 @@ import CvsError from 'types/common/cvs-error';
 import { fetchBenefitForms, fetchDiagnosis, fetchMaritalStatuses, fetchDriversLicences, saveClient } from 'utils/api';
 import Client from 'types/model/Client';
 import { Moment } from 'moment';
+import CVSError from 'types/common/cvs-error';
+import { FieldOrderWorkingContract } from 'types/common/fieldorder';
 
 const ClientCreate = () => {
     const initialClient: Client = { 
         id: 0,
         firstname: '',
-        dateofbirth: new Date(),
         initials: '',
         lastname: '',
         gender: 0,
@@ -41,14 +42,24 @@ const ClientCreate = () => {
         residence: '',
         telephonenumber: '',        
         emailaddress: '',
-        maritalstatus: '',
         driverslicences: [],
+        doelgroepregister: false,
         emergencypeople: [],
         workingcontracts: [],
+        benefitforms: [],
     };
 
     const [client, setClient] = useState<Client>(initialClient);
     const [error, setError] = useState<string | null>(null);
+
+    const [confirmMessage, setConfirmMessage] = useState<string>('');
+    const [isConfirmPopupOneButtonOpen, setConfirmPopupOneButtonOpen] = useState<boolean>(false);
+    const handlePopUpConfirmClick = () => {
+        setConfirmPopupOneButtonOpen(false);
+    };
+    const handlePopUpCancelClick = () => {
+        setConfirmPopupOneButtonOpen(false);
+    };
 
     const [isErrorPopupOpen, setErrorPopupOpen] = useState<boolean>(false);
     const [cvsError, setCvsError] = useState<CvsError>(() => {
@@ -86,6 +97,13 @@ const ClientCreate = () => {
         }));
     };
 
+    const handleDropdownWithButtonChange = (fieldName: string, value: number[]) => {
+        setClient(prevClient => ({
+            ...prevClient,
+            [fieldName]: value
+        }));
+    };
+
     const gendersDropdownOptions: DropdownObject[] = [
         {
             label: 'Man',
@@ -109,8 +127,23 @@ const ClientCreate = () => {
         {
             label: 'Ja',
             value: 1
-        } // TODO: replace to contants file
+        } // TODO: replace with yes/no dropdown component
     ];
+
+    const contracttypeDropdownOptions: DropdownObject[] = [
+        {
+            label: 'Tijdelijk',
+            value: 0
+        },
+        {
+            label: 'Permanent',
+            value: 1
+        }// TODO: replace to contants file
+    ]; // TODO: maybe make dynamic in the future
+
+    const optionsDictionaryWorkingContract: { [key: string]: DropdownObject[] } = {
+        "contracttype": contracttypeDropdownOptions
+    };
 
     const addEmergencyPerson = ():EmergencyPerson => {
         const newEmergencyPerson: EmergencyPerson = {
@@ -127,10 +160,10 @@ const ClientCreate = () => {
     const handleEmergencyPersonChange = (updatedPerson: EmergencyPerson, index: number) => {
         const updatedClient = { ...client };    
         const updatedEmergencyPeople = [...updatedClient.emergencypeople!];
-    
+
         updatedEmergencyPeople[index] = updatedPerson;
         updatedClient.emergencypeople = updatedEmergencyPeople;
-    
+
         setClient(updatedClient);
     };
 
@@ -147,9 +180,7 @@ const ClientCreate = () => {
     const addWorkingContract = ():WorkingContract => {
         return {
             companyname: '',
-            fromdate: new Date(),
-            todate: new Date(),
-            contracttype: '',
+            contracttype: 0,
             function: ''
         };
     };
@@ -183,15 +214,13 @@ const ClientCreate = () => {
                     label: diagnosis.name
                 }));
                 setDiagnoses(formattedDiagnoses);
-            } catch (error) {
-                console.error('Error loading diagnoses:', error);
+            } catch (error: any) {
                 setCvsError({
-                    errorcode: 'TEST',
-                    id: 1,
-                    message: 'Er is iets fout gegaan!'
+                    id: 0,
+                    errorcode: 'E',
+                    message: `Er is een opgetreden tijdens het laden van alle beschikbare diagnoses. Foutmelding: ${error.message}`
                 });
                 setErrorPopupOpen(true);
-                //tODO: show errormessage popup
             }
         };
 
@@ -203,9 +232,13 @@ const ClientCreate = () => {
                     label: benefitForm.name
                 }));
                 setBenefitForms(formattedBenefitForms);
-            } catch (error) {
-                console.error('Error loading benefitforms:', error);
-                //tODO: show errormessage popup
+            } catch (error: any) {
+                setCvsError({
+                    id: 0,
+                    errorcode: 'E',
+                    message: `Er is een opgetreden tijdens het laden van alle beschikbare uitkeringsvormen. Foutmelding: ${error.message}`
+                });
+                setErrorPopupOpen(true);
             }
         };
 
@@ -217,9 +250,13 @@ const ClientCreate = () => {
                     label: maritalStatus.name
                 }));
                 setMaritalStatuses(formattedMaritalStatuses);
-            } catch (error) {
-                console.error('Error loading marital statuses:', error);
-                //tODO: show errormessage popup
+            } catch (error: any) {
+                setCvsError({
+                    id: 0,
+                    errorcode: 'E',
+                    message: `Er is een opgetreden tijdens het laden van alle beschikbare burgerlijke staat opties. Foutmelding: ${error.message}`
+                });
+                setErrorPopupOpen(true);
             }
         };
 
@@ -231,9 +268,13 @@ const ClientCreate = () => {
                     label: `${driverLicence.category} (${driverLicence.description})`
                 }));
                 setDriversLicences(formattedDriversLicences);
-            } catch (error) {
-                console.error('Error loading drivers licences:', error);
-                //tODO: show errormessage popup
+            } catch (error: any) {
+                setCvsError({
+                    id: 0,
+                    errorcode: 'E',
+                    message: `Er is een opgetreden tijdens het laden van alle beschikbare rijbewijs codes. Foutmelding: ${error.message}`
+                });
+                setErrorPopupOpen(true);
             }
         };
 
@@ -385,11 +426,12 @@ const ClientCreate = () => {
                                 inputfieldname='geslacht'
                                 value={client.gender}
                                 onChange={(value) => handleDropdownChange('gender', value)} />
-                        </LabelField>                       
+                        </LabelField>
                     </div>
 
                     <DomainObjectInput 
-                        label='In geval van nood' 
+                        className='client-domain-object'
+                        label='In geval van nood'
                         addObject={addEmergencyPerson} 
                         domainObjects={client.emergencypeople!} 
                         labelType='contactpersoon' 
@@ -400,65 +442,108 @@ const ClientCreate = () => {
 
                     <div className='client-remarks'>
                         <Label text='Opmerkingen' />
-                        <Textarea text="Voeg opmerkingen toe" />
+                        <Textarea 
+                            placeholder="Voeg opmerkingen toe" 
+                            value={client.remarks}
+                            onChange={(value: string) => handleClientInputChange('remarks', value)} />
                     </div>
 
                     <SlideToggleLabel textColapsed='Klap uit voor meer opties' textExpanded='Klap in' >
                         <div className='client-extra-info'>
                             <LabelField text='Diagnose(s)' required={false}>
-                                <DropdownWithButton options={diagnoses} required={false} inputfieldname='diagnoses' />
+                                <DropdownWithButton 
+                                    options={diagnoses} 
+                                    required={false}
+                                    inputfieldname='diagnoses'
+                                    value={client.diagnoses?.map(d => d.id)}
+                                    onChange={(value) => {handleDropdownWithButtonChange('diagnoses', value)}} />
                             </LabelField>
 
                             <LabelField text='Uitkeringsvorm' required={false}>
-                                <DropdownWithButton options={benefitForms} required={false} inputfieldname='benefitforms' />
+                                <DropdownWithButton 
+                                    options={benefitForms} 
+                                    required={false} 
+                                    inputfieldname='benefitforms'
+                                    value={client.benefitforms?.map(d => d.id)}
+                                    onChange={(value) => {handleDropdownWithButtonChange('benefitforms', value)}} />
                             </LabelField>
 
                             <LabelField text='Burgerlijke staat' required={false}>
-                                <Dropdown options={maritalStatuses} required={false} inputfieldname='maritalstatuses' />
+                                <Dropdown 
+                                    options={maritalStatuses} 
+                                    required={false} 
+                                    inputfieldname='maritalstatus'
+                                    value={client.maritalstatus}
+                                    onChange={(value) => {handleDropdownChange('maritalstatus', value)}} />
                             </LabelField>
 
                             <LabelField text='Rijbewijs' required={false}>
-                                <DropdownWithButton options={driversLicences} required={false} inputfieldname='driverslicences' />
+                                <DropdownWithButton 
+                                    options={driversLicences} 
+                                    required={false} 
+                                    inputfieldname='driverslicences'
+                                    value={client.driverslicences?.map(d => d.id)}
+                                    onChange={(value) => {handleDropdownWithButtonChange('driverslicences', value)}} />
                             </LabelField>
 
-                            <LabelField text='Doelgroepregister' required={false}>
-                                <Dropdown options={doelgroepDropdownOptions} required={false} inputfieldname='doelgroepregister' />
-                            </LabelField>
+                            {/* TODO: doelgroepregister with yes no dropdown
+                             <LabelField text='Doelgroepregister' required={false}>
+                                <Dropdown 
+                                    options={doelgroepDropdownOptions} 
+                                    required={false} 
+                                    inputfieldname='doelgroepregister'
+                                    value={client.doelgroepregister}
+                                    onChange={(value) => handleDropdownChange('doelgroepregister', value)} />
+                            </LabelField> */}
                         </div>
 
-                        <DomainObjectInput 
+                        <DomainObjectInput
+                            className='client-domain-object'
                             label='Werkervaring' 
                             addObject={addWorkingContract} 
-                            domainObjects={workingContracts} 
+                            domainObjects={workingContracts}
+                            fieldOrder={FieldOrderWorkingContract}
                             labelType='werkervaring' 
                             typeName='WorkingContract' 
-                            numMinimalRequired={1}
+                            numMinimalRequired={0}
                             onRemoveObject={onRemoveWorkingContract}
-                            onChangeObject={handleWorkingContractChange} />
+                            onChangeObject={handleWorkingContractChange}
+                            optionsDictionary={optionsDictionaryWorkingContract} />
 
                     </SlideToggleLabel>
 
-                </div>
-                <div className='button-container'>
-                    <SaveButton
-                    buttonText= "Opslaan"
-                    loadingText = "Bezig met oplaan"
-                    successText = "Cliënt opgeslagen"
-                    errorText = "Fout tijdens opslaan"
-                    onSave={() => {
-                        try {
-                            saveClient(client!);
-                        } catch (error) {
-                            //tODO show errors!
-                            alert('Error while saving a client!!!');
-                        }
-                        
-                        console.log('Save successful')
-                    }}
-                    onError={() => console.error('Error saving')}
-                    />
+                    <div className='button-container'>
+                        <SaveButton
+                        buttonText= "Opslaan"
+                        loadingText = "Bezig met oplaan"
+                        successText = "Cliënt opgeslagen"
+                        errorText = "Fout tijdens opslaan"
+                        onSave={async () => { //TODO: Save button repair & error handling via server
+                            try {
+                                await saveClient(client!);
+
+                                setConfirmMessage('Client succesvol opgeslagen');
+                                setConfirmPopupOneButtonOpen(true);
+                            } catch (error: any) {
+                                setCvsError({
+                                    id: 0,
+                                    errorcode: 'E',
+                                    message: `Er is een opgetreden tijdens het opslaan van een client. Foutmelding: ${error.message}`
+                                });
+                                setErrorPopupOpen(true);
+                            }                        
+                        }}
+                        onError={() => console.error('Error saving')}
+                        />
+                    </div>
                 </div>
             </div>
+
+            <ConfirmPopup
+                message={confirmMessage}
+                isOpen={isConfirmPopupOneButtonOpen}
+                onClose={handlePopUpCancelClick}
+                buttons={[{ text: 'Bevestigen', onClick: handlePopUpConfirmClick, buttonType: {type:"Solid"}}]} />
 
             <ErrorPopup 
                 error={cvsError} 

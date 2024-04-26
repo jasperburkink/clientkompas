@@ -12,8 +12,7 @@
         pt-[140px]
         pb-[90px]
         mt-4
-        lg:mt-20
-        lg:grid-cols-3
+        lg:mt-20        
         lg:w-full
         lg:p-0
         lg:h-full
@@ -24,12 +23,14 @@
             items-center
             flex
             flex-row
-            my-6;
+            my-6
+            lg:col-span-2;
 
             .client-create-header-main{
                 @apply
                 flex-none
-                text-xl;
+                text-xl
+                lg:col-span-2;
             }
 
             .client-create-header-sub{
@@ -47,7 +48,9 @@
 
         .client-create-fields{
             @apply            
-            h-full;
+            h-full
+            lg:grid
+            lg:grid-cols-2;
 
             .house-number{
                 @apply
@@ -72,47 +75,80 @@
             }
         }
 
+        .client-domain-object{
+            @apply
+            lg:mt-14;
+        }
+
+        .datepicker {
+            @apply
+            w-full;
+        }
+
         .client-remarks{
             @apply
-            my-2;
+            my-2
+            lg:flex
+            lg:flex-row
+            lg:mr-6;
+
+            .label{
+                @apply
+                lg:flex-none
+                lg:w-28
+                lg:mt-6;
+            }
 
             textarea{
                 @apply
-                w-full;
+                my-4
+                w-full
+                lg:flex-initial
+                lg:ml-4;
             }
         }
-    }
 
-    .button-container{
-        @apply
-        flex
-        justify-center
-        flex-row
-        w-full
-        fixed
-        bottom-0
-        h-[90px]
-        bg-mainLightGray
-        p-5
-        shadow-2xl
-        shadow-black
-        lg:relative
-        lg:bg-transparent
-        lg:w-full
-        lg:h-auto
-        lg:shadow-none
-        lg:justify-items-end
-        lg:gap-0
-        lg:p-0;
-
-        .button{
+        .client-extra-info{
             @apply
-            text-base
-            lg:w-52
-            lg:text-center
-            lg:col-span-2;
+            lg:grid
+            lg:grid-cols-2;
         }
-    }
+
+        .button-container{
+            @apply
+            flex
+            justify-center
+            flex-row
+            w-full
+            fixed
+            bottom-0
+            h-[90px]
+            bg-mainLightGray
+            p-5
+            -mx-5
+            shadow-2xl
+            shadow-black
+            lg:relative
+            lg:bg-transparent
+            lg:w-full
+            lg:h-auto
+            lg:shadow-none
+            lg:justify-end
+            lg:gap-0
+            lg:p-0
+            z-50
+            lg:mt-4
+            lg:mb-12;
+    
+            .button{
+                @apply
+                text-base
+                lg:w-52
+                lg:text-center
+                lg:col-span-2;
+            }
+        }
+    }    
 
     .header-menu{
         @apply

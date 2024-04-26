@@ -1,5 +1,5 @@
 import EmergencyPerson from "./EmergencyPerson";
-import WorkingContract from "./WorkingContract";
+import WorkingContractQuery from "./WorkingContractQuery";
 
 export default interface ClientQuery {
     id: number;
@@ -22,7 +22,7 @@ export default interface ClientQuery {
     benefitform?: string;
     remarks?: string;
     emergencypeople?: EmergencyPerson[];
-    workingcontracts?: WorkingContract[];
+    workingcontracts?: WorkingContractQuery[];
 }
 
 export function getCompleteClientName(client: ClientQuery): string {
