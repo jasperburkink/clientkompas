@@ -1,6 +1,6 @@
 import 'index.css';
 
-import logo from "assets/sprong_logo_svg.svg";
+import logo from "assets/CK_dark_logo.svg";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from "@fortawesome/free-solid-svg-icons";
@@ -24,8 +24,8 @@ export function Sidebar(props) {
   }
     return (
       <div className=' z-20'>
-      <div className="logoBar">
-        <img src={logo} className="w-150px lg:w-[60%]" alt='Logo'/>
+      <div className="logoBar ">
+        <img src={logo} className="w-24 lg:w-[60%]" alt='Logo'/>
         <FontAwesomeIcon icon={faBars} id="hamburger" className="lg:hidden h-12 text-white ease-in-out duration-500 my-auto" onClick={openCloseBlueSideBar} />
       </div>
       <div id="sidebar" className="sidebar">
