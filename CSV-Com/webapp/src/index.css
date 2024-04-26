@@ -68,7 +68,7 @@
     */
     /* Navigation for blue sidebar */
     .navBtnsContainer {
-        @apply flex flex-col justify-between h-2/3 w-11/12 md:h-400px md:w-60 mt-100px md:mt-200px mx-auto
+        @apply flex flex-col justify-between h-2/3 w-11/12 md:h-400px md:w-60 mt-100px md:mt-250px mx-auto
     }
 
     .navBtn {
