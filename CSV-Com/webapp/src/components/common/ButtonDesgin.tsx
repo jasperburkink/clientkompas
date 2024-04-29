@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Spinner from './Spinner';
+import Spinner from './spinner-button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 

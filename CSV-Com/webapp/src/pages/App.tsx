@@ -17,7 +17,7 @@ import { SlideToggleLabel } from 'components/common/slide-toggle-label';
 import { DatePicker } from 'components/common/datepicker';
 import Textarea from "components/common/text-area";
 import ConfirmPopup from "components/common/confirm-popup";
-import SaveButton from 'components/common/SaveButton';
+import SaveButton from 'components/common/save-button';
 import { Dropdown, DropdownObject } from 'components/common/dropdown';
 import DropdownWithButton from "components/common/dropdown-with-button";
 import DropdownBoolean from 'components/common/dropdown-boolean';
@@ -28,6 +28,7 @@ import DomainObjectInput from 'components/common/domain-object-input';
 import EmergencyPerson from 'types/model/EmergencyPerson';
 import WorkingContract from 'types/model/WorkingContract';
 import LabelField from 'components/common/label-field';
+import ApiResult from 'types/common/api-result';
 
 function App() {
     const data = [
@@ -294,16 +295,23 @@ function App() {
                     <DropdownBoolean required={false} inputfieldname='dropdownboolean' />
 
                     <p>Wachtwoord input</p>
-                    <PasswordField inputfieldname='password' placeholder='Wachtwoord' />
-                                            
+                    <PasswordField inputfieldname='password' placeholder='Wachtwoord' />                
+
                     <p>Save button component</p>
                     <SaveButton
-                    buttonText= "placeholder 1"
-                    loadingText = "placeholder 2"
-                    successText = "placeholder 3"
-                    errorText = "placeholder 4"
-                    onSave={() => console.log('Save successful')}
-                    onError={() => console.error('Error saving')}/>
+                    buttonText= "Opslaan"
+                    loadingText = "Bezig met oplaan"
+                    successText = "Opgeslagen"
+                    errorText = "Fout tijdens opslaan"
+                    onSave={() => {
+                        let result: ApiResult = {
+                            Ok: true,
+                            Errors: ['Er is iets mis gegaan!'] 
+                        }
+                        return new Promise<ApiResult>(resolve => setTimeout(() => resolve(result), 2000));
+                    }}
+                    onResult={(result) => console.error('Result: ', result.Ok)}
+                    />
 
                     <ErrorPopup isOpen={isErrorPopupOpen} onClose={() => {}} error={cvsError} />
 

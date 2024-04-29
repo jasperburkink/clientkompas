@@ -8,7 +8,7 @@ import SearchClients from 'components/clients/search-clients';
 import { Copyright } from 'components/common/copyright';
 import { Header } from 'components/common/header';
 import { Label } from 'components/common/label';
-import SaveButton from 'components/common/SaveButton';
+import SaveButton from 'components/common/save-button';
 import LabelField from 'components/common/label-field';
 import { InputField } from 'components/common/input-field';
 import { Dropdown, DropdownObject } from 'components/common/dropdown';
@@ -28,6 +28,7 @@ import Client from 'types/model/Client';
 import { Moment } from 'moment';
 import CVSError from 'types/common/cvs-error';
 import { FieldOrderWorkingContract } from 'types/common/fieldorder';
+import ApiResult from 'types/common/api-result';
 
 const ClientCreate = () => {
     const initialClient: Client = { 
@@ -512,30 +513,23 @@ const ClientCreate = () => {
 
                     </SlideToggleLabel>
 
-                    <div className='button-container'>
-                        <SaveButton
-                        buttonText= "Opslaan"
-                        loadingText = "Bezig met oplaan"
-                        successText = "Cliënt opgeslagen"
-                        errorText = "Fout tijdens opslaan"
-                        onSave={async () => { //TODO: Save button repair & error handling via server
-                            try {
-                                await saveClient(client!);
-
-                                setConfirmMessage('Client succesvol opgeslagen');
-                                setConfirmPopupOneButtonOpen(true);
-                            } catch (error: any) {
-                                setCvsError({
-                                    id: 0,
-                                    errorcode: 'E',
-                                    message: `Er is een opgetreden tijdens het opslaan van een client. Foutmelding: ${error.message}`
-                                });
-                                setErrorPopupOpen(true);
-                            }                        
-                        }}
-                        onError={() => console.error('Error saving')}
-                        />
                     </div>
+                <div className='button-container'>
+                    <SaveButton
+                    buttonText= "Opslaan"
+                    loadingText = "Bezig met oplaan"
+                    successText = "Cliënt opgeslagen"
+                    errorText = "Fout tijdens opslaan"
+                    onSave={() => {
+                        let result: ApiResult = {
+                            Ok: false,
+                            Errors: ['Er is iets mis gegaan!'] 
+                        }
+                        return new Promise<ApiResult>(resolve => setTimeout(() => resolve(result), 2000));
+                    }}
+                    onResult={(result) => console.error('Result: ', result.Ok)}
+                    />
+
                 </div>
             </div>
 
