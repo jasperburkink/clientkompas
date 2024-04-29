@@ -15,7 +15,7 @@ interface DomainObjectInputProps<T>{
     className?: string;
     label: string;
     labelType: string;
-    domainObjects: T[];
+    value: T[];
     fieldOrder?: string[];
     numMinimalRequired: number;    
     addObject: () => T;
@@ -27,7 +27,7 @@ interface DomainObjectInputProps<T>{
 
 const DomainObjectInput = <T extends Record<string, any>>(props: DomainObjectInputProps<T>) => {
         const [domainObjects, setDomainObjects] = useState<T[]>(() => {
-            const defaultObjects:T[] = props.domainObjects;
+            const defaultObjects:T[] = props.value;
 
             for (let i = 0; defaultObjects.length < Math.max(props.numMinimalRequired, 1); i++) {
                 const newObject: T = props.addObject();
@@ -48,23 +48,23 @@ const DomainObjectInput = <T extends Record<string, any>>(props: DomainObjectInp
             props.onRemoveObject(domainObjectToRemove);
         };
 
-        const inputFields = domainObjects.map((domainObject, index) => {            
+        const inputFields = domainObjects.map((domainObject, domainIndex) => {            
             const orderedFields = props.fieldOrder || Object.keys(domainObject);
             const customLabelsForInterface = CustomLabels[props.typeName] as { [key: string]: string };
-            let requiredDomainObject: boolean = props.numMinimalRequired !== null && index < props.numMinimalRequired!;
+            let requiredDomainObject: boolean = props.numMinimalRequired !== null && domainIndex < props.numMinimalRequired!;
             const isOddNumberOfFields = orderedFields.length % 2 !== 0;
 
             return (
-                <div key={index} className={`domain-object-container`}>
+                <div key={domainIndex} className={`domain-object-container`}>
                     <div className="domain-object-container-item">
-                    {orderedFields.map((key, idx) => {
+                    {orderedFields.map((key, fieldIndex) => {
                         let value = domainObject[key];
                         let textValue: string  = customLabelsForInterface[key] ? customLabelsForInterface[key] : key;
                         let inputType: string = 'text';
                         inputType = getInputFieldType(value, key, props.optionsDictionary);
 
-                        const isFirstField = idx === 0;
-                        const isLastField = idx === orderedFields.length - 1;
+                        const isFirstField = fieldIndex === 0;
+                        const isLastField = fieldIndex === orderedFields.length - 1;
 
                         const onChangeField = (updatedValue: any, index: number, inputType: string) => {
                             const updatedDomainObjects = [...domainObjects];
@@ -100,7 +100,7 @@ const DomainObjectInput = <T extends Record<string, any>>(props: DomainObjectInp
                                 isOddNumberOfFields, 
                                 isFirstField,
                                 onChangeField,
-                                index,
+                                domainIndex,
                                 options)
                         );
                     })}
@@ -131,25 +131,25 @@ function getDomainObjectField<T extends Record<string, any>>(
     isOddNumberOfFields: boolean, 
     isFirstField: boolean, 
     onChange: (updatedValue: any, index: number, inputType: string) => void, 
-    index: number,
+    domainIndex: number,
     options?: DropdownObject[]) {
     let fieldComponent;
     
     switch (inputType) {
         case 'date':
-          fieldComponent = getDateField(textValue, requiredDomainObject, value, onChange, inputType, index);  
+          fieldComponent = getDateField(textValue, requiredDomainObject, value, onChange, inputType, domainIndex);  
             break;
         case 'dropdown':
             options 
-            ? fieldComponent = getDropdownField(textValue, requiredDomainObject, value, onChange, inputType, index, options)
-            : fieldComponent = getTextField(textValue, requiredDomainObject, value, onChange, inputType, index);
+            ? fieldComponent = getDropdownField(textValue, requiredDomainObject, value, onChange, inputType, domainIndex, options)
+            : fieldComponent = getTextField(textValue, requiredDomainObject, value, onChange, inputType, domainIndex);
             break;
         default:
-            fieldComponent = getTextField(textValue, requiredDomainObject, value, onChange, inputType, index);
+            fieldComponent = getTextField(textValue, requiredDomainObject, value, onChange, inputType, domainIndex);
             break;
     }
 
-    let firstField:boolean = index === 0;
+    let firstField:boolean = domainIndex === 0;
 
     return <>
         <div key={key} className="domain-object-field">
@@ -188,15 +188,15 @@ function getTextField(
     value: string, 
     onChange: (updatedValue: string, index: number, inputType: string) => void, 
     inputType: string,
-    index: number) {
+    domainIndex: number) {
     return <div className="domain-object-field-container">
         <LabelField text={textValue} required={requiredDomainObject}>
             <InputField 
-                inputfieldtype={{type:'text'}} 
-                 value={value}
+                inputfieldtype={{type:'text'}}                
+                value={value}
                 required={requiredDomainObject} 
                 placeholder={textValue} 
-                onChange={(newValue) => {onChange(newValue, index, inputType)}} />
+                onChange={(newValue) => {onChange(newValue, domainIndex, inputType)}} />
         </LabelField>
     </div>;
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './input-field.css';
 import { InputFieldType } from 'types/common/InputFieldComponentType';
 
@@ -11,13 +11,15 @@ export interface InputFieldProps {
     onChange?: (value: string) => void;
 }
 
-export const InputField = (props: InputFieldProps) => (  
+export const InputField = (props: InputFieldProps) => {
+
+    return(
     <div className={'input-field ' + props.className}>
         <input
-        onChange={(e) => {props.onChange?.(e.target.value);}}
+        onChange={(e) => {props.onChange?.(e.target.value);}}        
         value={props.value}
         type={props.inputfieldtype.type}
         placeholder={props.placeholder}
         required={props.required} />
      </div>
-);
+)};

@@ -36,6 +36,21 @@ namespace API.Controllers
             }
         }
 
+
+        [HttpGet("GetClientEditor/{id}")]
+        public async Task<ActionResult<GetClientEditDto>> GetClientEditor(int id)
+        {
+            try
+            {
+                var client = await Mediator.Send(new GetClientEditQuery { ClientId = id });
+                return Ok(client);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+        }
+
         [HttpPost]
         public async Task<ActionResult<ClientDto>> Create(CreateClientCommand command)
         {

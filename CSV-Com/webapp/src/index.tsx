@@ -2,25 +2,28 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './pages/App';
-import Clients from './pages/Clients';
-import ClientCreate from './pages/client-create';
 import reportWebVitals from './utils/reportWebVitals';
 import preval from 'preval.macro'
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ClientContextWrapper } from './pages/client-context';
+import { ClientContextWrapper, ClientRoute } from './pages/client-context';
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 root.render(
-    <React.StrictMode>
-        <BrowserRouter>
-            <Routes>
-                <Route path='/' element={<App />} />
-                <Route path='/Clients/:id?' element={<ClientContextWrapper />} />
-                <Route path='/client/new' element={<ClientCreate />} />
-            </Routes>
-        </BrowserRouter>
-    </React.StrictMode>
+    <>
+        <React.StrictMode>
+            <BrowserRouter>
+                <Routes>
+                    <Route path='/' element={<App />} />
+                    <Route  path='/clients' element={<ClientContextWrapper clientRoute={ClientRoute.VIEW_CLIENT} />} />
+                    <Route path='/clients/:id' element={<ClientContextWrapper clientRoute={ClientRoute.VIEW_CLIENT} />} />
+                    <Route path='/clients/edit' element={<ClientContextWrapper clientRoute={ClientRoute.EDIT_CLIENT} />} />
+                    <Route path='/clients/edit/:id' element={<ClientContextWrapper clientRoute={ClientRoute.EDIT_CLIENT} />} />
+                </Routes>
+            </BrowserRouter>
+        </React.StrictMode>
+        <span>Build Date: {preval`module.exports = new Date().toLocaleString();`}.</span>
+    </>
 );
 
 // If you want to start measuring performance in your app, pass a function
