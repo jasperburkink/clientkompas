@@ -38,10 +38,12 @@ const DropdownWithButton = (props: IDropDownProps) => {
         onChangeBadges(newBadges, props);
     };
 
-    const addBadge = () => {
-        if (value === '') return;
+    const addBadge = (item?: number) => {
+        if ((!value || value === '') && !item) return;
 
-        const option = props.options.find(element => element.value === parseInt(value));
+        let valueOption = item ?? parseInt(value);
+
+        const option = props.options.find(element => element.value === valueOption);
         const newBadge: IBadge = {
           id: option!.value,
           text: option!.label
@@ -56,12 +58,59 @@ const DropdownWithButton = (props: IDropDownProps) => {
         setSelect('');
     };
 
+    // const addBadge = async (item?: number) => {
+    //     if ((!value || value === '') && !item) return;
+    
+    //     let valueOption = item ?? parseInt(value);
+    
+    //     const option = props.options.find(element => element.value === valueOption);
+    //     const newBadge: IBadge = {
+    //         id: option!.value,
+    //         text: option!.label
+    //     };
+        
+    //     // Wacht tot de badge is toegevoegd voordat de staat wordt bijgewerkt
+    //     await new Promise<void>((resolve) => {
+    //         const updateState = () => {
+    //             const newbadges = badges.concat(newBadge);
+    //             setBadges(newbadges);
+        
+    //             onChangeBadges(newbadges, props);
+        
+    //             setCurentOptions(currentOptions.filter(badge => badge.id !== option?.value));
+    //             setSelect('');
+    //             resolve();
+    //         };
+            
+    //         updateState();
+    //     });
+    // };
+
     useEffect(() => {
-        const newOptions: IBadge[] = props.options.map(item => ({id: item.value, text: item.label}));
-        setCurentOptions(newOptions);
+        const addOptions = async () => {
+            const newOptions: IBadge[] = props.options.map(item => ({id: item.value, text: item.label}));
+            setCurentOptions(newOptions);
+        };
+
+        addOptions();
     }, [props.options]);
 
-// TODO: Load current badges and according existing values
+    useEffect(() => {        
+
+        const addExitingBadges = async () => {
+            //setBadges([]);
+
+            if (props.value && Array.isArray(props.value)) {
+                for (const item of props.value) {
+                    if (item) {
+                        await addBadge(item);
+                    }
+                }
+            }            
+        };
+    
+        addExitingBadges();
+    }, [props.value]);
 
     return (
         <div className='input-field flex-col '>
@@ -69,16 +118,16 @@ const DropdownWithButton = (props: IDropDownProps) => {
                 <select id="" className='dropdown' onChange={event => {setSelect(event.target.value);}} required={props.required}>
                     <option value=''>{OPTION_TEXT}</option>
                     {currentOptions.map((currentOption, index) => (
-                        <option key={currentOption.id} value={currentOption.id}>{currentOption.text}</option>
+                        <option key={props.inputfieldname + currentOption.id} value={currentOption.id}>{currentOption.text}</option>
                     ))};    
                 </select>
-                <button className='add-extra-dropdown-btn' type='button'  onClick={addBadge}>
+                <button className='add-extra-dropdown-btn' type='button'  onClick={() => {addBadge();}}>
                     <FontAwesomeIcon className='ml-[0]' icon={faPlus} size="xl" style={{color: "#000000",}} />
                 </button>
             </div>
             <div className='flex flex-wrap max-w-[100%]'>
                 {badges.map((badge, index) => (  
-                    <div key={badge.id} className='dropdownbadge'>
+                    <div key={props.inputfieldname + '_badge_' +badge.id} className='dropdownbadge'>
                         <div>
                             <p className='mx-1'>{badge.text}</p>
                             <input name={props.inputfieldname} type="hidden" value={badge.id} />

@@ -1,5 +1,6 @@
-import './client-create.css';
+import './client-editor.css';
 import React, { useEffect, useState } from "react";
+import { useParams } from 'react-router-dom';
 import { Sidebar } from 'components/sidebar/sidebar';
 import { NavButton } from 'components/nav/nav-button';
 import { SidebarGray } from 'components/sidebar/sidebar-gray';
@@ -28,9 +29,13 @@ import Client from 'types/model/Client';
 import { Moment } from 'moment';
 import CVSError from 'types/common/cvs-error';
 import { FieldOrderWorkingContract } from 'types/common/fieldorder';
+import StatusEnum from 'types/common/StatusEnum';
+import { fetchClientEditor } from 'utils/api';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import ApiResult from 'types/common/api-result';
 
-const ClientCreate = () => {
+const ClientEditor = () => {
     const initialClient: Client = { 
         id: 0,
         firstname: '',
@@ -50,8 +55,11 @@ const ClientCreate = () => {
         benefitforms: [],
     };
 
+    var { id } = useParams();
+
     const [client, setClient] = useState<Client>(initialClient);
     const [error, setError] = useState<string | null>(null);
+    const [status, setStatus] = useState(StatusEnum.IDLE);
 
     const [confirmMessage, setConfirmMessage] = useState<string>('');
     const [isConfirmPopupOneButtonOpen, setConfirmPopupOneButtonOpen] = useState<boolean>(false);
@@ -75,7 +83,6 @@ const ClientCreate = () => {
     const [benefitForms, setBenefitForms] = useState<IDropdownObject[]>([]);
     const [maritalStatuses, setMaritalStatuses] = useState<DropdownObject[]>([]);
     const [driversLicences, setDriversLicences] = useState<DropdownObject[]>([]);
-    const workingContracts : WorkingContract[] = [];
     
     const handleClientInputChange = (fieldName: string, value: string) => {
         setClient(prevClient => ({
@@ -207,6 +214,22 @@ const ClientCreate = () => {
     }
 
     useEffect(() => {
+        const fetchClientById = async () => {
+            try {
+              setStatus(StatusEnum.PENDING);
+              const fetchedClient: Client = await fetchClientEditor(id!);
+
+              setStatus(StatusEnum.SUCCESSFUL);
+    
+              setClient(fetchedClient);
+            } catch (e) {
+              // TODO: error handling
+              console.error(e);
+              setStatus(StatusEnum.REJECTED);
+              //setError(e);
+            }
+          };
+
         const loadDiagnoses = async () => { 
             try {
                 const apiDiagnoses = await fetchDiagnosis();
@@ -279,13 +302,22 @@ const ClientCreate = () => {
             }
         };
 
+        if(id && status !== StatusEnum.PENDING) {
+            fetchClientById();
+        }
+
         loadDiagnoses();
         loadBenifitForms();
         loadMaritalStatuses();
         loadDriversLicences();
-    }, []);    
+    }, [id]);
 
     return(
+        <>
+        <div className={`loading-spinner ${showLoadingScreen(status)}`}>
+            <FontAwesomeIcon icon={faSpinner} className="fa fa-2x fa-refresh fa-spin" />
+        </div>
+
         <div className="flex flex-col lg:flex-row h-screen lg:h-auto">
             <div className='lg:flex w-full'>
                 <div id='staticSidebar' className='sidebarContentPush'></div>
@@ -434,12 +466,13 @@ const ClientCreate = () => {
                         className='client-domain-object'
                         label='In geval van nood'
                         addObject={addEmergencyPerson} 
-                        domainObjects={client.emergencypeople!} 
+                        value={client.emergencypeople!} 
                         labelType='contactpersoon' 
                         typeName='EmergencyPerson' 
                         numMinimalRequired={1}
                         onRemoveObject={onRemoveEmergencyPerson}
-                        onChangeObject={handleEmergencyPersonChange} />
+                        onChangeObject={handleEmergencyPersonChange}
+                        key={JSON.stringify(client.id + "_emergencypeople")} />
 
                     <div className='client-remarks'>
                         <Label text='Opmerkingen' />
@@ -484,7 +517,8 @@ const ClientCreate = () => {
                                     required={false} 
                                     inputfieldname='driverslicences'
                                     value={client.driverslicences?.map(d => d.id)}
-                                    onChange={(value) => {handleDropdownWithButtonChange('driverslicences', value)}} />
+                                    onChange={(value) => {handleDropdownWithButtonChange('driverslicences', value)}}
+                                    />
                             </LabelField>
 
                             {/* TODO: doelgroepregister with yes no dropdown
@@ -502,34 +536,27 @@ const ClientCreate = () => {
                             className='client-domain-object'
                             label='Werkervaring' 
                             addObject={addWorkingContract} 
-                            domainObjects={workingContracts}
+                            value={client.workingcontracts!}
                             fieldOrder={FieldOrderWorkingContract}
                             labelType='werkervaring' 
                             typeName='WorkingContract' 
                             numMinimalRequired={0}
                             onRemoveObject={onRemoveWorkingContract}
                             onChangeObject={handleWorkingContractChange}
-                            optionsDictionary={optionsDictionaryWorkingContract} />
+                            optionsDictionary={optionsDictionaryWorkingContract}
+                            key={JSON.stringify(client.id + "_workingcontracts")} />
 
                     </SlideToggleLabel>
 
+                    <div className='button-container'>
+                        <SaveButton
+                        buttonText= "Opslaan"
+                        loadingText = "Bezig met oplaan"
+                        successText = "Cliënt opgeslagen"
+                        errorText = "Fout tijdens opslaan"
+                        onSave={async () => await saveClient(client!)}
+                        onResult={(apiResult) => handleSaveResult(apiResult, setConfirmMessage, setConfirmPopupOneButtonOpen, setCvsError, error, setErrorPopupOpen)} />
                     </div>
-                <div className='button-container'>
-                    <SaveButton
-                    buttonText= "Opslaan"
-                    loadingText = "Bezig met oplaan"
-                    successText = "Cliënt opgeslagen"
-                    errorText = "Fout tijdens opslaan"
-                    onSave={() => {
-                        let result: ApiResult = {
-                            Ok: false,
-                            Errors: ['Er is iets mis gegaan!'] 
-                        }
-                        return new Promise<ApiResult>(resolve => setTimeout(() => resolve(result), 2000));
-                    }}
-                    onResult={(result) => console.error('Result: ', result.Ok)}
-                    />
-
                 </div>
             </div>
 
@@ -545,7 +572,27 @@ const ClientCreate = () => {
                 onClose={() => setErrorPopupOpen(false)} />  
             <Copyright />
         </div>
+        </>
     );
 }
 
-export default ClientCreate;
+export default ClientEditor;
+
+function handleSaveResult(apiResult: ApiResult, setConfirmMessage: React.Dispatch<React.SetStateAction<string>>, setConfirmPopupOneButtonOpen: React.Dispatch<React.SetStateAction<boolean>>, setCvsError: React.Dispatch<React.SetStateAction<CvsError>>, error: string | null, setErrorPopupOpen: React.Dispatch<React.SetStateAction<boolean>>) {
+    if (apiResult.Ok) {
+        setConfirmMessage('Client succesvol opgeslagen');
+        setConfirmPopupOneButtonOpen(true);
+    }
+    else {
+        setCvsError({
+            id: 0,
+            errorcode: 'E',
+            message: `Er is een opgetreden tijdens het opslaan van een client. Foutmelding: ${apiResult.Errors.join(', ')}`
+        });
+        setErrorPopupOpen(true);
+    }
+}
+
+function showLoadingScreen(status: string): string | undefined {
+    return ` ${status === StatusEnum.PENDING ? 'loading-spinner-visible' : 'loading-spinner-hidden'}`;
+}

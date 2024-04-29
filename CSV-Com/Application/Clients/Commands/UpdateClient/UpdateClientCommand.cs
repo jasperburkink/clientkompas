@@ -1,8 +1,6 @@
 ﻿using Application.Clients.Dtos;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces.CVS;
-using Application.Diagnoses.Queries.GetDiagnosis;
-using Application.DriversLicences.Queries;
 using AutoMapper;
 using Domain.CVS.Domain;
 using Domain.CVS.Enums;
@@ -41,17 +39,17 @@ namespace Application.Clients.Commands.UpdateClient
 
         public string EmailAddress { get; set; }
 
-        public string MaritalStatus { get; set; }
-
-        public ICollection<DriversLicenceDto> DriversLicences { get; set; }
-
-        public ICollection<DiagnosisDto> Diagnoses { get; set; }
-
-        public ICollection<EmergencyPersonDto> EmergencyPeople { get; set; }
+        public int? MaritalStatus { get; set; }
 
         public int[] BenefitForms { get; set; }
 
-        public ICollection<WorkingContractDto> WorkingContracts { get; set; }
+        public int[] DriversLicences { get; set; }
+
+        public int[] Diagnoses { get; set; }
+
+        public EmergencyPersonDto[] EmergencyPeople { get; set; }
+
+        public WorkingContractDto[] WorkingContracts { get; set; }
 
         public string Remarks { get; set; }
     }
@@ -69,12 +67,12 @@ namespace Application.Clients.Commands.UpdateClient
 
         public async Task<ClientDto> Handle(UpdateClientCommand request, CancellationToken cancellationToken)
         {
-            var client = await _unitOfWork.ClientRepository.GetByIDAsync(request.Id, includeProperties: "EmergencyPeople,WorkingContracts,DriversLicences,Diagnoses", cancellationToken)
+            var client = await _unitOfWork.ClientRepository.GetByIDAsync(request.Id, includeProperties: "DriversLicences,BenefitForms,Diagnoses,EmergencyPeople,WorkingContracts,MaritalStatus", cancellationToken)
                 ?? throw new NotFoundException(nameof(Client), request.Id);
 
-            var benefitForms = new List<BenefitForm>(await _unitOfWork.BenefitFormRepository.GetAsync(bf => request.BenefitForms.Contains(bf.Id)));
+            var benefitForms = (await _unitOfWork.BenefitFormRepository.GetAsync(bf => request.BenefitForms.Contains(bf.Id))).ToList();
 
-            var maritalStatus = (await _unitOfWork.MaritalStatusRepository.GetAsync(a => a.Name == request.MaritalStatus))?.SingleOrDefault()
+            var maritalStatus = (await _unitOfWork.MaritalStatusRepository.GetAsync(a => a.Id == request.MaritalStatus))?.SingleOrDefault()
               ?? throw new NotFoundException(nameof(MaritalStatus), request.MaritalStatus);
 
             client.FirstName = request.FirstName;
@@ -97,9 +95,9 @@ namespace Application.Clients.Commands.UpdateClient
 
             client.BenefitForms = benefitForms;
 
-            client.DriversLicences = request.DriversLicences.Select(a => a.ToDomainModel(_mapper, client)).ToList();
+            client.DriversLicences = _unitOfWork.DriversLicenceRepository.Get(bf => request.BenefitForms.Contains(bf.Id)).ToList();
 
-            client.Diagnoses = request.Diagnoses.Select(a => a.ToDomainModel(_mapper, client)).ToList();
+            client.Diagnoses = _unitOfWork.DiagnosisRepository.Get(diagnosis => request.Diagnoses.Contains(diagnosis.Id)).ToList();
 
             client.EmergencyPeople = request.EmergencyPeople.Select(a => a.ToDomainModel(_mapper, client)).ToList();
 
@@ -109,7 +107,7 @@ namespace Application.Clients.Commands.UpdateClient
 
             client.Remarks = request.Remarks;
 
-            _unitOfWork.ClientRepository.Update(client);
+            await _unitOfWork.ClientRepository.UpdateAsync(client);
 
             await _unitOfWork.SaveAsync(cancellationToken);
 

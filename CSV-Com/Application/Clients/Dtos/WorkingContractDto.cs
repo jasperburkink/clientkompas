@@ -8,6 +8,8 @@ namespace Application.Clients.Dtos
 {
     public class WorkingContractDto : IMapFrom<WorkingContract>
     {
+        public int Id { get; set; }
+
         public string CompanyName { get; set; }
 
         public string Function { get; set; }

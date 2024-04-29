@@ -1,14 +1,14 @@
 ﻿using Application.BenefitForms.Queries.GetBenefitForm;
+using Application.Clients.Dtos;
 using Application.Common.Mappings;
 using Application.Diagnoses.Queries.GetDiagnosis;
 using Application.DriversLicences.Queries;
 using AutoMapper;
 using Domain.CVS.Domain;
-using Domain.CVS.Enums;
 
-namespace Application.Clients.Dtos
+namespace Application.Clients.Queries.GetClients
 {
-    public class ClientDto : IMapFrom<Client>
+    public class GetClientEditDto : IMapFrom<Client>
     {
         private const char SeperatorChar = ',';
 
@@ -22,7 +22,7 @@ namespace Application.Clients.Dtos
 
         public string LastName { get; set; }
 
-        public string Gender { get; set; }
+        public int Gender { get; set; }
 
         public string StreetName { get; set; }
 
@@ -40,7 +40,7 @@ namespace Application.Clients.Dtos
 
         public string EmailAddress { get; set; }
 
-        public string MaritalStatus { get; set; }
+        public int MaritalStatus { get; set; }
 
         public virtual ICollection<DriversLicenceDto> DriversLicences { get; set; }
 
@@ -57,9 +57,9 @@ namespace Application.Clients.Dtos
         public void Mapping(Profile profile)
         {
             // TODO: Get the right text value for the enum values. Depends on language user.
-            profile.CreateMap<Client, ClientDto>()
-                .ForMember(cDto => cDto.MaritalStatus, ms => ms.MapFrom(c => c.MaritalStatus.Name))
-                .ForMember(cDto => cDto.Gender, s => s.MapFrom(c => Enum.GetName(typeof(Gender), c.Gender)))
+            profile.CreateMap<Client, GetClientEditDto>()
+                .ForMember(cDto => cDto.MaritalStatus, ms => ms.MapFrom(c => c.MaritalStatus.Id))
+                .ForMember(cDto => cDto.Gender, s => s.MapFrom(c => c.Gender))
                 .ForMember(cDto => cDto.StreetName, address => address.MapFrom(c => c.Address.StreetName))
                 .ForMember(cDto => cDto.HouseNumber, address => address.MapFrom(c => c.Address.HouseNumber))
                 .ForMember(cDto => cDto.HouseNumberAddition, address => address.MapFrom(c => c.Address.HouseNumberAddition))

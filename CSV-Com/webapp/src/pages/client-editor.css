@@ -4,6 +4,30 @@
 @import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600&display=swap');
 
 @layer components {
+    .loading-spinner{
+        @apply
+        fixed
+        flex
+        inset-0
+         bg-gray-800
+          bg-opacity-50
+        items-center
+        justify-center
+        h-screen
+        w-full
+        z-50;
+    }
+
+    .loading-spinner-visible{
+        @apply
+        visible;
+    }
+
+    .loading-spinner-hidden{
+        @apply
+        invisible;
+    }
+
     .client-create-container {
         @apply
         flex

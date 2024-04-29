@@ -5,6 +5,8 @@ import MaritalStatus from "types/model/MaritalStatus";
 import DriversLicence from "types/model/DriversLicence";
 import Client from "types/model/Client";
 import moment from 'moment';
+import { isNullOrEmpty } from "./utilities";
+import ApiResult from "types/common/api-result";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -26,8 +28,33 @@ async function fetchAPI<T>(url: string, method: string = 'GET', body?: any): Pro
     return response.json() as Promise<T>;
 }
 
+//TODO: move this to global file
+const DATE_FORMAT_JSON = 'yyyy-MM-DD';
+    
+moment.prototype.toJSON = function(){
+    return moment(this).format(DATE_FORMAT_JSON);
+}
+Date.prototype.toJSON = function(){
+    return moment(this).format(DATE_FORMAT_JSON);
+}
+
 export const fetchClient = async (clientId: string): Promise<ClientQuery> => {
     return fetchAPI<ClientQuery>(`${apiUrl}Client/${clientId}`);
+}
+
+export const fetchClientEditor = async (clientId: string): Promise<Client> => {
+    let client = await fetchAPI<Client>(`${apiUrl}Client/GetClientEditor/${clientId}`);
+
+    // Parse dates in client object
+    client.dateofbirth = client.dateofbirth ? new Date(client.dateofbirth) : undefined;
+    if (client.workingcontracts) {
+        client.workingcontracts.forEach(contract => {
+            contract.fromdate = contract.fromdate ? new Date(contract.fromdate) : undefined;
+            contract.todate = contract.todate ? new Date(contract.todate) : undefined;
+        });
+    }
+
+    return client;
 }
 
 export const searchClients = async (searchTerm: string): Promise<ClientQuery[]> => {
@@ -53,9 +80,6 @@ export const fetchDriversLicences = async (): Promise<DriversLicence[]> => {
 export const deactivateClient = async (clientId: number): Promise<ClientQuery> => {
     return fetchAPI<ClientQuery>(`${apiUrl}Client/DeactivateClient`, 'PUT', { id: clientId });
 }
-
-//TODO: move this to global file
-const DATE_FORMAT_JSON = 'yyyy-MM-DD';
     
 moment.prototype.toJSON = function(){
     return moment(this).format(DATE_FORMAT_JSON);
@@ -64,11 +88,11 @@ Date.prototype.toJSON = function(){
     return moment(this).format(DATE_FORMAT_JSON);
 }
 
-export const saveClient = async (client: Client): Promise<void> => {    
-    let body = JSON.stringify(client);
+export const saveClient = async (client: Client): Promise<ApiResult> => {
+    let method = client.id > 0  ? 'PUT' : 'POST';
 
     const requestOptions: RequestInit = {
-        method: 'POST',
+        method: method,
         headers: {
             'Content-Type': 'application/json'
         },
@@ -79,9 +103,8 @@ export const saveClient = async (client: Client): Promise<void> => {
 
     let {title, errors} = await response.json();    
 
-    if (!response.ok) {
-        console.log(title, errors);
-        //TODO: Add all errors to error object, so caller can show errors!
-        throw new Error(title ?? 'Er is een fout opgetreden bij het opslaan van de cliënt.');
+    return {
+        Ok: response.ok,
+        Errors: errors
     }
 }

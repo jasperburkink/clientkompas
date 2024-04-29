@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="Clients\Commands\UpdateClient\UpdateClientCommandValidator.cs" />
     <Compile Include="Clients\Commands\UpdateClient\UpdateClientCommand.cs" />
   </ItemGroup>
 

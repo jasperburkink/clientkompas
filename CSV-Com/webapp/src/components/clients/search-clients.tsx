@@ -33,11 +33,10 @@ const SearchClients: React.FC = () => {
 
   const updateSearchResults = async (searchTerm: string) => {
     try{
-
       setStatus(StatusEnum.PENDING);
-      const clients = await searchClients(searchTerm);
+      const clients = await searchClients(searchTerm);      
       setStatus(StatusEnum.SUCCESSFUL);
-
+      
       if(!clients){
         return;
       }
@@ -46,7 +45,7 @@ const SearchClients: React.FC = () => {
       {          
         id: client.id,
         name: getCompleteClientName(client)
-      })));
+      })));      
     }
     catch(err) {
       setStatus(StatusEnum.REJECTED);

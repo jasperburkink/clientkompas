@@ -325,7 +325,7 @@ function App() {
                     <DomainObjectInput                    
                         label='Inputvelden voor contactpersoon' 
                         addObject={addEmergencyPerson} 
-                        domainObjects={emergencyPeople} 
+                        value={emergencyPeople} 
                         labelType='contactpersoon' 
                         typeName='EmergencyPerson' 
                         numMinimalRequired={1}
@@ -335,7 +335,7 @@ function App() {
                     <DomainObjectInput 
                         label='Inputvelden voor werkervaring' 
                         addObject={addWorkingContract} 
-                        domainObjects={workingContracts} 
+                        value={workingContracts} 
                         labelType='werkervaring' 
                         typeName='WorkingContract' 
                         numMinimalRequired={2}

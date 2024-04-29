@@ -1,4 +1,5 @@
-﻿using Domain.CVS.Domain;
+﻿using Domain.Constants;
+using Domain.CVS.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -41,18 +42,16 @@ namespace Infrastructure.Persistence.CVS.Configuration
                 .WithOne(wc => wc.Client)
                 .OnDelete(DeleteBehavior.Cascade);
 
-
-
             builder.Property(c => c.FirstName)
-                .HasMaxLength(50)
+                .HasMaxLength(ClientConstants.ClientFirstNameMaxLength)
                 .IsRequired();
 
             builder.Property(c => c.PrefixLastName)
-                .HasMaxLength(15)
+                .HasMaxLength(ClientConstants.ClientPrefixLastNameMaxLength)
                 .IsRequired(false);
 
             builder.Property(c => c.LastName)
-                .HasMaxLength(50)
+                .HasMaxLength(ClientConstants.ClientLastNameMaxLength)
                 .IsRequired();
 
             builder.Property(c => c.Initials)

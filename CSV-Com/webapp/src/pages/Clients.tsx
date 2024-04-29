@@ -160,8 +160,9 @@ function Clients() {
                     {/* Profile picture */}
                     <div className={`client-profile-picture`} style={{ 
                         gridRowStart: "span " + profilePicSpanValue,
-                        gridRowEnd: "span "+profilePicSpanValue}}>                        
-                        <ProfilePicture />
+                        gridRowEnd: "span "+profilePicSpanValue}}>
+                        {/* TODO: Future feature */}
+                        {/* <ProfilePicture /> */}
                     </div>
 
                     <div className='client-info-main'>                        
@@ -300,8 +301,9 @@ function Clients() {
                         ]} />
                     
                     <div className='button-container'>
-                        <LinkButton buttonType={{type:"Solid"}} text="Cliënt aanpassen" href="../client-edit" />
-                        <LinkButton buttonType={{type:"NotSolid"}} text="Urenoverzicht" href="../client-hours" />
+                        <LinkButton buttonType={{type:"Solid"}} text="Cliënt aanpassen" href={`../clients/edit/${id}`} />
+                        {/* TODO: Future feature */}
+                        {/* <LinkButton buttonType={{type:"NotSolid"}} text="Urenoverzicht" href="../client-hours" /> */}
                     </div>
                 </div>
                 }
