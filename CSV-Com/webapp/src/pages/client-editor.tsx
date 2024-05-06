@@ -1,6 +1,6 @@
 import './client-editor.css';
-import React, { useEffect, useState } from "react";
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState, useContext } from "react";
+import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import { Sidebar } from 'components/sidebar/sidebar';
 import { NavButton } from 'components/nav/nav-button';
 import { SidebarGray } from 'components/sidebar/sidebar-gray';
@@ -25,7 +25,7 @@ import ConfirmPopup from "components/common/confirm-popup";
 import ErrorPopup from 'components/common/error-popup';
 import CvsError from 'types/common/cvs-error';
 import { fetchBenefitForms, fetchDiagnosis, fetchMaritalStatuses, fetchDriversLicences, saveClient } from 'utils/api';
-import Client from 'types/model/Client';
+import Client, { getCompleteClientName } from 'types/model/Client';
 import { Moment } from 'moment';
 import CVSError from 'types/common/cvs-error';
 import { FieldOrderWorkingContract } from 'types/common/fieldorder';
@@ -37,6 +37,7 @@ import ApiResult from 'types/common/api-result';
 import DriversLicence from 'types/model/DriversLicence';
 import MaritalStatus from 'types/model/MaritalStatus';
 import BenefitForm from 'types/model/BenefitForm';
+import { ClientContext } from './client-context';
 
 const ClientEditor = () => {
     const initialClient: Client = { 
@@ -58,20 +59,21 @@ const ClientEditor = () => {
         benefitforms: [],
     };
 
+    const clientContext = useContext(ClientContext)
     var { id } = useParams();
-
+    const navigate = useNavigate();
+    
     const [client, setClient] = useState<Client>(initialClient);
     const [error, setError] = useState<string | null>(null);
     const [status, setStatus] = useState(StatusEnum.IDLE);
 
     const [confirmMessage, setConfirmMessage] = useState<string>('');
     const [isConfirmPopupOneButtonOpen, setConfirmPopupOneButtonOpen] = useState<boolean>(false);
-    const handlePopUpConfirmClick = () => {
+
+    const handlePopUpConfirmClientSavedClick = () => {
         setConfirmPopupOneButtonOpen(false);
-    };
-    const handlePopUpCancelClick = () => {
-        setConfirmPopupOneButtonOpen(false);
-    };
+        navigate(`/clients/${client.id}`);
+    }; // NOTE: this function is now specific for closing the confirm popup after saving a client.
 
     const [isErrorPopupOpen, setErrorPopupOpen] = useState<boolean>(false);
     const [cvsError, setCvsError] = useState<CvsError>(() => {
@@ -588,8 +590,11 @@ const ClientEditor = () => {
                         loadingText = "Bezig met oplaan"
                         successText = "Cliënt opgeslagen"
                         errorText = "Fout tijdens opslaan"
-                        onSave={async () => await saveClient(client!)}
-                        onResult={(apiResult) => handleSaveResult(apiResult, setConfirmMessage, setConfirmPopupOneButtonOpen, setCvsError, error, setErrorPopupOpen)} />
+                        onSave={async () => {                                 
+                                return await saveClient(client!)
+                            }
+                        }
+                        onResult={(apiResult) => handleSaveResult(apiResult, setConfirmMessage, setConfirmPopupOneButtonOpen, setCvsError, setErrorPopupOpen, setClient)} />
                     </div>
                 </div>
             </div>
@@ -597,8 +602,8 @@ const ClientEditor = () => {
             <ConfirmPopup
                 message={confirmMessage}
                 isOpen={isConfirmPopupOneButtonOpen}
-                onClose={handlePopUpCancelClick}
-                buttons={[{ text: 'Bevestigen', onClick: handlePopUpConfirmClick, buttonType: {type:"Solid"}}]} />
+                onClose={handlePopUpConfirmClientSavedClick}
+                buttons={[{ text: 'Bevestigen', onClick: handlePopUpConfirmClientSavedClick, buttonType: {type:"Solid"}}]} />
 
             <ErrorPopup 
                 error={cvsError} 
@@ -612,16 +617,24 @@ const ClientEditor = () => {
 
 export default ClientEditor;
 
-function handleSaveResult(apiResult: ApiResult, setConfirmMessage: React.Dispatch<React.SetStateAction<string>>, setConfirmPopupOneButtonOpen: React.Dispatch<React.SetStateAction<boolean>>, setCvsError: React.Dispatch<React.SetStateAction<CvsError>>, error: string | null, setErrorPopupOpen: React.Dispatch<React.SetStateAction<boolean>>) {
+function handleSaveResult(
+    apiResult: ApiResult<Client>, 
+    setConfirmMessage: React.Dispatch<React.SetStateAction<string>>, 
+    setConfirmPopupOneButtonOpen: React.Dispatch<React.SetStateAction<boolean>>, 
+    setCvsError: React.Dispatch<React.SetStateAction<CvsError>>, 
+    setErrorPopupOpen: React.Dispatch<React.SetStateAction<boolean>>, 
+    setClient: React.Dispatch<React.SetStateAction<Client>>) {
     if (apiResult.Ok) {
         setConfirmMessage('Client succesvol opgeslagen');
         setConfirmPopupOneButtonOpen(true);
+
+        setClient(apiResult.ReturnObject!);
     }
     else {
         setCvsError({
             id: 0,
             errorcode: 'E',
-            message: `Er is een opgetreden tijdens het opslaan van een client. Foutmelding: ${apiResult.Errors.join(', ')}`
+            message: `Er is een opgetreden tijdens het opslaan van een client. Foutmelding: ${apiResult.Errors!.join(', ')}`
         });
         setErrorPopupOpen(true);
     }

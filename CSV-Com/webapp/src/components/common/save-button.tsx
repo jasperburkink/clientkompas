@@ -6,23 +6,17 @@ import ApiResult from 'types/common/api-result';
 
 const RESET_TIMEOUT = 4000;
 
-interface SaveButtonProps {
+interface SaveButtonProps<T> {
   buttonText: string;
   loadingText: string;
   successText: string;
   errorText: string;
-  onSave: () => Promise<ApiResult>;
-  onResult: (result: ApiResult) => void;
+  onSave: () => Promise<ApiResult<T>>;
+  onResult: (result: ApiResult<T>) => void;
 }
 
-const SaveButton: React.FC<SaveButtonProps> = ({
-  buttonText,
-  loadingText,
-  successText,
-  errorText,
-  onSave,
-  onResult,
-}) => {
+
+const SaveButton = <T,>({ buttonText, loadingText, successText, errorText, onSave, onResult }: SaveButtonProps<T>) => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
@@ -44,7 +38,7 @@ const SaveButton: React.FC<SaveButtonProps> = ({
         setError(false);
       }, RESET_TIMEOUT)
 
-      onResult(result);     
+      onResult(result);  
   };
 
   return (

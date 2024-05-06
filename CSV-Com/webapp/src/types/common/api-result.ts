@@ -1,4 +1,5 @@
-export default interface ApiResult {
+export default interface ApiResult <T> {
     Ok: boolean;
-    Errors: string[];
+    Errors?: string[];
+    ReturnObject?: T;
 }
