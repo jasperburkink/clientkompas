@@ -29,7 +29,7 @@ const ResultsList: React.FC<ResultsListProps> = (props) => {
     return (
     <ul>
       {props.results.map((result) => (
-        <li className='results-item' key={result.id}><a href={'../clients/' + result.id}>{result.name}</a></li>
+        <li className='results-item' key={result.id}><a href={'/clients/' + result.id}>{result.name}</a></li>
       ))}
     </ul>
   );

@@ -2,6 +2,7 @@ import BenefitForm from "./BenefitForm";
 import Diagnosis from "./Diagnosis";
 import DriversLicence from "./DriversLicence";
 import EmergencyPerson from "./EmergencyPerson";
+import MaritalStatus from "./MaritalStatus";
 import WorkingContract from "./WorkingContract";
 
 export default interface Client {
@@ -19,7 +20,7 @@ export default interface Client {
     telephonenumber: string;
     dateofbirth?: Date;
     emailaddress: string;
-    maritalstatus?: number;
+    maritalstatus?: MaritalStatus;
     driverslicences: DriversLicence[];
     doelgroepregister: boolean;
     diagnoses?: Diagnosis[];

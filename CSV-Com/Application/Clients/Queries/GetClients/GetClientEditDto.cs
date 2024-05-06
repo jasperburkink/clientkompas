@@ -3,6 +3,7 @@ using Application.Clients.Dtos;
 using Application.Common.Mappings;
 using Application.Diagnoses.Queries.GetDiagnosis;
 using Application.DriversLicences.Queries;
+using Application.MaritalStatuses.Queries.GetMaritalStatus;
 using AutoMapper;
 using Domain.CVS.Domain;
 
@@ -10,8 +11,6 @@ namespace Application.Clients.Queries.GetClients
 {
     public class GetClientEditDto : IMapFrom<Client>
     {
-        private const char SeperatorChar = ',';
-
         public int Id { get; set; }
 
         public string FirstName { get; set; }
@@ -40,7 +39,7 @@ namespace Application.Clients.Queries.GetClients
 
         public string EmailAddress { get; set; }
 
-        public int MaritalStatus { get; set; }
+        public MaritalStatusDto? MaritalStatus { get; set; }
 
         public virtual ICollection<DriversLicenceDto> DriversLicences { get; set; }
 
@@ -58,7 +57,7 @@ namespace Application.Clients.Queries.GetClients
         {
             // TODO: Get the right text value for the enum values. Depends on language user.
             profile.CreateMap<Client, GetClientEditDto>()
-                .ForMember(cDto => cDto.MaritalStatus, ms => ms.MapFrom(c => c.MaritalStatus.Id))
+                .ForMember(cDto => cDto.MaritalStatus, ms => ms.MapFrom(c => c.MaritalStatus))
                 .ForMember(cDto => cDto.Gender, s => s.MapFrom(c => c.Gender))
                 .ForMember(cDto => cDto.StreetName, address => address.MapFrom(c => c.Address.StreetName))
                 .ForMember(cDto => cDto.HouseNumber, address => address.MapFrom(c => c.Address.HouseNumber))

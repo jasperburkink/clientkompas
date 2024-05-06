@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace Application.Clients.Commands.UpdateClient
 {
-    internal class UpdateClientCommandValidator : AbstractValidator<UpdateClientCommand>
+    public class UpdateClientCommandValidator : AbstractValidator<UpdateClientCommand>
     {
         private readonly IUnitOfWork _unitOfWork;
 

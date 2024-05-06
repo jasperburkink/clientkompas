@@ -13,7 +13,7 @@ import SaveButton from 'components/common/save-button';
 import LabelField from 'components/common/label-field';
 import { InputField } from 'components/common/input-field';
 import { Dropdown, DropdownObject } from 'components/common/dropdown';
-import DropdownWithButton, { IDropdownObject } from "components/common/dropdown-with-button";
+import DropdownWithButton from "components/common/dropdown-with-button";
 import { DatePicker } from 'components/common/datepicker';
 import Textarea from "components/common/text-area";
 import DomainObjectInput from 'components/common/domain-object-input';
@@ -32,8 +32,11 @@ import { FieldOrderWorkingContract } from 'types/common/fieldorder';
 import StatusEnum from 'types/common/StatusEnum';
 import { fetchClientEditor } from 'utils/api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faDiagnoses, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import ApiResult from 'types/common/api-result';
+import DriversLicence from 'types/model/DriversLicence';
+import MaritalStatus from 'types/model/MaritalStatus';
+import BenefitForm from 'types/model/BenefitForm';
 
 const ClientEditor = () => {
     const initialClient: Client = { 
@@ -79,10 +82,10 @@ const ClientEditor = () => {
         }
     });
 
-    const [diagnoses, setDiagnoses] = useState<IDropdownObject[]>([]);
-    const [benefitForms, setBenefitForms] = useState<IDropdownObject[]>([]);
-    const [maritalStatuses, setMaritalStatuses] = useState<DropdownObject[]>([]);
-    const [driversLicences, setDriversLicences] = useState<DropdownObject[]>([]);
+    const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
+    const [benefitForms, setBenefitForms] = useState<BenefitForm[]>([]);
+    const [maritalStatuses, setMaritalStatuses] = useState<MaritalStatus[]>([]);
+    const [driversLicences, setDriversLicences] = useState<DriversLicence[]>([]);
     
     const handleClientInputChange = (fieldName: string, value: string) => {
         setClient(prevClient => ({
@@ -98,17 +101,46 @@ const ClientEditor = () => {
         }));
     };
 
-    const handleDropdownChange = (fieldName: string, value: string | number) => {
+    const handleGenderChange = (value: number) => {
         setClient(prevClient => ({
             ...prevClient,
-            [fieldName]: value
+            gender: value
+        }));
+    };
+    
+    const handleMaritalStatusChange = (value: number) => {
+        let maritalStatusClient: MaritalStatus = maritalStatuses.filter(ms => ms.id === value)[0];
+
+        setClient(prevClient => ({
+            ...prevClient,
+            maritalstatus: maritalStatusClient
         }));
     };
 
-    const handleDropdownWithButtonChange = (fieldName: string, value: number[]) => {
+    const handleBenefitFormsChange = (values: number[]) => {
+        let benefitFormsClient = benefitForms.filter(bf => values.includes(bf.id));
+
         setClient(prevClient => ({
             ...prevClient,
-            [fieldName]: value
+            benefitforms: benefitFormsClient
+        }));
+    };
+
+    const handleDiagnosesChange = (values: number[]) => {
+        let diagnosesClient = diagnoses.filter(d => values.includes(d.id));
+
+        setClient(prevClient => ({
+            ...prevClient,
+            diagnoses: diagnosesClient
+        }));
+    };
+
+    const handleDriversLicensesChange = (values: number[]) => {
+        let driversLicencesClient = driversLicences.filter(dl => values.includes(dl.id));
+
+        setClient(prevClient => ({
+            ...prevClient,
+            driverslicences: driversLicencesClient
         }));
     };
 
@@ -232,12 +264,7 @@ const ClientEditor = () => {
 
         const loadDiagnoses = async () => { 
             try {
-                const apiDiagnoses = await fetchDiagnosis();
-                const formattedDiagnoses = apiDiagnoses.map(diagnosis => ({
-                    value: diagnosis.id,
-                    label: diagnosis.name
-                }));
-                setDiagnoses(formattedDiagnoses);
+                setDiagnoses(await fetchDiagnosis());
             } catch (error: any) {
                 setCvsError({
                     id: 0,
@@ -248,14 +275,9 @@ const ClientEditor = () => {
             }
         };
 
-        const loadBenifitForms = async () => { 
+        const loadBenefitForms = async () => { 
             try {
-                const apiBenefitForms = await fetchBenefitForms();
-                const formattedBenefitForms = apiBenefitForms.map(benefitForm => ({
-                    value: benefitForm.id,
-                    label: benefitForm.name
-                }));
-                setBenefitForms(formattedBenefitForms);
+                setBenefitForms(await fetchBenefitForms());
             } catch (error: any) {
                 setCvsError({
                     id: 0,
@@ -268,12 +290,7 @@ const ClientEditor = () => {
 
         const loadMaritalStatuses = async () => { 
             try {
-                const apiMaritalStatuses = await fetchMaritalStatuses();
-                const formattedMaritalStatuses = apiMaritalStatuses.map(maritalStatus => ({
-                    value: maritalStatus.id,
-                    label: maritalStatus.name
-                }));
-                setMaritalStatuses(formattedMaritalStatuses);
+                setMaritalStatuses(await fetchMaritalStatuses());
             } catch (error: any) {
                 setCvsError({
                     id: 0,
@@ -286,12 +303,7 @@ const ClientEditor = () => {
 
         const loadDriversLicences = async () => { 
             try {
-                const apiDriversLicences = await fetchDriversLicences();
-                const formattedDriversLicences = apiDriversLicences.map(driverLicence => ({
-                    value: driverLicence.id,
-                    label: `${driverLicence.category} (${driverLicence.description})`
-                }));
-                setDriversLicences(formattedDriversLicences);
+                setDriversLicences(await fetchDriversLicences());
             } catch (error: any) {
                 setCvsError({
                     id: 0,
@@ -307,7 +319,7 @@ const ClientEditor = () => {
         }
 
         loadDiagnoses();
-        loadBenifitForms();
+        loadBenefitForms();
         loadMaritalStatuses();
         loadDriversLicences();
     }, [id]);
@@ -458,7 +470,7 @@ const ClientEditor = () => {
                                 required={true} 
                                 inputfieldname='geslacht'
                                 value={client.gender}
-                                onChange={(value) => handleDropdownChange('gender', value)} />
+                                onChange={(value) => handleGenderChange(value)} />
                         </LabelField>
                     </div>
 
@@ -486,39 +498,61 @@ const ClientEditor = () => {
                         <div className='client-extra-info'>
                             <LabelField text='Diagnose(s)' required={false}>
                                 <DropdownWithButton 
-                                    options={diagnoses} 
+                                    options={
+                                        diagnoses.map(diagnosis => ({
+                                            value: diagnosis.id,
+                                            label: diagnosis.name
+                                        }))
+                                    } 
                                     required={false}
                                     inputfieldname='diagnoses'
                                     value={client.diagnoses?.map(d => d.id)}
-                                    onChange={(value) => {handleDropdownWithButtonChange('diagnoses', value)}} />
+                                    onChange={(values) => {handleDiagnosesChange(values)}}
+                                    key={JSON.stringify(client.id + "_diagnoses")} />
                             </LabelField>
 
                             <LabelField text='Uitkeringsvorm' required={false}>
                                 <DropdownWithButton 
-                                    options={benefitForms} 
+                                    options={
+                                        benefitForms.map(benefitForm => ({
+                                            value: benefitForm.id,
+                                            label: benefitForm.name
+                                        }))
+                                    } 
                                     required={false} 
                                     inputfieldname='benefitforms'
                                     value={client.benefitforms?.map(d => d.id)}
-                                    onChange={(value) => {handleDropdownWithButtonChange('benefitforms', value)}} />
+                                    onChange={(values) => {handleBenefitFormsChange(values)}}
+                                    key={JSON.stringify(client.id + "_benefitforms")} />
                             </LabelField>
 
                             <LabelField text='Burgerlijke staat' required={false}>
                                 <Dropdown 
-                                    options={maritalStatuses} 
+                                    options={
+                                        maritalStatuses.map(maritalStatus => ({
+                                            value: maritalStatus.id,
+                                            label: maritalStatus.name
+                                        }))
+                                    } 
                                     required={false} 
                                     inputfieldname='maritalstatus'
-                                    value={client.maritalstatus}
-                                    onChange={(value) => {handleDropdownChange('maritalstatus', value)}} />
+                                    value={client.maritalstatus?.id}
+                                    onChange={(value) => {handleMaritalStatusChange(value)}} />
                             </LabelField>
 
                             <LabelField text='Rijbewijs' required={false}>
                                 <DropdownWithButton 
-                                    options={driversLicences} 
+                                    options={
+                                        driversLicences.map(driverLicence => ({
+                                            value: driverLicence.id,
+                                            label: `${driverLicence.category} (${driverLicence.description})`
+                                        }))
+                                    } 
                                     required={false} 
                                     inputfieldname='driverslicences'
                                     value={client.driverslicences?.map(d => d.id)}
-                                    onChange={(value) => {handleDropdownWithButtonChange('driverslicences', value)}}
-                                    />
+                                    onChange={(values) => {handleDriversLicensesChange(values)}}
+                                    key={JSON.stringify(client.id + "_driverslicences")} />
                             </LabelField>
 
                             {/* TODO: doelgroepregister with yes no dropdown

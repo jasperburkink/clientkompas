@@ -90,6 +90,9 @@ Date.prototype.toJSON = function(){
 
 export const saveClient = async (client: Client): Promise<ApiResult> => {
     let method = client.id > 0  ? 'PUT' : 'POST';
+    // TODO: Remove this eventually
+    let body = JSON.stringify(client);
+    console.log(body);
 
     const requestOptions: RequestInit = {
         method: method,
@@ -101,7 +104,20 @@ export const saveClient = async (client: Client): Promise<ApiResult> => {
 
     const response = await fetch(`${apiUrl}Client`, requestOptions);
 
-    let {title, errors} = await response.json();    
+    if(!response.ok){
+        
+    }
+
+    let errors: string[] = [];
+    
+    try {
+        errors= await response.json();
+    }
+    catch (err) {
+        console.log(err);
+    }
+
+    errors.push(response.statusText);
 
     return {
         Ok: response.ok,

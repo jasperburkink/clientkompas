@@ -57,6 +57,7 @@ namespace Application.Clients.Queries.GetClients
             // TODO: Get the right text value for the enum values. Depends on language user.
             profile.CreateMap<Client, GetClientDto>()
                 .ForMember(cDto => cDto.Gender, s => s.MapFrom(c => Enum.GetName(typeof(Gender), c.Gender)))
+                .ForMember(cDto => cDto.MaritalStatus, s => s.MapFrom(c => c.MaritalStatus != null ? c.MaritalStatus.Name : string.Empty))
                 .ForMember(cDto => cDto.DriversLicences, dl => dl.MapFrom(c => string.Join(SeperatorString, c.DriversLicences.Select(dl => dl.Category))))
                 .ForMember(cDto => cDto.Diagnoses, dDto => dDto.MapFrom(c => string.Join(SeperatorString, c.Diagnoses.Select(d => d.Name))))
                 .ForMember(cDto => cDto.BenefitForm, dDto => dDto.MapFrom(c => string.Join(SeperatorString, c.BenefitForms.Select(d => d.Name))))

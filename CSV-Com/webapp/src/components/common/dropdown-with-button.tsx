@@ -2,137 +2,82 @@ import React, { useState, useEffect } from 'react';
 import './dropdown.css';
 import './dropdown-with-button.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAsterisk , faPlus,faXmark} from "@fortawesome/free-solid-svg-icons";
-
-export interface IDropdownObject {
-    value: number;
-    label: string;
-}
+import { faAsterisk , faPlus, faXmark} from "@fortawesome/free-solid-svg-icons";
+import { Dropdown, DropdownObject } from './dropdown';
 
 interface IDropDownProps {
-    options: IDropdownObject[];
+    options: DropdownObject[];
     required: boolean;
     inputfieldname: string;
     value?: number[];
     onChange?: (value: number[]) => void;
 }
 
-interface IBadge{
-    id: number;
-    text: string;
-}
-
-const OPTION_TEXT = 'Kies uit de lijst'
-
 const DropdownWithButton = (props: IDropDownProps) => {
-    const [badges, setBadges] = useState<IBadge[]>([]);
-    const [currentOptions, setCurentOptions] = useState<IBadge[]>([]);
-    const [value,setSelect] = useState('');
+    const getSelectableOptions = (options: DropdownObject[]): DropdownObject[] => {
+        return options.filter(option => !selectedOptions.includes(option.value));
+    }; // Get all options that can be selected in the dropdown. So not the options that already have been selected.
 
-    const removeBadge = (badge: IBadge) => {
-        let newcurrentOptions = currentOptions.concat(badge);
-        setCurentOptions(newcurrentOptions); 
-        let newBadges = badges.filter(a => a.id !== badge.id);   
-        setBadges(newBadges);
+    const [selectedOptions, setSelectedOptions] = useState<number[]>(() => {
+        return props.value ?? [];
+    }); // All options that have been selected by the user
 
-        onChangeBadges(newBadges, props);
-    };
+    const [dropdownOptions, setDropdownOptions] = useState<DropdownObject[]>(props.options); // All options that are available to select in the dropdown.
 
-    const addBadge = (item?: number) => {
-        if ((!value || value === '') && !item) return;
+    const [dropdownValue, setDropdownValue] = useState<number>(0); // Dropdown value that's currently selected.
 
-        let valueOption = item ?? parseInt(value);
+    const addOption = (value: number) => {
+        if(dropdownValue === 0) return;
 
-        const option = props.options.find(element => element.value === valueOption);
-        const newBadge: IBadge = {
-          id: option!.value,
-          text: option!.label
-        }
-        
-        const newbadges = badges.concat(newBadge);
-        setBadges(newbadges);
+        setSelectedOptions([...selectedOptions, value]);        
 
-        onChangeBadges(newbadges, props);
+        setDropdownValue(0);
+    }; // Add an selected option.
 
-        setCurentOptions(currentOptions.filter(badge => badge.id !== option?.value));
-        setSelect('');
-    };
-
-    // const addBadge = async (item?: number) => {
-    //     if ((!value || value === '') && !item) return;
-    
-    //     let valueOption = item ?? parseInt(value);
-    
-    //     const option = props.options.find(element => element.value === valueOption);
-    //     const newBadge: IBadge = {
-    //         id: option!.value,
-    //         text: option!.label
-    //     };
-        
-    //     // Wacht tot de badge is toegevoegd voordat de staat wordt bijgewerkt
-    //     await new Promise<void>((resolve) => {
-    //         const updateState = () => {
-    //             const newbadges = badges.concat(newBadge);
-    //             setBadges(newbadges);
-        
-    //             onChangeBadges(newbadges, props);
-        
-    //             setCurentOptions(currentOptions.filter(badge => badge.id !== option?.value));
-    //             setSelect('');
-    //             resolve();
-    //         };
-            
-    //         updateState();
-    //     });
-    // };
+    const removeOption = (value: number) => {
+        setSelectedOptions(oldValues => {
+                return oldValues.filter(number => number !== value);
+            }
+        )
+    }; // Remove an selected option.
 
     useEffect(() => {
-        const addOptions = async () => {
-            const newOptions: IBadge[] = props.options.map(item => ({id: item.value, text: item.label}));
-            setCurentOptions(newOptions);
-        };
+        setDropdownOptions(getSelectableOptions(props.options));
+    }, [props.value, selectedOptions]); // Update method to update dropdown options.
 
-        addOptions();
-    }, [props.options]);
 
-    useEffect(() => {        
-
-        const addExitingBadges = async () => {
-            //setBadges([]);
-
-            if (props.value && Array.isArray(props.value)) {
-                for (const item of props.value) {
-                    if (item) {
-                        await addBadge(item);
-                    }
-                }
-            }            
-        };
+    useEffect(() => {
+        if (props.onChange) {
+            props.onChange(selectedOptions);
+        }
+    }, [selectedOptions]);
     
-        addExitingBadges();
-    }, [props.value]);
-
     return (
-        <div className='input-field flex-col '>
+        <div className='input-field flex-col'>
             <div className='flex'>
-                <select id="" className='dropdown' onChange={event => {setSelect(event.target.value);}} required={props.required}>
-                    <option value=''>{OPTION_TEXT}</option>
-                    {currentOptions.map((currentOption, index) => (
-                        <option key={props.inputfieldname + currentOption.id} value={currentOption.id}>{currentOption.text}</option>
-                    ))};    
-                </select>
-                <button className='add-extra-dropdown-btn' type='button'  onClick={() => {addBadge();}}>
+                <Dropdown 
+                    className='dropdown'
+                    options={dropdownOptions}
+                    required={props.required}
+                    inputfieldname={props.inputfieldname}
+                    value={dropdownValue}
+                    onChange={(e) => setDropdownValue(e)} />
+                <button className='add-extra-dropdown-btn' type='button'  onClick={() => {addOption(dropdownValue);}}>
                     <FontAwesomeIcon className='ml-[0]' icon={faPlus} size="xl" style={{color: "#000000",}} />
                 </button>
             </div>
             <div className='flex flex-wrap max-w-[100%]'>
-                {badges.map((badge, index) => (  
-                    <div key={props.inputfieldname + '_badge_' +badge.id} className='dropdownbadge'>
+                {selectedOptions.map((selectedOption, index) => (  
+                    <div key={props.inputfieldname + '_badge_' + selectedOption} className='dropdownbadge'>
                         <div>
-                            <p className='mx-1'>{badge.text}</p>
-                            <input name={props.inputfieldname} type="hidden" value={badge.id} />
+                            <p className='mx-1'>
+                                {props.options.find(option => option.value === selectedOption)?.label}
+                            </p>
+                            <input name={props.inputfieldname} type="hidden" value={selectedOption} />
                         </div>
-                        <button type='button' className='badgeBtn' onClick={() => removeBadge(badge)}><FontAwesomeIcon icon={faXmark} size="sm" style={{color: "#000000",}} /></button>
+                        <button type='button' className='badgeBtn' onClick={() => removeOption(selectedOption)}>
+                            <FontAwesomeIcon icon={faXmark} size="sm" style={{color: "#000000",}} />
+                        </button>
                     </div>      
                 ))}
             </div>
@@ -141,8 +86,3 @@ const DropdownWithButton = (props: IDropDownProps) => {
 };
 
 export default DropdownWithButton;
-
-function onChangeBadges(badges: IBadge[], props: IDropDownProps) {
-    let badgesIds = badges.map(badge => badge.id);
-    props.onChange?.(badgesIds);
-}

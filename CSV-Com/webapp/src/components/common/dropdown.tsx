@@ -9,6 +9,7 @@ export interface DropdownObject {
 
 interface IDropDownProps {
     options: Array<DropdownObject>;
+    className?: string;
     required: boolean;
     inputfieldname: string;
     value?: number;
@@ -18,16 +19,14 @@ interface IDropDownProps {
 const OPTION_TEXT = 'Kies uit de lijst'
 
 export const Dropdown = (props: IDropDownProps) => (  
-    <div className='input-field'>
-        <select name={props.inputfieldname} id=""  className='dropdown'  required={props.required} value={props.value}
-        onChange={(e) => {
-            const selectedValue = parseInt(e.target.value);
-            props.onChange?.(selectedValue);
-        }}>
-            <option key={0} value=''>{OPTION_TEXT}</option>
-            {props.options.map((item) => (
-                <option key={item.value} value={item.value} >{item.label}</option>
-            ))}
-        </select>
-    </div>
+    <select name={props.inputfieldname} id=""  className={`dropdown ${props.className}`}  required={props.required} value={props.value}
+    onChange={(e) => {
+        const selectedValue = parseInt(e.target.value);
+        props.onChange?.(selectedValue);
+    }}>
+        <option key={0} value=''>{OPTION_TEXT}</option>
+        {props.options.map((item) => (
+            <option key={item.value} value={item.value} >{item.label}</option>
+        ))}
+    </select>
 );
