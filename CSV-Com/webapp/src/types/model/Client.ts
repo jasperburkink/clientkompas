@@ -29,3 +29,7 @@ export default interface Client {
     emergencypeople?: EmergencyPerson[];
     workingcontracts?: WorkingContract[];
 }
+
+export function getCompleteClientName(client: Client): string {
+    return `${client.prefixlastname ? `${client.prefixlastname} ` : ''}${client.lastname}, ${client.firstname}`;
+};

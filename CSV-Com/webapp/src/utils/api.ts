@@ -7,6 +7,7 @@ import Client from "types/model/Client";
 import moment from 'moment';
 import { isNullOrEmpty } from "./utilities";
 import ApiResult from "types/common/api-result";
+import { error } from "console";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -88,11 +89,8 @@ Date.prototype.toJSON = function(){
     return moment(this).format(DATE_FORMAT_JSON);
 }
 
-export const saveClient = async (client: Client): Promise<ApiResult> => {
+export const saveClient = async (client: Client): Promise<ApiResult<Client>> => {
     let method = client.id > 0  ? 'PUT' : 'POST';
-    // TODO: Remove this eventually
-    let body = JSON.stringify(client);
-    console.log(body);
 
     const requestOptions: RequestInit = {
         method: method,
@@ -102,25 +100,31 @@ export const saveClient = async (client: Client): Promise<ApiResult> => {
         body: JSON.stringify(client)
     };
 
-    const response = await fetch(`${apiUrl}Client`, requestOptions);
-
-    if(!response.ok){
-        
-    }
-
-    let errors: string[] = [];
+    const response = await fetch(`${apiUrl}Client`, requestOptions);     
     
-    try {
-        errors= await response.json();
-    }
-    catch (err) {
-        console.log(err);
+    if(!response.ok){
+        try {
+            let {title, errors} = await response.json();
+        
+            return {
+                Ok: response.ok,
+                Errors: errors
+            }
+        }
+        catch (err) {
+            console.log(`An error has occured while reading errors from API while saving a client. Error:${err}.`);
+        }
+
+        return {
+            Ok: response.ok,
+            Errors: [response.statusText]
+        }
     }
 
-    errors.push(response.statusText);
+    let clientReturn: Client = await response.json();
 
     return {
         Ok: response.ok,
-        Errors: errors
+        ReturnObject: clientReturn
     }
 }

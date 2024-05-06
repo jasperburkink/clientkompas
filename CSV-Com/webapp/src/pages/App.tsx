@@ -131,6 +131,11 @@ function App() {
         ]
     };
 
+    interface returnObject {
+        name: string,
+        id: number
+    }
+
     const handleWorkingContractChange = (updatedWorkingContract: WorkingContract, index: number) => {
         const updatedWorkingContracts = workingContracts;    
         updatedWorkingContracts[index] = updatedWorkingContract;
@@ -304,11 +309,15 @@ function App() {
                     successText = "Opgeslagen"
                     errorText = "Fout tijdens opslaan"
                     onSave={() => {
-                        let result: ApiResult = {
+                        let result: ApiResult<returnObject> = {
                             Ok: true,
-                            Errors: ['Er is iets mis gegaan!'] 
+                            Errors: ['Er is iets mis gegaan!'] ,
+                            ReturnObject: {
+                                name: "test",
+                                id: 1
+                            }                            
                         }
-                        return new Promise<ApiResult>(resolve => setTimeout(() => resolve(result), 2000));
+                        return new Promise<ApiResult<returnObject>>(resolve => setTimeout(() => resolve(result), 2000));
                     }}
                     onResult={(result) => console.error('Result: ', result.Ok)}
                     />
