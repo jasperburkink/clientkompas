@@ -30,7 +30,7 @@ namespace Domain.CVS.Domain
 
         public string EmailAddress { get; set; }
 
-        public MaritalStatus MaritalStatus { get; set; }
+        public MaritalStatus? MaritalStatus { get; set; }
 
         public List<DriversLicence> DriversLicences { get; set; } = new();
 

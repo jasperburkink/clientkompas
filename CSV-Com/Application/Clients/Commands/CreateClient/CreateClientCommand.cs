@@ -1,5 +1,10 @@
-﻿using Application.Clients.Dtos;
+﻿using Application.BenefitForms.Queries.GetBenefitForm;
+using Application.Clients.Dtos;
+using Application.Common.Exceptions;
 using Application.Common.Interfaces.CVS;
+using Application.Diagnoses.Queries.GetDiagnosis;
+using Application.DriversLicences.Queries;
+using Application.MaritalStatuses.Queries.GetMaritalStatus;
 using AutoMapper;
 using Domain.CVS.Domain;
 using Domain.CVS.Enums;
@@ -37,17 +42,17 @@ namespace Application.Clients.Commands.CreateClient
 
         public string EmailAddress { get; set; }
 
-        public int? MaritalStatus { get; set; }
+        public MaritalStatusDto? MaritalStatus { get; set; }
 
-        public int[] BenefitForms { get; set; }
+        public ICollection<BenefitFormDto> BenefitForms { get; set; }
 
-        public int[] DriversLicences { get; set; }
+        public ICollection<DriversLicenceDto> DriversLicences { get; set; }
 
-        public int[] Diagnoses { get; set; }
+        public ICollection<DiagnosisDto> Diagnoses { get; set; }
 
-        public EmergencyPersonDto[] EmergencyPeople { get; set; }
+        public ICollection<EmergencyPersonDto> EmergencyPeople { get; set; }
 
-        public WorkingContractDto[] WorkingContracts { get; set; }
+        public ICollection<WorkingContractDto> WorkingContracts { get; set; }
 
         public string Remarks { get; set; }
     }
@@ -65,15 +70,21 @@ namespace Application.Clients.Commands.CreateClient
 
         public async Task<ClientDto> Handle(CreateClientCommand request, CancellationToken cancellationToken)
         {
-            var benefitForms = new List<BenefitForm>(await _unitOfWork.BenefitFormRepository.GetAsync(bfdb => request.BenefitForms.Any(bfr => bfdb.Id.Equals(bfr))));
+            var benefitFormIds = request.BenefitForms.Select(x => x.Id).ToList();
+            var benefitForms = (await _unitOfWork.BenefitFormRepository.GetAsync(bf => benefitFormIds.Contains(bf.Id))).ToList();
 
-            var maritalStatus = request.MaritalStatus != null
-                ? (await _unitOfWork.MaritalStatusRepository.GetAsync(a => a.Id == request.MaritalStatus))?.SingleOrDefault()
-                : null;
+            var diagnosisIds = request.Diagnoses.Select(x => x.Id).ToList();
+            var diagnoses = (await _unitOfWork.DiagnosisRepository.GetAsync(d => diagnosisIds.Contains(d.Id))).ToList();
 
-            var driversLicences = new List<DriversLicence>(await _unitOfWork.DriversLicenceRepository.GetAsync(dldb => request.DriversLicences.Any(dlr => dldb.Id.Equals(dlr))));
+            var driversLicenceIds = request.DriversLicences.Select(x => x.Id).ToList();
+            var driversLicences = (await _unitOfWork.DriversLicenceRepository.GetAsync(dl => driversLicenceIds.Contains(dl.Id))).ToList();
 
-            var diagnoses = new List<Diagnosis>(await _unitOfWork.DiagnosisRepository.GetAsync(ddb => request.Diagnoses.Any(dr => ddb.Id.Equals(dr))));
+            MaritalStatus? maritalStatus = null;
+            if (request.MaritalStatus != null)
+            {
+                maritalStatus = (await _unitOfWork.MaritalStatusRepository.GetAsync(a => a.Id == request.MaritalStatus.Id))?.SingleOrDefault()
+                  ?? throw new NotFoundException(nameof(MaritalStatus), request.MaritalStatus);
+            }
 
             var client = new Client
             {

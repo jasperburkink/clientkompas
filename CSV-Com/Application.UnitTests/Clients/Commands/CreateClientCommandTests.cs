@@ -1,7 +1,10 @@
 ﻿using System.Linq.Expressions;
+using Application.BenefitForms.Queries.GetBenefitForm;
 using Application.Clients.Commands.CreateClient;
 using Application.Clients.Dtos;
 using Application.Common.Interfaces.CVS;
+using Application.Diagnoses.Queries.GetDiagnosis;
+using Application.DriversLicences.Queries;
 using AutoMapper;
 using Domain.CVS.Domain;
 using Moq;
@@ -26,13 +29,18 @@ namespace Application.UnitTests.Clients.Commands
             var command = new CreateClientCommand
             {
                 FirstName = "FirstName",
+                LastName = "LastName",
+                DateOfBirth = DateOnly.FromDateTime(DateTime.Now.Date),
                 StreetName = "Dorpstraat",
                 HouseNumber = 1,
                 HouseNumberAddition = "A",
                 PostalCode = "1234AB",
                 Residence = "Amsterdam",
                 EmergencyPeople = new EmergencyPersonDto[] { new() },
-                WorkingContracts = new WorkingContractDto[] { new() }
+                WorkingContracts = new WorkingContractDto[] { new() },
+                BenefitForms = new BenefitFormDto[] { new() },
+                Diagnoses = new DiagnosisDto[] { new() },
+                DriversLicences = new DriversLicenceDto[] { new() }
             };
 
             var clientDto = new ClientDto
