@@ -17,7 +17,7 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearchChange }) => {
       };  
   
       return (
-        <form>
+        <form onSubmit={e => {e.preventDefault();}}>
           <div className="relative">
             <InputField className='my-2' inputfieldtype={{type:'text'}} required={false} placeholder='Zoeken' value={searchTerm} onChange={handleInputChange} />
             <div className="absolute inset-y-0 right-2 pl-3 

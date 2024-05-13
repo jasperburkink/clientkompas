@@ -13,7 +13,8 @@
 
     .results-item{
         @apply
-        my-2
+        relative
+        z-10
         hover:underline;
     }
 }
