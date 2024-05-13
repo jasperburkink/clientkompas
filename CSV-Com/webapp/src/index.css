@@ -33,11 +33,11 @@
     }
 
     .sidebarLineGray {
-        @apply hidden lg:block bg-subGray1 h-48 rounded-50% w-50rem mt-line rotate-line -ml-150px
+        @apply hidden lg:block bg-subGray1 h-48 rounded-50% w-50rem mt-line rotate-line -ml-150px z-0 relative 
     }
 
     .sidebarDarkLineGray {
-        @apply hidden lg:block bg-subGray2 h-48 rounded-50% w-50rem rotate-darkLine -mt-darkLine -ml-150px
+        @apply hidden lg:block bg-subGray2 h-48 rounded-50% w-50rem rotate-darkLine -mt-darkLine -ml-150px z-0 relative
     }
 
     .sidebarArrow {
