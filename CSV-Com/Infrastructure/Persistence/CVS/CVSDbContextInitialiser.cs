@@ -160,7 +160,10 @@ namespace Infrastructure.Persistence.CVS
                         new WorkingContract
                         {
                             Id = 1,
-                            CompanyName = "SBICT",
+                            CompanyName = new Orgnization
+                            {
+                                CompanyName = "SBICT",
+                            },
                             Function = "Directeur",
                             ContractType = ContractType.Temporary,
                             FromDate = new DateOnly(2023, 1, 1),
@@ -169,7 +172,10 @@ namespace Infrastructure.Persistence.CVS
                         new WorkingContract
                         {
                             Id = 2,
+                            CompanyName = new Orgnization
+                            {
                             CompanyName = "De Nederlandse regering",
+                            },
                             Function = "Minister president",
                             ContractType = ContractType.Permanent,
                             FromDate = new DateOnly(2010, 1, 1),
@@ -211,7 +217,10 @@ namespace Infrastructure.Persistence.CVS
                         new WorkingContract
                         {
                             Id = 3,
+                            CompanyName = new Orgnization
+                            {
                             CompanyName = "De Nederlandse regering",
+                            },
                             Function = "Minister president",
                             ContractType = ContractType.Permanent,
                             FromDate = new DateOnly(1980, 1, 1),
