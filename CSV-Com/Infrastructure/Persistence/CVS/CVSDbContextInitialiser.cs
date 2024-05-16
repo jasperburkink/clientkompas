@@ -160,7 +160,7 @@ namespace Infrastructure.Persistence.CVS
                         new WorkingContract
                         {
                             Id = 1,
-                            CompanyName = new Orgnization
+                            CompanyName = new Organization
                             {
                                 CompanyName = "SBICT",
                             },
@@ -172,7 +172,7 @@ namespace Infrastructure.Persistence.CVS
                         new WorkingContract
                         {
                             Id = 2,
-                            CompanyName = new Orgnization
+                            CompanyName = new Organization
                             {
                             CompanyName = "De Nederlandse regering",
                             },
@@ -217,7 +217,7 @@ namespace Infrastructure.Persistence.CVS
                         new WorkingContract
                         {
                             Id = 3,
-                            CompanyName = new Orgnization
+                            CompanyName = new Organization
                             {
                             CompanyName = "De Nederlandse regering",
                             },
