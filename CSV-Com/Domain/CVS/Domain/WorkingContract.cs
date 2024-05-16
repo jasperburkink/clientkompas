@@ -9,7 +9,7 @@ namespace Domain.CVS.Domain
 
         public Client Client { get; set; }
 
-        public string CompanyName { get; set; }
+        public Orgnization CompanyName { get; set; }
 
         public string Function { get; set; }
 
