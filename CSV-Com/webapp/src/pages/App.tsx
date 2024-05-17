@@ -97,7 +97,7 @@ function App() {
     }
       
     const workingContract: WorkingContract = {
-        companyname: 'SB-ICT',
+        organizationname: 'SB-ICT',
         contracttype: 0,
         fromdate: new Date('2020-01-01'),
         todate: new Date('2021-01-01'),
@@ -105,7 +105,7 @@ function App() {
       };
 
     const workingContract2: WorkingContract = {
-        companyname: 'Welkoop',
+        organizationname: 'Welkoop',
         contracttype: 1,
         fromdate: new Date('1995-01-01'),
         todate: new Date('1998-01-01'),
@@ -116,7 +116,7 @@ function App() {
 
     const addWorkingContract = ():WorkingContract => {
         return {
-            companyname: '',
+            organizationname: '',
             contracttype: 0,
             fromdate: new Date(),
             todate: new Date(),

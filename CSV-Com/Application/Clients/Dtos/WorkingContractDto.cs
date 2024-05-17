@@ -10,7 +10,7 @@ namespace Application.Clients.Dtos
     {
         public int Id { get; set; }
 
-        public string CompanyName { get; set; }
+        public string Organization { get; set; }
 
         public string Function { get; set; }
 

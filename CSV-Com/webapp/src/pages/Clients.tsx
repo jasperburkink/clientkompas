@@ -239,7 +239,7 @@ function Clients() {
                                     <div key={i} className='col-span-2 lg:grid lg:grid-cols-2 mt-5'>
                                         <div className='client-label-value'>
                                             <Label text={Moment(workingContract.todate) > Moment() ? 'Werkt bij: ' : 'Werkt(e) bij: ' } />
-                                            <Label text={workingContract.companyname} />
+                                            <Label text={workingContract.organizationname} />
                                         </div>
                                         <div className='client-label-value'>
                                             <Label text='Functie: ' />

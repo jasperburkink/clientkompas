@@ -18,6 +18,8 @@ namespace Infrastructure.Persistence.CVS
 
         public DbSet<BenefitForm> BenefitForm { get; set; }
 
+        public DbSet<Organization> Organizations { get; set; }
+
         public CVSDbContext(DbContextOptions<CVSDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder builder)

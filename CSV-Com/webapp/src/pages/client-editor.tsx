@@ -221,7 +221,7 @@ const ClientEditor = () => {
 
     const addWorkingContract = ():WorkingContract => {
         return {
-            companyname: '',
+            organizationname: '',
             contracttype: 0,
             function: ''
         };

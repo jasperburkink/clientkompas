@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Persistence.CVS.Configuration
 {
-    public class CompanyConfiguration : IEntityTypeConfiguration<Organization>, ICVSEntityTypeConfiguration
+    public class OrganizationConfiguration : IEntityTypeConfiguration<Organization>, ICVSEntityTypeConfiguration
     {
         public void Configure(ModelBuilder modelBuilder)
         {
@@ -15,37 +15,37 @@ namespace Infrastructure.Persistence.CVS.Configuration
         public void Configure(EntityTypeBuilder<Organization> builder)
         {
             builder.HasMany(c => c.WorkingContracts)
-                .WithOne(wc => wc.CompanyName)
+                .WithOne(wc => wc.Organization)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.Property(c => c.CompanyName)
-                .HasMaxLength(OrganizationConstants.CompanyNameMaxLength)
+            builder.Property(c => c.OrganizationName)
+                .HasMaxLength(OrganizationConstants.OrganizationNameMaxLength)
                 .IsRequired();
 
             builder.OwnsOne(c => c.VisitAddress, a =>
             {
                 a.Property(p => p.StreetName)
-                .HasColumnName("StreetName")
+                .HasColumnName("VisitStreetName")
                 .HasMaxLength(OrganizationConstants.StreetNameMaxLength)
                 .IsRequired();
 
                 a.Property(p => p.PostalCode)
-                .HasColumnName("PostalCode")
+                .HasColumnName("VisitPostalCode")
                 .HasMaxLength(OrganizationConstants.PostalCodeMaxLength)
                 .IsRequired();
 
                 a.Property(p => p.HouseNumber)
-                .HasColumnName("HouseNumber")
+                .HasColumnName("VisitHouseNumber")
                 .HasMaxLength(OrganizationConstants.HouseNumberMaxLength)
                 .IsRequired();
 
                 a.Property(p => p.HouseNumberAddition)
-                .HasColumnName("HouseNumberAddition")
+                .HasColumnName("VisitHouseNumberAddition")
                 .HasMaxLength(OrganizationConstants.HouseNumberAdditionMaxLength)
                 .IsRequired(false);
 
                 a.Property(p => p.Residence)
-                .HasColumnName("Residence")
+                .HasColumnName("VisitResidence")
                 .HasMaxLength(OrganizationConstants.ResidenceMaxLength)
                 .IsRequired();
             });
@@ -53,27 +53,27 @@ namespace Infrastructure.Persistence.CVS.Configuration
             builder.OwnsOne(c => c.InvoiceAddress, a =>
             {
                 a.Property(p => p.StreetName)
-                .HasColumnName("StreetName")
+                .HasColumnName("InvoiceStreetName")
                 .HasMaxLength(OrganizationConstants.StreetNameMaxLength)
                 .IsRequired();
 
                 a.Property(p => p.PostalCode)
-                .HasColumnName("PostalCode")
+                .HasColumnName("InvoicePostalCode")
                 .HasMaxLength(OrganizationConstants.PostalCodeMaxLength)
                 .IsRequired();
 
                 a.Property(p => p.HouseNumber)
-                .HasColumnName("HouseNumber")
+                .HasColumnName("InvoiceHouseNumber")
                 .HasMaxLength(OrganizationConstants.HouseNumberMaxLength)
                 .IsRequired();
 
                 a.Property(p => p.HouseNumberAddition)
-                .HasColumnName("HouseNumberAddition")
+                .HasColumnName("InvoiceHouseNumberAddition")
                 .HasMaxLength(OrganizationConstants.HouseNumberAdditionMaxLength)
                 .IsRequired(false);
 
                 a.Property(p => p.Residence)
-                .HasColumnName("Residence")
+                .HasColumnName("InvoiceResidence")
                 .HasMaxLength(OrganizationConstants.ResidenceMaxLength)
                 .IsRequired();
             });
@@ -81,27 +81,27 @@ namespace Infrastructure.Persistence.CVS.Configuration
             builder.OwnsOne(c => c.PostAddress, a =>
             {
                 a.Property(p => p.StreetName)
-                .HasColumnName("StreetName")
+                .HasColumnName("PostStreetName")
                 .HasMaxLength(OrganizationConstants.StreetNameMaxLength)
                 .IsRequired();
 
                 a.Property(p => p.PostalCode)
-                .HasColumnName("PostalCode")
+                .HasColumnName("PostPostalCode")
                 .HasMaxLength(OrganizationConstants.PostalCodeMaxLength)
                 .IsRequired();
 
                 a.Property(p => p.HouseNumber)
-                .HasColumnName("HouseNumber")
+                .HasColumnName("PostHouseNumber")
                 .HasMaxLength(OrganizationConstants.HouseNumberMaxLength)
                 .IsRequired();
 
                 a.Property(p => p.HouseNumberAddition)
-                .HasColumnName("HouseNumberAddition")
+                .HasColumnName("PostHouseNumberAddition")
                 .HasMaxLength(OrganizationConstants.HouseNumberAdditionMaxLength)
                 .IsRequired(false);
 
                 a.Property(p => p.Residence)
-                .HasColumnName("Residence")
+                .HasColumnName("PostResidence")
                 .HasMaxLength(OrganizationConstants.ResidenceMaxLength)
                 .IsRequired();
             });

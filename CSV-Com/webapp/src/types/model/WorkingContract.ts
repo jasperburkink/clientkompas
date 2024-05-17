@@ -1,5 +1,5 @@
 export default interface WorkingContract {
-    companyname: string;
+    organizationname: string;
     function: string;
     contracttype: number;
     fromdate?: Date;

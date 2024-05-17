@@ -2,7 +2,7 @@
 {
     public static class OrganizationConstants
     {
-        public const int CompanyNameMaxLength = 40;
+        public const int OrganizationNameMaxLength = 40;
         public const int StreetNameMaxLength = AddressConstants.StreetNameMaxLength;
         public const int HouseNumberMaxLength = AddressConstants.HouseNumberMaxLength;
         public const int HouseNumberAdditionMaxLength = AddressConstants.HouseNumberAdditionMaxLength;
