@@ -160,9 +160,24 @@ namespace Infrastructure.Persistence.CVS
                         new WorkingContract
                         {
                             Id = 1,
-                            CompanyName = new Organization
+                            Organization = new Organization
                             {
-                                CompanyName = "SBICT",
+                                OrganizationName = "SBICT",
+                                BIC = "12345678",
+                                BTWNumber = "12",
+                                IBANNumber = "13",
+                                KVKNumber = "33012",
+                                EmailAddress = "David@gmail.com",
+                                Website = "www.sbict.nl",
+                                PhoneNumber = "0316778822",
+                                ContactPersonName = "David Visser",
+                                ContactPersonFunction = "Stagair",
+                                ContactPersonTelephoneNumber = "0633081490",
+                                ContactPersonMobilephoneNumber = "0633083122",
+                                ContactPersonEmailAddress = "Contact@gmail.com",
+                                VisitAddress = Address.From("Nijverheidsstraat", 4, "", "6905DL", "Zevenaar"),
+                                InvoiceAddress = Address.From("Nijverheidsstraat", 4, "", "6905DL", "Zevenaar"),
+                                PostAddress = Address.From("Nijverheidsstraat", 4, "", "6905DL", "Zevenaar")
                             },
                             Function = "Directeur",
                             ContractType = ContractType.Temporary,
@@ -172,9 +187,24 @@ namespace Infrastructure.Persistence.CVS
                         new WorkingContract
                         {
                             Id = 2,
-                            CompanyName = new Organization
+                            Organization = new Organization
                             {
-                            CompanyName = "De Nederlandse regering",
+                                OrganizationName = "De Nederlandse regering",
+                                BIC = "12345678",
+                                BTWNumber = "12",
+                                IBANNumber = "13",
+                                KVKNumber = "33012",
+                                EmailAddress = "Regering@gmail.com",
+                                Website = "www.Rijksoverheid.nl",
+                                PhoneNumber = "0316283661",
+                                ContactPersonName = "Jan Pietje",
+                                ContactPersonFunction = "Minister president",
+                                ContactPersonTelephoneNumber = "0633033291",
+                                ContactPersonMobilephoneNumber = "0633083333",
+                                ContactPersonEmailAddress = "Contact@gmail.com",
+                                VisitAddress = Address.From("Bezuidenhoutseweg", 67, "", "2233LK", "Den Haag"),
+                                InvoiceAddress = Address.From("Bezuidenhoutseweg", 67, "", "2233LK", "Den Haag"),
+                                PostAddress = Address.From("Bezuidenhoutseweg", 67, "", "2233LK", "Den Haag")
                             },
                             Function = "Minister president",
                             ContractType = ContractType.Permanent,
@@ -217,11 +247,26 @@ namespace Infrastructure.Persistence.CVS
                         new WorkingContract
                         {
                             Id = 3,
-                            CompanyName = new Organization
+                            Organization = new Organization
                             {
-                            CompanyName = "De Nederlandse regering",
+                                OrganizationName = "DHL",
+                                BIC = "12345678",
+                                BTWNumber = "12",
+                                IBANNumber = "13",
+                                KVKNumber = "33012",
+                                EmailAddress = "DHL@gmail.com",
+                                Website = "www.Regering.nl",
+                                PhoneNumber = "0316283661",
+                                ContactPersonName = "Alexander de Croo",
+                                ContactPersonFunction = "Magazijn medewerker",
+                                ContactPersonTelephoneNumber = "0633081496",
+                                ContactPersonMobilephoneNumber = "0633081496",
+                                ContactPersonEmailAddress = "Contact@gmail.com",
+                                VisitAddress = Address.From("Dorpstraat", 1, "b", "2233LK", "Rotterdam"),
+                                InvoiceAddress = Address.From("Rotterdamseweg", 3, "AB", "2299KJ", "Rotterdamn"),
+                                PostAddress = Address.From("Steenstraat", 33, "h", "3311ff", "Hilversum")
                             },
-                            Function = "Minister president",
+                            Function = "Magazijn medewerker",
                             ContractType = ContractType.Permanent,
                             FromDate = new DateOnly(1980, 1, 1),
                             ToDate = new DateOnly(2000, 1, 1)

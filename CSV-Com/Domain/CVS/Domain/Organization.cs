@@ -5,7 +5,7 @@ namespace Domain.CVS.Domain
 {
     public class Organization : BaseAuditableEntity
     {
-        public string CompanyName { get; set; }
+        public string OrganizationName { get; set; }
 
         public Address VisitAddress { get; set; }
         public Address InvoiceAddress { get; set; }
