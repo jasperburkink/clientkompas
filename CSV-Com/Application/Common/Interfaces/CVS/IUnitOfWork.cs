@@ -16,6 +16,8 @@ namespace Application.Common.Interfaces.CVS
 
         IRepository<BenefitForm> BenefitFormRepository { get; }
 
+        IRepository<Organization> OrganizationRepository { get; }
+
         public void Save();
 
         public Task SaveAsync(CancellationToken cancellationToken = default);
