@@ -84,7 +84,8 @@ namespace Application.Organizations.Queries.GetOrganizations
                 .ForMember(cDto => cDto.PostHouseNumber, address => address.MapFrom(c => c.PostAddress.HouseNumber))
                 .ForMember(cDto => cDto.PostHouseNumberAddition, address => address.MapFrom(c => c.PostAddress.HouseNumberAddition))
                 .ForMember(cDto => cDto.PostPostalCode, address => address.MapFrom(c => c.PostAddress.PostalCode))
-                .ForMember(cDto => cDto.PostResidence, address => address.MapFrom(c => c.PostAddress.Residence));
+                .ForMember(cDto => cDto.PostResidence, address => address.MapFrom(c => c.PostAddress.Residence))
+                .ForMember(cDto => cDto.WorkingContracts, wc => wc.MapFrom(c => c.WorkingContracts));
         }
     }
 }
