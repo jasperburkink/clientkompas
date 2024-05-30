@@ -74,6 +74,7 @@ namespace Application.Organizations.Rules
             return ruleBuilder
                 .NotEmpty().WithMessage($"{nameof(Organization.KVKNumber)} is verplicht.")
                 .MaximumLength(OrganizationConstants.KVKNumberMaxLength).WithMessage($"{nameof(Organization.KVKNumber)} mag niet langer zijn dan {OrganizationConstants.KVKNumberMaxLength} karakters.");
+            //TODO: Add check for unique KVK value
         }
 
         public static IRuleBuilderOptions<T, string> ValidateBTWNumber<T>(this IRuleBuilder<T, string> ruleBuilder)

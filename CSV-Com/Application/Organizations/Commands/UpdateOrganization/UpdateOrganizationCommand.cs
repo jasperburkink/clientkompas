@@ -103,14 +103,23 @@ namespace Application.Organizations.Commands.UpdateOrganization
             organization.InvoiceAddress = Address.From(request.InvoiceStreetName, request.InvoiceHouseNumber, request.InvoiceHouseNumberAddition, request.InvoicePostalCode, request.InvoiceResidence);
 
             organization.ContactPersonName = request.ContactPersonName;
+
             organization.ContactPersonFunction = request.ContactPersonFunction;
+
             organization.ContactPersonTelephoneNumber = request.ContactPersonTelephoneNumber;
+
             organization.ContactPersonMobilephoneNumber = request.ContactPersonMobilephoneNumber;
+
             organization.ContactPersonEmailAddress = request.ContactPersonEmailAddress;
+
             organization.PhoneNumber = request.PhoneNumber;
+
             organization.Website = request.Website;
+
             organization.EmailAddress = request.EmailAddress;
+
             organization.KVKNumber = request.KVKNumber;
+
             organization.BTWNumber = request.BTWNumber;
 
             var workingContracts = new List<WorkingContract>();
@@ -123,7 +132,10 @@ namespace Application.Organizations.Commands.UpdateOrganization
             organization.WorkingContracts = workingContracts;
 
             organization.IBANNumber = request.IBANNumber;
+
             organization.BIC = request.BIC;
+
+            await _unitOfWork.OrganizationRepository.UpdateAsync(organization);
 
             await _unitOfWork.SaveAsync(cancellationToken);
 

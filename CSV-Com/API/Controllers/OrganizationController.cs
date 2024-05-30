@@ -1,6 +1,7 @@
 ﻿using Application.Organizations.Commands.CreateOrganization;
 using Application.Organizations.Dtos;
 using Application.Common.Exceptions;
+using Application.Organizations.Commands.DeleteOrganization;
 using Application.Organizations.Commands.UpdateOrganization;
 using Application.Organizations.Queries.GetOrganizations;
 using Application.Organizations.Queries.SearchOrganizations;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
     public class OrganizationController : ApiControllerBase
@@ -50,6 +52,20 @@ namespace API.Controllers
             }
         }
 
+        [HttpGet("[action]")]
+        public async Task<ActionResult<IEnumerable<SearchOrganizationDto>>> SearchOrganizations([FromQuery] SearchOrganizationQuery query)
+        {
+            try
+            {
+                var organization = await Mediator.Send(query);
+                return Ok(organization);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+        }
+
         [HttpPost]
         public async Task<ActionResult<OrganizationDto>> Create(CreateOrganizationCommand command)
         {
@@ -63,17 +79,21 @@ namespace API.Controllers
             }
         }
 
-        [HttpGet("[action]")]
-        public async Task<ActionResult<IEnumerable<SearchOrganizationDto>>> SearchOrganizations([FromQuery] SearchOrganizationQuery query)
+        [HttpDelete]
+        public async Task<ActionResult> Delete(DeleteOrganizationCommand command)
         {
             try
             {
-                var organization = await Mediator.Send(query);
-                return Ok(organization);
+                await Mediator.Send(command);
+                return Ok();
+            }
+            catch (NotFoundException ex)
+            {
+                return StatusCode(404, ex);
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+                return StatusCode(500, ex);
             }
         }
     }
