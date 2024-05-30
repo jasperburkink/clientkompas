@@ -49,7 +49,7 @@ namespace Application.Clients.Queries.GetClients
 
         public virtual ICollection<BenefitFormDto> BenefitForms { get; set; }
 
-        public virtual ICollection<WorkingContractDto> WorkingContracts { get; set; }
+        public virtual ICollection<ClientWorkingContractDto> WorkingContracts { get; set; }
 
         public string Remarks { get; set; }
 

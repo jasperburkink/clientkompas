@@ -6,7 +6,7 @@ using Domain.CVS.Domain;
 
 namespace Application.Clients.Dtos
 {
-    public class WorkingContractDto : IMapFrom<WorkingContract>
+    public class ClientWorkingContractDto : IMapFrom<WorkingContract>
     {
         public int Id { get; set; }
 
@@ -20,7 +20,7 @@ namespace Application.Clients.Dtos
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<WorkingContract, WorkingContractDto>();
+            profile.CreateMap<WorkingContract, ClientWorkingContractDto>();
         }
 
         public WorkingContract ToDomainModel(IMapper mapper, Client client) // TODO: remove this method when upgrading to .net 8. Automapper issues have been solved in newer versions.

@@ -52,7 +52,7 @@ namespace Application.Clients.Commands.CreateClient
 
         public ICollection<EmergencyPersonDto> EmergencyPeople { get; set; }
 
-        public ICollection<WorkingContractDto> WorkingContracts { get; set; }
+        public ICollection<ClientWorkingContractDto> WorkingContracts { get; set; }
 
         public string Remarks { get; set; }
     }
