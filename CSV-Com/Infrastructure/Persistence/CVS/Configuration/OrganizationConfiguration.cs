@@ -22,6 +22,9 @@ namespace Infrastructure.Persistence.CVS.Configuration
                 .HasMaxLength(OrganizationConstants.OrganizationNameMaxLength)
                 .IsRequired();
 
+            builder.HasIndex(c => c.OrganizationName)
+                .IsFullText();
+
             builder.OwnsOne(c => c.VisitAddress, a =>
             {
                 a.Property(p => p.StreetName)

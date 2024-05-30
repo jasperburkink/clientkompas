@@ -60,11 +60,11 @@ namespace Application.Organizations.Dtos
 
         public string BTWNumber { get; set; }
 
+        public ICollection<WorkingContractOrganizationDto> WorkingContracts { get; set; }
+
         public string IBANNumber { get; set; }
 
         public string BIC { get; set; }
-
-        public ICollection<WorkingContractOrganizationDto> WorkingContracts { get; set; }
 
         public void Mapping(Profile profile)
         {

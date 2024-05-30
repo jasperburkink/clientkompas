@@ -20,6 +20,8 @@ namespace Infrastructure.Persistence.CVS
         private GenericRepository<BenefitForm> benefitFormRepository;
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
         private GenericRepository<Organization> organizationRepository;
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
+        private GenericRepository<WorkingContract> workingContractRepository;
 
         public UnitOfWork(CVSDbContext context)
         {
@@ -87,8 +89,19 @@ namespace Infrastructure.Persistence.CVS
         {
             get
             {
+
                 organizationRepository ??= new GenericRepository<Organization>(_context);
                 return organizationRepository;
+            }
+        }
+
+        public IRepository<WorkingContract> WorkingContractRepository
+        {
+            get
+            {
+
+                workingContractRepository ??= new GenericRepository<WorkingContract>(_context);
+                return workingContractRepository;
             }
         }
 

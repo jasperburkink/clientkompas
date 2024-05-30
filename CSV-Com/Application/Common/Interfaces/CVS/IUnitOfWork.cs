@@ -18,6 +18,8 @@ namespace Application.Common.Interfaces.CVS
 
         IRepository<Organization> OrganizationRepository { get; }
 
+        IRepository<WorkingContract> WorkingContractRepository { get; }
+
         public void Save();
 
         public Task SaveAsync(CancellationToken cancellationToken = default);

@@ -165,6 +165,11 @@ namespace Infrastructure.Persistence.CVS
             return await Context.Organizations.FirstOrDefaultAsync(o => o.KVKNumber == kvkNumber, cancellationToken);
         }
 
+        public async Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken)
+        {
+            return await Context.Set<TEntity>().AnyAsync(predicate, cancellationToken);
+        }
+
         public async Task<IEnumerable<TEntity>> FullTextSearch(string searchTerm, CancellationToken cancellationToken = default, params Expression<Func<TEntity, object>>[] properties)
         {
             return await Task.Run(() =>
