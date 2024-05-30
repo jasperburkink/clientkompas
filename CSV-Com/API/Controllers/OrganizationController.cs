@@ -1,6 +1,7 @@
-﻿using Application.Common.Exceptions;
-using Application.Organizations.Commands.UpdateOrganization;
+﻿using Application.Organizations.Commands.CreateOrganization;
 using Application.Organizations.Dtos;
+using Application.Common.Exceptions;
+using Application.Organizations.Commands.UpdateOrganization;
 using Application.Organizations.Queries.GetOrganizations;
 using Application.Organizations.Queries.SearchOrganizations;
 using Microsoft.AspNetCore.Mvc;
@@ -46,6 +47,19 @@ namespace API.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, ex);
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<OrganizationDto>> Create(CreateOrganizationCommand command)
+        {
+            try
+            {
+                return await Mediator.Send(command);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
             }
         }
 

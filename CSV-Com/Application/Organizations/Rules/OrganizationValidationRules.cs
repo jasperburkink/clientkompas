@@ -1,5 +1,4 @@
-﻿
-using Domain.Constants;
+﻿using Domain.Constants;
 using Domain.CVS.Domain;
 using FluentValidation;
 
