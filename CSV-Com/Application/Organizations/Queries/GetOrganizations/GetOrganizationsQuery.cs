@@ -20,7 +20,7 @@ namespace Application.Organizations.Queries.GetOrganizations
 
         public async Task<IEnumerable<GetOrganizationDto>> Handle(GetOrganizationsQuery request, CancellationToken cancellationToken)
         {
-            return (await _unitOfWork.OrganizationRepository.GetAsync(includeProperties: "WorkingContracts"))
+            return (await _unitOfWork.OrganizationRepository.GetAsync(includeProperties: "WorkingContracts.Client"))
                 .AsQueryable()
                 .ProjectTo<GetOrganizationDto>(_mapper.ConfigurationProvider)
                 .OrderBy(c => c.OrganizationName);
