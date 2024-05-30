@@ -87,7 +87,6 @@ namespace Infrastructure.Persistence.CVS
         {
             get
             {
-
                 organizationRepository ??= new GenericRepository<Organization>(_context);
                 return organizationRepository;
             }
