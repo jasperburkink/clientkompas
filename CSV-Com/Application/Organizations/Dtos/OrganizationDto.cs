@@ -1,11 +1,10 @@
 ﻿using Application.Common.Mappings;
-using Application.Organizations.Dtos;
 using AutoMapper;
 using Domain.CVS.Domain;
 
-namespace Application.Organizations.Queries.GetOrganizations
+namespace Application.Organizations.Dtos
 {
-    public class GetOrganizationDto : IMapFrom<Organization>
+    public class OrganizationDto : IMapFrom<Organization>
     {
         public int Id { get; set; }
 
@@ -61,15 +60,15 @@ namespace Application.Organizations.Queries.GetOrganizations
 
         public string BTWNumber { get; set; }
 
-        public virtual ICollection<WorkingContractDto> WorkingContracts { get; set; }
-
         public string IBANNumber { get; set; }
 
         public string BIC { get; set; }
 
+        public ICollection<WorkingContractDto> WorkingContracts { get; set; }
+
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<Organization, GetOrganizationDto>()
+            profile.CreateMap<Organization, OrganizationDto>()
                 .ForMember(cDto => cDto.VisitStreetName, address => address.MapFrom(c => c.VisitAddress.StreetName))
                 .ForMember(cDto => cDto.VisitHouseNumber, address => address.MapFrom(c => c.VisitAddress.HouseNumber))
                 .ForMember(cDto => cDto.VisitHouseNumberAddition, address => address.MapFrom(c => c.VisitAddress.HouseNumberAddition))

@@ -1,4 +1,7 @@
-﻿using Application.Organizations.Queries.GetOrganizations;
+﻿using Application.Common.Exceptions;
+using Application.Organizations.Commands.UpdateOrganization;
+using Application.Organizations.Dtos;
+using Application.Organizations.Queries.GetOrganizations;
 using Application.Organizations.Queries.SearchOrganizations;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,6 +28,24 @@ namespace API.Controllers
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<OrganizationDto>> Put(UpdateOrganizationCommand command)
+        {
+            try
+            {
+                var result = await Mediator.Send(command);
+                return Ok(result);
+            }
+            catch (NotFoundException ex)
+            {
+                return StatusCode(404, ex);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
             }
         }
 
