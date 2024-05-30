@@ -142,6 +142,9 @@ namespace Infrastructure.Persistence.CVS.Configuration
                 .HasMaxLength(OrganizationConstants.KVKNumberMaxLength)
                 .IsRequired();
 
+            builder.HasIndex(c => c.KVKNumber)
+                .IsUnique();
+
             builder.Property(c => c.BTWNumber)
                 .HasMaxLength(OrganizationConstants.BTWNumberMaxLength)
                 .IsRequired();

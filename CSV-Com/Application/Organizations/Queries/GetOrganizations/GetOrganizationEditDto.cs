@@ -5,7 +5,7 @@ using Domain.CVS.Domain;
 
 namespace Application.Organizations.Queries.GetOrganizations
 {
-    public class GetOrganizationDto : IMapFrom<Organization>
+    public class GetOrganizationEditDto : IMapFrom<Organization>
     {
         public int Id { get; set; }
 
@@ -69,7 +69,7 @@ namespace Application.Organizations.Queries.GetOrganizations
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<Organization, GetOrganizationDto>()
+            profile.CreateMap<Organization, GetOrganizationEditDto>()
                 .ForMember(cDto => cDto.VisitStreetName, address => address.MapFrom(c => c.VisitAddress.StreetName))
                 .ForMember(cDto => cDto.VisitHouseNumber, address => address.MapFrom(c => c.VisitAddress.HouseNumber))
                 .ForMember(cDto => cDto.VisitHouseNumberAddition, address => address.MapFrom(c => c.VisitAddress.HouseNumberAddition))
@@ -87,5 +87,6 @@ namespace Application.Organizations.Queries.GetOrganizations
                 .ForMember(cDto => cDto.PostResidence, address => address.MapFrom(c => c.PostAddress.Residence))
                 .ForMember(cDto => cDto.WorkingContracts, wc => wc.MapFrom(c => c.WorkingContracts));
         }
+
     }
 }

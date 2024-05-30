@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using Application.Common.Interfaces.CVS;
 using Domain.Common;
+using Domain.CVS.Domain;
 using Infrastructure.Common;
 using Microsoft.EntityFrameworkCore;
 
@@ -157,6 +158,11 @@ namespace Infrastructure.Persistence.CVS
                 _dbSet.Attach(entityToUpdate);
                 Context.Entry(entityToUpdate).State = EntityState.Modified;
             }, cancellationToken);
+        }
+
+        public async Task<Organization> GetByKVKNumberAsync(string kvkNumber, CancellationToken cancellationToken)
+        {
+            return await Context.Organizations.FirstOrDefaultAsync(o => o.KVKNumber == kvkNumber, cancellationToken);
         }
 
         public async Task<IEnumerable<TEntity>> FullTextSearch(string searchTerm, CancellationToken cancellationToken = default, params Expression<Func<TEntity, object>>[] properties)
