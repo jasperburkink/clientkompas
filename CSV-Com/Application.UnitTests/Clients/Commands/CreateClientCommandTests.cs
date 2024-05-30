@@ -37,7 +37,7 @@ namespace Application.UnitTests.Clients.Commands
                 PostalCode = "1234AB",
                 Residence = "Amsterdam",
                 EmergencyPeople = new EmergencyPersonDto[] { new() },
-                WorkingContracts = new WorkingContractDto[] { new() },
+                WorkingContracts = new ClientWorkingContractDto[] { new() },
                 BenefitForms = new BenefitFormDto[] { new() },
                 Diagnoses = new DiagnosisDto[] { new() },
                 DriversLicences = new DriversLicenceDto[] { new() }

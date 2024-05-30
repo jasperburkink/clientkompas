@@ -63,7 +63,7 @@ namespace Application.Organizations.Commands.CreateOrganization
 
         public string BTWNumber { get; set; }
 
-        public ICollection<WorkingContractDto> WorkingContracts { get; set; }
+        public ICollection<WorkingContractOrganizationDto> WorkingContracts { get; set; }
 
         public string IBANNumber { get; set; }
 

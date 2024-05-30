@@ -33,7 +33,7 @@ namespace Application.UnitTests.Common.Mappings
 
         [Theory]
         [InlineData(typeof(Client), typeof(ClientDto))]
-        [InlineData(typeof(WorkingContract), typeof(WorkingContractDto))]
+        [InlineData(typeof(WorkingContract), typeof(ClientWorkingContractDto))]
         [InlineData(typeof(EmergencyPerson), typeof(EmergencyPersonDto))]
         public void ShouldSupportMappingFromSourceToDestination(Type source, Type destination)
         {

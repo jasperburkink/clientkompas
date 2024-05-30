@@ -64,7 +64,7 @@ namespace Application.Organizations.Dtos
 
         public string BIC { get; set; }
 
-        public ICollection<WorkingContractDto> WorkingContracts { get; set; }
+        public ICollection<WorkingContractOrganizationDto> WorkingContracts { get; set; }
 
         public void Mapping(Profile profile)
         {

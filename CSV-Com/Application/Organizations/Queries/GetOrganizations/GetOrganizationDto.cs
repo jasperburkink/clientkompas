@@ -61,7 +61,7 @@ namespace Application.Organizations.Queries.GetOrganizations
 
         public string BTWNumber { get; set; }
 
-        public virtual ICollection<WorkingContractDto> WorkingContracts { get; set; }
+        public virtual ICollection<WorkingContractOrganizationDto> WorkingContracts { get; set; }
 
         public string IBANNumber { get; set; }
 
