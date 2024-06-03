@@ -1,5 +1,4 @@
 ﻿using Application.Common.Mappings;
-using Application.Organizations.Dtos;
 using AutoMapper;
 using Domain.CVS.Domain;
 
@@ -57,8 +56,6 @@ namespace Application.Organizations.Queries.SearchOrganizations
 
         public string BTWNumber { get; set; }
 
-        public virtual ICollection<WorkingContractOrganizationDto> WorkingContracts { get; set; }
-
         public string IBANNumber { get; set; }
 
         public string BIC { get; set; }
@@ -80,8 +77,7 @@ namespace Application.Organizations.Queries.SearchOrganizations
                 .ForMember(cDto => cDto.PostHouseNumber, address => address.MapFrom(c => c.PostAddress.HouseNumber))
                 .ForMember(cDto => cDto.PostHouseNumberAddition, address => address.MapFrom(c => c.PostAddress.HouseNumberAddition))
                 .ForMember(cDto => cDto.PostPostalCode, address => address.MapFrom(c => c.PostAddress.PostalCode))
-                .ForMember(cDto => cDto.PostResidence, address => address.MapFrom(c => c.PostAddress.Residence))
-                .ForMember(cDto => cDto.WorkingContracts, wc => wc.MapFrom(c => c.WorkingContracts));
+                .ForMember(cDto => cDto.PostResidence, address => address.MapFrom(c => c.PostAddress.Residence));
         }
     }
 }

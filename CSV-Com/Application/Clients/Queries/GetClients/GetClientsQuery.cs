@@ -30,7 +30,7 @@ namespace Application.Clients.Queries.GetClients
             // TODO: Find a better solution for including properties.
             return (await _unitOfWork.ClientRepository.GetAsync(includeProperties: "MaritalStatus,BenefitForms,DriversLicences,Diagnoses,EmergencyPeople,WorkingContracts"))
                 .AsQueryable()
-                .Where(c => c.DeactivationDateAndTime == null)
+                .Where(c => c.DeactivationDateTime == null)
                 .ProjectTo<GetClientDto>(_mapper.ConfigurationProvider)
                 .OrderBy(c => c.LastName)
                 .ThenBy(c => c.FirstName);

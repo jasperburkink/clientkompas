@@ -18,6 +18,8 @@ namespace Application.Clients.Dtos
 
         public DateOnly ToDate { get; set; }
 
+        public int OrganizationId { get; set; }
+
         public void Mapping(Profile profile)
         {
             profile.CreateMap<WorkingContract, ClientWorkingContractDto>();

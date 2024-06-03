@@ -106,7 +106,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     b.Property<DateOnly>("DateOfBirth")
                         .HasColumnType("date");
 
-                    b.Property<DateTime?>("DeactivationDateAndTime")
+                    b.Property<DateTime?>("DeactivationDateTime")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("EmailAddress")
@@ -373,6 +373,12 @@ namespace Infrastructure.Persistence.CVS.Migrations
                         .HasColumnType("varchar(250)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("KVKNumber")
+                        .IsUnique();
+
+                    b.HasIndex("OrganizationName")
+                        .HasAnnotation("MySql:FullTextIndex", true);
 
                     b.ToTable("Organizations");
                 });
@@ -711,7 +717,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.CVS.Domain.Organization", "Organization")
-                        .WithMany("WorkingContracts")
+                        .WithMany()
                         .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -731,11 +737,6 @@ namespace Infrastructure.Persistence.CVS.Migrations
             modelBuilder.Entity("Domain.CVS.Domain.MaritalStatus", b =>
                 {
                     b.Navigation("Clients");
-                });
-
-            modelBuilder.Entity("Domain.CVS.Domain.Organization", b =>
-                {
-                    b.Navigation("WorkingContracts");
                 });
 #pragma warning restore 612, 618
         }

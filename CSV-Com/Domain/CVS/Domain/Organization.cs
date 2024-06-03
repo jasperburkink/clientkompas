@@ -27,8 +27,6 @@ namespace Domain.CVS.Domain
 
         public string BTWNumber { get; set; }
 
-        public List<WorkingContract> WorkingContracts { get; set; } = new();
-
         public string IBANNumber { get; set; }
 
         public string BIC { get; set; }

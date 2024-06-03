@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Persistence.CVS.Migrations
 {
     /// <inheritdoc />
-    public partial class Organization : Migration
+    public partial class Organizations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,6 +15,11 @@ namespace Infrastructure.Persistence.CVS.Migrations
             migrationBuilder.DropColumn(
                 name: "CompanyName",
                 table: "WorkingContract");
+
+            migrationBuilder.RenameColumn(
+                name: "DeactivationDateAndTime",
+                table: "Clients",
+                newName: "DeactivationDateTime");
 
             migrationBuilder.AddColumn<int>(
                 name: "OrganizationId",
@@ -100,6 +105,18 @@ namespace Infrastructure.Persistence.CVS.Migrations
                 table: "WorkingContract",
                 column: "OrganizationId");
 
+            migrationBuilder.CreateIndex(
+                name: "IX_Organizations_KVKNumber",
+                table: "Organizations",
+                column: "KVKNumber",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Organizations_OrganizationName",
+                table: "Organizations",
+                column: "OrganizationName")
+                .Annotation("MySql:FullTextIndex", true);
+
             migrationBuilder.AddForeignKey(
                 name: "FK_WorkingContract_Organizations_OrganizationId",
                 table: "WorkingContract",
@@ -126,6 +143,11 @@ namespace Infrastructure.Persistence.CVS.Migrations
             migrationBuilder.DropColumn(
                 name: "OrganizationId",
                 table: "WorkingContract");
+
+            migrationBuilder.RenameColumn(
+                name: "DeactivationDateTime",
+                table: "Clients",
+                newName: "DeactivationDateAndTime");
 
             migrationBuilder.AddColumn<string>(
                 name: "CompanyName",
