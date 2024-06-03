@@ -19,8 +19,9 @@ variables:
 
 stages: 
   - build
-  - test     
-  - image-build-sync-test
+  - test   
+  - preparations
+  - deployment
 
 dotnet-build:
   before_script:
@@ -55,8 +56,7 @@ dotnet-test:
       junit: 
         - '**/TestResults.xml'
     when: always  # Keep result files. Even when tests fail.
-  dependencies:
-    - dotnet-build
+  needs: [ "dotnet-build" ]
 
 node-build:
   before_script:
@@ -96,16 +96,15 @@ node-test:
         coverage_format: cobertura
         path: '**/coverage-final.json'
   image: $NODE_IMAGE
-  dependencies:
-    - node-build
+  needs: [ "node-build" ]
 
-image-build-sync-test-job:
+upload-images-test:
   services:
   - name: docker:20.10.16-dind
   before_script:
   - "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
   - apk add --update curl
-  stage: image-build-sync-test  
+  stage: preparations
   script:
     # Dotnet build  
     - cd CSV-Com
@@ -118,10 +117,31 @@ image-build-sync-test-job:
     # Docker push
     - docker push $DOTNET_DOCKER_IMAGE_NAME_TEST
     - docker push $NODE_DOCKER_IMAGE_NAME_TEST
-    - echo refreshing environments
-    - curl -m 300 "http://192.168.1.15:6012/environment_refresh?s=${ENV_REFRESH_SECRET}"
   image: $DOCKER_IMAGE
-  retry: 2
+  needs: [ "dotnet-test", "node-test" ]
   allow_failure: true
   rules:
-  - when: manual  
+  - when: manual
+  
+deploy-latest-images:
+  stage: deployment
+  script:
+    - secret="$ENV_REFRESH_SECRET"
+    # Step 1: Call the first URL with the provided secret and store the response as "identifier"
+    - FIRST_URL="http://cvs-dev.sbict.local:6021/DockerInternal/refresh_environments?s=$secret"
+    - identifier=$(curl -s "$FIRST_URL")
+    - echo "Running refresh job:"
+    - echo "$identifier"
+    # Step 2: Keep checking the second URL until the response is not "Loading"
+    - SECOND_URL="http://cvs-dev.sbict.local:6021/DockerInternal/check_job?identifier=$identifier"
+    - while [[ "$(curl -s "$SECOND_URL")" == "Loading" ]]; do
+    -     echo "Waiting for job to finish"
+    -     sleep 5
+    - done
+    # Step 3: Call the third URL and display the response
+    - THIRD_URL="http://cvs-dev.sbict.local:6021/DockerInternal/job_result?identifier=$identifier"
+    - response=$(curl -s "$THIRD_URL")
+    - echo "Job result:"
+    - echo "$response"
+  image: $DOTNET_IMAGE
+  needs: [ "upload-images-test" ]

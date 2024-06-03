@@ -48,8 +48,7 @@ dotnet-test:
       junit: 
         - '**/TestResults.xml'
     when: always  # Keep result files. Even when tests fail.
-  dependencies:
-    - dotnet-build
+  needs: [ "dotnet-build" ]
 
 node-build:
   before_script:
@@ -89,5 +88,4 @@ node-test:
         coverage_format: cobertura
         path: '**/coverage-final.json'
   image: $NODE_IMAGE
-  dependencies:
-    - node-build
+  needs: [ "node-build" ]

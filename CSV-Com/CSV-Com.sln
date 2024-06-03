@@ -36,8 +36,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pipelines", "Pipelines", "{
 	ProjectSection(SolutionItems) = preProject
 		Pipelines\Configuration.yml = Pipelines\Configuration.yml
 		Pipelines\Pipeline_DeployToDev.yml = Pipelines\Pipeline_DeployToDev.yml
-		Pipelines\Pipeline_OnMergeRequest.yml = Pipelines\Pipeline_OnMergeRequest.yml
 		Pipelines\Pipeline_DeployToProd.yml = Pipelines\Pipeline_DeployToProd.yml
+		Pipelines\Pipeline_OnMergeRequest.yml = Pipelines\Pipeline_OnMergeRequest.yml
 	EndProjectSection
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "webapp", "webapp\webapp.esproj", "{2D542BE9-B395-4F5A-A092-9C79CD226C0A}"
@@ -47,6 +47,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.FunctionalTests", "Application.FunctionalTests\Application.FunctionalTests.csproj", "{61D56599-3825-4049-AB30-4010E72BD15F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApp.FunctionalTests", "webapp.FunctionalTests\WebApp.FunctionalTests.csproj", "{DE1BB072-BAC1-4D6E-A98E-A68E581D7197}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker", "Docker", "{C6D061C5-A49C-436E-96CF-71D67A441131}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Docker.API", "Docker.API\Docker.API.csproj", "{8A52644E-89EA-4369-8AA4-2AF81D5CE566}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -108,6 +112,10 @@ Global
 		{DE1BB072-BAC1-4D6E-A98E-A68E581D7197}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE1BB072-BAC1-4D6E-A98E-A68E581D7197}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE1BB072-BAC1-4D6E-A98E-A68E581D7197}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A52644E-89EA-4369-8AA4-2AF81D5CE566}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A52644E-89EA-4369-8AA4-2AF81D5CE566}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A52644E-89EA-4369-8AA4-2AF81D5CE566}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A52644E-89EA-4369-8AA4-2AF81D5CE566}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -126,6 +134,7 @@ Global
 		{7B796DED-C42D-4BB5-A319-D51E61B7273C} = {D11CDFEC-6C29-413C-8BDA-8E8301D5B98C}
 		{61D56599-3825-4049-AB30-4010E72BD15F} = {D11CDFEC-6C29-413C-8BDA-8E8301D5B98C}
 		{DE1BB072-BAC1-4D6E-A98E-A68E581D7197} = {D11CDFEC-6C29-413C-8BDA-8E8301D5B98C}
+		{8A52644E-89EA-4369-8AA4-2AF81D5CE566} = {C6D061C5-A49C-436E-96CF-71D67A441131}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4D032C28-AA5E-48C7-BC4C-EDD9924A657B}
