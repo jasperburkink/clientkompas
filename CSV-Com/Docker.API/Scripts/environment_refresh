@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Usage: ./my_script.sh <secret>
+# Example: ./my_script.sh mySecret123
+
+# Check if the secret argument is provided
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 <secret>"
+    exit 1
+fi
+
+secret="$1"
+
+# Step 1: Call the first URL with the provided secret and store the response as "identifier"
+FIRST_URL="http://cvs-dev.sbict.local:6021/DockerInternal/refresh_environments?s=$secret"
+identifier=$(curl -s "$FIRST_URL")
+
+echo "Running refresh job:"
+echo "$identifier"
+
+# Step 2: Keep checking the second URL until the response is not "Loading"
+SECOND_URL="http://cvs-dev.sbict.local:6021/DockerInternal/check_job?identifier=$identifier"
+while [[ "$(curl -s "$SECOND_URL")" == "Loading" ]]; do
+    echo "Waiting for job to finish"
+    sleep 5  # Adjust the sleep interval as needed
+done
+
+# Step 3: Call the third URL and display the response
+THIRD_URL="http://cvs-dev.sbict.local:6021/DockerInternal/job_result?identifier=$identifier"
+response=$(curl -s "$THIRD_URL")
+echo "Job result:"
+echo "$response"
