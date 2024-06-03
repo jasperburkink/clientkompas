@@ -122,15 +122,6 @@ namespace Application.Organizations.Commands.UpdateOrganization
 
             organization.BTWNumber = request.BTWNumber;
 
-            var workingContracts = new List<WorkingContract>();
-            foreach (var dto in request.WorkingContracts)
-            {
-                var client = await _unitOfWork.ClientRepository.GetByIDAsync(dto.ClientId, cancellationToken);
-                var workingContract = dto.ToDomainModel(_mapper, organization, client);
-                workingContracts.Add(workingContract);
-            }
-            organization.WorkingContracts = workingContracts;
-
             organization.IBANNumber = request.IBANNumber;
 
             organization.BIC = request.BIC;

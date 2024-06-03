@@ -28,7 +28,7 @@ namespace Application.Clients.Commands.DeactivateClient
             var client = await _unitOfWork.ClientRepository.GetByIDAsync(request.Id, cancellationToken)
                 ?? throw new NotFoundException(nameof(Client), request.Id);
 
-            client.DeactivationDateAndTime = DateTime.UtcNow;
+            client.DeactivationDateTime = DateTime.UtcNow;
 
             await _unitOfWork.SaveAsync(cancellationToken);
 

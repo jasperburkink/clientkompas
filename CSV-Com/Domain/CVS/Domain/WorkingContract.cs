@@ -11,6 +11,8 @@ namespace Domain.CVS.Domain
 
         public Organization Organization { get; set; }
 
+        public int OrganizationId { get; set; }
+
         public string Function { get; set; }
 
         public ContractType ContractType { get; set; }

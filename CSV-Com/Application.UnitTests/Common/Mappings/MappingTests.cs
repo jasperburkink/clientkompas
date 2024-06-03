@@ -1,14 +1,8 @@
-﻿using Application.Clients.Dtos;
-using Application.Clients.Queries.GetClients;
+﻿using System.Runtime.Serialization;
+using Application.Clients.Dtos;
 using Application.Common.Mappings;
 using AutoMapper;
 using Domain.CVS.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.UnitTests.Common.Mappings
 {

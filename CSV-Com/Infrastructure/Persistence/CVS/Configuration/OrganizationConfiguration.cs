@@ -14,10 +14,6 @@ namespace Infrastructure.Persistence.CVS.Configuration
 
         public void Configure(EntityTypeBuilder<Organization> builder)
         {
-            builder.HasMany(c => c.WorkingContracts)
-                .WithOne(wc => wc.Organization)
-                .OnDelete(DeleteBehavior.Cascade);
-
             builder.Property(c => c.OrganizationName)
                 .HasMaxLength(OrganizationConstants.OrganizationNameMaxLength)
                 .IsRequired();

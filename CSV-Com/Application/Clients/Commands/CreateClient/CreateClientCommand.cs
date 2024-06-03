@@ -104,17 +104,9 @@ namespace Application.Clients.Commands.CreateClient
                 Remarks = request.Remarks
             };
 
-            foreach (var emergencyPersonRequest in request.EmergencyPeople)
-            {
-                var emergencyPerson = emergencyPersonRequest.ToDomainModel(_mapper, client);
-                client.EmergencyPeople.Add(emergencyPerson);
-            }
+            client.EmergencyPeople = request.EmergencyPeople.Select(a => a.ToDomainModel(_mapper, client)).ToList();
 
-            foreach (var workingContractRequest in request.WorkingContracts)
-            {
-                var workingContract = workingContractRequest.ToDomainModel(_mapper, client);
-                client.WorkingContracts.Add(workingContract);
-            }
+            client.WorkingContracts = request.WorkingContracts.Select(a => a.ToDomainModel(_mapper, client)).ToList();
 
             await _unitOfWork.ClientRepository.InsertAsync(client, cancellationToken);
             await _unitOfWork.SaveAsync(cancellationToken);

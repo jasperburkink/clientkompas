@@ -25,7 +25,7 @@ namespace Application.Clients.Queries.SearchClients
         {
             return (await _unitOfWork.ClientRepository.FullTextSearch(request.SearchTerm, cancellationToken, client => client.FullName))
                 .AsQueryable()
-                .Where(c => c.DeactivationDateAndTime == null)
+                .Where(c => c.DeactivationDateTime == null)
                 .ProjectTo<SearchClientDto>(_mapper.ConfigurationProvider)
                 .OrderBy(sc => sc.LastName)
                 .ThenBy(sc => sc.FirstName);

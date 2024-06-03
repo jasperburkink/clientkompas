@@ -42,7 +42,7 @@ namespace Domain.CVS.Domain
 
         public List<WorkingContract> WorkingContracts { get; set; } = new();
 
-        public DateTime? DeactivationDateAndTime { get; set; }
+        public DateTime? DeactivationDateTime { get; set; }
 
         public string Remarks { get; set; }
     }
