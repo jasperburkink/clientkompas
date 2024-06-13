@@ -11,5 +11,7 @@ namespace Application.FunctionalTests
         Task ResetAsync();
 
         Task DisposeAsync();
+
+        Task DropAsync();
     }
 }

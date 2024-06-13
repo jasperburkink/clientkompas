@@ -59,5 +59,12 @@ namespace Application.FunctionalTests
         {
             await _connection.DisposeAsync();
         }
+
+        public async Task DropAsync()
+        {
+            var command = _connection.CreateCommand();
+            command.CommandText = $"drop schema if exists {_connection.Database}";
+            command.ExecuteNonQuery();
+        }
     }
 }

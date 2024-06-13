@@ -43,6 +43,7 @@ dotnet-build:
 dotnet-test:
   stage: test
   script:
+    - export ASPNETCORE_ENVIRONMENT=ocdev
     - cd CSV-Com  
     - dotnet test -c $BUILD_CONFIGURATION --collect:"XPlat Code Coverage" # Run and publish testresults with junit to gitlab
   image: $DOTNET_IMAGE
