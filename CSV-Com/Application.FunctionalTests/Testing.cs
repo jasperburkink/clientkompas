@@ -13,22 +13,36 @@ namespace Application.FunctionalTests
     [SetUpFixture]
     public partial class Testing
     {
+        private const int DATABASE_PREFIX_LENGTH = 10;
+
         private static ITestDatabase s_databaseCSV;
         private static ITestDatabase s_databaseAuthentication;
         private static CustomWebApplicationFactory s_factory = null!;
         private static IServiceScopeFactory s_scopeFactory = null!;
         private static string? s_userId;
+        private static readonly string? s_databasePrefix = GenerateRandomPrefix();
 
         [OneTimeSetUp]
         public async Task RunBeforeAnyTests()
         {
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            if (environment is null)
+            {
+                Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Development");
+                environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            }
+
             var configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
+                .AddJsonFile($"appsettings.{environment}.json", optional: false, reloadOnChange: true)
                 .AddEnvironmentVariables()
                 .Build();
 
             var authenticationConnectionString = configuration.GetConnectionString("AuthenticationConnectionString");
             var csvConnectionString = configuration.GetConnectionString("CVSConnectionString");
+
+            authenticationConnectionString = authenticationConnectionString?.Replace("<<test_db_name>>", $"{s_databasePrefix}_Authentication");
+            csvConnectionString = csvConnectionString?.Replace("<<test_db_name>>", $"{s_databasePrefix}_CVS");
 
             s_databaseAuthentication = await TestDatabaseFactory<AuthenticationDbContext>.CreateAsync(authenticationConnectionString!);
             s_databaseCSV = await TestDatabaseFactory<CVSDbContext>.CreateAsync(csvConnectionString!);
@@ -152,8 +166,21 @@ namespace Application.FunctionalTests
         [OneTimeTearDown]
         public async Task RunAfterAnyTests()
         {
+            await s_databaseAuthentication.DropAsync();
+            await s_databaseCSV.DropAsync();
             await s_databaseCSV.DisposeAsync();
             await s_factory.DisposeAsync();
+        }
+
+        private static string GenerateRandomPrefix()
+        {
+            var characters = "abcdefghijklmnopqrstuvwxyz1234567890";
+            var prefix = "test_";
+            for (var i = 0; i < DATABASE_PREFIX_LENGTH; i++)
+            {
+                prefix += characters[Random.Shared.Next(0, characters.Length)];
+            }
+            return prefix;
         }
     }
 }

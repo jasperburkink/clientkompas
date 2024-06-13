@@ -57,5 +57,10 @@ namespace Application.FunctionalTests
             await _connection.DisposeAsync();
             await _container.DisposeAsync();
         }
+
+        public Task DropAsync()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
