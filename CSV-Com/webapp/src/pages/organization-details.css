@@ -1,0 +1,177 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600&display=swap');
+
+@layer components {
+    .organizations {
+        @apply 
+        grid 
+        grid-cols-2 
+        px-5 
+        pt-[140px] 
+        pb-[90px] 
+        mt-4 
+        lg:mt-12
+        lg:grid-cols-3 
+        lg:w-full 
+        lg:p-0 
+        lg:h-full 
+        lg:px-12;
+
+        .property{
+            @apply 
+            col-span-2 
+            grid 
+            grid-cols-2 
+            overflow-hidden 
+            lg:col-span-3;
+        }
+    
+        .label{
+            @apply 
+            text-lg;
+        }        
+    
+        .header{
+            @apply 
+            text-3xl 
+            mb-5 
+            w-full 
+            lg:text-3xl 
+            col-span-3 
+            lg:row-end-1;
+        }
+    
+        .organization-info-main-visitadres{
+            @apply 
+            col-span-3 
+            lg:col-end-2 
+            lg:col-span-1 
+            lg:row-end-2;
+        }
+    
+        .organization-number{
+            @apply 
+            col-span-2 
+            lg:col-end-2 
+            lg:col-span-1 
+            my-5;
+        }
+
+        .organization-subheader{
+            @apply 
+            mt-4
+            col-span-2;
+        }
+
+        @media only screen and (min-width: 1050px){
+            .organization-info-main-contact {margin-left: 30%;}
+            .organization-info-main-contactperson {margin-left: 30%;}
+        }
+    
+        .organization-info-main-contact{
+            @apply 
+            col-span-2 
+            lg:col-end-3
+            lg:col-span-1
+            lg:row-end-2;
+        }
+
+        .organization-info-main-post_invoiceadres{
+            @apply 
+            col-span-2 
+            lg:col-end-2 
+            lg:col-span-1 
+            lg:row-end-3;
+        }
+
+        .organization-info-main-contactperson{
+            @apply 
+            col-span-2
+            lg:col-end-3 
+            lg:col-span-1 
+            lg:row-end-3;
+        }
+
+        .organization-info-main-organizationinfo{
+            @apply 
+            col-span-2 
+            lg:col-end-2 
+            lg:col-span-1 
+            lg:row-end-4;
+        }
+    
+        .organization-label-value {
+            @apply 
+            flex 
+            flex-row 
+            overflow-hidden 
+            whitespace-nowrap;
+        }
+        
+        .organization-label-value > .label {
+            @apply 
+            my-0 
+            mr-2; /* Add margin-right to space out the labels */
+        }
+        .organization-remarks{
+            @apply 
+            col-span-2;
+        }
+
+        .button-container{
+            @apply 
+            fixed 
+            bottom-0 
+            h-[90px] 
+            col-span-2 
+            w-full 
+            bg-mainLightGray 
+            p-5 
+            gap-4 
+            -mx-5 
+            grid 
+            grid-cols-2 
+            shadow-2xl 
+            shadow-black 
+            lg:relative 
+            lg:bg-transparent 
+            lg:w-full 
+            lg:h-auto 
+            lg:shadow-none 
+            lg:justify-items-end 
+            lg:gap-0 
+            lg:p-0;
+
+            .button{
+                @apply 
+                text-base 
+                lg:w-52 
+                lg:text-center 
+                lg:col-span-2;
+            }
+        }
+
+        .button{
+            @apply 
+            text-xs 
+            lg:text-lg;
+        }
+
+        .organization-deactivate-button{
+            @apply
+            h-14
+        }
+    }
+    
+    .header-menu{
+        @apply 
+        fixed 
+        lg:flex 
+        lg:static 
+        h-[140px] 
+        w-full 
+        lg:w-auto;
+    }
+}

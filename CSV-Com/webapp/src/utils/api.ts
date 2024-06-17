@@ -8,6 +8,7 @@ import moment from 'moment';
 import { isNullOrEmpty } from "./utilities";
 import ApiResult from "types/common/api-result";
 import { error } from "console";
+import Organization from "types/model/Organization";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -127,4 +128,8 @@ export const saveClient = async (client: Client): Promise<ApiResult<Client>> => 
         Ok: response.ok,
         ReturnObject: clientReturn
     }
+}
+
+export const fetchOrganization = async (organizationId: string): Promise<Organization> => {
+    return fetchAPI<Organization>(`${apiUrl}organization/${organizationId}`);
 }
