@@ -4,7 +4,7 @@ using AutoMapper;
 using Domain.CVS.Domain;
 using Domain.CVS.Enums;
 
-namespace Application.Clients.Queries.GetClients
+namespace Application.Clients.Queries.GetClient
 {
     public class GetClientDto : IMapFrom<Client>
     {
@@ -48,7 +48,7 @@ namespace Application.Clients.Queries.GetClients
 
         public string BenefitForm { get; set; }
 
-        public virtual ICollection<ClientWorkingContractDto> WorkingContracts { get; set; }
+        public virtual ICollection<GetClientWorkingContractDto> WorkingContracts { get; set; }
 
         public string Remarks { get; set; }
 
@@ -65,7 +65,8 @@ namespace Application.Clients.Queries.GetClients
                 .ForMember(cDto => cDto.HouseNumber, address => address.MapFrom(c => c.Address.HouseNumber))
                 .ForMember(cDto => cDto.HouseNumberAddition, address => address.MapFrom(c => c.Address.HouseNumberAddition))
                 .ForMember(cDto => cDto.PostalCode, address => address.MapFrom(c => c.Address.PostalCode))
-                .ForMember(cDto => cDto.Residence, address => address.MapFrom(c => c.Address.Residence));
+                .ForMember(cDto => cDto.Residence, address => address.MapFrom(c => c.Address.Residence))
+                .ForMember(cDto => cDto.WorkingContracts, workingContract => workingContract.MapFrom(c => c.WorkingContracts));
         }
     }
 }

@@ -7,7 +7,7 @@ using Application.MaritalStatuses.Queries.GetMaritalStatus;
 using AutoMapper;
 using Domain.CVS.Domain;
 
-namespace Application.Clients.Queries.GetClients
+namespace Application.Clients.Queries.GetClientEdit
 {
     public class GetClientEditDto : IMapFrom<Client>
     {
@@ -49,7 +49,7 @@ namespace Application.Clients.Queries.GetClients
 
         public virtual ICollection<BenefitFormDto> BenefitForms { get; set; }
 
-        public virtual ICollection<ClientWorkingContractDto> WorkingContracts { get; set; }
+        public virtual ICollection<GetClientEditWorkingContractDto> WorkingContracts { get; set; }
 
         public string Remarks { get; set; }
 

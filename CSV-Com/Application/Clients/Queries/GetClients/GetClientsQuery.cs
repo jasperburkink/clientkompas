@@ -1,4 +1,5 @@
-﻿using Application.Common.Interfaces.CVS;
+﻿using Application.Clients.Queries.GetClient;
+using Application.Common.Interfaces.CVS;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
