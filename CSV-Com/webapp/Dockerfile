@@ -6,6 +6,8 @@ RUN echo Using Environment: ${ENVIRONMENT_NAME}
 WORKDIR /app
 COPY package.json .
 COPY yarn.lock .
+COPY tsconfig.json .
+COPY tailwind.config.js .
 RUN yarn install
 COPY . .
 RUN npm run build:${ENVIRONMENT_NAME}
