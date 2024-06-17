@@ -7,6 +7,7 @@ import preval from 'preval.macro'
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ClientContextWrapper, ClientRoute } from './pages/client-context';
+import { OrganizationContextWrapper, OrganizationRoute } from 'pages/organization-context';
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 root.render(
@@ -19,6 +20,7 @@ root.render(
                     <Route path='/clients/:id' element={<ClientContextWrapper clientRoute={ClientRoute.VIEW_CLIENT} />} />
                     <Route path='/clients/edit' element={<ClientContextWrapper clientRoute={ClientRoute.EDIT_CLIENT} />} />
                     <Route path='/clients/edit/:id' element={<ClientContextWrapper clientRoute={ClientRoute.EDIT_CLIENT} />} />
+                    <Route path='/organization/:id' element={<OrganizationContextWrapper organizationRoute={OrganizationRoute.VIEW_ORGANIZATION} />} />
                 </Routes>
             </BrowserRouter>
         </React.StrictMode>

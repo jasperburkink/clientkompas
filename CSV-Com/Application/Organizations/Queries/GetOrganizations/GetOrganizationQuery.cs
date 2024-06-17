@@ -22,7 +22,7 @@ namespace Application.Organizations.Queries.GetOrganizations
 
         public async Task<GetOrganizationDto> Handle(GetOrganizationQuery request, CancellationToken cancellationToken)
         {
-            var organization = await _unitOfWork.OrganizationRepository.GetByIDAsync(request.OrganizationId, cancellationToken: cancellationToken, includeProperties: "WorkingContracts");
+            var organization = await _unitOfWork.OrganizationRepository.GetByIDAsync(request.OrganizationId, cancellationToken: cancellationToken, includeProperties: "");
             return _mapper.Map<GetOrganizationDto>(organization);
         }
     }

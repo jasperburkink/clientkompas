@@ -1,0 +1,31 @@
+export default interface Organization {
+    id: number;
+    organizationname: string;
+    visitstreetname: string;
+    visithousenumber: number;
+    visithousenumberaddition?: string;
+    visitpostalcode: string;
+    visitresidence: string;
+    invoicestreetname: string;
+    invoicehousenumber: number;
+    invoicehousenumberaddition?: string;
+    invoicepostalcode: string;
+    invoiceresidence: string;
+    poststreetname: string;
+    posthousenumber: number;
+    posthousenumberaddition?: string;
+    postpostalcode: string;
+    postresidence: string;
+    contactpersonname: string;
+    contactpersonfunction: string;
+    contactpersontelephonenumber: string;
+    contactpersonmobilephonenumber: string;
+    contactpersonemailaddress: string;
+    phonenumber: string;
+    website: string;
+    emailaddress: string;
+    kvknumber: string;
+    btwnumber: string;
+    ibannumber: string;
+    bic: string;
+}

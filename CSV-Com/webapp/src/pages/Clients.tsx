@@ -168,7 +168,7 @@ function Clients() {
                     <div className='client-info-main'>                        
                         <Label text={client.firstname + ' ' + (!client.prefixlastname ? '' : client.prefixlastname + ' ')  + client.lastname} />
                         <Label text={client.streetname + ' ' + client.housenumber + (!client.housenumberaddition ? '' : client.housenumberaddition)} />
-                        <Label text={client.postalcode + ' ' + client.residence} />                
+                        <Label text={client.postalcode + ' ' + client.residence} />
                     </div>
 
                     {/* Client number */}                    

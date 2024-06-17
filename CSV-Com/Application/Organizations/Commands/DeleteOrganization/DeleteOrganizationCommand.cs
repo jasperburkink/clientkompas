@@ -20,6 +20,9 @@ namespace Application.Organizations.Commands.DeleteOrganization
 
         public async Task Handle(DeleteOrganizationCommand request, CancellationToken cancellationToken)
         {
+            var org = _unitOfWork.OrganizationRepository.GetByID(request.Id);
+            var org2 = _unitOfWork.OrganizationRepository.Get(o => o.Id == request.Id);
+
             var organization = await _unitOfWork.OrganizationRepository.GetByIDAsync(request.Id, cancellationToken)
                 ?? throw new NotFoundException(nameof(Organization), request.Id);
 
