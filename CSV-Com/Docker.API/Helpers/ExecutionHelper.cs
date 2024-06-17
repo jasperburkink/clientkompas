@@ -4,7 +4,14 @@ namespace Docker.API.Helpers
 {
     public class ExecutionHelper
     {
-        public static async Task<ExecutionResult> ExecuteAsync(string script, CancellationToken token)
+        private static readonly CancellationTokenSource s_defaultTokenSource = new();
+        public static async Task<string> ExecuteDockerCommand(string command, CancellationToken? token = null)
+        {
+            var fullCommand = $"docker {command}";
+            var result = await ExecuteAsync(fullCommand, token);
+            return !result.Success ? throw new Exception(result.ToString()) : result.ToString();
+        }
+        public static async Task<ExecutionResult> ExecuteAsync(string script, CancellationToken? token = null)
         {
             if (!File.Exists(script))
             {
@@ -23,10 +30,10 @@ namespace Docker.API.Helpers
 
             _ = p.Start();
 
-            var error = await p.StandardError.ReadToEndAsync(token);
-            var output = await p.StandardOutput.ReadToEndAsync(token);
+            var error = await p.StandardError.ReadToEndAsync(token ?? s_defaultTokenSource.Token);
+            var output = await p.StandardOutput.ReadToEndAsync(token ?? s_defaultTokenSource.Token);
 
-            await p.WaitForExitAsync(token);
+            await p.WaitForExitAsync(token ?? s_defaultTokenSource.Token);
 
             var success = p.ExitCode == 0;
 

@@ -19,6 +19,7 @@ namespace Docker.API
 
             builder.Services.AddSingleton<IDockerRefreshService, DockerRefreshService>();
             builder.Services.AddSingleton<IDelayedKillService, DelayedKillService>();
+            builder.Services.AddSingleton<IDockerInfoService, DockerInfoService>();
 
             builder.Services.Configure<SecurityOptions>(
                 builder.Configuration.GetSection(SecurityOptions.Position));
