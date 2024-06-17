@@ -4,6 +4,8 @@ using Application.Clients.Commands.DeactivateClient;
 using Application.Clients.Commands.DeleteClientDriversLicence;
 using Application.Clients.Commands.UpdateClient;
 using Application.Clients.Dtos;
+using Application.Clients.Queries.GetClient;
+using Application.Clients.Queries.GetClientEdit;
 using Application.Clients.Queries.GetClients;
 using Application.Clients.Queries.SearchClients;
 using Application.Common.Exceptions;

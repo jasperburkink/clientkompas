@@ -2,7 +2,7 @@
 using AutoMapper;
 using MediatR;
 
-namespace Application.Clients.Queries.GetClients
+namespace Application.Clients.Queries.GetClientEdit
 {
     public record GetClientEditQuery : IRequest<GetClientEditDto>
     {

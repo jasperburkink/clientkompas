@@ -4,7 +4,7 @@ const CustomLabels = {
         telephonenumber: 'Telefoonnr.'
     },
     WorkingContract: {
-        organizationname: 'Werkt bij',
+        organizationid: 'Werkt bij',
         function: 'Functie',
         contracttype: 'Contract',
         fromdate: 'Van',

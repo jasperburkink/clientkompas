@@ -79,6 +79,10 @@ export const fetchDriversLicences = async (): Promise<DriversLicence[]> => {
     return fetchAPI<DriversLicence[]>(`${apiUrl}DriversLicence`);
 }
 
+export const fetchOrganizations = async (): Promise<Organization[]> => {
+    return fetchAPI<Organization[]>(`${apiUrl}Organization`);
+}
+
 export const deactivateClient = async (clientId: number): Promise<ClientQuery> => {
     return fetchAPI<ClientQuery>(`${apiUrl}Client/DeactivateClient`, 'PUT', { id: clientId });
 }
