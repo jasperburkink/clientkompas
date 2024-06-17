@@ -13,9 +13,9 @@ namespace Docker.API.Helpers
         }
         public static async Task<ExecutionResult> ExecuteAsync(string script, CancellationToken? token = null)
         {
-            if (!File.Exists(script))
+            if (!File.Exists("/bin/bash"))
             {
-                return new(false, "Script not found", "");
+                return new(false, "/bin/bash is not found on current ssytem", "");
             }
 
             var p = new Process();
