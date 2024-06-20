@@ -40,5 +40,7 @@ namespace Application.Common.Interfaces.CVS
         Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken);
 
         Task<IEnumerable<TEntity>> FullTextSearch(string searchTerm, CancellationToken cancellationToken = default, params Expression<Func<TEntity, object>>[] properties);
+
+        Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
     }
 }

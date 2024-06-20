@@ -56,6 +56,7 @@ namespace Infrastructure.Persistence.CVS
                 return clientRepository;
             }
         }
+
         public IRepository<DriversLicence> DriversLicenceRepository
         {
             get
@@ -64,8 +65,6 @@ namespace Infrastructure.Persistence.CVS
                 return driversLicenceRepository;
             }
         }
-
-
 
         public IRepository<MaritalStatus> MaritalStatusRepository
         {
