@@ -1,4 +1,4 @@
-﻿namespace Domain.Constants
+﻿namespace Domain.Authentication.Constants
 {
     internal class AddressConstants
     {

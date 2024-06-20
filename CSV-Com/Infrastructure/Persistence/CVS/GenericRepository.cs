@@ -181,5 +181,10 @@ namespace Infrastructure.Persistence.CVS
                 return _dbSet.FromSqlInterpolated(FormattableStringFactory.Create(query));
             }, cancellationToken);
         }
+
+        public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+        {
+            return await _dbSet.AnyAsync(predicate, cancellationToken);
+        }
     }
 }

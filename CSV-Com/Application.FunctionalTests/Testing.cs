@@ -1,4 +1,4 @@
-﻿using Domain.Constants;
+﻿using Domain.Authentication.Constants;
 using Infrastructure.Identity;
 using Infrastructure.Persistence.Authentication;
 using Infrastructure.Persistence.CVS;
