@@ -264,7 +264,7 @@ function App() {
                     </LabelField>                    
 
                     <p>Slide toggle label</p>
-                    <SlideToggleLabel textColapsed='Klap uit!' textExpanded='Klap in!' >
+                    <SlideToggleLabel text='Overige cliënt informatie' smallTextColapsed=' - klap uit voor meer opties' smallTextExpanded=' - klap in voor minder opties' >
                         <div className='p-5 bg-mainGray text-mainBlue rounded-2xl border-2 border-black w-full h-44'>Dit is een paneel wat inklapbaar is!!!</div>
                     </SlideToggleLabel>
 

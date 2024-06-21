@@ -518,7 +518,7 @@ const ClientEditor = () => {
                             onChange={(value: string) => handleClientInputChange('remarks', value)} />
                     </div>
 
-                    <SlideToggleLabel textColapsed='Klap uit voor meer opties' textExpanded='Klap in' >
+                    <SlideToggleLabel text='Overige cliënt informatie' smallTextColapsed=' - klap uit voor meer opties' smallTextExpanded=' - klap in voor minder opties' >
                         <div className='client-extra-info'>
                             <LabelField text='Diagnose(s)' required={false}>
                                 <DropdownWithButton 
