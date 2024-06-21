@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import ResultItem  from './../types/common/ResultItem';
 import OrganizationDetails from './organization-details';
+import OrganizationEditor from './organization-editor';
+
 
 export const OrganizationContext = React.createContext<IOrganizationContext>({allOrganization: [], setAllOrganizations: (x) => null});
 
@@ -24,7 +26,7 @@ export const OrganizationContextWrapper = (props: OrganizationContextWrapperProp
     return (
         <OrganizationContext.Provider value={organizationContext}>
             { props.organizationRoute === OrganizationRoute.VIEW_ORGANIZATION && <OrganizationDetails />}
-            { props.organizationRoute === OrganizationRoute.EDIT_ORGANIZATION && <OrganizationDetails />}
+            { props.organizationRoute === OrganizationRoute.EDIT_ORGANIZATION && <OrganizationEditor />}
         </OrganizationContext.Provider>
     );
   };

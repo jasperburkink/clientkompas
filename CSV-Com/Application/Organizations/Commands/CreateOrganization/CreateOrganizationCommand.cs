@@ -63,8 +63,6 @@ namespace Application.Organizations.Commands.CreateOrganization
 
         public string BTWNumber { get; set; }
 
-        public ICollection<WorkingContractOrganizationDto> WorkingContracts { get; set; }
-
         public string IBANNumber { get; set; }
 
         public string BIC { get; set; }
@@ -108,14 +106,6 @@ namespace Application.Organizations.Commands.CreateOrganization
                 IBANNumber = request.IBANNumber,
                 BIC = request.BIC
             };
-
-            var workingContracts = new List<WorkingContract>();
-            foreach (var dto in request.WorkingContracts)
-            {
-                var client = await _unitOfWork.ClientRepository.GetByIDAsync(dto.ClientId, cancellationToken);
-                var workingContract = dto.ToDomainModel(_mapper, organization, client);
-                workingContracts.Add(workingContract);
-            }
 
             await _unitOfWork.OrganizationRepository.InsertAsync(organization, cancellationToken);
             await _unitOfWork.SaveAsync(cancellationToken);
