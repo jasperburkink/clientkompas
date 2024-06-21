@@ -21,10 +21,13 @@ root.render(
                     <Route path='/clients/edit' element={<ClientContextWrapper clientRoute={ClientRoute.EDIT_CLIENT} />} />
                     <Route path='/clients/edit/:id' element={<ClientContextWrapper clientRoute={ClientRoute.EDIT_CLIENT} />} />
                     <Route path='/organization/:id' element={<OrganizationContextWrapper organizationRoute={OrganizationRoute.VIEW_ORGANIZATION} />} />
+                    <Route path='/organization/edit' element={<OrganizationContextWrapper organizationRoute={OrganizationRoute.EDIT_ORGANIZATION} />} />
+                    <Route path='/organization/edit/:id' element={<OrganizationContextWrapper organizationRoute={OrganizationRoute.EDIT_ORGANIZATION} />} />
                 </Routes>
             </BrowserRouter>
         </React.StrictMode>
-        <span>Build Date: {preval`module.exports = new Date().toLocaleString();`}.</span>
+        {/* <span>Build Date: {preval`module.exports = new Date().toLocaleString();`}.</span> */}
+         {/* TODO: Uitgezet want dit was zichtbaar op elke pagina */}
     </>
 );
 
