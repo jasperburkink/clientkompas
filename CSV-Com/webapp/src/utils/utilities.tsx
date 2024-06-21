@@ -13,4 +13,3 @@ export const objectToBoolean = (object: any) =>{
 export const booleanToNumber = (boolean: boolean) =>{
     return Number(boolean);
 }
-

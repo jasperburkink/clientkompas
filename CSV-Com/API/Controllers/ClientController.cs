@@ -92,12 +92,12 @@ namespace API.Controllers
         }
 
         [HttpPut("DeactivateClient")]
-        public async Task<ActionResult<ClientDto>> DeactivateClient(DeactivateClientCommand command)
+        public async Task<IActionResult> DeactivateClient(DeactivateClientCommand command)
         {
             try
             {
-                var result = await Mediator.Send(command);
-                return Ok(result);
+                await Mediator.Send(command);
+                return Ok();
             }
             catch (NotFoundException ex)
             {

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Persistence.CVS.Migrations
 {
     /// <inheritdoc />
-    public partial class DBinit : Migration
+    public partial class DbInit : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -102,6 +102,78 @@ namespace Infrastructure.Persistence.CVS.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "Organizations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    OrganizationName = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    VisitStreetName = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    VisitHouseNumber = table.Column<int>(type: "int", maxLength: 5, nullable: false),
+                    VisitHouseNumberAddition = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    VisitPostalCode = table.Column<string>(type: "varchar(7)", maxLength: 7, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    VisitResidence = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    InvoiceStreetName = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    InvoiceHouseNumber = table.Column<int>(type: "int", maxLength: 5, nullable: false),
+                    InvoiceHouseNumberAddition = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    InvoicePostalCode = table.Column<string>(type: "varchar(7)", maxLength: 7, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    InvoiceResidence = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PostStreetName = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PostHouseNumber = table.Column<int>(type: "int", maxLength: 5, nullable: false),
+                    PostHouseNumberAddition = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PostPostalCode = table.Column<string>(type: "varchar(7)", maxLength: 7, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PostResidence = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ContactPersonName = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ContactPersonFunction = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ContactPersonTelephoneNumber = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ContactPersonMobilephoneNumber = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ContactPersonEmailAddress = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PhoneNumber = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Website = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    EmailAddress = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    KVKNumber = table.Column<string>(type: "varchar(8)", maxLength: 8, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    BTWNumber = table.Column<string>(type: "varchar(12)", maxLength: 12, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    IBANNumber = table.Column<string>(type: "varchar(18)", maxLength: 18, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    BIC = table.Column<string>(type: "varchar(8)", maxLength: 8, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Created = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    LastModified = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModifiedBy = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Organizations", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -145,7 +217,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     Gender = table.Column<int>(type: "int", nullable: false),
                     StreetName = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    HouseNumber = table.Column<int>(type: "int", nullable: false),
+                    HouseNumber = table.Column<int>(type: "int", maxLength: 5, nullable: false),
                     HouseNumberAddition = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PostalCode = table.Column<string>(type: "varchar(7)", maxLength: 7, nullable: false)
@@ -157,9 +229,9 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     DateOfBirth = table.Column<DateOnly>(type: "date", nullable: false),
                     EmailAddress = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    MaritalStatusId = table.Column<int>(type: "int", nullable: false),
-                    DeactivationDateAndTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    Remarks = table.Column<string>(type: "longtext", nullable: true)
+                    MaritalStatusId = table.Column<int>(type: "int", nullable: true),
+                    DeactivationDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    Remarks = table.Column<string>(type: "varchar(1000)", maxLength: 1000, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Created = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     CreatedBy = table.Column<string>(type: "longtext", nullable: true)
@@ -262,9 +334,9 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     ClientId = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "longtext", nullable: false)
+                    Name = table.Column<string>(type: "varchar(90)", maxLength: 90, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    TelephoneNumber = table.Column<string>(type: "longtext", nullable: false)
+                    TelephoneNumber = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Created = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     CreatedBy = table.Column<string>(type: "longtext", nullable: true)
@@ -275,7 +347,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EmergencyPerson", x => x.Id);
+                    table.PrimaryKey("PK_EmergencyPerson", x => new { x.ClientId, x.Id });
                     table.ForeignKey(
                         name: "FK_EmergencyPerson_Clients_ClientId",
                         column: x => x.ClientId,
@@ -292,8 +364,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     ClientId = table.Column<int>(type: "int", nullable: false),
-                    CompanyName = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    OrganizationId = table.Column<int>(type: "int", nullable: false),
                     Function = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ContractType = table.Column<int>(type: "int", nullable: false),
@@ -313,6 +384,12 @@ namespace Infrastructure.Persistence.CVS.Migrations
                         name: "FK_WorkingContract_Clients_ClientId",
                         column: x => x.ClientId,
                         principalTable: "Clients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_WorkingContract_Organizations_OrganizationId",
+                        column: x => x.OrganizationId,
+                        principalTable: "Organizations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -345,14 +422,26 @@ namespace Infrastructure.Persistence.CVS.Migrations
                 column: "MaritalStatusId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EmergencyPerson_ClientId",
-                table: "EmergencyPerson",
-                column: "ClientId");
+                name: "IX_Organizations_KVKNumber",
+                table: "Organizations",
+                column: "KVKNumber",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Organizations_OrganizationName",
+                table: "Organizations",
+                column: "OrganizationName")
+                .Annotation("MySql:FullTextIndex", true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_WorkingContract_ClientId",
                 table: "WorkingContract",
                 column: "ClientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkingContract_OrganizationId",
+                table: "WorkingContract",
+                column: "OrganizationId");
         }
 
         /// <inheritdoc />
@@ -387,6 +476,9 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
             migrationBuilder.DropTable(
                 name: "Clients");
+
+            migrationBuilder.DropTable(
+                name: "Organizations");
 
             migrationBuilder.DropTable(
                 name: "MaritalStatus");

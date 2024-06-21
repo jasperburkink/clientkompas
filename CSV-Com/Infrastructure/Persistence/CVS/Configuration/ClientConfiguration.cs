@@ -35,10 +35,6 @@ namespace Infrastructure.Persistence.CVS.Configuration
                 .WithMany(d => d.Clients)
                 .UsingEntity(join => join.ToTable("ClientBenefitForm"));
 
-            builder.HasMany(c => c.EmergencyPeople)
-                .WithOne(ep => ep.Client)
-                .OnDelete(DeleteBehavior.Cascade);
-
             builder.HasMany(c => c.WorkingContracts)
                 .WithOne(wc => wc.Client)
                 .OnDelete(DeleteBehavior.Cascade);

@@ -54,8 +54,7 @@ function Clients() {
           setStatus(StatusEnum.PENDING);
           const fetchedClient: ClientQuery = await fetchClient(id!);
           setStatus(StatusEnum.SUCCESSFUL);
-
-          setClient(fetchedClient);
+          setClient(fetchedClient);          
           
           var rowSpanProfilePic = fetchedClient && fetchedClient.emergencypeople ? fetchedClient.emergencypeople.length + PROFILE_PIC_ROW_SPAN_DEFAULT_VALUE : PROFILE_PIC_ROW_SPAN_DEFAULT_VALUE;
           setProfilePicSpanValue(rowSpanProfilePic);
@@ -120,7 +119,7 @@ function Clients() {
         }
     
         fetchClientById();
-      }, [id]);
+    }, [id]);    
       
     return (
         <div className="flex flex-col lg:flex-row h-screen lg:h-auto">
@@ -147,7 +146,7 @@ function Clients() {
                 }
 
                 {(status === StatusEnum.IDLE || status === StatusEnum.PENDING) &&
-                    <div className='clients-spinner'>
+                    <div className='clients-spinner' data-testid="clients-spinner">
                     <FontAwesomeIcon icon={faSpinner} className="fa fa-3x fa-refresh fa-spin" />
                     </div>
                 }
@@ -268,7 +267,7 @@ function Clients() {
 
                     </SlideToggleLabel>
 
-                    <Button buttonType={{type:"Solid"}} text="Deactivateer cliënt" className='client-deactivate-button' onClick={() => deactivateClientClick(client)} />
+                    <Button buttonType={{type:"Solid"}} text="Deactivateer cliënt" className='client-deactivate-button' onClick={() => deactivateClientClick(client)} data-testid="deactivate-button" />
                     <ConfirmPopup
                     message="Weet u zeker dat u de cliënt wilt deactiveren?"
                     isOpen={isDeactivateConfirmPopupOpen}

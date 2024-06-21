@@ -4,6 +4,7 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+        
         {
             "type": "chrome",
             "request": "launch",
@@ -12,14 +13,20 @@
             "webRoot": "${workspaceFolder}"
         },
         {
-            "name": "Launch via NPM",
+            "name": "Debug Tests",
             "type": "node",
             "request": "launch",
-            "cwd": "${workspaceRoot}",
-            "runtimeExecutable": "npm",
-            "runtimeArgs": [
-               "test"
-            ]
+            "runtimeExecutable": "${workspaceRoot}/webapp/node_modules/.bin/react-scripts",
+            "args": [
+              "test",
+              "--runInBand",
+              "--no-cache",
+              "--env=jsdom",
+              "--watchAll=false"
+            ],
+            "cwd": "${workspaceRoot}/webapp",
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen"
         }
     ]
 }

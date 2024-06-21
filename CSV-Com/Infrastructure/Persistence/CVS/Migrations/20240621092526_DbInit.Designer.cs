@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.CVS.Migrations
 {
     [DbContext(typeof(CVSDbContext))]
-    [Migration("20240603115155_Organizations")]
-    partial class Organizations
+    [Migration("20240621092526_DbInit")]
+    partial class DbInit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -154,7 +154,8 @@ namespace Infrastructure.Persistence.CVS.Migrations
                         .HasColumnType("varchar(15)");
 
                     b.Property<string>("Remarks")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)");
 
                     b.Property<string>("TelephoneNumber")
                         .IsRequired()
@@ -227,42 +228,6 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("DriversLicence");
-                });
-
-            modelBuilder.Entity("Domain.CVS.Domain.EmergencyPerson", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("TelephoneNumber")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClientId");
-
-                    b.ToTable("EmergencyPerson");
                 });
 
             modelBuilder.Entity("Domain.CVS.Domain.MaritalStatus", b =>
@@ -525,6 +490,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
                                 .HasColumnType("int");
 
                             b1.Property<int>("HouseNumber")
+                                .HasMaxLength(5)
                                 .HasColumnType("int")
                                 .HasColumnName("HouseNumber");
 
@@ -559,21 +525,55 @@ namespace Infrastructure.Persistence.CVS.Migrations
                                 .HasForeignKey("ClientId");
                         });
 
+                    b.OwnsMany("Domain.CVS.Domain.EmergencyPerson", "EmergencyPeople", b1 =>
+                        {
+                            b1.Property<int>("ClientId")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            b1.Property<DateTime>("Created")
+                                .HasColumnType("datetime(6)");
+
+                            b1.Property<string>("CreatedBy")
+                                .HasColumnType("longtext");
+
+                            b1.Property<DateTime?>("LastModified")
+                                .HasColumnType("datetime(6)");
+
+                            b1.Property<string>("LastModifiedBy")
+                                .HasColumnType("longtext");
+
+                            b1.Property<string>("Name")
+                                .IsRequired()
+                                .HasMaxLength(90)
+                                .HasColumnType("varchar(90)")
+                                .HasColumnName("Name");
+
+                            b1.Property<string>("TelephoneNumber")
+                                .IsRequired()
+                                .HasMaxLength(15)
+                                .HasColumnType("varchar(15)")
+                                .HasColumnName("TelephoneNumber");
+
+                            b1.HasKey("ClientId", "Id");
+
+                            b1.ToTable("EmergencyPerson");
+
+                            b1.WithOwner("Client")
+                                .HasForeignKey("ClientId");
+
+                            b1.Navigation("Client");
+                        });
+
                     b.Navigation("Address")
                         .IsRequired();
 
+                    b.Navigation("EmergencyPeople");
+
                     b.Navigation("MaritalStatus");
-                });
-
-            modelBuilder.Entity("Domain.CVS.Domain.EmergencyPerson", b =>
-                {
-                    b.HasOne("Domain.CVS.Domain.Client", "Client")
-                        .WithMany("EmergencyPeople")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("Domain.CVS.Domain.Organization", b =>
@@ -732,8 +732,6 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
             modelBuilder.Entity("Domain.CVS.Domain.Client", b =>
                 {
-                    b.Navigation("EmergencyPeople");
-
                     b.Navigation("WorkingContracts");
                 });
 
