@@ -9,7 +9,6 @@ namespace Application.FunctionalTests.Clients.Queries.GetClients
     public class GetClientsQueryTests : BaseTestFixture
     {
         [Test]
-        // [Ignore("Pipeline can't handle sql connections, please think of an alternative (in memory db)")]
         public async Task Handle_CorrectFlow_ShouldReturnClients()
         {
             // Arrange
@@ -56,7 +55,6 @@ namespace Application.FunctionalTests.Clients.Queries.GetClients
         }
 
         [Test]
-        // [Ignore("Pipeline can't handle sql connections, please think of an alternative (in memory db)")]
         public void Handle_UserIsAnomymousUser_ThrowsUnauthorizedAccessException()
         {
             // Arrange

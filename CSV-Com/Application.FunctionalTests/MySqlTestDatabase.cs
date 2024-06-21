@@ -1,4 +1,5 @@
 ﻿using System.Data.Common;
+using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 using Respawn;
@@ -29,12 +30,23 @@ namespace Application.FunctionalTests
             _connection = new MySqlConnection(mySqlConnectionStringBuilder.ConnectionString);
 
             var options = new DbContextOptionsBuilder<TContext>()
-                .UseMySql(_connectionString, MySqlServerVersion.LatestSupportedServerVersion)
-                .Options;
+                .UseMySql(_connectionString, MySqlServerVersion.LatestSupportedServerVersion,
+                options => options.EnableRetryOnFailure(
+                    maxRetryCount: 5,
+                    maxRetryDelay: TimeSpan.FromSeconds(30),
+                    errorNumbersToAdd: null)
+                ).Options;
 
             var context = (DbContext)Activator.CreateInstance(typeof(TContext), options);
 
-            context.Database.Migrate();
+            try
+            {
+                context.Database.Migrate();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
 
             _connection.Open();
 

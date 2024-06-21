@@ -622,6 +622,7 @@ const ClientEditor = () => {
             </div>
 
             <ConfirmPopup
+                data-testid='confirm-popup'
                 message={confirmMessage}
                 isOpen={isConfirmPopupOneButtonOpen}
                 onClose={handlePopUpConfirmClientSavedClick}

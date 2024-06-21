@@ -42,8 +42,17 @@ namespace Domain.CVS.Domain
 
         public List<WorkingContract> WorkingContracts { get; set; } = new();
 
-        public DateTime? DeactivationDateTime { get; set; }
+        public DateTime? DeactivationDateTime { get; private set; }
 
         public string Remarks { get; set; }
+
+        public DateTime Deactivate(DateTime deactivationDateTime)
+        {
+            // TODO: Maybe add a check to see if the client is already deactivated return result via result pattern.
+
+            var dateTime = deactivationDateTime;
+            DeactivationDateTime = dateTime;
+            return dateTime;
+        }
     }
 }

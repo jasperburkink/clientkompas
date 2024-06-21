@@ -9,7 +9,7 @@ using AutoMapper;
 using Domain.CVS.Domain;
 using Moq;
 
-namespace Application.UnitTests.Clients.Commands
+namespace Application.UnitTests.Clients.Commands.CreateClient
 {
     public class CreateClientCommandTests
     {
