@@ -207,7 +207,7 @@ function Clients() {
                         )                         
                     }                    
 
-                    <SlideToggleLabel className='client-additional-info' textColapsed='Meer informatie' textExpanded='Minder informatie'>                       
+                    <SlideToggleLabel text='Overige cliënt informatie' smallTextColapsed=' - klap uit voor meer opties' smallTextExpanded=' - klap in voor minder opties' >
                         <Label text='Overige informatie' className='client-subheader' strong={true} />
                         
                         <div className='client-additional-info-container'>
