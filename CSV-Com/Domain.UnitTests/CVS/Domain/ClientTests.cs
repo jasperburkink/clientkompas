@@ -46,5 +46,59 @@ namespace Domain.UnitTests.CVS.Domain
             // Assert
             client.DeactivationDateTime.Should().Be(now);
         }
+
+        [Fact]
+        public void FullName_CombinesParts_ReturnNameCombined()
+        {
+            // Arrange
+            var client = new Client
+            {
+                FirstName = "Piet",
+                PrefixLastName = "van der",
+                LastName = "Molen"
+            };
+
+            // Act
+            var fullName = client.FullName;
+
+            // Assert
+            fullName.Should().Be("Piet van der Molen");
+        }
+
+        [Fact]
+        public void FullName_WhiteSpacesInNames_ReturnNameWithoutDoubleWhiteSpaces()
+        {
+            // Arrange
+            var client = new Client
+            {
+                FirstName = "  Piet  ",
+                PrefixLastName = "  van   der  ",
+                LastName = "  Molen  "
+            };
+
+            // Act
+            var fullName = client.FullName;
+
+            // Assert
+            fullName.Should().Be("Piet van der Molen");
+        }
+
+        [Fact]
+        public void FullName_PrefixLastNameIsEmpty_ReturnNameWithoutPrefixLastName()
+        {
+            // Arrange
+            var client = new Client
+            {
+                FirstName = "Piet",
+                PrefixLastName = string.Empty,
+                LastName = "Molen"
+            };
+
+            // Act
+            var fullName = client.FullName;
+
+            // Assert
+            fullName.Should().Be("Piet Molen");
+        }
     }
 }

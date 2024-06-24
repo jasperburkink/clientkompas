@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Persistence.CVS.Migrations
 {
     /// <inheritdoc />
-    public partial class DbInit : Migration
+    public partial class DBinit : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
