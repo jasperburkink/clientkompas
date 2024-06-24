@@ -160,6 +160,7 @@ namespace Infrastructure.Persistence.CVS
             }, cancellationToken);
         }
 
+        // TODO: This doesn't belong here. Refactor!
         public async Task<Organization> GetByKVKNumberAsync(string kvkNumber, CancellationToken cancellationToken)
         {
             return await Context.Organizations.FirstOrDefaultAsync(o => o.KVKNumber == kvkNumber, cancellationToken);
@@ -175,10 +176,26 @@ namespace Infrastructure.Persistence.CVS
             return await Task.Run(() =>
             {
                 var tableName = ContextExtensions.GetTableName(Context, typeof(TEntity));
-                // NOTE: This is specific MySql related functionality for full text seacrhing on a fulltext index. So if the database provider is changed, this functionality has to be changed!
-                var query = $@"SELECT * FROM {tableName} WHERE MATCH({string.Join(',', properties.Select(o => PropertyInfoHelper.GetPropertyInfo(o).Name))}) AGAINST ('""{searchTerm}""' IN BOOLEAN MODE) OR {string.IsNullOrEmpty(searchTerm)}";
 
-                return _dbSet.FromSqlInterpolated(FormattableStringFactory.Create(query));
+                var searchTerms = Array.Empty<string>();
+                if (!string.IsNullOrEmpty(searchTerm))
+                {
+                    searchTerms = searchTerm.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                }
+
+                var likeClauses = properties.Select(prop =>
+                {
+                    var propertyName = PropertyInfoHelper.GetPropertyInfo(prop).Name;
+                    return string.Join(" OR ", searchTerms.Select(term => $"{propertyName} LIKE '%{term}%'"));
+                });
+
+                var combinedLikeClauses = string.Join(") OR (", likeClauses);
+
+                var whereClause = string.IsNullOrEmpty(combinedLikeClauses) ? "1=1" : $"({combinedLikeClauses})";
+
+                var query = $@"SELECT * FROM {tableName} WHERE {whereClause}";
+
+                return _dbSet.FromSqlInterpolated(FormattableStringFactory.Create(query)).AsEnumerable();
             }, cancellationToken);
         }
 

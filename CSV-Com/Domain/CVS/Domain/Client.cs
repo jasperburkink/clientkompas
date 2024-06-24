@@ -1,4 +1,5 @@
-﻿using Domain.Common;
+﻿using System.Text.RegularExpressions;
+using Domain.Common;
 using Domain.CVS.Enums;
 using Domain.CVS.ValueObjects;
 
@@ -16,7 +17,14 @@ namespace Domain.CVS.Domain
 
         public string FullName
         {
-            get => string.Join(' ', (new string[] { FirstName, PrefixLastName, LastName }).Where(fv => !string.IsNullOrEmpty(fv)).Select(s => s.Trim()));
+            get
+            {
+                var fullName = string.Join(' ', (new string[] { FirstName, PrefixLastName, LastName })
+                .Where(fv => !string.IsNullOrEmpty(fv))
+                .Select(s => s.Trim()));
+
+                return Regex.Replace(fullName, @"\s+", " ");
+            }
             set => _ = value;
         }
 

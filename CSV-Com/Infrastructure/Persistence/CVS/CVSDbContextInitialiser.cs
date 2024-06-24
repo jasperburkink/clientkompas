@@ -47,6 +47,7 @@ namespace Infrastructure.Persistence.CVS
             // Default data
             // Seed, if necessary
             // TODO: Maybe only when debugging
+            // TODO: when running intergation tests it may crash sometime becasuse of respawn. Maybe don't use static ids.
             BenefitForm benefitForm1, benefitForm2;
             int benefitForm1Id = 1, benefitForm2Id = 2;
 
@@ -70,8 +71,8 @@ namespace Infrastructure.Persistence.CVS
             }
             else
             {
-                benefitForm1 = _context.BenefitForm.First(ms => ms.Id.Equals(benefitForm1Id));
-                benefitForm2 = _context.BenefitForm.First(ms => ms.Id.Equals(benefitForm2Id));
+                benefitForm1 = _context.BenefitForm.First();
+                benefitForm2 = _context.BenefitForm.First();
             }
 
             MaritalStatus martitalStatus;
