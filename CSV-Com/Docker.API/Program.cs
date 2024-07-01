@@ -23,6 +23,7 @@ namespace Docker.API
             builder.Services.AddSingleton<IDockerInfoService, DockerInfoService>();
 
             builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+            builder.Services.AddProblemDetails();
 
             builder.Services.Configure<SecurityOptions>(
                 builder.Configuration.GetSection(SecurityOptions.Position));
