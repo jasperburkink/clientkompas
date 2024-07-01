@@ -3,18 +3,13 @@ using NetArchTest.Rules;
 
 namespace ArchitectureTests
 {
-    public class CleanArchitectureTests : IClassFixture<BaseTestFixture>
+    public class CleanArchitectureTests(BaseTestFixture testFixture) : IClassFixture<BaseTestFixture>
     {
         private const string DomainProjectName = "Domain";
         private const string ApplicationProjectName = "Application";
         private const string InfrastructureProjectName = "Infrastructure";
 
-        private readonly BaseTestFixture _testFixture;
-
-        public CleanArchitectureTests(BaseTestFixture testFixture)
-        {
-            _testFixture = testFixture;
-        }
+        private readonly BaseTestFixture _testFixture = testFixture;
 
         private Assembly DomainAssembly => _testFixture.GetAssemblyByName(DomainProjectName);
 

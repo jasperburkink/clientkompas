@@ -7,38 +7,26 @@ namespace Docker.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class DockerInternalController : ControllerBase
+    public class DockerInternalController(ILogger<DockerInternalController> logger, IDockerRefreshService dockerRefreshService, IDelayedKillService delayedKillService, IOptions<SecurityOptions> options) : ControllerBase
     {
         private const int ShutdownDelayMilliseconds = 500;
-        private readonly ILogger<DockerInternalController> _logger;
-        private readonly IDockerRefreshService _dockerRefreshService;
-        private readonly IDelayedKillService _delayedKillService;
-        private readonly IOptions<SecurityOptions> _options;
-
-        public DockerInternalController(ILogger<DockerInternalController> logger, IDockerRefreshService dockerRefreshService, IDelayedKillService delayedKillService, IOptions<SecurityOptions> options)
-        {
-            _logger = logger;
-            _dockerRefreshService = dockerRefreshService;
-            _delayedKillService = delayedKillService;
-            _options = options;
-        }
 
         [HttpGet("refresh_environments")]
         public ActionResult<string> RefreshEnvironments(string s)
         {
             if (!IsAuthorized(s))
             {
-                _logger.LogWarning("Unauthorized call denied. Secret: " + s);
+                logger.LogWarning("Unauthorized call denied. Secret: " + s);
                 return Unauthorized();
             }
 
             try
             {
-                return _dockerRefreshService.RefreshEnvironments();
+                return dockerRefreshService.RefreshEnvironments();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Job failed: {ex.Message}");
+                logger.LogError(ex, $"Job failed: {ex.Message}");
                 return StatusCode(500, ex.Message);
             }
         }
@@ -46,15 +34,15 @@ namespace Docker.API.Controllers
         [HttpGet("check_job")]
         public ActionResult<string> CheckRefreshJob(string identifier)
         {
-            var result = _dockerRefreshService.CheckRefreshJob(identifier);
+            var result = dockerRefreshService.CheckRefreshJob(identifier);
 
             if (result is null)
             {
-                _logger.LogInformation($"Status of job: {identifier} was not found");
+                logger.LogInformation($"Status of job: {identifier} was not found");
                 return NotFound();
             }
 
-            _logger.LogInformation($"Status of job: {identifier} was {result}");
+            logger.LogInformation($"Status of job: {identifier} was {result}");
             return Ok(result);
 
         }
@@ -62,15 +50,15 @@ namespace Docker.API.Controllers
         [HttpGet("job_result")]
         public ActionResult<string> GetJobResult(string identifier)
         {
-            var result = _dockerRefreshService.GetJobResult(identifier);
+            var result = dockerRefreshService.GetJobResult(identifier);
 
             if (result is null)
             {
-                _logger.LogInformation($"Status of job: {identifier} was not found");
+                logger.LogInformation($"Status of job: {identifier} was not found");
                 return NotFound();
             }
 
-            _logger.LogInformation($"Status of job: {identifier} was {result}");
+            logger.LogInformation($"Status of job: {identifier} was {result}");
             return Ok(result);
         }
 
@@ -79,18 +67,18 @@ namespace Docker.API.Controllers
         {
             if (!IsAuthorized(s))
             {
-                _logger.LogWarning($"Unauthorized call denied. Secret: {s}");
+                logger.LogWarning($"Unauthorized call denied. Secret: {s}");
                 return Unauthorized();
             }
 
-            _delayedKillService.KillApplicationDelayed(ShutdownDelayMilliseconds);
+            delayedKillService.KillApplicationDelayed(ShutdownDelayMilliseconds);
 
             return Ok("Exiting");
         }
 
         private bool IsAuthorized(string secret)
         {
-            var configuredSecret = _options.Value.Secret;
+            var configuredSecret = options.Value.Secret;
             return secret == configuredSecret;
         }
     }

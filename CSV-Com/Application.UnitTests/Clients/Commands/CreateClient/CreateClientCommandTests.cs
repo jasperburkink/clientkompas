@@ -1,10 +1,7 @@
 ﻿using System.Linq.Expressions;
-using Application.BenefitForms.Queries.GetBenefitForm;
 using Application.Clients.Commands.CreateClient;
 using Application.Clients.Dtos;
 using Application.Common.Interfaces.CVS;
-using Application.Diagnoses.Queries.GetDiagnosis;
-using Application.DriversLicences.Queries;
 using AutoMapper;
 using Domain.CVS.Domain;
 using Moq;
@@ -36,11 +33,11 @@ namespace Application.UnitTests.Clients.Commands.CreateClient
                 HouseNumberAddition = "A",
                 PostalCode = "1234AB",
                 Residence = "Amsterdam",
-                EmergencyPeople = new EmergencyPersonDto[] { new() },
-                WorkingContracts = new ClientWorkingContractDto[] { new() },
-                BenefitForms = new BenefitFormDto[] { new() },
-                Diagnoses = new DiagnosisDto[] { new() },
-                DriversLicences = new DriversLicenceDto[] { new() }
+                EmergencyPeople = [new()],
+                WorkingContracts = [new()],
+                BenefitForms = [new()],
+                Diagnoses = [new()],
+                DriversLicences = [new()]
             };
 
             var clientDto = new ClientDto
@@ -61,7 +58,7 @@ namespace Application.UnitTests.Clients.Commands.CreateClient
                 It.IsAny<string>(),
                 It.IsAny<CancellationToken>()
             ))
-            .ReturnsAsync(new List<BenefitForm> { new() });
+            .ReturnsAsync([new()]);
 
             _unitOfWorkMock.Setup(uw => uw.DriversLicenceRepository.GetAsync(
                It.IsAny<Expression<Func<DriversLicence, bool>>>(),
@@ -69,7 +66,7 @@ namespace Application.UnitTests.Clients.Commands.CreateClient
                It.IsAny<string>(),
                It.IsAny<CancellationToken>()
            ))
-           .ReturnsAsync(new List<DriversLicence>());
+           .ReturnsAsync([]);
 
             _unitOfWorkMock.Setup(uw => uw.MaritalStatusRepository.GetAsync(
                 It.IsAny<Expression<Func<MaritalStatus, bool>>>(),
@@ -77,7 +74,7 @@ namespace Application.UnitTests.Clients.Commands.CreateClient
                 It.IsAny<string>(),
                 It.IsAny<CancellationToken>()
             ))
-            .ReturnsAsync(new List<MaritalStatus> { new() });
+            .ReturnsAsync([new()]);
 
             _unitOfWorkMock.Setup(uw => uw.DiagnosisRepository.GetAsync(
                It.IsAny<Expression<Func<Diagnosis, bool>>>(),
@@ -85,7 +82,7 @@ namespace Application.UnitTests.Clients.Commands.CreateClient
                It.IsAny<string>(),
                It.IsAny<CancellationToken>()
            ))
-           .ReturnsAsync(new List<Diagnosis>());
+           .ReturnsAsync([]);
 
             _unitOfWorkMock.Setup(uw => uw.ClientRepository.InsertAsync(It.IsAny<Client>(), default));
             _unitOfWorkMock.Setup(uw => uw.SaveAsync(default));

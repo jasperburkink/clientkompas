@@ -44,7 +44,7 @@ namespace Application.UnitTests.Clients.Queries.SearchClients
 
             _unitOfWorkMock.Setup(uw => uw.ClientRepository.FullTextSearch(
                 query.SearchTerm, It.IsAny<CancellationToken>(), It.IsAny<System.Linq.Expressions.Expression<Func<Client, object>>>()
-            )).ReturnsAsync(clients.ToList());
+            )).ReturnsAsync([.. clients]);
 
             // Act
             var result = await _handler.Handle(query, CancellationToken.None);
@@ -64,7 +64,7 @@ namespace Application.UnitTests.Clients.Queries.SearchClients
                 query.SearchTerm,
                 It.IsAny<CancellationToken>(),
                 It.IsAny<System.Linq.Expressions.Expression<Func<Client, object>>>()
-            )).ReturnsAsync(new List<Client>());
+            )).ReturnsAsync([]);
 
             // Act
             var result = await _handler.Handle(query, CancellationToken.None);
@@ -104,7 +104,7 @@ namespace Application.UnitTests.Clients.Queries.SearchClients
 
             _unitOfWorkMock.Setup(uw => uw.ClientRepository.FullTextSearch(
                 query.SearchTerm, It.IsAny<CancellationToken>(), It.IsAny<System.Linq.Expressions.Expression<Func<Client, object>>>()
-            )).ReturnsAsync(clients.ToList());
+            )).ReturnsAsync([.. clients]);
 
             // Act
             var result = await _handler.Handle(query, CancellationToken.None);

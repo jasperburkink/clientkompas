@@ -77,12 +77,12 @@ namespace Application.FunctionalTests
 
         public static async Task<string> RunAsDefaultUserAsync()
         {
-            return await RunAsUserAsync("test@local", "Testing1234!", Array.Empty<string>());
+            return await RunAsUserAsync("test@local", "Testing1234!", []);
         }
 
         public static async Task<string> RunAsAdministratorAsync()
         {
-            return await RunAsUserAsync("administrator@local", "Administrator1234!", new[] { Roles.Administrator });
+            return await RunAsUserAsync("administrator@local", "Administrator1234!", [Roles.Administrator]);
         }
 
         public static async Task<string> RunAsUserAsync(string userName, string password, string[] roles)

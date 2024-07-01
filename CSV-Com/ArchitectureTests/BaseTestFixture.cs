@@ -8,7 +8,7 @@ namespace ArchitectureTests
 
         public BaseTestFixture()
         {
-            _assemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
+            _assemblies = [.. AppDomain.CurrentDomain.GetAssemblies()];
         }
 
         public Assembly GetAssemblyByName(string name)
