@@ -168,8 +168,8 @@ copy-files-docker-api:
   rules:
   - changes:
     - $SOLUTION_FOLDER/$DOCKER_API_FOLDER/**/*.cs # all C# files in the Docker.API project folder
-#  rules:
-#  - when: manual  
+    #  rules:
+    #  - when: manual  
 
 deploy-latest-docker-api:
   stage: deployment
