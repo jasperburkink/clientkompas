@@ -29,6 +29,7 @@ namespace Docker.API
 
             var app = builder.Build();
 
+            // Use exception handling
             app.UseExceptionHandler();
 
             // Configure the HTTP request pipeline.
