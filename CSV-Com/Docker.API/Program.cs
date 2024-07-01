@@ -1,4 +1,5 @@
 ﻿
+using Docker.API.Exceptions;
 using Docker.API.Options;
 using Docker.API.Services;
 
@@ -21,10 +22,14 @@ namespace Docker.API
             builder.Services.AddSingleton<IDelayedKillService, DelayedKillService>();
             builder.Services.AddSingleton<IDockerInfoService, DockerInfoService>();
 
+            builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
             builder.Services.Configure<SecurityOptions>(
                 builder.Configuration.GetSection(SecurityOptions.Position));
 
             var app = builder.Build();
+
+            app.UseExceptionHandler();
 
             // Configure the HTTP request pipeline.
 
