@@ -164,6 +164,9 @@ copy-files-docker-api:
     - chmod +x /var/docker-internal-server/Scripts/environment_refresh
   image: $DOTNET_IMAGE
   needs: [ "dotnet-build" ]
+  allow_failure: true
+  rules:
+  - when: manual  
 
 deploy-latest-docker-api:
   stage: deployment
@@ -175,5 +178,3 @@ deploy-latest-docker-api:
   image: $DOTNET_IMAGE
   needs: [ "copy-files-docker-api" ]
   allow_failure: true
-  rules:
-  - when: manual  
