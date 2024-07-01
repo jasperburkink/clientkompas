@@ -97,7 +97,7 @@ function App() {
     }
       
     const workingContract: WorkingContract = {
-        organizationname: 'SB-ICT',
+        organizationid: 2,
         contracttype: 0,
         fromdate: new Date('2020-01-01'),
         todate: new Date('2021-01-01'),
@@ -105,7 +105,7 @@ function App() {
       };
 
     const workingContract2: WorkingContract = {
-        organizationname: 'Welkoop',
+        organizationid: 1,
         contracttype: 1,
         fromdate: new Date('1995-01-01'),
         todate: new Date('1998-01-01'),
@@ -116,7 +116,7 @@ function App() {
 
     const addWorkingContract = ():WorkingContract => {
         return {
-            organizationname: '',
+            organizationid: 0,
             contracttype: 0,
             fromdate: new Date(),
             todate: new Date(),
@@ -264,7 +264,7 @@ function App() {
                     </LabelField>                    
 
                     <p>Slide toggle label</p>
-                    <SlideToggleLabel textColapsed='Klap uit!' textExpanded='Klap in!' >
+                    <SlideToggleLabel text='Overige cliënt informatie' smallTextColapsed=' - klap uit voor meer opties' smallTextExpanded=' - klap in voor minder opties' >
                         <div className='p-5 bg-mainGray text-mainBlue rounded-2xl border-2 border-black w-full h-44'>Dit is een paneel wat inklapbaar is!!!</div>
                     </SlideToggleLabel>
 

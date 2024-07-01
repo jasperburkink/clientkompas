@@ -1,1 +1,1 @@
-export const FieldOrderWorkingContract = ['organizationname', 'function', 'contracttype', 'fromdate', 'todate'];
+export const FieldOrderWorkingContract = ['organizationid', 'function', 'contracttype', 'fromdate', 'todate'];

@@ -64,8 +64,6 @@ namespace Application.Organizations.Commands.UpdateOrganization
 
         public string BTWNumber { get; set; }
 
-        public ICollection<WorkingContractOrganizationDto> WorkingContracts { get; set; }
-
         public string IBANNumber { get; set; }
 
         public string BIC { get; set; }
@@ -84,7 +82,7 @@ namespace Application.Organizations.Commands.UpdateOrganization
 
         public async Task<OrganizationDto> Handle(UpdateOrganizationCommand request, CancellationToken cancellationToken)
         {
-            var organization = await _unitOfWork.OrganizationRepository.GetByIDAsync(request.Id, includeProperties: "WorkingContracts", cancellationToken)
+            var organization = await _unitOfWork.OrganizationRepository.GetByIDAsync(request.Id, includeProperties: "", cancellationToken)
                 ?? throw new NotFoundException(nameof(Organization), request.Id);
 
             var existingOrganizationWithKVKNumber = await _unitOfWork.OrganizationRepository.GetByKVKNumberAsync(request.KVKNumber, cancellationToken);

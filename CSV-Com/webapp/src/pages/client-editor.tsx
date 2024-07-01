@@ -24,7 +24,7 @@ import Diagnosis from 'types/model/Diagnosis';
 import ConfirmPopup from "components/common/confirm-popup";
 import ErrorPopup from 'components/common/error-popup';
 import CvsError from 'types/common/cvs-error';
-import { fetchBenefitForms, fetchDiagnosis, fetchMaritalStatuses, fetchDriversLicences, saveClient } from 'utils/api';
+import { fetchBenefitForms, fetchDiagnosis, fetchMaritalStatuses, fetchDriversLicences, saveClient, fetchOrganizations } from 'utils/api';
 import Client, { getCompleteClientName } from 'types/model/Client';
 import { Moment } from 'moment';
 import CVSError from 'types/common/cvs-error';
@@ -38,6 +38,7 @@ import DriversLicence from 'types/model/DriversLicence';
 import MaritalStatus from 'types/model/MaritalStatus';
 import BenefitForm from 'types/model/BenefitForm';
 import { ClientContext } from './client-context';
+import Organization from 'types/model/Organization';
 
 const ClientEditor = () => {
     const initialClient: Client = { 
@@ -88,6 +89,7 @@ const ClientEditor = () => {
     const [benefitForms, setBenefitForms] = useState<BenefitForm[]>([]);
     const [maritalStatuses, setMaritalStatuses] = useState<MaritalStatus[]>([]);
     const [driversLicences, setDriversLicences] = useState<DriversLicence[]>([]);
+    const [organizations, setOrganizations] = useState<Organization[]>([]);
     
     const handleClientInputChange = (fieldName: string, value: string) => {
         setClient(prevClient => ({
@@ -184,7 +186,11 @@ const ClientEditor = () => {
     ]; // TODO: maybe make dynamic in the future
 
     const optionsDictionaryWorkingContract: { [key: string]: DropdownObject[] } = {
-        "contracttype": contracttypeDropdownOptions
+        "contracttype": contracttypeDropdownOptions,
+        "organizationid": organizations.map(organization => ({
+            label: organization.organizationname,
+            value: organization.id
+        }))
     };
 
     const addEmergencyPerson = ():EmergencyPerson => {
@@ -221,7 +227,7 @@ const ClientEditor = () => {
 
     const addWorkingContract = ():WorkingContract => {
         return {
-            organizationname: '',
+            organizationid: 0,
             contracttype: 0,
             function: ''
         };
@@ -316,6 +322,21 @@ const ClientEditor = () => {
             }
         };
 
+        const loadOrganizations = async () => {
+            try {
+
+                var orgs = await fetchOrganizations();
+                setOrganizations(orgs);
+            } catch (error: any) {
+                setCvsError({
+                    id: 0,
+                    errorcode: 'E',
+                    message: `Er is een opgetreden tijdens het laden van alle beschikbare organisaties. Foutmelding: ${error.message}`
+                });
+                setErrorPopupOpen(true);
+            }
+        }
+
         if(id && status !== StatusEnum.PENDING) {
             fetchClientById();
         }
@@ -324,6 +345,7 @@ const ClientEditor = () => {
         loadBenefitForms();
         loadMaritalStatuses();
         loadDriversLicences();
+        loadOrganizations();
     }, [id]);
 
     return(
@@ -496,7 +518,7 @@ const ClientEditor = () => {
                             onChange={(value: string) => handleClientInputChange('remarks', value)} />
                     </div>
 
-                    <SlideToggleLabel textColapsed='Klap uit voor meer opties' textExpanded='Klap in' >
+                    <SlideToggleLabel text='Overige cliënt informatie' smallTextColapsed=' - klap uit voor meer opties' smallTextExpanded=' - klap in voor minder opties' >
                         <div className='client-extra-info'>
                             <LabelField text='Diagnose(s)' required={false}>
                                 <DropdownWithButton 
@@ -600,6 +622,7 @@ const ClientEditor = () => {
             </div>
 
             <ConfirmPopup
+                data-testid='confirm-popup'
                 message={confirmMessage}
                 isOpen={isConfirmPopupOneButtonOpen}
                 onClose={handlePopUpConfirmClientSavedClick}

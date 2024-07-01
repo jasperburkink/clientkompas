@@ -1,4 +1,4 @@
-﻿using Domain.Constants;
+﻿using Domain.Authentication.Constants;
 using Domain.CVS.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

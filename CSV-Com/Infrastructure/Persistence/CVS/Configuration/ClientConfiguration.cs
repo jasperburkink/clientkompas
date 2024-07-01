@@ -1,4 +1,4 @@
-﻿using Domain.Constants;
+﻿using Domain.CVS.Constants;
 using Domain.CVS.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -35,32 +35,28 @@ namespace Infrastructure.Persistence.CVS.Configuration
                 .WithMany(d => d.Clients)
                 .UsingEntity(join => join.ToTable("ClientBenefitForm"));
 
-            builder.HasMany(c => c.EmergencyPeople)
-                .WithOne(ep => ep.Client)
-                .OnDelete(DeleteBehavior.Cascade);
-
             builder.HasMany(c => c.WorkingContracts)
                 .WithOne(wc => wc.Client)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.Property(c => c.FirstName)
-                .HasMaxLength(ClientConstants.ClientFirstNameMaxLength)
+                .HasMaxLength(ClientConstants.FirstNameMaxLength)
                 .IsRequired();
 
             builder.Property(c => c.PrefixLastName)
-                .HasMaxLength(ClientConstants.ClientPrefixLastNameMaxLength)
+                .HasMaxLength(ClientConstants.PrefixLastNameMaxLength)
                 .IsRequired(false);
 
             builder.Property(c => c.LastName)
-                .HasMaxLength(ClientConstants.ClientLastNameMaxLength)
+                .HasMaxLength(ClientConstants.LastNameMaxLength)
                 .IsRequired();
 
             builder.Property(c => c.Initials)
-                .HasMaxLength(15)
+                .HasMaxLength(ClientConstants.InitialsMaxLength)
                 .IsRequired();
 
             builder.Property(c => c.FullName)
-                .HasMaxLength(120);
+                .HasMaxLength(ClientConstants.FullnameMaxLength);
 
             builder.HasIndex(c => c.FullName)
                 .IsFullText();
@@ -69,42 +65,57 @@ namespace Infrastructure.Persistence.CVS.Configuration
             {
                 a.Property(p => p.StreetName)
                 .HasColumnName("StreetName")
-                .HasMaxLength(100)
+                .HasMaxLength(ClientConstants.StreetnameMaxLength)
                 .IsRequired();
 
                 a.Property(p => p.PostalCode)
                 .HasColumnName("PostalCode")
-                .HasMaxLength(7)
+                .HasMaxLength(ClientConstants.PostalcodeMaxLength)
                 .IsRequired();
 
                 a.Property(p => p.HouseNumber)
                 .HasColumnName("HouseNumber")
+                .HasMaxLength(ClientConstants.HouseNumberMaxLength)
                 .IsRequired();
 
                 a.Property(p => p.HouseNumberAddition)
                 .HasColumnName("HouseNumberAddition")
-                .HasMaxLength(10)
+                .HasMaxLength(ClientConstants.HouseNumberAdditionMaxLength)
                 .IsRequired(false);
 
                 a.Property(p => p.Residence)
                 .HasColumnName("Residence")
-                .HasMaxLength(100)
+                .HasMaxLength(ClientConstants.ResidenceMaxLength)
                 .IsRequired();
             });
 
             builder.Property(c => c.TelephoneNumber)
-                .HasMaxLength(15)
+                .HasMaxLength(ClientConstants.TelephoneNumberMaxLength)
                 .IsRequired();
 
             builder.Property(c => c.EmailAddress)
-                .HasMaxLength(250)
+                .HasMaxLength(ClientConstants.EmailAddressMaxLength)
                 .IsRequired();
 
             builder.Property(c => c.DateOfBirth)
                 .IsRequired();
 
             builder.Property(c => c.Remarks)
+                .HasMaxLength(ClientConstants.RemarksMaxLength)
                 .IsRequired(false);
+
+            builder.OwnsMany(c => c.EmergencyPeople, a =>
+            {
+                a.Property(e => e.Name)
+                 .HasColumnName("Name")
+                 .HasMaxLength(EmergencyPersonConstants.NameMaxLength)
+                 .IsRequired();
+
+                a.Property(e => e.TelephoneNumber)
+                .HasColumnName("TelephoneNumber")
+                .HasMaxLength(EmergencyPersonConstants.TelephoneNumberMaxLength)
+                .IsRequired();
+            });
         }
     }
 }

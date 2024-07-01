@@ -1,4 +1,4 @@
-﻿using Domain.Constants;
+﻿using Domain.Authentication.Constants;
 using Infrastructure.Identity;
 using Infrastructure.Persistence.Authentication;
 using Infrastructure.Persistence.CVS;
@@ -150,6 +150,18 @@ namespace Application.FunctionalTests
             var context = scope.ServiceProvider.GetRequiredService<CVSDbContext>();
 
             context.Add(entity);
+
+            await context.SaveChangesAsync();
+        }
+
+        public static async Task UpdateAsync<TEntity>(TEntity entity)
+            where TEntity : class
+        {
+            using var scope = s_scopeFactory.CreateScope();
+
+            var context = scope.ServiceProvider.GetRequiredService<CVSDbContext>();
+
+            context.Update(entity);
 
             await context.SaveChangesAsync();
         }

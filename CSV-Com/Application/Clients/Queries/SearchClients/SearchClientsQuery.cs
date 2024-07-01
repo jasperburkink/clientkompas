@@ -28,7 +28,7 @@ namespace Application.Clients.Queries.SearchClients
                 .Where(c => c.DeactivationDateTime == null)
                 .ProjectTo<SearchClientDto>(_mapper.ConfigurationProvider)
                 .OrderBy(sc => sc.LastName)
-                .ThenBy(sc => sc.FirstName);
+                .ThenBy(sc => sc.FirstName).ToList();
         }
     }
 }

@@ -79,6 +79,10 @@ export const fetchDriversLicences = async (): Promise<DriversLicence[]> => {
     return fetchAPI<DriversLicence[]>(`${apiUrl}DriversLicence`);
 }
 
+export const fetchOrganizations = async (): Promise<Organization[]> => {
+    return fetchAPI<Organization[]>(`${apiUrl}Organization`);
+}
+
 export const deactivateClient = async (clientId: number): Promise<ClientQuery> => {
     return fetchAPI<ClientQuery>(`${apiUrl}Client/DeactivateClient`, 'PUT', { id: clientId });
 }
@@ -132,4 +136,49 @@ export const saveClient = async (client: Client): Promise<ApiResult<Client>> => 
 
 export const fetchOrganization = async (organizationId: string): Promise<Organization> => {
     return fetchAPI<Organization>(`${apiUrl}organization/${organizationId}`);
+}
+
+export const fetchOrganizationEditor = async (organizationId: string): Promise<Organization> => {
+    let organization = await fetchAPI<Organization>(`${apiUrl}Organization/${organizationId}`);
+    return organization;
+}
+
+export const saveOrganization = async (organization: Organization): Promise<ApiResult<Organization>> => {
+    let method = organization.id > 0  ? 'PUT' : 'POST';
+
+    const requestOptions: RequestInit = {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(organization)
+    };
+
+    const response = await fetch(`${apiUrl}Organization`, requestOptions);     
+    
+    if(!response.ok){
+        try {
+            let {title, errors} = await response.json();
+        
+            return {
+                Ok: response.ok,
+                Errors: errors
+            }
+        }
+        catch (err) {
+            console.log(`An error has occured while reading errors from API while saving an organization. Error:${err}.`);
+        }
+
+        return {
+            Ok: response.ok,
+            Errors: [response.statusText]
+        }
+    }
+
+    let organizationReturn: Organization = await response.json();
+
+    return {
+        Ok: response.ok,
+        ReturnObject: organizationReturn
+    }
 }
