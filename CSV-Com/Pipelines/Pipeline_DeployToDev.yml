@@ -166,7 +166,8 @@ copy-files-docker-api:
   needs: [ "dotnet-build" ]
   allow_failure: true
   rules:
-  - changes: $SOLUTION_FOLDER/$DOCKER_API_FOLDER/**/*.cs # all C# files in the Docker.API project folder
+  - changes:
+    - $SOLUTION_FOLDER/$DOCKER_API_FOLDER/**/*.cs # all C# files in the Docker.API project folder
 #  rules:
 #  - when: manual  
 
