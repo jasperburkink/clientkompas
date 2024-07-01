@@ -163,7 +163,7 @@ copy-files-docker-api:
     - dotnet build
     - chmod +x /var/docker-internal-server/Scripts/environment_refresh
   image: $DOTNET_IMAGE
-  needs: [ "dotnet-build" ]
+  needs: [ "dotnet-build", "deploy-latest-images" ]
   allow_failure: true
   rules:
   - changes:
