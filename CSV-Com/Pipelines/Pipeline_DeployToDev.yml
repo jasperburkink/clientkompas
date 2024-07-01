@@ -167,8 +167,7 @@ copy-files-docker-api:
   allow_failure: true
   rules:
     - changes:
-      - /*.{cs} # ... or whatever your file extension is
-      - $SOLUTION_FOLDER/$DOCKER_API_FOLDER/**/* # all C# files in the Docker.API project folder
+      - $SOLUTION_FOLDER/$DOCKER_API_FOLDER/**/*.cs # all C# files in the Docker.API project folder
 #  rules:
 #  - when: manual  
 
