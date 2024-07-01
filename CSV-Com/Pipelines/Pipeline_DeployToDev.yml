@@ -152,7 +152,7 @@ deploy-latest-images:
   needs: [ "upload-images-dev" ]
 
 copy-files-docker-api:
-  stage: preparations
+  stage: deployment
   script:
     - secret="$ENV_REFRESH_SECRET"   
     - cd $SOLUTION_FOLDER/$DOCKER_API_FOLDER
