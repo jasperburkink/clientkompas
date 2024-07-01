@@ -201,7 +201,7 @@ copy-files-docker-api-manual:
   - when: manual
   
 deploy-latest-docker-api-manual:
-  stage: deployment
+  stage: manual
   script:
     - secret="$ENV_REFRESH_SECRET"  
     - FIRST_URL="http://cvs-dev.sbict.local:6021/DockerInternal/exit?s=$secret"
