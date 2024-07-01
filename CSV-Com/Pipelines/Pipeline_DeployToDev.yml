@@ -19,6 +19,7 @@ variables:
   NODE_DOCKER_IMAGE_FILENAME: "node_docker_image"
 
 stages: 
+  - manual    
   - build
   - test   
   - preparations
@@ -182,3 +183,30 @@ deploy-latest-docker-api:
   rules:
   - changes:
     - $SOLUTION_FOLDER/$DOCKER_API_FOLDER/**/*.cs
+
+copy-files-docker-api-manual:
+  stage: manual
+  script:
+    - secret="$ENV_REFRESH_SECRET"   
+    - cd $SOLUTION_FOLDER/$DOCKER_API_FOLDER
+    - cp -rf . /var/docker-internal-server/
+    - cd /var/docker-internal-server/
+    - sed -i "s/"secret"/"${secret}"/g" ./appsettings.json
+    - dotnet restore
+    - dotnet build
+    - chmod +x /var/docker-internal-server/Scripts/environment_refresh
+  image: $DOTNET_IMAGE
+  allow_failure: true
+  rules:
+  - when: manual
+  
+deploy-latest-docker-api-manual:
+  stage: deployment
+  script:
+    - secret="$ENV_REFRESH_SECRET"  
+    - FIRST_URL="http://cvs-dev.sbict.local:6021/DockerInternal/exit?s=$secret"
+    - curl -f -s "$FIRST_URL"
+    - echo "Killing server, it should be automatically rebooted"
+  image: $DOTNET_IMAGE
+  needs: [ "copy-files-docker-api-manual" ]
+  allow_failure: true
