@@ -1,4 +1,5 @@
-﻿using Domain.Authentication.Constants;
+﻿using System.Linq.Expressions;
+using Domain.Authentication.Constants;
 using Infrastructure.Identity;
 using Infrastructure.Persistence.Authentication;
 using Infrastructure.Persistence.CVS;
@@ -140,6 +141,23 @@ namespace Application.FunctionalTests
             var context = scope.ServiceProvider.GetRequiredService<CVSDbContext>();
 
             return await context.FindAsync<TEntity>(keyValues);
+        }
+
+        public static async Task<ICollection<TEntity>> GetAsync<TEntity>(params Expression<Func<TEntity, object>>[] includes)
+            where TEntity : class
+        {
+            using var scope = s_scopeFactory.CreateScope();
+
+            var context = scope.ServiceProvider.GetRequiredService<CVSDbContext>();
+
+            IQueryable<TEntity> query = context.Set<TEntity>();
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            return await query.ToListAsync();
         }
 
         public static async Task AddAsync<TEntity>(TEntity entity)

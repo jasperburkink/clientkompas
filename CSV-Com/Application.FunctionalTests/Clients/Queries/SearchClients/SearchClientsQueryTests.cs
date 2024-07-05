@@ -1,7 +1,7 @@
 ﻿using Application.Clients.Queries.SearchClients;
 using Domain.CVS.Domain;
-using Domain.CVS.Enums;
-using Domain.CVS.ValueObjects;
+using TestData;
+using TestData.Client;
 using static Application.FunctionalTests.Testing;
 
 namespace Application.FunctionalTests.Clients.Queries.SearchClients
@@ -18,32 +18,9 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
             // TODO: Turn on authentication 
             //await RunAsDefaultUserAsync();
 
-            var benefitForm = new BenefitForm
-            {
-                Name = "Test"
-            };
+            ITestDataGenerator<Client> testDataGeneratorClient = new ClientDataGenerator();
 
-            _client = new Client
-            {
-                FirstName = "Berend",
-                LastName = "Berendsen",
-                Address = Address.From("Dorpstraat", 1, string.Empty, "1234AB", "Amsterdam"),
-                TelephoneNumber = "0123456789",
-                PrefixLastName = "van de",
-                Gender = Gender.Man,
-                EmailAddress = "a@b.com",
-                Initials = "J.W.C.",
-                Remarks = "Jan is geweldig",
-                DateOfBirth = new DateOnly(1960, 12, 25),
-                MaritalStatus = new MaritalStatus
-                {
-                    Name = "Gehuwd"
-                },
-                BenefitForms =
-                {
-                    benefitForm
-                }
-            };
+            _client = testDataGeneratorClient.Create();
 
             await AddAsync(_client);
 
@@ -202,7 +179,7 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
 
         [Test]
         public async Task Handle_SearchClientByFullName_ReturnsClient()
-            {
+        {
             // Arrange
             var query = new SearchClientsQuery { SearchTerm = _client.FullName };
 
@@ -216,9 +193,9 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
 
         [Test]
         public async Task Handle_SearchClientByPartionOfFullNameMiddle_ReturnsClient()
-            {
+        {
             // Arrange
-            var partionFullname = $"{_client.FirstName[4..]} {_client.PrefixLastName[..4]}";
+            var partionFullname = $"{_client.FirstName[(_client.FirstName.Length - 1)..]} {_client.PrefixLastName[..(_client.PrefixLastName.Length - 1)]}";
             var query = new SearchClientsQuery { SearchTerm = partionFullname };
 
             // Act
@@ -233,7 +210,7 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
         public async Task Handle_SearchClientByPartionOfFullNameEndAndBeginning_ReturnsClient()
         {
             // Arrange
-            var partionFullname = $"{_client.FirstName[..4]} {_client.LastName[4..]}";
+            var partionFullname = $"{_client.FirstName[..(_client.FirstName.Length - 1)]} {_client.LastName[(_client.LastName.Length - 1)..]}";
             var query = new SearchClientsQuery { SearchTerm = partionFullname };
 
             // Act
@@ -261,7 +238,7 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
 
         [Test]
         public async Task Handle_SearchTermIsNull_ReturnsAllClients()
-                {
+        {
             // Arrange
             string searchTerm = null;
             var query = new SearchClientsQuery { SearchTerm = searchTerm };
@@ -276,9 +253,9 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
 
         [Test]
         public async Task Handle_SearchByPartOfFirstName_ReturnsClient()
-                {
+        {
             // Arrange
-            var searchTerm = $"{_client.FirstName[..5]}";
+            var searchTerm = $"{_client.FirstName[..(_client.FirstName.Length - 1)]}";
             var query = new SearchClientsQuery { SearchTerm = searchTerm };
 
             // Act
@@ -287,13 +264,13 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
             // Assert
             clients.Should().HaveCount(1);
             clients.First().Should().BeEquivalentTo(_searchClientDto);
-                }
+        }
 
         [Test]
         public async Task Handle_SearchByOneRightLetter_ReturnsClient()
         {
             // Arrange
-            var searchTerm = $"B";
+            var searchTerm = _client.FirstName.First().ToString();
             var query = new SearchClientsQuery { SearchTerm = searchTerm };
 
             // Act
@@ -308,7 +285,8 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
         public async Task Handle_SearchByOneWrongLetter_ReturnsNoClient()
         {
             // Arrange
-            var searchTerm = $"X";
+            var existingClients = await GetAsync<Client>();
+            var searchTerm = GetLetterNotInClientNames(existingClients);
             var query = new SearchClientsQuery { SearchTerm = searchTerm };
 
             // Act
@@ -316,6 +294,15 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
 
             // Assert
             clients.Should().BeEmpty();
+        }
+
+        private string GetLetterNotInClientNames(ICollection<Client> clients)
+        {
+            const string Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            var allNames = string.Concat(clients.Select(c => c.FullName.ToUpper()));
+            var missingLetters = Alphabet.Except(allNames).ToList();
+
+            return missingLetters.FirstOrDefault().ToString();
         }
     }
 }

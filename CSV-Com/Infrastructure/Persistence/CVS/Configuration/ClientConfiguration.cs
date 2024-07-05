@@ -65,27 +65,27 @@ namespace Infrastructure.Persistence.CVS.Configuration
             {
                 a.Property(p => p.StreetName)
                 .HasColumnName("StreetName")
-                .HasMaxLength(ClientConstants.StreetnameMaxLength)
+                .HasMaxLength(AddressConstants.StreetnameMaxLength)
                 .IsRequired();
 
                 a.Property(p => p.PostalCode)
                 .HasColumnName("PostalCode")
-                .HasMaxLength(ClientConstants.PostalcodeMaxLength)
+                .HasMaxLength(AddressConstants.PostalcodeMaxLength)
                 .IsRequired();
 
                 a.Property(p => p.HouseNumber)
                 .HasColumnName("HouseNumber")
-                .HasMaxLength(ClientConstants.HouseNumberMaxLength)
+                .HasMaxLength(AddressConstants.HouseNumberMaxValue)
                 .IsRequired();
 
                 a.Property(p => p.HouseNumberAddition)
                 .HasColumnName("HouseNumberAddition")
-                .HasMaxLength(ClientConstants.HouseNumberAdditionMaxLength)
+                .HasMaxLength(AddressConstants.HouseNumberAdditionMaxLength)
                 .IsRequired(false);
 
                 a.Property(p => p.Residence)
                 .HasColumnName("Residence")
-                .HasMaxLength(ClientConstants.ResidenceMaxLength)
+                .HasMaxLength(AddressConstants.ResidenceMaxLength)
                 .IsRequired();
             });
 

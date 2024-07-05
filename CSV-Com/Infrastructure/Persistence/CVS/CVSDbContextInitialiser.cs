@@ -8,6 +8,7 @@ namespace Infrastructure.Persistence.CVS
 {
     public class CVSDbContextInitialiser
     {
+        private const int InitialNumberOfClients = 10;
         private readonly ILogger<CVSDbContextInitialiser> _logger;
         private readonly CVSDbContext _context;
         public CVSDbContextInitialiser(ILogger<CVSDbContextInitialiser> logger, CVSDbContext context)
@@ -96,6 +97,13 @@ namespace Infrastructure.Persistence.CVS
 
             if (!_context.Clients.Any())
             {
+                //var clients = ClientData.Create(InitialNumberOfClients);
+
+                //foreach (var client in clients)
+                //{
+                //    _context.Clients.Add(client);
+                //}
+
                 _context.Clients.Add(new Client
                 {
                     Id = 1,

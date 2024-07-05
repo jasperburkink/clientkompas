@@ -1,7 +1,5 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Interfaces.CVS;
+﻿using Application.Common.Interfaces.CVS;
 using AutoMapper;
-using Domain.CVS.Domain;
 using MediatR;
 
 namespace Application.Clients.Commands.DeactivateClient
@@ -24,8 +22,7 @@ namespace Application.Clients.Commands.DeactivateClient
 
         public async Task Handle(DeactivateClientCommand request, CancellationToken cancellationToken)
         {
-            var client = await _unitOfWork.ClientRepository.GetByIDAsync(request.Id, cancellationToken)
-                ?? throw new NotFoundException(nameof(Client), request.Id); // TODO: omzetten naar result pattern
+            var client = await _unitOfWork.ClientRepository.GetByIDAsync(request.Id, cancellationToken);
 
             if (client.DeactivationDateTime != null)
             {

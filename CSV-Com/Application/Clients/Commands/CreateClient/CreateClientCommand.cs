@@ -16,27 +16,27 @@ namespace Application.Clients.Commands.CreateClient
 {
     public record CreateClientCommand : IRequest<ClientDto>
     {
-        public string FirstName { get; init; }
+        public string FirstName { get; set; }
 
-        public string Initials { get; init; }
+        public string Initials { get; set; }
 
-        public string PrefixLastName { get; init; }
+        public string PrefixLastName { get; set; }
 
-        public string LastName { get; init; }
+        public string LastName { get; set; }
 
-        public Gender Gender { get; init; }
+        public Gender Gender { get; set; }
 
-        public string StreetName { get; init; }
+        public string StreetName { get; set; }
 
-        public int HouseNumber { get; init; }
+        public int HouseNumber { get; set; }
 
-        public string HouseNumberAddition { get; init; }
+        public string HouseNumberAddition { get; set; }
 
-        public string PostalCode { get; init; }
+        public string PostalCode { get; set; }
 
-        public string Residence { get; init; }
+        public string Residence { get; set; }
 
-        public string TelephoneNumber { get; init; }
+        public string TelephoneNumber { get; set; }
 
         public DateOnly DateOfBirth { get; set; }
 
@@ -55,6 +55,11 @@ namespace Application.Clients.Commands.CreateClient
         public ICollection<ClientWorkingContractDto> WorkingContracts { get; set; }
 
         public string Remarks { get; set; }
+
+        public CreateClientCommand()
+        {
+
+        }
     }
 
     public class CreateClientCommandHandler : IRequestHandler<CreateClientCommand, ClientDto>

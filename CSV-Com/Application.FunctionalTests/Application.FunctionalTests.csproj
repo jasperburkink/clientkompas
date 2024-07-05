@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\API\API.csproj" />
+    <ProjectReference Include="..\TestData\TestData.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,4 +1,5 @@
 ﻿using Domain.CVS.Domain;
+using Domain.CVS.Enums;
 using FluentValidation;
 
 namespace Application.Common.Rules
@@ -11,10 +12,11 @@ namespace Application.Common.Rules
         //        .NotEmpty().WithMessage($"{nameof(WorkingContract.CompanyName)} is verplicht.");
         //}
 
-        public static IRuleBuilderOptions<T, int> ValidateWorkingContractContractType<T>(this IRuleBuilder<T, int> ruleBuilder)
+        public static IRuleBuilderOptions<T, ContractType> ValidateWorkingContractContractType<T>(this IRuleBuilder<T, ContractType> ruleBuilder)
         {
             return ruleBuilder
-                .NotEmpty().WithMessage($"{nameof(WorkingContract.ContractType)} is verplicht.");
+                .IsInEnum().WithMessage($"{nameof(WorkingContract.ContractType)} heeft een ongeldige waarde.")
+                .NotNull().WithMessage($"{nameof(WorkingContract.ContractType)} is verplicht.");
         }
 
         public static IRuleBuilderOptions<T, string> ValidateWorkingContractFunction<T>(this IRuleBuilder<T, string> ruleBuilder)

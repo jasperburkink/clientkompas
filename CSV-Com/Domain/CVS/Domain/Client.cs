@@ -56,11 +56,12 @@ namespace Domain.CVS.Domain
 
         public DateTime Deactivate(DateTime deactivationDateTime)
         {
-            // TODO: Maybe add a check to see if the client is already deactivated return result via result pattern.
+            if (!DeactivationDateTime.HasValue)
+            {
+                DeactivationDateTime = deactivationDateTime;
+            }
 
-            var dateTime = deactivationDateTime;
-            DeactivationDateTime = dateTime;
-            return dateTime;
+            return DeactivationDateTime.Value;
         }
     }
 }
