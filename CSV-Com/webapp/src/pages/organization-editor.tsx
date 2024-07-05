@@ -102,6 +102,9 @@ const OrganizationEditor = () => {
               //setError(e);
             }
           };
+          if(id && status !== StatusEnum.PENDING) {
+            fetchOrganizationById();
+        }
     }, [id]);
 
     return(
