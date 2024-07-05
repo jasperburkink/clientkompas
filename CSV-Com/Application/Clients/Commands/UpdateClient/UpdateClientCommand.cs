@@ -15,7 +15,7 @@ namespace Application.Clients.Commands.UpdateClient
 {
     public record UpdateClientCommand : IRequest<ClientDto>
     {
-        public int Id { get; init; }
+        public int Id { get; set; }
 
         public string FirstName { get; init; }
 
