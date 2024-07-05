@@ -4,6 +4,7 @@ using Application.Common.Exceptions;
 using Application.Common.Interfaces.CVS;
 using Application.Diagnoses.Queries.GetDiagnosis;
 using Application.DriversLicences.Queries;
+using Application.MaritalStatuses.Queries.GetMaritalStatus;
 using AutoMapper;
 using Domain.CVS.Domain;
 using Domain.CVS.Enums;
@@ -42,7 +43,7 @@ namespace Application.Clients.Commands.UpdateClient
 
         public string EmailAddress { get; set; }
 
-        public MaritalStatus? MaritalStatus { get; set; }
+        public MaritalStatusDto? MaritalStatus { get; set; }
 
         public ICollection<BenefitFormDto> BenefitForms { get; set; }
 
