@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.CVS.Migrations
 {
     [DbContext(typeof(CVSDbContext))]
-    [Migration("20240624074841_DB-init")]
+    [Migration("20240705094935_DB-init")]
     partial class DBinit
     {
         /// <inheritdoc />
@@ -265,8 +265,8 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
                     b.Property<string>("BIC")
                         .IsRequired()
-                        .HasMaxLength(8)
-                        .HasColumnType("varchar(8)");
+                        .HasMaxLength(11)
+                        .HasColumnType("varchar(11)");
 
                     b.Property<string>("BTWNumber")
                         .IsRequired()
@@ -280,23 +280,23 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
                     b.Property<string>("ContactPersonFunction")
                         .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("varchar(40)");
-
-                    b.Property<string>("ContactPersonMobilephoneNumber")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("varchar(10)");
-
-                    b.Property<string>("ContactPersonName")
-                        .IsRequired()
                         .HasMaxLength(80)
                         .HasColumnType("varchar(80)");
 
+                    b.Property<string>("ContactPersonMobilephoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("varchar(15)");
+
+                    b.Property<string>("ContactPersonName")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("varchar(250)");
+
                     b.Property<string>("ContactPersonTelephoneNumber")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("varchar(10)");
+                        .HasMaxLength(15)
+                        .HasColumnType("varchar(15)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime(6)");
@@ -311,8 +311,8 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
                     b.Property<string>("IBANNumber")
                         .IsRequired()
-                        .HasMaxLength(18)
-                        .HasColumnType("varchar(18)");
+                        .HasMaxLength(34)
+                        .HasColumnType("varchar(34)");
 
                     b.Property<string>("KVKNumber")
                         .IsRequired()
@@ -327,13 +327,13 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
                     b.Property<string>("OrganizationName")
                         .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("varchar(40)");
+                        .HasMaxLength(80)
+                        .HasColumnType("varchar(80)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("varchar(10)");
+                        .HasMaxLength(15)
+                        .HasColumnType("varchar(15)");
 
                     b.Property<string>("Website")
                         .IsRequired()
@@ -490,7 +490,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
                                 .HasColumnType("int");
 
                             b1.Property<int>("HouseNumber")
-                                .HasMaxLength(5)
+                                .HasMaxLength(100000)
                                 .HasColumnType("int")
                                 .HasColumnName("HouseNumber");
 

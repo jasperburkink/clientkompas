@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using Application.Common.Mappings;
 using AutoMapper;
 using Domain.CVS.Domain;
+using Domain.CVS.Enums;
 
 namespace Application.Clients.Dtos
 {
@@ -12,7 +13,7 @@ namespace Application.Clients.Dtos
 
         public string Function { get; set; }
 
-        public int ContractType { get; set; }
+        public ContractType ContractType { get; set; }
 
         public DateOnly FromDate { get; set; }
 

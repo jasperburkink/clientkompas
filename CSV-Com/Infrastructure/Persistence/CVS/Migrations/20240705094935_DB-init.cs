@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -107,7 +106,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    OrganizationName = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                    OrganizationName = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     VisitStreetName = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -136,17 +135,17 @@ namespace Infrastructure.Persistence.CVS.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PostResidence = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ContactPersonName = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: false)
+                    ContactPersonName = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ContactPersonFunction = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                    ContactPersonFunction = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ContactPersonTelephoneNumber = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false)
+                    ContactPersonTelephoneNumber = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ContactPersonMobilephoneNumber = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false)
+                    ContactPersonMobilephoneNumber = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ContactPersonEmailAddress = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    PhoneNumber = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false)
+                    PhoneNumber = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Website = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -156,9 +155,9 @@ namespace Infrastructure.Persistence.CVS.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     BTWNumber = table.Column<string>(type: "varchar(12)", maxLength: 12, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    IBANNumber = table.Column<string>(type: "varchar(18)", maxLength: 18, nullable: false)
+                    IBANNumber = table.Column<string>(type: "varchar(34)", maxLength: 34, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    BIC = table.Column<string>(type: "varchar(8)", maxLength: 8, nullable: false)
+                    BIC = table.Column<string>(type: "varchar(11)", maxLength: 11, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Created = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     CreatedBy = table.Column<string>(type: "longtext", nullable: true)
@@ -217,7 +216,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     Gender = table.Column<int>(type: "int", nullable: false),
                     StreetName = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    HouseNumber = table.Column<int>(type: "int", maxLength: 5, nullable: false),
+                    HouseNumber = table.Column<int>(type: "int", maxLength: 100000, nullable: false),
                     HouseNumberAddition = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PostalCode = table.Column<string>(type: "varchar(7)", maxLength: 7, nullable: false)

@@ -29,6 +29,11 @@
   <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\TestData\TestData.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Clients\Commands\SearchClients\" />
   </ItemGroup>
 
   <ItemGroup>

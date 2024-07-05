@@ -1,46 +1,28 @@
 ﻿using Application.Clients.Queries.GetClients;
 using Domain.CVS.Domain;
-using Domain.CVS.Enums;
-using Domain.CVS.ValueObjects;
+using TestData;
+using TestData.Client;
 using static Application.FunctionalTests.Testing;
 
 namespace Application.FunctionalTests.Clients.Queries.GetClients
 {
     public class GetClientsQueryTests : BaseTestFixture
     {
+        private ITestDataGenerator<Client> _testDataGeneratorClient;
+
+        [SetUp]
+        public void Initialize()
+        {
+            _testDataGeneratorClient = new ClientDataGenerator();
+        }
+
         [Test]
-        public async Task Handle_CorrectFlow_ShouldReturnClients()
+        public async Task Handle_CorrectFlowOneClient_ShouldReturnOneClient()
         {
             // Arrange
             // TODO: Turn on authentication 
             //await RunAsDefaultUserAsync();
-
-            var benefitForm = new BenefitForm
-            {
-                Name = "Test"
-            };
-
-            var client = new Client
-            {
-                FirstName = "Berend",
-                LastName = "Berendsen",
-                Address = Address.From("Dorpstraat", 1, string.Empty, "1234AB", "Amsterdam"),
-                TelephoneNumber = "0123456789",
-                PrefixLastName = "",
-                Gender = Gender.Man,
-                EmailAddress = "a@b.com",
-                Initials = "J.W.C.",
-                Remarks = "Jan is geweldig",
-                DateOfBirth = new DateOnly(1960, 12, 25),
-                MaritalStatus = new MaritalStatus
-                {
-                    Name = "Gehuwd"
-                },
-                BenefitForms =
-                {
-                    benefitForm
-                }
-            };
+            var client = _testDataGeneratorClient.Create();
 
             await AddAsync(client);
 
@@ -52,6 +34,29 @@ namespace Application.FunctionalTests.Clients.Queries.GetClients
             // Assert
             result.Should().NotBeNull().And.HaveCountGreaterThan(0);
             result.Should().Contain(c => c.LastName == client.LastName);
+        }
+
+        [Test]
+        public async Task Handle_CorrectFlowMultipleClients_ShouldReturnMultipleClients()
+        {
+            // Arrange
+            // TODO: Turn on authentication 
+            //await RunAsDefaultUserAsync();
+            var numberOfClients = 5;
+            var clients = _testDataGeneratorClient.Create(numberOfClients);
+
+            foreach (var client in clients)
+            {
+                await AddAsync(client);
+            }
+
+            var query = new GetClientsQuery();
+
+            // Act
+            var result = await SendAsync(query);
+
+            // Assert
+            result.Should().NotBeNull().And.HaveCount(numberOfClients);
         }
 
         [Test]
