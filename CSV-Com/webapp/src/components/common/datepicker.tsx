@@ -19,7 +19,8 @@ export interface DatePickerProps {
     value?: Date | null,
     required: boolean,
     className?: string,
-    onChange?: (value: Moment.Moment | null) => void;
+    onChange?: (value: Moment.Moment | null) => void
+    dataTestId?: string;
 }
 
 function GenerateAwesomeFontCalendarIcon() {
@@ -67,15 +68,25 @@ export const DatePicker = (props: DatePickerProps) => {
       <MobileDatePickerControl.MobileDatePicker
       className={`datepicker ${props.className}`}      
       value={props.value ? Moment(props.value) : null}
-      onChange={handleDateChange} />
+      onChange={handleDateChange}
+      slotProps={{
+        textField: {
+          inputProps: {
+            'data-testid': props.dataTestId
+          }
+        }
+      }} />
     ): (
       <DatePickerControl.DatePicker      
         className={`datepicker ${props.className}`}
         value={props.value ? Moment(props.value) : null}
         slots={{openPickerIcon: GenerateAwesomeFontCalendarIcon}}
         slotProps={{textField: {
-          required: props.required
-        }}}
+          required: props.required,
+          inputProps: {
+              'data-testid': props.dataTestId            
+          }
+        }}}        
         onChange={handleDateChange}
         sx={{
           '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': { border: '2px solid b3b3b3' }, //Init state

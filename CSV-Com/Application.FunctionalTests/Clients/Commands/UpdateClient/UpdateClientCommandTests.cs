@@ -90,22 +90,19 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public async Task Handle_ClientDoesNotExist_ShouldThrowNotFoundException()
+        public void Handle_ClientDoesNotExist_ShouldThrowNotFoundException()
         {
-            asdsad
             // Arrange
-            var firstName = _command.FirstName;
-            var lastName = _command.LastName;
+            var command = _command with
+            {
+                Id = _command.Id + 1
+            }; // Client with this id does not exists in the database
 
-            // Act
-            await SendAsync(_command);
-            var client = (await GetAsync<Client>()).FirstOrDefault();
-
-            // Assert
-            client.Should().NotBeNull();
-            client!.FirstName.Should().Be(firstName);
-            client.LastName.Should().Be(lastName);
-            client.Id.Should().BeGreaterThan(0);
+            // Act & Assert
+            Assert.ThrowsAsync<Common.Exceptions.NotFoundException>(async () =>
+            {
+                await SendAsync(command);
+            });
         }
 
         [Test]

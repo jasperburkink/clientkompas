@@ -11,6 +11,7 @@ interface IDropDownProps {
     inputfieldname: string;
     value?: number[];
     onChange?: (value: number[]) => void;
+    dataTestId?: string;
 }
 
 const DropdownWithButton = (props: IDropDownProps) => {
@@ -61,7 +62,8 @@ const DropdownWithButton = (props: IDropDownProps) => {
                     required={props.required}
                     inputfieldname={props.inputfieldname}
                     value={dropdownValue}
-                    onChange={(e) => setDropdownValue(e)} />
+                    onChange={(e) => setDropdownValue(e)}
+                    dataTestId= />
                 <button className='add-extra-dropdown-btn' type='button'  onClick={() => {addOption(dropdownValue);}}>
                     <FontAwesomeIcon className='ml-[0]' icon={faPlus} size="xl" style={{color: "#000000",}} />
                 </button>

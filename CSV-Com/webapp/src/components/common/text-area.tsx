@@ -5,7 +5,8 @@ export interface TextareaProps {
   value?: string,
   placeholder: string,
   className?: string,
-  onChange?: (value: string) => void;
+  onChange?: (value: string) => void,
+  dataTestId?: string;
 }
 
 const Textarea = (props: TextareaProps) => {
@@ -19,6 +20,7 @@ const Textarea = (props: TextareaProps) => {
         value={props.value}
         placeholder={props.placeholder} 
         onChange={(e) => {props.onChange?.(e.target.value);}}
+        data-testid={props.dataTestId}
       />
     </div>
   );

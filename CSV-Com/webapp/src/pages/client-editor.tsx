@@ -39,6 +39,7 @@ import MaritalStatus from 'types/model/MaritalStatus';
 import BenefitForm from 'types/model/BenefitForm';
 import { ClientContext } from './client-context';
 import Organization from 'types/model/Organization';
+import { nameof } from 'types/common/nameof';
 
 const ClientEditor = () => {
     const initialClient: Client = { 
@@ -386,7 +387,8 @@ const ClientEditor = () => {
                                 required={true} 
                                 placeholder='Voornaam' 
                                 value={client.firstname} 
-                                onChange={(value) => handleClientInputChange('firstname', value)} />
+                                onChange={(value) => handleClientInputChange('firstname', value)}
+                                dataTestId='firstname' />
                         </LabelField>
 
                         <LabelField text='Voorletters' required={true}>
@@ -395,7 +397,8 @@ const ClientEditor = () => {
                                 required={true} 
                                 placeholder='b.v. A B' 
                                 value={client.initials}
-                                onChange={(value) => handleClientInputChange('initials', value)} />
+                                onChange={(value) => handleClientInputChange('initials', value)}
+                                dataTestId='initials' />
                         </LabelField>
 
                         <LabelField text='Tussenvoegsel' required={false}>
@@ -404,7 +407,8 @@ const ClientEditor = () => {
                                 required={false} 
                                 placeholder='b.v. de' 
                                 value={client.prefixlastname} 
-                                onChange={(value) => handleClientInputChange('prefixlastname', value)} />
+                                onChange={(value) => handleClientInputChange('prefixlastname', value)}
+                                dataTestId='prefixlastname' />
                         </LabelField>
 
                         <LabelField text='Achternaam' required={true}>
@@ -413,7 +417,8 @@ const ClientEditor = () => {
                                 required={true} 
                                 placeholder='Achternaam' 
                                 value={client.lastname} 
-                                onChange={(value) => handleClientInputChange('lastname', value)} />
+                                onChange={(value) => handleClientInputChange('lastname', value)}
+                                dataTestId='lastname' />
                         </LabelField>
 
                         <LabelField text='Straatadres' required={true}>
@@ -422,7 +427,8 @@ const ClientEditor = () => {
                                 required={true} 
                                 placeholder='Adres' 
                                 value={client.streetname} 
-                                onChange={(value) => handleClientInputChange('streetname', value)} />
+                                onChange={(value) => handleClientInputChange('streetname', value)}
+                                dataTestId='streetname' />
                         </LabelField>
 
                         <LabelField text='Huisnummer' required={true}>
@@ -432,7 +438,8 @@ const ClientEditor = () => {
                                 placeholder='b.v. 11' 
                                 className='house-number' 
                                 value={client.housenumber}
-                                onChange={(value) => handleClientInputChange('housenumber', value)} />
+                                onChange={(value) => handleClientInputChange('housenumber', value)}
+                                dataTestId='housenumber' />
                             <LabelField text='Toevoeging' required={false} className='house-number-addition'>
                                 <InputField 
                                     inputfieldtype={{type:'text'}} 
@@ -440,7 +447,8 @@ const ClientEditor = () => {
                                     placeholder='b.v. A' 
                                     className='house-number-addition-field' 
                                     value={client.housenumberaddition}
-                                    onChange={(value) => handleClientInputChange('housenumberaddition', value)} />
+                                    onChange={(value) => handleClientInputChange('housenumberaddition', value)}
+                                    dataTestId='housenumberaddition' />
                             </LabelField>
                         </LabelField>
 
@@ -450,7 +458,8 @@ const ClientEditor = () => {
                                 required={true} 
                                 placeholder='b.v. 1234 AA' 
                                 value={client.postalcode}
-                                onChange={(value) => handleClientInputChange('postalcode', value)} />
+                                onChange={(value) => handleClientInputChange('postalcode', value)}
+                                dataTestId='postalcode' />
                         </LabelField>
 
                         <LabelField text='Woonplaats' required={true}>
@@ -459,7 +468,8 @@ const ClientEditor = () => {
                                 required={true} 
                                 placeholder='Woonplaats' 
                                 value={client.residence}
-                                onChange={(value) => handleClientInputChange('residence', value)} />
+                                onChange={(value) => handleClientInputChange('residence', value)}
+                                dataTestId='residence' />
                         </LabelField>
 
                         <LabelField text='Telefoon' required={true}>
@@ -468,7 +478,8 @@ const ClientEditor = () => {
                                 required={true} 
                                 placeholder='b.v. 0543-123456' 
                                 value={client.telephonenumber}
-                                onChange={(value) => handleClientInputChange('telephonenumber', value)} />
+                                onChange={(value) => handleClientInputChange('telephonenumber', value)}
+                                dataTestId='telephonenumber' />
                         </LabelField>
 
                         <LabelField text='E-mail' required={true}>
@@ -477,7 +488,8 @@ const ClientEditor = () => {
                                 required={true} 
                                 placeholder='b.v. mail@mailbox.com' 
                                 value={client.emailaddress}
-                                onChange={(value) => handleClientInputChange('emailaddress', value)} />
+                                onChange={(value) => handleClientInputChange('emailaddress', value)}
+                                dataTestId='emailaddress' />
                         </LabelField>
 
                         <LabelField text='Geboortedatum' required={true}>
@@ -485,7 +497,8 @@ const ClientEditor = () => {
                                 required={true} 
                                 placeholder='Selecteer een datum' 
                                 value={client.dateofbirth}
-                                onChange={(value) => handleClientDatePickerChange('dateofbirth', value)} />
+                                onChange={(value) => handleClientDatePickerChange('dateofbirth', value)}
+                                dataTestId='dateofbirth' />
                         </LabelField>
 
                         <LabelField text='Geslacht' required={true}>
@@ -494,7 +507,8 @@ const ClientEditor = () => {
                                 required={true} 
                                 inputfieldname='geslacht'
                                 value={client.gender}
-                                onChange={(value) => handleGenderChange(value)} />
+                                onChange={(value) => handleGenderChange(value)}
+                                dataTestId='gender' />
                         </LabelField>
                     </div>
 
@@ -508,14 +522,16 @@ const ClientEditor = () => {
                         numMinimalRequired={1}
                         onRemoveObject={onRemoveEmergencyPerson}
                         onChangeObject={handleEmergencyPersonChange}
-                        key={JSON.stringify(client.id + "_emergencypeople")} />
+                        key={JSON.stringify(client.id + "_emergencypeople")}
+                        dataTestId='emergencypeople' />
 
                     <div className='client-remarks'>
                         <Label text='Opmerkingen' />
                         <Textarea 
                             placeholder="Voeg opmerkingen toe" 
                             value={client.remarks}
-                            onChange={(value: string) => handleClientInputChange('remarks', value)} />
+                            onChange={(value: string) => handleClientInputChange('remarks', value)}
+                            dataTestId='remarks' />
                     </div>
 
                     <SlideToggleLabel text='Overige cliënt informatie' smallTextColapsed=' - klap uit voor meer opties' smallTextExpanded=' - klap in voor minder opties' >
