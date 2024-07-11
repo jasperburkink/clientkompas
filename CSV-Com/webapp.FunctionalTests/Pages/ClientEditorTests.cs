@@ -1,6 +1,5 @@
 ﻿using Domain.CVS.Domain;
 using Domain.CVS.Enums;
-using Microsoft.Playwright;
 using TestData;
 
 namespace WebApp.FunctionalTests.Pages
@@ -11,185 +10,132 @@ namespace WebApp.FunctionalTests.Pages
     {
         // TODO: test mobile
 
-        private const string Url = Constants.Url + "Clients/Edit/";
+        private const string Url = Constants.Url + "Clients/";
+        private int _clientId;
 
         [Test, Order(1)]
         public async Task CreateClient_FillInClientDataAndSave_ClientShouldBeAdded()
         {
             // Arrange
-            var emailAddress = FakerConfiguration.Faker.Person.Email;
+            string firstName = "John", initials = "J", lastname = "Doe", streetName = "Dorpstraat", housenumber = "4",
+            houseNumberAddition = "a", postalCode = "1234 AB", residence = "Utrecht", telephoneNumber = "0123456789",
+            emailAddress = FakerConfiguration.Faker.Person.Email, dateOfBirth = "02-08-1989", emergencyPerson1Name = "Jane Doe",
+            emergencyPerson1TelephoneNumber = "0987654321", emergencyPerson2Name = "Willem Doe", emergencyPerson2TelephoneNumber = "0654789123",
+            remark = "Wie is John Doe?", diagnosis1 = "Depression", diagnosis2 = "Dyslexia", benefitForm = "WIA", maritalStatus = "Unmarried",
+            driversLicence = "B (Auto)", workingContractOrganization = "SBICT", workingContractFunction = "Software Ontwikkelaar",
+            workingContractContractType = "Tijdelijk", workingContractFromDate = "01-12-2022", workingContractToDate = "05-01-2025";
 
-            // TODO: change to datatestid selectors?
+            var gender = Gender.Woman;
+
             // Act
-            await Page.GotoAsync(Url);
-            await Page.GetByTestId(nameof(Client.FirstName).ToLower()).FillAsync("John");
+            await Page.GotoAsync($"{Url}Edit/");
 
-            await Page.GetByTestId(nameof(Client.Initials).ToLower()).FillAsync("J");
+            await Page.GetByTestId(nameof(Client.FirstName).ToLower()).FillAsync(firstName);
 
-            await Page.GetByTestId(nameof(Client.LastName).ToLower()).FillAsync("Doe");
+            await Page.GetByTestId(nameof(Client.Initials).ToLower()).FillAsync(initials);
 
-            await Page.GetByTestId(nameof(Client.Address.StreetName).ToLower()).FillAsync("Dorpstraat");
+            await Page.GetByTestId(nameof(Client.LastName).ToLower()).FillAsync(lastname);
 
-            await Page.GetByTestId(nameof(Client.Address.HouseNumber).ToLower()).FillAsync("4");
+            await Page.GetByTestId(nameof(Client.Address.StreetName).ToLower()).FillAsync(streetName);
 
-            await Page.GetByTestId(nameof(Client.Address.HouseNumberAddition).ToLower()).FillAsync("a");
+            await Page.GetByTestId(nameof(Client.Address.HouseNumber).ToLower()).FillAsync(housenumber);
 
-            await Page.GetByTestId(nameof(Client.Address.PostalCode).ToLower()).FillAsync("1234 AB");
+            await Page.GetByTestId(nameof(Client.Address.HouseNumberAddition).ToLower()).FillAsync(houseNumberAddition);
 
-            await Page.GetByTestId(nameof(Client.Address.Residence).ToLower()).FillAsync("Utrecht");
+            await Page.GetByTestId(nameof(Client.Address.PostalCode).ToLower()).FillAsync(postalCode);
 
-            await Page.GetByTestId(nameof(Client.TelephoneNumber).ToLower()).FillAsync("0123456789");
+            await Page.GetByTestId(nameof(Client.Address.Residence).ToLower()).FillAsync(residence);
+
+            await Page.GetByTestId(nameof(Client.TelephoneNumber).ToLower()).FillAsync(telephoneNumber);
 
             await Page.GetByTestId(nameof(Client.EmailAddress).ToLower()).FillAsync(emailAddress);
 
-            await Page.GetByTestId(nameof(Client.DateOfBirth).ToLower()).FillAsync("02-08-1989");
+            await Page.GetByTestId(nameof(Client.DateOfBirth).ToLower()).FillAsync(dateOfBirth);
 
-            await Page.GetByTestId(nameof(Client.Gender).ToLower()).SelectOptionAsync(new[] { ((int)Gender.Woman).ToString() });
+            await Page.GetByTestId(nameof(Client.Gender).ToLower()).SelectOptionAsync(new[] { ((int)gender).ToString() });
 
-            await Page.GetByTestId($"{nameof(Client.EmergencyPeople).ToLower()}.{nameof(EmergencyPerson.Name).ToLower()}.1").FillAsync("Jane Doe");
+            await Page.GetByTestId($"{nameof(Client.EmergencyPeople).ToLower()}.{nameof(EmergencyPerson.Name).ToLower()}.1").FillAsync(emergencyPerson1Name);
 
-            await Page.GetByTestId($"{nameof(Client.EmergencyPeople).ToLower()}.{nameof(EmergencyPerson.TelephoneNumber).ToLower()}.1").FillAsync("0987654321");
+            await Page.GetByTestId($"{nameof(Client.EmergencyPeople).ToLower()}.{nameof(EmergencyPerson.TelephoneNumber).ToLower()}.1").FillAsync(emergencyPerson1TelephoneNumber);
 
             await Page.GetByTestId($"{nameof(Client.EmergencyPeople).ToLower()}.add").ClickAsync();
 
-            await Page.GetByTestId($"{nameof(Client.EmergencyPeople).ToLower()}.{nameof(EmergencyPerson.Name).ToLower()}.2").FillAsync("Willem Doe");
+            await Page.GetByTestId($"{nameof(Client.EmergencyPeople).ToLower()}.{nameof(EmergencyPerson.Name).ToLower()}.2").FillAsync(emergencyPerson2Name);
 
-            await Page.GetByTestId($"{nameof(Client.EmergencyPeople).ToLower()}.{nameof(EmergencyPerson.TelephoneNumber).ToLower()}.2").FillAsync("0654789123");
+            await Page.GetByTestId($"{nameof(Client.EmergencyPeople).ToLower()}.{nameof(EmergencyPerson.TelephoneNumber).ToLower()}.2").FillAsync(emergencyPerson2TelephoneNumber);
 
-            await Page.GetByTestId(nameof(Client.Remarks).ToLower()).FillAsync("Wie is John Doe?");
+            await Page.GetByTestId(nameof(Client.Remarks).ToLower()).FillAsync(remark);
 
+            await Page.GetByTestId(nameof(Client.Diagnoses).ToLower()).SelectOptionAsync(new[] { diagnosis1 });
+            await Page.GetByTestId($"{nameof(Client.Diagnoses).ToLower()}.add").ClickAsync();
 
-            await Page.Locator("select[name=\"diagnoses\"]").SelectOptionAsync(new[] { "1" });
-            await Page.Locator("select[name=\"benefitforms\"]").SelectOptionAsync(new[] { "1" });
-            await Page.Locator("div").Filter(new() { HasTextRegex = new Regex("^UitkeringsvormKies uit de lijstBijstandWIA$") }).GetByRole(AriaRole.Button).ClickAsync();
-            await Page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Diagnose\\(s\\)Kies uit de lijstDyslexiaDepression$") }).GetByRole(AriaRole.Button).ClickAsync();
-            await Page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Kies uit de lijstWIA$") }).GetByRole(AriaRole.Button).ClickAsync();
-            await Page.Locator("select[name=\"maritalstatus\"]").SelectOptionAsync(new[] { "1" });
-            await Page.Locator("select[name=\"driverslicences\"]").SelectOptionAsync(new[] { "1" });
-            await Page.Locator("div").Filter(new() { HasTextRegex = new Regex("^RijbewijsKies uit de lijstB \\(Auto\\)A \\(Motor\\)$") }).GetByRole(AriaRole.Button).ClickAsync();
-            await Page.Locator("select[name=\"driverslicences\"]").SelectOptionAsync(new[] { "2" });
-            await Page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Kies uit de lijstA \\(Motor\\)$") }).GetByRole(AriaRole.Button).ClickAsync();
-            await Page.Locator("select[name=\"Werkt bij\"]").SelectOptionAsync(new[] { "5" });
-            await Page.GetByPlaceholder("Functie").ClickAsync();
-            await Page.GetByPlaceholder("Functie").FillAsync("Directeur");
-            await Page.Locator("select[name=\"Contract\"]").SelectOptionAsync(new[] { "1" });
-            await Page.GetByLabel("Choose date").Nth(1).ClickAsync();
-            await Page.Locator("div").Filter(new() { HasTextRegex = new Regex("^juli 2024$") }).Nth(1).ClickAsync();
-            await Page.GetByRole(AriaRole.Radio, new() { Name = "1997" }).ClickAsync();
-            await Page.GetByRole(AriaRole.Gridcell, new() { Name = "7", Exact = true }).ClickAsync();
-            await Page.GetByLabel("Choose date", new() { Exact = true }).ClickAsync();
-            await Page.Locator("div").Filter(new() { HasTextRegex = new Regex("^juli 2024$") }).Nth(1).ClickAsync();
-            await Page.GetByRole(AriaRole.Radio, new() { Name = "2006" }).ClickAsync();
+            await Page.GetByTestId(nameof(Client.Diagnoses).ToLower()).SelectOptionAsync(new[] { diagnosis2 });
+            await Page.GetByTestId($"{nameof(Client.Diagnoses).ToLower()}.add").ClickAsync();
+
+            await Page.GetByTestId(nameof(Client.BenefitForms).ToLower()).SelectOptionAsync(new[] { benefitForm });
+            await Page.GetByTestId($"{nameof(Client.BenefitForms).ToLower()}.add").ClickAsync();
+
+            await Page.GetByTestId(nameof(Client.MaritalStatus).ToLower()).SelectOptionAsync(new[] { maritalStatus });
+
+            await Page.GetByTestId(nameof(Client.DriversLicences).ToLower()).SelectOptionAsync(new[] { driversLicence });
+            await Page.GetByTestId($"{nameof(Client.DriversLicences).ToLower()}.add").ClickAsync();
+
+            await Page.GetByTestId($"{nameof(Client.WorkingContracts).ToLower()}.{nameof(WorkingContract.OrganizationId).ToLower()}.1").SelectOptionAsync(new[] { workingContractOrganization });
+            await Page.GetByTestId($"{nameof(Client.WorkingContracts).ToLower()}.{nameof(WorkingContract.Function).ToLower()}.1").FillAsync(workingContractFunction);
+            await Page.GetByTestId($"{nameof(Client.WorkingContracts).ToLower()}.{nameof(WorkingContract.ContractType).ToLower()}.1").SelectOptionAsync(new[] { workingContractContractType });
+            await Page.GetByTestId($"{nameof(Client.WorkingContracts).ToLower()}.{nameof(WorkingContract.FromDate).ToLower()}.1").FillAsync(workingContractFromDate);
+            await Page.GetByTestId($"{nameof(Client.WorkingContracts).ToLower()}.{nameof(WorkingContract.ToDate).ToLower()}.1").FillAsync(workingContractToDate);
+
             await Page.GetByTestId("button.save").ClickAsync();
-            await Page.GetByRole(AriaRole.Button, new() { Name = "Bevestigen" }).ClickAsync();
+            await Page.GetByTestId("button.confirm").ClickAsync();
 
             // Assert
-            await Expect(Page.GetByText("John Doe", new() { Exact = true })).ToBeVisibleAsync();
-            await Expect(Page.GetByText("Jane Doe")).ToBeVisibleAsync();
-            await Expect(Page.GetByText("Dyslexia")).ToBeVisibleAsync();
-            await Expect(Page.GetByText("Unmarried")).ToBeVisibleAsync();
-            await Expect(Page.GetByText("B, A")).ToBeVisibleAsync();
-            await Expect(Page.GetByText("Bijstand")).ToBeVisibleAsync();
+            await Expect(Page.GetByText($"{firstName} {lastname}", new() { Exact = true })).ToBeVisibleAsync();
+            await Expect(Page.GetByText(emergencyPerson1Name)).ToBeVisibleAsync();
+            await Expect(Page.GetByText(diagnosis1)).ToBeVisibleAsync();
+            await Expect(Page.GetByText(maritalStatus)).ToBeVisibleAsync();
+            await Expect(Page.GetByText(workingContractOrganization)).ToBeVisibleAsync();
+            await Expect(Page.GetByText(benefitForm)).ToBeVisibleAsync();
             await Expect(Page.GetByText(emailAddress)).ToBeVisibleAsync();
-        }
 
-        [Test, Order(2)]
-        public async Task UpdateClient_FillInClientDataAndSave_ClientShouldBeUpdated()
-        {
-            // Arrange
-            var emailAddress = FakerConfiguration.Faker.Person.Email;
-            var firstName = "Piedro";
-
-            // TODO: change to datatestid selectors?
-            // Act
-            await Page.GotoAsync(Url);
-            await Page.GetByPlaceholder("Voornaam").ClickAsync();
-            await Page.GetByPlaceholder("Voornaam").FillAsync(firstName);
-            await Page.GetByPlaceholder("Voornaam").PressAsync("Tab");
-            await Page.GetByPlaceholder("b.v. A B").FillAsync("J");
-            await Page.GetByPlaceholder("b.v. A B").PressAsync("Tab");
-            await Page.GetByPlaceholder("b.v. de").PressAsync("Tab");
-            await Page.GetByPlaceholder("Achternaam").FillAsync("Doe");
-            await Page.GetByPlaceholder("Achternaam").PressAsync("Tab");
-            await Page.GetByPlaceholder("Adres").FillAsync("Dorpstraat");
-            await Page.GetByPlaceholder("Adres").PressAsync("Tab");
-            await Page.GetByPlaceholder("b.v. 11").FillAsync("4");
-            await Page.GetByPlaceholder("b.v. 11").PressAsync("Tab");
-            await Page.GetByPlaceholder("b.v. A", new() { Exact = true }).FillAsync("a");
-            await Page.GetByPlaceholder("b.v. A", new() { Exact = true }).PressAsync("Tab");
-            await Page.GetByPlaceholder("b.v. 1234 AA").FillAsync("1234 AB");
-            await Page.GetByPlaceholder("b.v. 1234 AA").PressAsync("Tab");
-            await Page.GetByPlaceholder("Woonplaats").FillAsync("Utrecht");
-            await Page.GetByPlaceholder("Woonplaats").PressAsync("Tab");
-            await Page.GetByPlaceholder("b.v. 0543-").FillAsync("0123456789");
-            await Page.GetByPlaceholder("b.v. 0543-").PressAsync("Tab");
-            await Page.GetByPlaceholder("b.v. mail@mailbox.com").FillAsync(emailAddress);
-            await Page.GetByLabel("Choose date").First.ClickAsync();
-            await Page.GetByLabel("calendar view is open, switch").ClickAsync();
-            await Page.GetByRole(AriaRole.Radio, new() { Name = "1989" }).ClickAsync();
-            await Page.GetByRole(AriaRole.Gridcell, new() { Name = "19" }).ClickAsync();
-            await Page.GetByPlaceholder("Naam", new() { Exact = true }).ClickAsync();
-            await Page.GetByPlaceholder("Naam", new() { Exact = true }).FillAsync("Jane Doe");
-            await Page.GetByPlaceholder("Naam", new() { Exact = true }).PressAsync("Tab");
-            await Page.GetByPlaceholder("Telefoonnr.").FillAsync("0987654321");
-            await Page.GetByRole(AriaRole.Button, new() { Name = "Voeg nog een contactpersoon" }).ClickAsync();
-            await Page.GetByPlaceholder("Naam").Nth(3).ClickAsync();
-            await Page.GetByPlaceholder("Naam").Nth(3).FillAsync("Willem Doe");
-            await Page.GetByPlaceholder("Naam").Nth(3).PressAsync("Tab");
-            await Page.GetByPlaceholder("Telefoonnr.").Nth(1).FillAsync("0654789123");
-            await Page.GetByPlaceholder("Voeg opmerkingen toe").ClickAsync();
-            await Page.GetByPlaceholder("Voeg opmerkingen toe").FillAsync("Wie is John Doe?");
-            await Page.Locator("select[name=\"diagnoses\"]").SelectOptionAsync(new[] { "1" });
-            await Page.Locator("select[name=\"benefitforms\"]").SelectOptionAsync(new[] { "1" });
-            await Page.Locator("div").Filter(new() { HasTextRegex = new Regex("^UitkeringsvormKies uit de lijstBijstandWIA$") }).GetByRole(AriaRole.Button).ClickAsync();
-            await Page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Diagnose\\(s\\)Kies uit de lijstDyslexiaDepression$") }).GetByRole(AriaRole.Button).ClickAsync();
-            await Page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Kies uit de lijstWIA$") }).GetByRole(AriaRole.Button).ClickAsync();
-            await Page.Locator("select[name=\"maritalstatus\"]").SelectOptionAsync(new[] { "1" });
-            await Page.Locator("select[name=\"driverslicences\"]").SelectOptionAsync(new[] { "1" });
-            await Page.Locator("div").Filter(new() { HasTextRegex = new Regex("^RijbewijsKies uit de lijstB \\(Auto\\)A \\(Motor\\)$") }).GetByRole(AriaRole.Button).ClickAsync();
-            await Page.Locator("select[name=\"driverslicences\"]").SelectOptionAsync(new[] { "2" });
-            await Page.Locator("div").Filter(new() { HasTextRegex = new Regex("^Kies uit de lijstA \\(Motor\\)$") }).GetByRole(AriaRole.Button).ClickAsync();
-            await Page.Locator("select[name=\"Werkt bij\"]").SelectOptionAsync(new[] { "5" });
-            await Page.GetByPlaceholder("Functie").ClickAsync();
-            await Page.GetByPlaceholder("Functie").FillAsync("Directeur");
-            await Page.Locator("select[name=\"Contract\"]").SelectOptionAsync(new[] { "1" });
-            await Page.GetByLabel("Choose date").Nth(1).ClickAsync();
-            await Page.Locator("div").Filter(new() { HasTextRegex = new Regex("^juli 2024$") }).Nth(1).ClickAsync();
-            await Page.GetByRole(AriaRole.Radio, new() { Name = "1997" }).ClickAsync();
-            await Page.GetByRole(AriaRole.Gridcell, new() { Name = "7", Exact = true }).ClickAsync();
-            await Page.GetByLabel("Choose date", new() { Exact = true }).ClickAsync();
-            await Page.Locator("div").Filter(new() { HasTextRegex = new Regex("^juli 2024$") }).Nth(1).ClickAsync();
-            await Page.GetByRole(AriaRole.Radio, new() { Name = "2006" }).ClickAsync();
-            await Page.GetByTestId("button.save").ClickAsync();
-            await Page.GetByRole(AriaRole.Button, new() { Name = "Bevestigen" }).ClickAsync();
-
-            // Assert
-            await Expect(Page.GetByText(firstName)).ToBeVisibleAsync();
-            await Expect(Page.GetByText("Jane Doe")).ToBeVisibleAsync();
-            await Expect(Page.GetByText("Dyslexia")).ToBeVisibleAsync();
-            await Expect(Page.GetByText("Unmarried")).ToBeVisibleAsync();
-            await Expect(Page.GetByText("B, A")).ToBeVisibleAsync();
-            await Expect(Page.GetByText("Bijstand")).ToBeVisibleAsync();
-            await Expect(Page.GetByText(emailAddress)).ToBeVisibleAsync();
+            _clientId = int.Parse(await Page.GetByTestId("clientid").InnerTextAsync());
         }
 
         [Test, Order(3)]
+        public async Task UpdateClient_FillInClientDataAndSave_ClientShouldBeUpdated()
+        {
+            // Arrange
+            string firstName = "Piedro", lastname = "Doe";
+
+            // Act
+            await Page.GotoAsync($"{Url}Edit/{_clientId}");
+            await Task.Delay(TimeSpan.FromSeconds(2));
+
+            await Page.GetByTestId(nameof(Client.FirstName).ToLower()).FillAsync(firstName);
+
+            await Page.GetByTestId("button.save").ClickAsync();
+            await Page.GetByTestId("button.confirm").ClickAsync();
+
+            // Assert
+            await Expect(Page.GetByText($"{firstName} {lastname}", new() { Exact = true })).ToBeVisibleAsync();
+        }
+
+        [Test, Order(4)]
         public async Task DeactivateClient_Client_ShouldBeShownInSearchResults()
         {
             // Arrange
-            var name = "Jansen, Jan";
+            var url = $"{Url}{_clientId}";
+            string firstName = "Piedro", lastname = "Doe";
 
             // Act
-            await Page.GotoAsync(Url);
-            await Page.Locator("#sidebarArrow").ClickAsync();
-            await Page.GetByRole(AriaRole.Link, new() { Name = "Jansen, Jan" }).ClickAsync();
-            await Page.GetByTestId("button_test").ClickAsync();
-            await Page.GetByRole(AriaRole.Button, new() { Name = "Bevestigen" }).ClickAsync();
-            await Page.GetByRole(AriaRole.Button, new() { Name = "Ok" }).ClickAsync();
-            await Page.Locator("#sidebarArrow").ClickAsync();
+            await Page.GotoAsync($"{Url}{_clientId}");
+            await Page.GetByTestId("button.deactivate").ClickAsync();
+            await Page.GetByTestId("button.confirmok").ClickAsync();
+            await Page.GetByTestId("button.confirmdeactivated").ClickAsync();
+            await Page.GotoAsync($"{Url}{_clientId}");
 
             // Assert
-            await Expect(Page.GetByRole(AriaRole.Link, new() { Name = name })).ToBeVisibleAsync();
+            await Expect(Page.GetByText($"{firstName} {lastname}", new() { Exact = true })).ToBeHiddenAsync();
         }
     }
 }

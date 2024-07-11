@@ -548,7 +548,8 @@ const ClientEditor = () => {
                                     inputfieldname='diagnoses'
                                     value={client.diagnoses?.map(d => d.id)}
                                     onChange={(values) => {handleDiagnosesChange(values)}}
-                                    key={JSON.stringify(client.id + "_diagnoses")} />
+                                    key={JSON.stringify(client.id + "_diagnoses")}
+                                    dataTestId='diagnoses' />
                             </LabelField>
 
                             <LabelField text='Uitkeringsvorm' required={false}>
@@ -563,7 +564,8 @@ const ClientEditor = () => {
                                     inputfieldname='benefitforms'
                                     value={client.benefitforms?.map(d => d.id)}
                                     onChange={(values) => {handleBenefitFormsChange(values)}}
-                                    key={JSON.stringify(client.id + "_benefitforms")} />
+                                    key={JSON.stringify(client.id + "_benefitforms")}
+                                    dataTestId='benefitforms' />
                             </LabelField>
 
                             <LabelField text='Burgerlijke staat' required={false}>
@@ -577,7 +579,8 @@ const ClientEditor = () => {
                                     required={false} 
                                     inputfieldname='maritalstatus'
                                     value={client.maritalstatus?.id}
-                                    onChange={(value) => {handleMaritalStatusChange(value)}} />
+                                    onChange={(value) => {handleMaritalStatusChange(value)}}
+                                    dataTestId='maritalstatus' />
                             </LabelField>
 
                             <LabelField text='Rijbewijs' required={false}>
@@ -592,7 +595,8 @@ const ClientEditor = () => {
                                     inputfieldname='driverslicences'
                                     value={client.driverslicences?.map(d => d.id)}
                                     onChange={(values) => {handleDriversLicensesChange(values)}}
-                                    key={JSON.stringify(client.id + "_driverslicences")} />
+                                    key={JSON.stringify(client.id + "_driverslicences")}
+                                    dataTestId='driverslicences' />
                             </LabelField>
 
                             {/* TODO: doelgroepregister with yes no dropdown
@@ -618,21 +622,23 @@ const ClientEditor = () => {
                             onRemoveObject={onRemoveWorkingContract}
                             onChangeObject={handleWorkingContractChange}
                             optionsDictionary={optionsDictionaryWorkingContract}
-                            key={JSON.stringify(client.id + "_workingcontracts")} />
+                            key={JSON.stringify(client.id + "_workingcontracts")}
+                            dataTestId='workingcontracts' />
 
                     </SlideToggleLabel>
 
                     <div className='button-container'>
                         <SaveButton
-                        buttonText= "Opslaan"
-                        loadingText = "Bezig met oplaan"
-                        successText = "Cliënt opgeslagen"
-                        errorText = "Fout tijdens opslaan"
-                        onSave={async () => {                                 
-                                return await saveClient(client!)
+                            buttonText= "Opslaan"
+                            loadingText = "Bezig met oplaan"
+                            successText = "Cliënt opgeslagen"
+                            errorText = "Fout tijdens opslaan"
+                            onSave={async () => {                                 
+                                    return await saveClient(client!)
+                                }
                             }
-                        }
-                        onResult={(apiResult) => handleSaveResult(apiResult, setConfirmMessage, setConfirmPopupOneButtonOpen, setCvsError, setErrorPopupOpen, setClient)} />
+                            onResult={(apiResult) => handleSaveResult(apiResult, setConfirmMessage, setConfirmPopupOneButtonOpen, setCvsError, setErrorPopupOpen, setClient)}
+                            dataTestId='button.save' />
                     </div>
                 </div>
             </div>
@@ -642,7 +648,7 @@ const ClientEditor = () => {
                 message={confirmMessage}
                 isOpen={isConfirmPopupOneButtonOpen}
                 onClose={handlePopUpConfirmClientSavedClick}
-                buttons={[{ text: 'Bevestigen', onClick: handlePopUpConfirmClientSavedClick, buttonType: {type:"Solid"}}]} />
+                buttons={[{ text: 'Bevestigen', dataTestId: 'button.confirm', onClick: handlePopUpConfirmClientSavedClick, buttonType: {type:"Solid"}}]} />
 
             <ErrorPopup 
                 error={cvsError} 

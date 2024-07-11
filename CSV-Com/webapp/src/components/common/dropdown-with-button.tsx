@@ -46,7 +46,6 @@ const DropdownWithButton = (props: IDropDownProps) => {
         setDropdownOptions(getSelectableOptions(props.options));
     }, [props.value, selectedOptions]); // Update method to update dropdown options.
 
-
     useEffect(() => {
         if (props.onChange) {
             props.onChange(selectedOptions);
@@ -63,8 +62,8 @@ const DropdownWithButton = (props: IDropDownProps) => {
                     inputfieldname={props.inputfieldname}
                     value={dropdownValue}
                     onChange={(e) => setDropdownValue(e)}
-                    dataTestId= />
-                <button className='add-extra-dropdown-btn' type='button'  onClick={() => {addOption(dropdownValue);}}>
+                    dataTestId={props.dataTestId} />
+                <button className='add-extra-dropdown-btn' type='button' data-testid={`${props.dataTestId}.add`} onClick={() => {addOption(dropdownValue);}}>
                     <FontAwesomeIcon className='ml-[0]' icon={faPlus} size="xl" style={{color: "#000000",}} />
                 </button>
             </div>
