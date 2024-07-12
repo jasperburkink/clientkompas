@@ -36,20 +36,21 @@ dotnet-test:
   script:
     - export ASPNETCORE_ENVIRONMENT=ocdev
     - cd CSV-Com
-    - dotnet test -c $BUILD_CONFIGURATION --logger "trx;LogFileName=TestResults.xml" --collect:"XPlat Code Coverage"
+    - dotnet test -c $BUILD_CONFIGURATION --logger "trx;LogFileName=TestResults.xml" --results-directory "./TestResults" --collect:"XPlat Code Coverage"
+    - find . -type f -name "*.trx"  # Controleer of de .trx bestanden aanwezig zijn
+    - find . -type f -name "*.cobertura.xml"  # Controleer of de coverage bestanden aanwezig zijn
   image: $DOTNET_IMAGE
   artifacts:
     paths:
-      - '**/*.trx'
-      - '**/TestResults.xml'
-      - '**/*.cobertura.xml'
+      - '**/TestResults/*.trx'
+      - '**/TestResults/**/*.xml'
+      - '**/TestResults/**/*.cobertura.xml'
     reports:
+      junit: '**/TestResults/TestResults.xml'
       coverage_report:
         coverage_format: cobertura
-        path: '**/*.cobertura.xml'
-      junit: 
-        - '**/TestResults.xml'
-    when: always  # Keep result files. Even when tests fail.
+        path: '**/TestResults/**/*.cobertura.xml'
+    when: always
   needs: [ "dotnet-build" ]
 
 node-build:

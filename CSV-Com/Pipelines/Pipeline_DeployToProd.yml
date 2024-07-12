@@ -42,18 +42,19 @@ dotnet-build:
 dotnet-test:
   stage: test
   script:
-    - export ASPNETCORE_ENVIRONMENT=ocdev  
-    - cd CSV-Com  
-    - dotnet test -c $BUILD_CONFIGURATION --collect:"XPlat Code Coverage" # Run and publish testresults with junit to gitlab
+    - export ASPNETCORE_ENVIRONMENT=ocdev
+    - cd CSV-Com
+    - dotnet test -c $BUILD_CONFIGURATION --logger "trx;LogFileName=TestResults.xml" --collect:"XPlat Code Coverage"
   image: $DOTNET_IMAGE
   artifacts:
     paths:
+      - '**/*.trx'
       - '**/TestResults.xml'
-      - '**/coverage.cobertura.xml'
+      - '**/*.cobertura.xml'
     reports:
       coverage_report:
         coverage_format: cobertura
-        path: '**/coverage.cobertura.xml'
+        path: '**/*.cobertura.xml'
       junit: 
         - '**/TestResults.xml'
     when: always  # Keep result files. Even when tests fail.
