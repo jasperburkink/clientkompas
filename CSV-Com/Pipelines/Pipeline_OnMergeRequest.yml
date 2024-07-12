@@ -35,8 +35,7 @@ dotnet-test:
   stage: test
   script:
     - export ASPNETCORE_ENVIRONMENT=ocdev
-    - cd CSV-Com  
-    - dotnet test -c $BUILD_CONFIGURATION --collect:"XPlat Code Coverage" # Run and publish testresults with junit to gitlab
+    - cd CSV-Com
     - dotnet test -c $BUILD_CONFIGURATION --logger "trx;LogFileName=TestResults.xml" --collect:"XPlat Code Coverage"
   image: $DOTNET_IMAGE
   artifacts:
