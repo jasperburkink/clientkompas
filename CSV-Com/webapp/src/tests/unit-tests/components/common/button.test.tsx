@@ -29,10 +29,11 @@ test('Renders_TextOnButton_HasCorrectText', () => {
 test('OnClickEvent_FireOnClick_EventHasBeenFired', () => {
     // Arrange
     const onClickMock = jest.fn();
+    const testid = "testid";
 
     // Act
-    const { getByTestId } = render(<Button buttonType={{ type: "Solid" }} text="Button1" onClick={onClickMock} />);
-    const buttonElement = getByTestId('button_test');    
+    const { getByTestId } = render(<Button buttonType={{ type: "Solid" }} text="Button1" dataTestId={testid} onClick={onClickMock} />);
+    const buttonElement = getByTestId(testid);    
     fireEvent.click(buttonElement);
 
     // Assert
