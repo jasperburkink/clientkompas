@@ -34,14 +34,12 @@ dotnet-build:
 dotnet-test:
   stage: test
   variables:
-    CONFIGURATION: "Debug"
     COVERAGE_FLAG: "XPlat Code Coverage"
     LOGGER_FLAG: "junit;LogFilePath=./TestResults/test-results.xml;MethodFormat=Class;FailureBodyFormat=Verbose"
   script:
     - export ASPNETCORE_ENVIRONMENT=ocdev
     - cd $SOLUTION_FOLDER
     - dotnet test -c $BUILD_CONFIGURATION --logger "$LOGGER_FLAG" --collect:"$COVERAGE_FLAG"
-    - ls -R .
   image: $DOTNET_IMAGE
   artifacts:
     paths:
