@@ -36,16 +36,16 @@ dotnet-test:
   script:
     - export ASPNETCORE_ENVIRONMENT=ocdev
     - cd CSV-Com
-    - dotnet test -c $BUILD_CONFIGURATION --logger "junit;LogFilePath=./junit/junit-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose" --collect:"XPlat Code Coverage"
+    - dotnet test -c $BUILD_CONFIGURATION --logger "junit;LogFilePath=./TestResults/test-results.xml;MethodFormat=Class;FailureBodyFormat=Verbose" --collect:"XPlat Code Coverage"
     - ls -R .
   image: $DOTNET_IMAGE
   artifacts:
     paths:
-      - CSV-Com/**/TestResults/*.trx
+      # - CSV-Com/**/TestResults/*.trx
       - CSV-Com/**/TestResults/**/*.xml
       - CSV-Com/**/TestResults/**/*.cobertura.xml
     reports:
-      junit: CSV-Com/**/TestResults/*.trx
+      junit: CSV-Com/**/TestResults/**/test-results.xml
       coverage_report:
         coverage_format: cobertura
         path: CSV-Com/**/TestResults/**/*.cobertura.xml
