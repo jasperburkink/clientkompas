@@ -33,22 +33,25 @@ dotnet-build:
 
 dotnet-test:
   stage: test
+  variables:
+    CONFIGURATION: "Debug"
+    COVERAGE_FLAG: "XPlat Code Coverage"
+    LOGGER_FLAG: "junit;LogFilePath=./TestResults/test-results.xml;MethodFormat=Class;FailureBodyFormat=Verbose"
   script:
     - export ASPNETCORE_ENVIRONMENT=ocdev
-    - cd CSV-Com
-    - dotnet test -c $BUILD_CONFIGURATION --logger "junit;LogFilePath=./TestResults/test-results.xml;MethodFormat=Class;FailureBodyFormat=Verbose" --collect:"XPlat Code Coverage"
+    - cd $SOLUTION_FOLDER
+    - dotnet test -c $BUILD_CONFIGURATION --logger "$LOGGER_FLAG" --collect:"$COVERAGE_FLAG"
     - ls -R .
   image: $DOTNET_IMAGE
   artifacts:
     paths:
-      # - CSV-Com/**/TestResults/*.trx
-      - CSV-Com/**/TestResults/**/*.xml
-      - CSV-Com/**/TestResults/**/*.cobertura.xml
+      - $SOLUTION_FOLDER/**/TestResults/**/test-results.xml
+      - $SOLUTION_FOLDER/**/TestResults/**/*.cobertura.xml
     reports:
-      junit: CSV-Com/**/TestResults/**/test-results.xml
+      junit: $SOLUTION_FOLDER/**/TestResults/**/test-results.xml
       coverage_report:
         coverage_format: cobertura
-        path: CSV-Com/**/TestResults/**/*.cobertura.xml
+        path: $SOLUTION_FOLDER/**/TestResults/**/*.cobertura.xml
     when: always
   needs: ["dotnet-build"]
 
