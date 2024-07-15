@@ -8,7 +8,7 @@ export interface InputFieldProps {
     required: boolean,
     inputfieldtype: InputFieldType,
     className?: string,
-    onChange?: (value: string) => void
+    onChange?: (value: string) => void,
     dataTestId?: string;
 }
 

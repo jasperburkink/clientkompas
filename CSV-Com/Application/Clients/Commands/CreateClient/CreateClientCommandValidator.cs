@@ -23,7 +23,7 @@ namespace Application.Clients.Commands.CreateClient
             RuleFor(c => c.HouseNumberAddition).ValidateAddressHouseNumberAddition();
             RuleFor(c => c.Residence).ValidateAddressResidence();
             RuleFor(c => c.TelephoneNumber).ValidateClientTelephoneNumber();
-            RuleFor(c => c.EmailAddress).ValidateClientEmailAddress(_unitOfWork, client => { return 0; });
+            RuleFor(c => c.EmailAddress).ValidateClientEmailAddress(_unitOfWork, client => 0);
             RuleFor(c => c.DateOfBirth).ValidateClientDateOfBirth();
             RuleFor(c => c.Remarks).ValidateClientRemarks();
             RuleFor(c => c.EmergencyPeople).ValidateClientEmergencyPeople();
