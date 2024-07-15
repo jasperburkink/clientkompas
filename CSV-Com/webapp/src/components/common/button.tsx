@@ -8,6 +8,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
     buttonType: ButtonType;
     isOpen?: boolean;
     setIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+    dataTestId?: string;
 }
 
 export const Button = (props: ButtonProps) => {
@@ -25,9 +26,9 @@ export const Button = (props: ButtonProps) => {
 
     return (
         <button
-            data-testid='button_test'
             onClick={handleClick}
             className={combinedClassName}
+            data-testid={props.dataTestId}
         >
             {props.text}
         </button>

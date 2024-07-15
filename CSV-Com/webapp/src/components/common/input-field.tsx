@@ -8,7 +8,8 @@ export interface InputFieldProps {
     required: boolean,
     inputfieldtype: InputFieldType,
     className?: string,
-    onChange?: (value: string) => void;
+    onChange?: (value: string) => void,
+    dataTestId?: string;
 }
 
 export const InputField = (props: InputFieldProps) => {
@@ -20,6 +21,7 @@ export const InputField = (props: InputFieldProps) => {
         value={props.value}
         type={props.inputfieldtype.type}
         placeholder={props.placeholder}
-        required={props.required} />
+        required={props.required}
+        data-testid={props.dataTestId}  />
      </div>
 )};

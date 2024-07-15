@@ -55,15 +55,16 @@ namespace Application.Common.Rules
                 .MaximumLength(ClientConstants.TelephoneNumberMaxLength).WithMessage($"{nameof(Client.TelephoneNumber)}  mag niet langer zijn dan {ClientConstants.TelephoneNumberMaxLength} karakters.");
         }
 
-        public static IRuleBuilderOptions<T, string> ValidateClientEmailAddress<T>(this IRuleBuilder<T, string> ruleBuilder, IUnitOfWork unitOfWork)
+        public static IRuleBuilderOptions<T, string> ValidateClientEmailAddress<T>(this IRuleBuilder<T, string> ruleBuilder, IUnitOfWork unitOfWork, Func<T, int> getCurrentClientId)
         {
             return ruleBuilder
                 .NotEmpty().WithMessage($"{nameof(Client.EmailAddress)} is verplicht.")
                 .EmailAddress().WithMessage($"{nameof(Client.EmailAddress)} is geen geldig e-mailadres.")
                 .MaximumLength(ClientConstants.EmailAddressMaxLength).WithMessage($"{nameof(Client.EmailAddress)}  mag niet langer zijn dan {ClientConstants.EmailAddressMaxLength} karakters.")
-                .MustAsync(async (email, cancellationToken) =>
+                .MustAsync(async (client, email, cancellationToken) =>
                 {
-                    return !await unitOfWork.ClientRepository.ExistsAsync(c => c.EmailAddress == email, cancellationToken);
+                    var currentClientId = getCurrentClientId(client);
+                    return !await unitOfWork.ClientRepository.ExistsAsync(c => c.EmailAddress == email && c.Id != currentClientId, cancellationToken);
                 }).WithMessage($"{nameof(Client.EmailAddress)} is al in gebruik voor een andere cliënt.");
         }
 
