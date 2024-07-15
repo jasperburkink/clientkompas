@@ -23,6 +23,7 @@ interface DomainObjectInputProps<T>{
     onRemoveObject: (removedObject: T) => void;
     onChangeObject: (updatedObject: T, index: number) => void,
     optionsDictionary?: { [key: string] : DropdownObject[] };
+    dataTestId?: string;
 }
 
 const DomainObjectInput = <T extends Record<string, any>>(props: DomainObjectInputProps<T>) => {
@@ -62,6 +63,7 @@ const DomainObjectInput = <T extends Record<string, any>>(props: DomainObjectInp
                         let textValue: string  = customLabelsForInterface[key] ? customLabelsForInterface[key] : key;
                         let inputType: string = 'text';
                         inputType = getInputFieldType(value, key, props.optionsDictionary);
+                        let dataTestId: string = `${props.dataTestId}.${key}.${(domainIndex+1)}`;
 
                         const isFirstField = fieldIndex === 0;
                         const isLastField = fieldIndex === orderedFields.length - 1;
@@ -101,6 +103,7 @@ const DomainObjectInput = <T extends Record<string, any>>(props: DomainObjectInp
                                 isFirstField,
                                 onChangeField,
                                 domainIndex,
+                                dataTestId,
                                 options)
                         );
                     })}
@@ -113,7 +116,7 @@ const DomainObjectInput = <T extends Record<string, any>>(props: DomainObjectInp
     return <>
         <Label text={props.label} className={`domain-object-label ${props.className}`} strong={true} />
         {inputFields}
-        <Button buttonType={{type:"Underline"}} text={`Voeg nog een ${props.labelType} toe`} className='domain-object-add-button' onClick={handleAddObject} />
+        <Button buttonType={{type:"Underline"}} text={`Voeg nog een ${props.labelType} toe`} className='domain-object-add-button' dataTestId={`${props.dataTestId}.add`} onClick={handleAddObject} />
         </>;
 };
 
@@ -132,20 +135,21 @@ function getDomainObjectField<T extends Record<string, any>>(
     isFirstField: boolean, 
     onChange: (updatedValue: any, index: number, inputType: string) => void, 
     domainIndex: number,
+    dataTestId: string,
     options?: DropdownObject[]) {
     let fieldComponent;
     
     switch (inputType) {
         case 'date':
-          fieldComponent = getDateField(textValue, requiredDomainObject, value, onChange, inputType, domainIndex);  
+          fieldComponent = getDateField(textValue, requiredDomainObject, value, onChange, inputType, domainIndex, dataTestId);  
             break;
         case 'dropdown':
             options 
-            ? fieldComponent = getDropdownField(textValue, requiredDomainObject, value, onChange, inputType, domainIndex, options)
-            : fieldComponent = getTextField(textValue, requiredDomainObject, value, onChange, inputType, domainIndex);
+            ? fieldComponent = getDropdownField(textValue, requiredDomainObject, value, onChange, inputType, domainIndex, options, dataTestId)
+            : fieldComponent = getTextField(textValue, requiredDomainObject, value, onChange, inputType, domainIndex, dataTestId);
             break;
         default:
-            fieldComponent = getTextField(textValue, requiredDomainObject, value, onChange, inputType, domainIndex);
+            fieldComponent = getTextField(textValue, requiredDomainObject, value, onChange, inputType, domainIndex, dataTestId);
             break;
     }
 
@@ -170,14 +174,16 @@ function getDateField(
     value: Date,
     onChange: (updatedValue: Moment | null, index: number, inputType: string) => void,
     inputType: string,
-    index: number) {
+    index: number,
+    dataTestId: string) {
     return <div className="domain-object-field-container">
         <LabelField text={textValue} required={requiredDomainObject}>
             <DatePicker 
                 placeholder='b.v. 01-01-2001' 
                 required={requiredDomainObject} 
                 value={value}
-                onChange={(newValue) => {onChange(newValue, index, inputType)}} />
+                onChange={(newValue) => {onChange(newValue, index, inputType)}}
+                dataTestId={dataTestId} />
         </LabelField>   
     </div>;
 }
@@ -188,7 +194,8 @@ function getTextField(
     value: string, 
     onChange: (updatedValue: string, index: number, inputType: string) => void, 
     inputType: string,
-    domainIndex: number) {
+    domainIndex: number,
+    dataTestId: string) {
     return <div className="domain-object-field-container">
         <LabelField text={textValue} required={requiredDomainObject}>
             <InputField 
@@ -196,7 +203,8 @@ function getTextField(
                 value={value}
                 required={requiredDomainObject} 
                 placeholder={textValue} 
-                onChange={(newValue) => {onChange(newValue, domainIndex, inputType)}} />
+                onChange={(newValue) => {onChange(newValue, domainIndex, inputType)}}
+                dataTestId={dataTestId} />
         </LabelField>
     </div>;
 }
@@ -208,7 +216,8 @@ function getDropdownField(
     onChange: (updatedValue: string | number, index: number, inputType: string) => void, 
     inputType: string,    
     index: number,
-    options: DropdownObject[]) {
+    options: DropdownObject[],
+    dataTestId: string) {
     return <div className="domain-object-field-container">
         <LabelField text={textValue} required={requiredDomainObject}>
             <Dropdown 
@@ -216,7 +225,8 @@ function getDropdownField(
                 options={options}
                 value={value}
                 required={requiredDomainObject}
-                onChange={(newValue) => {onChange(newValue, index, inputType)}} />
+                onChange={(newValue) => {onChange(newValue, index, inputType)}}
+                dataTestId={dataTestId} />
         </LabelField>
     </div>;
 }

@@ -142,7 +142,7 @@ function Clients() {
 
                 {status === StatusEnum.REJECTED && id && !client &&
                     // TODO: Client should be shown, but is not found. Show error message.
-                    <div>Client with client id ${id} not found!</div>
+                    <div>Client with client id '{id}' not found!</div>
                 }
 
                 {(status === StatusEnum.IDLE || status === StatusEnum.PENDING) &&
@@ -173,7 +173,7 @@ function Clients() {
                     {/* Client number */}                    
                     <div className='client-number client-label-value'>
                         <Label text='Cliëntnummer: ' />
-                        <Label data-testid="client-number-value" text={client.id+''} />
+                        <Label data-testid="client-number-value" dataTestId='clientid' text={client.id+''} />
                     </div>
                     
                     {/* Client main info 2 */}
@@ -267,14 +267,14 @@ function Clients() {
 
                     </SlideToggleLabel>
 
-                    <Button buttonType={{type:"Solid"}} text="Deactivateer cliënt" className='client-deactivate-button' onClick={() => deactivateClientClick(client)} data-testid="deactivate-button" />
+                    <Button buttonType={{type:"Solid"}} text="Deactivateer cliënt" className='client-deactivate-button' onClick={() => deactivateClientClick(client)} dataTestId="button.deactivate" />
                     <ConfirmPopup
                     message="Weet u zeker dat u de cliënt wilt deactiveren?"
                     isOpen={isDeactivateConfirmPopupOpen}
                     onClose={cancelDeactivateClient}
                     buttons={
                         [
-                            { text: 'Bevestigen', onClick: async () => 
+                            { text: 'Bevestigen', dataTestId: 'button.confirmok', onClick: async () => 
                             {
                                 setDeactivatedClient(await deactivateClientConfirmed(client, clientContext));
 
@@ -291,7 +291,7 @@ function Clients() {
                     onClose={closeConfirmedDeactivateClientPopUp}
                     buttons={
                         [
-                            { text: 'Ok', onClick: () => 
+                            { text: 'Ok', dataTestId: 'button.confirmdeactivated', onClick: () => 
                             {
                                 if(deactivateClient !== null) {
                                     nav(PATH_CLIENTS);

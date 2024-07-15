@@ -13,17 +13,19 @@ interface IDropDownProps {
     required: boolean;
     inputfieldname: string;
     value?: number;
-    onChange?: (value: number) => void;
+    onChange?: (value: number) => void
+    dataTestId?: string;
 }
 
 const OPTION_TEXT = 'Kies uit de lijst'
 
 export const Dropdown = (props: IDropDownProps) => (  
     <select name={props.inputfieldname} id=""  className={`dropdown ${props.className}`}  required={props.required} value={props.value}
-    onChange={(e) => {
-        const selectedValue = parseInt(e.target.value);
-        props.onChange?.(selectedValue);
-    }}>
+        onChange={(e) => {
+            const selectedValue = parseInt(e.target.value);
+            props.onChange?.(selectedValue);
+        }}
+        data-testid={props.dataTestId}>
         <option key={0} value=''>{OPTION_TEXT}</option>
         {props.options.map((item) => (
             <option key={item.value} value={item.value} >{item.label}</option>
