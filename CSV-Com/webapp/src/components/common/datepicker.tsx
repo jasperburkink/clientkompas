@@ -19,7 +19,7 @@ export interface DatePickerProps {
     value?: Date | null,
     required: boolean,
     className?: string,
-    onChange?: (value: Moment.Moment | null) => void
+    onChange?: (value: Moment.Moment | null) => void,
     dataTestId?: string;
 }
 
