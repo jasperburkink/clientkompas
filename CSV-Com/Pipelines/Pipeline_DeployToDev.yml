@@ -43,23 +43,25 @@ dotnet-build:
 
 dotnet-test:
   stage: test
+  variables:
+    COVERAGE_FLAG: "XPlat Code Coverage"
+    LOGGER_FLAG: "junit;LogFilePath=./TestResults/test-results.xml;MethodFormat=Class;FailureBodyFormat=Verbose"
   script:
     - export ASPNETCORE_ENVIRONMENT=ocdev
-    - cd CSV-Com  
-    - dotnet test -c $BUILD_CONFIGURATION --collect:"XPlat Code Coverage" # Run and publish testresults with junit to gitlab
+    - cd $SOLUTION_FOLDER
+    - dotnet test -c $BUILD_CONFIGURATION --logger "$LOGGER_FLAG" --collect:"$COVERAGE_FLAG"
   image: $DOTNET_IMAGE
   artifacts:
     paths:
-      - '**/TestResults.xml'
-      - '**/coverage.cobertura.xml'
+      - $SOLUTION_FOLDER/**/TestResults/**/test-results.xml
+      - $SOLUTION_FOLDER/**/TestResults/**/*.cobertura.xml
     reports:
+      junit: $SOLUTION_FOLDER/**/TestResults/**/test-results.xml
       coverage_report:
         coverage_format: cobertura
-        path: '**/coverage.cobertura.xml'
-      junit: 
-        - '**/TestResults.xml'
-    when: always  # Keep result files. Even when tests fail.
-  needs: [ "dotnet-build" ]
+        path: $SOLUTION_FOLDER/**/TestResults/**/*.cobertura.xml
+    when: always
+  needs: ["dotnet-build"]
 
 node-build:
   before_script:
