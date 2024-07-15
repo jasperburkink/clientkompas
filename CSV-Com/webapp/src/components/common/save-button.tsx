@@ -13,10 +13,10 @@ interface SaveButtonProps<T> {
   errorText: string;
   onSave: () => Promise<ApiResult<T>>;
   onResult: (result: ApiResult<T>) => void;
+  dataTestId?: string;
 }
 
-
-const SaveButton = <T,>({ buttonText, loadingText, successText, errorText, onSave, onResult }: SaveButtonProps<T>) => {
+const SaveButton = <T,>({ buttonText, loadingText, successText, errorText, onSave, onResult, dataTestId }: SaveButtonProps<T>) => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
@@ -47,7 +47,7 @@ const SaveButton = <T,>({ buttonText, loadingText, successText, errorText, onSav
         onClick={saveAction}
         className={IsButtonVisible(error, success)}
         disabled={loading || error || success}
-        data-testid="button.save"
+        data-testid={dataTestId}
       >
         {loading && <Spinner data-testid="spinner" />}
         {success && (
@@ -87,4 +87,3 @@ function ButtonTextShowcase(showText: boolean, loading: boolean, success: boolea
 function ButtonTextLoader(loading: boolean, loadingText: string, success: boolean, successText: string, buttonText: string): React.ReactNode {
   return loading ? loadingText : success ? successText : buttonText;
 }
-
