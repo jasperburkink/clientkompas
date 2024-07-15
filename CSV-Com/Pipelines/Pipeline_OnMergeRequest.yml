@@ -36,7 +36,7 @@ dotnet-test:
   script:
     - export ASPNETCORE_ENVIRONMENT=ocdev
     - cd CSV-Com
-    - dotnet test -c $BUILD_CONFIGURATION --logger "trx" --collect:"XPlat Code Coverage"
+    - dotnet test -c $BUILD_CONFIGURATION --logger "junit;LogFilePath=./junit/junit-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose" --collect:"XPlat Code Coverage"
     - ls -R .
   image: $DOTNET_IMAGE
   artifacts:
