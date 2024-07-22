@@ -1,9 +1,4 @@
-﻿using Application.BenefitForms.Queries.GetBenefitForm;
-using Application.Clients.Dtos;
-using Application.Common.Mappings;
-using Application.Diagnoses.Queries.GetDiagnosis;
-using Application.DriversLicences.Queries;
-using Application.MaritalStatuses.Queries.GetMaritalStatus;
+﻿using Application.Common.Mappings;
 using AutoMapper;
 using Domain.CVS.Domain;
 
@@ -39,15 +34,15 @@ namespace Application.Clients.Queries.GetClientEdit
 
         public string EmailAddress { get; set; }
 
-        public MaritalStatusDto? MaritalStatus { get; set; }
+        public GetClientEditMaritalStatusDto? MaritalStatus { get; set; }
 
-        public virtual ICollection<DriversLicenceDto> DriversLicences { get; set; }
+        public virtual ICollection<GetClientEditDriversLicenceDto> DriversLicences { get; set; }
 
-        public virtual ICollection<DiagnosisDto> Diagnoses { get; set; }
+        public virtual ICollection<GetClientEditDiagnosisDto> Diagnoses { get; set; }
 
-        public virtual ICollection<EmergencyPersonDto> EmergencyPeople { get; set; }
+        public virtual ICollection<GetClientEditEmergencyPersonDto> EmergencyPeople { get; set; }
 
-        public virtual ICollection<BenefitFormDto> BenefitForms { get; set; }
+        public virtual ICollection<GetClientEditBenefitFormDto> BenefitForms { get; set; }
 
         public virtual ICollection<GetClientEditWorkingContractDto> WorkingContracts { get; set; }
 
@@ -61,7 +56,7 @@ namespace Application.Clients.Queries.GetClientEdit
                 .ForMember(cDto => cDto.Gender, s => s.MapFrom(c => c.Gender))
                 .ForMember(cDto => cDto.StreetName, address => address.MapFrom(c => c.Address.StreetName))
                 .ForMember(cDto => cDto.HouseNumber, address => address.MapFrom(c => c.Address.HouseNumber))
-                .ForMember(cDto => cDto.HouseNumberAddition, address => address.MapFrom(c => c.Address.HouseNumberAddition))
+                .ForMember(cDto => cDto.HouseNumberAddition, address => address.MapFrom(c => c.Address.HouseNumberAddition ?? string.Empty))
                 .ForMember(cDto => cDto.PostalCode, address => address.MapFrom(c => c.Address.PostalCode))
                 .ForMember(cDto => cDto.Residence, address => address.MapFrom(c => c.Address.Residence));
         }

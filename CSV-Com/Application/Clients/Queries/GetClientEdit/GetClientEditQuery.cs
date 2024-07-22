@@ -1,4 +1,5 @@
-﻿using Application.Common.Interfaces.CVS;
+﻿using Application.Common.Exceptions;
+using Application.Common.Interfaces.CVS;
 using AutoMapper;
 using MediatR;
 
@@ -24,7 +25,10 @@ namespace Application.Clients.Queries.GetClientEdit
         {
             // TODO: Find a better solution for including properties.
             var client = await _unitOfWork.ClientRepository.GetByIDAsync(request.ClientId, cancellationToken: cancellationToken, includeProperties: "DriversLicences,BenefitForms,Diagnoses,EmergencyPeople,WorkingContracts,MaritalStatus");
-            return _mapper.Map<GetClientEditDto>(client);
+
+            return client == null
+                ? throw new NotFoundException($"Client with id '{request.ClientId}' does not exist.")
+                : _mapper.Map<GetClientEditDto>(client);
         }
     }
 }

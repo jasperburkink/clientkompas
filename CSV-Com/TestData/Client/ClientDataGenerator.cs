@@ -3,6 +3,7 @@ using Domain.CVS.Domain;
 using Domain.CVS.Enums;
 using TestData.Diagnosis;
 using TestData.DriversLicence;
+using TestData.EmergencyPerson;
 using TestData.MaritalStatus;
 using TestData.Organization;
 
@@ -20,6 +21,7 @@ namespace TestData.Client
             ITestDataGenerator<Domain.CVS.Domain.Organization> testDataGeneratorOrganization = new OrganizationDataGenerator();
             ITestDataGenerator<Domain.CVS.Domain.DriversLicence> testDataGeneratorDriverLicence = new DriversLicenceDataGenerator();
             ITestDataGenerator<Domain.CVS.Domain.Diagnosis> testDataGeneratorDiagnosis = new DiagnosisDataGenerator();
+            ITestDataGenerator<Domain.CVS.Domain.EmergencyPerson> testDataGeneratorEmergencyPerson = new EmergencyPersonDataGenerator();
 
             return new AutoFaker<Domain.CVS.Domain.Client>()
                 .RuleFor(c => c.Id, 0)
@@ -42,7 +44,7 @@ namespace TestData.Client
                 .RuleFor(c => c.BenefitForms, f => f.Make(3, () => new BenefitForm { Id = 0, Name = f.Random.String2(10) }))
                 .RuleFor(c => c.DriversLicences, f => f.Make(3, () => testDataGeneratorDriverLicence.Create()))
                 .RuleFor(c => c.Diagnoses, f => f.Make(3, () => testDataGeneratorDiagnosis.Create()))
-                .RuleFor(c => c.EmergencyPeople, f => f.Make(3, () => new EmergencyPerson { Name = faker.Person.FullName, TelephoneNumber = faker.Phone.PhoneNumber() }))
+                .RuleFor(c => c.EmergencyPeople, f => f.Make(3, () => testDataGeneratorEmergencyPerson.Create()))
                 .RuleFor(c => c.WorkingContracts, f => f.Make(5, () => new WorkingContract
                 {
                     Id = 0,
