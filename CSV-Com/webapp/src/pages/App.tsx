@@ -29,6 +29,7 @@ import EmergencyPerson from 'types/model/EmergencyPerson';
 import WorkingContract from 'types/model/WorkingContract';
 import LabelField from 'components/common/label-field';
 import ApiResult from 'types/common/api-result';
+import Menu from 'components/common/menu';
 
 function App() {
     const data = [
@@ -149,19 +150,9 @@ function App() {
     return (
         <div className="flex flex-col lg:flex-row h-screen lg:h-auto">
             <div id='staticSidebar' className='sidebarContentPush'></div>
-                {/* TODO: Move menu to own control. Is already a task on the backlog. */}
-                <div className='header-menu fixed'>
-                    <Sidebar>
-                        <NavButton text="Cliënten" icon="Gebruikers" />
-                        <NavButton text="Uren registratie" icon="Klok" />
-                        <NavButton text="Organistatie" icon="Gebouw" />
-                        <NavButton text="Gebruiker" icon="Gebruiker" />
-                        <NavButton text="Uitloggen" icon="Uitloggen" />
-                    </Sidebar>
-                    <SidebarGray>
-                        <NavTitle lijstNaam="Empty list" />                        
-                    </SidebarGray>    
-                </div>
+                <Menu>
+                    <NavTitle lijstNaam="Empty list" />  
+                </Menu>   
                 <div className='lg:grid lg:grid-cols-2 lg:gap-10 pt-[140px] m-2'>
                     <p>Header</p>
                     <Header text="Dit zijn alle beschikbare componenten." />

@@ -1,9 +1,7 @@
 import './client-editor.css';
 import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate, Navigate } from 'react-router-dom';
-import { Sidebar } from 'components/sidebar/sidebar';
-import { NavButton } from 'components/nav/nav-button';
-import { SidebarGray } from 'components/sidebar/sidebar-gray';
+import Menu from 'components/common/menu';
 import { NavTitle } from 'components/nav/nav-title';
 import SearchClients from 'components/clients/search-clients';
 import { Copyright } from 'components/common/copyright';
@@ -42,6 +40,8 @@ import Organization from 'types/model/Organization';
 import { nameof } from 'types/common/nameof';
 
 const ClientEditor = () => {
+    
+
     const initialClient: Client = { 
         id: 0,
         firstname: '',
@@ -358,20 +358,12 @@ const ClientEditor = () => {
         <div className="flex flex-col lg:flex-row h-screen lg:h-auto">
             <div className='lg:flex w-full'>
                 <div id='staticSidebar' className='sidebarContentPush'></div>
-                {/* TODO: Move menu to own control. Is already a task on the backlog. */}
-                <div className='header-menu fixed'>
-                    <Sidebar>
-                        <NavButton text="Cliënten" icon="Gebruikers" />
-                        <NavButton text="Uren registratie" icon="Klok" />
-                        <NavButton text="Organistatie" icon="Gebouw" />
-                        <NavButton text="Gebruiker" icon="Gebruiker" />
-                        <NavButton text="Uitloggen" icon="Uitloggen" />
-                    </Sidebar>
-                    <SidebarGray>
-                        <NavTitle lijstNaam="Cliënten" />
-                        <SearchClients />
-                    </SidebarGray>    
-                </div>
+                
+                <Menu>
+                    <NavTitle lijstNaam="Cliënten" />
+                    <SearchClients />
+                </Menu>
+
                 <div className="client-create-container">
                     <div className='client-create-header'>
                         <Header text="Cliënt aanmaken" className='client-create-header-main' />

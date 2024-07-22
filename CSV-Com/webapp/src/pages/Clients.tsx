@@ -6,9 +6,7 @@ import { Header } from 'components/common/header';
 import { Label } from 'components/common/label';
 import { LinkButton } from 'components/common/link-button';
 import { Button } from 'components/common/button';
-import { Sidebar } from 'components/sidebar/sidebar';
-import { NavButton } from 'components/nav/nav-button';
-import { SidebarGray } from 'components/sidebar/sidebar-gray';
+import Menu from 'components/common/menu';
 import { ProfilePicture } from 'components/common/profile-picture';
 import { Copyright } from 'components/common/copyright';
 import { NavTitle } from 'components/nav/nav-title';
@@ -32,7 +30,6 @@ const DATE_FORMAT = 'DD-MM-yyyy';
 function Clients() {
     const PROFILE_PIC_ROW_SPAN_DEFAULT_VALUE = 4;
     const PATH_CLIENTS = '/Clients/';
-
     const clientContext = useContext(ClientContext)
     const [client, setClient] = useState<ClientQuery | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -125,20 +122,11 @@ function Clients() {
         <div className="flex flex-col lg:flex-row h-screen lg:h-auto">
             <div className='lg:flex w-full'>
             <div id='staticSidebar' className='sidebarContentPush'></div>
-                {/* TODO: Move menu to own control. Is already a task on the backlog. */}
-                <div className='header-menu fixed'>
-                    <Sidebar>
-                        <NavButton text="Cliënten" icon="Gebruikers" />
-                        <NavButton text="Uren registratie" icon="Klok" />
-                        <NavButton text="Organistatie" icon="Gebouw" />
-                        <NavButton text="Gebruiker" icon="Gebruiker" />
-                        <NavButton text="Uitloggen" icon="Uitloggen" />
-                    </Sidebar>
-                    <SidebarGray>
-                        <NavTitle lijstNaam="Cliënten" />
-                        <SearchClients />
-                    </SidebarGray>    
-                </div>
+
+                <Menu>
+                    <NavTitle lijstNaam="Cliënten" />
+                    <SearchClients />
+                </Menu>
 
                 {status === StatusEnum.REJECTED && id && !client &&
                     // TODO: Client should be shown, but is not found. Show error message.
