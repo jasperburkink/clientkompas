@@ -164,14 +164,4 @@
             h-14
         }
     }
-    
-    .header-menu{
-        @apply 
-        fixed 
-        lg:flex 
-        lg:static 
-        h-[140px] 
-        w-full 
-        lg:w-auto;
-    }
 }

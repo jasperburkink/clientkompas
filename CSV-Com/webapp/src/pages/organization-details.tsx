@@ -21,6 +21,7 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { IOrganizationContext, OrganizationContext } from './organization-context';
 import Organization from 'types/model/Organization';
 import ConfirmPopup from 'components/common/confirm-popup';
+import Menu from 'components/common/menu';
 
 const NO_INFO = 'Geen informatie beschikbaar';
 const DATE_FORMAT = 'DD-MM-yyyy';
@@ -70,20 +71,11 @@ function OrganizationDetails() {
         <div className="flex flex-col lg:flex-row h-screen lg:h-auto">
             <div className='lg:flex w-full'>
             <div id='staticSidebar' className='sidebarContentPush'></div>
-                {/* TODO: Move menu to own control. Is already a task on the backlog. */}
-                <div className='header-menu fixed'>
-                    <Sidebar>
-                        <NavButton text="Cliënten" icon="Gebruikers" />
-                        <NavButton text="Uren registratie" icon="Klok" />
-                        <NavButton text="Organistatie" icon="Gebouw" />
-                        <NavButton text="Gebruiker" icon="Gebruiker" />
-                        <NavButton text="Uitloggen" icon="Uitloggen" />
-                    </Sidebar>
-                    <SidebarGray>
-                        <NavTitle lijstNaam="Organisatie" />
-                        <SearchClients />
-                    </SidebarGray>    
-                </div>
+                
+                <Menu>
+                    <NavTitle lijstNaam="Organisatie" />
+                    <SearchClients /> {/* TODO: Organization search */}
+                </Menu>
 
                 {status === StatusEnum.REJECTED && id && !organization &&
                     // TODO: Organization should be shown, but is not found. Show error message.

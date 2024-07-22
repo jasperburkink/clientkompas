@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+
+    .header-menu{
+        @apply
+        z-40
+        fixed
+        lg:flex
+        lg:static
+        h-[140px]
+        w-full
+        lg:w-auto;
+    }
+    
+}
