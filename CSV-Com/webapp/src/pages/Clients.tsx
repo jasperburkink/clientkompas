@@ -153,9 +153,9 @@ function Clients() {
                     </div>
 
                     <div className='client-info-main'>                        
-                        <Label text={client.firstname + ' ' + (!client.prefixlastname ? '' : client.prefixlastname + ' ')  + client.lastname} />
-                        <Label text={client.streetname + ' ' + client.housenumber + (!client.housenumberaddition ? '' : client.housenumberaddition)} />
-                        <Label text={client.postalcode + ' ' + client.residence} />
+                        <Label dataTestId='client-fullname' text={client.firstname + ' ' + (!client.prefixlastname ? '' : client.prefixlastname + ' ')  + client.lastname} />
+                        <Label dataTestId='client-address-part1' text={client.streetname + ' ' + client.housenumber + (!client.housenumberaddition ? '' : client.housenumberaddition)} />
+                        <Label dataTestId='client-address-part2' text={client.postalcode + ' ' + client.residence} />
                     </div>
 
                     {/* Client number */}                    
@@ -168,17 +168,17 @@ function Clients() {
                     <div className='client-info-main-2'>                        
                         <div className='client-label-value'>
                             <Label text='Telefoon: ' />
-                            <Label text={client.telephonenumber} />
+                            <Label dataTestId='client-telephonenumber' text={client.telephonenumber} />
                         </div>
 
                         <div className='client-label-value'>
                             <Label text='E-mail: ' />
-                            <Label text={client.emailaddress} />
+                            <Label dataTestId='client-emailaddress' text={client.emailaddress} />
                         </div>
 
                         <div className='client-label-value'>
                             <Label text='Geboortedatum: ' />
-                            <Label text={Moment(client.dateofbirth).format(DATE_FORMAT)} />
+                            <Label dataTestId='client-dateofbirth' text={Moment(client.dateofbirth).format(DATE_FORMAT)} />
                         </div>                        
                     </div>
 
