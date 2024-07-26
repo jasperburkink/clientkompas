@@ -6,6 +6,13 @@ namespace TestData.Organization
     {
         public Faker<Domain.CVS.Domain.Organization> Faker { get => GetFaker(); }
 
+        public bool FillOptionalProperties { get; set; }
+
+        public OrganizationDataGenerator(bool fillOptionalProperties = true)
+        {
+            FillOptionalProperties = fillOptionalProperties;
+        }
+
         public Faker<Domain.CVS.Domain.Organization> GetFaker()
         {
             var faker = new Faker(FakerConfiguration.Localization);

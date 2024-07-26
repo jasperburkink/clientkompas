@@ -10,7 +10,7 @@ namespace Application.Clients.Queries.GetClientEdit
         public int ClientId { get; init; }
     }
 
-    internal class GetClientEditQueryHandler : IRequestHandler<GetClientEditQuery, GetClientEditDto>
+    public class GetClientEditQueryHandler : IRequestHandler<GetClientEditQuery, GetClientEditDto>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
