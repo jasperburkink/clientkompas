@@ -14,6 +14,7 @@ variables:
 stages: 
   - build
   - test
+  - coverage 
 
 dotnet-build:
   before_script:
@@ -30,65 +31,107 @@ dotnet-build:
   artifacts:
     paths:
       - '**/bin'
+      - '**/obj'
+    expire_in: 1 day
 
 dotnet-test:
   stage: test
   variables:
-    COVERAGE_FLAG: "XPlat Code Coverage"
     LOGGER_FLAG: "junit;LogFilePath=./TestResults/test-results.xml;MethodFormat=Class;FailureBodyFormat=Verbose"
   script:
     - export ASPNETCORE_ENVIRONMENT=ocdev
     - cd $SOLUTION_FOLDER
-    - dotnet test -c $BUILD_CONFIGURATION --logger "$LOGGER_FLAG" --collect:"$COVERAGE_FLAG"
+    - |
+      dotnet test \
+        -c $BUILD_CONFIGURATION \
+        --no-build \
+        --no-restore \
+        --logger "$LOGGER_FLAG" \
+        --results-directory "./TestResults" \
   image: $DOTNET_IMAGE
   artifacts:
     paths:
       - $SOLUTION_FOLDER/**/TestResults/**/test-results.xml
-      - $SOLUTION_FOLDER/**/TestResults/**/*.cobertura.xml
     reports:
       junit: $SOLUTION_FOLDER/**/TestResults/**/test-results.xml
-      coverage_report:
-        coverage_format: cobertura
-        path: $SOLUTION_FOLDER/**/TestResults/**/*.cobertura.xml
     when: always
   needs: ["dotnet-build"]
+  dependencies:
+    - dotnet-build
+
+# Coverage can not be retrieved while running tests on a artifact. Also coverage is only needed when running on merge-requests.
+dotnet-coverage:
+  stage: coverage
+  before_script:
+    - apt-get update && apt-get install -y --no-install-recommends libc6-dev libxml2
+    - dotnet tool install --global dotnet-coverage
+    - export PATH="$PATH:/root/.dotnet/tools"
+  script:
+    - export ASPNETCORE_ENVIRONMENT=ocdev
+    - cd $SOLUTION_FOLDER
+    - |
+      RESULTS_DIR="./TestResults"
+      mkdir -p $RESULTS_DIR
+      for project in $(find . -name '*Tests.csproj'); do
+        echo "Collecting coverage for $project"
+        pushd $(dirname $project)
+        dotnet-coverage collect dotnet test -f cobertura -o $RESULTS_DIR/coverage-$(basename $project .csproj).xml
+        popd
+      done
+  image: $DOTNET_IMAGE
+  artifacts:
+    paths:
+      - $SOLUTION_FOLDER/**/TestResults/coverage-*.xml
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: $SOLUTION_FOLDER/**/TestResults/coverage-*.xml
+    when: always
+  coverage: '/TOTAL\s+\d+%\s+\d+/'
+  needs: ["dotnet-test"]
+  dependencies:
+    - dotnet-test
 
 node-build:
   before_script:
-  - cd $SOLUTION_FOLDER/$NODE_FOLDER
-  - if [ -f "package-lock.json" ]; then
-  - echo "Please remove package-lock.json and don't use 'npm install', use 'yarn install' and 'yarn add' instead."
-  - exit 1
-  - fi
-  - yarn cache clean && yarn install
-  - export CI=false
+    - cd $SOLUTION_FOLDER/$NODE_FOLDER
+    - |
+      if [ -f "package-lock.json" ]; then
+        echo "Please remove package-lock.json and don't use 'npm install', use 'yarn install' and 'yarn add' instead."
+        exit 1
+      fi
+    - yarn cache clean && yarn install
+    - export CI=false
   stage: build
   script:
-  - yarn build
+    - yarn build
   image: $NODE_IMAGE
   artifacts:
     paths:
       - '$SOLUTION_FOLDER/$NODE_FOLDER/build/'
+      - '$SOLUTION_FOLDER/$NODE_FOLDER/node_modules/'
+    expire_in: 1 day
 
 node-test:
   before_script:
     - cd $SOLUTION_FOLDER/$NODE_FOLDER
-    - yarn install
   stage: test
   script:
     - npx nyc --reporter=cobertura npm run test:ci
   coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
   artifacts:
-    paths: # NOTE: Is it even necessary to artifact these files if their already being used in the reports? Keep this until we are sure that codecoverage is working
-      - '**/junit.xml'
-      - '**/coverage/'
-      - '**/coverage-final.json'
+    paths:
+      - $SOLUTION_FOLDER/$NODE_FOLDER/**/junit.xml
+      - $SOLUTION_FOLDER/$NODE_FOLDER/**/coverage/
+      - $SOLUTION_FOLDER/$NODE_FOLDER/**/coverage-final.json
     when: always
     reports:
       junit:
-        - '**/junit.xml'
+        - $SOLUTION_FOLDER/$NODE_FOLDER/**/junit.xml
       coverage_report:
         coverage_format: cobertura
-        path: '**/coverage-final.json'
+        path: $SOLUTION_FOLDER/$NODE_FOLDER/**/coverage-final.json
   image: $NODE_IMAGE
-  needs: [ "node-build" ]
+  needs: ["node-build"]
+  dependencies:
+    - node-build

@@ -7,13 +7,13 @@ namespace Domain.CVS.Domain
 {
     public class Client : BaseAuditableEntity
     {
-        public string FirstName { get; set; }
+        public required string FirstName { get; set; }
 
-        public string Initials { get; set; }
+        public required string Initials { get; set; }
 
-        public string PrefixLastName { get; set; }
+        public string? PrefixLastName { get; set; }
 
-        public string LastName { get; set; }
+        public required string LastName { get; set; }
 
         public string FullName
         {
@@ -28,15 +28,15 @@ namespace Domain.CVS.Domain
             set => _ = value;
         }
 
-        public Gender Gender { get; set; }
+        public required Gender Gender { get; set; }
 
-        public Address Address { get; set; }
+        public required Address Address { get; set; }
 
-        public string TelephoneNumber { get; set; }
+        public required string TelephoneNumber { get; set; }
 
-        public DateOnly DateOfBirth { get; set; }
+        public required DateOnly DateOfBirth { get; set; }
 
-        public string EmailAddress { get; set; }
+        public required string EmailAddress { get; set; }
 
         public MaritalStatus? MaritalStatus { get; set; }
 
@@ -52,7 +52,7 @@ namespace Domain.CVS.Domain
 
         public DateTime? DeactivationDateTime { get; private set; }
 
-        public string Remarks { get; set; }
+        public string? Remarks { get; set; }
 
         public DateTime Deactivate(DateTime deactivationDateTime)
         {

@@ -6,6 +6,8 @@ namespace TestData
     {
         public Faker<T> Faker { get; }
 
+        public bool FillOptionalProperties { get; set; }
+
         public T Create()
         {
             return Faker.Generate();

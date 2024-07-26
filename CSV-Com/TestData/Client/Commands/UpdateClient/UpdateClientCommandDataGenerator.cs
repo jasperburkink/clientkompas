@@ -13,6 +13,13 @@ namespace TestData.Client.Commands.UpdateClient
     {
         public Faker<UpdateClientCommand> Faker { get => GetFaker(); }
 
+        public bool FillOptionalProperties { get; set; }
+
+        public UpdateClientCommandDataGenerator(bool fillOptionalProperties = true)
+        {
+            FillOptionalProperties = fillOptionalProperties;
+        }
+
         private Faker<UpdateClientCommand> GetFaker()
         {
             var faker = new Faker(FakerConfiguration.Localization);

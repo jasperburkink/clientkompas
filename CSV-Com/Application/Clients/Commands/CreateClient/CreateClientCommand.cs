@@ -16,45 +16,45 @@ namespace Application.Clients.Commands.CreateClient
 {
     public record CreateClientCommand : IRequest<ClientDto>
     {
-        public string FirstName { get; set; }
+        public required string FirstName { get; set; }
 
-        public string Initials { get; set; }
+        public required string Initials { get; set; }
 
-        public string PrefixLastName { get; set; }
+        public required string PrefixLastName { get; set; }
 
-        public string LastName { get; set; }
+        public required string LastName { get; set; }
 
-        public Gender Gender { get; set; }
+        public required Gender Gender { get; set; }
 
-        public string StreetName { get; set; }
+        public required string StreetName { get; set; }
 
-        public int HouseNumber { get; set; }
+        public required int HouseNumber { get; set; }
 
-        public string HouseNumberAddition { get; set; }
+        public required string HouseNumberAddition { get; set; }
 
-        public string PostalCode { get; set; }
+        public required string PostalCode { get; set; }
 
-        public string Residence { get; set; }
+        public required string Residence { get; set; }
 
-        public string TelephoneNumber { get; set; }
+        public required string TelephoneNumber { get; set; }
 
-        public DateOnly DateOfBirth { get; set; }
+        public required DateOnly DateOfBirth { get; set; }
 
-        public string EmailAddress { get; set; }
+        public required string EmailAddress { get; set; }
 
-        public MaritalStatusDto? MaritalStatus { get; set; }
+        public required MaritalStatusDto? MaritalStatus { get; set; }
 
-        public ICollection<BenefitFormDto> BenefitForms { get; set; }
+        public required ICollection<BenefitFormDto> BenefitForms { get; set; }
 
-        public ICollection<DriversLicenceDto> DriversLicences { get; set; }
+        public required ICollection<DriversLicenceDto> DriversLicences { get; set; }
 
-        public ICollection<DiagnosisDto> Diagnoses { get; set; }
+        public required ICollection<DiagnosisDto> Diagnoses { get; set; }
 
-        public ICollection<EmergencyPersonDto> EmergencyPeople { get; set; }
+        public required ICollection<EmergencyPersonDto> EmergencyPeople { get; set; }
 
-        public ICollection<ClientWorkingContractDto> WorkingContracts { get; set; }
+        public required ICollection<ClientWorkingContractDto> WorkingContracts { get; set; }
 
-        public string Remarks { get; set; }
+        public required string Remarks { get; set; }
 
         public CreateClientCommand()
         {
@@ -106,7 +106,9 @@ namespace Application.Clients.Commands.CreateClient
                 MaritalStatus = maritalStatus,
                 DriversLicences = driversLicences,
                 Diagnoses = diagnoses,
-                Remarks = request.Remarks
+                Remarks = request.Remarks,
+                EmergencyPeople = new(),
+                WorkingContracts = new()
             };
 
             client.EmergencyPeople = request.EmergencyPeople.Select(a => a.ToDomainModel(_mapper, client)).ToList();

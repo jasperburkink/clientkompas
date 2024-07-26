@@ -33,7 +33,7 @@ namespace Application.Clients.Queries.GetClient
             var client = await _unitOfWork.ClientRepository.GetByIDAsync(request.ClientId, cancellationToken: cancellationToken, includeProperties: "DriversLicences,BenefitForms,Diagnoses,EmergencyPeople,WorkingContracts.Organization,MaritalStatus");
 
             return client == null
-                ? throw new NotFoundException($"Client with id '{request.ClientId}' does not exist.")
+                ? throw new NotFoundException($"Client with id '{request.ClientId}' could not be found.")
                 : _mapper.Map<GetClientDto>(client);
         }
     }

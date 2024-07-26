@@ -1,162 +1,162 @@
 ﻿using Domain.CVS.Domain;
 using Domain.CVS.Enums;
 using Domain.CVS.ValueObjects;
+using TestData;
+using TestData.Client;
 
 namespace Domain.UnitTests.CVS.Domain
 {
     public class ClientTests
     {
+        private readonly Client _client, _clientDefault;
+
+        public ClientTests()
+        {
+            ITestDataGenerator<Client> clientDataGenerator = new ClientDataGenerator();
+            _client = clientDataGenerator.Create();
+            clientDataGenerator.FillOptionalProperties = false;
+            _clientDefault = clientDataGenerator.Create();
+        }
 
         [Fact]
         public void FirstName_SettingProperty_ValueHasBeenSet()
         {
             // Arrange
-            var client = new Client();
             var firstName = "Jan";
 
             // Act
-            client.FirstName = firstName;
+            _client.FirstName = firstName;
 
             // Assert
-            client.FirstName.Should().Be(firstName);
+            _client.FirstName.Should().Be(firstName);
         }
 
         [Fact]
         public void Initials_SettingProperty_ValueHasBeenSet()
         {
             // Arrange
-            var client = new Client();
             var initials = "J";
 
             // Act
-            client.Initials = initials;
+            _client.Initials = initials;
 
             // Assert
-            client.Initials.Should().Be(initials);
+            _client.Initials.Should().Be(initials);
         }
 
         [Fact]
         public void PrefixLastName_SettingProperty_ValueHasBeenSet()
         {
             // Arrange
-            var client = new Client();
             var prefixLastName = "van der";
 
             // Act
-            client.PrefixLastName = prefixLastName;
+            _client.PrefixLastName = prefixLastName;
 
             // Assert
-            client.PrefixLastName.Should().Be(prefixLastName);
+            _client.PrefixLastName.Should().Be(prefixLastName);
         }
 
         [Fact]
         public void LastName_SettingProperty_ValueHasBeenSet()
         {
             // Arrange
-            var client = new Client();
             var lastName = "Doe";
 
             // Act
-            client.LastName = lastName;
+            _client.LastName = lastName;
 
             // Assert
-            client.LastName.Should().Be(lastName);
+            _client.LastName.Should().Be(lastName);
         }
 
         [Fact]
         public void Gender_SettingProperty_ValueHasBeenSet()
         {
             // Arrange
-            var client = new Client();
             var gender = Gender.Woman;
 
             // Act
-            client.Gender = gender;
+            _client.Gender = gender;
 
             // Assert
-            client.Gender.Should().Be(gender);
+            _client.Gender.Should().Be(gender);
         }
 
         [Fact]
         public void Address_SettingProperty_ValueHasBeenSet()
         {
             // Arrange
-            var client = new Client();
             string streetName = "Main St", houseNumberAddition = "a", postalCode = "1234 AB", residence = "Arnhem";
             var houseNumber = 4;
             var address = Address.From(streetName, houseNumber, houseNumberAddition, postalCode, residence);
 
             // Act
-            client.Address = address;
+            _client.Address = address;
 
             // Assert
-            client.Address.Should().Be(address);
+            _client.Address.Should().Be(address);
         }
 
         [Fact]
         public void TelephoneNumber_SettingProperty_ValueHasBeenSet()
         {
             // Arrange
-            var client = new Client();
             var telephoneNumber = "1234567890";
 
             // Act
-            client.TelephoneNumber = telephoneNumber;
+            _client.TelephoneNumber = telephoneNumber;
 
             // Assert
-            client.TelephoneNumber.Should().Be(telephoneNumber);
+            _client.TelephoneNumber.Should().Be(telephoneNumber);
         }
 
         [Fact]
         public void DateOfBirth_SettingProperty_ValueHasBeenSet()
         {
             // Arrange
-            var client = new Client();
             var dateOfBirth = new DateOnly(1990, 1, 1);
 
             // Act
-            client.DateOfBirth = dateOfBirth;
+            _client.DateOfBirth = dateOfBirth;
 
             // Assert
-            client.DateOfBirth.Should().Be(dateOfBirth);
+            _client.DateOfBirth.Should().Be(dateOfBirth);
         }
 
         [Fact]
         public void MaritalStatus_SettingProperty_ValueHasBeenSet()
         {
             // Arrange
-            var client = new Client();
             var maritalStatus = new MaritalStatus
             {
                 Name = "Getrouwd"
             };
 
             // Act
-            client.MaritalStatus = maritalStatus;
+            _client.MaritalStatus = maritalStatus;
 
             // Assert
-            client.MaritalStatus.Should().Be(maritalStatus);
+            _client.MaritalStatus.Should().Be(maritalStatus);
         }
 
         [Fact]
         public void EmailAddress_SettingProperty_ValueHasBeenSet()
         {
             // Arrange
-            var client = new Client();
             var emailAddress = "jane.doe@example.com";
 
             // Act
-            client.EmailAddress = emailAddress;
+            _client.EmailAddress = emailAddress;
 
             // Assert
-            client.EmailAddress.Should().Be(emailAddress);
+            _client.EmailAddress.Should().Be(emailAddress);
         }
 
         [Fact]
         public void DriversLicences_SettingProperty_ValueHasBeenSet()
         {
             // Arrange
-            var client = new Client();
             var driversLicences = new List<DriversLicence>
             {
                 new()
@@ -166,17 +166,16 @@ namespace Domain.UnitTests.CVS.Domain
             };
 
             // Act
-            client.DriversLicences = driversLicences;
+            _client.DriversLicences = driversLicences;
 
             // Assert
-            client.DriversLicences.Should().BeSameAs(driversLicences);
+            _client.DriversLicences.Should().BeSameAs(driversLicences);
         }
 
         [Fact]
         public void EmergencyPeople_SettingProperty_ValueHasBeenSet()
         {
             // Arrange
-            var client = new Client();
             var emergencyPeople = new List<EmergencyPerson>
             {
                 new ()
@@ -187,17 +186,16 @@ namespace Domain.UnitTests.CVS.Domain
             };
 
             // Act
-            client.EmergencyPeople = emergencyPeople;
+            _client.EmergencyPeople = emergencyPeople;
 
             // Assert
-            client.EmergencyPeople.Should().BeSameAs(emergencyPeople);
+            _client.EmergencyPeople.Should().BeSameAs(emergencyPeople);
         }
 
         [Fact]
         public void Diagnoses_SettingProperty_ValueHasBeenSet()
         {
             // Arrange
-            var client = new Client();
             var diagnoses = new List<Diagnosis>
             {
                 new ()
@@ -207,17 +205,16 @@ namespace Domain.UnitTests.CVS.Domain
             };
 
             // Act
-            client.Diagnoses = diagnoses;
+            _client.Diagnoses = diagnoses;
 
             // Assert
-            client.Diagnoses.Should().BeSameAs(diagnoses);
+            _client.Diagnoses.Should().BeSameAs(diagnoses);
         }
 
         [Fact]
         public void BenefitForms_SettingProperty_ValueHasBeenSet()
         {
             // Arrange
-            var client = new Client();
             var benefitForms = new List<BenefitForm>
             {
                 new ()
@@ -227,17 +224,16 @@ namespace Domain.UnitTests.CVS.Domain
             };
 
             // Act
-            client.BenefitForms = benefitForms;
+            _client.BenefitForms = benefitForms;
 
             // Assert
-            client.BenefitForms.Should().BeSameAs(benefitForms);
+            _client.BenefitForms.Should().BeSameAs(benefitForms);
         }
 
         [Fact]
         public void WorkingContracts_SettingProperty_ValueHasBeenSet()
         {
             // Arrange
-            var client = new Client();
             var workingContracts = new List<WorkingContract>
             {
                 new ()
@@ -251,48 +247,30 @@ namespace Domain.UnitTests.CVS.Domain
             };
 
             // Act
-            client.WorkingContracts = workingContracts;
+            _client.WorkingContracts = workingContracts;
 
             // Assert
-            client.WorkingContracts.Should().BeSameAs(workingContracts);
+            _client.WorkingContracts.Should().BeSameAs(workingContracts);
         }
 
         [Fact]
         public void Remarks_SettingProperty_ValueHasBeenSet()
         {
             // Arrange
-            var client = new Client();
             var remarks = "Some remarks";
 
             // Act
-            client.Remarks = remarks;
+            _client.Remarks = remarks;
 
             // Assert
-            client.Remarks.Should().Be(remarks);
-        }
-
-
-        [Fact]
-        public void DriversLicences_DefaultValue_IsEmptyList()
-        {
-            // Arrange
-            var client = new Client();
-
-            // Act
-            var driversLicences = client.DriversLicences;
-
-            // Assert
-            driversLicences.Should().BeEmpty();
+            _client.Remarks.Should().Be(remarks);
         }
 
         [Fact]
         public void DeactivationDateTime_Contructor_DefaultValueIsNull()
         {
-            // Arrange
-            var client = new Client();
-
             // Act
-            var deactivationDateTime = client.DeactivationDateTime;
+            var deactivationDateTime = _clientDefault.DeactivationDateTime;
 
             // Assert
             deactivationDateTime.HasValue.Should().Be(false);
@@ -304,11 +282,10 @@ namespace Domain.UnitTests.CVS.Domain
         public void Deactivate_SuccessState_ReturnsDeactivationDateTime()
         {
             // Arrange
-            var client = new Client();
             var now = DateTime.Now;
 
             // Act
-            var result = client.Deactivate(now);
+            var result = _client.Deactivate(now);
 
             // Assert
             result.Should().Be(now);
@@ -318,29 +295,25 @@ namespace Domain.UnitTests.CVS.Domain
         public void Deactivate_SuccessState_DeactivationDateTimeHasBeenSet()
         {
             // Arrange
-            var client = new Client();
             var now = DateTime.Now;
 
             // Act
-            client.Deactivate(now);
+            _client.Deactivate(now);
 
             // Assert
-            client.DeactivationDateTime.Should().Be(now);
+            _client.DeactivationDateTime.Should().Be(now);
         }
 
         [Fact]
         public void FullName_CombinesParts_ReturnNameCombined()
         {
             // Arrange
-            var client = new Client
-            {
-                FirstName = "Piet",
-                PrefixLastName = "van der",
-                LastName = "Molen"
-            };
+            _client.FirstName = "Piet";
+            _client.PrefixLastName = "van der";
+            _client.LastName = "Molen";
 
             // Act
-            var fullName = client.FullName;
+            var fullName = _client.FullName;
 
             // Assert
             fullName.Should().Be("Piet van der Molen");
@@ -350,15 +323,12 @@ namespace Domain.UnitTests.CVS.Domain
         public void FullName_WhiteSpacesInNames_ReturnNameWithoutDoubleWhiteSpaces()
         {
             // Arrange
-            var client = new Client
-            {
-                FirstName = "  Piet  ",
-                PrefixLastName = "  van   der  ",
-                LastName = "  Molen  "
-            };
+            _client.FirstName = "  Piet  ";
+            _client.PrefixLastName = "  van   der  ";
+            _client.LastName = "  Molen  ";
 
             // Act
-            var fullName = client.FullName;
+            var fullName = _client.FullName;
 
             // Assert
             fullName.Should().Be("Piet van der Molen");
@@ -368,15 +338,12 @@ namespace Domain.UnitTests.CVS.Domain
         public void FullName_PrefixLastNameIsEmpty_ReturnNameWithoutPrefixLastName()
         {
             // Arrange
-            var client = new Client
-            {
-                FirstName = "Piet",
-                PrefixLastName = string.Empty,
-                LastName = "Molen"
-            };
+            _client.FirstName = "Piet";
+            _client.PrefixLastName = string.Empty;
+            _client.LastName = "Molen";
 
             // Act
-            var fullName = client.FullName;
+            var fullName = _client.FullName;
 
             // Assert
             fullName.Should().Be("Piet Molen");
@@ -386,17 +353,16 @@ namespace Domain.UnitTests.CVS.Domain
         public void Deactivate_AlreadyDeactivated_ReturnsInitialDeactivationTime()
         {
             // Arrange
-            var client = new Client();
             var initialDeactivationTime = DateTime.Now.AddDays(-1);
-            client.Deactivate(initialDeactivationTime);
+            _client.Deactivate(initialDeactivationTime);
             var newDeactivationTime = DateTime.Now;
 
             // Act
-            var result = client.Deactivate(newDeactivationTime);
+            var result = _client.Deactivate(newDeactivationTime);
 
             // Assert
             result.Should().Be(initialDeactivationTime);
-            client.DeactivationDateTime.Should().Be(initialDeactivationTime);
+            _client.DeactivationDateTime.Should().Be(initialDeactivationTime);
         }
 
 

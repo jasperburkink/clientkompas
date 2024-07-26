@@ -6,6 +6,13 @@ namespace TestData.Diagnosis
     {
         public Faker<Domain.CVS.Domain.Diagnosis> Faker { get => GetFaker(); }
 
+        public bool FillOptionalProperties { get; set; }
+
+        public DiagnosisDataGenerator(bool fillOptionalProperties = true)
+        {
+            FillOptionalProperties = fillOptionalProperties;
+        }
+
         private Faker<Domain.CVS.Domain.Diagnosis> GetFaker()
         {
             return new AutoFaker<Domain.CVS.Domain.Diagnosis>()

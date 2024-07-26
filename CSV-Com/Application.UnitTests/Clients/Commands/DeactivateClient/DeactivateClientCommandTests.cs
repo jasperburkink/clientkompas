@@ -5,11 +5,20 @@ using AutoMapper;
 using Domain.CVS.Domain;
 using Microsoft.EntityFrameworkCore;
 using Moq;
+using TestData;
+using TestData.Client;
 
 namespace Application.UnitTests.Clients.Commands.DeactivateClient
 {
     public class DeactivateClientCommandTests
     {
+        private readonly Client _client;
+
+        public DeactivateClientCommandTests()
+        {
+            ITestDataGenerator<Client> clientDataGenerator = new ClientDataGenerator(false);
+            _client = clientDataGenerator.Create();
+        }
 
         [Fact]
         public async Task Handle_CorrectFlow_ReturnsClientWithDeactivationDateTime()
@@ -18,10 +27,9 @@ namespace Application.UnitTests.Clients.Commands.DeactivateClient
             var unitOfWorkMock = new Mock<IUnitOfWork>();
             var mapperMock = new Mock<IMapper>();
             var clientRepositoryMock = new Mock<IRepository<Client>>();
-            var client = new Client();
 
             unitOfWorkMock.Setup(uow => uow.ClientRepository).Returns(clientRepositoryMock.Object);
-            clientRepositoryMock.Setup(cr => cr.GetByIDAsync(It.IsAny<int>(), It.IsAny<CancellationToken>())).ReturnsAsync(client);
+            clientRepositoryMock.Setup(cr => cr.GetByIDAsync(It.IsAny<int>(), It.IsAny<CancellationToken>())).ReturnsAsync(_client);
 
             var handler = new DeactivateClientCommandHandler(unitOfWorkMock.Object, mapperMock.Object);
             var command = new DeactivateClientCommand { Id = 1 };
@@ -30,8 +38,8 @@ namespace Application.UnitTests.Clients.Commands.DeactivateClient
             await handler.Handle(command, CancellationToken.None);
 
             // Assert
-            client.DeactivationDateTime.Should().NotBeNull();
-            client.DeactivationDateTime!.Value.Date.Should().Be(DateTime.Now.Date);
+            _client.DeactivationDateTime.Should().NotBeNull();
+            _client.DeactivationDateTime!.Value.Date.Should().Be(DateTime.Now.Date);
             clientRepositoryMock.Verify(cr => cr.UpdateAsync(It.IsAny<Client>(), CancellationToken.None), Times.Once);
             unitOfWorkMock.Verify(uow => uow.SaveAsync(CancellationToken.None), Times.Once);
         }
@@ -62,11 +70,10 @@ namespace Application.UnitTests.Clients.Commands.DeactivateClient
             var unitOfWorkMock = new Mock<IUnitOfWork>();
             var mapperMock = new Mock<IMapper>();
             var clientRepositoryMock = new Mock<IRepository<Client>>();
-            var client = new Client();
-            client.SetPrivate(c => c.DeactivationDateTime, new DateTime(2020, 04, 01));
+            _client.SetPrivate(c => c.DeactivationDateTime, new DateTime(2020, 04, 01));
 
             unitOfWorkMock.Setup(uow => uow.ClientRepository).Returns(clientRepositoryMock.Object);
-            clientRepositoryMock.Setup(cr => cr.GetByIDAsync(It.IsAny<int>(), It.IsAny<CancellationToken>())).ReturnsAsync(client);
+            clientRepositoryMock.Setup(cr => cr.GetByIDAsync(It.IsAny<int>(), It.IsAny<CancellationToken>())).ReturnsAsync(_client);
 
             var handler = new DeactivateClientCommandHandler(unitOfWorkMock.Object, mapperMock.Object);
             var command = new DeactivateClientCommand { Id = 1 };
@@ -83,10 +90,9 @@ namespace Application.UnitTests.Clients.Commands.DeactivateClient
             var unitOfWorkMock = new Mock<IUnitOfWork>();
             var mapperMock = new Mock<IMapper>();
             var clientRepositoryMock = new Mock<IRepository<Client>>();
-            var client = new Client();
 
             unitOfWorkMock.Setup(uow => uow.ClientRepository).Returns(clientRepositoryMock.Object);
-            clientRepositoryMock.Setup(cr => cr.GetByIDAsync(It.IsAny<int>(), It.IsAny<CancellationToken>())).ReturnsAsync(client);
+            clientRepositoryMock.Setup(cr => cr.GetByIDAsync(It.IsAny<int>(), It.IsAny<CancellationToken>())).ReturnsAsync(_client);
             unitOfWorkMock.Setup(uow => uow.SaveAsync(It.IsAny<CancellationToken>())).ThrowsAsync(new DbUpdateException("Failed to save changes"));
 
             var handler = new DeactivateClientCommandHandler(unitOfWorkMock.Object, mapperMock.Object);
