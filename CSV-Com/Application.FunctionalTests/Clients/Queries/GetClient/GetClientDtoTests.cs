@@ -261,6 +261,50 @@ namespace Application.FunctionalTests.Clients.Queries.GetClient
         }
 
         [Test]
+        public async Task IsInTargetGroupRegister_IsTrue_ShouldReturnIsInTargetGroupRegister()
+        {
+            // Arrange            
+            var client = _testDataGeneratorClient.Create();
+            var expectedResult = true;
+            client.IsInTargetGroupRegister = expectedResult;
+
+            await AddAsync(client);
+
+            var query = new GetClientQuery
+            {
+                ClientId = client.Id
+            };
+
+            // Act
+            var result = await SendAsync(query);
+
+            // Assert
+            result.IsInTargetGroupRegister.Should().Be(expectedResult);
+        }
+
+        [Test]
+        public async Task IsInTargetGroupRegister_IsFalse_ShouldReturnIsInTargetGroupRegister()
+        {
+            // Arrange            
+            var client = _testDataGeneratorClient.Create();
+            var expectedResult = false;
+            client.IsInTargetGroupRegister = expectedResult;
+
+            await AddAsync(client);
+
+            var query = new GetClientQuery
+            {
+                ClientId = client.Id
+            };
+
+            // Act
+            var result = await SendAsync(query);
+
+            // Assert
+            result.IsInTargetGroupRegister.Should().Be(expectedResult);
+        }
+
+        [Test]
         public async Task DriversLicences_OneDriversLicence_ShouldReturnFormattedString()
         {
             // Arrange

@@ -60,6 +60,7 @@ namespace Application.UnitTests.Clients.Commands.CreateClient
                     Id = _command.MaritalStatus.Id,
                     Name = _command.MaritalStatus.Name
                 },
+                IsInTargetGroupRegister = false,
                 DriversLicences = [],
                 Diagnoses = [],
                 EmergencyPeople = _command.EmergencyPeople.Select(ep => ep.ToDomainModel(_mapperMock.Object, null)).ToList(),

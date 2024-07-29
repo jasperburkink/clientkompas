@@ -141,6 +141,19 @@ namespace Domain.UnitTests.CVS.Domain
         }
 
         [Fact]
+        public void IsInTargetGroupRegister_SettingProperty_ValueHasBeenSet()
+        {
+            // Arrange
+            var isInTargetGroupRegister = true;
+
+            // Act
+            _client.IsInTargetGroupRegister = isInTargetGroupRegister;
+
+            // Assert
+            _client.IsInTargetGroupRegister.Should().Be(isInTargetGroupRegister);
+        }
+
+        [Fact]
         public void EmailAddress_SettingProperty_ValueHasBeenSet()
         {
             // Arrange

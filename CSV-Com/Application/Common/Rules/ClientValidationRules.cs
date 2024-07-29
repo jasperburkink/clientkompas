@@ -55,6 +55,12 @@ namespace Application.Common.Rules
                 .MaximumLength(ClientConstants.TelephoneNumberMaxLength).WithMessage($"{nameof(Client.TelephoneNumber)}  mag niet langer zijn dan {ClientConstants.TelephoneNumberMaxLength} karakters.");
         }
 
+        public static IRuleBuilderOptions<T, bool> ValidateClientIsInTargetGroupRegister<T>(this IRuleBuilder<T, bool> ruleBuilder)
+        {
+            return ruleBuilder
+                .NotNull().WithMessage($"{nameof(Client.IsInTargetGroupRegister)} is verplicht.");
+        }
+
         public static IRuleBuilderOptions<T, string> ValidateClientEmailAddress<T>(this IRuleBuilder<T, string> ruleBuilder, IUnitOfWork unitOfWork, Func<T, int> getCurrentClientId)
         {
             return ruleBuilder

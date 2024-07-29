@@ -21,8 +21,8 @@ export default interface Client {
     dateofbirth?: Date;
     emailaddress: string;
     maritalstatus?: MaritalStatus;
+    isintargetgroupregister: boolean;
     driverslicences: DriversLicence[];
-    doelgroepregister: boolean;
     diagnoses?: Diagnosis[];
     benefitforms?: BenefitForm[];
     remarks?: string;

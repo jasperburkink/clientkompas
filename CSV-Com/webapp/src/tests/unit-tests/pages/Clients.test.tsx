@@ -121,6 +121,7 @@ describe('ClientPage', () => {
             residence: 'City',
             telephonenumber: '1234567890',
             emailaddress: 'john.doe@example.com',
+            isintargetgroupregister: false,
             dateofbirth: new Date('1990-01-01'),
             emergencypeople: [],
             diagnoses: 'None',
@@ -200,6 +201,7 @@ describe('ClientPage', () => {
                 residence: 'City',
                 telephonenumber: '1234567890',
                 emailaddress: 'john.doe@example.com',
+                isintargetgroupregister: false,
                 dateofbirth: new Date('1990-01-01'),
                 emergencypeople: [
                 ],
@@ -223,6 +225,7 @@ describe('ClientPage', () => {
                 residence: 'Townsville',
                 telephonenumber: '0987654321',
                 emailaddress: 'jane.smith@example.com',
+                isintargetgroupregister: false,
                 dateofbirth: new Date('1985-05-15'),
                 emergencypeople: [
                 ],
@@ -246,6 +249,7 @@ describe('ClientPage', () => {
                 residence: 'Village',
                 telephonenumber: '1231231234',
                 emailaddress: 'michael.johnson@example.com',
+                isintargetgroupregister: true,
                 dateofbirth: new Date('1975-03-20'),
                 emergencypeople: [
                 ],
@@ -269,6 +273,7 @@ describe('ClientPage', () => {
                 residence: 'Metropolis',
                 telephonenumber: '3213214321',
                 emailaddress: 'emily.davis@example.com',
+                isintargetgroupregister: true,
                 dateofbirth: new Date('1992-07-12'),
                 emergencypeople: [
                 ],
@@ -292,6 +297,7 @@ describe('ClientPage', () => {
                 residence: 'Hamlet',
                 telephonenumber: '4324325432',
                 emailaddress: 'robert.brown@example.com',
+                isintargetgroupregister: true,
                 dateofbirth: new Date('1980-11-30'),
                 emergencypeople: [
                 ],
@@ -347,6 +353,7 @@ describe('ClientPage', () => {
             residence: 'City',
             telephonenumber: '1234567890',
             emailaddress: 'john.doe@example.com',
+            isintargetgroupregister: false,
             dateofbirth: new Date('1990-01-01'),
             emergencypeople: [],
             diagnoses: 'None',
@@ -423,6 +430,7 @@ describe('ClientPage', () => {
             residence: 'City',
             telephonenumber: '1234567890',
             emailaddress: 'john.doe@example.com',
+            isintargetgroupregister: false,
             dateofbirth: new Date('1990-01-01'),
             emergencypeople: [],
             diagnoses: 'None',
@@ -502,6 +510,7 @@ describe('ClientPage', () => {
                 residence: 'City',
                 telephonenumber: '1234567890',
                 emailaddress: 'john.doe@example.com',
+                isintargetgroupregister: false,
                 dateofbirth: new Date('1990-01-01'),
                 emergencypeople: [
                 ],
@@ -525,6 +534,7 @@ describe('ClientPage', () => {
                 residence: 'Townsville',
                 telephonenumber: '0987654321',
                 emailaddress: 'jane.smith@example.com',
+                isintargetgroupregister: false,
                 dateofbirth: new Date('1985-05-15'),
                 emergencypeople: [
                 ],
@@ -548,6 +558,7 @@ describe('ClientPage', () => {
                 residence: 'Village',
                 telephonenumber: '1231231234',
                 emailaddress: 'michael.johnson@example.com',
+                isintargetgroupregister: false,
                 dateofbirth: new Date('1975-03-20'),
                 emergencypeople: [
                 ],
@@ -571,6 +582,7 @@ describe('ClientPage', () => {
                 residence: 'Metropolis',
                 telephonenumber: '3213214321',
                 emailaddress: 'emily.davis@example.com',
+                isintargetgroupregister: false,
                 dateofbirth: new Date('1992-07-12'),
                 emergencypeople: [
                 ],
@@ -594,6 +606,7 @@ describe('ClientPage', () => {
                 residence: 'Hamlet',
                 telephonenumber: '4324325432',
                 emailaddress: 'robert.brown@example.com',
+                isintargetgroupregister: false,
                 dateofbirth: new Date('1980-11-30'),
                 emergencypeople: [
                 ],

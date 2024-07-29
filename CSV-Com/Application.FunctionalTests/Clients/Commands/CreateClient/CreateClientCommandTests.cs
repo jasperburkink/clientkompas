@@ -1,4 +1,5 @@
 ﻿using Application.Clients.Commands.CreateClient;
+using Application.Clients.Queries.GetClient;
 using Application.Diagnoses.Queries.GetDiagnosis;
 using Application.DriversLicences.Queries;
 using Application.MaritalStatuses.Queries.GetMaritalStatus;
@@ -722,15 +723,15 @@ namespace Application.FunctionalTests.Clients.Commands.CreateClient
             // Arrange
             var command = _command with
             {
-                DriversLicences = new List<DriversLicenceDto>()
-                {
+                DriversLicences =
+                [
                     new()
                     {
                         Id = 2000,
                         Category = "Foo",
                         Description = "Bar"
                     }
-                }
+                ]
             };
 
             // Act
@@ -764,14 +765,14 @@ namespace Application.FunctionalTests.Clients.Commands.CreateClient
             // Arrange
             var command = _command with
             {
-                Diagnoses = new List<DiagnosisDto>()
-                {
+                Diagnoses =
+                [
                     new()
                     {
                         Id = 2000,
                         Name = "Foo"
                     }
-                }
+                ]
             };
 
             // Act

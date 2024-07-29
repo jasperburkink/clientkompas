@@ -34,6 +34,8 @@ namespace Application.Clients.Queries.GetClientEdit
 
         public string EmailAddress { get; set; }
 
+        public required bool IsInTargetGroupRegister { get; set; }
+
         public GetClientEditMaritalStatusDto? MaritalStatus { get; set; }
 
         public virtual ICollection<GetClientEditDriversLicenceDto> DriversLicences { get; set; }

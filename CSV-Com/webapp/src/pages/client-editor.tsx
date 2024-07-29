@@ -38,6 +38,7 @@ import BenefitForm from 'types/model/BenefitForm';
 import { ClientContext } from './client-context';
 import Organization from 'types/model/Organization';
 import { nameof } from 'types/common/nameof';
+import DropdownBoolean from 'components/common/dropdown-boolean';
 
 const ClientEditor = () => {
     
@@ -54,8 +55,8 @@ const ClientEditor = () => {
         residence: '',
         telephonenumber: '',        
         emailaddress: '',
+        isintargetgroupregister: false,
         driverslicences: [],
-        doelgroepregister: false,
         emergencypeople: [],
         workingcontracts: [],
         benefitforms: [],
@@ -146,6 +147,13 @@ const ClientEditor = () => {
         setClient(prevClient => ({
             ...prevClient,
             driverslicences: driversLicencesClient
+        }));
+    };
+
+    const handleIsInTargetGroupRegisterChange = (value: boolean) => {
+        setClient(prevClient => ({
+            ...prevClient,
+            isintargetgroupregister: value
         }));
     };
 
@@ -591,15 +599,13 @@ const ClientEditor = () => {
                                     dataTestId='driverslicences' />
                             </LabelField>
 
-                            {/* TODO: doelgroepregister with yes no dropdown
-                             <LabelField text='Doelgroepregister' required={false}>
-                                <Dropdown 
-                                    options={doelgroepDropdownOptions} 
+                            <LabelField text='Doelgroepregister' required={false}>
+                                <DropdownBoolean 
                                     required={false} 
                                     inputfieldname='doelgroepregister'
-                                    value={client.doelgroepregister}
-                                    onChange={(value) => handleDropdownChange('doelgroepregister', value)} />
-                            </LabelField> */}
+                                    value={client.isintargetgroupregister}
+                                    onChange={(value) => handleIsInTargetGroupRegisterChange(value)} />
+                            </LabelField>
                         </div>
 
                         <DomainObjectInput
