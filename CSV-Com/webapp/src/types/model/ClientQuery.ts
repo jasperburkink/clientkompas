@@ -17,6 +17,7 @@ export default interface ClientQuery {
     dateofbirth: Date;
     emailaddress: string;
     maritalstatus: string;
+    isintargetgroupregister: boolean;
     driverslicences: string;
     diagnoses?: string;
     benefitform?: string;

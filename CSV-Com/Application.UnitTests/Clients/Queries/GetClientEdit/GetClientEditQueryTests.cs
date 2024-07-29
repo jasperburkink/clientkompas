@@ -58,6 +58,7 @@ namespace Application.UnitTests.Clients.Queries.GetClientEdit
                 Residence = _client.Address.Residence,
                 StreetName = _client.Address.StreetName,
                 MaritalStatus = _client.MaritalStatus != null ? new GetClientEditMaritalStatusDto { Id = _client.MaritalStatus.Id, Name = _client.MaritalStatus.Name } : null,
+                IsInTargetGroupRegister = false,
                 WorkingContracts = _client.WorkingContracts.Select(wc => new GetClientEditWorkingContractDto { Id = wc.Id, OrganizationId = wc.OrganizationId, Function = wc.Function, ContractType = (int)wc.ContractType, FromDate = wc.FromDate, ToDate = wc.ToDate }).ToList(),
                 Remarks = _client.Remarks
             };

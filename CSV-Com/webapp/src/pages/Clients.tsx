@@ -219,6 +219,11 @@ function Clients() {
                                 <Label text={client.benefitform ? client.benefitform : NO_INFO} />
                             </div>
 
+                            <div className='client-label-value'>
+                                <Label text='Doelgroepregister: ' />
+                                <Label text={client.isintargetgroupregister ? "Ja" : "Nee"} />
+                            </div>
+
                             {!client.workingcontracts &&
                             <Label text={NO_INFO} className='col-span-2' />}
                             {client.workingcontracts &&

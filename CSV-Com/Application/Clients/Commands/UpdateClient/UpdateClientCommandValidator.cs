@@ -24,6 +24,7 @@ namespace Application.Clients.Commands.UpdateClient
             RuleFor(c => c.Residence).ValidateAddressResidence();
             RuleFor(c => c.TelephoneNumber).ValidateClientTelephoneNumber();
             RuleFor(c => c.EmailAddress).ValidateClientEmailAddress(_unitOfWork, client => client.Id);
+            RuleFor(c => c.IsInTargetGroupRegister).ValidateClientIsInTargetGroupRegister();
             RuleFor(c => c.DateOfBirth).ValidateClientDateOfBirth();
             RuleFor(c => c.Remarks).ValidateClientRemarks();
             RuleFor(c => c.EmergencyPeople).ValidateClientEmergencyPeople();

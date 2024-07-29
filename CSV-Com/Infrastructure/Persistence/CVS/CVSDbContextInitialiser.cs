@@ -117,6 +117,7 @@ namespace Infrastructure.Persistence.CVS
                     DateOfBirth = new DateOnly(1990, 5, 14),
                     EmailAddress = "a@b.com",
                     MaritalStatus = martitalStatus,
+                    IsInTargetGroupRegister = true,
                     DriversLicences =
                     {
                         new DriversLicence
@@ -237,6 +238,7 @@ namespace Infrastructure.Persistence.CVS
                     DateOfBirth = new DateOnly(1950, 12, 1),
                     EmailAddress = "b@a.com",
                     MaritalStatus = martitalStatus,
+                    IsInTargetGroupRegister = false,
                     EmergencyPeople =
                     {
                         new EmergencyPerson

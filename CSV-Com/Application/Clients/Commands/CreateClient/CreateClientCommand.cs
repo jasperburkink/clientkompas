@@ -44,6 +44,8 @@ namespace Application.Clients.Commands.CreateClient
 
         public required MaritalStatusDto? MaritalStatus { get; set; }
 
+        public required bool IsInTargetGroupRegister { get; set; }
+
         public required ICollection<BenefitFormDto> BenefitForms { get; set; }
 
         public required ICollection<DriversLicenceDto> DriversLicences { get; set; }
@@ -102,6 +104,7 @@ namespace Application.Clients.Commands.CreateClient
                 TelephoneNumber = request.TelephoneNumber,
                 DateOfBirth = request.DateOfBirth,
                 EmailAddress = request.EmailAddress,
+                IsInTargetGroupRegister = request.IsInTargetGroupRegister,
                 BenefitForms = benefitForms,
                 MaritalStatus = maritalStatus,
                 DriversLicences = driversLicences,

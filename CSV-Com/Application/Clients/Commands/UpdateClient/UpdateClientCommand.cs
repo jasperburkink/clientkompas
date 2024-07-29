@@ -45,6 +45,8 @@ namespace Application.Clients.Commands.UpdateClient
 
         public MaritalStatusDto? MaritalStatus { get; set; }
 
+        public required bool IsInTargetGroupRegister { get; set; }
+
         public required ICollection<BenefitFormDto> BenefitForms { get; set; }
 
         public required ICollection<DriversLicenceDto> DriversLicences { get; set; }
@@ -100,6 +102,8 @@ namespace Application.Clients.Commands.UpdateClient
             client.DateOfBirth = request.DateOfBirth;
 
             client.EmailAddress = request.EmailAddress;
+
+            client.IsInTargetGroupRegister = request.IsInTargetGroupRegister;
 
             client.BenefitForms = benefitForms;
 

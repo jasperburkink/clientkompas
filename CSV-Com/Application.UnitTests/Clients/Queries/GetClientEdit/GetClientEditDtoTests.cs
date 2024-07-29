@@ -273,6 +273,23 @@ namespace Application.UnitTests.Clients.Queries.GetClientEdit
         }
 
         [Fact]
+        public async Task Handle_GetClient_IsInTargetGroupRegisterShouldBeSet()
+        {
+            // Arrange
+            var query = new GetClientEditQuery { ClientId = _client.Id };
+
+            _unitOfWorkMock.Setup(uw => uw.ClientRepository.GetByIDAsync(
+                query.ClientId, It.IsAny<string>(), default
+            )).ReturnsAsync(_client);
+
+            // Act
+            var result = await _handler.Handle(query, CancellationToken.None);
+
+            // Assert
+            result.IsInTargetGroupRegister.Should().Be(_client.IsInTargetGroupRegister);
+        }
+
+        [Fact]
         public async Task Handle_GetClient_EmailAddressShouldBeSet()
         {
             // Arrange
