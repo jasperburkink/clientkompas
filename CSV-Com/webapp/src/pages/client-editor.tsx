@@ -38,6 +38,7 @@ import BenefitForm from 'types/model/BenefitForm';
 import { ClientContext } from './client-context';
 import Organization from 'types/model/Organization';
 import { nameof } from 'types/common/nameof';
+import { ValidationErrorHash } from 'types/common/validation-error';
 
 const ClientEditor = () => {
     
@@ -66,6 +67,7 @@ const ClientEditor = () => {
     const navigate = useNavigate();
     
     const [client, setClient] = useState<Client>(initialClient);
+    const [validationErrors, setValidationErrors] = useState<ValidationErrorHash>({});
     const [error, setError] = useState<string | null>(null);
     const [status, setStatus] = useState(StatusEnum.IDLE);
 
@@ -254,6 +256,34 @@ const ClientEditor = () => {
         }));
     }
 
+    const handleSaveResult = (
+        apiResult: ApiResult<Client>, 
+        setConfirmMessage: React.Dispatch<React.SetStateAction<string>>, 
+        setConfirmPopupOneButtonOpen: React.Dispatch<React.SetStateAction<boolean>>, 
+        setCvsError: React.Dispatch<React.SetStateAction<CvsError>>, 
+        setErrorPopupOpen: React.Dispatch<React.SetStateAction<boolean>>, 
+        setClient: React.Dispatch<React.SetStateAction<Client>>): void => {
+        if (apiResult.Ok) {
+            setConfirmMessage('Client succesvol opgeslagen');
+            setConfirmPopupOneButtonOpen(true);
+    
+            setClient(apiResult.ReturnObject!);
+        }
+        else {
+            if(apiResult.ValidationErrors) {
+                setValidationErrors(apiResult.ValidationErrors);
+            }
+            else {
+                setCvsError({
+                    id: 0,
+                    errorcode: 'E',
+                    message: `Er is een opgetreden tijdens het opslaan van een client. Foutmelding: ${apiResult.Errors!.join(', ')}`
+                });
+                setErrorPopupOpen(true);    
+            }
+        }
+    }
+
     useEffect(() => {
         const fetchClientById = async () => {
             try {
@@ -380,7 +410,8 @@ const ClientEditor = () => {
                                 placeholder='Voornaam' 
                                 value={client.firstname} 
                                 onChange={(value) => handleClientInputChange('firstname', value)}
-                                dataTestId='firstname' />
+                                dataTestId='firstname'
+                                error={validationErrors.firstname?.errormessage} />
                         </LabelField>
 
                         <LabelField text='Voorletters' required={true}>
@@ -390,7 +421,8 @@ const ClientEditor = () => {
                                 placeholder='b.v. A B' 
                                 value={client.initials}
                                 onChange={(value) => handleClientInputChange('initials', value)}
-                                dataTestId='initials' />
+                                dataTestId='initials'
+                                error={validationErrors.initials?.errormessage} />
                         </LabelField>
 
                         <LabelField text='Tussenvoegsel' required={false}>
@@ -400,7 +432,8 @@ const ClientEditor = () => {
                                 placeholder='b.v. de' 
                                 value={client.prefixlastname} 
                                 onChange={(value) => handleClientInputChange('prefixlastname', value)}
-                                dataTestId='prefixlastname' />
+                                dataTestId='prefixlastname'
+                                error={validationErrors.prefixlastname?.errormessage} />
                         </LabelField>
 
                         <LabelField text='Achternaam' required={true}>
@@ -410,7 +443,8 @@ const ClientEditor = () => {
                                 placeholder='Achternaam' 
                                 value={client.lastname} 
                                 onChange={(value) => handleClientInputChange('lastname', value)}
-                                dataTestId='lastname' />
+                                dataTestId='lastname'
+                                error={validationErrors.lastname?.errormessage} />
                         </LabelField>
 
                         <LabelField text='Straatadres' required={true}>
@@ -420,7 +454,8 @@ const ClientEditor = () => {
                                 placeholder='Adres' 
                                 value={client.streetname} 
                                 onChange={(value) => handleClientInputChange('streetname', value)}
-                                dataTestId='streetname' />
+                                dataTestId='streetname'
+                                error={validationErrors.streetname?.errormessage} />
                         </LabelField>
 
                         <LabelField text='Huisnummer' required={true}>
@@ -431,7 +466,8 @@ const ClientEditor = () => {
                                 className='house-number' 
                                 value={client.housenumber}
                                 onChange={(value) => handleClientInputChange('housenumber', value)}
-                                dataTestId='housenumber' />
+                                dataTestId='housenumber'
+                                error={validationErrors.housenumber?.errormessage} />
                             <LabelField text='Toevoeging' required={false} className='house-number-addition'>
                                 <InputField 
                                     inputfieldtype={{type:'text'}} 
@@ -440,7 +476,8 @@ const ClientEditor = () => {
                                     className='house-number-addition-field' 
                                     value={client.housenumberaddition}
                                     onChange={(value) => handleClientInputChange('housenumberaddition', value)}
-                                    dataTestId='housenumberaddition' />
+                                    dataTestId='housenumberaddition'
+                                    error={validationErrors.housenumberaddition?.errormessage} />
                             </LabelField>
                         </LabelField>
 
@@ -451,7 +488,8 @@ const ClientEditor = () => {
                                 placeholder='b.v. 1234 AA' 
                                 value={client.postalcode}
                                 onChange={(value) => handleClientInputChange('postalcode', value)}
-                                dataTestId='postalcode' />
+                                dataTestId='postalcode'
+                                error={validationErrors.postalcode?.errormessage} />
                         </LabelField>
 
                         <LabelField text='Woonplaats' required={true}>
@@ -461,7 +499,8 @@ const ClientEditor = () => {
                                 placeholder='Woonplaats' 
                                 value={client.residence}
                                 onChange={(value) => handleClientInputChange('residence', value)}
-                                dataTestId='residence' />
+                                dataTestId='residence'
+                                error={validationErrors.residence?.errormessage} />
                         </LabelField>
 
                         <LabelField text='Telefoon' required={true}>
@@ -471,7 +510,8 @@ const ClientEditor = () => {
                                 placeholder='b.v. 0543-123456' 
                                 value={client.telephonenumber}
                                 onChange={(value) => handleClientInputChange('telephonenumber', value)}
-                                dataTestId='telephonenumber' />
+                                dataTestId='telephonenumber'
+                                error={validationErrors.telephonenumber?.errormessage} />
                         </LabelField>
 
                         <LabelField text='E-mail' required={true}>
@@ -481,7 +521,8 @@ const ClientEditor = () => {
                                 placeholder='b.v. mail@mailbox.com' 
                                 value={client.emailaddress}
                                 onChange={(value) => handleClientInputChange('emailaddress', value)}
-                                dataTestId='emailaddress' />
+                                dataTestId='emailaddress'
+                                error={validationErrors.emailaddress?.errormessage} />
                         </LabelField>
 
                         <LabelField text='Geboortedatum' required={true}>
@@ -490,7 +531,8 @@ const ClientEditor = () => {
                                 placeholder='Selecteer een datum' 
                                 value={client.dateofbirth}
                                 onChange={(value) => handleClientDatePickerChange('dateofbirth', value)}
-                                dataTestId='dateofbirth' />
+                                dataTestId='dateofbirth'
+                                error={validationErrors.dateofbirth?.errormessage} />
                         </LabelField>
 
                         <LabelField text='Geslacht' required={true}>
@@ -500,7 +542,8 @@ const ClientEditor = () => {
                                 inputfieldname='geslacht'
                                 value={client.gender}
                                 onChange={(value) => handleGenderChange(value)}
-                                dataTestId='gender' />
+                                dataTestId='gender'
+                                error={validationErrors.gender?.errormessage} />
                         </LabelField>
                     </div>
 
@@ -515,7 +558,8 @@ const ClientEditor = () => {
                         onRemoveObject={onRemoveEmergencyPerson}
                         onChangeObject={handleEmergencyPersonChange}
                         key={JSON.stringify(client.id + "_emergencypeople")}
-                        dataTestId='emergencypeople' />
+                        dataTestId='emergencypeople'
+                         />
 
                     <div className='client-remarks'>
                         <Label text='Opmerkingen' />
@@ -523,7 +567,8 @@ const ClientEditor = () => {
                             placeholder="Voeg opmerkingen toe" 
                             value={client.remarks}
                             onChange={(value: string) => handleClientInputChange('remarks', value)}
-                            dataTestId='remarks' />
+                            dataTestId='remarks'
+                            error={validationErrors.remarks?.errormessage} />
                     </div>
 
                     <SlideToggleLabel text='Overige cliënt informatie' smallTextColapsed=' - klap uit voor meer opties' smallTextExpanded=' - klap in voor minder opties' >
@@ -541,7 +586,8 @@ const ClientEditor = () => {
                                     value={client.diagnoses?.map(d => d.id)}
                                     onChange={(values) => {handleDiagnosesChange(values)}}
                                     key={JSON.stringify(client.id + "_diagnoses")}
-                                    dataTestId='diagnoses' />
+                                    dataTestId='diagnoses'
+                                    error={validationErrors.diagnoses?.errormessage} />
                             </LabelField>
 
                             <LabelField text='Uitkeringsvorm' required={false}>
@@ -557,7 +603,8 @@ const ClientEditor = () => {
                                     value={client.benefitforms?.map(d => d.id)}
                                     onChange={(values) => {handleBenefitFormsChange(values)}}
                                     key={JSON.stringify(client.id + "_benefitforms")}
-                                    dataTestId='benefitforms' />
+                                    dataTestId='benefitforms'
+                                    error={validationErrors.benefitforms?.errormessage} />
                             </LabelField>
 
                             <LabelField text='Burgerlijke staat' required={false}>
@@ -572,7 +619,8 @@ const ClientEditor = () => {
                                     inputfieldname='maritalstatus'
                                     value={client.maritalstatus?.id}
                                     onChange={(value) => {handleMaritalStatusChange(value)}}
-                                    dataTestId='maritalstatus' />
+                                    dataTestId='maritalstatus'
+                                    error={validationErrors.maritalstatus?.errormessage} />
                             </LabelField>
 
                             <LabelField text='Rijbewijs' required={false}>
@@ -588,7 +636,8 @@ const ClientEditor = () => {
                                     value={client.driverslicences?.map(d => d.id)}
                                     onChange={(values) => {handleDriversLicensesChange(values)}}
                                     key={JSON.stringify(client.id + "_driverslicences")}
-                                    dataTestId='driverslicences' />
+                                    dataTestId='driverslicences'
+                                    error={validationErrors.driverslicences?.errormessage} />
                             </LabelField>
 
                             {/* TODO: doelgroepregister with yes no dropdown
@@ -615,7 +664,8 @@ const ClientEditor = () => {
                             onChangeObject={handleWorkingContractChange}
                             optionsDictionary={optionsDictionaryWorkingContract}
                             key={JSON.stringify(client.id + "_workingcontracts")}
-                            dataTestId='workingcontracts' />
+                            dataTestId='workingcontracts'
+                             />
 
                     </SlideToggleLabel>
 
@@ -650,29 +700,6 @@ const ClientEditor = () => {
 }
 
 export default ClientEditor;
-
-function handleSaveResult(
-    apiResult: ApiResult<Client>, 
-    setConfirmMessage: React.Dispatch<React.SetStateAction<string>>, 
-    setConfirmPopupOneButtonOpen: React.Dispatch<React.SetStateAction<boolean>>, 
-    setCvsError: React.Dispatch<React.SetStateAction<CvsError>>, 
-    setErrorPopupOpen: React.Dispatch<React.SetStateAction<boolean>>, 
-    setClient: React.Dispatch<React.SetStateAction<Client>>) {
-    if (apiResult.Ok) {
-        setConfirmMessage('Client succesvol opgeslagen');
-        setConfirmPopupOneButtonOpen(true);
-
-        setClient(apiResult.ReturnObject!);
-    }
-    else {
-        setCvsError({
-            id: 0,
-            errorcode: 'E',
-            message: `Er is een opgetreden tijdens het opslaan van een client. Foutmelding: ${apiResult.Errors!.join(', ')}`
-        });
-        setErrorPopupOpen(true);
-    }
-}
 
 function showLoadingScreen(status: string): string | undefined {
     return ` ${status === StatusEnum.PENDING ? 'loading-spinner-visible' : 'loading-spinner-hidden'}`;

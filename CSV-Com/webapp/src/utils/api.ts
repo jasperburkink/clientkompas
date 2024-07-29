@@ -7,8 +7,9 @@ import Client from "types/model/Client";
 import moment from 'moment';
 import { isNullOrEmpty } from "./utilities";
 import ApiResult from "types/common/api-result";
-import { error } from "console";
+import { Console, error } from "console";
 import Organization from "types/model/Organization";
+import { ValidationErrorHash, ValidationError, parseValidationErrors } from "types/common/validation-error";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -97,6 +98,9 @@ Date.prototype.toJSON = function(){
 export const saveClient = async (client: Client): Promise<ApiResult<Client>> => {
     let method = client.id > 0  ? 'PUT' : 'POST';
 
+    console.log(JSON.stringify(client));
+
+
     const requestOptions: RequestInit = {
         method: method,
         headers: {
@@ -106,18 +110,30 @@ export const saveClient = async (client: Client): Promise<ApiResult<Client>> => 
     };
 
     const response = await fetch(`${apiUrl}Client`, requestOptions);     
-    
+
     if(!response.ok){
         try {
-            let {title, errors} = await response.json();
-        
+            var responseData = await response.json();
+
             return {
                 Ok: response.ok,
-                Errors: errors
-            }
+                ValidationErrors: parseValidationErrors(responseData)
+            };
         }
         catch (err) {
-            console.log(`An error has occured while reading errors from API while saving a client. Error:${err}.`);
+            try
+            {
+                let {title, errors} = responseData;
+            
+                return {
+                    Title: title,
+                    Ok: response.ok,
+                    Errors: errors
+                }
+            }
+            catch (err) {
+                console.log(`An unexpected error has occured while reading errors from API while saving a client. Error:${err}.`);
+            }
         }
 
         return {

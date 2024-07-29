@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import styled from '@emotion/styled';
 import { DateTimePicker } from '@mui/x-date-pickers';
+import { ErrorMessage } from './error-message';
 
 const LOCALE_PROVIDER = "nl";
 const MOBILE_BREAKPOINT = 640;
@@ -20,7 +21,8 @@ export interface DatePickerProps {
     required: boolean,
     className?: string,
     onChange?: (value: Moment.Moment | null) => void,
-    dataTestId?: string;
+    dataTestId?: string,
+    error?: string;
 }
 
 function GenerateAwesomeFontCalendarIcon() {
@@ -63,38 +65,41 @@ export const DatePicker = (props: DatePickerProps) => {
   };
 
   return (
-  <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale={LOCALE_PROVIDER}>
-    {isMobileView ? (
-      <MobileDatePickerControl.MobileDatePicker
-      className={`datepicker ${props.className}`}      
-      value={props.value ? Moment(props.value) : null}
-      onChange={handleDateChange}
-      slotProps={{
-        textField: {
-          inputProps: {
-            'data-testid': props.dataTestId
-          }
-        }
-      }} />
-    ): (
-      <DatePickerControl.DatePicker      
-        className={`datepicker ${props.className}`}
-        value={props.value ? Moment(props.value) : null}
-        slots={{openPickerIcon: GenerateAwesomeFontCalendarIcon}}
-        slotProps={{textField: {
-          required: props.required,
-          inputProps: {
-              'data-testid': props.dataTestId            
-          }
-        }}}        
-        onChange={handleDateChange}
-        sx={{
-          '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': { border: '2px solid b3b3b3' }, //Init state
-          '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': { border: '2px solid #b3b3b3' },  // at hover state
-          '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': { border: '2px solid #148CB8' }, // at focused state
-      }}
-         />
-    )}
-  </LocalizationProvider>
+    <div className='datepicker-container'>
+      <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale={LOCALE_PROVIDER}>
+        {isMobileView ? (
+          <MobileDatePickerControl.MobileDatePicker
+          className={`datepicker ${props.className}`}      
+          value={props.value ? Moment(props.value) : null}
+          onChange={handleDateChange}
+          slotProps={{
+            textField: {
+              inputProps: {
+                'data-testid': props.dataTestId
+              }
+            }
+          }} />
+        ): (
+          <DatePickerControl.DatePicker      
+            className={`datepicker ${props.className}`}
+            value={props.value ? Moment(props.value) : null}
+            slots={{openPickerIcon: GenerateAwesomeFontCalendarIcon}}
+            slotProps={{textField: {
+              required: props.required,
+              inputProps: {
+                  'data-testid': props.dataTestId
+              }
+            }}}        
+            onChange={handleDateChange}
+            sx={{
+              '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': { border: '2px solid b3b3b3' }, //Init state
+              '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': { border: '2px solid #b3b3b3' },  // at hover state
+              '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': { border: '2px solid #148CB8' }, // at focused state
+          }}
+            />
+        )}
+      </LocalizationProvider>  
+      {props.error && <ErrorMessage error={props.error} />}
+  </div>
   );
 };

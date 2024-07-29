@@ -1,5 +1,6 @@
 import React from "react";
 import "./text-area.css";
+import { ErrorMessage } from "./error-message";
 
 export interface TextareaProps {
   value?: string,
@@ -7,11 +8,12 @@ export interface TextareaProps {
   className?: string,
   onChange?: (value: string) => void,
   dataTestId?: string;
+  error?: string;
 }
 
 const Textarea = (props: TextareaProps) => {
   return (
-    <div style={{ flex: 1 }}>
+    <div className='text-area-container' style={{ flex: 1 }}>
       <textarea
         className="text-area"
         name="postContent"
@@ -22,6 +24,7 @@ const Textarea = (props: TextareaProps) => {
         onChange={(e) => {props.onChange?.(e.target.value);}}
         data-testid={props.dataTestId}
       />
+      {props.error && <ErrorMessage error={props.error} />}
     </div>
   );
 };
