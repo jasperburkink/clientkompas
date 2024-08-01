@@ -10,6 +10,9 @@ import { faXmark} from "@fortawesome/free-solid-svg-icons";
 import CustomLabels from 'types/common/labels';
 import moment, { Moment } from 'moment';
 import { Dropdown, DropdownObject } from './dropdown';
+import { ValidationError, ValidationErrorHash } from 'types/common/validation-error';
+import WorkingContract from 'types/model/WorkingContract';
+import RequiredFields, { RequiredFieldsConfig } from 'types/common/required-fields';
 
 interface DomainObjectInputProps<T>{
     className?: string;
@@ -17,13 +20,14 @@ interface DomainObjectInputProps<T>{
     labelType: string;
     value: T[];
     fieldOrder?: string[];
-    numMinimalRequired: number;    
+    numMinimalRequired: number;
     addObject: () => T;
     typeName: keyof typeof CustomLabels;
     onRemoveObject: (removedObject: T) => void;
     onChangeObject: (updatedObject: T, index: number) => void,
     optionsDictionary?: { [key: string] : DropdownObject[] };
     dataTestId?: string;
+    errors?: ValidationErrorHash;
 }
 
 const DomainObjectInput = <T extends Record<string, any>>(props: DomainObjectInputProps<T>) => {
@@ -64,6 +68,10 @@ const DomainObjectInput = <T extends Record<string, any>>(props: DomainObjectInp
                         let inputType: string = 'text';
                         inputType = getInputFieldType(value, key, props.optionsDictionary);
                         let dataTestId: string = `${props.dataTestId}.${key}.${(domainIndex+1)}`;
+                        let error: string | undefined = props.errors?.[`${props.typeName}[${domainIndex}].${key.toLowerCase()}`]?.errormessage;                        
+                        let requiredField: boolean = isFieldRequired(props.typeName, key);
+
+                        console.log(`${key}:${requiredField}`);
 
                         const isFirstField = fieldIndex === 0;
                         const isLastField = fieldIndex === orderedFields.length - 1;
@@ -96,6 +104,7 @@ const DomainObjectInput = <T extends Record<string, any>>(props: DomainObjectInp
                                 textValue, 
                                 value, 
                                 requiredDomainObject, 
+                                requiredField,
                                 isLastField, 
                                 handleRemoveObject, 
                                 domainObject, 
@@ -104,7 +113,9 @@ const DomainObjectInput = <T extends Record<string, any>>(props: DomainObjectInp
                                 onChangeField,
                                 domainIndex,
                                 dataTestId,
-                                options)
+                                options,
+                                error
+                            )
                         );
                     })}
                     </div>              
@@ -128,6 +139,7 @@ function getDomainObjectField<T extends Record<string, any>>(
     textValue: string, 
     value: any, 
     requiredDomainObject: boolean, 
+    requiredField: boolean,
     isLastField: boolean, 
     handleRemoveObject: (domainObjectToRemove: T) => void, 
     domainObject: T, 
@@ -136,20 +148,21 @@ function getDomainObjectField<T extends Record<string, any>>(
     onChange: (updatedValue: any, index: number, inputType: string) => void, 
     domainIndex: number,
     dataTestId: string,
-    options?: DropdownObject[]) {
+    options?: DropdownObject[],
+    error?: string) {
     let fieldComponent;
     
     switch (inputType) {
         case 'date':
-          fieldComponent = getDateField(textValue, requiredDomainObject, value, onChange, inputType, domainIndex, dataTestId);  
+          fieldComponent = getDateField(textValue, requiredField, value, onChange, inputType, domainIndex, dataTestId, error);  
             break;
         case 'dropdown':
             options 
-            ? fieldComponent = getDropdownField(textValue, requiredDomainObject, value, onChange, inputType, domainIndex, options, dataTestId)
-            : fieldComponent = getTextField(textValue, requiredDomainObject, value, onChange, inputType, domainIndex, dataTestId);
+            ? fieldComponent = getDropdownField(textValue, requiredField, value, onChange, inputType, domainIndex, options, dataTestId, error)
+            : fieldComponent = getTextField(textValue, requiredField, value, onChange, inputType, domainIndex, dataTestId, error);
             break;
         default:
-            fieldComponent = getTextField(textValue, requiredDomainObject, value, onChange, inputType, domainIndex, dataTestId);
+            fieldComponent = getTextField(textValue, requiredField, value, onChange, inputType, domainIndex, dataTestId, error);
             break;
     }
 
@@ -169,64 +182,70 @@ function getDomainObjectField<T extends Record<string, any>>(
 }
 
 function getDateField(
-    textValue: string, 
-    requiredDomainObject: boolean, 
+    textValue: string,
+    requiredField: boolean,
     value: Date,
     onChange: (updatedValue: Moment | null, index: number, inputType: string) => void,
     inputType: string,
     index: number,
-    dataTestId: string) {
+    dataTestId: string,
+    error?: string) {
     return <div className="domain-object-field-container">
-        <LabelField text={textValue} required={requiredDomainObject}>
+        <LabelField text={textValue} required={requiredField}>
             <DatePicker 
                 placeholder='b.v. 01-01-2001' 
-                required={requiredDomainObject} 
+                required={requiredField} 
                 value={value}
                 onChange={(newValue) => {onChange(newValue, index, inputType)}}
-                dataTestId={dataTestId} />
+                dataTestId={dataTestId}
+                error={error} />
         </LabelField>   
     </div>;
 }
 
 function getTextField(
     textValue: string, 
-    requiredDomainObject: boolean, 
+    requiredField: boolean,
     value: string, 
     onChange: (updatedValue: string, index: number, inputType: string) => void, 
     inputType: string,
     domainIndex: number,
-    dataTestId: string) {
+    dataTestId: string,
+    error?: string) {
     return <div className="domain-object-field-container">
-        <LabelField text={textValue} required={requiredDomainObject}>
+        <LabelField text={textValue} required={requiredField}>
             <InputField 
                 inputfieldtype={{type:'text'}}                
                 value={value}
-                required={requiredDomainObject} 
+                required={requiredField} 
                 placeholder={textValue} 
                 onChange={(newValue) => {onChange(newValue, domainIndex, inputType)}}
-                dataTestId={dataTestId} />
+                dataTestId={dataTestId}
+                error={error} />
         </LabelField>
     </div>;
 }
 
 function getDropdownField(
     textValue: string, 
-    requiredDomainObject: boolean, 
+    requiredField: boolean,
     value: number, 
     onChange: (updatedValue: string | number, index: number, inputType: string) => void, 
     inputType: string,    
     index: number,
     options: DropdownObject[],
-    dataTestId: string) {
+    dataTestId: string,
+    error?: string) {
     return <div className="domain-object-field-container">
-        <LabelField text={textValue} required={requiredDomainObject}>
+        <LabelField text={textValue} required={requiredField}>
             <Dropdown 
                 inputfieldname={textValue}
                 options={options}
                 value={value}
-                required={requiredDomainObject}
+                required={requiredField}
                 onChange={(newValue) => {onChange(newValue, index, inputType)}}
-                dataTestId={dataTestId} />
+                dataTestId={dataTestId}
+                error={error} />
         </LabelField>
     </div>;
 }
@@ -257,4 +276,8 @@ function getInputFieldType(value: any, key: string, optionsDictionary?:{ [key: s
     }
 
     return inputType;
+}
+
+function isFieldRequired<T>(typeName: keyof RequiredFieldsConfig, fieldName: keyof T): boolean {
+    return RequiredFields[typeName]?.[fieldName] ?? false; // Standaard op false als het type of veld niet gevonden wordt
 }

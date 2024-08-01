@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import './dropdown.css';
 import './dropdown-with-button.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAsterisk , faPlus, faXmark} from "@fortawesome/free-solid-svg-icons";
@@ -12,6 +11,7 @@ interface IDropDownProps {
     value?: number[];
     onChange?: (value: number[]) => void;
     dataTestId?: string;
+    error?: string;
 }
 
 const DropdownWithButton = (props: IDropDownProps) => {
@@ -54,21 +54,22 @@ const DropdownWithButton = (props: IDropDownProps) => {
     
     return (
         <div className='input-field flex-col'>
-            <div className='flex'>
+            <div className='dropdown-component-container'>
                 <Dropdown 
-                    className='dropdown'
+                    className='dropdown-component'
                     options={dropdownOptions}
                     required={props.required}
                     inputfieldname={props.inputfieldname}
                     value={dropdownValue}
                     onChange={(e) => setDropdownValue(e)}
-                    dataTestId={props.dataTestId} />
+                    dataTestId={props.dataTestId}
+                    error={props.error} />
                 <button className='add-extra-dropdown-btn' type='button' data-testid={`${props.dataTestId}.add`} onClick={() => {addOption(dropdownValue);}}>
-                    <FontAwesomeIcon className='ml-[0]' icon={faPlus} size="xl" style={{color: "#000000",}} />
+                    <FontAwesomeIcon className='ml-[0]' icon={faPlus} size="xl" style={{color: "#000000"}} />
                 </button>
             </div>
-            <div className='flex flex-wrap max-w-[100%]'>
-                {selectedOptions.map((selectedOption, index) => (  
+            <div className='dropdown-badge-container'>
+                {selectedOptions.map((selectedOption, index) => (
                     <div key={props.inputfieldname + '_badge_' + selectedOption} className='dropdownbadge'>
                         <div>
                             <p className='mx-1'>
@@ -77,7 +78,7 @@ const DropdownWithButton = (props: IDropDownProps) => {
                             <input name={props.inputfieldname} type="hidden" value={selectedOption} />
                         </div>
                         <button type='button' className='badgeBtn' onClick={() => removeOption(selectedOption)}>
-                            <FontAwesomeIcon icon={faXmark} size="sm" style={{color: "#000000",}} />
+                            <FontAwesomeIcon icon={faXmark} size="sm" style={{color: "#000000"}} />
                         </button>
                     </div>      
                 ))}

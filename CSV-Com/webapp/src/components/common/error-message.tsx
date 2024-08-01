@@ -1,3 +1,5 @@
+import './error-message.css';
+
 export interface ErrorMessageProps {
     error?: string;
 }

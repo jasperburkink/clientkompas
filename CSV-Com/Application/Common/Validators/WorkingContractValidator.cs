@@ -13,10 +13,11 @@ namespace Application.Common.Validators
         {
             _unitOfWork = unitOfWork;
 
+            RuleFor(wc => wc.OrganizationId).ValidateWorkingContractOrganization();
             RuleFor(wc => wc.ContractType).ValidateWorkingContractContractType();
             RuleFor(wc => wc.Function).ValidateWorkingContractFunction();
-            RuleFor(wc => wc.FromDate).ValidateWorkingContractFromDate();
-            RuleFor(wc => wc.ToDate).ValidateWorkingContractToDate();
+            RuleFor(wc => wc.FromDate).ValidateWorkingContractFromDate(workingContract => workingContract.ToDate);
+            RuleFor(wc => wc.ToDate).ValidateWorkingContractToDate(workingContract => workingContract.FromDate);
         }
     }
 }

@@ -327,7 +327,7 @@ function App() {
                         addObject={addEmergencyPerson} 
                         value={emergencyPeople} 
                         labelType='contactpersoon' 
-                        typeName='EmergencyPerson' 
+                        typeName='emergencypeople' 
                         numMinimalRequired={1}
                         onRemoveObject={onRemoveEmergencyPerson}
                         onChangeObject={handleEmergencyPersonChange} />
@@ -337,7 +337,7 @@ function App() {
                         addObject={addWorkingContract} 
                         value={workingContracts} 
                         labelType='werkervaring' 
-                        typeName='WorkingContract' 
+                        typeName='workingcontracts' 
                         numMinimalRequired={2}
                         onRemoveObject={onRemoveWorkingContract}
                         onChangeObject={handleWorkingContractChange}

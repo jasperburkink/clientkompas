@@ -38,7 +38,7 @@ import BenefitForm from 'types/model/BenefitForm';
 import { ClientContext } from './client-context';
 import Organization from 'types/model/Organization';
 import { nameof } from 'types/common/nameof';
-import { ValidationErrorHash } from 'types/common/validation-error';
+import { filterValidationErrors, ValidationErrorHash } from 'types/common/validation-error';
 
 const ClientEditor = () => {
     
@@ -277,8 +277,9 @@ const ClientEditor = () => {
                 setCvsError({
                     id: 0,
                     errorcode: 'E',
-                    message: `Er is een opgetreden tijdens het opslaan van een client. Foutmelding: ${apiResult.Errors!.join(', ')}`
+                    message: `Er is een opgetreden tijdens het opslaan van een client. Foutmelding: ${(apiResult.Errors as string[]).join(', ')}`
                 });
+                
                 setErrorPopupOpen(true);    
             }
         }
@@ -553,13 +554,13 @@ const ClientEditor = () => {
                         addObject={addEmergencyPerson} 
                         value={client.emergencypeople!} 
                         labelType='contactpersoon' 
-                        typeName='EmergencyPerson' 
+                        typeName='emergencypeople' 
                         numMinimalRequired={1}
                         onRemoveObject={onRemoveEmergencyPerson}
                         onChangeObject={handleEmergencyPersonChange}
                         key={JSON.stringify(client.id + "_emergencypeople")}
                         dataTestId='emergencypeople'
-                         />
+                        errors={filterValidationErrors(validationErrors, 'emergencypeople')} />
 
                     <div className='client-remarks'>
                         <Label text='Opmerkingen' />
@@ -658,14 +659,14 @@ const ClientEditor = () => {
                             value={client.workingcontracts!}
                             fieldOrder={FieldOrderWorkingContract}
                             labelType='werkervaring' 
-                            typeName='WorkingContract' 
+                            typeName='workingcontracts' 
                             numMinimalRequired={0}
                             onRemoveObject={onRemoveWorkingContract}
                             onChangeObject={handleWorkingContractChange}
                             optionsDictionary={optionsDictionaryWorkingContract}
                             key={JSON.stringify(client.id + "_workingcontracts")}
                             dataTestId='workingcontracts'
-                             />
+                            errors={filterValidationErrors(validationErrors, 'workingcontracts')} />
 
                     </SlideToggleLabel>
 

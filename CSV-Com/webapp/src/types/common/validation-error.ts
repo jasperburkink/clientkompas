@@ -18,3 +18,15 @@ export const parseValidationErrors = (json: any): ValidationErrorHash => {
 
     return validationErrorHash;
 };
+
+export const filterValidationErrors = (errors: ValidationErrorHash, name: string): ValidationErrorHash => {
+    const validationErrors: ValidationErrorHash = {};
+
+    for (const key in errors) {
+        if (errors[key].propertyname.toLowerCase().startsWith(name.toLowerCase())) {
+            validationErrors[key] = errors[key];
+        }
+    }
+
+    return validationErrors;
+};

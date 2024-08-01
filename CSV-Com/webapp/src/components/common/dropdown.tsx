@@ -22,14 +22,14 @@ interface IDropDownProps {
 const OPTION_TEXT = 'Kies uit de lijst'
 
 export const Dropdown = (props: IDropDownProps) => (  
-    <div className="dropdown-container">
-        <select name={props.inputfieldname} id=""  className={`dropdown ${props.className}`}  required={props.required} value={props.value}
+    <div className={`dropdown-container ${props.className}`} >
+        <select name={props.inputfieldname} className='dropdown' required={props.required} value={props.value}
             onChange={(e) => {
                 const selectedValue = parseInt(e.target.value);
                 props.onChange?.(selectedValue);
             }}
             data-testid={props.dataTestId}>
-            <option key={0} value=''>{OPTION_TEXT}</option>
+            requiredDomainObject && <option key={0} value='0'>{OPTION_TEXT}</option>
             {props.options.map((item) => (
                 <option key={item.value} value={item.value} >{item.label}</option>
             ))}

@@ -10,6 +10,7 @@ import ApiResult from "types/common/api-result";
 import { Console, error } from "console";
 import Organization from "types/model/Organization";
 import { ValidationErrorHash, ValidationError, parseValidationErrors } from "types/common/validation-error";
+import { Type } from "typescript";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -39,6 +40,56 @@ moment.prototype.toJSON = function(){
 }
 Date.prototype.toJSON = function(){
     return moment(this).format(DATE_FORMAT_JSON);
+}
+
+const handleApiResonse = async <T>(response: Response): Promise<ApiResult<T>> => {
+    if(response.ok){
+        let ObjectReturn: T = await response.json();
+
+        return {
+            Ok: response.ok,
+            ReturnObject: ObjectReturn
+        }
+    }
+
+    // Error
+    try {
+        var responseData = await response.json();
+
+        let titleResponse: string | undefined;
+        let errorsResponse: string[] | undefined;
+        let validationErrorsResponse: ValidationErrorHash | undefined;
+
+        try{
+            validationErrorsResponse = parseValidationErrors(responseData);
+        }
+        catch(err){
+            console.log(`Error while parsing api validation errors. Error:${err}`);
+        }
+
+        try{
+            let {title, errors} = responseData;
+            titleResponse = title;
+            errorsResponse = processErrors(errors);
+        }
+        catch(err){
+            console.log(`Error while parsing api errors. Error:${err}`);
+        }
+        
+        return {
+            Ok: response.ok,
+            Title: titleResponse,
+            Errors: errorsResponse,
+            ValidationErrors: validationErrorsResponse
+        }        
+    }
+    catch (err) {
+        console.log(`Error while parsing api response. Error:${err}`);
+        return {
+            Ok: response.ok,
+            Errors: [response.statusText]
+        }
+    }
 }
 
 export const fetchClient = async (clientId: string): Promise<ClientQuery> => {
@@ -111,43 +162,7 @@ export const saveClient = async (client: Client): Promise<ApiResult<Client>> => 
 
     const response = await fetch(`${apiUrl}Client`, requestOptions);     
 
-    if(!response.ok){
-        try {
-            var responseData = await response.json();
-
-            return {
-                Ok: response.ok,
-                ValidationErrors: parseValidationErrors(responseData)
-            };
-        }
-        catch (err) {
-            try
-            {
-                let {title, errors} = responseData;
-            
-                return {
-                    Title: title,
-                    Ok: response.ok,
-                    Errors: errors
-                }
-            }
-            catch (err) {
-                console.log(`An unexpected error has occured while reading errors from API while saving a client. Error:${err}.`);
-            }
-        }
-
-        return {
-            Ok: response.ok,
-            Errors: [response.statusText]
-        }
-    }
-
-    let clientReturn: Client = await response.json();
-
-    return {
-        Ok: response.ok,
-        ReturnObject: clientReturn
-    }
+    return handleApiResonse<Client>(response);
 }
 
 export const fetchOrganization = async (organizationId: string): Promise<Organization> => {
@@ -172,29 +187,13 @@ export const saveOrganization = async (organization: Organization): Promise<ApiR
 
     const response = await fetch(`${apiUrl}Organization`, requestOptions);     
     
-    if(!response.ok){
-        try {
-            let {title, errors} = await response.json();
-        
-            return {
-                Ok: response.ok,
-                Errors: errors
-            }
-        }
-        catch (err) {
-            console.log(`An error has occured while reading errors from API while saving an organization. Error:${err}.`);
-        }
+    return handleApiResonse<Organization>(response);
+}
 
-        return {
-            Ok: response.ok,
-            Errors: [response.statusText]
-        }
-    }
+function processErrors(errors: { [key: string]: string[] }): string[] {
 
-    let organizationReturn: Organization = await response.json();
+    // Verzamel alle foutmeldingen in een enkele array
+    const allErrors: string[] = Object.values(errors).flat();
 
-    return {
-        Ok: response.ok,
-        ReturnObject: organizationReturn
-    }
+    return allErrors;
 }
