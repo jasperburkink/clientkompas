@@ -3,6 +3,7 @@ import './dropdown-with-button.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAsterisk , faPlus, faXmark} from "@fortawesome/free-solid-svg-icons";
 import { Dropdown, DropdownObject } from './dropdown';
+import { ValidationError } from 'types/common/validation-error';
 
 interface IDropDownProps {
     options: DropdownObject[];
@@ -11,7 +12,7 @@ interface IDropDownProps {
     value?: number[];
     onChange?: (value: number[]) => void;
     dataTestId?: string;
-    error?: string;
+    errors?: ValidationError[];
 }
 
 const DropdownWithButton = (props: IDropDownProps) => {
@@ -63,7 +64,7 @@ const DropdownWithButton = (props: IDropDownProps) => {
                     value={dropdownValue}
                     onChange={(e) => setDropdownValue(e)}
                     dataTestId={props.dataTestId}
-                    error={props.error} />
+                    errors={props.errors} />
                 <button className='add-extra-dropdown-btn' type='button' data-testid={`${props.dataTestId}.add`} onClick={() => {addOption(dropdownValue);}}>
                     <FontAwesomeIcon className='ml-[0]' icon={faPlus} size="xl" style={{color: "#000000"}} />
                 </button>

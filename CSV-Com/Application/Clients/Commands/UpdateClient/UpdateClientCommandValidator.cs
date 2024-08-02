@@ -1,4 +1,5 @@
-﻿using Application.Common.Interfaces.CVS;
+﻿using Application.Common.Interfaces;
+using Application.Common.Interfaces.CVS;
 using Application.Common.Rules;
 using Application.Common.Validators;
 using FluentValidation;
@@ -8,11 +9,12 @@ namespace Application.Clients.Commands.UpdateClient
     public class UpdateClientCommandValidator : AbstractValidator<UpdateClientCommand>
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IResourceMessageProvider _resourceMessageProvider;
 
-        public UpdateClientCommandValidator(IUnitOfWork unitOfWork)
+        public UpdateClientCommandValidator(IUnitOfWork unitOfWork, IResourceMessageProvider resourceMessageProvider)
         {
             _unitOfWork = unitOfWork;
-
+            _resourceMessageProvider = resourceMessageProvider;
             RuleFor(c => c.FirstName).ValidateClientFirstName();
             RuleFor(c => c.LastName).ValidateClientLastName();
             RuleFor(c => c.PrefixLastName).ValidateClientPrefixLastName();
@@ -33,7 +35,7 @@ namespace Application.Clients.Commands.UpdateClient
             RuleFor(c => c.BenefitForms).ValidateClientBenefitForms();
             RuleFor(c => c.DriversLicences).ValidateClientDriversLicences();
             RuleFor(c => c.WorkingContracts).ValidateClientWorkingContracts();
-            RuleForEach(c => c.WorkingContracts).SetValidator(new WorkingContractValidator(_unitOfWork));
+            RuleForEach(c => c.WorkingContracts).SetValidator(new WorkingContractValidator(_unitOfWork, _resourceMessageProvider));
         }
     }
 }

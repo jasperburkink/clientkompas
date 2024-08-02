@@ -1,5 +1,8 @@
-﻿using System.Reflection;
+﻿using System.Globalization;
+using System.Reflection;
 using Application.Common.Behaviours;
+using Application.Common.Interfaces;
+using Application.Common.Resources;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,9 +22,10 @@ namespace Application
                 cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehaviour<,>));
                 //cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(AuthorizationBehaviour<,>));
                 cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
-                //cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
+                //cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));                
 
             });
+            services.AddSingleton<IResourceMessageProvider>(new ResourceMessageProvider(CultureInfo.CurrentUICulture));
 
             return services;
         }

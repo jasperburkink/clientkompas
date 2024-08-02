@@ -43,4 +43,64 @@
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Common\Validators\Resources\Address.nl.Designer.cs">
+      <DependentUpon>Address.nl.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Common\Validators\Resources\Address.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Address.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Common\Validators\Resources\EmergencyPersonValidator.nl.Designer.cs">
+      <DependentUpon>EmergencyPersonValidator.nl.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Common\Validators\Resources\EmergencyPersonValidator.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>EmergencyPersonValidator.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Common\Validators\Resources\WorkingContractValidator.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>WorkingContractValidator.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Common\Validators\Resources\WorkingContractValidator.nl.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>WorkingContractValidator.nl.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Common\Validators\Resources\Address.nl.resx">
+      <LastGenOutput>Address.nl.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Validators\Resources\Address.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Address.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Validators\Resources\EmergencyPersonValidator.nl.resx">
+      <LastGenOutput>EmergencyPersonValidator.nl.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Validators\Resources\EmergencyPersonValidator.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>EmergencyPersonValidator.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Validators\Resources\WorkingContractValidator.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WorkingContractValidator.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Validators\Resources\WorkingContractValidator.nl.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WorkingContractValidator.nl.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>

@@ -1,6 +1,7 @@
 import React from "react";
 import "./text-area.css";
 import { ErrorMessage } from "./error-message";
+import { ValidationError } from "types/common/validation-error";
 
 export interface TextareaProps {
   value?: string,
@@ -8,7 +9,7 @@ export interface TextareaProps {
   className?: string,
   onChange?: (value: string) => void,
   dataTestId?: string;
-  error?: string;
+  errors?: ValidationError[];
 }
 
 const Textarea = (props: TextareaProps) => {
@@ -24,7 +25,7 @@ const Textarea = (props: TextareaProps) => {
         onChange={(e) => {props.onChange?.(e.target.value);}}
         data-testid={props.dataTestId}
       />
-      {props.error && <ErrorMessage error={props.error} />}
+      <ErrorMessage errors={props.errors} />
     </div>
   );
 };

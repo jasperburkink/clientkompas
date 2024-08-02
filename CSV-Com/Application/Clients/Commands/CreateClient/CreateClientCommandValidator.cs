@@ -1,4 +1,5 @@
-﻿using Application.Common.Interfaces.CVS;
+﻿using Application.Common.Interfaces;
+using Application.Common.Interfaces.CVS;
 using Application.Common.Rules;
 using Application.Common.Validators;
 using FluentValidation;
@@ -9,7 +10,7 @@ namespace Application.Clients.Commands.CreateClient
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public CreateClientCommandValidator(IUnitOfWork unitOfWork)
+        public CreateClientCommandValidator(IUnitOfWork unitOfWork, IResourceMessageProvider resourceMessageProvider)
         {
             _unitOfWork = unitOfWork;
 
@@ -33,7 +34,7 @@ namespace Application.Clients.Commands.CreateClient
             RuleFor(c => c.BenefitForms).ValidateClientBenefitForms();
             RuleFor(c => c.DriversLicences).ValidateClientDriversLicences();
             RuleFor(c => c.WorkingContracts).ValidateClientWorkingContracts();
-            RuleForEach(c => c.WorkingContracts).SetValidator(new WorkingContractValidator(_unitOfWork));
+            RuleForEach(c => c.WorkingContracts).SetValidator(new WorkingContractValidator(_unitOfWork, resourceMessageProvider));
         }
     }
 }

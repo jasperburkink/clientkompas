@@ -4,6 +4,7 @@ import { InputFieldType } from 'types/common/InputFieldComponentType';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { ErrorMessage } from './error-message';
+import { ValidationError } from 'types/common/validation-error';
 
 export interface InputFieldProps {
     value?: string,
@@ -13,7 +14,7 @@ export interface InputFieldProps {
     className?: string,
     onChange?: (value: string) => void,
     dataTestId?: string;
-    error?: string;
+    errors?: ValidationError[];
 }
 
 export const InputField = (props: InputFieldProps) => {
@@ -28,9 +29,9 @@ export const InputField = (props: InputFieldProps) => {
             placeholder={props.placeholder}
             required={props.required}
             data-testid={props.dataTestId}
-            className={`${props.error ? 'error' : ''}`} />        
-            <FontAwesomeIcon icon={faTriangleExclamation} className={`error-icon fa-lg ${props.error ? 'visible' : 'hidden'}`} />
+            className={`${props.errors ? 'error' : ''}`} />        
+            <FontAwesomeIcon icon={faTriangleExclamation} className={`error-icon fa-lg ${props.errors ? 'visible' : 'hidden'}`} />
         </div>
-        {props.error && <ErrorMessage error={props.error} />}
+        <ErrorMessage errors={props.errors} />
      </div>
 )};

@@ -412,7 +412,7 @@ const ClientEditor = () => {
                                 value={client.firstname} 
                                 onChange={(value) => handleClientInputChange('firstname', value)}
                                 dataTestId='firstname'
-                                error={validationErrors.firstname?.errormessage} />
+                                errors={validationErrors.firstname} />
                         </LabelField>
 
                         <LabelField text='Voorletters' required={true}>
@@ -423,7 +423,7 @@ const ClientEditor = () => {
                                 value={client.initials}
                                 onChange={(value) => handleClientInputChange('initials', value)}
                                 dataTestId='initials'
-                                error={validationErrors.initials?.errormessage} />
+                                errors={validationErrors.initials} />
                         </LabelField>
 
                         <LabelField text='Tussenvoegsel' required={false}>
@@ -434,7 +434,7 @@ const ClientEditor = () => {
                                 value={client.prefixlastname} 
                                 onChange={(value) => handleClientInputChange('prefixlastname', value)}
                                 dataTestId='prefixlastname'
-                                error={validationErrors.prefixlastname?.errormessage} />
+                                errors={validationErrors.prefixlastname} />
                         </LabelField>
 
                         <LabelField text='Achternaam' required={true}>
@@ -445,7 +445,7 @@ const ClientEditor = () => {
                                 value={client.lastname} 
                                 onChange={(value) => handleClientInputChange('lastname', value)}
                                 dataTestId='lastname'
-                                error={validationErrors.lastname?.errormessage} />
+                                errors={validationErrors.lastname} />
                         </LabelField>
 
                         <LabelField text='Straatadres' required={true}>
@@ -456,7 +456,7 @@ const ClientEditor = () => {
                                 value={client.streetname} 
                                 onChange={(value) => handleClientInputChange('streetname', value)}
                                 dataTestId='streetname'
-                                error={validationErrors.streetname?.errormessage} />
+                                errors={validationErrors.streetname} />
                         </LabelField>
 
                         <LabelField text='Huisnummer' required={true}>
@@ -468,7 +468,7 @@ const ClientEditor = () => {
                                 value={client.housenumber}
                                 onChange={(value) => handleClientInputChange('housenumber', value)}
                                 dataTestId='housenumber'
-                                error={validationErrors.housenumber?.errormessage} />
+                                errors={validationErrors.housenumber} />
                             <LabelField text='Toevoeging' required={false} className='house-number-addition'>
                                 <InputField 
                                     inputfieldtype={{type:'text'}} 
@@ -478,7 +478,7 @@ const ClientEditor = () => {
                                     value={client.housenumberaddition}
                                     onChange={(value) => handleClientInputChange('housenumberaddition', value)}
                                     dataTestId='housenumberaddition'
-                                    error={validationErrors.housenumberaddition?.errormessage} />
+                                    errors={validationErrors.housenumberaddition} />
                             </LabelField>
                         </LabelField>
 
@@ -490,7 +490,7 @@ const ClientEditor = () => {
                                 value={client.postalcode}
                                 onChange={(value) => handleClientInputChange('postalcode', value)}
                                 dataTestId='postalcode'
-                                error={validationErrors.postalcode?.errormessage} />
+                                errors={validationErrors.postalcode} />
                         </LabelField>
 
                         <LabelField text='Woonplaats' required={true}>
@@ -501,7 +501,7 @@ const ClientEditor = () => {
                                 value={client.residence}
                                 onChange={(value) => handleClientInputChange('residence', value)}
                                 dataTestId='residence'
-                                error={validationErrors.residence?.errormessage} />
+                                errors={validationErrors.residence} />
                         </LabelField>
 
                         <LabelField text='Telefoon' required={true}>
@@ -512,7 +512,7 @@ const ClientEditor = () => {
                                 value={client.telephonenumber}
                                 onChange={(value) => handleClientInputChange('telephonenumber', value)}
                                 dataTestId='telephonenumber'
-                                error={validationErrors.telephonenumber?.errormessage} />
+                                errors={validationErrors.telephonenumber} />
                         </LabelField>
 
                         <LabelField text='E-mail' required={true}>
@@ -523,7 +523,7 @@ const ClientEditor = () => {
                                 value={client.emailaddress}
                                 onChange={(value) => handleClientInputChange('emailaddress', value)}
                                 dataTestId='emailaddress'
-                                error={validationErrors.emailaddress?.errormessage} />
+                                errors={validationErrors.emailaddress} />
                         </LabelField>
 
                         <LabelField text='Geboortedatum' required={true}>
@@ -533,7 +533,7 @@ const ClientEditor = () => {
                                 value={client.dateofbirth}
                                 onChange={(value) => handleClientDatePickerChange('dateofbirth', value)}
                                 dataTestId='dateofbirth'
-                                error={validationErrors.dateofbirth?.errormessage} />
+                                errors={validationErrors.dateofbirth} />
                         </LabelField>
 
                         <LabelField text='Geslacht' required={true}>
@@ -544,7 +544,7 @@ const ClientEditor = () => {
                                 value={client.gender}
                                 onChange={(value) => handleGenderChange(value)}
                                 dataTestId='gender'
-                                error={validationErrors.gender?.errormessage} />
+                                errors={validationErrors.gender} />
                         </LabelField>
                     </div>
 
@@ -569,7 +569,7 @@ const ClientEditor = () => {
                             value={client.remarks}
                             onChange={(value: string) => handleClientInputChange('remarks', value)}
                             dataTestId='remarks'
-                            error={validationErrors.remarks?.errormessage} />
+                            errors={validationErrors.remarks} />
                     </div>
 
                     <SlideToggleLabel text='Overige cliënt informatie' smallTextColapsed=' - klap uit voor meer opties' smallTextExpanded=' - klap in voor minder opties' >
@@ -588,7 +588,7 @@ const ClientEditor = () => {
                                     onChange={(values) => {handleDiagnosesChange(values)}}
                                     key={JSON.stringify(client.id + "_diagnoses")}
                                     dataTestId='diagnoses'
-                                    error={validationErrors.diagnoses?.errormessage} />
+                                    errors={validationErrors.diagnoses} />
                             </LabelField>
 
                             <LabelField text='Uitkeringsvorm' required={false}>
@@ -605,7 +605,7 @@ const ClientEditor = () => {
                                     onChange={(values) => {handleBenefitFormsChange(values)}}
                                     key={JSON.stringify(client.id + "_benefitforms")}
                                     dataTestId='benefitforms'
-                                    error={validationErrors.benefitforms?.errormessage} />
+                                    errors={validationErrors.benefitforms} />
                             </LabelField>
 
                             <LabelField text='Burgerlijke staat' required={false}>
@@ -621,7 +621,7 @@ const ClientEditor = () => {
                                     value={client.maritalstatus?.id}
                                     onChange={(value) => {handleMaritalStatusChange(value)}}
                                     dataTestId='maritalstatus'
-                                    error={validationErrors.maritalstatus?.errormessage} />
+                                    errors={validationErrors.maritalstatus} />
                             </LabelField>
 
                             <LabelField text='Rijbewijs' required={false}>
@@ -638,7 +638,7 @@ const ClientEditor = () => {
                                     onChange={(values) => {handleDriversLicensesChange(values)}}
                                     key={JSON.stringify(client.id + "_driverslicences")}
                                     dataTestId='driverslicences'
-                                    error={validationErrors.driverslicences?.errormessage} />
+                                    errors={validationErrors.driverslicences} />
                             </LabelField>
 
                             {/* TODO: doelgroepregister with yes no dropdown

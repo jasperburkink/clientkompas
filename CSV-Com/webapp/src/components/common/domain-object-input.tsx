@@ -68,7 +68,7 @@ const DomainObjectInput = <T extends Record<string, any>>(props: DomainObjectInp
                         let inputType: string = 'text';
                         inputType = getInputFieldType(value, key, props.optionsDictionary);
                         let dataTestId: string = `${props.dataTestId}.${key}.${(domainIndex+1)}`;
-                        let error: string | undefined = props.errors?.[`${props.typeName}[${domainIndex}].${key.toLowerCase()}`]?.errormessage;                        
+                        let errors: ValidationError[] | undefined = props.errors?.[`${props.typeName}[${domainIndex}].${key.toLowerCase()}`];                        
                         let requiredField: boolean = isFieldRequired(props.typeName, key);
 
                         console.log(`${key}:${requiredField}`);
@@ -114,7 +114,7 @@ const DomainObjectInput = <T extends Record<string, any>>(props: DomainObjectInp
                                 domainIndex,
                                 dataTestId,
                                 options,
-                                error
+                                errors
                             )
                         );
                     })}
@@ -149,20 +149,20 @@ function getDomainObjectField<T extends Record<string, any>>(
     domainIndex: number,
     dataTestId: string,
     options?: DropdownObject[],
-    error?: string) {
+    errors?: ValidationError[]) {
     let fieldComponent;
     
     switch (inputType) {
         case 'date':
-          fieldComponent = getDateField(textValue, requiredField, value, onChange, inputType, domainIndex, dataTestId, error);  
+          fieldComponent = getDateField(textValue, requiredField, value, onChange, inputType, domainIndex, dataTestId, errors);  
             break;
         case 'dropdown':
             options 
-            ? fieldComponent = getDropdownField(textValue, requiredField, value, onChange, inputType, domainIndex, options, dataTestId, error)
-            : fieldComponent = getTextField(textValue, requiredField, value, onChange, inputType, domainIndex, dataTestId, error);
+            ? fieldComponent = getDropdownField(textValue, requiredField, value, onChange, inputType, domainIndex, options, dataTestId, errors)
+            : fieldComponent = getTextField(textValue, requiredField, value, onChange, inputType, domainIndex, dataTestId, errors);
             break;
         default:
-            fieldComponent = getTextField(textValue, requiredField, value, onChange, inputType, domainIndex, dataTestId, error);
+            fieldComponent = getTextField(textValue, requiredField, value, onChange, inputType, domainIndex, dataTestId, errors);
             break;
     }
 
@@ -189,7 +189,7 @@ function getDateField(
     inputType: string,
     index: number,
     dataTestId: string,
-    error?: string) {
+    errors?: ValidationError[]) {
     return <div className="domain-object-field-container">
         <LabelField text={textValue} required={requiredField}>
             <DatePicker 
@@ -198,7 +198,7 @@ function getDateField(
                 value={value}
                 onChange={(newValue) => {onChange(newValue, index, inputType)}}
                 dataTestId={dataTestId}
-                error={error} />
+                errors={errors} />
         </LabelField>   
     </div>;
 }
@@ -211,7 +211,7 @@ function getTextField(
     inputType: string,
     domainIndex: number,
     dataTestId: string,
-    error?: string) {
+    errors?: ValidationError[]) {
     return <div className="domain-object-field-container">
         <LabelField text={textValue} required={requiredField}>
             <InputField 
@@ -221,7 +221,7 @@ function getTextField(
                 placeholder={textValue} 
                 onChange={(newValue) => {onChange(newValue, domainIndex, inputType)}}
                 dataTestId={dataTestId}
-                error={error} />
+                errors={errors} />
         </LabelField>
     </div>;
 }
@@ -235,7 +235,7 @@ function getDropdownField(
     index: number,
     options: DropdownObject[],
     dataTestId: string,
-    error?: string) {
+    errors?: ValidationError[]) {
     return <div className="domain-object-field-container">
         <LabelField text={textValue} required={requiredField}>
             <Dropdown 
@@ -245,7 +245,7 @@ function getDropdownField(
                 required={requiredField}
                 onChange={(newValue) => {onChange(newValue, index, inputType)}}
                 dataTestId={dataTestId}
-                error={error} />
+                errors={errors} />
         </LabelField>
     </div>;
 }

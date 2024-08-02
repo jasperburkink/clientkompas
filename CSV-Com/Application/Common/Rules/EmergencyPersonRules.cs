@@ -1,23 +1,30 @@
-﻿using Domain.CVS.Constants;
-using Domain.CVS.Domain;
+﻿using Application.Common.Interfaces;
+using Application.Common.Validators;
+using Domain.CVS.Constants;
 using FluentValidation;
 
 namespace Application.Common.Rules
 {
     public static class EmergencyPersonRules
     {
-        public static IRuleBuilderOptions<T, string> ValidateEmergencyPersonName<T>(this IRuleBuilder<T, string> ruleBuilder)
+        public static IRuleBuilderOptions<T, string> ValidateEmergencyPersonName<T>(this IRuleBuilder<T, string> ruleBuilder,
+            IResourceMessageProvider resourceMessageProvider)
         {
             return ruleBuilder
-                .NotEmpty().WithMessage($"{nameof(EmergencyPerson.Name)} is verplicht.")
-                .MaximumLength(EmergencyPersonConstants.NameMaxLength).WithMessage($"{nameof(EmergencyPerson.Name)} mag niet langer zijn dan {EmergencyPersonConstants.NameMaxLength} karakters.");
+                .NotEmpty()
+                .WithMessage(resourceMessageProvider.GetMessage<EmergencyPersonValidator>("NameRequired"))
+                .MaximumLength(EmergencyPersonConstants.NameMaxLength)
+                .WithMessage(resourceMessageProvider.GetMessage<EmergencyPersonValidator>("NameMaxLength", EmergencyPersonConstants.NameMaxLength));
         }
 
-        public static IRuleBuilderOptions<T, string> ValidateEmergencyPersonTelephoneNumber<T>(this IRuleBuilder<T, string> ruleBuilder)
+        public static IRuleBuilderOptions<T, string> ValidateEmergencyPersonTelephoneNumber<T>(this IRuleBuilder<T, string> ruleBuilder,
+            IResourceMessageProvider resourceMessageProvider)
         {
             return ruleBuilder
-                .NotEmpty().WithMessage($"{nameof(EmergencyPerson.TelephoneNumber)} is verplicht.")
-                .MaximumLength(EmergencyPersonConstants.TelephoneNumberMaxLength).WithMessage($"{nameof(EmergencyPerson.TelephoneNumber)} mag niet langer zijn dan {EmergencyPersonConstants.TelephoneNumberMaxLength} karakters.");
+                .NotEmpty()
+                .WithMessage(resourceMessageProvider.GetMessage<EmergencyPersonValidator>("TelephoneNumberRequired"))
+                .MaximumLength(EmergencyPersonConstants.TelephoneNumberMaxLength)
+                .WithMessage(resourceMessageProvider.GetMessage<EmergencyPersonValidator>("TelephoneNumberMaxLength", EmergencyPersonConstants.TelephoneNumberMaxLength));
         }
     }
 }

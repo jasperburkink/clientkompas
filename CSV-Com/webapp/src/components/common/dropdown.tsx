@@ -1,6 +1,7 @@
 import React from 'react';
 import './dropdown.css';
 import { ErrorMessage } from './error-message';
+import { ValidationError } from 'types/common/validation-error';
 
 
 export interface DropdownObject {
@@ -16,7 +17,7 @@ interface IDropDownProps {
     value?: number;
     onChange?: (value: number) => void;
     dataTestId?: string;
-    error? :string;
+    errors? :ValidationError[];
 }
 
 const OPTION_TEXT = 'Kies uit de lijst'
@@ -34,6 +35,6 @@ export const Dropdown = (props: IDropDownProps) => (
                 <option key={item.value} value={item.value} >{item.label}</option>
             ))}
         </select>
-        {props.error && <ErrorMessage error={props.error} />}
+        <ErrorMessage errors={props.errors} />
     </div>
 );

@@ -11,6 +11,7 @@ import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import styled from '@emotion/styled';
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { ErrorMessage } from './error-message';
+import { ValidationError } from 'types/common/validation-error';
 
 const LOCALE_PROVIDER = "nl";
 const MOBILE_BREAKPOINT = 640;
@@ -22,7 +23,7 @@ export interface DatePickerProps {
     className?: string,
     onChange?: (value: Moment.Moment | null) => void,
     dataTestId?: string,
-    error?: string;
+    errors?: ValidationError[];
 }
 
 function GenerateAwesomeFontCalendarIcon() {
@@ -99,7 +100,7 @@ export const DatePicker = (props: DatePickerProps) => {
             />
         )}
       </LocalizationProvider>  
-      {props.error && <ErrorMessage error={props.error} />}
+      <ErrorMessage errors={props.errors} />
   </div>
   );
 };

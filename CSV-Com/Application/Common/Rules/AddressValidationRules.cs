@@ -1,4 +1,6 @@
-﻿using Domain.CVS.Constants;
+﻿using Application.Common.Interfaces;
+using Application.Common.Validators;
+using Domain.CVS.Constants;
 using Domain.CVS.ValueObjects;
 using FluentValidation;
 
@@ -8,14 +10,17 @@ namespace Application.Common.Rules
     {
         public const string POSTALCODE_REGEX = "^[1-9][0-9]{3} ?(?!sa|sd|ss|SA|SD|SS)[A-Za-z]{2}$";
 
-        public static IRuleBuilderOptions<T, string> ValidateAddressStreetName<T>(this IRuleBuilder<T, string> ruleBuilder)
+        public static IRuleBuilderOptions<T, string> ValidateAddressStreetName<T>(this IRuleBuilder<T, string> ruleBuilder,
+            IResourceMessageProvider resourceMessageProvider)
         {
             return ruleBuilder
-                .NotEmpty().WithMessage($"{nameof(Address.StreetName)} is verplicht.")
+                .NotEmpty()
+                .WithMessage(resourceMessageProvider.GetMessage<AddressValidator>("StreetNameRequired"))
                 .MaximumLength(AddressConstants.StreetnameMaxLength).WithMessage($"{nameof(Address.StreetName)}  mag niet langer zijn dan {AddressConstants.StreetnameMaxLength} karakters.");
         }
 
-        public static IRuleBuilderOptions<T, string> ValidateAddressPostalCode<T>(this IRuleBuilder<T, string> ruleBuilder)
+        public static IRuleBuilderOptions<T, string> ValidateAddressPostalCode<T>(this IRuleBuilder<T, string> ruleBuilder,
+            IResourceMessageProvider resourceMessageProvider)
         {
             return ruleBuilder
                 .NotEmpty().WithMessage($"{nameof(Address.PostalCode)} is verplicht.")
@@ -23,7 +28,8 @@ namespace Application.Common.Rules
                 .MaximumLength(AddressConstants.PostalcodeMaxLength).WithMessage($"{nameof(Address.PostalCode)}  mag niet langer zijn dan {AddressConstants.PostalcodeMaxLength} karakters.");
         }
 
-        public static IRuleBuilderOptions<T, int> ValidateAddressHouseNumber<T>(this IRuleBuilder<T, int> ruleBuilder)
+        public static IRuleBuilderOptions<T, int> ValidateAddressHouseNumber<T>(this IRuleBuilder<T, int> ruleBuilder,
+            IResourceMessageProvider resourceMessageProvider)
         {
             return ruleBuilder
                 .NotEmpty().WithMessage($"{nameof(Address.HouseNumber)} is verplicht.")
@@ -31,13 +37,15 @@ namespace Application.Common.Rules
                 .LessThanOrEqualTo(AddressConstants.HouseNumberMaxValue).WithMessage($"{nameof(Address.HouseNumber)} mag niet groter zijn dan {AddressConstants.HouseNumberMaxValue}.");
         }
 
-        public static IRuleBuilderOptions<T, string> ValidateAddressHouseNumberAddition<T>(this IRuleBuilder<T, string> ruleBuilder)
+        public static IRuleBuilderOptions<T, string> ValidateAddressHouseNumberAddition<T>(this IRuleBuilder<T, string> ruleBuilder,
+            IResourceMessageProvider resourceMessageProvider)
         {
             return ruleBuilder
                 .MaximumLength(AddressConstants.HouseNumberAdditionMaxLength).WithMessage($"{nameof(Address.HouseNumberAddition)}  mag niet langer zijn dan {AddressConstants.HouseNumberAdditionMaxLength} karakters.");
         }
 
-        public static IRuleBuilderOptions<T, string> ValidateAddressResidence<T>(this IRuleBuilder<T, string> ruleBuilder)
+        public static IRuleBuilderOptions<T, string> ValidateAddressResidence<T>(this IRuleBuilder<T, string> ruleBuilder,
+            IResourceMessageProvider resourceMessageProvider)
         {
             return ruleBuilder
                 .NotEmpty().WithMessage($"{nameof(Address.Residence)} is verplicht.")
