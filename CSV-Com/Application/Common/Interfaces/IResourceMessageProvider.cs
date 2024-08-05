@@ -6,6 +6,8 @@ namespace Application.Common.Interfaces
     {
         CultureInfo CultureInfo { get; }
 
+        string GetMessage(Type type, string key, params object[] args);
+
         string GetMessage<T>(string key, params object[] args);
     }
 }

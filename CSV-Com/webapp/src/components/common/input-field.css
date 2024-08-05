@@ -49,13 +49,6 @@
             w-8;
         }
     }
-        
-
-    /* .input-field svg{
-        @apply 
-        m-3 
-        text-redRequired;
-    }     */
     
     .Mui-focused fieldset.MuiOutlinedInput-notchedOutline {
         border-color: red;

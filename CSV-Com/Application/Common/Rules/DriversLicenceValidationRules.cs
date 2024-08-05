@@ -1,23 +1,29 @@
-﻿using Domain.CVS.Constants;
-using Domain.CVS.Domain;
+﻿using Application.Common.Interfaces;
+using Domain.CVS.Constants;
 using FluentValidation;
 
 namespace Application.Common.Rules
 {
     public static class DriversLicenceValidationRules
     {
-        public static IRuleBuilderOptions<T, string> ValidateDriversLicenceCategory<T>(this IRuleBuilder<T, string> ruleBuilder)
+        public static IRuleBuilderOptions<T, string> ValidateDriversLicenceCategory<T>(this IRuleBuilder<T, string> ruleBuilder,
+            IResourceMessageProvider resourceMessageProvider)
         {
             return ruleBuilder
-                .NotEmpty().WithMessage($"{nameof(DriversLicence.Category)} is verplicht.")
-                .MaximumLength(DriversLicenceConstants.CATEGORY_MAXLENGTH).WithMessage($"{nameof(DriversLicence.Category)} mag niet langer zijn dan {DriversLicenceConstants.CATEGORY_MAXLENGTH} karakters.");
+                .NotEmpty()
+                .WithMessage(resourceMessageProvider.GetMessage(typeof(DriversLicenceValidationRules), "CategoryRequired"))
+                .MaximumLength(DriversLicenceConstants.CATEGORY_MAXLENGTH)
+                .WithMessage(resourceMessageProvider.GetMessage(typeof(DriversLicenceValidationRules), "CategoryMaxLength", DriversLicenceConstants.CATEGORY_MAXLENGTH));
         }
 
-        public static IRuleBuilderOptions<T, string> ValidateDriversLicenceDescription<T>(this IRuleBuilder<T, string> ruleBuilder)
+        public static IRuleBuilderOptions<T, string> ValidateDriversLicenceDescription<T>(this IRuleBuilder<T, string> ruleBuilder,
+            IResourceMessageProvider resourceMessageProvider)
         {
             return ruleBuilder
-                .NotEmpty().WithMessage($"{nameof(DriversLicence.Description)} is verplicht.")
-                .MaximumLength(DriversLicenceConstants.DESCRIPTION_MAXLENGTH).WithMessage($"{nameof(DriversLicence.Category)} mag niet langer zijn dan {DriversLicenceConstants.DESCRIPTION_MAXLENGTH} karakters.");
+                .NotEmpty()
+                .WithMessage(resourceMessageProvider.GetMessage(typeof(DriversLicenceValidationRules), "DescriptionRequired"))
+                .MaximumLength(DriversLicenceConstants.DESCRIPTION_MAXLENGTH)
+                .WithMessage(resourceMessageProvider.GetMessage(typeof(DriversLicenceValidationRules), "DescriptionMaxLength", DriversLicenceConstants.DESCRIPTION_MAXLENGTH));
         }
     }
 }

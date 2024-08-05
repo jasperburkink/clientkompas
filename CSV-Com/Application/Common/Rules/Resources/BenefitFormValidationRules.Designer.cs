@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Application.Common.Validators.Resources {
+namespace Application.Common.Rules.Resources {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace Application.Common.Validators.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class WorkingContractValidator {
+    internal class BenefitFormValidationRules {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal WorkingContractValidator() {
+        internal BenefitFormValidationRules() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Application.Common.Validators.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Application.Common.Validators.Resources.WorkingContractValidator", typeof(WorkingContractValidator).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Application.Common.Rules.Resources.BenefitFormValidationRules", typeof(BenefitFormValidationRules).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,47 +61,20 @@ namespace Application.Common.Validators.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to De van datum kan niet na de tot datum liggen..
+        ///   Looks up a localized string similar to Naam mag niet langer zijn dan {0} karakters..
         /// </summary>
-        internal static string FromDateAfterUntilDate {
+        internal static string NameMaxLength {
             get {
-                return ResourceManager.GetString("FromDateAfterUntilDate", resourceCulture);
+                return ResourceManager.GetString("NameMaxLength", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to De van datum kan niet in de toekomst liggen..
+        ///   Looks up a localized string similar to Naam is verplicht..
         /// </summary>
-        internal static string FromDateInFuture1 {
+        internal static string NameRequired {
             get {
-                return ResourceManager.GetString("FromDateInFuture1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Functie mag niet langer zijn dan {0} karakters..
-        /// </summary>
-        internal static string FunctionMaxCharacters {
-            get {
-                return ResourceManager.GetString("FunctionMaxCharacters", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to De tot datum kan niet in de toekomst liggen..
-        /// </summary>
-        internal static string ToDateInFuture {
-            get {
-                return ResourceManager.GetString("ToDateInFuture", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to De tot datum kan niet voor de van datum liggen..
-        /// </summary>
-        internal static string UntilDateBeforeFromDate {
-            get {
-                return ResourceManager.GetString("UntilDateBeforeFromDate", resourceCulture);
+                return ResourceManager.GetString("NameRequired", resourceCulture);
             }
         }
     }

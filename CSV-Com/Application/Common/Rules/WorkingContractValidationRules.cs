@@ -1,13 +1,11 @@
 ﻿using Application.Common.Interfaces;
-using Application.Common.Validators;
 using Domain.CVS.Constants;
-using Domain.CVS.Domain;
 using Domain.CVS.Enums;
 using FluentValidation;
 
 namespace Application.Common.Rules
 {
-    public static class WorkingContractRules
+    public static class WorkingContractValidationRules
     {
 
         public static IRuleBuilderOptions<T, int> ValidateWorkingContractOrganizationId<T>(this IRuleBuilder<T, int> ruleBuilder,
@@ -15,7 +13,7 @@ namespace Application.Common.Rules
         {
             return ruleBuilder
                 .GreaterThan(0)
-                .WithMessage(resourceMessageProvider.GetMessage<WorkingContractValidator>("OrganizationRequired"));
+                .WithMessage(resourceMessageProvider.GetMessage(typeof(WorkingContractValidationRules), "OrganizationRequired"));
         }
 
         public static IRuleBuilderOptions<T, ContractType> ValidateWorkingContractContractType<T>(this IRuleBuilder<T, ContractType> ruleBuilder,
@@ -23,7 +21,7 @@ namespace Application.Common.Rules
         {
             return ruleBuilder
                 .IsInEnum()
-                .WithMessage(resourceMessageProvider.GetMessage<WorkingContractValidator>("ContractInvalidValue"));
+                .WithMessage(resourceMessageProvider.GetMessage(typeof(WorkingContractValidationRules), "ContractInvalidValue"));
         }
 
         public static IRuleBuilderOptions<T, string> ValidateWorkingContractFunction<T>(this IRuleBuilder<T, string> ruleBuilder,
@@ -31,9 +29,9 @@ namespace Application.Common.Rules
         {
             return ruleBuilder
                 .NotEmpty()
-                .WithMessage($"{nameof(WorkingContract.Function)} is verplicht.")
+                .WithMessage(resourceMessageProvider.GetMessage(typeof(WorkingContractValidationRules), "FunctionRequired"))
                 .MaximumLength(WorkingContractConstants.FUNCTION_MAXLENGTH)
-                .WithMessage(resourceMessageProvider.GetMessage<WorkingContractValidator>("FunctionMaxCharacters", WorkingContractConstants.FUNCTION_MAXLENGTH));
+                .WithMessage(resourceMessageProvider.GetMessage(typeof(WorkingContractValidationRules), "FunctionMaxCharacters", WorkingContractConstants.FUNCTION_MAXLENGTH));
         }
 
         public static IRuleBuilderOptions<T, DateOnly> ValidateWorkingContractFromDate<T>(
@@ -43,9 +41,9 @@ namespace Application.Common.Rules
         {
             return ruleBuilder
                 .LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.Now))
-                .WithMessage(resourceMessageProvider.GetMessage<WorkingContractValidator>("FromDateInFuture"))
+                .WithMessage(resourceMessageProvider.GetMessage(typeof(WorkingContractValidationRules), "FromDateInFuture"))
                 .Must((model, fromDate) => fromDate < toDateSelector(model))
-                .WithMessage(resourceMessageProvider.GetMessage<WorkingContractValidator>("FromDateAfterUntilDate"));
+                .WithMessage(resourceMessageProvider.GetMessage(typeof(WorkingContractValidationRules), "FromDateAfterUntilDate"));
         }
 
         public static IRuleBuilderOptions<T, DateOnly> ValidateWorkingContractToDate<T>(
@@ -55,9 +53,9 @@ namespace Application.Common.Rules
         {
             return ruleBuilder
                 .LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.Now))
-                .WithMessage(resourceMessageProvider.GetMessage<WorkingContractValidator>("ToDateInFuture"))
+                .WithMessage(resourceMessageProvider.GetMessage(typeof(WorkingContractValidationRules), "ToDateInFuture"))
                 .Must((model, toDate) => toDate > fromDateSelector(model))
-                .WithMessage(resourceMessageProvider.GetMessage<WorkingContractValidator>("UntilDateBeforeFromDate"));
+                .WithMessage(resourceMessageProvider.GetMessage(typeof(WorkingContractValidationRules), "UntilDateBeforeFromDate"));
         }
     }
 }

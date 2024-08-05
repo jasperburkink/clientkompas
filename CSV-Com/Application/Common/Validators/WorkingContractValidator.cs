@@ -19,7 +19,7 @@ namespace Application.Common.Validators
             RuleFor(wc => wc.OrganizationId).ValidateWorkingContractOrganizationId(_resourceMessageProvider);
             RuleFor(wc => wc.ContractType).ValidateWorkingContractContractType(_resourceMessageProvider);
             RuleFor(wc => wc.Function).ValidateWorkingContractFunction(_resourceMessageProvider);
-            RuleFor(wc => wc.FromDate).ValidateWorkingContractFromDate(_resourceMessageProvider, workingContract => workingContract.FromDate);
+            RuleFor(wc => wc.FromDate).ValidateWorkingContractFromDate(_resourceMessageProvider, workingContract => workingContract.ToDate);
             RuleFor(wc => wc.ToDate).ValidateWorkingContractToDate(_resourceMessageProvider, workingContract => workingContract.FromDate);
         }
     }

@@ -3,7 +3,6 @@ import './dropdown.css';
 import { ErrorMessage } from './error-message';
 import { ValidationError } from 'types/common/validation-error';
 
-
 export interface DropdownObject {
     label: string;
     value: number;
@@ -24,7 +23,7 @@ const OPTION_TEXT = 'Kies uit de lijst'
 
 export const Dropdown = (props: IDropDownProps) => (  
     <div className={`dropdown-container ${props.className}`} >
-        <select name={props.inputfieldname} className='dropdown' required={props.required} value={props.value}
+        <select name={props.inputfieldname} className={`dropdown ${props.errors ? 'error' : ''}`} required={props.required} value={props.value}
             onChange={(e) => {
                 const selectedValue = parseInt(e.target.value);
                 props.onChange?.(selectedValue);

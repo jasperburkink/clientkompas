@@ -154,15 +154,15 @@ const ClientEditor = () => {
     const gendersDropdownOptions: DropdownObject[] = [
         {
             label: 'Man',
-            value: 0
-        },
-        {
-            label: 'Vrouw',
             value: 1
         },
         {
+            label: 'Vrouw',
+            value: 2
+        },
+        {
             label: 'Non-binair',
-            value: 2   
+            value: 3   
         } // TODO: replace to contants file
     ]; // TODO: maybe make dynamic in the future
 
@@ -180,11 +180,11 @@ const ClientEditor = () => {
     const contracttypeDropdownOptions: DropdownObject[] = [
         {
             label: 'Tijdelijk',
-            value: 0
+            value: 1
         },
         {
             label: 'Permanent',
-            value: 1
+            value: 2
         }// TODO: replace to contants file
     ]; // TODO: maybe make dynamic in the future
 

@@ -117,25 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ContractInvalidValue" xml:space="preserve">
-    <value>Contract heeft een ongeldige waarde.</value>
+  <data name="CategoryMaxLength" xml:space="preserve">
+    <value>Categorie mag niet langer zijn dan {0} karakters.</value>
   </data>
-  <data name="FromDateAfterUntilDate" xml:space="preserve">
-    <value>De van datum kan niet na de tot datum liggen.</value>
+  <data name="CategoryRequired" xml:space="preserve">
+    <value>Categorie is verplicht.</value>
   </data>
-  <data name="FromDateInFuture" xml:space="preserve">
-    <value>De van datum kan niet in de toekomst liggen.</value>
+  <data name="DescriptionMaxLength" xml:space="preserve">
+    <value>Omschrijving mag niet langer zijn dan {0} karakters.</value>
   </data>
-  <data name="FunctionMaxCharacters" xml:space="preserve">
-    <value>Functie mag niet langer zijn dan {0} karakters.</value>
-  </data>
-  <data name="OrganizationRequired" xml:space="preserve">
-    <value>Organisatie is verplicht.</value>
-  </data>
-  <data name="ToDateInFuture" xml:space="preserve">
-    <value>De tot datum kan niet in de toekomst liggen.</value>
-  </data>
-  <data name="UntilDateBeforeFromDate" xml:space="preserve">
-    <value>De tot datum kan niet voor de van datum liggen.</value>
+  <data name="DescriptionRequired" xml:space="preserve">
+    <value>Omschrijving is verplicht.</value>
   </data>
 </root>

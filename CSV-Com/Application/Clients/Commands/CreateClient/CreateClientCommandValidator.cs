@@ -9,32 +9,33 @@ namespace Application.Clients.Commands.CreateClient
     public class CreateClientCommandValidator : AbstractValidator<CreateClientCommand>
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IResourceMessageProvider _resourceMessageProvider;
 
         public CreateClientCommandValidator(IUnitOfWork unitOfWork, IResourceMessageProvider resourceMessageProvider)
         {
             _unitOfWork = unitOfWork;
-
-            RuleFor(c => c.FirstName).ValidateClientFirstName();
-            RuleFor(c => c.LastName).ValidateClientLastName();
-            RuleFor(c => c.PrefixLastName).ValidateClientPrefixLastName();
-            RuleFor(c => c.Initials).ValidateClientInitials();
-            RuleFor(c => c.StreetName).ValidateAddressStreetName();
-            RuleFor(c => c.PostalCode).ValidateAddressPostalCode();
-            RuleFor(c => c.HouseNumber).ValidateAddressHouseNumber();
-            RuleFor(c => c.HouseNumberAddition).ValidateAddressHouseNumberAddition();
-            RuleFor(c => c.Residence).ValidateAddressResidence();
-            RuleFor(c => c.TelephoneNumber).ValidateClientTelephoneNumber();
-            RuleFor(c => c.EmailAddress).ValidateClientEmailAddress(_unitOfWork, client => 0);
-            RuleFor(c => c.DateOfBirth).ValidateClientDateOfBirth();
-            RuleFor(c => c.Remarks).ValidateClientRemarks();
-            RuleFor(c => c.EmergencyPeople).ValidateClientEmergencyPeople();
-            RuleForEach(c => c.EmergencyPeople).SetValidator(new EmergencyPersonValidator(_unitOfWork));
-            RuleFor(c => c.Gender).ValidateClientGender();
-            RuleFor(c => c.Diagnoses).ValidateClientDiagnoses();
-            RuleFor(c => c.BenefitForms).ValidateClientBenefitForms();
-            RuleFor(c => c.DriversLicences).ValidateClientDriversLicences();
-            RuleFor(c => c.WorkingContracts).ValidateClientWorkingContracts();
-            RuleForEach(c => c.WorkingContracts).SetValidator(new WorkingContractValidator(_unitOfWork, resourceMessageProvider));
+            _resourceMessageProvider = resourceMessageProvider;
+            RuleFor(c => c.FirstName).ValidateClientFirstName(_resourceMessageProvider);
+            RuleFor(c => c.LastName).ValidateClientLastName(_resourceMessageProvider);
+            RuleFor(c => c.PrefixLastName).ValidateClientPrefixLastName(_resourceMessageProvider);
+            RuleFor(c => c.Initials).ValidateClientInitials(_resourceMessageProvider);
+            RuleFor(c => c.StreetName).ValidateAddressStreetName(_resourceMessageProvider);
+            RuleFor(c => c.PostalCode).ValidateAddressPostalCode(_resourceMessageProvider);
+            RuleFor(c => c.HouseNumber).ValidateAddressHouseNumber(_resourceMessageProvider);
+            RuleFor(c => c.HouseNumberAddition).ValidateAddressHouseNumberAddition(_resourceMessageProvider);
+            RuleFor(c => c.Residence).ValidateAddressResidence(_resourceMessageProvider);
+            RuleFor(c => c.TelephoneNumber).ValidateClientTelephoneNumber(_resourceMessageProvider);
+            RuleFor(c => c.EmailAddress).ValidateClientEmailAddress(_unitOfWork, client => 0, _resourceMessageProvider);
+            RuleFor(c => c.DateOfBirth).ValidateClientDateOfBirth(_resourceMessageProvider);
+            RuleFor(c => c.Remarks).ValidateClientRemarks(_resourceMessageProvider);
+            RuleFor(c => c.EmergencyPeople).ValidateClientEmergencyPeople(_resourceMessageProvider);
+            RuleForEach(c => c.EmergencyPeople).SetValidator(new EmergencyPersonValidator(_unitOfWork, _resourceMessageProvider));
+            RuleFor(c => c.Gender).ValidateClientGender(_resourceMessageProvider);
+            RuleFor(c => c.Diagnoses).ValidateClientDiagnoses(_resourceMessageProvider);
+            RuleFor(c => c.BenefitForms).ValidateClientBenefitForms(_resourceMessageProvider);
+            RuleFor(c => c.DriversLicences).ValidateClientDriversLicences(_resourceMessageProvider);
+            RuleFor(c => c.WorkingContracts).ValidateClientWorkingContracts(_resourceMessageProvider);
+            RuleForEach(c => c.WorkingContracts).SetValidator(new WorkingContractValidator(_unitOfWork, _resourceMessageProvider));
         }
     }
 }

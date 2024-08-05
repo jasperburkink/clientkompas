@@ -70,7 +70,7 @@ export const DatePicker = (props: DatePickerProps) => {
       <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale={LOCALE_PROVIDER}>
         {isMobileView ? (
           <MobileDatePickerControl.MobileDatePicker
-          className={`datepicker ${props.className}`}      
+          className={`datepicker ${props.className} ${props.errors ? 'error' : ''}`}      
           value={props.value ? Moment(props.value) : null}
           onChange={handleDateChange}
           slotProps={{
@@ -82,7 +82,7 @@ export const DatePicker = (props: DatePickerProps) => {
           }} />
         ): (
           <DatePickerControl.DatePicker      
-            className={`datepicker ${props.className}`}
+            className={`datepicker ${props.className} ${props.errors ? 'error' : ''}`}
             value={props.value ? Moment(props.value) : null}
             slots={{openPickerIcon: GenerateAwesomeFontCalendarIcon}}
             slotProps={{textField: {

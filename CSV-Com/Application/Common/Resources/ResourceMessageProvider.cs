@@ -17,6 +17,11 @@ namespace Application.Common.Resources
         public string GetMessage<T>(string key, params object[] args)
         {
             var type = typeof(T);
+            return GetMessage(type, key, args);
+        }
+
+        public string GetMessage(Type type, string key, params object[] args)
+        {
             var namespaceName = type.Namespace;
 
             var resourceManager = new ResourceManager($"{namespaceName}.Resources.{type.Name}", Assembly.GetExecutingAssembly());
