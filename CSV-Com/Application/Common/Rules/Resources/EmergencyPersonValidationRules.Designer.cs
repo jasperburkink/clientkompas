@@ -59,5 +59,41 @@ namespace Application.Common.Rules.Resources {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Naam mag niet langer zijn dan {0} karakters..
+        /// </summary>
+        internal static string NameMaxLength {
+            get {
+                return ResourceManager.GetString("NameMaxLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Naam is verplicht..
+        /// </summary>
+        internal static string NameRequired {
+            get {
+                return ResourceManager.GetString("NameRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Telefoonnummer mag niet langer zijn dan {0} karakters..
+        /// </summary>
+        internal static string TelephoneNumberMaxLength {
+            get {
+                return ResourceManager.GetString("TelephoneNumberMaxLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Telefoonnummer is verplicht..
+        /// </summary>
+        internal static string TelephoneNumberRequired {
+            get {
+                return ResourceManager.GetString("TelephoneNumberRequired", resourceCulture);
+            }
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Application.Clients.Commands.CreateClient;
 using Application.Clients.Dtos;
+using Application.Common.Interfaces;
 using Application.Common.Interfaces.CVS;
 using AutoMapper;
 using Domain.CVS.Constants;
@@ -18,6 +19,7 @@ namespace Application.UnitTests.Clients.Commands.CreateClient
     {
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;
         private readonly Mock<IMapper> _mapperMock;
+        private readonly Mock<IResourceMessageProvider> _resourceMessageProviderMock;
         private readonly CreateClientCommandHandler _handler;
         private readonly CreateClientCommandValidator _validator;
         private readonly CreateClientCommand _command;
@@ -26,11 +28,24 @@ namespace Application.UnitTests.Clients.Commands.CreateClient
         {
             _unitOfWorkMock = new Mock<IUnitOfWork>();
             _mapperMock = new Mock<IMapper>();
+            _resourceMessageProviderMock = new Mock<IResourceMessageProvider>();
+
+            _resourceMessageProviderMock
+            .Setup(m => m.GetMessage(It.IsAny<Type>(), It.IsAny<string>(), It.IsAny<object[]>()))
+            .Returns("Mock validation message.");
+
+            //_resourceMessageProviderMock
+            //.Setup(m => m.GetMessage(It.IsAny<Type>(), It.IsAny<string>(), It.IsAny<object[]>()))
+            //.Returns((Type type, string key, object[] args) => $"Mocked message for type: {type}, key: {key}");
+
+            //_resourceMessageProviderMock
+            //    .Setup(m => m.GetMessage<int>(It.IsAny<string>(), It.IsAny<object[]>()))
+            //    .Returns((string key, object[] args) => $"Mocked message for generic type int, key: {key}");
 
             ITestDataGenerator<CreateClientCommand> testDataGenerator = new CreateClientCommandDataGenerator();
             _command = testDataGenerator.Create();
 
-            _validator = new CreateClientCommandValidator(_unitOfWorkMock.Object);
+            _validator = new CreateClientCommandValidator(_unitOfWorkMock.Object, _resourceMessageProviderMock.Object);
             _handler = new CreateClientCommandHandler(_unitOfWorkMock.Object, _mapperMock.Object);
 
             _unitOfWorkMock.Setup(uw => uw.ClientRepository.ExistsAsync(

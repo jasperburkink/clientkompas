@@ -135,9 +135,6 @@
   <data name="PostalCodeMaxLength" xml:space="preserve">
     <value>Postcode mag niet langer zijn dn {0} karakters.</value>
   </data>
-  <data name="PostalCodeRegex" xml:space="preserve">
-    <value>^[1-9][0-9]{3} ?(?!sa|sd|ss|SA|SD|SS)[A-Za-z]{2}$</value>
-  </data>
   <data name="PostalCodeRequired" xml:space="preserve">
     <value>Postcode is verplicht.</value>
   </data>

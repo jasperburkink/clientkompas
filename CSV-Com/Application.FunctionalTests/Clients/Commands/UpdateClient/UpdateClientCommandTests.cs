@@ -90,7 +90,7 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_ClientDoesNotExist_ShouldThrowNotFoundException()
+        public void Handle_ClientDoesNotExist_ShouldThrowValidationException()
         {
             // Arrange
             var command = _command with
@@ -99,7 +99,7 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
             }; // Client with this id does not exists in the database
 
             // Act & Assert
-            Assert.ThrowsAsync<Common.Exceptions.NotFoundException>(async () =>
+            Assert.ThrowsAsync<ValidationException>(async () =>
             {
                 await SendAsync(command);
             });

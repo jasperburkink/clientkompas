@@ -115,15 +115,6 @@ namespace Application.Common.Rules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ^[1-9][0-9]{3} ?(?!sa|sd|ss|SA|SD|SS)[A-Za-z]{2}$.
-        /// </summary>
-        internal static string PostalCodeRegex {
-            get {
-                return ResourceManager.GetString("PostalCodeRegex", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Postcode is verplicht..
         /// </summary>
         internal static string PostalCodeRequired {

@@ -44,14 +44,24 @@ namespace TestData.Client.Commands.CreateClient
                 .RuleFor(c => c.DriversLicences, f => f.Make(3, () => new DriversLicenceDto { Id = f.Random.Int(1, 10), Category = f.Random.String2(2, "ABCDEFGHIJKLMNOPQRSTUVWXYZ") }))
                 .RuleFor(c => c.Diagnoses, f => f.Make(3, () => new DiagnosisDto() { Id = f.Random.Int(1, 10), Name = f.Random.String2(10) }))
                 .RuleFor(c => c.EmergencyPeople, f => f.Make(3, () => new EmergencyPersonDto { Name = faker.Person.FullName, TelephoneNumber = faker.Phone.PhoneNumber() }))
-                .RuleFor(c => c.WorkingContracts, f => f.Make(5, () => new ClientWorkingContractDto
+                .RuleFor(c => c.WorkingContracts, f => f.Make(5, () =>
                 {
-                    Id = 0,
-                    FromDate = new DateOnlyBinder().CreateInstance<DateOnly>(null),
-                    ToDate = new DateOnlyBinder().CreateInstance<DateOnly>(null),
-                    ContractType = f.PickRandom<ContractType>(),
-                    Function = faker.Name.JobTitle(),
-                    OrganizationId = f.Random.Int(1, 10)
+                    var fromDate = new DateOnlyBinder().CreateInstance<DateOnly>(null);
+                    var toDate = new DateOnlyBinder().CreateInstance<DateOnly>(null);
+                    while (toDate <= fromDate)
+                    {
+                        toDate = new DateOnlyBinder().CreateInstance<DateOnly>(null);
+                    }
+
+                    return new ClientWorkingContractDto
+                    {
+                        Id = 0,
+                        FromDate = fromDate,
+                        ToDate = toDate,
+                        ContractType = f.PickRandom<ContractType>(),
+                        Function = faker.Name.JobTitle(),
+                        OrganizationId = f.Random.Int(1, 10)
+                    };
                 }))
                 .RuleFor(c => c.Remarks, faker.Lorem.Sentence());
         }

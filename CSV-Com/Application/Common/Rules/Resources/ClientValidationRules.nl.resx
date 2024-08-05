@@ -121,7 +121,7 @@
     <value>Uitkeringsvormen mag niet leeg zijn.</value>
   </data>
   <data name="ClientDoesNotExists" xml:space="preserve">
-    <value>Cliënt met id '{}' bestaat niet.</value>
+    <value>Cliënt met id '{0}' bestaat niet.</value>
   </data>
   <data name="DateOfBirthNotInFuture" xml:space="preserve">
     <value>Geboortedatum kan niet in de toekomst liggen.</value>

@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Text.RegularExpressions;
+using Application.Common.Rules;
 using Bogus;
 
 namespace TestData
@@ -10,7 +11,7 @@ namespace TestData
         {
             if (typeof(TType) == typeof(string))
             {
-                var validPostalCodeRegex = new Regex(Properties.Resources.PostalCodeRegex);
+                var validPostalCodeRegex = new Regex(AddressValidationRules.POSTALCODE_REGEX);
                 string zipCode;
                 do
                 {

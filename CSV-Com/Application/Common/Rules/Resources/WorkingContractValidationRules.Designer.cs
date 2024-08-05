@@ -61,6 +61,15 @@ namespace Application.Common.Rules.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Contract heeft een ongeldige waarde..
+        /// </summary>
+        internal static string ContractInvalidValue {
+            get {
+                return ResourceManager.GetString("ContractInvalidValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to De van datum kan niet na de tot datum liggen..
         /// </summary>
         internal static string FromDateAfterUntilDate {
@@ -72,9 +81,9 @@ namespace Application.Common.Rules.Resources {
         /// <summary>
         ///   Looks up a localized string similar to De van datum kan niet in de toekomst liggen..
         /// </summary>
-        internal static string FromDateInFuture1 {
+        internal static string FromDateInFuture {
             get {
-                return ResourceManager.GetString("FromDateInFuture1", resourceCulture);
+                return ResourceManager.GetString("FromDateInFuture", resourceCulture);
             }
         }
         
@@ -93,6 +102,15 @@ namespace Application.Common.Rules.Resources {
         internal static string FunctionRequired {
             get {
                 return ResourceManager.GetString("FunctionRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Organisatie is verplicht..
+        /// </summary>
+        internal static string OrganizationRequired {
+            get {
+                return ResourceManager.GetString("OrganizationRequired", resourceCulture);
             }
         }
         

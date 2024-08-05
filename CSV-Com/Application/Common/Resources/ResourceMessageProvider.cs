@@ -26,7 +26,8 @@ namespace Application.Common.Resources
 
             var resourceManager = new ResourceManager($"{namespaceName}.Resources.{type.Name}", Assembly.GetExecutingAssembly());
 
-            var message = resourceManager.GetString(key, CultureInfo.CurrentUICulture);
+            var message = resourceManager.GetString(key, CultureInfo.CurrentUICulture) ?? string.Empty;
+
             return args.Length > 0 ? string.Format(message, args) : message;
         }
     }

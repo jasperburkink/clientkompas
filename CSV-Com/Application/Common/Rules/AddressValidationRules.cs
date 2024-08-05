@@ -6,6 +6,8 @@ namespace Application.Common.Rules
 {
     public static class AddressValidationRules
     {
+        public const string POSTALCODE_REGEX = "^[1-9][0-9]{3} ?(?!sa|sd|ss|SA|SD|SS)[A-Za-z]{2}$";
+
         public static IRuleBuilderOptions<T, string> ValidateAddressStreetName<T>(this IRuleBuilder<T, string> ruleBuilder,
             IResourceMessageProvider resourceMessageProvider)
         {
@@ -22,7 +24,7 @@ namespace Application.Common.Rules
             return ruleBuilder
                 .NotEmpty()
                 .WithMessage(resourceMessageProvider.GetMessage(typeof(AddressValidationRules), "PostalCodeRequired"))
-                .Matches(resourceMessageProvider.GetMessage(typeof(AddressValidationRules), "PostalCodeRegex"))
+                .Matches(POSTALCODE_REGEX)
                 .WithMessage((rootObject, postalCode) => resourceMessageProvider.GetMessage(typeof(AddressValidationRules), "PostalCodeInvalid", postalCode))
                 .MaximumLength(AddressConstants.PostalcodeMaxLength)
                 .WithMessage(resourceMessageProvider.GetMessage(typeof(AddressValidationRules), "PostalCodeMaxLength", AddressConstants.PostalcodeMaxLength));
