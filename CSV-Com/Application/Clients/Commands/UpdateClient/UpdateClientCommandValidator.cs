@@ -27,6 +27,7 @@ namespace Application.Clients.Commands.UpdateClient
             RuleFor(c => c.Residence).ValidateAddressResidence(_resourceMessageProvider);
             RuleFor(c => c.TelephoneNumber).ValidateClientTelephoneNumber(_resourceMessageProvider);
             RuleFor(c => c.EmailAddress).ValidateClientEmailAddress(_unitOfWork, client => client.Id, _resourceMessageProvider);
+            RuleFor(c => c.IsInTargetGroupRegister).ValidateClientIsInTargetGroupRegister(_resourceMessageProvider);
             RuleFor(c => c.DateOfBirth).ValidateClientDateOfBirth(_resourceMessageProvider);
             RuleFor(c => c.Remarks).ValidateClientRemarks(_resourceMessageProvider);
             RuleFor(c => c.EmergencyPeople).ValidateClientEmergencyPeople(_resourceMessageProvider);

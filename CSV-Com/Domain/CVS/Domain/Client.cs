@@ -40,6 +40,8 @@ namespace Domain.CVS.Domain
 
         public MaritalStatus? MaritalStatus { get; set; }
 
+        public required bool IsInTargetGroupRegister { get; set; }
+
         public List<DriversLicence> DriversLicences { get; set; } = new();
 
         public List<EmergencyPerson> EmergencyPeople { get; set; } = new();

@@ -37,6 +37,8 @@ namespace Application.Clients.Queries.GetClient
 
         public string EmailAddress { get; set; }
 
+        public required bool IsInTargetGroupRegister { get; set; }
+
         public string MaritalStatus { get; set; }
 
         public string DriversLicences { get; set; }

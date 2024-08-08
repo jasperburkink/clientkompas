@@ -14,6 +14,7 @@ export const mockClient: ClientQuery = {
     telephonenumber: '1234567890',
     emailaddress: 'john.doe@example.com',
     dateofbirth: new Date('1990-01-01'),
+    isintargetgroupregister: false,
     emergencypeople: [],
     diagnoses: 'None',
     maritalstatus: 'Single',

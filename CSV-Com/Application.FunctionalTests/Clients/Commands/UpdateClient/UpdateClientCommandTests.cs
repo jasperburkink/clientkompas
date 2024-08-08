@@ -749,15 +749,15 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
             // Arrange
             var command = _command with
             {
-                DriversLicences = new List<DriversLicenceDto>()
-                {
+                DriversLicences =
+                [
                     new()
                     {
                         Id = 2000,
                         Category = "Foo",
                         Description = "Bar"
                     }
-                }
+                ]
             };
 
             // Act
@@ -791,14 +791,14 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
             // Arrange
             var command = _command with
             {
-                Diagnoses = new List<DiagnosisDto>()
-                {
+                Diagnoses =
+                [
                     new()
                     {
                         Id = 2000,
                         Name = "Foo"
                     }
-                }
+                ]
             };
 
             // Act
