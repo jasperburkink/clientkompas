@@ -75,7 +75,8 @@ namespace Application.Common.Rules
             IResourceMessageProvider resourceMessageProvider)
         {
             return ruleBuilder
-                .NotNull().WithMessage($"{nameof(Client.IsInTargetGroupRegister)} is verplicht.");
+                .NotNull()
+                .WithMessage(resourceMessageProvider.GetMessage(typeof(ClientValidationRules), "IsInTargetGroupRegisterRequired"));
         }
 
         public static IRuleBuilderOptions<T, string> ValidateClientEmailAddress<T>(this IRuleBuilder<T, string> ruleBuilder, IUnitOfWork unitOfWork, Func<T, int> getCurrentClientId,

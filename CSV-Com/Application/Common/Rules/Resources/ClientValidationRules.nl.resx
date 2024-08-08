@@ -168,6 +168,9 @@
   <data name="InitialsRequired" xml:space="preserve">
     <value>Voorletters is verplicht.</value>
   </data>
+  <data name="IsInTargetGroupRegisterRequired" xml:space="preserve">
+    <value>Doelgroepregister is verplicht.</value>
+  </data>
   <data name="LastNameMaxLength" xml:space="preserve">
     <value>Achternaam mag niet langer zijn dan {0} karakters.</value>
   </data>
