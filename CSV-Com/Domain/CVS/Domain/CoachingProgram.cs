@@ -5,6 +5,10 @@ namespace Domain.CVS.Domain
 {
     public class CoachingProgram : BaseAuditableEntity
     {
+        public required Client Client { get; set; }
+
+        public required int ClientId { get; set; }
+
         public required string Title { get; set; }
 
         public required string OrderNumber { get; set; }
@@ -19,8 +23,11 @@ namespace Domain.CVS.Domain
 
         public required DateOnly EndDate { get; set; }
 
-        public required decimal BudgetAmmount { get; set; }
+        public decimal? BudgetAmmount { get; set; }
 
         public required decimal HourlyRate { get; set; }
+
+        public decimal RemainingHours => HourlyRate == 0 ? 0 : (BudgetAmmount ?? 0) / HourlyRate;
+
     }
 }
