@@ -15,7 +15,7 @@ namespace Application.Clients.Commands.UpdateClient
         {
             _unitOfWork = unitOfWork;
             _resourceMessageProvider = resourceMessageProvider;
-            RuleFor(c => c.Id).ValidateClientExists(unitOfWork, _resourceMessageProvider);
+            RuleFor(c => c.Id).ValidateClientExists(_unitOfWork, _resourceMessageProvider);
             RuleFor(c => c.FirstName).ValidateClientFirstName(_resourceMessageProvider);
             RuleFor(c => c.LastName).ValidateClientLastName(_resourceMessageProvider);
             RuleFor(c => c.PrefixLastName).ValidateClientPrefixLastName(_resourceMessageProvider);

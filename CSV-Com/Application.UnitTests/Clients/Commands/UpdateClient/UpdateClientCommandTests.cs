@@ -79,8 +79,6 @@ namespace Application.UnitTests.Clients.Commands.UpdateClient
                 Remarks = _command.Remarks
             };
 
-            _unitOfWorkMock.Setup(uw => uw.ClientRepository.ExistsAsync(It.IsAny<Expression<Func<Client, bool>>>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(true);
             _unitOfWorkMock.Setup(uw => uw.ClientRepository.GetByIDAsync(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(client);
             _unitOfWorkMock.Setup(uw => uw.BenefitFormRepository.GetAsync(It.IsAny<Expression<Func<BenefitForm, bool>>>(), It.IsAny<Func<IQueryable<BenefitForm>, IOrderedQueryable<BenefitForm>>>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
@@ -132,6 +130,17 @@ namespace Application.UnitTests.Clients.Commands.UpdateClient
         [Fact]
         public async Task Validate_ValidCommand_ShouldNotHaveAnyValidationErrors()
         {
+            // Arrange
+            _unitOfWorkMock.Setup(uw => uw.ClientRepository.ExistsAsync(
+                It.Is<Expression<Func<Client, bool>>>(expr => expr.IsExpressionForProperty(client => client.Id)),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(true);
+
+            _unitOfWorkMock.Setup(uw => uw.ClientRepository.ExistsAsync(
+                It.Is<Expression<Func<Client, bool>>>(expr => expr.IsExpressionForProperty(client => client.EmailAddress)),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(false);
+
             // Act
             var result = await _validator.TestValidateAsync(_command);
 
