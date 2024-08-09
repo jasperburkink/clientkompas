@@ -13,7 +13,7 @@ namespace Domain.UnitTests.CVS.Domain
 
         public CoachingProgramTests()
         {
-            ITestDataGenerator<CoachingProgram> coachingProgramDataGenerator = new CoachingProgramGenerator();
+            ITestDataGenerator<CoachingProgram> coachingProgramDataGenerator = new CoachingProgramDataGenerator();
             _coachingProgram = coachingProgramDataGenerator.Create();
             coachingProgramDataGenerator.FillOptionalProperties = false;
             _coachingProgramDefault = coachingProgramDataGenerator.Create();

@@ -48,7 +48,7 @@ namespace TestData.Client.Commands.UpdateClient
                 .RuleFor(c => c.EmergencyPeople, f => f.Make(3, () => new EmergencyPersonDto { Name = faker.Person.FullName, TelephoneNumber = faker.Phone.PhoneNumber() }))
                 .RuleFor(c => c.WorkingContracts, f => f.Make(5, () => new ClientWorkingContractDto
                 {
-                    Id = 0,
+                    Id = faker.IndexFaker + 1,
                     FromDate = new DateOnlyBinder().CreateInstance<DateOnly>(null),
                     ToDate = new DateOnlyBinder().CreateInstance<DateOnly>(null),
                     ContractType = f.PickRandom<ContractType>(),

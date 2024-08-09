@@ -20,6 +20,8 @@ namespace Application.Common.Interfaces.CVS
 
         IRepository<WorkingContract> WorkingContractRepository { get; }
 
+        IRepository<Domain.CVS.Domain.CoachingProgram> CoachingProgramRepository { get; }
+
         public void Save();
 
         public Task SaveAsync(CancellationToken cancellationToken = default);

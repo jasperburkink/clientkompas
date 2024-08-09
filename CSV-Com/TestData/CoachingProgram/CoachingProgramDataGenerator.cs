@@ -6,13 +6,13 @@ using TestData.Organization;
 
 namespace TestData.CoachingProgram
 {
-    public class CoachingProgramGenerator : ITestDataGenerator<Domain.CVS.Domain.CoachingProgram>
+    public class CoachingProgramDataGenerator : ITestDataGenerator<Domain.CVS.Domain.CoachingProgram>
     {
         public Faker<Domain.CVS.Domain.CoachingProgram> Faker { get => GetFaker(); }
 
         public bool FillOptionalProperties { get; set; }
 
-        public CoachingProgramGenerator(bool fillOptionalProperties = true)
+        public CoachingProgramDataGenerator(bool fillOptionalProperties = true)
         {
             FillOptionalProperties = fillOptionalProperties;
         }
@@ -23,7 +23,7 @@ namespace TestData.CoachingProgram
             ITestDataGenerator<Domain.CVS.Domain.Organization> testDataGeneratorOrganization = new OrganizationDataGenerator();
 
             return new AutoFaker<Domain.CVS.Domain.CoachingProgram>()
-                .RuleFor(cp => cp.Id, 0)
+                .RuleFor(cp => cp.Id, f => f.IndexFaker + 1)
                 .RuleFor(cp => cp.Client, testDataGeneratorClient.Create())
                 .RuleFor(cp => cp.Title, f => f.Random.String2(CoachingProgramConstants.TITLE_MAXLENGTH))
                 .RuleFor(cp => cp.OrderNumber, f => FillOptionalProperties ? f.Random.String2(CoachingProgramConstants.ORDERNUMBER_MAXLENGTH) : null)

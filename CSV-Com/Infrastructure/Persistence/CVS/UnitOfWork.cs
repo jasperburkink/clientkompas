@@ -22,6 +22,8 @@ namespace Infrastructure.Persistence.CVS
         private GenericRepository<Organization> organizationRepository;
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
         private GenericRepository<WorkingContract> workingContractRepository;
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
+        private GenericRepository<CoachingProgram> coachingProgramRepository;
 
         public UnitOfWork(CVSDbContext context)
         {
@@ -101,6 +103,15 @@ namespace Infrastructure.Persistence.CVS
 
                 workingContractRepository ??= new GenericRepository<WorkingContract>(_context);
                 return workingContractRepository;
+            }
+        }
+
+        public IRepository<CoachingProgram> CoachingProgramRepository
+        {
+            get
+            {
+                coachingProgramRepository ??= new GenericRepository<CoachingProgram>(_context);
+                return coachingProgramRepository;
             }
         }
 

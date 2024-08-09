@@ -11,7 +11,7 @@ namespace Domain.CVS.Domain
 
         public required string Title { get; set; }
 
-        public required string OrderNumber { get; set; }
+        public string? OrderNumber { get; set; }
 
         public Organization? Organization { get; set; }
 
