@@ -1,11 +1,12 @@
-﻿using Application.Common.Mappings;
+﻿using Application.CoachingPrograms.Queries.GetCoachingProgram;
+using Application.Common.Mappings;
 using AutoMapper;
 using Domain.CVS.Domain;
 using Domain.CVS.Enums;
 
-namespace Application.CoachingPrograms.Queries.GetCoachingProgram
+namespace Application.CoachingPrograms.Commands.CreateCoachingProgram
 {
-    public class GetCoachingProgramDto : IMapFrom<CoachingProgram>
+    public class CreateCoachingProgramCommandDto : IMapFrom<CoachingProgram>
     {
         public required int Id { get; set; }
 

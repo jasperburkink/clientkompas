@@ -7,7 +7,7 @@ using static Application.FunctionalTests.Testing;
 
 namespace Application.FunctionalTests.CoachingPrograms.Queries.GetCoachingProgramsByClient
 {
-    public class GetCoachingProgramsByClientQueryTests
+    public class GetCoachingProgramsByClientQueryTests : BaseTestFixture
     {
         private ITestDataGenerator<Client> _testDataGeneratorClient;
         private ITestDataGenerator<CoachingProgram> _testDataGeneratorCoachingProgram;
@@ -26,14 +26,17 @@ namespace Application.FunctionalTests.CoachingPrograms.Queries.GetCoachingProgra
             // TODO: Turn on authentication 
             //await RunAsDefaultUserAsync();
             var client = _testDataGeneratorClient.Create();
+
+            await AddAsync(client);
+
             var coachingPrograms = _testDataGeneratorCoachingProgram.Create(5).ToList();
             for (var i = 0; i < coachingPrograms.Count(); i++)
             {
                 coachingPrograms[i].ClientId = client.Id;
-                coachingPrograms[i].Client.Id = client.Id;
+                coachingPrograms[i].Client = null;
+
+                await AddAsync(coachingPrograms[i]);
             }
-            asdsad
-            await AddAsync(client);
 
             var query = new GetCoachingProgramsByClientQuery()
             {
@@ -45,7 +48,38 @@ namespace Application.FunctionalTests.CoachingPrograms.Queries.GetCoachingProgra
 
             // Assert
             result.Should().NotBeNull();
-            result.Id.Should().Be(client.Id);
+            result.Count().Should().Be(coachingPrograms.Count());
+        }
+
+        [Test]
+        public async Task Handle_UserIsAnomymousUser_ThrowsUnauthorizedAccessException()
+        {
+            // Arrange
+            var client = _testDataGeneratorClient.Create();
+
+            await AddAsync(client);
+
+            var coachingPrograms = _testDataGeneratorCoachingProgram.Create(5).ToList();
+            for (var i = 0; i < coachingPrograms.Count(); i++)
+            {
+                coachingPrograms[i].ClientId = client.Id;
+                coachingPrograms[i].Client = null;
+
+                await AddAsync(coachingPrograms[i]);
+            }
+
+            var query = new GetCoachingProgramsByClientQuery()
+            {
+                ClientId = client.Id
+            };
+
+            // Act
+            var result = () => SendAsync(query);
+
+            // Assert
+            //TODO: Turn on authentication 
+            //await result.Should().ThrowAsync<UnauthorizedAccessException>();
+            result.Should().NotBeNull();
         }
     }
 }

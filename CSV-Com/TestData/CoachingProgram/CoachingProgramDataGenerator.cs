@@ -20,7 +20,6 @@ namespace TestData.CoachingProgram
         private Faker<Domain.CVS.Domain.CoachingProgram> GetFaker()
         {
             ITestDataGenerator<Domain.CVS.Domain.Client> testDataGeneratorClient = new ClientDataGenerator();
-            ITestDataGenerator<Domain.CVS.Domain.Organization> testDataGeneratorOrganization = new OrganizationDataGenerator();
 
             return new AutoFaker<Domain.CVS.Domain.CoachingProgram>()
                 .RuleFor(cp => cp.Id, f => f.IndexFaker + 1)
@@ -28,7 +27,14 @@ namespace TestData.CoachingProgram
                 .RuleFor(cp => cp.Title, f => f.Random.String2(CoachingProgramConstants.TITLE_MAXLENGTH))
                 .RuleFor(cp => cp.OrderNumber, f => FillOptionalProperties ? f.Random.String2(CoachingProgramConstants.ORDERNUMBER_MAXLENGTH) : null)
                 .RuleFor(cp => cp.CoachingProgramType, f => f.PickRandom<CoachingProgramType>())
-                .RuleFor(cp => cp.Organization, FillOptionalProperties ? testDataGeneratorOrganization.Create() : null)
+                .RuleFor(cp => cp.Organization, () =>
+                {
+                    ITestDataGenerator<Domain.CVS.Domain.Organization> testDataGeneratorOrganization = new OrganizationDataGenerator();
+
+                    return FillOptionalProperties ?
+                        testDataGeneratorOrganization.Create()
+                    : null;
+                })
                 .RuleFor(cp => cp.BeginDate, new DateOnlyBinder().CreateInstance<DateOnly>(null))
                 .RuleFor(cp => cp.EndDate, new DateOnlyBinder().CreateInstance<DateOnly>(null))
                 .RuleFor(cp => cp.BudgetAmmount, f => FillOptionalProperties ? f.Random.Decimal() : null)

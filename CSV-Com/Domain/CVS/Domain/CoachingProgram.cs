@@ -5,7 +5,7 @@ namespace Domain.CVS.Domain
 {
     public class CoachingProgram : BaseAuditableEntity
     {
-        public required Client Client { get; set; }
+        public Client? Client { get; set; }
 
         public required int ClientId { get; set; }
 
@@ -28,6 +28,5 @@ namespace Domain.CVS.Domain
         public required decimal HourlyRate { get; set; }
 
         public decimal RemainingHours => HourlyRate == 0 ? 0 : (BudgetAmmount ?? 0) / HourlyRate;
-
     }
 }
