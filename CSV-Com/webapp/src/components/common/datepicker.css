@@ -2,25 +2,39 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer components {   
-    .datepicker{
-        @apply
-        bg-mainLightGray;
-    }
+@layer components { 
+    .datepicker-container{
 
-    .datepicker input{
-        @apply
-        text-sm 
-        h-4;
-    }
+        .datepicker{
+            @apply
+            bg-mainLightGray;
 
-    .datepicker div{
-        @apply
-        rounded-lg;
-    }
+            input{
+                @apply
+                text-sm                 
+                h-4;
+            }
 
-    .datepicker fieldset{
-        @apply
-        border-2;        
-    }
+            div{   
+                @apply
+                rounded-lg;
+            }
+
+            fieldset{
+                @apply
+                border-2; 
+            }
+        }
+
+        .error{
+            @apply            
+            bg-redRequiredLight;
+
+            fieldset{
+                @apply
+                border-redRequired;
+            }
+        }
+
+    }   
 }

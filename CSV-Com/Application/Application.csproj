@@ -44,4 +44,91 @@
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Common\Rules\Resources\AddressValidationRules.nl.Designer.cs">
+      <DependentUpon>AddressValidationRules.nl.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Common\Rules\Resources\AddressValidationRules.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AddressValidationRules.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Common\Rules\Resources\BenefitFormValidationRules.Designer.cs">
+      <DependentUpon>BenefitFormValidationRules.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Common\Rules\Resources\DriversLicenceValidationRules.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DriversLicenceValidationRules.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Common\Rules\Resources\EmergencyPersonValidationRules.nl.Designer.cs">
+      <DependentUpon>EmergencyPersonValidationRules.nl.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Common\Rules\Resources\EmergencyPersonValidationRules.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>EmergencyPersonValidationRules.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Common\Rules\Resources\BenefitFormValidationRules.nl.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>BenefitFormValidationRules.nl.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Common\Rules\Resources\WorkingContractValidationRules.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>WorkingContractValidationRules.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Common\Rules\Resources\WorkingContractValidationRules.nl.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>WorkingContractValidationRules.nl.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Common\Rules\Resources\AddressValidationRules.nl.resx">
+      <LastGenOutput>AddressValidationRules.nl.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Rules\Resources\AddressValidationRules.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AddressValidationRules.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Rules\Resources\BenefitFormValidationRules.resx">
+      <LastGenOutput>BenefitFormValidationRules.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Rules\Resources\DriversLicenceValidationRules.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>DriversLicenceValidationRules.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Rules\Resources\EmergencyPersonValidationRules.nl.resx">
+      <LastGenOutput>EmergencyPersonValidationRules.nl.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Rules\Resources\EmergencyPersonValidationRules.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>EmergencyPersonValidationRules.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Rules\Resources\BenefitFormValidationRules.nl.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>BenefitFormValidationRules.nl.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Rules\Resources\WorkingContractValidationRules.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WorkingContractValidationRules.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Rules\Resources\WorkingContractValidationRules.nl.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WorkingContractValidationRules.nl.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>

@@ -55,14 +55,24 @@ namespace TestData.Client
                 .RuleFor(c => c.DriversLicences, f => f.Make(3, () => testDataGeneratorDriverLicence.Create()))
                 .RuleFor(c => c.Diagnoses, f => f.Make(3, () => testDataGeneratorDiagnosis.Create()))
                 .RuleFor(c => c.EmergencyPeople, f => f.Make(3, () => testDataGeneratorEmergencyPerson.Create()))
-                .RuleFor(c => c.WorkingContracts, f => f.Make(5, () => new WorkingContract
+                .RuleFor(c => c.WorkingContracts, f => f.Make(5, () =>
                 {
-                    Id = 0,
-                    FromDate = new DateOnlyBinder().CreateInstance<DateOnly>(null),
-                    ToDate = new DateOnlyBinder().CreateInstance<DateOnly>(null),
-                    ContractType = f.PickRandom<ContractType>(),
-                    Function = faker.Name.JobTitle(),
-                    Organization = testDataGeneratorOrganization.Create()
+                    var fromDate = new DateOnlyBinder().CreateInstance<DateOnly>(null);
+                    var toDate = new DateOnlyBinder().CreateInstance<DateOnly>(null);
+                    while (toDate <= fromDate)
+                    {
+                        toDate = new DateOnlyBinder().CreateInstance<DateOnly>(null);
+                    }
+
+                    return new WorkingContract
+                    {
+                        Id = 0,
+                        FromDate = fromDate,
+                        ToDate = toDate,
+                        ContractType = f.PickRandom<ContractType>(),
+                        Function = faker.Name.JobTitle(),
+                        Organization = testDataGeneratorOrganization.Create()
+                    };
                 }))
                 .RuleFor(c => c.Remarks, faker.Lorem.Sentence());
             }

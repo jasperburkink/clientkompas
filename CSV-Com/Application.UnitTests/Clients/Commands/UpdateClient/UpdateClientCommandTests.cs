@@ -2,6 +2,7 @@
 using Application.Clients.Commands.UpdateClient;
 using Application.Clients.Dtos;
 using Application.Common.Exceptions;
+using Application.Common.Interfaces;
 using Application.Common.Interfaces.CVS;
 using AutoMapper;
 using Domain.CVS.Constants;
@@ -19,6 +20,7 @@ namespace Application.UnitTests.Clients.Commands.UpdateClient
     {
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;
         private readonly Mock<IMapper> _mapperMock;
+        private readonly Mock<IResourceMessageProvider> _resourceMessageProviderMock;
         private readonly UpdateClientCommandHandler _handler;
         private readonly UpdateClientCommandValidator _validator;
         private readonly UpdateClientCommand _command;
@@ -27,11 +29,20 @@ namespace Application.UnitTests.Clients.Commands.UpdateClient
         {
             _unitOfWorkMock = new Mock<IUnitOfWork>();
             _mapperMock = new Mock<IMapper>();
+            _resourceMessageProviderMock = new Mock<IResourceMessageProvider>();
+
+            _resourceMessageProviderMock
+            .Setup(m => m.GetMessage(It.IsAny<Type>(), It.IsAny<string>(), It.IsAny<object[]>()))
+            .Returns((Type type, string key, object[] args) => $"Mocked message for type: {type}, key: {key}");
+
+            _resourceMessageProviderMock
+                .Setup(m => m.GetMessage<int>(It.IsAny<string>(), It.IsAny<object[]>()))
+                .Returns((string key, object[] args) => $"Mocked message for generic type int, key: {key}");
 
             ITestDataGenerator<UpdateClientCommand> testDataGenerator = new UpdateClientCommandDataGenerator();
             _command = testDataGenerator.Create();
 
-            _validator = new UpdateClientCommandValidator(_unitOfWorkMock.Object);
+            _validator = new UpdateClientCommandValidator(_unitOfWorkMock.Object, _resourceMessageProviderMock.Object);
             _handler = new UpdateClientCommandHandler(_unitOfWorkMock.Object, _mapperMock.Object);
 
             _unitOfWorkMock.Setup(uw => uw.ClientRepository.ExistsAsync(
@@ -120,6 +131,17 @@ namespace Application.UnitTests.Clients.Commands.UpdateClient
         [Fact]
         public async Task Validate_ValidCommand_ShouldNotHaveAnyValidationErrors()
         {
+            // Arrange
+            _unitOfWorkMock.Setup(uw => uw.ClientRepository.ExistsAsync(
+                It.Is<Expression<Func<Client, bool>>>(expr => expr.IsExpressionForProperty(client => client.Id)),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(true);
+
+            _unitOfWorkMock.Setup(uw => uw.ClientRepository.ExistsAsync(
+                It.Is<Expression<Func<Client, bool>>>(expr => expr.IsExpressionForProperty(client => client.EmailAddress)),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(false);
+
             // Act
             var result = await _validator.TestValidateAsync(_command);
 

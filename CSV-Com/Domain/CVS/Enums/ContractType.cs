@@ -2,7 +2,7 @@
 {
     public enum ContractType
     {
-        Temporary,
-        Permanent
+        Temporary = 1,
+        Permanent = 2
     }
 }

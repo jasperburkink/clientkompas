@@ -21,5 +21,13 @@ namespace Application.UnitTests
 
             return body.Member.Name;
         }
+
+        public static bool IsExpressionForProperty<T, TProperty>(this Expression<Func<T, bool>> expr, Expression<Func<T, TProperty>> propertyExpression)
+        {
+            var body = expr.Body as BinaryExpression;
+            var left = body?.Left as MemberExpression;
+            var property = (propertyExpression.Body as MemberExpression)?.Member.Name;
+            return left?.Member.Name == property;
+        }
     }
 }
