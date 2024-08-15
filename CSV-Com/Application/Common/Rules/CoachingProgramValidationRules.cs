@@ -30,7 +30,7 @@ namespace Application.Common.Rules
                 }).WithMessage(id => resourceMessageProvider.GetMessage(typeof(CoachingProgramValidationRules), "ClientDoesNotExists", id));
         }
 
-        public static IRuleBuilderOptions<T, string> ValidateCoachingProgramTitle<T>(this IRuleBuilder<T, string> ruleBuilder, IUnitOfWork unitOfWork,
+        public static IRuleBuilderOptions<T, string> ValidateCoachingProgramTitle<T>(this IRuleBuilder<T, string> ruleBuilder,
             IResourceMessageProvider resourceMessageProvider)
         {
             return ruleBuilder
@@ -40,7 +40,7 @@ namespace Application.Common.Rules
                 .WithMessage(resourceMessageProvider.GetMessage(typeof(CoachingProgramValidationRules), "TitleMaxLength", CoachingProgramConstants.TITLE_MAXLENGTH));
         }
 
-        public static IRuleBuilderOptions<T, string> ValidateCoachingProgramOrderNumber<T>(this IRuleBuilder<T, string> ruleBuilder, IUnitOfWork unitOfWork,
+        public static IRuleBuilderOptions<T, string?> ValidateCoachingProgramOrderNumber<T>(this IRuleBuilder<T, string?> ruleBuilder,
             IResourceMessageProvider resourceMessageProvider)
         {
             return ruleBuilder
@@ -48,7 +48,7 @@ namespace Application.Common.Rules
                 .WithMessage(resourceMessageProvider.GetMessage(typeof(CoachingProgramValidationRules), "OrderNumberMaxLength", CoachingProgramConstants.ORDERNUMBER_MAXLENGTH));
         }
 
-        public static IRuleBuilderOptions<T, int> ValidateCoachingProgramOrganization<T>(this IRuleBuilder<T, int> ruleBuilder, IUnitOfWork unitOfWork,
+        public static IRuleBuilderOptions<T, int?> ValidateCoachingProgramOrganization<T>(this IRuleBuilder<T, int?> ruleBuilder, IUnitOfWork unitOfWork,
             IResourceMessageProvider resourceMessageProvider)
         {
             return ruleBuilder
@@ -58,7 +58,7 @@ namespace Application.Common.Rules
                 }).WithMessage(id => resourceMessageProvider.GetMessage(typeof(CoachingProgramValidationRules), "OrganizationDoesNotExists", id));
         }
 
-        public static IRuleBuilderOptions<T, CoachingProgramType> ValidateCoachingProgramCoachingProgramType<T>(this IRuleBuilder<T, CoachingProgramType> ruleBuilder, IUnitOfWork unitOfWork,
+        public static IRuleBuilderOptions<T, CoachingProgramType> ValidateCoachingProgramCoachingProgramType<T>(this IRuleBuilder<T, CoachingProgramType> ruleBuilder,
             IResourceMessageProvider resourceMessageProvider)
         {
             return ruleBuilder
@@ -90,7 +90,7 @@ namespace Application.Common.Rules
                 .WithMessage(resourceMessageProvider.GetMessage(typeof(WorkingContractValidationRules), "UntilDateBeforeFromDate"));
         }
 
-        public static IRuleBuilderOptions<T, decimal> ValidateCoachingProgramBudgetAmmount<T>(this IRuleBuilder<T, decimal> ruleBuilder, IUnitOfWork unitOfWork,
+        public static IRuleBuilderOptions<T, decimal?> ValidateCoachingProgramBudgetAmmount<T>(this IRuleBuilder<T, decimal?> ruleBuilder,
             IResourceMessageProvider resourceMessageProvider)
         {
             return ruleBuilder
@@ -98,12 +98,12 @@ namespace Application.Common.Rules
                 .WithMessage(id => resourceMessageProvider.GetMessage(typeof(CoachingProgramValidationRules), "BudgetAmmountPositive", id));
         }
 
-        public static IRuleBuilderOptions<T, decimal> ValidateCoachingProgramHourlyRate<T>(this IRuleBuilder<T, decimal> ruleBuilder, IUnitOfWork unitOfWork,
+        public static IRuleBuilderOptions<T, decimal> ValidateCoachingProgramHourlyRate<T>(this IRuleBuilder<T, decimal> ruleBuilder,
             IResourceMessageProvider resourceMessageProvider)
         {
             return ruleBuilder
                 .NotEmpty()
-                .WithMessage()
+                .WithMessage(resourceMessageProvider.GetMessage(typeof(CoachingProgramValidationRules), "HourlyRateRequired"))
                 .GreaterThanOrEqualTo(0)
                 .WithMessage(id => resourceMessageProvider.GetMessage(typeof(CoachingProgramValidationRules), "BudgetAmmountPositive", id));
         }

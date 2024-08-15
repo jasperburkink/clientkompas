@@ -135,6 +135,9 @@
   <data name="FunctionRequired" xml:space="preserve">
     <value>Functie is verplicht.</value>
   </data>
+  <data name="HourlyRateRequired" xml:space="preserve">
+    <value>Uurtarief is verplicht.</value>
+  </data>
   <data name="OrganizationRequired" xml:space="preserve">
     <value>Organisatie is verplicht.</value>
   </data>
