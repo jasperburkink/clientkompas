@@ -18,7 +18,7 @@ namespace TestData.Diagnosis
             var faker = new Faker(FakerConfiguration.Localization);
 
             return new AutoFaker<Domain.CVS.Domain.Diagnosis>()
-                .RuleFor(d => d.Id, faker.IndexFaker + 1)
+                .RuleFor(d => d.Id, FakerConfiguration.Faker.IndexFaker++)
                 .RuleFor(dl => dl.Name, f => f.Random.String2(10));
         }
     }

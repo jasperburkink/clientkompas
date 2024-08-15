@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Diagnostics;
+using System.Globalization;
 using System.Reflection;
 using System.Resources;
 using Application.Common.Interfaces;
@@ -22,13 +23,21 @@ namespace Application.Common.Resources
 
         public string GetMessage(Type type, string key, params object[] args)
         {
-            var namespaceName = type.Namespace;
+            try
+            {
+                var namespaceName = type.Namespace;
 
-            var resourceManager = new ResourceManager($"{namespaceName}.Resources.{type.Name}", Assembly.GetExecutingAssembly());
+                var resourceManager = new ResourceManager($"{namespaceName}.Resources.{type.Name}", Assembly.GetExecutingAssembly());
 
-            var message = resourceManager.GetString(key, CultureInfo.CurrentUICulture) ?? string.Empty;
+                var message = resourceManager.GetString(key, CultureInfo.CurrentUICulture) ?? string.Empty;
 
-            return args.Length > 0 ? string.Format(message, args) : message;
+                return args.Length > 0 ? string.Format(message, args) : message;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"An error has occured while getting a resource message. Message:{ex.Message}");
+                throw;
+            }
         }
     }
 }

@@ -18,7 +18,7 @@ namespace TestData.Organization
             var faker = new Faker(FakerConfiguration.Localization);
 
             return new AutoFaker<Domain.CVS.Domain.Organization>()
-                .RuleFor(o => o.Id, faker.IndexFaker + 1)
+                .RuleFor(o => o.Id, FakerConfiguration.Faker.IndexFaker++)
                 .RuleFor(o => o.OrganizationName, FakerConfiguration.Faker.Company.CompanyName())
                 .RuleFor(o => o.VisitAddress, Domain.CVS.ValueObjects.Address.From(
                     FakerConfiguration.Faker.Address.StreetName(),

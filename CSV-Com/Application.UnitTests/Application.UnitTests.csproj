@@ -34,7 +34,6 @@
 
   <ItemGroup>
     <Folder Include="Clients\Commands\SearchClients\" />
-    <Folder Include="CoachingPrograms\Commands\" />
   </ItemGroup>
 
   <ItemGroup>

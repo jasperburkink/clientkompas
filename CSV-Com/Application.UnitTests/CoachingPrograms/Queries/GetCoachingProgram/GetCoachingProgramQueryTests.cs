@@ -38,6 +38,7 @@ namespace Application.UnitTests.CoachingPrograms.Queries.GetCoachingProgram
 
             var coachingProgramDto = new GetCoachingProgramDto
             {
+                Id = _coachingProgram.Id,
                 Title = _coachingProgram.Title,
                 BeginDate = _coachingProgram.BeginDate,
                 EndDate = _coachingProgram.EndDate,

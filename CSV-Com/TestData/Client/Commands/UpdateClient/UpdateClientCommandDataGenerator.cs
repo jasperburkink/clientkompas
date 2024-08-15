@@ -57,7 +57,7 @@ namespace TestData.Client.Commands.UpdateClient
 
                     return new ClientWorkingContractDto
                     {
-                        Id = faker.IndexFaker + 1,
+                        Id = FakerConfiguration.Faker.IndexFaker++,
                         FromDate = fromDate,
                         ToDate = toDate,
                         ContractType = f.PickRandom<ContractType>(),

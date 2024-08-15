@@ -22,7 +22,7 @@ namespace TestData.CoachingProgram
             ITestDataGenerator<Domain.CVS.Domain.Client> testDataGeneratorClient = new ClientDataGenerator();
 
             return new AutoFaker<Domain.CVS.Domain.CoachingProgram>()
-                .RuleFor(cp => cp.Id, f => f.IndexFaker + 1)
+                .RuleFor(cp => cp.Id, FakerConfiguration.Faker.IndexFaker++)
                 .RuleFor(cp => cp.Client, testDataGeneratorClient.Create())
                 .RuleFor(cp => cp.Title, f => f.Random.String2(CoachingProgramConstants.TITLE_MAXLENGTH))
                 .RuleFor(cp => cp.OrderNumber, f => FillOptionalProperties ? f.Random.String2(CoachingProgramConstants.ORDERNUMBER_MAXLENGTH) : null)

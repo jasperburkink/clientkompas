@@ -61,6 +61,15 @@ namespace Application.Common.Rules.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Het budget mag geen negatieve waarde bevatten..
+        /// </summary>
+        internal static string BudgetAmmountPositive {
+            get {
+                return ResourceManager.GetString("BudgetAmmountPositive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cliënt met id &apos;{0}&apos; bestaat niet..
         /// </summary>
         internal static string ClientDoesNotExists {
@@ -115,6 +124,24 @@ namespace Application.Common.Rules.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Het uurtarief mag geen negatieve waarde bevatten..
+        /// </summary>
+        internal static string HourlyRatePositive {
+            get {
+                return ResourceManager.GetString("HourlyRatePositive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uurtarief is verplicht..
+        /// </summary>
+        internal static string HourlyRateRequired {
+            get {
+                return ResourceManager.GetString("HourlyRateRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ordernummer mag niet langer zijn dan {0} karakters..
         /// </summary>
         internal static string OrderNumberMaxLength {
@@ -124,7 +151,7 @@ namespace Application.Common.Rules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Organisatie is verplicht..
+        ///   Looks up a localized string similar to Organisatie met id &apos;{0}&apos; bestaat niet..
         /// </summary>
         internal static string OrganizationDoesNotExists {
             get {

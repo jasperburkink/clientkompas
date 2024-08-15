@@ -31,7 +31,7 @@ namespace TestData.Client
             ITestDataGenerator<Domain.CVS.Domain.EmergencyPerson> testDataGeneratorEmergencyPerson = new EmergencyPersonDataGenerator();
 
             var autofaker = new AutoFaker<Domain.CVS.Domain.Client>()
-                .RuleFor(c => c.Id, faker.IndexFaker + 1)
+                .RuleFor(c => c.Id, FakerConfiguration.Faker.IndexFaker++)
                 .RuleFor(c => c.FirstName, faker.Person.FirstName)
                 .RuleFor(c => c.Initials, faker.Random.String2(1, "ABCDEFGHIJKLMNOPQRSTUVWXYZ"))
                 .RuleFor(c => c.PrefixLastName, faker.Random.String2(3, "abcdefghijklmnopqrstuvwxyz"))

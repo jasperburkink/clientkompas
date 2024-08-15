@@ -23,7 +23,7 @@ namespace Application.Common.Rules
         {
             return ruleBuilder
                 .NotEmpty()
-                .WithMessage(resourceMessageProvider.GetMessage(typeof(CoachingProgramValidationRules), "ClientRequired"))
+                .WithMessage(id => resourceMessageProvider.GetMessage(typeof(CoachingProgramValidationRules), "ClientRequired", id))
                 .MustAsync(async (id, cancellationToken) =>
                 {
                     return await unitOfWork.ClientRepository.ExistsAsync(c => c.Id == id, cancellationToken);
@@ -105,7 +105,7 @@ namespace Application.Common.Rules
                 .NotEmpty()
                 .WithMessage(resourceMessageProvider.GetMessage(typeof(CoachingProgramValidationRules), "HourlyRateRequired"))
                 .GreaterThanOrEqualTo(0)
-                .WithMessage(id => resourceMessageProvider.GetMessage(typeof(CoachingProgramValidationRules), "BudgetAmmountPositive", id));
+                .WithMessage(id => resourceMessageProvider.GetMessage(typeof(CoachingProgramValidationRules), "HourlyRatePositive", id));
         }
     }
 }

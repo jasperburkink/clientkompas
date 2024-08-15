@@ -3,9 +3,9 @@ using AutoMapper;
 using Domain.CVS.Domain;
 using Domain.CVS.Enums;
 
-namespace Application.CoachingPrograms.Commands.CreateCoachingProgram
+namespace Application.CoachingPrograms.Commands.UpdateCoachingProgram
 {
-    public class CreateCoachingProgramCommandDto : IMapFrom<CoachingProgram>
+    public class UpdateCoachingProgramCommandDto : IMapFrom<CoachingProgram>
     {
         public required int Id { get; set; }
 
@@ -31,7 +31,7 @@ namespace Application.CoachingPrograms.Commands.CreateCoachingProgram
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<CoachingProgram, CreateCoachingProgramCommandDto>()
+            profile.CreateMap<CoachingProgram, UpdateCoachingProgramCommandDto>()
                 .ForMember(cpDto => cpDto.ClientFullName, m => m.MapFrom(cp => cp.Client.FullName))
                 .ForMember(cpDto => cpDto.OrganizationName, m => m.MapFrom(cp => cp.Organization.OrganizationName));
         }
