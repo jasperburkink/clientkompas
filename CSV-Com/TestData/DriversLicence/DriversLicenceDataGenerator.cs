@@ -18,7 +18,7 @@ namespace TestData.DriversLicence
             var faker = new Faker(FakerConfiguration.Localization);
 
             return new AutoFaker<Domain.CVS.Domain.DriversLicence>()
-                .RuleFor(dl => dl.Id, FakerConfiguration.Faker.IndexFaker++)
+                .RuleFor(dl => dl.Id, 0)
                 .RuleFor(dl => dl.Category, f => f.Random.String2(2, "ABCDEFGHIJKLMNOPQRSTUVWXYZ"))
                 .RuleFor(dl => dl.Description, f => f.Random.String2(10));
         }

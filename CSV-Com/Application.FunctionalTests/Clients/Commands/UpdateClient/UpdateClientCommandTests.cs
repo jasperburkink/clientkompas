@@ -32,17 +32,22 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         public async Task SetUp()
         {
             _testDataGeneratorClient = new ClientDataGenerator();
-            var client = _testDataGeneratorClient.Create();
-            await AddAsync(client);
-
             _testDataGeneratorMartialStatus = new MaritalStatusDataGenerator();
             _testDataGeneratorOrganization = new OrganizationDataGenerator();
             _testDataGeneratorDriversLicence = new DriversLicenceDataGenerator();
             _testDataGeneratorDiagnosis = new DiagnosisDataGenerator();
+            //_testDataGeneratorDiagnosis = new WorkingContractData();
             _testDataGeneratorUpdateClientCommand = new UpdateClientCommandDataGenerator();
+
+            _command = _testDataGeneratorUpdateClientCommand.Create();
+
+            var client = _testDataGeneratorClient.Create();
+            await AddAsync(client);
+            _command.Id = client.Id;
 
             var maritalStatus = _testDataGeneratorMartialStatus.Create();
             await AddAsync(maritalStatus);
+            _command.MaritalStatus!.Id = maritalStatus.Id;
 
             var organization = _testDataGeneratorOrganization.Create();
             await AddAsync(organization);
@@ -52,23 +57,26 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
             {
                 await AddAsync(driversLicence);
             }
+            _command.DriversLicences = driversLicences
+                .OrderBy(x => Guid.NewGuid())
+                .Take(NumOfDriversLicences)
+                .Select(dl => new DriversLicenceDto { Category = dl.Category, Description = dl.Description, Id = dl.Id }).ToList();
 
             var diagnoses = _testDataGeneratorDiagnosis.Create(10);
             foreach (var diagnosis in diagnoses)
             {
                 await AddAsync(diagnosis);
             }
+            _command.Diagnoses = diagnoses
+                .OrderBy(x => Guid.NewGuid())
+                .Take(NumOfDiagnoses)
+                .Select(d => new DiagnosisDto { Name = d.Name, Id = d.Id }).ToList();
 
-            _command = _testDataGeneratorUpdateClientCommand.Create();
-            _command.MaritalStatus!.Id = maritalStatus.Id;
             foreach (var workingContract in _command.WorkingContracts)
             {
                 workingContract.OrganizationId = organization.Id;
             }
-            _command.Id = client.Id;
-
-            _command.DriversLicences = driversLicences.OrderBy(x => Guid.NewGuid()).Take(NumOfDriversLicences).Select(dl => new DriversLicenceDto { Category = dl.Category, Description = dl.Description, Id = dl.Id }).ToList();
-            _command.Diagnoses = diagnoses.OrderBy(x => Guid.NewGuid()).Take(NumOfDiagnoses).Select(d => new DiagnosisDto { Name = d.Name, Id = d.Id }).ToList();
+            //_command.WorkingContracts = [];
         }
 
         [Test]

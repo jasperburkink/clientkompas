@@ -22,30 +22,28 @@ namespace Application.FunctionalTests.CoachingPrograms.Commands.CreateCoachingPr
             _testDataGeneratorOrganization = new OrganizationDataGenerator();
             _testDataGeneratorCreateCoachingProgramCommand = new CreateCoachingProgramCommandDataGenerator();
 
+            var client = _testDataGeneratorClient.Create();
+            await AddAsync(client);
+
             var organization = _testDataGeneratorOrganization.Create();
+            organization.Id = 0;
             await AddAsync(organization);
 
-
             _command = _testDataGeneratorCreateCoachingProgramCommand.Create();
+            _command.ClientId = client.Id;
+            _command.OrganizationId = organization.Id;
         }
-
 
         [Test]
         public async Task Handle_CorrectFlow_ShouldCreateCoachingProgram()
         {
-            // Arrange
-            var firstName = _command.FirstName;
-            var lastName = _command.LastName;
-
             // Act
             await SendAsync(_command);
-            var client = (await GetAsync<Client>()).FirstOrDefault();
+            var coachingProgram = (await GetAsync<CoachingProgram>()).FirstOrDefault();
 
             // Assert
-            client.Should().NotBeNull();
-            client!.FirstName.Should().Be(firstName);
-            client.LastName.Should().Be(lastName);
-            client.Id.Should().BeGreaterThan(0);
+            coachingProgram.Should().NotBeNull();
+            coachingProgram!.Id.Should().NotBe(0);
         }
     }
 }
