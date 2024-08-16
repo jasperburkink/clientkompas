@@ -1,4 +1,4 @@
-﻿using Application.CoachingPrograms.Commands.CreateCoachingProgram;
+﻿using Application.CoachingPrograms.Commands.UpdateCoachingProgram;
 using Domain.CVS.Domain;
 using TestData;
 using TestData.Client;
@@ -6,21 +6,22 @@ using TestData.CoachingProgram.Commands;
 using TestData.Organization;
 using static Application.FunctionalTests.Testing;
 
-namespace Application.FunctionalTests.CoachingPrograms.Commands.CreateCoachingProgram
+namespace Application.FunctionalTests.CoachingPrograms.Commands.UpdateCoachingProgram
 {
-    public class CreateCoachingProgramCommandDtoTests : BaseTestFixture
+
+    public class UpdateCoachingProgramCommandDtoTests : BaseTestFixture
     {
         private ITestDataGenerator<Client> _testDataGeneratorClient;
         private ITestDataGenerator<Organization> _testDataGeneratorOrganization;
-        private ITestDataGenerator<CreateCoachingProgramCommand> _testDataGeneratorCreateCoachingProgramCommand;
-        private CreateCoachingProgramCommand _command;
+        private ITestDataGenerator<UpdateCoachingProgramCommand> _testDataGeneratorUpdateCoachingProgramCommand;
+        private UpdateCoachingProgramCommand _command;
 
         [SetUp]
         public async Task SetUp()
         {
             _testDataGeneratorClient = new ClientDataGenerator();
             _testDataGeneratorOrganization = new OrganizationDataGenerator();
-            _testDataGeneratorCreateCoachingProgramCommand = new CreateCoachingProgramCommandDataGenerator();
+            _testDataGeneratorUpdateCoachingProgramCommand = new UpdateCoachingProgramCommandDataGenerator();
 
             var client = _testDataGeneratorClient.Create();
             await AddAsync(client);
@@ -28,9 +29,20 @@ namespace Application.FunctionalTests.CoachingPrograms.Commands.CreateCoachingPr
             var organization = _testDataGeneratorOrganization.Create();
             await AddAsync(organization);
 
-            _command = _testDataGeneratorCreateCoachingProgramCommand.Create();
+            _command = _testDataGeneratorUpdateCoachingProgramCommand.Create();
             _command.ClientId = client.Id;
             _command.OrganizationId = organization.Id;
+        }
+
+        [Test]
+        public async Task Handle_CorrectFlow_ShouldHaveRightId()
+        {
+            // Act
+            await SendAsync(_command);
+            var coachingProgram = (await GetAsync<CoachingProgram>()).FirstOrDefault();
+
+            // Assert
+            coachingProgram!.Id.Should().Be(_command.Id);
         }
 
         [Test]

@@ -6,6 +6,7 @@ using TestData.DriversLicence;
 using TestData.EmergencyPerson;
 using TestData.MaritalStatus;
 using TestData.Organization;
+using TestData.WorkingContract;
 
 namespace TestData.Client
 {
@@ -29,6 +30,7 @@ namespace TestData.Client
             ITestDataGenerator<Domain.CVS.Domain.DriversLicence> testDataGeneratorDriverLicence = new DriversLicenceDataGenerator();
             ITestDataGenerator<Domain.CVS.Domain.Diagnosis> testDataGeneratorDiagnosis = new DiagnosisDataGenerator();
             ITestDataGenerator<Domain.CVS.Domain.EmergencyPerson> testDataGeneratorEmergencyPerson = new EmergencyPersonDataGenerator();
+            ITestDataGenerator<Domain.CVS.Domain.WorkingContract> testDataGeneratorWorkingContract = new WorkingContractDataGenerator();
 
             var autofaker = new AutoFaker<Domain.CVS.Domain.Client>()
                 .RuleFor(c => c.Id, 0)
@@ -55,25 +57,7 @@ namespace TestData.Client
                 .RuleFor(c => c.DriversLicences, f => f.Make(3, () => testDataGeneratorDriverLicence.Create()))
                 .RuleFor(c => c.Diagnoses, f => f.Make(3, () => testDataGeneratorDiagnosis.Create()))
                 .RuleFor(c => c.EmergencyPeople, f => f.Make(3, () => testDataGeneratorEmergencyPerson.Create()))
-                .RuleFor(c => c.WorkingContracts, f => f.Make(5, () =>
-                {
-                    var fromDate = new DateOnlyBinder().CreateInstance<DateOnly>(null);
-                    var toDate = new DateOnlyBinder().CreateInstance<DateOnly>(null);
-                    while (toDate <= fromDate)
-                    {
-                        toDate = new DateOnlyBinder().CreateInstance<DateOnly>(null);
-                    }
-
-                    return new WorkingContract
-                    {
-                        Id = 0,
-                        FromDate = fromDate,
-                        ToDate = toDate,
-                        ContractType = f.PickRandom<ContractType>(),
-                        Function = faker.Name.JobTitle(),
-                        Organization = testDataGeneratorOrganization.Create()
-                    };
-                }))
+                .RuleFor(c => c.WorkingContracts, f => f.Make(5, () => testDataGeneratorWorkingContract.Create()))
                 .RuleFor(c => c.Remarks, faker.Lorem.Sentence());
             }
             else

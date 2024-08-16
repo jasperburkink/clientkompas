@@ -37,6 +37,7 @@ namespace Infrastructure.Persistence.CVS.Configuration
 
             builder.HasMany(c => c.WorkingContracts)
                 .WithOne(wc => wc.Client)
+                .HasForeignKey(wc => wc.ClientId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.Property(c => c.FirstName)

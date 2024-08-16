@@ -56,6 +56,7 @@ namespace Application.CoachingPrograms.Commands.CreateCoachingProgram
 
             await _unitOfWork.CoachingProgramRepository.InsertAsync(coachingProgram, cancellationToken);
             await _unitOfWork.SaveAsync(cancellationToken);
+            coachingProgram = await _unitOfWork.CoachingProgramRepository.GetByIDAsync(coachingProgram.Id, includeProperties: "Client,Organization", cancellationToken);
 
             coachingProgram.AddDomainEvent(new CoachingProgramCreatedEvent(coachingProgram));
 

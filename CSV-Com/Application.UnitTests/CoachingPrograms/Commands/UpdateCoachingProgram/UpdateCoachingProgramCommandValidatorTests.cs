@@ -60,6 +60,9 @@ namespace Application.UnitTests.CoachingPrograms.Commands.UpdateCoachingProgram
         [Fact]
         public async Task Validate_ValidCommand_ShouldNotHaveAnyValidationErrors()
         {
+            // Arrange
+            _command.ClientId = 1;
+
             // Act
             var result = await _validator.TestValidateAsync(_command);
 

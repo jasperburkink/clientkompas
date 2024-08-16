@@ -43,8 +43,4 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="CoachingPrograms\Commands\UpdateCoachingProgram\" />
-  </ItemGroup>
-
 </Project>
