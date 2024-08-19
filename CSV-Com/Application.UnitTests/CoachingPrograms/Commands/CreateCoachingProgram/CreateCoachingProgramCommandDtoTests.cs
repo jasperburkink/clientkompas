@@ -74,6 +74,7 @@ namespace Application.UnitTests.CoachingPrograms.Commands.CreateCoachingProgram
 
             _unitOfWorkMock.Setup(uw => uw.CoachingProgramRepository.InsertAsync(It.IsAny<CoachingProgram>(), default));
             _unitOfWorkMock.Setup(uw => uw.SaveAsync(default)).Returns(Task.CompletedTask);
+            _unitOfWorkMock.Setup(uw => uw.CoachingProgramRepository.GetByIDAsync(It.IsAny<int>(), It.IsAny<string>(), default)).ReturnsAsync(_coachingProgram);
 
             _mapperMock.Setup(m => m.Map<CreateCoachingProgramCommandDto>(It.IsAny<CoachingProgram>())).Returns(new CreateCoachingProgramCommandDto
             {

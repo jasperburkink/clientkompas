@@ -57,10 +57,12 @@ namespace Application.CoachingPrograms.Commands.UpdateCoachingProgram
             coachingProgram.HourlyRate = request.HourlyRate;
             coachingProgram.BudgetAmmount = request.BudgetAmmount;
 
-            await _unitOfWork.CoachingProgramRepository.InsertAsync(coachingProgram, cancellationToken);
+            await _unitOfWork.CoachingProgramRepository.UpdateAsync(coachingProgram, cancellationToken);
             await _unitOfWork.SaveAsync(cancellationToken);
 
             coachingProgram.AddDomainEvent(new CoachingProgramUpdatedEvent(coachingProgram));
+
+            coachingProgram = await _unitOfWork.CoachingProgramRepository.GetByIDAsync(coachingProgram.Id, includeProperties: "Client,Organization", cancellationToken);
 
             return _mapper.Map<UpdateCoachingProgramCommandDto>(coachingProgram);
         }

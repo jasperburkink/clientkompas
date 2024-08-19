@@ -1,7 +1,9 @@
 ﻿using Application.CoachingPrograms.Commands.UpdateCoachingProgram;
 using Domain.CVS.Domain;
+using Domain.CVS.Enums;
 using TestData;
 using TestData.Client;
+using TestData.CoachingProgram;
 using TestData.CoachingProgram.Commands;
 using TestData.Organization;
 using static Application.FunctionalTests.Testing;
@@ -15,6 +17,7 @@ namespace Application.FunctionalTests.CoachingPrograms.Commands.UpdateCoachingPr
         private ITestDataGenerator<Organization> _testDataGeneratorOrganization;
         private ITestDataGenerator<UpdateCoachingProgramCommand> _testDataGeneratorUpdateCoachingProgramCommand;
         private UpdateCoachingProgramCommand _command;
+        private CoachingProgram _coachingProgram;
 
         [SetUp]
         public async Task SetUp()
@@ -32,6 +35,16 @@ namespace Application.FunctionalTests.CoachingPrograms.Commands.UpdateCoachingPr
             _command = _testDataGeneratorUpdateCoachingProgramCommand.Create();
             _command.ClientId = client.Id;
             _command.OrganizationId = organization.Id;
+
+            ITestDataGenerator<CoachingProgram> testDataGeneratorCoachingProgram = new CoachingProgramDataGenerator();
+            _coachingProgram = testDataGeneratorCoachingProgram.Create();
+            _coachingProgram.ClientId = client.Id;
+            _coachingProgram.Client = null;
+            _coachingProgram.OrganizationId = organization.Id;
+            _coachingProgram.Organization = null;
+            await AddAsync(_coachingProgram);
+
+            _command.Id = _coachingProgram.Id;
         }
 
         [Test]
@@ -88,21 +101,29 @@ namespace Application.FunctionalTests.CoachingPrograms.Commands.UpdateCoachingPr
         [Test]
         public async Task Handle_Title_IsSet()
         {
+            // Arrange
+            var title = "Title";
+            _command.Title = title;
+
             // Act
             var result = await SendAsync(_command);
 
             // Assert
-            result.Title.Should().Be(_command.Title);
+            result.Title.Should().Be(title);
         }
 
         [Test]
         public async Task Handle_OrderNumber_IsSet()
         {
+            // Arrange
+            var orderNumber = "Order1234567";
+            _command.OrderNumber = orderNumber;
+
             // Act
             var result = await SendAsync(_command);
 
             // Assert
-            result.OrderNumber.Should().Be(_command.OrderNumber);
+            result.OrderNumber.Should().Be(orderNumber);
         }
 
         [Test]
@@ -123,51 +144,71 @@ namespace Application.FunctionalTests.CoachingPrograms.Commands.UpdateCoachingPr
         [Test]
         public async Task Handle_CoachingProgramType_IsSet()
         {
+            // Arrange
+            var coachingProgramType = CoachingProgramType.ExternJobCoach;
+            _command.CoachingProgramType = coachingProgramType;
+
             // Act
             var result = await SendAsync(_command);
 
             // Assert
-            result.CoachingProgramType.Should().Be(_command.CoachingProgramType);
+            result.CoachingProgramType.Should().Be(coachingProgramType);
         }
 
         [Test]
         public async Task Handle_BeginDate_IsSet()
         {
+            // Arrange
+            var beginDate = new DateOnly(1986, 3, 24);
+            _command.BeginDate = beginDate;
+
             // Act
             var result = await SendAsync(_command);
 
             // Assert
-            result.BeginDate.Should().Be(_command.BeginDate);
+            result.BeginDate.Should().Be(beginDate);
         }
 
         [Test]
         public async Task Handle_EndDate_IsSet()
         {
+            // Arrange
+            var endDate = new DateOnly(2024, 1, 2);
+            _command.EndDate = endDate;
+
             // Act
             var result = await SendAsync(_command);
 
             // Assert
-            result.EndDate.Should().Be(_command.EndDate);
+            result.EndDate.Should().Be(endDate);
         }
 
         [Test]
         public async Task Handle_BudgetAmmount_IsSet()
         {
+            // Arrange
+            var budgetAmmount = 100.50m;
+            _command.BudgetAmmount = budgetAmmount;
+
             // Act
             var result = await SendAsync(_command);
 
             // Assert
-            result.BudgetAmmount.Should().Be(_command.BudgetAmmount);
+            result.BudgetAmmount.Should().Be(budgetAmmount);
         }
 
         [Test]
         public async Task Handle_HourlyRate_IsSet()
         {
+            // Arrange
+            var hourlyRate = 1000.75m;
+            _command.HourlyRate = hourlyRate;
+
             // Act
             var result = await SendAsync(_command);
 
             // Assert
-            result.HourlyRate.Should().Be(_command.HourlyRate);
+            result.HourlyRate.Should().Be(hourlyRate);
         }
     }
 }

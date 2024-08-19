@@ -87,6 +87,8 @@ namespace Application.FunctionalTests.CoachingPrograms.Commands.CreateCoachingPr
             await AddAsync(organization);
 
             var command2 = _testDataGeneratorCreateCoachingProgramCommand.Create();
+            command2.ClientId = client.Id;
+            command2.OrganizationId = organization.Id;
 
             // Act
             await SendAsync(_command);
