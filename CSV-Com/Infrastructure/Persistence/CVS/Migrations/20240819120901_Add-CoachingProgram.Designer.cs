@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.CVS.Migrations
 {
     [DbContext(typeof(CVSDbContext))]
-    [Migration("20240808134342_Add-CoachingProgram")]
+    [Migration("20240819120901_Add-CoachingProgram")]
     partial class AddCoachingProgram
     {
         /// <inheritdoc />
@@ -188,8 +188,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     b.Property<decimal?>("BudgetAmmount")
                         .HasColumnType("decimal(65,30)");
 
-                    b.Property<int?>("ClientId")
-                        .IsRequired()
+                    b.Property<int>("ClientId")
                         .HasColumnType("int");
 
                     b.Property<int>("CoachingProgramType")
@@ -231,7 +230,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
                     b.HasIndex("OrganizationId");
 
-                    b.ToTable("CoachingProgram");
+                    b.ToTable("CoachingPrograms");
                 });
 
             modelBuilder.Entity("Domain.CVS.Domain.Diagnosis", b =>

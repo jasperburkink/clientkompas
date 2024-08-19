@@ -20,6 +20,8 @@ namespace Infrastructure.Persistence.CVS
 
         public DbSet<Organization> Organizations { get; set; }
 
+        public DbSet<CoachingProgram> CoachingPrograms { get; set; }
+
         public CVSDbContext(DbContextOptions<CVSDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder builder)

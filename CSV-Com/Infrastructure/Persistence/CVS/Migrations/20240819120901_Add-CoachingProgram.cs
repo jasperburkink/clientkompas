@@ -79,7 +79,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
                 .OldAnnotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "CoachingProgram",
+                name: "CoachingPrograms",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -104,15 +104,15 @@ namespace Infrastructure.Persistence.CVS.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CoachingProgram", x => x.Id);
+                    table.PrimaryKey("PK_CoachingPrograms", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CoachingProgram_Clients_ClientId",
+                        name: "FK_CoachingPrograms_Clients_ClientId",
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CoachingProgram_Organizations_OrganizationId",
+                        name: "FK_CoachingPrograms_Organizations_OrganizationId",
                         column: x => x.OrganizationId,
                         principalTable: "Organizations",
                         principalColumn: "Id");
@@ -120,13 +120,13 @@ namespace Infrastructure.Persistence.CVS.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CoachingProgram_ClientId",
-                table: "CoachingProgram",
+                name: "IX_CoachingPrograms_ClientId",
+                table: "CoachingPrograms",
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CoachingProgram_OrganizationId",
-                table: "CoachingProgram",
+                name: "IX_CoachingPrograms_OrganizationId",
+                table: "CoachingPrograms",
                 column: "OrganizationId");
         }
 
@@ -134,7 +134,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CoachingProgram");
+                name: "CoachingPrograms");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Function",

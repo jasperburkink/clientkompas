@@ -46,7 +46,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
                     b.HasIndex("DiagnosesId");
 
-                    b.ToTable("ClientDiagnosis", (string)null);
+                    b.ToTable("ClientDiagnosis");
                 });
 
             modelBuilder.Entity("ClientDriversLicence", b =>
@@ -61,7 +61,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
                     b.HasIndex("DriversLicencesId");
 
-                    b.ToTable("ClientDriversLicence", (string)null);
+                    b.ToTable("ClientDriversLicence");
                 });
 
             modelBuilder.Entity("Domain.CVS.Domain.BenefitForm", b =>
@@ -89,7 +89,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BenefitForm", (string)null);
+                    b.ToTable("BenefitForm");
                 });
 
             modelBuilder.Entity("Domain.CVS.Domain.Client", b =>
@@ -170,7 +170,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
                     b.HasIndex("MaritalStatusId");
 
-                    b.ToTable("Clients", (string)null);
+                    b.ToTable("Clients");
                 });
 
             modelBuilder.Entity("Domain.CVS.Domain.CoachingProgram", b =>
@@ -185,8 +185,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     b.Property<decimal?>("BudgetAmmount")
                         .HasColumnType("decimal(65,30)");
 
-                    b.Property<int?>("ClientId")
-                        .IsRequired()
+                    b.Property<int>("ClientId")
                         .HasColumnType("int");
 
                     b.Property<int>("CoachingProgramType")
@@ -228,7 +227,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
                     b.HasIndex("OrganizationId");
 
-                    b.ToTable("CoachingProgram", (string)null);
+                    b.ToTable("CoachingPrograms");
                 });
 
             modelBuilder.Entity("Domain.CVS.Domain.Diagnosis", b =>
@@ -256,7 +255,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Diagnosis", (string)null);
+                    b.ToTable("Diagnosis");
                 });
 
             modelBuilder.Entity("Domain.CVS.Domain.DriversLicence", b =>
@@ -289,7 +288,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DriversLicence", (string)null);
+                    b.ToTable("DriversLicence");
                 });
 
             modelBuilder.Entity("Domain.CVS.Domain.MaritalStatus", b =>
@@ -317,7 +316,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MaritalStatus", (string)null);
+                    b.ToTable("MaritalStatus");
                 });
 
             modelBuilder.Entity("Domain.CVS.Domain.Organization", b =>
@@ -411,7 +410,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     b.HasIndex("OrganizationName")
                         .HasAnnotation("MySql:FullTextIndex", true);
 
-                    b.ToTable("Organizations", (string)null);
+                    b.ToTable("Organizations");
                 });
 
             modelBuilder.Entity("Domain.CVS.Domain.User", b =>
@@ -446,7 +445,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Domain.CVS.Domain.WorkingContract", b =>
@@ -493,7 +492,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
                     b.HasIndex("OrganizationId");
 
-                    b.ToTable("WorkingContract", (string)null);
+                    b.ToTable("WorkingContract");
                 });
 
             modelBuilder.Entity("BenefitFormClient", b =>
@@ -548,7 +547,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
                         .HasForeignKey("MaritalStatusId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.OwnsOne("Domain.CVS.Domain.Client.Address#Domain.CVS.ValueObjects.Address", "Address", b1 =>
+                    b.OwnsOne("Domain.CVS.ValueObjects.Address", "Address", b1 =>
                         {
                             b1.Property<int>("ClientId")
                                 .HasColumnType("int");
@@ -583,13 +582,13 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
                             b1.HasKey("ClientId");
 
-                            b1.ToTable("Clients", (string)null);
+                            b1.ToTable("Clients");
 
                             b1.WithOwner()
                                 .HasForeignKey("ClientId");
                         });
 
-                    b.OwnsMany("Domain.CVS.Domain.Client.EmergencyPeople#Domain.CVS.Domain.EmergencyPerson", "EmergencyPeople", b1 =>
+                    b.OwnsMany("Domain.CVS.Domain.EmergencyPerson", "EmergencyPeople", b1 =>
                         {
                             b1.Property<int>("ClientId")
                                 .HasColumnType("int");
@@ -624,7 +623,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
                             b1.HasKey("ClientId", "Id");
 
-                            b1.ToTable("EmergencyPerson", (string)null);
+                            b1.ToTable("EmergencyPerson");
 
                             b1.WithOwner("Client")
                                 .HasForeignKey("ClientId");
@@ -659,7 +658,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
             modelBuilder.Entity("Domain.CVS.Domain.Organization", b =>
                 {
-                    b.OwnsOne("Domain.CVS.Domain.Organization.InvoiceAddress#Domain.CVS.ValueObjects.Address", "InvoiceAddress", b1 =>
+                    b.OwnsOne("Domain.CVS.ValueObjects.Address", "InvoiceAddress", b1 =>
                         {
                             b1.Property<int>("OrganizationId")
                                 .HasColumnType("int");
@@ -694,13 +693,13 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
                             b1.HasKey("OrganizationId");
 
-                            b1.ToTable("Organizations", (string)null);
+                            b1.ToTable("Organizations");
 
                             b1.WithOwner()
                                 .HasForeignKey("OrganizationId");
                         });
 
-                    b.OwnsOne("Domain.CVS.Domain.Organization.PostAddress#Domain.CVS.ValueObjects.Address", "PostAddress", b1 =>
+                    b.OwnsOne("Domain.CVS.ValueObjects.Address", "PostAddress", b1 =>
                         {
                             b1.Property<int>("OrganizationId")
                                 .HasColumnType("int");
@@ -735,13 +734,13 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
                             b1.HasKey("OrganizationId");
 
-                            b1.ToTable("Organizations", (string)null);
+                            b1.ToTable("Organizations");
 
                             b1.WithOwner()
                                 .HasForeignKey("OrganizationId");
                         });
 
-                    b.OwnsOne("Domain.CVS.Domain.Organization.VisitAddress#Domain.CVS.ValueObjects.Address", "VisitAddress", b1 =>
+                    b.OwnsOne("Domain.CVS.ValueObjects.Address", "VisitAddress", b1 =>
                         {
                             b1.Property<int>("OrganizationId")
                                 .HasColumnType("int");
@@ -776,7 +775,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
 
                             b1.HasKey("OrganizationId");
 
-                            b1.ToTable("Organizations", (string)null);
+                            b1.ToTable("Organizations");
 
                             b1.WithOwner()
                                 .HasForeignKey("OrganizationId");
