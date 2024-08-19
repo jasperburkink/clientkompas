@@ -41,7 +41,7 @@ namespace Application.UnitTests.CoachingPrograms.Commands.UpdateCoachingProgram
             _resourceMessageProviderMock
                 .Setup(m => m.GetMessage(It.IsAny<Type>(), It.IsAny<string>(), It.IsAny<object[]>()))
                 .Returns((Type type, string key, object[] args) =>
-                    $"Mock validation message for Type: {type.Name}, Key: {key}, Args: {string.Join(", ", args ?? new object[0])}");
+                    $"Mock validation message for Type: {type.Name}, Key: {key}, Args: {string.Join(", ", args ?? [])}");
 
             _validator = new UpdateCoachingProgramCommandValidator(_unitOfWorkMock.Object, _resourceMessageProviderMock.Object);
 
