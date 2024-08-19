@@ -1,16 +1,19 @@
-﻿using Domain.CVS.Constants;
-using Domain.CVS.Domain;
+﻿using Application.Common.Interfaces;
+using Domain.CVS.Constants;
 using FluentValidation;
 
 namespace Application.Common.Rules
 {
     public static class BenefitFormValidationRules
     {
-        public static IRuleBuilderOptions<T, string> ValidateDiagnosisName<T>(this IRuleBuilder<T, string> ruleBuilder)
+        public static IRuleBuilderOptions<T, string> ValidateBenefitFormName<T>(this IRuleBuilder<T, string> ruleBuilder,
+             IResourceMessageProvider resourceMessageProvider)
         {
             return ruleBuilder
-                .NotEmpty().WithMessage($"{nameof(BenefitForm.Name)} is verplicht.")
-                .MaximumLength(BenefitFormConstants.NAME_MAXLENGTH).WithMessage($"{nameof(BenefitForm.Name)} mag niet langer zijn dan {BenefitFormConstants.NAME_MAXLENGTH} karakters.");
+                .NotEmpty()
+                .WithMessage(resourceMessageProvider.GetMessage(typeof(BenefitFormValidationRules), "NameRequired"))
+                .MaximumLength(BenefitFormConstants.NAME_MAXLENGTH)
+                .WithMessage(resourceMessageProvider.GetMessage(typeof(BenefitFormValidationRules), "NameMaxLength", BenefitFormConstants.NAME_MAXLENGTH));
         }
     }
 }

@@ -60,6 +60,10 @@ namespace API.Controllers
             {
                 return await Mediator.Send(command);
             }
+            catch (FluentValidation.ValidationException ex)
+            {
+                return BadRequest(ex.Errors);
+            }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex);
@@ -85,6 +89,10 @@ namespace API.Controllers
             {
                 return StatusCode(StatusCodes.Status404NotFound, ex);
             }
+            catch (FluentValidation.ValidationException ex)
+            {
+                return BadRequest(ex.Errors);
+            }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex);
@@ -102,6 +110,10 @@ namespace API.Controllers
             catch (NotFoundException ex)
             {
                 return StatusCode(StatusCodes.Status404NotFound, ex);
+            }
+            catch (FluentValidation.ValidationException ex)
+            {
+                return BadRequest(ex.Errors);
             }
             catch (Exception ex)
             {
