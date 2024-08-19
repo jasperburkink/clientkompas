@@ -1,9 +1,9 @@
 const CustomLabels = {
-    EmergencyPerson: {
+    emergencypeople: {
         name: 'Naam',
         telephonenumber: 'Telefoonnr.'
     },
-    WorkingContract: {
+    workingcontracts: {
         organizationid: 'Werkt bij',
         function: 'Functie',
         contracttype: 'Contract',
