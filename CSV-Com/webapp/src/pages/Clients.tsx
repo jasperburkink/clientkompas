@@ -14,7 +14,7 @@ import { SlideToggleLabel } from 'components/common/slide-toggle-label';
 import ClientQuery from 'types/model/ClientQuery';
 import 'utils/utilities';
 import Moment from 'moment';
-import { fetchClient, deactivateClient } from 'utils/api';
+import { fetchClient, deactivateClient, fetchCoachingProgramsByClient } from 'utils/api';
 import SearchClients from 'components/clients/search-clients';
 import StatusEnum from 'types/common/StatusEnum';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -23,6 +23,9 @@ import { DatePicker } from 'components/common/datepicker';
 import { ClientContext, IClientContext } from './client-context';
 import ConfirmPopup from "components/common/confirm-popup";
 import Client from '../types/model/Client';
+import { Dropdown } from 'components/common/dropdown';
+import CoachingProgramQuery from 'types/model/CoachingProgramQuery';
+import CoachingProgram from 'types/model/CoachingProgram';
 
 const NO_INFO = 'Geen informatie beschikbaar';
 const DATE_FORMAT = 'DD-MM-yyyy';
@@ -38,6 +41,8 @@ function Clients() {
     const [isDeactivateConfirmPopupOpen, setDeactivateConfirmPopupOpen] = useState<boolean>(false);
     const [isDeactivateConfirmedPopupOpen, setDeactivateConfirmedPopupOpen] = useState<boolean>(false);
     const [deactivatedClient, setDeactivatedClient] = useState<ClientQuery | null>(null);
+    const [coachingPrograms, setCoachingPrograms] = useState<CoachingProgramQuery[]>([]);
+    const [currentCoachingProgram, setCurrentCoachingProgram] = useState<CoachingProgram | null>(null);
     
     var { id } = useParams();
 
@@ -51,7 +56,7 @@ function Clients() {
           setStatus(StatusEnum.PENDING);
           const fetchedClient: ClientQuery = await fetchClient(id!);
           setStatus(StatusEnum.SUCCESSFUL);
-          setClient(fetchedClient);          
+          setClient(fetchedClient);                  
           
           var rowSpanProfilePic = fetchedClient && fetchedClient.emergencypeople ? fetchedClient.emergencypeople.length + PROFILE_PIC_ROW_SPAN_DEFAULT_VALUE : PROFILE_PIC_ROW_SPAN_DEFAULT_VALUE;
           setProfilePicSpanValue(rowSpanProfilePic);
@@ -61,7 +66,7 @@ function Clients() {
           setStatus(StatusEnum.REJECTED);
           //setError(e);
         }
-      };
+      };    
 
     function deactivateClientClick(client: ClientQuery) {
         try{
@@ -108,6 +113,10 @@ function Clients() {
         setDeactivateConfirmedPopupOpen(false);
     }
 
+    const handleCoachingProgramChange = (value: number) => {
+        alert(value);
+    };
+
     // Get client by id
     useEffect(() => {
         if(!id) {
@@ -116,7 +125,15 @@ function Clients() {
         }
     
         fetchClientById();
-    }, [id]);    
+
+        const fetchCoachingProgramsData = async () => {
+            const programs = await fetchCoachingProgramsByClient(id!);
+            setCoachingPrograms(programs);
+        };
+
+        fetchCoachingProgramsData();
+
+    }, [id]);
       
     return (
         <div className="flex flex-col lg:flex-row h-screen lg:h-auto">
@@ -142,7 +159,7 @@ function Clients() {
                 {status === StatusEnum.SUCCESSFUL && client &&
                 <div className="clients">
                 {/* {Client main info 1 */}           
-                    <Header text="Cliënt info" />
+                    <Header text="Cliënt info" className='client-header' />
 
                     {/* Profile picture */}
                     <div className={`client-profile-picture`} style={{ 
@@ -195,7 +212,7 @@ function Clients() {
                         )                         
                     }                    
 
-                    <SlideToggleLabel text='Overige cliënt informatie' smallTextColapsed=' - klap uit voor meer opties' smallTextExpanded=' - klap in voor minder opties' >
+                    <SlideToggleLabel className='slidetoggle' text='Overige cliënt informatie' smallTextColapsed=' - klap uit voor meer opties' smallTextExpanded=' - klap in voor minder opties' >
                         <Label text='Overige informatie' className='client-subheader' strong={true} />
                         
                         <div className='client-additional-info-container'>
@@ -260,6 +277,18 @@ function Clients() {
 
                     </SlideToggleLabel>
 
+                    <Header text="Traject info" className='traject-header' />
+
+                    <Dropdown 
+                        options={coachingPrograms.map(program => ({ 
+                            label: program.title, 
+                            value: program.id
+                        }))} 
+                        required={false} 
+                        inputfieldname='coaching-program'
+                        onChange={(value) => handleCoachingProgramChange(value)}
+                        dataTestId='coaching-program' />
+
                     <Button buttonType={{type:"Solid"}} text="Deactivateer cliënt" className='client-deactivate-button' onClick={() => deactivateClientClick(client)} dataTestId="button.deactivate" />
                     <ConfirmPopup
                     message="Weet u zeker dat u de cliënt wilt deactiveren?"
@@ -276,7 +305,7 @@ function Clients() {
                                 }
                             }, buttonType: {type:"Solid"}},
                             { text: 'Annuleren', onClick: cancelDeactivateClient, buttonType: {type:"NotSolid"}},
-                        ]} />
+                        ]} />                    
 
                     <ConfirmPopup
                     message={`Cliënt met id '${deactivatedClient ? deactivatedClient!.id : ''}' is gedeactiveerd!`}

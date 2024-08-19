@@ -11,6 +11,7 @@ import { Console, error } from "console";
 import Organization from "types/model/Organization";
 import { ValidationErrorHash, ValidationError, parseValidationErrors } from "types/common/validation-error";
 import { Type } from "typescript";
+import CoachingProgramQuery from "types/model/CoachingProgramQuery";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -188,6 +189,10 @@ export const saveOrganization = async (organization: Organization): Promise<ApiR
     const response = await fetch(`${apiUrl}Organization`, requestOptions);     
     
     return handleApiResonse<Organization>(response);
+}
+
+export const fetchCoachingProgramsByClient = async (clientId: string): Promise<CoachingProgramQuery[]> => {
+    return fetchAPI<CoachingProgramQuery[]>(`${apiUrl}CoachingProgram/GetCoachingProgramsByClient/${clientId}`);
 }
 
 function processErrors(errors: { [key: string]: string[] }): string[] {

@@ -33,12 +33,12 @@
             text-lg;
         }        
     
-        .header{
+        .client-header{
             @apply 
             text-3xl 
             mb-5 
             w-full 
-            lg:text-3xl 
+            lg:text-3xl
             lg:row-end-1;
         }
     
@@ -129,6 +129,20 @@
         .client-remarks{
             @apply 
             col-span-2;
+        }
+
+        .slidetoggle{
+            @apply
+            col-span-2;
+        }
+
+        .traject-header{
+            @apply 
+            text-3xl 
+            mb-5 
+            w-full 
+            lg:text-3xl
+            lg:col-span-3;
         }
 
         .button-container{
