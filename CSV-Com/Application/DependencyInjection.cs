@@ -22,7 +22,6 @@ namespace Application
                 cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehaviour<,>));
                 //cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(AuthorizationBehaviour<,>));
                 cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
-                //cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));                
 
             });
             services.AddSingleton<IResourceMessageProvider>(new ResourceMessageProvider(CultureInfo.CurrentUICulture));
