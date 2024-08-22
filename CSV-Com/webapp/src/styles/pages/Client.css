@@ -176,6 +176,30 @@
                     lg:block;
                 }
             }
+
+            .traject-buttons{
+                @apply
+                w-full 
+                h-auto 
+                shadow-none
+                flex
+                flex-col
+                items-center
+                gap-4
+                lg:items-end
+                lg:pr-4;
+
+                .button{
+                    @apply
+                    content-center
+                    w-56
+                    h-20
+                    lg:h-12
+                    lg:text-base
+                    text-lg
+                    text-center;
+                }
+            }
         }
 
         .button-container{
