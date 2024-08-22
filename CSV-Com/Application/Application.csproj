@@ -44,6 +44,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="CoachingPrograms\Queries\GetCoachingProgram\Resources\GetCoachingProgramDto.nl.Designer.cs">
+      <DependentUpon>GetCoachingProgramDto.nl.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="CoachingPrograms\Queries\GetCoachingProgram\Resources\GetCoachingProgramDto.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>GetCoachingProgramDto.resx</DependentUpon>
+    </Compile>
     <Compile Update="Common\Rules\Resources\AddressValidationRules.nl.Designer.cs">
       <DependentUpon>AddressValidationRules.nl.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -102,6 +112,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="CoachingPrograms\Queries\GetCoachingProgram\Resources\GetCoachingProgramDto.nl.resx">
+      <LastGenOutput>GetCoachingProgramDto.nl.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="CoachingPrograms\Queries\GetCoachingProgram\Resources\GetCoachingProgramDto.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>GetCoachingProgramDto.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Common\Rules\Resources\AddressValidationRules.nl.resx">
       <LastGenOutput>AddressValidationRules.nl.Designer.cs</LastGenOutput>
       <Generator>ResXFileCodeGenerator</Generator>

@@ -16,7 +16,7 @@ namespace TestData.MaritalStatus
         private Faker<Domain.CVS.Domain.MaritalStatus> GetFaker()
         {
             return new AutoFaker<Domain.CVS.Domain.MaritalStatus>()
-                .RuleFor(mt => mt.Name, f => f.Random.String2(10)); // TODO: Take value 10 from contants
+                .RuleFor(mt => mt.Name, f => f.PickRandom(Constants.MARITALSTATUSES_OPTIONS));
         }
     }
 }

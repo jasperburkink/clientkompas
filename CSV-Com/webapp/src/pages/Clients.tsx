@@ -14,7 +14,7 @@ import { SlideToggleLabel } from 'components/common/slide-toggle-label';
 import ClientQuery from 'types/model/ClientQuery';
 import 'utils/utilities';
 import Moment from 'moment';
-import { fetchClient, deactivateClient, fetchCoachingProgramsByClient } from 'utils/api';
+import { fetchClient, deactivateClient, fetchCoachingProgramsByClient, fetchCoachingProgram } from 'utils/api';
 import SearchClients from 'components/clients/search-clients';
 import StatusEnum from 'types/common/StatusEnum';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -26,6 +26,9 @@ import Client from '../types/model/Client';
 import { Dropdown } from 'components/common/dropdown';
 import CoachingProgramQuery from 'types/model/CoachingProgramQuery';
 import CoachingProgram from 'types/model/CoachingProgram';
+import LabelField from 'components/common/label-field';
+import Decimal from 'decimal.js-light';
+import { formatCurrency } from 'utils/utilities';
 
 const NO_INFO = 'Geen informatie beschikbaar';
 const DATE_FORMAT = 'DD-MM-yyyy';
@@ -113,8 +116,20 @@ function Clients() {
         setDeactivateConfirmedPopupOpen(false);
     }
 
-    const handleCoachingProgramChange = (value: number) => {
-        alert(value);
+    const handleCoachingProgramChange = async (value: number) => {
+        try {
+            if(value === 0) {
+                setCurrentCoachingProgram(null);
+                return;
+            }
+
+            const fetchedCoachingProgram: CoachingProgram = await fetchCoachingProgram(value);
+            setCurrentCoachingProgram(fetchedCoachingProgram);                              
+          } catch (e) {
+            // TODO: error handling
+            console.error(e);
+            //setError(e);
+          }
     };
 
     // Get client by id
@@ -131,9 +146,18 @@ function Clients() {
             setCoachingPrograms(programs);
         };
 
-        fetchCoachingProgramsData();
+        fetchCoachingProgramsData();        
 
     }, [id]);
+
+    useEffect(() => {
+        if(coachingPrograms.length <= 0)
+            return;
+
+        handleCoachingProgramChange(coachingPrograms[0].id);
+    }, [coachingPrograms]);
+
+    
       
     return (
         <div className="flex flex-col lg:flex-row h-screen lg:h-auto">
@@ -212,11 +236,11 @@ function Clients() {
                         )                         
                     }                    
 
-                    <SlideToggleLabel className='slidetoggle' text='Overige cliënt informatie' smallTextColapsed=' - klap uit voor meer opties' smallTextExpanded=' - klap in voor minder opties' >
+                    <SlideToggleLabel className='slidetoggle client-additional-info' text='Overige cliënt informatie' smallTextColapsed=' - klap uit voor meer opties' smallTextExpanded=' - klap in voor minder opties' >
                         <Label text='Overige informatie' className='client-subheader' strong={true} />
                         
                         <div className='client-additional-info-container'>
-                            <div className='client-label-value '>
+                            <div className='client-label-value'>
                                 <Label text='Diagnose(s): ' />
                                 <Label text={client.diagnoses ? client.diagnoses : NO_INFO} />
                             </div>
@@ -277,49 +301,121 @@ function Clients() {
 
                     </SlideToggleLabel>
 
-                    <Header text="Traject info" className='traject-header' />
+                    <div className='traject-container'>
+                        <Header text="Traject info" className='traject-header' />
+                        
+                        <Dropdown
+                            options={coachingPrograms.map(program => ({ 
+                                label: program.title, 
+                                value: program.id
+                            }))} 
+                            required={false} 
+                            inputfieldname='coaching-program'
+                            onChange={(value) => handleCoachingProgramChange(value)}
+                            dataTestId='coaching-program' />
 
-                    <Dropdown 
-                        options={coachingPrograms.map(program => ({ 
-                            label: program.title, 
-                            value: program.id
-                        }))} 
-                        required={false} 
-                        inputfieldname='coaching-program'
-                        onChange={(value) => handleCoachingProgramChange(value)}
-                        dataTestId='coaching-program' />
+                        <div className='traject-default-values'>
+                            <div className='traject-label-value'>
+                                <Label text='BeginDatum: ' />
+                                <Label text={currentCoachingProgram ? Moment(currentCoachingProgram.begindate).format(DATE_FORMAT) : ''} />
+                            </div>
+
+                            <div className='traject-label-value'>
+                                <Label text='EindDatum: ' />
+                                <Label text={currentCoachingProgram ? Moment(currentCoachingProgram.enddate).format(DATE_FORMAT) : ''} />
+                            </div>
+
+                            <div className='traject-label-value'>
+                                <Label text='Traject type: ' />
+                                <Label text={currentCoachingProgram ? currentCoachingProgram.coachingprogramtype : ''} />
+                            </div>
+                        </div>
+
+                        {currentCoachingProgram !== null && 
+                        <SlideToggleLabel 
+                            className='slidetoggle' 
+                            text='Overige cliënt informatie' 
+                            smallTextColapsed=' - klap uit voor meer opties' 
+                            smallTextExpanded=' - klap in voor minder opties' >
+
+                            <div className='traject-additional-info'>
+                                <div className='traject-label-value'>
+                                    <Label text='Client: ' />
+                                    <Label text={currentCoachingProgram.clientfullname} />
+                                </div>
+
+                                <div className='traject-label-value'>
+                                    <Label text='Titel: ' />
+                                    <Label text={currentCoachingProgram.title} />
+                                </div>
+
+                                <div className='traject-label-value'>
+                                    <Label text='Ordernummer: ' />
+                                    <Label text={currentCoachingProgram.ordernumber ? currentCoachingProgram.ordernumber : ''} />
+                                </div>
+
+                                <div className='traject-label-value'>
+                                    <Label text='Organisatie: ' />
+                                    <Label text={currentCoachingProgram.organizationname ? currentCoachingProgram.organizationname : ''} />
+                                </div> 
+
+                                <div className='traject-label-value'>
+                                    <Label text='Budget: ' />
+                                    <Label text={currentCoachingProgram.budgetammount ? formatCurrency(currentCoachingProgram.budgetammount) : ''} />
+                                </div> 
+
+                                <div className='traject-label-value'>
+                                    <Label text='Uurtarief: ' />
+                                    <Label text={currentCoachingProgram.hourlyrate ? formatCurrency(currentCoachingProgram.hourlyrate) : ''} />
+                                </div>
+
+                                <div className='traject-label-value'>
+                                    <Label text='Te besteden uren: ' />
+                                    <Label text={currentCoachingProgram.remaininghours ? currentCoachingProgram.remaininghours.toLocaleString() : ''} />
+                                </div>
+                            </div>
+
+                        </SlideToggleLabel>}
+                    </div>
+                    
+
+                    
+
+                    
+
+                    
 
                     <Button buttonType={{type:"Solid"}} text="Deactivateer cliënt" className='client-deactivate-button' onClick={() => deactivateClientClick(client)} dataTestId="button.deactivate" />
                     <ConfirmPopup
-                    message="Weet u zeker dat u de cliënt wilt deactiveren?"
-                    isOpen={isDeactivateConfirmPopupOpen}
-                    onClose={cancelDeactivateClient}
-                    buttons={
-                        [
-                            { text: 'Bevestigen', dataTestId: 'button.confirmok', onClick: async () => 
-                            {
-                                setDeactivatedClient(await deactivateClientConfirmed(client, clientContext));
+                        message="Weet u zeker dat u de cliënt wilt deactiveren?"
+                        isOpen={isDeactivateConfirmPopupOpen}
+                        onClose={cancelDeactivateClient}
+                        buttons={
+                            [
+                                { text: 'Bevestigen', dataTestId: 'button.confirmok', onClick: async () => 
+                                {
+                                    setDeactivatedClient(await deactivateClientConfirmed(client, clientContext));
 
-                                if(deactivateClient !== null){
-                                    setDeactivateConfirmedPopupOpen(true);
-                                }
-                            }, buttonType: {type:"Solid"}},
-                            { text: 'Annuleren', onClick: cancelDeactivateClient, buttonType: {type:"NotSolid"}},
-                        ]} />                    
+                                    if(deactivateClient !== null){
+                                        setDeactivateConfirmedPopupOpen(true);
+                                    }
+                                }, buttonType: {type:"Solid"}},
+                                { text: 'Annuleren', onClick: cancelDeactivateClient, buttonType: {type:"NotSolid"}},
+                            ]} />                    
 
                     <ConfirmPopup
-                    message={`Cliënt met id '${deactivatedClient ? deactivatedClient!.id : ''}' is gedeactiveerd!`}
-                    isOpen={isDeactivateConfirmedPopupOpen}
-                    onClose={closeConfirmedDeactivateClientPopUp}
-                    buttons={
-                        [
-                            { text: 'Ok', dataTestId: 'button.confirmdeactivated', onClick: () => 
-                            {
-                                if(deactivateClient !== null) {
-                                    nav(PATH_CLIENTS);
-                                }
-                            }, buttonType: {type:"Solid"}},
-                        ]} />
+                        message={`Cliënt met id '${deactivatedClient ? deactivatedClient!.id : ''}' is gedeactiveerd!`}
+                        isOpen={isDeactivateConfirmedPopupOpen}
+                        onClose={closeConfirmedDeactivateClientPopUp}
+                        buttons={
+                            [
+                                { text: 'Ok', dataTestId: 'button.confirmdeactivated', onClick: () => 
+                                {
+                                    if(deactivateClient !== null) {
+                                        nav(PATH_CLIENTS);
+                                    }
+                                }, buttonType: {type:"Solid"}},
+                            ]} />
                     
                     <div className='button-container'>
                         <LinkButton buttonType={{type:"Solid"}} text="Cliënt aanpassen" href={`../clients/edit/${id}`} />

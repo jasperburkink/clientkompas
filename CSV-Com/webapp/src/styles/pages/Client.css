@@ -108,9 +108,7 @@
             col-span-2;
 
             .toggle-button{                
-                @apply 
-                hidden 
-                float-right 
+                @apply
                 lg:block;
             }
 
@@ -121,7 +119,7 @@
 
             .client-additional-info-container{
                 @apply 
-                lg:grid 
+                lg:grid
                 lg:grid-cols-2;
             }
         }
@@ -136,13 +134,48 @@
             col-span-2;
         }
 
-        .traject-header{
-            @apply 
-            text-3xl 
-            mb-5 
-            w-full 
-            lg:text-3xl
-            lg:col-span-3;
+        .traject-container{
+            @apply
+            flex
+            flex-col
+            col-span-2
+            lg:col-span-2;
+
+            .traject-header{
+                @apply 
+                text-3xl 
+                mb-5 
+                w-full
+                mt-5
+                lg:text-3xl;
+            }
+            
+            .traject-default-values{
+                @apply 
+                lg:grid
+                lg:grid-cols-2;
+            }
+
+            .traject-label-value{
+                @apply 
+                grid grid-cols-2 
+                overflow-hidden 
+                lg:flex 
+                lg:whitespace-break-spaces;
+            }
+    
+            .traject-additional-info{
+                @apply 
+                lg:grid
+                lg:grid-cols-2;
+    
+                .toggle-button{                
+                    @apply 
+                    hidden 
+                    float-right 
+                    lg:block;
+                }
+            }
         }
 
         .button-container{
