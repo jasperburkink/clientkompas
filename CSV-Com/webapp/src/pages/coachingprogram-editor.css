@@ -28,7 +28,7 @@
         invisible;
     }
 
-    .client-create-container {
+    .coachingprogram-create-container {
         @apply
         flex
         flex-col
@@ -42,7 +42,7 @@
         lg:h-full
         lg:px-12;
 
-        .client-create-header{
+        .coachingprogram-create-header{
             @apply
             items-center
             flex
@@ -50,14 +50,14 @@
             my-6
             lg:col-span-2;
 
-            .client-create-header-main{
+            .coachingprogram-create-header-main{
                 @apply
                 flex-none
                 text-xl
                 lg:col-span-2;
             }
 
-            .client-create-header-sub{
+            .coachingprogram-create-header-sub{
                 @apply
                 px-1
                 text-sm
@@ -65,83 +65,33 @@
             }
         }
 
-        .client-create-subheader {
+        .coachingprogram-create-subheader {
             @apply
             my-2;
         }
 
-        .client-create-fields{
+        .coachingprogram-create-fields{
             @apply            
             h-full
+            flex
+            flex-col
             lg:grid
-            lg:grid-cols-2;
-
-            .house-number{
+            lg:grid-cols-2;       
+        }
+       
+        .client-fullname{
+            @apply
+            flex 
+            items-end
+            justify-start
+            h-full
+            lg:h-auto
+            lg:mt-3;
+            
+            p {
                 @apply
-                w-16
-                float-left;
+                text-left;
             }
-        
-            .house-number-addition{
-                @apply
-                py-0;
-
-                label{
-                    @apply
-                    text-sm
-                    w-12;
-                }
-
-                .house-number-addition-field{
-                    @apply
-                    w-16;
-                }
-            }            
-        }
-
-        .client-domain-object{
-            @apply
-            lg:mt-14;
-        }
-
-        .datepicker {
-            @apply
-            w-full;
-        }
-
-        .client-remarks{
-            @apply
-            my-2
-            lg:flex
-            lg:flex-row
-            lg:mr-6;
-
-            .label{
-                @apply
-                lg:flex-none
-                lg:w-28
-                lg:mt-6;
-            }
-
-            textarea{
-                @apply
-                my-4
-                w-full
-                lg:flex-initial
-                lg:ml-4;
-            }
-        }
-
-        .client-extra-info{
-            @apply
-            lg:grid
-            lg:grid-cols-2;
-        }
-
-        .coachingprogram-create-fields{
-            @apply
-            lg:grid
-            lg:grid-cols-2;
         }
 
         .button-container{

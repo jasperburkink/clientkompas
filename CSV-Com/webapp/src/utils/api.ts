@@ -13,6 +13,7 @@ import { ValidationErrorHash, ValidationError, parseValidationErrors } from "typ
 import { Type } from "typescript";
 import CoachingProgramQuery from "types/model/CoachingProgramQuery";
 import CoachingProgram from "types/model/CoachingProgram";
+import CoachingProgramEdit from "types/model/CoachingProgramEdit";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -200,6 +201,25 @@ export const fetchCoachingProgram = async (id: number): Promise<CoachingProgram>
 let tempco = await fetchAPI<CoachingProgram>(`${apiUrl}CoachingProgram/${id}`);
 
     return await fetchAPI<CoachingProgram>(`${apiUrl}CoachingProgram/${id}`);
+}
+
+export const saveCoachingProgram = async (coachingProgram: CoachingProgramEdit): Promise<ApiResult<CoachingProgramEdit>> => {
+    let method = coachingProgram.id > 0  ? 'PUT' : 'POST';
+
+    console.log(JSON.stringify(coachingProgram));
+
+
+    const requestOptions: RequestInit = {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(coachingProgram)
+    };
+
+    const response = await fetch(`${apiUrl}CoachingProgram`, requestOptions);     
+
+    return handleApiResonse<CoachingProgramEdit>(response);
 }
 
 function processErrors(errors: { [key: string]: string[] }): string[] {
