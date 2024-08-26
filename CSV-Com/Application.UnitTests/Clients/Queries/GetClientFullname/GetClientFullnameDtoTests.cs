@@ -37,7 +37,7 @@ namespace Application.UnitTests.Clients.Queries.GetClientFullname
             var query = new GetClientFullnameQuery { ClientId = _client.Id };
 
             _unitOfWorkMock.Setup(uw => uw.ClientRepository.GetByIDAsync(
-                query.ClientId, It.IsAny<string>(), default
+                query.ClientId, default
             )).ReturnsAsync(_client);
 
             // Act
@@ -54,7 +54,7 @@ namespace Application.UnitTests.Clients.Queries.GetClientFullname
             var query = new GetClientFullnameQuery { ClientId = _client.Id };
 
             _unitOfWorkMock.Setup(uw => uw.ClientRepository.GetByIDAsync(
-                query.ClientId, It.IsAny<string>(), default
+                query.ClientId, default
             )).ReturnsAsync(_client);
 
             // Act

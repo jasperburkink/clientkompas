@@ -15,6 +15,7 @@ import CoachingProgramQuery from "types/model/CoachingProgramQuery";
 import CoachingProgram from "types/model/CoachingProgram";
 import CoachingProgramEdit from "types/model/CoachingProgramEdit";
 import GetClientFullnameDto from "types/model/GetClientFullnameDto";
+import GetCoachingProgramTypesDto from "types/model/GetCoachingProgramTypesDto";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -208,11 +209,14 @@ let tempco = await fetchAPI<CoachingProgram>(`${apiUrl}CoachingProgram/${id}`);
     return await fetchAPI<CoachingProgram>(`${apiUrl}CoachingProgram/${id}`);
 }
 
+export const fetchCoachingProgramTypes = async (): Promise<GetCoachingProgramTypesDto[]> => {
+    return await fetchAPI<GetCoachingProgramTypesDto[]>(`${apiUrl}CoachingProgram/GetCoachingProgramTypes`);
+}
+
 export const saveCoachingProgram = async (coachingProgram: CoachingProgramEdit): Promise<ApiResult<CoachingProgramEdit>> => {
     let method = coachingProgram.id > 0  ? 'PUT' : 'POST';
 
     console.log(JSON.stringify(coachingProgram));
-
 
     const requestOptions: RequestInit = {
         method: method,

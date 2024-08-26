@@ -10,7 +10,7 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { useParams, useNavigate } from 'react-router-dom';
 import { ClientContext } from './client-context';
 import Client from "types/model/Client";
-import { fetchClientFullname, fetchOrganizations, saveCoachingProgram } from "utils/api";
+import { fetchClientFullname, fetchCoachingProgramTypes, fetchOrganizations, saveCoachingProgram } from "utils/api";
 import { Copyright } from "components/common/copyright";
 import ErrorPopup from "components/common/error-popup";
 import CvsError from 'types/common/cvs-error';
@@ -31,6 +31,7 @@ import SaveButton from 'components/common/save-button';
 import ApiResult from 'types/common/api-result';
 import ConfirmPopup from 'components/common/confirm-popup';
 import GetClientFullnameDto from 'types/model/GetClientFullnameDto';
+import GetCoachingProgramTypesDto from 'types/model/GetCoachingProgramTypesDto';
 
 const CoachingProgramEditor = () => {
     var { clientid, id } = useParams();
@@ -54,7 +55,7 @@ const CoachingProgramEditor = () => {
     const [status, setStatus] = useState(StatusEnum.IDLE);        
     const [client, setClient] = useState<GetClientFullnameDto | null>(null);    
     const [organizations, setOrganizations] = useState<Organization[]>([]);
-    const [coachingProgramTypes, setTrajectTypes] = useState<DropdownObject[]>([]);
+    const [coachingProgramTypes, setTrajectTypes] = useState<GetCoachingProgramTypesDto[]>([]);
 
     const [validationErrors, setValidationErrors] = useState<ValidationErrorHash>({});
     const [error, setError] = useState<CvsError>({
@@ -86,9 +87,11 @@ const CoachingProgramEditor = () => {
                     throw new Error(`Client with id ${clientid} was not found.`);
                 }
 
-              setStatus(StatusEnum.SUCCESSFUL);
-    
-              setClient(clientFullname);
+                coachingProgram.clientid = parseInt(clientid!, 10);
+
+                setStatus(StatusEnum.SUCCESSFUL);
+        
+                setClient(clientFullname);
             } catch (e: any) {
               // TODO: error handling
               console.error(e);
@@ -122,8 +125,24 @@ const CoachingProgramEditor = () => {
                 setErrorPopupOpen(true);
             }
         }
+
+        const loadCoachingProgramTypes = async () => {
+            try {
+    
+                var types = await fetchCoachingProgramTypes();
+                setTrajectTypes(types);
+            } catch (error: any) {
+                setError({
+                    id: 0,
+                    errorcode: 'E',
+                    message: `Er is een opgetreden tijdens het laden van alle beschikbare trajecttypes. Foutmelding: ${error.message}`
+                });
+                setErrorPopupOpen(true);
+            }
+        }        
     
         loadOrganizations();
+        loadCoachingProgramTypes();
     }, [clientid]);
 
     const handleInputChange = (fieldName: keyof CoachingProgramEdit, value: any) => {
@@ -245,8 +264,8 @@ return(
                         <Dropdown 
                             options={
                                 coachingProgramTypes.map(coachingProgramType => ({
-                                    value: coachingProgramType.value,
-                                    label: coachingProgramType.label
+                                    value: coachingProgramType.id,
+                                    label: coachingProgramType.name
                                 }))
                             } 
                             required={true} 

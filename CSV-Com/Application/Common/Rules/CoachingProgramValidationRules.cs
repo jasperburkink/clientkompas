@@ -54,7 +54,7 @@ namespace Application.Common.Rules
             return ruleBuilder
                 .MustAsync(async (id, cancellationToken) =>
                 {
-                    return await unitOfWork.OrganizationRepository.ExistsAsync(o => o.Id == id, cancellationToken);
+                    return id == 0 || await unitOfWork.OrganizationRepository.ExistsAsync(o => o.Id == id, cancellationToken);
                 }).WithMessage(id => resourceMessageProvider.GetMessage(typeof(CoachingProgramValidationRules), "OrganizationDoesNotExists", id));
         }
 

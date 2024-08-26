@@ -44,7 +44,7 @@ namespace Application.UnitTests.Clients.Queries.GetClientFullname
             };
 
             _unitOfWorkMock.Setup(uw => uw.ClientRepository.GetByIDAsync(
-                query.ClientId, It.IsAny<string>(), default
+                query.ClientId, default
             )).ReturnsAsync(_client);
 
             // Act
