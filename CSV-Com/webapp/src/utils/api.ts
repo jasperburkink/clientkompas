@@ -14,6 +14,7 @@ import { Type } from "typescript";
 import CoachingProgramQuery from "types/model/CoachingProgramQuery";
 import CoachingProgram from "types/model/CoachingProgram";
 import CoachingProgramEdit from "types/model/CoachingProgramEdit";
+import GetClientFullnameDto from "types/model/GetClientFullnameDto";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -116,6 +117,10 @@ export const fetchClientEditor = async (clientId: string): Promise<Client> => {
 
 export const searchClients = async (searchTerm: string): Promise<ClientQuery[]> => {
     return fetchAPI<ClientQuery[]>(`${apiUrl}Client/SearchClients?SearchTerm=${searchTerm}`);
+}
+
+export const fetchClientFullname = async (clientId: string): Promise<GetClientFullnameDto> => {
+    return fetchAPI<GetClientFullnameDto>(`${apiUrl}Client/GetClientFullname/${clientId}`);
 }
 
 export const fetchBenefitForms = async (): Promise<BenefitForm[]> => {

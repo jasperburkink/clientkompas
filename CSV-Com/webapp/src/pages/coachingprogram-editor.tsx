@@ -10,7 +10,7 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { useParams, useNavigate } from 'react-router-dom';
 import { ClientContext } from './client-context';
 import Client from "types/model/Client";
-import { fetchClient, fetchOrganizations, saveCoachingProgram } from "utils/api";
+import { fetchClientFullname, fetchOrganizations, saveCoachingProgram } from "utils/api";
 import { Copyright } from "components/common/copyright";
 import ErrorPopup from "components/common/error-popup";
 import CvsError from 'types/common/cvs-error';
@@ -30,6 +30,7 @@ import { Moment } from 'moment';
 import SaveButton from 'components/common/save-button';
 import ApiResult from 'types/common/api-result';
 import ConfirmPopup from 'components/common/confirm-popup';
+import GetClientFullnameDto from 'types/model/GetClientFullnameDto';
 
 const CoachingProgramEditor = () => {
     var { clientid, id } = useParams();
@@ -41,8 +42,8 @@ const CoachingProgramEditor = () => {
         0,
         "",
         0,
-        new Date(),
-        new Date(),
+        null,
+        null,
         new Decimal(0),
         new Decimal(0),
         "",
@@ -51,7 +52,7 @@ const CoachingProgramEditor = () => {
     const [coachingProgram, setCoachingProgram] = useState<CoachingProgramEdit>(initialCoachingProgram);
 
     const [status, setStatus] = useState(StatusEnum.IDLE);        
-    const [client, setClient] = useState<ClientQuery | null>(null);    
+    const [client, setClient] = useState<GetClientFullnameDto | null>(null);    
     const [organizations, setOrganizations] = useState<Organization[]>([]);
     const [coachingProgramTypes, setTrajectTypes] = useState<DropdownObject[]>([]);
 
@@ -79,15 +80,15 @@ const CoachingProgramEditor = () => {
                 }
 
                 setStatus(StatusEnum.PENDING);
-                const fetchedClient: ClientQuery = await fetchClient(clientid!);
+                const clientFullname: GetClientFullnameDto = await fetchClientFullname(clientid!);
 
-                if(fetchedClient === null){
+                if(clientFullname === null){
                     throw new Error(`Client with id ${clientid} was not found.`);
                 }
 
               setStatus(StatusEnum.SUCCESSFUL);
     
-              setClient(fetchedClient);
+              setClient(clientFullname);
             } catch (e: any) {
               // TODO: error handling
               console.error(e);
@@ -197,7 +198,7 @@ return(
 
                 <div className='coachingprogram-create-fields'>
                     <LabelField text='Cliënt' required={false}>
-                        <Label className='client-fullname' text={client !== null ? client.lastname : ''} />
+                        <Label className='client-fullname' text={client !== null ? client.clientfullname : ''} />
                     </LabelField>
                 </div>
 

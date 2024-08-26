@@ -7,8 +7,8 @@ export default class CoachingProgramEdit {
     ordernumber?: string;
     organizationid?: number;
     coachingprogramtype: number;
-    begindate: Date;
-    enddate: Date;
+    begindate: Date | null;
+    enddate: Date | null;
     budgetammount?: Decimal;
     hourlyrate: Decimal;
 
@@ -17,8 +17,8 @@ export default class CoachingProgramEdit {
         clientid: number,
         title: string,
         coachingprogramtype: number,
-        begindate: Date,
-        enddate: Date,
+        begindate: Date | null,
+        enddate: Date| null,
         hourlyrate: Decimal,
         budgetammount?: Decimal,
         ordernumber?: string,
