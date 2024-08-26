@@ -59,6 +59,16 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="Common\Rules\Resources\CoachingProgramValidationRules.nl.Designer.cs">
+      <DependentUpon>CoachingProgramValidationRules.nl.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Common\Rules\Resources\CoachingProgramValidationRules.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CoachingProgramValidationRules.resx</DependentUpon>
+    </Compile>
     <Compile Update="Common\Rules\Resources\DriversLicenceValidationRules.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -103,6 +113,14 @@
     <EmbeddedResource Update="Common\Rules\Resources\BenefitFormValidationRules.resx">
       <LastGenOutput>BenefitFormValidationRules.Designer.cs</LastGenOutput>
       <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Rules\Resources\CoachingProgramValidationRules.nl.resx">
+      <LastGenOutput>CoachingProgramValidationRules.nl.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Rules\Resources\CoachingProgramValidationRules.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>CoachingProgramValidationRules.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Common\Rules\Resources\DriversLicenceValidationRules.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -1,4 +1,5 @@
 ﻿using Application.Clients.Commands.UpdateClient;
+using Application.Clients.Dtos;
 using Application.Diagnoses.Queries.GetDiagnosis;
 using Application.DriversLicences.Queries;
 using Application.MaritalStatuses.Queries.GetMaritalStatus;
@@ -13,6 +14,7 @@ using TestData.Diagnosis;
 using TestData.DriversLicence;
 using TestData.MaritalStatus;
 using TestData.Organization;
+using TestData.WorkingContract;
 using static Application.FunctionalTests.Testing;
 
 namespace Application.FunctionalTests.Clients.Commands.UpdateClient
@@ -24,25 +26,31 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         private ITestDataGenerator<Organization> _testDataGeneratorOrganization;
         private ITestDataGenerator<DriversLicence> _testDataGeneratorDriversLicence;
         private ITestDataGenerator<Diagnosis> _testDataGeneratorDiagnosis;
+        private ITestDataGenerator<WorkingContract> _testDataGeneratorWorkingContract;
         private ITestDataGenerator<UpdateClientCommand> _testDataGeneratorUpdateClientCommand;
         private UpdateClientCommand _command;
-        private const int NumOfDriversLicences = 2, NumOfDiagnoses = 2;
+        private const int NUM_OF_DRIVERSLICENCES = 2, NUM_OF_DIAGNOSES = 2, NUM_OF_WORKINGCONTRACTS = 2;
 
         [SetUp]
         public async Task SetUp()
         {
             _testDataGeneratorClient = new ClientDataGenerator();
-            var client = _testDataGeneratorClient.Create();
-            await AddAsync(client);
-
             _testDataGeneratorMartialStatus = new MaritalStatusDataGenerator();
             _testDataGeneratorOrganization = new OrganizationDataGenerator();
             _testDataGeneratorDriversLicence = new DriversLicenceDataGenerator();
             _testDataGeneratorDiagnosis = new DiagnosisDataGenerator();
+            _testDataGeneratorWorkingContract = new WorkingContractDataGenerator();
             _testDataGeneratorUpdateClientCommand = new UpdateClientCommandDataGenerator();
+
+            _command = _testDataGeneratorUpdateClientCommand.Create();
+
+            var client = _testDataGeneratorClient.Create();
+            await AddAsync(client);
+            _command.Id = client.Id;
 
             var maritalStatus = _testDataGeneratorMartialStatus.Create();
             await AddAsync(maritalStatus);
+            _command.MaritalStatus!.Id = maritalStatus.Id;
 
             var organization = _testDataGeneratorOrganization.Create();
             await AddAsync(organization);
@@ -52,23 +60,35 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
             {
                 await AddAsync(driversLicence);
             }
+            _command.DriversLicences = driversLicences
+                .OrderBy(x => Guid.NewGuid())
+                .Take(NUM_OF_DRIVERSLICENCES)
+                .Select(dl => new DriversLicenceDto { Category = dl.Category, Description = dl.Description, Id = dl.Id }).ToList();
 
             var diagnoses = _testDataGeneratorDiagnosis.Create(10);
             foreach (var diagnosis in diagnoses)
             {
                 await AddAsync(diagnosis);
             }
+            _command.Diagnoses = diagnoses
+                .OrderBy(x => Guid.NewGuid())
+                .Take(NUM_OF_DIAGNOSES)
+                .Select(d => new DiagnosisDto { Name = d.Name, Id = d.Id }).ToList();
 
-            _command = _testDataGeneratorUpdateClientCommand.Create();
-            _command.MaritalStatus!.Id = maritalStatus.Id;
-            foreach (var workingContract in _command.WorkingContracts)
-            {
-                workingContract.OrganizationId = organization.Id;
-            }
-            _command.Id = client.Id;
+            var workingContracts = _testDataGeneratorWorkingContract.Create(10);
 
-            _command.DriversLicences = driversLicences.OrderBy(x => Guid.NewGuid()).Take(NumOfDriversLicences).Select(dl => new DriversLicenceDto { Category = dl.Category, Description = dl.Description, Id = dl.Id }).ToList();
-            _command.Diagnoses = diagnoses.OrderBy(x => Guid.NewGuid()).Take(NumOfDiagnoses).Select(d => new DiagnosisDto { Name = d.Name, Id = d.Id }).ToList();
+            _command.WorkingContracts = workingContracts
+                .OrderBy(wc => wc.Id)
+                .Take(NUM_OF_WORKINGCONTRACTS)
+                .Select(wc => new ClientWorkingContractDto
+                {
+                    Id = wc.Id,
+                    ContractType = wc.ContractType,
+                    FromDate = wc.FromDate,
+                    ToDate = wc.ToDate,
+                    Function = wc.Function,
+                    OrganizationId = organization.Id
+                }).ToList();
         }
 
         [Test]
@@ -124,7 +144,7 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
             var client = (await GetAsync<Client>(c => c.DriversLicences)).FirstOrDefault();
 
             // Assert
-            client!.DriversLicences.Should().NotBeNull().And.HaveCount(NumOfDriversLicences);
+            client!.DriversLicences.Should().NotBeNull().And.HaveCount(NUM_OF_DRIVERSLICENCES);
         }
 
         [Test]
@@ -135,7 +155,7 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
             var client = (await GetAsync<Client>(c => c.Diagnoses)).FirstOrDefault();
 
             // Assert
-            client!.Diagnoses.Should().NotBeNull().And.HaveCount(NumOfDiagnoses);
+            client!.Diagnoses.Should().NotBeNull().And.HaveCount(NUM_OF_DIAGNOSES);
         }
 
         [Test]
@@ -150,7 +170,7 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public async Task Handle_MultipleCommands_ShouldCreateMultipleClients()
+        public async Task Handle_MultipleCommands_ShouldUpdateMultipleClients()
         {
             // Arrange
             var maritalStatus = _testDataGeneratorMartialStatus.Create();
@@ -164,10 +184,21 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
             var command2 = _testDataGeneratorUpdateClientCommand.Create();
             command2.Id = client.Id;
             command2.MaritalStatus!.Id = maritalStatus.Id;
-            foreach (var workingContract in command2.WorkingContracts)
-            {
-                workingContract.OrganizationId = organization.Id;
-            }
+
+            var workingContracts = _testDataGeneratorWorkingContract.Create(10);
+
+            command2.WorkingContracts = workingContracts
+               .OrderBy(wc => wc.Id)
+               .Take(NUM_OF_WORKINGCONTRACTS)
+               .Select(wc => new ClientWorkingContractDto
+               {
+                   Id = wc.Id,
+                   ContractType = wc.ContractType,
+                   FromDate = wc.FromDate,
+                   ToDate = wc.ToDate,
+                   Function = wc.Function,
+                   OrganizationId = organization.Id
+               }).ToList();
 
             // Act
             await SendAsync(_command);

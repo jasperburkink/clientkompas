@@ -22,6 +22,8 @@ namespace Infrastructure.Persistence.CVS
         private GenericRepository<Organization> organizationRepository;
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
         private GenericRepository<WorkingContract> workingContractRepository;
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
+        private GenericRepository<CoachingProgram> coachingProgramRepository;
 
         public UnitOfWork(CVSDbContext context)
         {
@@ -30,78 +32,47 @@ namespace Infrastructure.Persistence.CVS
 
         public IRepository<User> UserRepository
         {
-            get
-            {
-
-                userRepository ??= new GenericRepository<User>(_context);
-                return userRepository;
-            }
+            get => userRepository ??= new GenericRepository<User>(_context);
         }
 
         public IRepository<Diagnosis> DiagnosisRepository
         {
-            get
-            {
-
-                diagnosisRepository ??= new GenericRepository<Diagnosis>(_context);
-                return diagnosisRepository;
-            }
+            get => diagnosisRepository ??= new GenericRepository<Diagnosis>(_context);
         }
 
         public IRepository<Client> ClientRepository
         {
-            get
-            {
-                clientRepository ??= new GenericRepository<Client>(_context);
-                return clientRepository;
-            }
+            get => clientRepository ??= new GenericRepository<Client>(_context);
         }
 
         public IRepository<DriversLicence> DriversLicenceRepository
         {
-            get
-            {
-                driversLicenceRepository ??= new GenericRepository<DriversLicence>(_context);
-                return driversLicenceRepository;
-            }
+            get => driversLicenceRepository ??= new GenericRepository<DriversLicence>(_context);
         }
 
         public IRepository<MaritalStatus> MaritalStatusRepository
         {
-            get
-            {
-                maritalStatusRepository ??= new GenericRepository<MaritalStatus>(_context);
-                return maritalStatusRepository;
-            }
+            get => maritalStatusRepository ??= new GenericRepository<MaritalStatus>(_context);
         }
 
         public IRepository<BenefitForm> BenefitFormRepository
         {
-            get
-            {
-                benefitFormRepository ??= new GenericRepository<BenefitForm>(_context);
-                return benefitFormRepository;
-            }
+            get => benefitFormRepository ??= new GenericRepository<BenefitForm>(_context);
         }
 
         public IRepository<Organization> OrganizationRepository
         {
-            get
-            {
-
-                organizationRepository ??= new GenericRepository<Organization>(_context);
-                return organizationRepository;
-            }
+            get => organizationRepository ??= new GenericRepository<Organization>(_context);
         }
 
         public IRepository<WorkingContract> WorkingContractRepository
         {
-            get
-            {
+            get => workingContractRepository ??= new GenericRepository<WorkingContract>(_context);
+        }
 
-                workingContractRepository ??= new GenericRepository<WorkingContract>(_context);
-                return workingContractRepository;
-            }
+        public IRepository<CoachingProgram> CoachingProgramRepository
+        {
+            get => coachingProgramRepository ??= new GenericRepository<CoachingProgram>(_context);
         }
 
         public void Save()

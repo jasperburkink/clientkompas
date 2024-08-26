@@ -173,6 +173,63 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     b.ToTable("Clients");
                 });
 
+            modelBuilder.Entity("Domain.CVS.Domain.CoachingProgram", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateOnly>("BeginDate")
+                        .HasColumnType("date");
+
+                    b.Property<decimal?>("BudgetAmmount")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CoachingProgramType")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateOnly>("EndDate")
+                        .HasColumnType("date");
+
+                    b.Property<decimal>("HourlyRate")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("OrderNumber")
+                        .HasMaxLength(15)
+                        .HasColumnType("varchar(15)");
+
+                    b.Property<int?>("OrganizationId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.ToTable("CoachingPrograms");
+                });
+
             modelBuilder.Entity("Domain.CVS.Domain.Diagnosis", b =>
                 {
                     b.Property<int>("Id")
@@ -580,6 +637,23 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     b.Navigation("EmergencyPeople");
 
                     b.Navigation("MaritalStatus");
+                });
+
+            modelBuilder.Entity("Domain.CVS.Domain.CoachingProgram", b =>
+                {
+                    b.HasOne("Domain.CVS.Domain.Client", "Client")
+                        .WithMany()
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.CVS.Domain.Organization", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId");
+
+                    b.Navigation("Client");
+
+                    b.Navigation("Organization");
                 });
 
             modelBuilder.Entity("Domain.CVS.Domain.Organization", b =>

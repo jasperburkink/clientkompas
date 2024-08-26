@@ -9,6 +9,8 @@ namespace Domain.CVS.Domain
 
         public Client Client { get; set; }
 
+        public int ClientId { get; set; }
+
         public Organization Organization { get; set; }
 
         public int OrganizationId { get; set; }
