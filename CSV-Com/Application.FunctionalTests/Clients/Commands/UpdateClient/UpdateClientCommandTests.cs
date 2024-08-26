@@ -29,7 +29,7 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         private ITestDataGenerator<WorkingContract> _testDataGeneratorWorkingContract;
         private ITestDataGenerator<UpdateClientCommand> _testDataGeneratorUpdateClientCommand;
         private UpdateClientCommand _command;
-        private const int NumOfDriversLicences = 2, NumOfDiagnoses = 2, NUM_OF_WORKINGCONTRACTS = 2;
+        private const int NUM_OF_DRIVERSLICENCES = 2, NUM_OF_DIAGNOSES = 2, NUM_OF_WORKINGCONTRACTS = 2;
 
         [SetUp]
         public async Task SetUp()
@@ -62,7 +62,7 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
             }
             _command.DriversLicences = driversLicences
                 .OrderBy(x => Guid.NewGuid())
-                .Take(NumOfDriversLicences)
+                .Take(NUM_OF_DRIVERSLICENCES)
                 .Select(dl => new DriversLicenceDto { Category = dl.Category, Description = dl.Description, Id = dl.Id }).ToList();
 
             var diagnoses = _testDataGeneratorDiagnosis.Create(10);
@@ -72,7 +72,7 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
             }
             _command.Diagnoses = diagnoses
                 .OrderBy(x => Guid.NewGuid())
-                .Take(NumOfDiagnoses)
+                .Take(NUM_OF_DIAGNOSES)
                 .Select(d => new DiagnosisDto { Name = d.Name, Id = d.Id }).ToList();
 
             var workingContracts = _testDataGeneratorWorkingContract.Create(10);
@@ -144,7 +144,7 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
             var client = (await GetAsync<Client>(c => c.DriversLicences)).FirstOrDefault();
 
             // Assert
-            client!.DriversLicences.Should().NotBeNull().And.HaveCount(NumOfDriversLicences);
+            client!.DriversLicences.Should().NotBeNull().And.HaveCount(NUM_OF_DRIVERSLICENCES);
         }
 
         [Test]
@@ -155,7 +155,7 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
             var client = (await GetAsync<Client>(c => c.Diagnoses)).FirstOrDefault();
 
             // Assert
-            client!.Diagnoses.Should().NotBeNull().And.HaveCount(NumOfDiagnoses);
+            client!.Diagnoses.Should().NotBeNull().And.HaveCount(NUM_OF_DIAGNOSES);
         }
 
         [Test]
