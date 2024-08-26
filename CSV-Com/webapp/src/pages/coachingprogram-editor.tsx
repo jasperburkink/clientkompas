@@ -196,7 +196,7 @@ return(
                 </div>
 
                 <div className='coachingprogram-create-fields'>
-                    <LabelField text='Cliënt' required={true}>
+                    <LabelField text='Cliënt' required={false}>
                         <Label className='client-fullname' text={client !== null ? client.lastname : ''} />
                     </LabelField>
                 </div>
@@ -240,7 +240,7 @@ return(
                             errors={validationErrors.organizationid} />
                     </LabelField>
 
-                    <LabelField text='Traject type' required={false}>
+                    <LabelField text='Traject type' required={true}>
                         <Dropdown 
                             options={
                                 coachingProgramTypes.map(coachingProgramType => ({
@@ -256,7 +256,7 @@ return(
                             errors={validationErrors.coachingprogramtype} />
                     </LabelField>
 
-                    <LabelField text='Aanvangsdatum' required={false}>
+                    <LabelField text='Aanvangsdatum' required={true}>
                         <DatePicker 
                             required={true} 
                             placeholder='Selecteer een datum' 
@@ -266,7 +266,7 @@ return(
                             errors={validationErrors.begindate} />
                     </LabelField>
 
-                    <LabelField text='Einddatum' required={false}>
+                    <LabelField text='Einddatum' required={true}>
                         <DatePicker 
                             required={true} 
                             placeholder='Selecteer een datum' 
@@ -298,10 +298,10 @@ return(
                             errors={validationErrors.hourlyrate} />
                     </LabelField>
 
-                    <LabelField text='Te besteden uren' required={true}>
+                    <LabelField text='Te besteden uren' required={false}>
                         <DecimalInputField 
                             inputfieldtype={{type:'text'}} 
-                            required={true} 
+                            required={false} 
                             placeholder='Te besteden uren' 
                             value={coachingProgram.remaininghours}
                             dataTestId='remaininghours'

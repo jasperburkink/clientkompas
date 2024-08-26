@@ -315,7 +315,7 @@ function Clients() {
                                 label: program.title, 
                                 value: program.id
                             }))} 
-                            required={false} 
+                            required={true} 
                             inputfieldname='coaching-program'
                             onChange={(value) => handleCoachingProgramChange(value)}
                             dataTestId='coaching-program' />
