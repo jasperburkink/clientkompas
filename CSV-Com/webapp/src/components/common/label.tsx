@@ -1,5 +1,7 @@
 import React, { LabelHTMLAttributes } from 'react';
 import './label.css';
+import { ValidationError } from 'types/common/validation-error';
+import { ErrorMessage } from './error-message';
 
 interface LabelProps extends React.LabelHTMLAttributes<HTMLParagraphElement> {
     text: string,
@@ -7,6 +9,7 @@ interface LabelProps extends React.LabelHTMLAttributes<HTMLParagraphElement> {
     underline?: boolean,
     cursive?: boolean,
     dataTestId?: string;
+    errors?: ValidationError[];
 }
 
 export const Label = (props: LabelProps) => (
@@ -14,6 +17,7 @@ export const Label = (props: LabelProps) => (
         <p className={getLabelClassName(props) } data-testid={props.dataTestId}>
             {props.text}
         </p>
+        <ErrorMessage errors={props.errors} />
     </div>
   );
 

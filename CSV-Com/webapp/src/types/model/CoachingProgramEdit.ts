@@ -7,8 +7,8 @@ export default class CoachingProgramEdit {
     ordernumber?: string;
     organizationid?: number;
     coachingprogramtype: number;
-    begindate: Date | null;
-    enddate: Date | null;
+    begindate?: Date;
+    enddate?: Date;
     budgetammount?: Decimal;
     hourlyrate: Decimal;
 
@@ -16,13 +16,13 @@ export default class CoachingProgramEdit {
         id: number,
         clientid: number,
         title: string,
-        coachingprogramtype: number,
-        begindate: Date | null,
-        enddate: Date| null,
+        coachingprogramtype: number,        
         hourlyrate: Decimal,
-        budgetammount?: Decimal,
         ordernumber?: string,
-        organizationid?: number
+        organizationid?: number,
+        begindate?: Date,
+        enddate?: Date,
+        budgetammount?: Decimal
     ) {
         this.id = id;
         this.clientid = clientid;

@@ -82,6 +82,7 @@
         .client-fullname{
             @apply
             flex 
+            flex-col
             items-end
             justify-start
             h-full
@@ -90,7 +91,13 @@
             
             p {
                 @apply
-                text-left;
+                text-left
+                w-full;
+            }
+
+            .error-message{
+                @apply
+                w-full;
             }
         }
 

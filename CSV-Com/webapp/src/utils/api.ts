@@ -160,7 +160,6 @@ export const saveClient = async (client: Client): Promise<ApiResult<Client>> => 
 
     console.log(JSON.stringify(client));
 
-
     const requestOptions: RequestInit = {
         method: method,
         headers: {
@@ -217,6 +216,8 @@ export const saveCoachingProgram = async (coachingProgram: CoachingProgramEdit):
     let method = coachingProgram.id > 0  ? 'PUT' : 'POST';
 
     console.log(JSON.stringify(coachingProgram));
+
+    coachingProgram.organizationid = coachingProgram.organizationid && coachingProgram.organizationid > 0 ? coachingProgram.organizationid : undefined;
 
     const requestOptions: RequestInit = {
         method: method,

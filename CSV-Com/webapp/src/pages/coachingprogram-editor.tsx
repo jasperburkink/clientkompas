@@ -43,13 +43,14 @@ const CoachingProgramEditor = () => {
         0,
         "",
         0,
-        null,
-        null,
-        new Decimal(0),
         new Decimal(0),
         "",
-        0
+        0,
+        undefined,
+        undefined,
+        new Decimal(0)
     );
+
     const [coachingProgram, setCoachingProgram] = useState<CoachingProgramEdit>(initialCoachingProgram);
 
     const [status, setStatus] = useState(StatusEnum.IDLE);        
@@ -151,13 +152,13 @@ const CoachingProgramEditor = () => {
                 prevCoachingProgram.id,
                 prevCoachingProgram.clientid,
                 prevCoachingProgram.title,
-                prevCoachingProgram.coachingprogramtype,                
-                prevCoachingProgram.begindate,
-                prevCoachingProgram.enddate,                
+                prevCoachingProgram.coachingprogramtype,                                              
                 prevCoachingProgram.hourlyrate,
-                prevCoachingProgram.budgetammount,                
                 prevCoachingProgram.ordernumber,
-                prevCoachingProgram.organizationid
+                prevCoachingProgram.organizationid,
+                prevCoachingProgram.begindate,
+                prevCoachingProgram.enddate,  
+                prevCoachingProgram.budgetammount
             );
     
             updatedCoachingProgram.updateField(fieldName, value);
@@ -217,7 +218,10 @@ return(
 
                 <div className='coachingprogram-create-fields'>
                     <LabelField text='Cliënt' required={false}>
-                        <Label className='client-fullname' text={client !== null ? client.clientfullname : ''} />
+                        <Label 
+                            className='client-fullname' 
+                            text={client !== null ? client.clientfullname : ''}
+                            errors={validationErrors.clientid} />
                     </LabelField>
                 </div>
 
