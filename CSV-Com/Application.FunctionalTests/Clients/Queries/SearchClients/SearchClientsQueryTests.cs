@@ -157,18 +157,11 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
         {
             // Arrange
             var prefixLastName = string.Empty;
-            var client = await FindAsync<Client>(_client.Id);
-            if (client is null)
-            {
-                Assert.Fail("Error while setting up deactivation datetime because client cannot be found.");
-            }
-            else
-            {
-                client.PrefixLastName = prefixLastName;
-                await UpdateAsync(client);
-            }
+            await ResetState();
+            _client.PrefixLastName = prefixLastName;
+            await AddAsync(_client);
 
-            var query = new SearchClientsQuery { SearchTerm = $"{_client.PrefixLastName}" };
+            var query = new SearchClientsQuery { SearchTerm = "PrefixLastName" };
 
             // Act
             var clients = await SendAsync(query);
@@ -195,6 +188,12 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
         public async Task Handle_SearchClientByPartionOfFullNameMiddle_ReturnsClient()
         {
             // Arrange
+            var prefixLastName = "van";
+            await ResetState();
+            _client.PrefixLastName = prefixLastName;
+            _searchClientDto.PrefixLastName = prefixLastName;
+            await AddAsync(_client);
+
             var partionFullname = $"{_client.FirstName[(_client.FirstName.Length - 1)..]} {_client.PrefixLastName[..(_client.PrefixLastName.Length - 1)]}";
             var query = new SearchClientsQuery { SearchTerm = partionFullname };
 
