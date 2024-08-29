@@ -173,7 +173,7 @@ namespace Application.FunctionalTests.CoachingPrograms.Commands.UpdateCoachingPr
         public async Task Handle_EndDate_IsSet()
         {
             // Arrange
-            var endDate = new DateOnly(2200, 1, 2);
+            var endDate = new DateOnly(2024, 1, 2);
             _command.EndDate = endDate;
 
             // Act
