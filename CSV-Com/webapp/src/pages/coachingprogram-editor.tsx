@@ -35,12 +35,13 @@ import GetCoachingProgramTypesDto from 'types/model/GetCoachingProgramTypesDto';
 
 const CoachingProgramEditor = () => {
     var { clientid, id } = useParams();
+
     const navigate = useNavigate();
     const clientContext = useContext(ClientContext);
 
     const initialCoachingProgram: CoachingProgramEdit = new CoachingProgramEdit(
         0,
-        0,
+        parseInt(clientid!, 10),
         "",
         0,
         new Decimal(0),
@@ -221,7 +222,8 @@ return(
                         <Label 
                             className='client-fullname' 
                             text={client !== null ? client.clientfullname : ''}
-                            errors={validationErrors.clientid} />
+                            errors={validationErrors.clientid}
+                            dataTestId='client-fullname' />
                     </LabelField>
                 </div>
 
@@ -244,7 +246,7 @@ return(
                             placeholder='Ordernummer' 
                             value={coachingProgram.ordernumber} 
                             onChange={(value) => handleInputChange('ordernumber', value)}
-                            dataTestId='ordernummer'
+                            dataTestId='ordernumber'
                             errors={validationErrors.lastname} />
                     </LabelField>
 

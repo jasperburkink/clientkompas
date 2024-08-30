@@ -14,7 +14,7 @@ interface LabelProps extends React.LabelHTMLAttributes<HTMLParagraphElement> {
 
 export const Label = (props: LabelProps) => (
     <div className={"label " + props.className}>
-        <p className={getLabelClassName(props) } data-testid={props.dataTestId}>
+        <p data-testid={props.dataTestId} className={getLabelClassName(props)}>
             {props.text}
         </p>
         <ErrorMessage errors={props.errors} />

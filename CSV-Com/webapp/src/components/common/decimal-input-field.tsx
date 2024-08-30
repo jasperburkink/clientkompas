@@ -22,11 +22,14 @@ export interface DecimalInputFieldProps {
 export const DecimalInputField = (props: DecimalInputFieldProps) => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (props.readOnly) return; 
-
-        const inputValue = e.target.value;
-
-        // Check if the input is a valid decimal number
+        if (props.readOnly) return;
+    
+        let inputValue = e.target.value;
+    
+        // Vervang komma door punt
+        inputValue = inputValue.replace(',', '.');
+    
+        // Check of de invoer een geldig decimaal getal is
         if (/^-?\d*\.?\d*$/.test(inputValue) || inputValue === '') {
             if (inputValue === '') {
                 props.onChange?.(new Decimal(0));
@@ -40,6 +43,7 @@ export const DecimalInputField = (props: DecimalInputFieldProps) => {
             }
         }
     };
+    
 
     return (
         <div className={`input-field ${props.className}`}>
