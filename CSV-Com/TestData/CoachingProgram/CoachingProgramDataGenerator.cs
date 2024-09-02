@@ -25,8 +25,8 @@ namespace TestData.CoachingProgram
             return new AutoFaker<Domain.CVS.Domain.CoachingProgram>()
                 .RuleFor(cp => cp.Id, 0)
                 .RuleFor(cp => cp.Client, testDataGeneratorClient.Create())
-                .RuleFor(cp => cp.Title, f => f.Random.String2(CoachingProgramConstants.TITLE_MAXLENGTH))
-                .RuleFor(cp => cp.OrderNumber, f => FillOptionalProperties ? f.Random.String2(CoachingProgramConstants.ORDERNUMBER_MAXLENGTH) : null)
+                .RuleFor(cp => cp.Title, f => f.Commerce.ProductName())
+                .RuleFor(cp => cp.OrderNumber, f => FillOptionalProperties ? f.Random.AlphaNumeric(CoachingProgramConstants.ORDERNUMBER_MAXLENGTH) : null)
                 .RuleFor(cp => cp.CoachingProgramType, f => f.PickRandom<CoachingProgramType>())
                 .RuleFor(cp => cp.Organization, () =>
                 {

@@ -24,6 +24,7 @@ namespace TestData.Client
         private Faker<Domain.CVS.Domain.Client> GetFaker()
         {
             var faker = new Faker(FakerConfiguration.Localization);
+            var random = new Random();
 
             ITestDataGenerator<Domain.CVS.Domain.MaritalStatus> testDataGeneratorMaritalStatus = new MaritalStatusDataGenerator();
             ITestDataGenerator<Domain.CVS.Domain.Organization> testDataGeneratorOrganization = new OrganizationDataGenerator();
@@ -36,7 +37,11 @@ namespace TestData.Client
                 .RuleFor(c => c.Id, 0)
                 .RuleFor(c => c.FirstName, faker.Person.FirstName)
                 .RuleFor(c => c.Initials, faker.Random.String2(1, "ABCDEFGHIJKLMNOPQRSTUVWXYZ"))
-                .RuleFor(c => c.PrefixLastName, faker.Random.String2(3, "abcdefghijklmnopqrstuvwxyz"))
+                .RuleFor(c => c.PrefixLastName, f =>
+                {
+                    var usePrefixLastName = random.Next(2) == 1;
+                    return usePrefixLastName ? faker.PickRandom(Constants.PREFIX_LASTNAME_OPTIONS) : null;
+                })
                 .RuleFor(c => c.LastName, faker.Person.LastName)
                 .RuleFor(c => c.Gender, faker.PickRandom<Gender>())
                 .RuleFor(c => c.Address, Domain.CVS.ValueObjects.Address.From(
@@ -53,7 +58,7 @@ namespace TestData.Client
             if (FillOptionalProperties)
             {
                 autofaker.RuleFor(c => c.MaritalStatus, f => testDataGeneratorMaritalStatus.Create())
-                .RuleFor(c => c.BenefitForms, f => f.Make(3, () => new BenefitForm { Id = 0, Name = f.Random.String2(10) }))
+                .RuleFor(c => c.BenefitForms, f => f.Make(3, () => new BenefitForm { Id = 0, Name = f.PickRandom(Constants.BENEFITFORM_OPTIONS) }))
                 .RuleFor(c => c.DriversLicences, f => f.Make(3, () => testDataGeneratorDriverLicence.Create()))
                 .RuleFor(c => c.Diagnoses, f => f.Make(3, () => testDataGeneratorDiagnosis.Create()))
                 .RuleFor(c => c.EmergencyPeople, f => f.Make(3, () => testDataGeneratorEmergencyPerson.Create()))

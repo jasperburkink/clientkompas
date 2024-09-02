@@ -35,6 +35,7 @@ namespace Application.UnitTests.CoachingPrograms.Queries.GetCoachingProgram
         {
             // Arrange
             var query = new GetCoachingProgramQuery { Id = _coachingProgram.Id };
+            _coachingProgram.CoachingProgramType = Domain.CVS.Enums.CoachingProgramType.PGB;
 
             var coachingProgramDto = new GetCoachingProgramDto
             {
@@ -43,7 +44,7 @@ namespace Application.UnitTests.CoachingPrograms.Queries.GetCoachingProgram
                 BeginDate = _coachingProgram.BeginDate,
                 EndDate = _coachingProgram.EndDate,
                 ClientFullName = _coachingProgram.Client.FullName,
-                CoachingProgramType = _coachingProgram.CoachingProgramType,
+                CoachingProgramType = "Persoonsgebonden budget (pgb)",
                 HourlyRate = _coachingProgram.HourlyRate,
                 RemainingHours = _coachingProgram.RemainingHours,
                 OrderNumber = _coachingProgram.OrderNumber,

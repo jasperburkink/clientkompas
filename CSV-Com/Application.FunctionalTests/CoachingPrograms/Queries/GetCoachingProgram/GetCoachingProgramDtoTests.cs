@@ -132,10 +132,10 @@ namespace Application.FunctionalTests.CoachingPrograms.Queries.GetCoachingProgra
         {
             // Arrange            
             var coachingProgram = _testDataGeneratorCoachingProgram.Create();
+            var coachingProgramType = "Prive jobcoach traject";
+            coachingProgram.CoachingProgramType = Domain.CVS.Enums.CoachingProgramType.PrivateCoachingProgram;
 
             await AddAsync(coachingProgram);
-
-            var expectedResult = coachingProgram.CoachingProgramType;
 
             var query = new GetCoachingProgramQuery
             {
@@ -146,7 +146,7 @@ namespace Application.FunctionalTests.CoachingPrograms.Queries.GetCoachingProgra
             var result = await SendAsync(query);
 
             // Assert
-            result.CoachingProgramType.Should().Be(expectedResult);
+            result.CoachingProgramType.Should().Be(coachingProgramType);
         }
 
         [Test]

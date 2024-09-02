@@ -101,7 +101,10 @@ namespace Application.UnitTests.CoachingPrograms.Queries.GetCoachingProgram
         public async Task Handle_GetCoachingProgram_CoachingProgramTypeShouldBeSet()
         {
             // Arrange
+            var coachingProgramType = "Prive jobcoach traject";
             var query = new GetCoachingProgramQuery { Id = _coachingProgram.Id };
+
+            _coachingProgram.CoachingProgramType = Domain.CVS.Enums.CoachingProgramType.PrivateCoachingProgram;
 
             _unitOfWorkMock.Setup(uw => uw.CoachingProgramRepository.GetByIDAsync(
                 query.Id, It.IsAny<string>(), default
@@ -111,7 +114,7 @@ namespace Application.UnitTests.CoachingPrograms.Queries.GetCoachingProgram
             var result = await _handler.Handle(query, CancellationToken.None);
 
             // Assert
-            result.CoachingProgramType.Should().Be(_coachingProgram.CoachingProgramType);
+            result.CoachingProgramType.Should().Be(coachingProgramType);
         }
 
         [Fact]
