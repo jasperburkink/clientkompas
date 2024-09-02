@@ -301,6 +301,12 @@ function Clients() {
 
                     </SlideToggleLabel>
 
+                    <div className='button-container'>
+                        <LinkButton buttonType={{type:"Solid"}} text="Cliënt aanpassen" href={`../clients/edit/${id}`} />
+                        {/* TODO: Future feature */}
+                        {/* <LinkButton buttonType={{type:"NotSolid"}} text="Urenoverzicht" href="../client-hours" /> */}
+                    </div>
+
                     <div className='traject-container'>
                         <Header text="Traject info" className='traject-header' />
                         
@@ -376,14 +382,12 @@ function Clients() {
                             </div>
 
                         </SlideToggleLabel>}
+
+                        <div className='traject-buttons'>
+                            <LinkButton buttonType={{type:"Solid"}} text="Traject aanpassen" href={`../clients/${id}/coachingprogram-editor/${currentCoachingProgram?.id}`} />
+                            <LinkButton buttonType={{type:"NotSolid"}} text="Nieuw traject" href={`../clients/${id}/coachingprogram-editor/`} />
+                        </div>
                     </div>
-                    
-
-                    
-
-                    
-
-                    
 
                     <Button buttonType={{type:"Solid"}} text="Deactivateer cliënt" className='client-deactivate-button' onClick={() => deactivateClientClick(client)} dataTestId="button.deactivate" />
                     <ConfirmPopup
@@ -417,11 +421,6 @@ function Clients() {
                                 }, buttonType: {type:"Solid"}},
                             ]} />
                     
-                    <div className='button-container'>
-                        <LinkButton buttonType={{type:"Solid"}} text="Cliënt aanpassen" href={`../clients/edit/${id}`} />
-                        {/* TODO: Future feature */}
-                        {/* <LinkButton buttonType={{type:"NotSolid"}} text="Urenoverzicht" href="../client-hours" /> */}
-                    </div>
                 </div>
                 }
             </div>
