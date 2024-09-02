@@ -24,7 +24,6 @@ namespace Application.CoachingPrograms.Queries.GetCoachingProgramEdit
 
         public async Task<GetCoachingProgramEditDto> Handle(GetCoachingProgramEditQuery request, CancellationToken cancellationToken)
         {
-            // TODO: Find a better solution for including properties.
             var coachingProgram = await _unitOfWork.CoachingProgramRepository.GetByIDAsync(request.Id, cancellationToken: cancellationToken);
 
             return coachingProgram == null

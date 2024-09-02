@@ -71,8 +71,6 @@ const DomainObjectInput = <T extends Record<string, any>>(props: DomainObjectInp
                         let errors: ValidationError[] | undefined = props.errors?.[`${props.typeName}[${domainIndex}].${key.toLowerCase()}`];                        
                         let requiredField: boolean = isFieldRequired(props.typeName, key);
 
-                        console.log(`${key}:${requiredField}`);
-
                         const isFirstField = fieldIndex === 0;
                         const isLastField = fieldIndex === orderedFields.length - 1;
 

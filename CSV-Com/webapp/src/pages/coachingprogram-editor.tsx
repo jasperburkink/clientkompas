@@ -10,7 +10,7 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { useParams, useNavigate } from 'react-router-dom';
 import { ClientContext } from './client-context';
 import Client from "types/model/Client";
-import { fetchClientFullname, fetchCoachingProgramTypes, fetchOrganizations, saveCoachingProgram } from "utils/api";
+import { fetchClientFullname, fetchCoachingProgramEdit, fetchCoachingProgramTypes, fetchOrganizations, saveCoachingProgram } from "utils/api";
 import { Copyright } from "components/common/copyright";
 import ErrorPopup from "components/common/error-popup";
 import CvsError from 'types/common/cvs-error';
@@ -37,7 +37,6 @@ const CoachingProgramEditor = () => {
     var { clientid, id } = useParams();
 
     const navigate = useNavigate();
-    const clientContext = useContext(ClientContext);
 
     const initialCoachingProgram: CoachingProgramEdit = new CoachingProgramEdit(
         0,
@@ -146,6 +145,39 @@ const CoachingProgramEditor = () => {
         loadOrganizations();
         loadCoachingProgramTypes();
     }, [clientid]);
+
+    useEffect(() => {
+        if(id === undefined)
+            return;
+
+        const fetchCoachingProgramEditById = async () => {
+            try {
+                if(id === null){
+                    throw new Error(`Id is not specified.`);
+                }
+
+                setStatus(StatusEnum.PENDING);
+                const coachingProgramEdit: CoachingProgramEdit = await fetchCoachingProgramEdit(id!);
+                setStatus(StatusEnum.SUCCESSFUL);
+        
+                setCoachingProgram(coachingProgramEdit);
+            } catch (e: any) {
+              // TODO: error handling
+              console.error(e);
+              setStatus(StatusEnum.REJECTED);
+
+              setError({
+                    id: 0,
+                    errorcode: 'E',
+                    message: `Er is een opgetreden tijdens het ophalen van de traject informatie. Foutmelding: ${e.message}.}`
+                });
+
+                setErrorPopupOpen(true);
+            }
+          };       
+
+          fetchCoachingProgramEditById();
+    }, [id]);
 
     const handleInputChange = (fieldName: keyof CoachingProgramEdit, value: any) => {
         setCoachingProgram(prevCoachingProgram => {            

@@ -9,6 +9,7 @@ import Decimal from 'decimal.js-light';
 
 export interface DecimalInputFieldProps {
     value?: Decimal;
+    valuestring?: string;    
     placeholder: string;
     required: boolean;
     inputfieldtype: InputFieldType;
@@ -25,21 +26,26 @@ export const DecimalInputField = (props: DecimalInputFieldProps) => {
         if (props.readOnly) return;
     
         let inputValue = e.target.value;
-    
-        // TODO: NL vs USA notations
-        inputValue = inputValue.replace(',', '.');
-            
-        if (/^-?\d*\.?\d*$/.test(inputValue) || inputValue === '') {
-            if (inputValue === '') {
-                props.onChange?.(new Decimal(0));
-            } else {
-                try {
-                    const decimalValue = new Decimal(inputValue);
-                    props.onChange?.(decimalValue);
-                } catch (error) {
-                    console.error('Invalid decimal value:', error);
-                }
+
+        try
+        {
+            if(inputValue.endsWith(','))
+            {
+                inputValue += '0';
             }
+
+            inputValue = inputValue.replace(',', '.');
+
+            const decimalValue = new Decimal(inputValue);
+
+            // props.value = decimalValue;
+            props.onChange?.(decimalValue);
+
+            
+        }
+        catch (err)
+        {
+            console.error('Invalid decimal value:', err);
         }
     };    
 
@@ -48,7 +54,7 @@ export const DecimalInputField = (props: DecimalInputFieldProps) => {
             <div className={`input-field-container`}>
                 <input
                     onChange={handleChange}
-                    value={props.value?.toString() || ''}
+                    value={props.valuestring}
                     type={props.inputfieldtype.type}
                     placeholder={props.placeholder}
                     required={props.required}
