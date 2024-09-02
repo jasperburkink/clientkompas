@@ -26,10 +26,9 @@ export const DecimalInputField = (props: DecimalInputFieldProps) => {
     
         let inputValue = e.target.value;
     
-        // Vervang komma door punt
+        // TODO: NL vs USA notations
         inputValue = inputValue.replace(',', '.');
-    
-        // Check of de invoer een geldig decimaal getal is
+            
         if (/^-?\d*\.?\d*$/.test(inputValue) || inputValue === '') {
             if (inputValue === '') {
                 props.onChange?.(new Decimal(0));
@@ -42,8 +41,7 @@ export const DecimalInputField = (props: DecimalInputFieldProps) => {
                 }
             }
         }
-    };
-    
+    };    
 
     return (
         <div className={`input-field ${props.className}`}>

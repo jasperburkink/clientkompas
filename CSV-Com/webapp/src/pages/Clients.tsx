@@ -377,7 +377,7 @@ function Clients() {
 
                                 <div className='traject-label-value'>
                                     <Label text='Te besteden uren: ' />
-                                    <Label dataTestId='coachingprogram-remaininghours' text={currentCoachingProgram.remaininghours ? currentCoachingProgram.remaininghours.toLocaleString() : ''} />
+                                    <Label dataTestId='coachingprogram-remaininghours' text={currentCoachingProgram.remaininghours ? formatCurrency(currentCoachingProgram.remaininghours) : ''} />
                                 </div>
                             </div>
 

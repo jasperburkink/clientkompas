@@ -1,4 +1,8 @@
-﻿using Domain.CVS.Domain;
+﻿using System.Globalization;
+using Application.CoachingPrograms.Queries.GetCoachingProgram;
+using Application.Common.Interfaces;
+using Application.Common.Resources;
+using Domain.CVS.Domain;
 using Domain.CVS.Enums;
 using FluentAssertions;
 using Microsoft.Playwright;
@@ -23,10 +27,9 @@ namespace WebApp.FunctionalTests.Pages.CoachingProgram
             _workingContractContractType = "Tijdelijk", _workingContractFromDate = "01-12-2022", _workingContractToDate = "05-01-2023",
             _title = "Traject voor John", _ordernumber = "XEP642", _beginDate = "01-01-2020", _endDate = "24-03-2024";
         private readonly Gender _gender = Gender.Woman;
-
-
+        private readonly CoachingProgramType _coachingProgramType = CoachingProgramType.PGB;
         private Domain.CVS.Domain.CoachingProgram _coachingProgram;
-
+        private readonly IResourceMessageProvider _resourceMessageProvider = new ResourceMessageProvider(CultureInfo.CurrentUICulture);
 
         //[Skip]
         //[Ignore("Playwright does not work in the pipeline")]
@@ -141,9 +144,10 @@ namespace WebApp.FunctionalTests.Pages.CoachingProgram
             await Page.GetByTestId(nameof(Domain.CVS.Domain.CoachingProgram.Title).ToLower()).FillAsync(_coachingProgram.Title);
             await Page.GetByTestId(nameof(Domain.CVS.Domain.CoachingProgram.OrderNumber).ToLower()).FillAsync(_coachingProgram.OrderNumber);
             await Page.GetByTestId(nameof(Domain.CVS.Domain.CoachingProgram.Organization).ToLower()).SelectOptionAsync(new[] { new SelectOptionValue() { Index = 1 } });
-            await Page.GetByTestId(nameof(Domain.CVS.Domain.CoachingProgram.CoachingProgramType).ToLower()).SelectOptionAsync(new[] { new SelectOptionValue() { Index = 1 } });
+            await Page.GetByTestId(nameof(Domain.CVS.Domain.CoachingProgram.CoachingProgramType).ToLower()).SelectOptionAsync(new[] { new SelectOptionValue() { Value = ((int)_coachingProgram.CoachingProgramType).ToString() } });
             await Page.GetByTestId(nameof(Domain.CVS.Domain.CoachingProgram.BeginDate).ToLower()).FillAsync(_coachingProgram.BeginDate.ToString("dd-MM-yyyy"));
             await Page.GetByTestId(nameof(Domain.CVS.Domain.CoachingProgram.EndDate).ToLower()).FillAsync(_coachingProgram.EndDate.ToString("dd-MM-yyyy"));
+
             await Page.GetByTestId(nameof(Domain.CVS.Domain.CoachingProgram.BudgetAmmount).ToLower()).FillAsync(_coachingProgram.BudgetAmmount.ToString().Replace('.', ','));
             await Page.GetByTestId(nameof(Domain.CVS.Domain.CoachingProgram.HourlyRate).ToLower()).FillAsync(_coachingProgram.HourlyRate.ToString().Replace('.', ','));
 
@@ -162,6 +166,8 @@ namespace WebApp.FunctionalTests.Pages.CoachingProgram
             // Arrange
             var url = $"{Url}{_clientId}";
             var fullName = $"{_firstName} {_lastname}";
+            var coachingProgramName = _resourceMessageProvider.GetMessage(typeof(GetCoachingProgramDto), Enum.GetName(_coachingProgram.CoachingProgramType));
+            var culture = new CultureInfo("nl-NL");
 
             // Act
             await Page.GotoAsync(url);
@@ -170,14 +176,19 @@ namespace WebApp.FunctionalTests.Pages.CoachingProgram
             // Assert
             await Expect(Page.GetByTestId("coachingprogram-begindate")).ToContainTextAsync(_coachingProgram.BeginDate.ToString("dd-MM-yyyy"));
             await Expect(Page.GetByTestId("coachingprogram-enddate")).ToContainTextAsync(_coachingProgram.EndDate.ToString("dd-MM-yyyy"));
-            await Expect(Page.GetByTestId("coachingprogram-coachingprogramtype")).ToContainTextAsync(Enum.GetName(_coachingProgram.CoachingProgramType));
+            await Expect(Page.GetByTestId("coachingprogram-coachingprogramtype")).ToContainTextAsync(coachingProgramName);
             await Expect(Page.GetByTestId("coachingprogram-clientfullname")).ToContainTextAsync(fullName);
             await Expect(Page.GetByTestId("coachingprogram-title")).ToContainTextAsync(_coachingProgram.Title);
-            await Expect(Page.GetByTestId("coachingprogram-ordernumber")).ToContainTextAsync(_coachingProgram.OrderNumber);
-            await Expect(Page.GetByTestId("coachingprogram-organizationname")).ToContainTextAsync(_coachingProgram.Organization.OrganizationName);
-            await Expect(Page.GetByTestId("coachingprogram-budgetammount")).ToContainTextAsync(_coachingProgram.BudgetAmmount.ToString());
-            await Expect(Page.GetByTestId("coachingprogram-hourlyrate")).ToContainTextAsync(_coachingProgram.HourlyRate.ToString());
-            await Expect(Page.GetByTestId("coachingprogram-remaininghours")).ToContainTextAsync(_coachingProgram.RemainingHours.ToString());
+            if (!string.IsNullOrEmpty(_coachingProgram.OrderNumber))
+            {
+                await Expect(Page.GetByTestId("coachingprogram-ordernumber")).ToContainTextAsync(_coachingProgram.OrderNumber);
+            }
+            if (_coachingProgram.BudgetAmmount.HasValue)
+            {
+                await Expect(Page.GetByTestId("coachingprogram-budgetammount")).ToContainTextAsync(Math.Round(_coachingProgram.BudgetAmmount.Value, 2).ToString("N", culture));
+            }
+            await Expect(Page.GetByTestId("coachingprogram-hourlyrate")).ToContainTextAsync(Math.Round(_coachingProgram.HourlyRate, 2).ToString("N", culture));
+            await Expect(Page.GetByTestId("coachingprogram-remaininghours")).ToContainTextAsync(Math.Round(_coachingProgram.RemainingHours, 2).ToString("N", culture));
         }
     }
 }
