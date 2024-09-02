@@ -174,7 +174,7 @@ namespace Infrastructure.Persistence.CVS
         {
             if (string.IsNullOrEmpty(searchTerm))
             {
-                return Enumerable.Empty<TEntity>();
+                return Context.Set<TEntity>();
             }
 
             var tableName = ContextExtensions.GetTableName(Context, typeof(TEntity));
