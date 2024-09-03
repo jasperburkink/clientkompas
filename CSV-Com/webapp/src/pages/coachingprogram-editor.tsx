@@ -339,7 +339,7 @@ return(
                             inputfieldtype={{type:'text'}} 
                             required={false} 
                             placeholder='Budgetbedrag' 
-                            value={coachingProgram.budgetammount} 
+                            value={coachingProgram.budgetammount?.toString()} 
                             onChange={(value) => handleInputChange('budgetammount', value)}
                             dataTestId='budgetammount'
                             errors={validationErrors.budgetammount} />
@@ -350,7 +350,7 @@ return(
                             inputfieldtype={{type:'text'}} 
                             required={true} 
                             placeholder='Uurtarief' 
-                            value={coachingProgram.hourlyrate} 
+                            value={coachingProgram.hourlyrate.toString()} 
                             onChange={(value) => handleInputChange('hourlyrate', value)}
                             dataTestId='hourlyrate'
                             errors={validationErrors.hourlyrate} />
@@ -361,7 +361,7 @@ return(
                             inputfieldtype={{type:'text'}} 
                             required={false} 
                             placeholder='Te besteden uren' 
-                            value={coachingProgram.remaininghours}
+                            value={coachingProgram.remaininghours.toString().replace('.', ',')}
                             dataTestId='remaininghours'
                             readOnly={true} />
                     </LabelField>

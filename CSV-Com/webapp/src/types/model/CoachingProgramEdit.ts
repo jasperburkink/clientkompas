@@ -37,11 +37,20 @@ export default class CoachingProgramEdit {
     }
 
     get remaininghours(): Decimal {
-        if (this.budgetammount && this.budgetammount > new Decimal(0) && this.hourlyrate > new Decimal(0)) {
-            return this.budgetammount.dividedBy(this.hourlyrate);
-        } else {
-            return new Decimal(0);
+        if(!this.budgetammount) return new Decimal(0);
+
+        try{
+
+            let budgetammount = new Decimal(typeof(this.budgetammount) === 'string' ? new String(this.budgetammount).replace(',', '.') : this.budgetammount);
+            let hourlyrate = new Decimal(typeof(this.hourlyrate) === 'string' ? new String(this.hourlyrate).replace(',', '.') : this.hourlyrate);
+            
+            return budgetammount.dividedBy(hourlyrate);
         }
+        catch(err){
+            console.log('Error while calculating remaininghours: ' + err);
+        }
+
+        return new Decimal(0);
     }
 
     updateField(fieldName: keyof CoachingProgramEdit, value: any) {
