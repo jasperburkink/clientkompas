@@ -1,6 +1,12 @@
-﻿using Application.Common.Interfaces.CVS;
+﻿using Application.Common.Interfaces;
+using Application.Common.Interfaces.Authentication;
+using Application.Common.Interfaces.CVS;
+using Infrastructure.Identity;
 using Infrastructure.Persistence.Authentication;
 using Infrastructure.Persistence.CVS;
+using Infrastructure.Services;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -51,26 +57,26 @@ namespace Infrastructure
                 .EnableSensitiveDataLogging()
 .EnableDetailedErrors());
 
-            //services.AddScoped<AuthenticationDbContextInitialiser>();
+            services.AddScoped<AuthenticationDbContextInitialiser>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            // TODO: Identity implementation
-            //services
-            //    .AddDefaultIdentity<ApplicationUser>()
-            //    .AddRoles<IdentityRole>()
-            //    .AddEntityFrameworkStores<AuthenticationDbContext>();
+            services
+                .AddDefaultIdentity<ApplicationUser>()
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<AuthenticationDbContext>();
 
-            ////services.AddIdentityServer()
-            ////    .AddApiAuthorization<ApplicationUser, AuthenticationDbContext>();
+            services.AddIdentityServer()
+                .AddApiAuthorization<ApplicationUser, AuthenticationDbContext>();
 
-            //services.AddTransient<IIdentityService, IdentityService>();
+            services.AddTransient<IDateTime, DateTimeService>();
+            services.AddTransient<IIdentityService, IdentityService>();
 
-            //services.AddAuthentication()
-            //    .AddIdentityServerJwt();
+            services.AddAuthentication()
+                .AddIdentityServerJwt();
 
-            //services.AddAuthorization(options =>
-            //    options.AddPolicy("CanPurge", policy => policy.RequireRole("Administrator")));
+            services.AddAuthorization(options =>
+                options.AddPolicy("CanPurge", policy => policy.RequireRole("Administrator")));
 
             return services;
         }
