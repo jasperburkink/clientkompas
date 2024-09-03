@@ -31,9 +31,9 @@ namespace WebApp.FunctionalTests.Pages.CoachingProgram
         private Domain.CVS.Domain.CoachingProgram _coachingProgram;
         private readonly IResourceMessageProvider _resourceMessageProvider = new ResourceMessageProvider(CultureInfo.CurrentUICulture);
 
-        //[Skip]
-        //[Ignore("Playwright does not work in the pipeline")]
-        [Test, Order(1)]
+        [Skip]
+        [Ignore("Playwright does not work in the pipeline")]
+        //[Test, Order(1)]
         public async Task CreateClient_FillInClientDataAndSave_ClientShouldBeAdded()
         {
             // Arrange
@@ -120,9 +120,9 @@ namespace WebApp.FunctionalTests.Pages.CoachingProgram
             _clientId = int.Parse(await Page.GetByTestId("clientid").InnerTextAsync());
         }
 
-        //[Skip]
-        //[Ignore("Playwright does not work in the pipeline")]
-        [Test, Order(2)]
+        [Skip]
+        [Ignore("Playwright does not work in the pipeline")]
+        //[Test, Order(2)]
         public async Task CreateCoachingProgram_FillInCoachingProgramDataAndSave_ClientShouldBeAdded()
         {
             // Arrange
@@ -158,9 +158,9 @@ namespace WebApp.FunctionalTests.Pages.CoachingProgram
             fullNameClient.Should().Be(fullName);
         }
 
-        //[Skip]
-        //[Ignore("Playwright does not work in the pipeline")]
-        [Test, Order(3)]
+        [Skip]
+        [Ignore("Playwright does not work in the pipeline")]
+        //[Test, Order(3)]
         public async Task ClientCoachingProgram_ShowDetails_CoachingProgramShouldBeVisible()
         {
             // Arrange
