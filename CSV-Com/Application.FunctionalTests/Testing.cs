@@ -26,32 +26,31 @@ namespace Application.FunctionalTests
         [OneTimeSetUp]
         public async Task RunBeforeAnyTests()
         {
-            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            if (environment is null)
-            {
-                Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Development");
-                environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            }
-
+            // Stel de configuratie in
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
             var configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile($"appsettings.{environment}.json", optional: false, reloadOnChange: true)
                 .AddEnvironmentVariables()
                 .Build();
 
-            var authenticationConnectionString = configuration.GetConnectionString("AuthenticationConnectionString");
-            var csvConnectionString = configuration.GetConnectionString("CVSConnectionString");
+            var authenticationConnectionString = configuration.GetConnectionString("AuthenticationConnectionString")
+                ?.Replace("<<test_db_name>>", $"{s_databasePrefix}_Authentication");
 
-            authenticationConnectionString = authenticationConnectionString?.Replace("<<test_db_name>>", $"{s_databasePrefix}_Authentication");
-            csvConnectionString = csvConnectionString?.Replace("<<test_db_name>>", $"{s_databasePrefix}_CVS");
+            var csvConnectionString = configuration.GetConnectionString("CVSConnectionString")
+                ?.Replace("<<test_db_name>>", $"{s_databasePrefix}_CVS");
 
             s_databaseAuthentication = await TestDatabaseFactory<AuthenticationDbContext>.CreateAsync(authenticationConnectionString!);
             s_databaseCSV = await TestDatabaseFactory<CVSDbContext>.CreateAsync(csvConnectionString!);
 
-            s_factory = new CustomWebApplicationFactory(s_databaseCSV.GetConnection());
+            var connectionCvs = s_databaseCSV.GetConnection();
+            var connectionAuthentication = s_databaseCSV.GetConnection();
 
+            // Configureer andere vereiste diensten en instanties
+            s_factory = new CustomWebApplicationFactory(connectionCvs, connectionAuthentication);
             s_scopeFactory = s_factory.Services.GetRequiredService<IServiceScopeFactory>();
         }
+
 
         public static async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
         {

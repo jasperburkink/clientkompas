@@ -1,4 +1,6 @@
 ﻿using System.Data.Common;
+using Application.Common.Interfaces.Authentication;
+using Infrastructure.Data.Authentication;
 using Infrastructure.Data.CVS;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -7,28 +9,41 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Moq;
 
 namespace Application.FunctionalTests
 {
-    public class CustomWebApplicationFactory(DbConnection connection) : WebApplicationFactory<Program>
+
+
+    public class CustomWebApplicationFactory(DbConnection connectionCvs, DbConnection connectionAuthentication) : WebApplicationFactory<Program>
     {
-        private readonly DbConnection _connection = connection;
+        private readonly DbConnection _connectionCvs = connectionCvs;
+        private readonly DbConnection _connectionAuthentication = connectionAuthentication;
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             builder.ConfigureTestServices(services =>
             {
-                //TODO:
-                //services
-                //    .RemoveAll<IUser>()
-                //    .AddTransient(provider => Mock.Of<IUser>(s => s.Id == GetUserId()));
+                services
+                    .RemoveAll<IUser>()
+                    .AddTransient(provider => Mock.Of<IUser>(s => s.UserId == Testing.GetUserId()));
 
+                // CVS
                 services
                     .RemoveAll<DbContextOptions<CVSDbContext>>()
                     .AddDbContext<CVSDbContext>((sp, options) =>
                     {
                         options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
-                        options.UseMySql(_connection, MySqlServerVersion.LatestSupportedServerVersion);
+                        options.UseMySql(_connectionCvs, MySqlServerVersion.LatestSupportedServerVersion);
+                    });
+
+                // Authentication
+                services
+                    .RemoveAll<DbContextOptions<AuthenticationDbContext>>()
+                    .AddDbContext<AuthenticationDbContext>((sp, options) =>
+                    {
+                        options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
+                        options.UseMySql(_connectionAuthentication, MySqlServerVersion.LatestSupportedServerVersion);
                     });
             });
         }

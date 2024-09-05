@@ -25,10 +25,8 @@ namespace Infrastructure
             var connectionStringCVS = configuration.GetValue<string>("ConnectionStrings:CVSConnectionString");
             Guard.Against.Null(connectionStringCVS, message: "Connection string 'CVSConnectionString' not found.");
 
-            //services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
             services.AddScoped<AuditableEntityInterceptor>();
             services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>(sp => sp.GetRequiredService<AuditableEntityInterceptor>());
-
 
             var serverVersion = MySqlServerVersion.LatestSupportedServerVersion;
 
