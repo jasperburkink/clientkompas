@@ -1,5 +1,4 @@
 ﻿using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
 using Application.Common.Interfaces.CVS;
 using Domain.Common;
 using Domain.CVS.Domain;
@@ -173,31 +172,38 @@ namespace Infrastructure.Persistence.CVS
 
         public async Task<IEnumerable<TEntity>> FullTextSearch(string searchTerm, CancellationToken cancellationToken = default, params Expression<Func<TEntity, object>>[] properties)
         {
-            return await Task.Run(() =>
+            if (string.IsNullOrEmpty(searchTerm))
             {
-                var tableName = ContextExtensions.GetTableName(Context, typeof(TEntity));
+                return Context.Set<TEntity>();
+            }
 
-                var searchTerms = Array.Empty<string>();
-                if (!string.IsNullOrEmpty(searchTerm))
+            var tableName = ContextExtensions.GetTableName(Context, typeof(TEntity));
+
+            var searchTerms = searchTerm.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+            var sqlParameters = new List<object>();
+            var whereClauses = new List<string>();
+
+            var parameterIndex = 0;
+
+            foreach (var prop in properties)
+            {
+                var propertyName = PropertyInfoHelper.GetPropertyInfo(prop).Name;
+                foreach (var term in searchTerms)
                 {
-                    searchTerms = searchTerm.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    var paramName = $"@p{parameterIndex++}";
+                    whereClauses.Add($"{propertyName} LIKE {paramName}");
+                    sqlParameters.Add($"%{term}%");
                 }
+            }
 
-                var likeClauses = properties.Select(prop =>
-                {
-                    var propertyName = PropertyInfoHelper.GetPropertyInfo(prop).Name;
-                    return string.Join(" OR ", searchTerms.Select(term => $"{propertyName} LIKE '%{term}%'"));
-                });
+            var combinedWhereClause = string.Join(" OR ", whereClauses);
 
-                var combinedLikeClauses = string.Join(") OR (", likeClauses);
+            var query = $"SELECT * FROM {tableName} WHERE {combinedWhereClause}";
 
-                var whereClause = string.IsNullOrEmpty(combinedLikeClauses) ? "1=1" : $"({combinedLikeClauses})";
-
-                var query = $@"SELECT * FROM {tableName} WHERE {whereClause}";
-
-                return _dbSet.FromSqlInterpolated(FormattableStringFactory.Create(query)).AsEnumerable();
-            }, cancellationToken);
+            return await _dbSet.FromSqlRaw(query, sqlParameters.ToArray()).ToListAsync(cancellationToken);
         }
+
 
         public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
         {

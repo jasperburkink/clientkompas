@@ -159,7 +159,7 @@ namespace Application.FunctionalTests.CoachingPrograms.Commands.UpdateCoachingPr
         public async Task Handle_BeginDate_IsSet()
         {
             // Arrange
-            var beginDate = new DateOnly(1986, 3, 24);
+            var beginDate = new DateOnly(1600, 3, 24);
             _command.BeginDate = beginDate;
 
             // Act
