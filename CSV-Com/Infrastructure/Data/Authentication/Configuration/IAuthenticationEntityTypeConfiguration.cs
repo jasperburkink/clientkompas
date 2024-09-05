@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Persistence.Authentication.Configuration
+namespace Infrastructure.Data.Authentication.Configuration
 {
     public interface IAuthenticationEntityTypeConfiguration
     {

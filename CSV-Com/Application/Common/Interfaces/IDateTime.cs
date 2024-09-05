@@ -3,6 +3,8 @@
     public interface IDateTime
     {
         DateTime Now { get; }
+
+        DateTime GetUtcNow();
     }
 
 }

@@ -1,9 +1,6 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Interfaces.CVS;
+﻿using Application.Common.Interfaces.CVS;
 using Application.Diagnoses.Queries.GetDiagnosis;
-using AutoMapper;
 using Domain.CVS.Domain;
-using MediatR;
 
 namespace Application.Diagnoses.Commands.UpdateDiagnosis
 {

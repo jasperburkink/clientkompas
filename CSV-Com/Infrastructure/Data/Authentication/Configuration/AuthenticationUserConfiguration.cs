@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infrastructure.Persistence.Authentication.Configuration
+namespace Infrastructure.Data.Authentication.Configuration
 {
     public class AuthenticationUserConfiguration : IEntityTypeConfiguration<AuthenticationUser>, IAuthenticationEntityTypeConfiguration
     {

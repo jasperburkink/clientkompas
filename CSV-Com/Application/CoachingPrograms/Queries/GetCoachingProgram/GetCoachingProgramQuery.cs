@@ -1,7 +1,4 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Interfaces.CVS;
-using AutoMapper;
-using MediatR;
+﻿using Application.Common.Interfaces.CVS;
 
 namespace Application.CoachingPrograms.Queries.GetCoachingProgram
 {

@@ -1,6 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 using API.Policies;
+using API.Services;
 using Application;
+using Application.Common.Interfaces.Authentication;
 using Infrastructure;
 using Infrastructure.Data.Authentication;
 using Infrastructure.Data.CVS;
@@ -13,6 +15,8 @@ builder.Configuration.SetBasePath(builder.Environment.ContentRootPath)
         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
         .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: false, reloadOnChange: true)
         .AddEnvironmentVariables();
+
+builder.Services.AddScoped<IUser, CurrentUser>();
 
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);

@@ -1,8 +1,8 @@
 ﻿using Domain.Authentication.Domain;
 using Duende.IdentityServer.EntityFramework.Options;
+using Infrastructure.Data.Authentication.Configuration;
 using Infrastructure.Data.Interceptor;
 using Infrastructure.Identity;
-using Infrastructure.Persistence.Authentication.Configuration;
 using MediatR;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;

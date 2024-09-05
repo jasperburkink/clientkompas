@@ -1,5 +1,5 @@
 ﻿using System.Data.Common;
-using Infrastructure.Persistence.CVS;
+using Infrastructure.Data.CVS;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -10,14 +10,9 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Application.FunctionalTests
 {
-    public class CustomWebApplicationFactory : WebApplicationFactory<Program>
+    public class CustomWebApplicationFactory(DbConnection connection) : WebApplicationFactory<Program>
     {
-        private readonly DbConnection _connection;
-
-        public CustomWebApplicationFactory(DbConnection connection)
-        {
-            _connection = connection;
-        }
+        private readonly DbConnection _connection = connection;
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {

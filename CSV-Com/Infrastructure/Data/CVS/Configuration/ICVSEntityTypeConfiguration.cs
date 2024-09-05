@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Persistence.CVS.Configuration
+namespace Infrastructure.Data.CVS.Configuration
 {
     public interface ICVSEntityTypeConfiguration
     {

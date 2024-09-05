@@ -1,5 +1,5 @@
 ﻿using Domain.CVS.Domain;
-using Infrastructure.Persistence.CVS.Configuration;
+using Infrastructure.Data.CVS.Configuration;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data.CVS

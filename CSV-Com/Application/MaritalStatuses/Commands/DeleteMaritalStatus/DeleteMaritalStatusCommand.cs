@@ -1,7 +1,6 @@
 ﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces.CVS;
 using Domain.CVS.Domain;
-using MediatR;
 
 namespace Application.MaritalStatuses.Commands.DeleteMaritalStatus
 {

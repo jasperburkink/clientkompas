@@ -3,7 +3,7 @@ using Domain.CVS.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infrastructure.Persistence.CVS.Configuration
+namespace Infrastructure.Data.CVS.Configuration
 {
     public class BenefitFormConfiguration : IEntityTypeConfiguration<BenefitForm>, ICVSEntityTypeConfiguration
     {

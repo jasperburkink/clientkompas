@@ -71,7 +71,7 @@ namespace Infrastructure.Persistence.Authentication.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AuthenticationUsers");
+                    b.ToTable("AuthenticationUsers", (string)null);
                 });
 #pragma warning restore 612, 618
         }

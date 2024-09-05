@@ -3,9 +3,9 @@ using Application.Common.Interfaces.Authentication;
 using Application.Common.Interfaces.CVS;
 using Infrastructure.Data.Authentication;
 using Infrastructure.Data.CVS;
+using Infrastructure.Data.Interceptor;
 using Infrastructure.Identity;
 using Infrastructure.Services;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -25,14 +25,19 @@ namespace Infrastructure
             var connectionStringCVS = configuration.GetValue<string>("ConnectionStrings:CVSConnectionString");
             Guard.Against.Null(connectionStringCVS, message: "Connection string 'CVSConnectionString' not found.");
 
-            services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
-            services.AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>();
+            //services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
+            services.AddScoped<AuditableEntityInterceptor>();
+            services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>(sp => sp.GetRequiredService<AuditableEntityInterceptor>());
+
 
             var serverVersion = MySqlServerVersion.LatestSupportedServerVersion;
 
-            services.AddDbContext<CVSDbContext>(
-            dbContextOptions => dbContextOptions
-                            .UseMySql(connectionStringCVS, serverVersion,
+            // CVS
+            services.AddDbContext<CVSDbContext>((sp, options) =>
+            {
+                options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
+
+                options.UseMySql(connectionStringCVS, serverVersion,
                             mySqlOptions =>
                             {
                                 mySqlOptions.MigrationsAssembly(typeof(CVSDbContext).Assembly.FullName); // Migrations in class library
@@ -43,26 +48,29 @@ namespace Infrastructure
 #endif
                             })
                             .LogTo(Console.WriteLine, LogLevel.Information)
-                            .EnableSensitiveDataLogging()
-            .EnableDetailedErrors());
-
+                            .EnableSensitiveDataLogging();
+            });
+            //services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
             services.AddScoped<CVSDbContextInitialiser>();
 
-            services.AddDbContext<AuthenticationDbContext>(
-            dbContextOptions => dbContextOptions
-                .UseMySql(connectionStringAuthentication, serverVersion,
+            // Authentication
+            services.AddDbContext<AuthenticationDbContext>((sp, options) =>
+            {
+                options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
+
+                options.UseMySql(connectionStringAuthentication, serverVersion,
                 mySqlOptions =>
                 {
                     mySqlOptions.MigrationsAssembly(typeof(AuthenticationDbContext).Assembly.FullName); // Migrations in class library
 #if DEBUG
                     mySqlOptions.EnableRetryOnFailure(maxRetryCount: 5,
-        maxRetryDelay: TimeSpan.FromSeconds(10),
-        errorNumbersToAdd: null);
+                        maxRetryDelay: TimeSpan.FromSeconds(10),
+                        errorNumbersToAdd: null);
 #endif
                 })
                 .LogTo(Console.WriteLine, LogLevel.Information)
-                .EnableSensitiveDataLogging()
-.EnableDetailedErrors());
+                .EnableSensitiveDataLogging();
+            });
 
             services.AddScoped<AuthenticationDbContextInitialiser>();
 
@@ -73,17 +81,17 @@ namespace Infrastructure
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<AuthenticationDbContext>();
 
-            services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, AuthenticationDbContext>();
+            //services.AddIdentityServer()
+            //    .AddApiAuthorization<ApplicationUser, AuthenticationDbContext>();
 
             services.AddTransient<IDateTime, DateTimeService>();
             services.AddTransient<IIdentityService, IdentityService>();
 
-            services.AddAuthentication()
-                .AddIdentityServerJwt();
+            //services.AddAuthentication()
+            //    .AddIdentityServerJwt();
 
             services.AddAuthorization(options =>
-                options.AddPolicy("CanPurge", policy => policy.RequireRole("Administrator")));
+                    options.AddPolicy("CanPurge", policy => policy.RequireRole("Administrator")));
 
             return services;
         }

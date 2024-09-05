@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Infrastructure.Persistence.CVS.Migrations
+namespace Infrastructure.Data.CVS.Migrations
 {
     /// <inheritdoc />
     public partial class DBinit : Migration
