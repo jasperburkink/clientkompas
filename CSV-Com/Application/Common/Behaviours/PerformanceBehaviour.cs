@@ -9,12 +9,12 @@ namespace Application.Common.Behaviours
     {
         private readonly Stopwatch _timer;
         private readonly ILogger<TRequest> _logger;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly IUser _currentUserService;
         private readonly IIdentityService _identityService;
 
         public PerformanceBehaviour(
             ILogger<TRequest> logger,
-            ICurrentUserService currentUserService,
+            IUser currentUserService,
             IIdentityService identityService)
         {
             _timer = new Stopwatch();

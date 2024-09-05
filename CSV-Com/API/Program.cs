@@ -2,8 +2,8 @@
 using API.Policies;
 using Application;
 using Infrastructure;
-using Infrastructure.Persistence.Authentication;
-using Infrastructure.Persistence.CVS;
+using Infrastructure.Data.Authentication;
+using Infrastructure.Data.CVS;
 
 var builder = WebApplication.CreateBuilder(args);
 

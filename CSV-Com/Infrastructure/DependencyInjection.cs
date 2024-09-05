@@ -1,25 +1,32 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Interfaces.CVS;
+using Infrastructure.Data.Authentication;
+using Infrastructure.Data.CVS;
 using Infrastructure.Identity;
-using Infrastructure.Persistence.Authentication;
-using Infrastructure.Persistence.CVS;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure
 {
-    public static class ConfigureServices
+    public static class DependencyInjection
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
             var connectionStringAuthentication = configuration.GetValue<string>("ConnectionStrings:AuthenticationConnectionString");
+            Guard.Against.Null(connectionStringAuthentication, message: "Connection string 'AuthenticationConnectionString' not found.");
+
             var connectionStringCVS = configuration.GetValue<string>("ConnectionStrings:CVSConnectionString");
+            Guard.Against.Null(connectionStringCVS, message: "Connection string 'CVSConnectionString' not found.");
+
+            services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
+            services.AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>();
 
             var serverVersion = MySqlServerVersion.LatestSupportedServerVersion;
 

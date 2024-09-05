@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Domain.Authentication.Constants;
+using Infrastructure.Data.Authentication;
 using Infrastructure.Identity;
-using Infrastructure.Persistence.Authentication;
 using Infrastructure.Persistence.CVS;
 using MediatR;
 using Microsoft.AspNetCore.Identity;

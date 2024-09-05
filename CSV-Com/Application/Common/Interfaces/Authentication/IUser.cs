@@ -1,6 +1,6 @@
 ﻿namespace Application.Common.Interfaces.Authentication
 {
-    public interface ICurrentUserService
+    public interface IUser
     {
         string? UserId { get; }
     }

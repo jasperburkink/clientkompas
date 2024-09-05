@@ -5,11 +5,11 @@ using TestData;
 using TestData.Client;
 using TestData.CoachingProgram;
 
-namespace Infrastructure.Persistence.CVS
+namespace Infrastructure.Data.CVS
 {
     public class CVSDbContextInitialiser
     {
-        private const int InitialNumberOfClients = 10;
+        private const int INITIAL_NUMBER_OF_CLIENTS = 10, INITIAL_NUMBER_OF_COACHINGPROGRAMS = 2;
         private readonly ILogger<CVSDbContextInitialiser> _logger;
         private readonly CVSDbContext _context;
         public CVSDbContextInitialiser(ILogger<CVSDbContextInitialiser> logger, CVSDbContext context)
@@ -54,7 +54,7 @@ namespace Infrastructure.Persistence.CVS
                 ITestDataGenerator<Client> testDataGeneratorClient = new ClientDataGenerator();
                 ITestDataGenerator<CoachingProgram> testDataGeneratorCoachingProgram = new CoachingProgramDataGenerator();
 
-                for (var i = 0; i < 10; i++)
+                for (var i = 0; i < INITIAL_NUMBER_OF_CLIENTS; i++)
                 {
                     var client = testDataGeneratorClient.Create();
                     _context.Clients.Add(client);
@@ -66,7 +66,7 @@ namespace Infrastructure.Persistence.CVS
 
                 foreach (var client in clients)
                 {
-                    for (var j = 0; j < 2; j++)
+                    for (var j = 0; j < INITIAL_NUMBER_OF_COACHINGPROGRAMS; j++)
                     {
                         var coachingProgram = testDataGeneratorCoachingProgram.Create();
                         coachingProgram.ClientId = client.Id;

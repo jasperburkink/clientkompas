@@ -5,18 +5,18 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-namespace Infrastructure.Persistence.Authentication.Interceptor
+namespace Infrastructure.Data.Interceptor
 {
-    public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
+    public class AuditableEntityInterceptor : SaveChangesInterceptor
     {
-        private readonly ICurrentUserService _currentUserService;
-        private readonly IDateTime _dateTime;
+        private readonly IUser _user;
+        private readonly IDateTime _dateTime;  // TODO: When migrating to .net 9 you can replace this interface with TimeProvider
 
-        public AuditableEntitySaveChangesInterceptor(
-            ICurrentUserService currentUserService,
+        public AuditableEntityInterceptor(
+            IUser currentUserService,
             IDateTime dateTime)
         {
-            _currentUserService = currentUserService;
+            _user = currentUserService;
             _dateTime = dateTime;
         }
 
@@ -40,16 +40,16 @@ namespace Infrastructure.Persistence.Authentication.Interceptor
 
             foreach (var entry in context.ChangeTracker.Entries<BaseAuditableEntity>())
             {
-                if (entry.State == EntityState.Added)
+                if (entry.State is EntityState.Added or EntityState.Modified || entry.HasChangedOwnedEntities())
                 {
-                    entry.Entity.CreatedBy = _currentUserService.UserId;
-                    entry.Entity.Created = _dateTime.Now;
-                }
-
-                if (entry.State == EntityState.Added || entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
-                {
-                    entry.Entity.LastModifiedBy = _currentUserService.UserId;
-                    entry.Entity.LastModified = _dateTime.Now;
+                    var utcNow = _dateTime.GetUtcNow();
+                    if (entry.State == EntityState.Added)
+                    {
+                        entry.Entity.CreatedBy = _user.Id;
+                        entry.Entity.Created = utcNow;
+                    }
+                    entry.Entity.LastModifiedBy = _user.Id;
+                    entry.Entity.LastModified = utcNow;
                 }
             }
         }

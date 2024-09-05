@@ -2,7 +2,7 @@
 using Infrastructure.Persistence.CVS.Configuration;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Persistence.CVS
+namespace Infrastructure.Data.CVS
 {
     public class CVSDbContext : DbContext
     {

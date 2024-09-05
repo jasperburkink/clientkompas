@@ -1,26 +1,26 @@
 ﻿using Domain.Authentication.Domain;
 using Duende.IdentityServer.EntityFramework.Options;
+using Infrastructure.Data.Interceptor;
 using Infrastructure.Identity;
 using Infrastructure.Persistence.Authentication.Configuration;
-using Infrastructure.Persistence.Authentication.Interceptor;
 using MediatR;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace Infrastructure.Persistence.Authentication
+namespace Infrastructure.Data.Authentication
 {
     public class AuthenticationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     {
         private readonly IMediator _mediator;
-        private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
+        private readonly AuditableEntityInterceptor _auditableEntitySaveChangesInterceptor;
 
         public DbSet<AuthenticationUser> AuthenticationUsers { get; set; }
 
         public AuthenticationDbContext(DbContextOptions<AuthenticationDbContext> options,
         IOptions<OperationalStoreOptions> operationalStoreOptions,
         IMediator mediator,
-        AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options, operationalStoreOptions)
+        AuditableEntityInterceptor auditableEntitySaveChangesInterceptor) : base(options, operationalStoreOptions)
         {
             _mediator = mediator;
             _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;

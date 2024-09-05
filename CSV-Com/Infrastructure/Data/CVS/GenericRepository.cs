@@ -5,7 +5,7 @@ using Domain.CVS.Domain;
 using Infrastructure.Common;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Persistence.CVS
+namespace Infrastructure.Data.CVS
 {
     public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
     {
