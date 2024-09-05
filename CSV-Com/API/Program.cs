@@ -53,7 +53,7 @@ if (app.Environment.IsDevelopment() || true) // <- TODO: for now we want this sc
 
     // Initialise and seed database
     using var scope = app.Services.CreateScope();
-    // TODO: Uncomment for authentication
+
     var initialiserAuthentication = scope.ServiceProvider.GetRequiredService<AuthenticationDbContextInitialiser>();
     await initialiserAuthentication.InitialiseAsync();
     await initialiserAuthentication.SeedAsync();
