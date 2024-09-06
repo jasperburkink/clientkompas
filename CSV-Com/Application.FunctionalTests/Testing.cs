@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Domain.Authentication.Constants;
+using Domain.Authentication.Domain;
 using Infrastructure.Data.Authentication;
 using Infrastructure.Data.CVS;
 using Infrastructure.Identity;
@@ -89,9 +90,9 @@ namespace Application.FunctionalTests
         {
             using var scope = s_scopeFactory.CreateScope();
 
-            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AuthenticationUser>>();
 
-            var user = new ApplicationUser { UserName = userName, Email = userName };
+            var user = new AuthenticationUser { UserName = userName, Email = userName };
 
             var result = await userManager.CreateAsync(user, password);
 
