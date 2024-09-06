@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Authentication.Migrations
 {
     [DbContext(typeof(AuthenticationDbContext))]
-    [Migration("20240906081647_DB-init")]
+    [Migration("20240906083759_DB-init")]
     partial class DBinit
     {
         /// <inheritdoc />
@@ -30,7 +30,7 @@ namespace Infrastructure.Data.Authentication.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<int>("CVSUserId")
+                    b.Property<int?>("CVSUserId")
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")

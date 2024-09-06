@@ -27,7 +27,7 @@ namespace Infrastructure.Data.Authentication.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<int>("CVSUserId")
+                    b.Property<int?>("CVSUserId")
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
