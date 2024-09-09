@@ -45,7 +45,7 @@ namespace Application.FunctionalTests
             s_databaseCSV = await TestDatabaseFactory<CVSDbContext>.CreateAsync(csvConnectionString!);
 
             var connectionCvs = s_databaseCSV.GetConnection();
-            var connectionAuthentication = s_databaseCSV.GetConnection();
+            var connectionAuthentication = s_databaseAuthentication.GetConnection();
 
             // Configureer andere vereiste diensten en instanties
             s_factory = new CustomWebApplicationFactory(connectionCvs, connectionAuthentication);
@@ -163,9 +163,16 @@ namespace Application.FunctionalTests
         public static async Task AddAsync<TEntity>(TEntity entity)
             where TEntity : class
         {
+            await AddAsync<TEntity, CVSDbContext>(entity);
+        }
+
+        public static async Task AddAsync<TEntity, TDbContext>(TEntity entity)
+            where TEntity : class
+            where TDbContext : DbContext
+        {
             using var scope = s_scopeFactory.CreateScope();
 
-            var context = scope.ServiceProvider.GetRequiredService<CVSDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<TDbContext>();
 
             context.Add(entity);
 

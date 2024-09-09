@@ -117,37 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="HousenumberAddtionMaxLength" xml:space="preserve">
-    <value>Huisnummer toevoeging mag niet langer zijn dan {0} karakters.</value>
+  <data name="PasswordMaxLength" xml:space="preserve">
+    <value>Wachtwoord mag niet langer zijn dan {0} karakters.</value>
   </data>
-  <data name="HouseNumberMaxValue" xml:space="preserve">
-    <value>Huisnummer mag niet groter zijn dan {0}.</value>
+  <data name="PasswordRequired" xml:space="preserve">
+    <value>Wachtwoord is verplicht.</value>
   </data>
-  <data name="HouseNumberNotNegativeValue" xml:space="preserve">
-    <value>Huisnummer kan geen negatieve waarde bevatten.</value>
+  <data name="UserNameMaxLength" xml:space="preserve">
+    <value>Gebruikersnaam mag niet langer zijn dan {0} karakters.</value>
   </data>
-  <data name="HouseNumberRequired" xml:space="preserve">
-    <value>Huisnummer is verplicht.</value>
-  </data>
-  <data name="PostalCodeInvalid" xml:space="preserve">
-    <value>Postcode '{0}' is geen geldige postcode.</value>
-  </data>
-  <data name="PostalCodeMaxLength" xml:space="preserve">
-    <value>Postcode mag niet langer zijn dan {0} karakters.</value>
-  </data>
-  <data name="PostalCodeRequired" xml:space="preserve">
-    <value>Postcode is verplicht.</value>
-  </data>
-  <data name="ResidenceMaxLength" xml:space="preserve">
-    <value>Woonplaats mag niet langer zijn dan {0} karakters.</value>
-  </data>
-  <data name="ResidenceRequired" xml:space="preserve">
-    <value>Woonplaats is verplicht.</value>
-  </data>
-  <data name="StreetNameMaxLength" xml:space="preserve">
-    <value>Straatnaam mag niet langer zijn dan  {0} karakters.</value>
-  </data>
-  <data name="StreetNameRequired" xml:space="preserve">
-    <value>Straatnaam is verplicht.</value>
+  <data name="UserNameRequired" xml:space="preserve">
+    <value>Gebruikersnaam is verplicht.</value>
   </data>
 </root>

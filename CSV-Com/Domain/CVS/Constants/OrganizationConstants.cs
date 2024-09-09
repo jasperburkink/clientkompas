@@ -1,12 +1,12 @@
-﻿namespace Domain.Authentication.Constants
+﻿namespace Domain.CVS.Constants
 {
     public static class OrganizationConstants
     {
         public const int OrganizationNameMaxLength = 80;
-        public const int StreetNameMaxLength = AddressConstants.StreetNameMaxLength;
-        public const int HouseNumberMaxLength = AddressConstants.HouseNumberMaxLength;
+        public const int StreetNameMaxLength = AddressConstants.StreetnameMaxLength;
+        public const int HouseNumberMaxValue = AddressConstants.HouseNumberMaxValue;
         public const int HouseNumberAdditionMaxLength = AddressConstants.HouseNumberAdditionMaxLength;
-        public const int PostalCodeMaxLength = AddressConstants.PostalCodeMaxLength;
+        public const int PostalCodeMaxLength = AddressConstants.PostalcodeMaxLength;
         public const int ResidenceMaxLength = AddressConstants.ResidenceMaxLength;
         public const int PhoneNumberMaxLength = 15;
         public const int ContactPersonNameMaxLength = 250;

@@ -2,6 +2,7 @@
 using Application.Common.Interfaces.Authentication;
 using Infrastructure.Data.Authentication;
 using Infrastructure.Data.CVS;
+using Infrastructure.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -27,6 +28,8 @@ namespace Application.FunctionalTests
                 services
                     .RemoveAll<IUser>()
                     .AddTransient(provider => Mock.Of<IUser>(s => s.UserId == Testing.GetUserId()));
+
+                services.AddTransient<IIdentityService, IdentityService>();
 
                 // CVS
                 services

@@ -64,6 +64,16 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>AddressValidationRules.resx</DependentUpon>
     </Compile>
+    <Compile Update="Common\Rules\Resources\AuthenticationValidationRules.nl.Designer.cs">
+      <DependentUpon>AuthenticationValidationRules.nl.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Common\Rules\Resources\AuthenticationValidationRules.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AuthenticationValidationRules.resx</DependentUpon>
+    </Compile>
     <Compile Update="Common\Rules\Resources\BenefitFormValidationRules.Designer.cs">
       <DependentUpon>BenefitFormValidationRules.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -127,6 +137,14 @@
     <EmbeddedResource Update="Common\Rules\Resources\AddressValidationRules.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>AddressValidationRules.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Rules\Resources\AuthenticationValidationRules.nl.resx">
+      <LastGenOutput>AuthenticationValidationRules.nl.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Rules\Resources\AuthenticationValidationRules.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AuthenticationValidationRules.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Common\Rules\Resources\BenefitFormValidationRules.resx">
       <LastGenOutput>BenefitFormValidationRules.Designer.cs</LastGenOutput>

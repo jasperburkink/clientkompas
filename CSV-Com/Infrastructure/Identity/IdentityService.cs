@@ -10,15 +10,18 @@ namespace Infrastructure.Identity
     public class IdentityService : IIdentityService
     {
         private readonly UserManager<AuthenticationUser> _userManager;
+        private readonly SignInManager<AuthenticationUser> _signInManager;
         private readonly IUserClaimsPrincipalFactory<AuthenticationUser> _userClaimsPrincipalFactory;
         private readonly IAuthorizationService _authorizationService;
 
         public IdentityService(
             UserManager<AuthenticationUser> userManager,
+            SignInManager<AuthenticationUser> signInManager,
             IUserClaimsPrincipalFactory<AuthenticationUser> userClaimsPrincipalFactory,
             IAuthorizationService authorizationService)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
             _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
             _authorizationService = authorizationService;
         }
@@ -78,6 +81,19 @@ namespace Infrastructure.Identity
             var result = await _userManager.DeleteAsync(user);
 
             return result.ToApplicationResult();
+        }
+
+        public async Task<bool> LoginAsync(string userName, string password)
+        {
+            // TODO: Look at cookie and lockedout parameter
+            var result = await _signInManager.PasswordSignInAsync(userName, password, true, false);
+
+            return result.Succeeded;
+        }
+
+        public async Task LogoutAsync()
+        {
+            await _signInManager.SignOutAsync();
         }
     }
 }
