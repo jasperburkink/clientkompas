@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Domain.Authentication.Constants;
+using Domain.Authentication.Domain;
 using Infrastructure.Data.Authentication;
 using Infrastructure.Data.CVS;
 using Infrastructure.Identity;
@@ -20,7 +21,7 @@ namespace Application.FunctionalTests
         private static ITestDatabase s_databaseAuthentication;
         private static CustomWebApplicationFactory s_factory = null!;
         private static IServiceScopeFactory s_scopeFactory = null!;
-        private static string? s_userId;
+        private static string? s_currentUserId;
         private static readonly string? s_databasePrefix = GenerateRandomPrefix();
 
         [OneTimeSetUp]
@@ -70,9 +71,9 @@ namespace Application.FunctionalTests
             await mediator.Send(request);
         }
 
-        public static string? GetUserId()
+        public static string? GetCurrentUserId()
         {
-            return s_userId;
+            return s_currentUserId;
         }
 
         public static async Task<string> RunAsDefaultUserAsync()
@@ -89,9 +90,9 @@ namespace Application.FunctionalTests
         {
             using var scope = s_scopeFactory.CreateScope();
 
-            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AuthenticationUser>>();
 
-            var user = new ApplicationUser { UserName = userName, Email = userName };
+            var user = new AuthenticationUser { UserName = userName, Email = userName };
 
             var result = await userManager.CreateAsync(user, password);
 
@@ -109,9 +110,9 @@ namespace Application.FunctionalTests
 
             if (result.Succeeded)
             {
-                s_userId = user.Id;
+                s_currentUserId = user.Id;
 
-                return s_userId;
+                return s_currentUserId;
             }
 
             var errors = string.Join(Environment.NewLine, result.ToApplicationResult().Errors);
@@ -129,7 +130,7 @@ namespace Application.FunctionalTests
             {
             }
 
-            s_userId = null;
+            s_currentUserId = null;
         }
 
         public static async Task<TEntity?> FindAsync<TEntity>(params object[] keyValues)

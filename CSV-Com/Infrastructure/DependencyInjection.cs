@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Interfaces.CVS;
+using Domain.Authentication.Domain;
 using Infrastructure.Data.Authentication;
 using Infrastructure.Data.CVS;
 using Infrastructure.Data.Interceptor;
@@ -75,14 +76,14 @@ namespace Infrastructure
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services
-                .AddDefaultIdentity<ApplicationUser>()
+                .AddDefaultIdentity<AuthenticationUser>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<AuthenticationDbContext>();
 
             //services.AddIdentityServer()
             //    .AddApiAuthorization<ApplicationUser, AuthenticationDbContext>();
 
-            services.AddTransient<IDateTime, DateTimeService>();
+            services.AddTransient<IDateTime, DateTimeWrapper>();
             services.AddTransient<IIdentityService, IdentityService>();
 
             //services.AddAuthentication()

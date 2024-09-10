@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces.Authentication;
 using Application.Common.Models;
+using Domain.Authentication.Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -8,13 +9,13 @@ namespace Infrastructure.Identity
 {
     public class IdentityService : IIdentityService
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
+        private readonly UserManager<AuthenticationUser> _userManager;
+        private readonly IUserClaimsPrincipalFactory<AuthenticationUser> _userClaimsPrincipalFactory;
         private readonly IAuthorizationService _authorizationService;
 
         public IdentityService(
-            UserManager<ApplicationUser> userManager,
-            IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory,
+            UserManager<AuthenticationUser> userManager,
+            IUserClaimsPrincipalFactory<AuthenticationUser> userClaimsPrincipalFactory,
             IAuthorizationService authorizationService)
         {
             _userManager = userManager;
@@ -31,7 +32,7 @@ namespace Infrastructure.Identity
 
         public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password)
         {
-            var user = new ApplicationUser
+            var user = new AuthenticationUser
             {
                 UserName = userName,
                 Email = userName,
@@ -72,7 +73,7 @@ namespace Infrastructure.Identity
             return user != null ? await DeleteUserAsync(user) : Result.Success();
         }
 
-        public async Task<Result> DeleteUserAsync(ApplicationUser user)
+        public async Task<Result> DeleteUserAsync(AuthenticationUser user)
         {
             var result = await _userManager.DeleteAsync(user);
 

@@ -37,7 +37,7 @@ namespace Application.Common.Behaviours
             if (elapsedMilliseconds > 500)
             {
                 var requestName = typeof(TRequest).Name;
-                var userId = _currentUserService.UserId ?? string.Empty;
+                var userId = _currentUserService.CurrentUserId ?? string.Empty;
                 var userName = string.Empty;
 
                 if (!string.IsNullOrEmpty(userId))

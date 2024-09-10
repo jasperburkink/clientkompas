@@ -1,4 +1,5 @@
-﻿using Infrastructure.Identity;
+﻿using Domain.Authentication.Constants;
+using Domain.Authentication.Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -9,10 +10,10 @@ namespace Infrastructure.Data.Authentication
     {
         private readonly ILogger<AuthenticationDbContextInitialiser> _logger;
         private readonly AuthenticationDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<AuthenticationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AuthenticationDbContextInitialiser(ILogger<AuthenticationDbContextInitialiser> logger, AuthenticationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public AuthenticationDbContextInitialiser(ILogger<AuthenticationDbContextInitialiser> logger, AuthenticationDbContext context, UserManager<AuthenticationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _logger = logger;
             _context = context;
@@ -51,25 +52,36 @@ namespace Infrastructure.Data.Authentication
 
         public async Task TrySeedAsync()
         {
-            // TODO: Determine the Default role and users
-
             // Default roles
-            var administratorRole = new IdentityRole("Administrator");
+            var administratorRole = new IdentityRole(nameof(Roles.Administrator));
+            await CreateRoleAndUser(administratorRole);
 
-            if (_roleManager.Roles.All(r => r.Name != administratorRole.Name))
+            var licenseeRole = new IdentityRole(nameof(Roles.Licensee));
+            await CreateRoleAndUser(licenseeRole);
+
+            var systemOwnerRole = new IdentityRole(nameof(Roles.SystemOwner));
+            await CreateRoleAndUser(systemOwnerRole);
+
+            var systemCoach = new IdentityRole(nameof(Roles.Coach));
+            await CreateRoleAndUser(systemCoach);
+        }
+
+        private async Task CreateRoleAndUser(IdentityRole role)
+        {
+            if (_roleManager.Roles.All(r => r.Name != role.Name))
             {
-                await _roleManager.CreateAsync(administratorRole);
+                await _roleManager.CreateAsync(role);
             }
 
             // Default users
-            var administrator = new ApplicationUser { UserName = "administrator@localhost", Email = "administrator@localhost" };
+            var user = new AuthenticationUser { UserName = $"{role.Name}@localhost", Email = $"{role.Name}@localhost" };
 
-            if (_userManager.Users.All(u => u.UserName != administrator.UserName))
+            if (_userManager.Users.All(u => u.UserName != user.UserName))
             {
-                await _userManager.CreateAsync(administrator, "Administrator1!");
-                if (!string.IsNullOrWhiteSpace(administratorRole.Name))
+                await _userManager.CreateAsync(user, $"{role.Name}1!");
+                if (!string.IsNullOrWhiteSpace(role.Name))
                 {
-                    await _userManager.AddToRolesAsync(administrator, new[] { administratorRole.Name });
+                    await _userManager.AddToRolesAsync(user, new[] { role.Name });
                 }
             }
         }
