@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Interfaces.CVS;
+using Domain.Authentication.Constants;
 using Domain.Authentication.Domain;
 using Infrastructure.Data.Authentication;
 using Infrastructure.Data.CVS;
@@ -80,17 +81,11 @@ namespace Infrastructure
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<AuthenticationDbContext>();
 
-            //services.AddIdentityServer()
-            //    .AddApiAuthorization<ApplicationUser, AuthenticationDbContext>();
-
             services.AddTransient<IDateTime, DateTimeService>();
             services.AddTransient<IIdentityService, IdentityService>();
 
-            //services.AddAuthentication()
-            //    .AddIdentityServerJwt();
-
             services.AddAuthorization(options =>
-                    options.AddPolicy("CanPurge", policy => policy.RequireRole("Administrator")));
+                    options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator)));
 
             return services;
         }
