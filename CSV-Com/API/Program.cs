@@ -1,8 +1,8 @@
-﻿using System.Text.Json.Serialization;
-using API.Policies;
+﻿using API;
 using Application;
 using Infrastructure;
-using Infrastructure.Persistence.CVS;
+using Infrastructure.Data.Authentication;
+using Infrastructure.Data.CVS;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,35 +13,9 @@ builder.Configuration.SetBasePath(builder.Environment.ContentRootPath)
         .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: false, reloadOnChange: true)
         .AddEnvironmentVariables();
 
+builder.Services.AddApiServices();
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
-
-// Makes sure that you don't have to add foreignkey objects in de JSON
-builder.Services.AddControllers(options =>
-    options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true
-    ).AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-        options.JsonSerializerOptions.WriteIndented = true;
-        options.JsonSerializerOptions.PropertyNamingPolicy = new LowerCaseNamingPolicy();
-        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-    });
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: "CvsCustomCorsPolicy",
-                      policy =>
-                      {
-                          policy.WithOrigins("http://localhost:3000")
-                          .AllowAnyHeader()
-                          .AllowAnyMethod()
-                          .AllowCredentials();
-                      });
-});
 
 var app = builder.Build();
 
@@ -52,10 +26,10 @@ if (app.Environment.IsDevelopment() || true) // <- TODO: for now we want this sc
 
     // Initialise and seed database
     using var scope = app.Services.CreateScope();
-    // TODO: Uncomment for authentication
-    //var initialiserAuthentication = scope.ServiceProvider.GetRequiredService<AuthenticationDbContextInitialiser>();
-    //await initialiserAuthentication.InitialiseAsync();
-    //await initialiserAuthentication.SeedAsync();
+
+    var initialiserAuthentication = scope.ServiceProvider.GetRequiredService<AuthenticationDbContextInitialiser>();
+    await initialiserAuthentication.InitialiseAsync();
+    await initialiserAuthentication.SeedAsync();
 
     var initialiserCVS = scope.ServiceProvider.GetRequiredService<CVSDbContextInitialiser>();
     await initialiserCVS.InitialiseAsync();

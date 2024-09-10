@@ -2,20 +2,19 @@
 using Application.Common.Exceptions;
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Security;
-using MediatR;
 
 namespace Application.Common.Behaviours
 {
     public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
     {
-        private readonly ICurrentUserService _currentUserService;
+        private readonly IUser _user;
         private readonly IIdentityService _identityService;
 
         public AuthorizationBehaviour(
-            ICurrentUserService currentUserService,
+            IUser user,
             IIdentityService identityService)
         {
-            _currentUserService = currentUserService;
+            _user = user;
             _identityService = identityService;
         }
 
@@ -26,7 +25,7 @@ namespace Application.Common.Behaviours
             if (authorizeAttributes.Any())
             {
                 // Must be authenticated user
-                if (_currentUserService.UserId == null)
+                if (_user.UserId == null)
                 {
                     throw new UnauthorizedAccessException();
                 }
@@ -42,7 +41,7 @@ namespace Application.Common.Behaviours
                     {
                         foreach (var role in roles)
                         {
-                            var isInRole = await _identityService.IsInRoleAsync(_currentUserService.UserId, role.Trim());
+                            var isInRole = await _identityService.IsInRoleAsync(_user.UserId, role.Trim());
                             if (isInRole)
                             {
                                 authorized = true;
@@ -64,7 +63,7 @@ namespace Application.Common.Behaviours
                 {
                     foreach (var policy in authorizeAttributesWithPolicies.Select(a => a.Policy))
                     {
-                        var authorized = await _identityService.AuthorizeAsync(_currentUserService.UserId, policy);
+                        var authorized = await _identityService.AuthorizeAsync(_user.UserId, policy);
 
                         if (!authorized)
                         {

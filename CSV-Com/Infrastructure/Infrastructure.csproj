@@ -8,9 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Persistence\CVS\ValueComparers\**" />
-    <EmbeddedResource Remove="Persistence\CVS\ValueComparers\**" />
-    <None Remove="Persistence\CVS\ValueComparers\**" />
+    <Compile Remove="Data\CVS\ValueComparers\**" />
+    <EmbeddedResource Remove="Data\CVS\ValueComparers\**" />
+    <None Remove="Data\CVS\ValueComparers\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,11 +22,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\TestData\TestData.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Persistence\Authentication\Migrations\" />
-    <Folder Include="Persistence\CVS\Migrations\" />
   </ItemGroup>
 
 </Project>

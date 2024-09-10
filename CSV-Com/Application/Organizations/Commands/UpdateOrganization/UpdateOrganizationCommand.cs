@@ -1,10 +1,8 @@
 ﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces.CVS;
 using Application.Organizations.Dtos;
-using AutoMapper;
 using Domain.CVS.Domain;
 using Domain.CVS.ValueObjects;
-using MediatR;
 
 namespace Application.Organizations.Commands.UpdateOrganization
 {

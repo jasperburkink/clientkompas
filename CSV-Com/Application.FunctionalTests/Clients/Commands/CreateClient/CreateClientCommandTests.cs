@@ -1,5 +1,4 @@
 ﻿using Application.Clients.Commands.CreateClient;
-using Application.Clients.Queries.GetClient;
 using Application.Diagnoses.Queries.GetDiagnosis;
 using Application.DriversLicences.Queries;
 using Application.MaritalStatuses.Queries.GetMaritalStatus;

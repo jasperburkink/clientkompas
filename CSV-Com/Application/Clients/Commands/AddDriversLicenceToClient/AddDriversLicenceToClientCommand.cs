@@ -1,9 +1,6 @@
 ﻿using Application.Clients.Dtos;
-using Application.Common.Exceptions;
 using Application.Common.Interfaces.CVS;
-using AutoMapper;
 using Domain.CVS.Domain;
-using MediatR;
 
 namespace Application.Clients.Commands.AddDriversLicenceToClient
 {

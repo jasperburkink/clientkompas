@@ -1,10 +1,7 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Interfaces.CVS;
-using AutoMapper;
+﻿using Application.Common.Interfaces.CVS;
 using Domain.CVS.Domain;
 using Domain.CVS.Enums;
 using Domain.CVS.Events;
-using MediatR;
 
 namespace Application.CoachingPrograms.Commands.UpdateCoachingProgram
 {

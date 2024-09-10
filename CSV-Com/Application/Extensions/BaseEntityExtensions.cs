@@ -1,5 +1,4 @@
-﻿using Application.Common.Exceptions;
-using Domain.Common;
+﻿using Domain.Common;
 
 
 namespace Application.Extensions
