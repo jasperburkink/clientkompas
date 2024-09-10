@@ -21,7 +21,7 @@ namespace Application.FunctionalTests
         private static ITestDatabase s_databaseAuthentication;
         private static CustomWebApplicationFactory s_factory = null!;
         private static IServiceScopeFactory s_scopeFactory = null!;
-        private static string? s_userId;
+        private static string? s_currentUserId;
         private static readonly string? s_databasePrefix = GenerateRandomPrefix();
 
         [OneTimeSetUp]
@@ -71,9 +71,9 @@ namespace Application.FunctionalTests
             await mediator.Send(request);
         }
 
-        public static string? GetUserId()
+        public static string? GetCurrentUserId()
         {
-            return s_userId;
+            return s_currentUserId;
         }
 
         public static async Task<string> RunAsDefaultUserAsync()
@@ -110,9 +110,9 @@ namespace Application.FunctionalTests
 
             if (result.Succeeded)
             {
-                s_userId = user.Id;
+                s_currentUserId = user.Id;
 
-                return s_userId;
+                return s_currentUserId;
             }
 
             var errors = string.Join(Environment.NewLine, result.ToApplicationResult().Errors);
@@ -130,7 +130,7 @@ namespace Application.FunctionalTests
             {
             }
 
-            s_userId = null;
+            s_currentUserId = null;
         }
 
         public static async Task<TEntity?> FindAsync<TEntity>(params object[] keyValues)

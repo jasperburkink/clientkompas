@@ -83,7 +83,7 @@ namespace Infrastructure
             //services.AddIdentityServer()
             //    .AddApiAuthorization<ApplicationUser, AuthenticationDbContext>();
 
-            services.AddTransient<IDateTime, DateTimeService>();
+            services.AddTransient<IDateTime, DateTimeWrapper>();
             services.AddTransient<IIdentityService, IdentityService>();
 
             //services.AddAuthentication()
