@@ -13,7 +13,9 @@ namespace Application.UnitTests.Authentication.Commands.Login
             var identityServiceMock = new Mock<IIdentityService>();
             identityServiceMock.Setup(mis => mis.LoginAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
 
-            var handler = new LoginCommandHandler(identityServiceMock.Object);
+            var bearerTokenServiceMock = new Mock<IBearerTokenService>();
+
+            var handler = new LoginCommandHandler(identityServiceMock.Object, bearerTokenServiceMock.Object);
 
             var command = new LoginCommand
             {
@@ -35,7 +37,9 @@ namespace Application.UnitTests.Authentication.Commands.Login
             var identityServiceMock = new Mock<IIdentityService>();
             identityServiceMock.Setup(mis => mis.LoginAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(false);
 
-            var handler = new LoginCommandHandler(identityServiceMock.Object);
+            var bearerTokenServiceMock = new Mock<IBearerTokenService>();
+
+            var handler = new LoginCommandHandler(identityServiceMock.Object, bearerTokenServiceMock.Object);
 
             var command = new LoginCommand
             {

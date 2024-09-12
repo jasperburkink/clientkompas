@@ -71,7 +71,6 @@ namespace Infrastructure
                 .LogTo(Console.WriteLine, LogLevel.Information)
                 .EnableSensitiveDataLogging();
             });
-
             services.AddScoped<AuthenticationDbContextInitialiser>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -81,8 +80,10 @@ namespace Infrastructure
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<AuthenticationDbContext>();
 
-            services.AddTransient<IDateTime, DateTimeService>();
-            services.AddTransient<IIdentityService, IdentityService>();
+            services.AddSingleton<IDateTime, DateTimeService>();
+            services.AddScoped<IIdentityService, IdentityService>();
+            services.AddScoped<IBearerTokenService, BearerTokenService>();
+            services.AddScoped<IPasswordHasher<AuthenticationUser>, Argon2PasswordHasher>();
 
             services.AddAuthorization(options =>
                     options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator)));

@@ -92,7 +92,17 @@ namespace Application.FunctionalTests
 
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AuthenticationUser>>();
 
-            var user = new AuthenticationUser { UserName = userName, Email = userName };
+            var hasher = new Argon2Hasher();
+            var salt = hasher.GenerateSalt();
+            var passwordHash = hasher.HashPassword(password, salt);
+
+            var user = new AuthenticationUser
+            {
+                UserName = userName,
+                Email = userName,
+                Salt = salt,
+                PasswordHash = passwordHash
+            };
 
             var result = await userManager.CreateAsync(user, password);
 

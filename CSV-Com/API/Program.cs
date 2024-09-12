@@ -13,9 +13,9 @@ builder.Configuration.SetBasePath(builder.Environment.ContentRootPath)
         .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: false, reloadOnChange: true)
         .AddEnvironmentVariables();
 
-builder.Services.AddApiServices();
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddApiServices();
 
 var app = builder.Build();
 
@@ -43,6 +43,7 @@ app.UseCors("CvsCustomCorsPolicy");
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

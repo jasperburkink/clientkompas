@@ -35,10 +35,16 @@ namespace Infrastructure.Identity
 
         public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password)
         {
+            var hasher = new Argon2Hasher();
+            var salt = hasher.GenerateSalt();
+            var passwordHash = hasher.HashPassword(password, salt);
+
             var user = new AuthenticationUser
             {
                 UserName = userName,
                 Email = userName,
+                PasswordHash = passwordHash,
+                Salt = salt
             };
 
             var result = await _userManager.CreateAsync(user, password);

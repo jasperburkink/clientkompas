@@ -10,12 +10,19 @@ namespace API.Controllers
     {
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<LoginCommandDto>> Create(LoginCommand command)
+        //[ValidateAntiForgeryToken]
+        public async Task<ActionResult<LoginCommandDto>> Login(LoginCommand command)
         {
             try
             {
-                return await Mediator.Send(command);
+                var result = await Mediator.Send(command);
+
+                if (!result.Success || result.BearerToken == null)
+                {
+                    return Unauthorized();
+                }
+
+                return Ok(result);
             }
             catch (FluentValidation.ValidationException ex)
             {
