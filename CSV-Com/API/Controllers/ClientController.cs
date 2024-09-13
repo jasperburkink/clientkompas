@@ -20,14 +20,12 @@ namespace API.Controllers
     [Authorize]
     public class ClientController : ApiControllerBase
     {
-        [Authorize]
         [HttpGet]
         public async Task<IEnumerable<GetClientDto>> Get([FromQuery] GetClientsQuery query)
         {
             return await Mediator.Send(query);
         }
 
-        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<GetClientDto>> Get(int id)
         {
@@ -42,7 +40,6 @@ namespace API.Controllers
             }
         }
 
-        [Authorize]
         [HttpGet("GetClientEditor/{id}")]
         public async Task<ActionResult<GetClientEditDto>> GetClientEditor(int id)
         {
@@ -57,7 +54,6 @@ namespace API.Controllers
             }
         }
 
-        [Authorize]
         [HttpPost]
         public async Task<ActionResult<ClientDto>> Create(CreateClientCommand command)
         {
@@ -75,7 +71,6 @@ namespace API.Controllers
             }
         }
 
-        [Authorize]
         [Route("[action]")]
         [HttpPost]
         public async Task<ActionResult<ClientDto>> AddDriversLicence(AddDriversLicenceToClientCommand command)
@@ -83,7 +78,6 @@ namespace API.Controllers
             return await Mediator.Send(command);
         }
 
-        [Authorize]
         [HttpPut]
         public async Task<ActionResult<ClientDto>> Updateclient(UpdateClientCommand command)
         {
@@ -106,7 +100,6 @@ namespace API.Controllers
             }
         }
 
-        [Authorize]
         [HttpPut("DeactivateClient")]
         public async Task<IActionResult> DeactivateClient(DeactivateClientCommand command)
         {
@@ -129,7 +122,6 @@ namespace API.Controllers
             }
         }
 
-        [Authorize]
         //TODO: implement with new Mediator structure
         [HttpDelete("{id}")]
         public void Delete(int id)
@@ -137,7 +129,6 @@ namespace API.Controllers
             throw new NotImplementedException();
         }
 
-        [Authorize]
         [Route("[action]")]
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -150,7 +141,6 @@ namespace API.Controllers
             return NoContent();
         }
 
-        [Authorize]
         [HttpGet("[action]")]
         public async Task<ActionResult<IEnumerable<SearchClientDto>>> SearchClients([FromQuery] SearchClientsQuery query)
         {

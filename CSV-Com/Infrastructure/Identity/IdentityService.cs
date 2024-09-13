@@ -89,12 +89,23 @@ namespace Infrastructure.Identity
             return result.ToApplicationResult();
         }
 
-        public async Task<bool> LoginAsync(string userName, string password)
+        public async Task<LoggedInResult> LoginAsync(string userName, string password)
         {
             // TODO: Look at cookie and lockedout parameter
             var result = await _signInManager.PasswordSignInAsync(userName, password, true, false);
+            if (!result.Succeeded)
+            {
+                return new LoggedInResult(result.Succeeded);
+            }
 
-            return result.Succeeded;
+            var user = await _userManager.FindByNameAsync(userName);
+            if (user == null)
+            {
+                return new LoggedInResult(result.Succeeded);
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+            return new LoggedInResult(result.Succeeded, user, roles);
         }
 
         public async Task LogoutAsync()

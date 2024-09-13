@@ -83,8 +83,8 @@ namespace Infrastructure.Data.Authentication
 
             var user = new AuthenticationUser
             {
-                UserName = $"{role.Name}@localhost",
-                Email = $"{role.Name}@localhost",
+                UserName = role.Name,
+                Email = role.Name,
                 Salt = salt,
                 PasswordHash = passwordHash
             };

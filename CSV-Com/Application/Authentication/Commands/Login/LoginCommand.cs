@@ -22,13 +22,21 @@ namespace Application.Authentication.Commands.Login
 
         public async Task<LoginCommandDto> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
-            var isUserLoggedIn = await _identityService.LoginAsync(request.UserName, request.Password);
+            var loggedInUser = await _identityService.LoginAsync(request.UserName, request.Password);
 
-            var bearerToken = await _bearerTokenService.GenerateBearerTokenAsync();
+            if (!loggedInUser.Succeeded || loggedInUser.User == null || loggedInUser.Roles == null)
+            {
+                return new LoginCommandDto
+                {
+                    Success = false
+                };
+            }
+
+            var bearerToken = await _bearerTokenService.GenerateBearerTokenAsync(loggedInUser.User, loggedInUser.Roles); // UserInfo & roles are processed inside the bearertoken
 
             return new LoginCommandDto
             {
-                Success = isUserLoggedIn,
+                Success = true,
                 BearerToken = bearerToken
             };
         }

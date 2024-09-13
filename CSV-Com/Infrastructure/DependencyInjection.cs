@@ -50,7 +50,6 @@ namespace Infrastructure
                             .LogTo(Console.WriteLine, LogLevel.Information)
                             .EnableSensitiveDataLogging();
             });
-            //services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
             services.AddScoped<CVSDbContextInitialiser>();
 
             // Authentication

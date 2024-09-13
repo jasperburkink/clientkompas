@@ -10,7 +10,6 @@ namespace API.Controllers
     {
         [HttpPost]
         [AllowAnonymous]
-        //[ValidateAntiForgeryToken]
         public async Task<ActionResult<LoginCommandDto>> Login(LoginCommand command)
         {
             try

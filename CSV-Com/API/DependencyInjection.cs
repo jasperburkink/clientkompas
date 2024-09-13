@@ -1,17 +1,23 @@
-﻿using System.Text;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using API.Policies;
 using API.Services;
 using Application.Common.Interfaces.Authentication;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace API
 {
     public static class DependencyInjection
     {
+        private const string SCHEME_NAME = "Bearer";
+        private const string BEARER_FORMAT = "JWT";
+        private const string API_VERSION = "v1";
+        private const string API_TITLE = "CVS API";
+        private const string CORS_POLICY_NAME = "CvsCustomCorsPolicy";
+        private const string SECURITY_SCHEME_NAME = "Authorization";
+        private const string SECURITY_SCHEME_DESCRIPTION = "Please enter a valid token";
+
         public static IServiceCollection AddApiServices(this IServiceCollection services)
         {
             services.AddScoped<IUser, CurrentUser>();
@@ -31,16 +37,16 @@ namespace API
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo API", Version = "v1" });
-                options.AddSecurityDefinition("Bearer",
+                options.SwaggerDoc(API_VERSION, new OpenApiInfo { Title = API_TITLE, Version = API_VERSION });
+                options.AddSecurityDefinition(SCHEME_NAME,
                 new OpenApiSecurityScheme
                 {
                     In = ParameterLocation.Header,
-                    Description = "Please enter a valid token",
-                    Name = "Authorization",
+                    Description = SECURITY_SCHEME_DESCRIPTION,
+                    Name = SECURITY_SCHEME_NAME,
                     Type = SecuritySchemeType.Http,
-                    BearerFormat = "JWT",
-                    Scheme = "Bearer"
+                    BearerFormat = BEARER_FORMAT,
+                    Scheme = SCHEME_NAME
                 });
                 options.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
@@ -50,7 +56,7 @@ namespace API
                             Reference = new OpenApiReference
                             {
                                 Type=ReferenceType.SecurityScheme,
-                                Id="Bearer"
+                                Id=SCHEME_NAME
                             }
                         },
                         new string[]{}
@@ -66,21 +72,12 @@ namespace API
             })
             .AddJwtBearer(options =>
             {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = "ABCXYZ", // Zorg ervoor dat deze overeenkomt met je token configuratie
-                    ValidAudience = "http://localhost:51398", // Controleer de audience waarde
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(BearerTokenService.SECRET_KEY))
-                };
+                options.TokenValidationParameters = BearerTokenService.GetTokenValidationParameters();
             });
 
             services.AddCors(options =>
             {
-                options.AddPolicy(name: "CvsCustomCorsPolicy",
+                options.AddPolicy(name: CORS_POLICY_NAME,
                                   policy =>
                                   {
                                       policy.WithOrigins("http://localhost:3000")

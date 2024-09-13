@@ -14,7 +14,7 @@ namespace Application.Common.Interfaces.Authentication
 
         Task<Result> DeleteUserAsync(string userId);
 
-        Task<bool> LoginAsync(string userName, string password);
+        Task<LoggedInResult> LoginAsync(string userName, string password);
 
         Task LogoutAsync();
     }
