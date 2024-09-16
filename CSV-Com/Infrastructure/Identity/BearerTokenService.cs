@@ -11,10 +11,13 @@ namespace Infrastructure.Identity
     public class BearerTokenService : IBearerTokenService
     {
         public const string SECRET_KEY = "thisisasecretkey@123"; // TODO: Secret to KeyVault
-        private const string CLAIM_NAME_CVSUSERID = "CVSUserId";
+        public const string CLAIM_NAME_CVSUSERID = "CVSUserId";
 
         public Task<string> GenerateBearerTokenAsync(AuthenticationUser user, IList<string> roles)
         {
+            ArgumentNullException.ThrowIfNull(user);
+            ArgumentNullException.ThrowIfNull(roles);
+
             try
             {
                 return Task.Run(() =>
