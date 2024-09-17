@@ -83,6 +83,7 @@ namespace Infrastructure
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IBearerTokenService, BearerTokenService>();
             services.AddScoped<IPasswordHasher<AuthenticationUser>, Argon2PasswordHasher>();
+            services.AddScoped<IHasher, Argon2Hasher>();
 
             services.AddAuthorization(options =>
                     options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator)));

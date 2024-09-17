@@ -1,6 +1,5 @@
 ﻿using Application.Common.Interfaces.Authentication;
 using Domain.Authentication.Domain;
-using Infrastructure.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 
@@ -16,7 +15,7 @@ namespace Infrastructure.FunctionalTests.Identity
 
         public IdentityServiceTests()
         {
-            _identityService = new IdentityService(_userManager, _signInManager, _userClaimsPrincipalFactory, _authorizationService);
+            //_identityService = new IdentityService(_userManager, _signInManager, _userClaimsPrincipalFactory, _authorizationService);
         }
 
         //[Fact]

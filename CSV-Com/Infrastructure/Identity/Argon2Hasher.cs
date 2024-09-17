@@ -1,10 +1,11 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+using Application.Common.Interfaces.Authentication;
 using Konscious.Security.Cryptography;
 
 namespace Infrastructure.Identity
 {
-    public class Argon2Hasher
+    public class Argon2Hasher : IHasher
     {
         private const int NUM_OF_THREADS = 8;
         private const int NUM_OF_ITERATIONS = 4;
