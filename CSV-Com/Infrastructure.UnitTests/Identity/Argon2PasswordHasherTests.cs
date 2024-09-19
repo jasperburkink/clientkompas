@@ -1,4 +1,5 @@
 ﻿using Domain.Authentication.Domain;
+using FluentAssertions;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 
@@ -24,12 +25,11 @@ namespace Infrastructure.UnitTests.Identity
             var hashedPassword = _passwordHasher.HashPassword(user, password);
 
             // Assert
-            Assert.NotNull(hashedPassword);
-            Assert.NotEmpty(hashedPassword);
+            hashedPassword.Should().NotBeNull().And.NotBeEmpty();
         }
 
         [Fact]
-        public void VerifyHashedPassword_ShouldReturnSuccess_ForCorrectPassword()
+        public void VerifyHashedPassword_CorrectPassword_ShouldReturnSuccess()
         {
             // Arrange
             var user = new AuthenticationUser
@@ -43,11 +43,11 @@ namespace Infrastructure.UnitTests.Identity
             var result = _passwordHasher.VerifyHashedPassword(user, hashedPassword, password);
 
             // Assert
-            Assert.Equal(PasswordVerificationResult.Success, result);
+            result.Should().Be(PasswordVerificationResult.Success);
         }
 
         [Fact]
-        public void VerifyHashedPassword_ShouldReturnFailed_ForIncorrectPassword()
+        public void VerifyHashedPassword_IncorrectPassword_ShouldReturnFailed()
         {
             // Arrange
             var user = new AuthenticationUser
@@ -63,11 +63,11 @@ namespace Infrastructure.UnitTests.Identity
             var result = _passwordHasher.VerifyHashedPassword(user, hashedPassword, incorrectPassword);
 
             // Assert
-            Assert.Equal(PasswordVerificationResult.Failed, result);
+            result.Should().Be(PasswordVerificationResult.Failed);
         }
 
         [Fact]
-        public void VerifyHashedPassword_ShouldReturnFailed_WhenUserSaltIsNull()
+        public void VerifyHashedPassword_UserSaltIsNull_ShouldCreateUserSalt()
         {
             // Arrange
             var user = new AuthenticationUser
@@ -81,7 +81,8 @@ namespace Infrastructure.UnitTests.Identity
             var result = _passwordHasher.VerifyHashedPassword(user, hashedPassword, password);
 
             // Assert
-            Assert.Equal(PasswordVerificationResult.Failed, result);
+            user.Salt.Should().NotBeEmpty();
+            result.Should().Be(PasswordVerificationResult.Success);
         }
     }
 }

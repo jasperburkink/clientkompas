@@ -8,7 +8,8 @@ namespace Infrastructure.Identity
         public string HashPassword(AuthenticationUser user, string password)
         {
             var hasher = new Argon2Hasher();
-            var salt = hasher.GenerateSalt(); // Unique salt per user
+            var salt = user.Salt ?? hasher.GenerateSalt(); // Unique salt per user
+            user.Salt = salt;
             return hasher.HashPassword(password, salt);
         }
 
