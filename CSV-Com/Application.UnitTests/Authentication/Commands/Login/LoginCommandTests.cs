@@ -18,7 +18,7 @@ namespace Application.UnitTests.Authentication.Commands.Login
             {
                 Salt = []
             };
-            var loggedInUser = new LoggedInResult(isUserLoggedIn, user, new List<string>());
+            var loggedInUser = new LoggedInResult(isUserLoggedIn, user, []);
 
             identityServiceMock.Setup(mis => mis.LoginAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(loggedInUser);
 
