@@ -16,7 +16,7 @@ namespace Application.UnitTests.Authentication.Commands.Login
             var isUserLoggedIn = true;
             var user = new AuthenticationUser()
             {
-                Salt = new byte[0]
+                Salt = []
             };
             var loggedInUser = new LoggedInResult(isUserLoggedIn, user, new List<string>());
 
@@ -76,7 +76,7 @@ namespace Application.UnitTests.Authentication.Commands.Login
             var isUserLoggedIn = true;
             var user = new AuthenticationUser()
             {
-                Salt = new byte[0]
+                Salt = []
             };
             var loggedInUser = new LoggedInResult(isUserLoggedIn, user, new List<string>());
 
