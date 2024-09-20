@@ -9,7 +9,6 @@ using Application.Clients.Queries.GetClientEdit;
 using Application.Clients.Queries.GetClients;
 using Application.Clients.Queries.SearchClients;
 using Application.Common.Exceptions;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -17,7 +16,7 @@ namespace API.Controllers
     // [EnableCors(origins: "localhost:3000", headers: "*", methods: "*")]
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class ClientController : ApiControllerBase
     {
         [HttpGet]

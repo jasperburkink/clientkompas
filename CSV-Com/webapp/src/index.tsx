@@ -8,6 +8,7 @@ import preval from 'preval.macro'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ClientContextWrapper, ClientRoute } from './pages/client-context';
 import { OrganizationContextWrapper, OrganizationRoute } from 'pages/organization-context';
+import Login from 'pages/login';
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 root.render(
@@ -16,6 +17,7 @@ root.render(
             <BrowserRouter>
                 <Routes>
                     <Route path='/' element={<App />} />
+                    <Route path='/login' element={<Login />} />
                     <Route  path='/clients' element={<ClientContextWrapper clientRoute={ClientRoute.VIEW_CLIENT} />} />
                     <Route path='/clients/:id' element={<ClientContextWrapper clientRoute={ClientRoute.VIEW_CLIENT} />} />
                     <Route path='/clients/edit' element={<ClientContextWrapper clientRoute={ClientRoute.EDIT_CLIENT} />} />
