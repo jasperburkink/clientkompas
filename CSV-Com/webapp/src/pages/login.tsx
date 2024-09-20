@@ -132,7 +132,7 @@ const Login = () => {
                             value={loginCommand.username}                            
                             onChange={(value) => handleLoginCommandInputChange('username', value)}
                             errors={validationErrors.username} 
-                            dataTestId='login-username' />
+                            dataTestId='username' />
 
                         <PasswordField 
                             inputfieldname='password' 
@@ -141,7 +141,7 @@ const Login = () => {
                             value={loginCommand.password}
                             onChange={(value) => handleLoginCommandInputChange('password', value)}
                             errors={validationErrors.password}
-                            dataTestId='login-password' />
+                            dataTestId='password' />
 
                         <LinkButton 
                             buttonType={{type:"Underline"}} 
@@ -169,7 +169,7 @@ const Login = () => {
                                 setCvsError, 
                                 setErrorPopupOpen, 
                                 setBearerToken)}
-                            dataTestId='login-button'
+                            dataTestId='button.login'
                         />
                     </div>
                 </div>

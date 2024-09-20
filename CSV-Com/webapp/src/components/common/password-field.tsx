@@ -39,7 +39,8 @@ const PasswordField = (props: IPasswordFieldProps) => {
                     placeholder={props.placeholder} 
                     name={props.inputfieldname} 
                     value={props.value} 
-                    onChange={(e) => {props.onChange?.(e.target.value);}} />
+                    onChange={(e) => {props.onChange?.(e.target.value);}}
+                    data-testid={props.dataTestId} />
                 <button type="button" onClick={visibility} className='visibilitybtn'>{icon}</button>                        
             </div>
             <ErrorMessage errors={props.errors} />
