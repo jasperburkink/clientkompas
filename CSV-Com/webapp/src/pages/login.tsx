@@ -131,7 +131,8 @@ const Login = () => {
                             className="login-username" 
                             value={loginCommand.username}                            
                             onChange={(value) => handleLoginCommandInputChange('username', value)}
-                            errors={validationErrors.username} />
+                            errors={validationErrors.username} 
+                            dataTestId='login-username' />
 
                         <PasswordField 
                             inputfieldname='password' 
@@ -139,9 +140,15 @@ const Login = () => {
                             className="login-password" 
                             value={loginCommand.password}
                             onChange={(value) => handleLoginCommandInputChange('password', value)}
-                            errors={validationErrors.password} />
+                            errors={validationErrors.password}
+                            dataTestId='login-password' />
 
-                        <LinkButton buttonType={{type:"Underline"}} text="Wachtwoord vergeten?" href="../pasword-forgotten" className="login-password-forgotten" />
+                        <LinkButton 
+                            buttonType={{type:"Underline"}} 
+                            text="Wachtwoord vergeten?" 
+                            href="../pasword-forgotten" 
+                            className="login-password-forgotten"
+                            dataTestId='login-password-forgotten' />
 
                         <SaveButton 
                             buttonText="Inloggen" 
@@ -162,6 +169,7 @@ const Login = () => {
                                 setCvsError, 
                                 setErrorPopupOpen, 
                                 setBearerToken)}
+                            dataTestId='login-button'
                         />
                     </div>
                 </div>
