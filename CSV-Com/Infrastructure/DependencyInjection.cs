@@ -86,7 +86,110 @@ namespace Infrastructure
             services.AddScoped<IHasher, Argon2Hasher>();
 
             services.AddAuthorization(options =>
-                    options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator)));
+            {
+                options.AddPolicy(Policies.LicenceManagement, policy =>
+                {
+                    policy.RequireRole(Roles.SystemOwner);
+                });
+
+                options.AddPolicy(Policies.CoachManagement, policy =>
+                {
+                    policy.RequireRole(Roles.SystemOwner);
+                    policy.RequireRole(Roles.Licensee);
+                    policy.RequireRole(Roles.Administrator);
+                });
+
+                options.AddPolicy(Policies.ClientManagement, policy =>
+                {
+                    policy.RequireRole(Roles.SystemOwner);
+                    policy.RequireRole(Roles.Licensee);
+                    policy.RequireRole(Roles.Administrator);
+                    policy.RequireRole(Roles.Coach);
+                });
+
+                options.AddPolicy(Policies.OrganizationManagement, policy =>
+                {
+                    policy.RequireRole(Roles.SystemOwner);
+                    policy.RequireRole(Roles.Licensee);
+                    policy.RequireRole(Roles.Administrator);
+                    policy.RequireRole(Roles.Coach);
+                });
+
+                options.AddPolicy(Policies.DriversLicenceManagement, policy =>
+                {
+                    policy.RequireRole(Roles.SystemOwner);
+                    policy.RequireRole(Roles.Licensee);
+                    policy.RequireRole(Roles.Administrator);
+                });
+
+                options.AddPolicy(Policies.MaritalStatusManagement, policy =>
+                {
+                    policy.RequireRole(Roles.SystemOwner);
+                    policy.RequireRole(Roles.Licensee);
+                    policy.RequireRole(Roles.Administrator);
+                });
+
+                options.AddPolicy(Policies.DiagnosisManagement, policy =>
+                {
+                    policy.RequireRole(Roles.SystemOwner);
+                    policy.RequireRole(Roles.Licensee);
+                    policy.RequireRole(Roles.Administrator);
+                });
+
+                options.AddPolicy(Policies.BenefitFormManagement, policy =>
+                {
+                    policy.RequireRole(Roles.SystemOwner);
+                    policy.RequireRole(Roles.Licensee);
+                    policy.RequireRole(Roles.Administrator);
+                });
+
+                options.AddPolicy(Policies.TimeRegistrationManagement, policy =>
+                {
+                    policy.RequireRole(Roles.SystemOwner);
+                    policy.RequireRole(Roles.Licensee);
+                    policy.RequireRole(Roles.Administrator);
+                    policy.RequireRole(Roles.Coach);
+                });
+
+
+                options.AddPolicy(Policies.CoachingProgramManagement, policy =>
+                {
+                    policy.RequireRole(Roles.SystemOwner);
+                    policy.RequireRole(Roles.Licensee);
+                    policy.RequireRole(Roles.Administrator);
+                    policy.RequireRole(Roles.Coach);
+                });
+
+
+                options.AddPolicy(Policies.AssignAdministrator, policy =>
+                {
+                    policy.RequireRole(Roles.SystemOwner);
+                    policy.RequireRole(Roles.Licensee);
+                });
+
+                options.AddPolicy(Policies.AnonymizeCoach, policy =>
+                {
+                    policy.RequireRole(Roles.SystemOwner);
+                    policy.RequireRole(Roles.Licensee);
+                    policy.RequireRole(Roles.Administrator);
+                });
+
+                options.AddPolicy(Policies.EditCoach, policy =>
+                {
+                    policy.RequireRole(Roles.SystemOwner);
+                    policy.RequireRole(Roles.Licensee);
+                    policy.RequireRole(Roles.Administrator);
+                    policy.RequireRole(Roles.Coach);
+                });
+
+                options.AddPolicy(Policies.GenerateRaport, policy =>
+                {
+                    policy.RequireRole(Roles.SystemOwner);
+                    policy.RequireRole(Roles.Licensee);
+                    policy.RequireRole(Roles.Administrator);
+                    policy.RequireRole(Roles.Coach);
+                });
+            });
 
             return services;
         }

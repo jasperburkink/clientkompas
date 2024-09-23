@@ -1,7 +1,10 @@
 ﻿using Application.Common.Interfaces.CVS;
+using Application.Common.Security;
+using Domain.Authentication.Constants;
 
 namespace Application.Clients.Queries.GetClient
 {
+    [Authorize(Policy = Policies.ClientManagement)]
     public record GetClientQuery : IRequest<GetClientDto>
     {
         public int ClientId { get; init; }
