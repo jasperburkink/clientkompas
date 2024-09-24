@@ -4,7 +4,7 @@ using Domain.Authentication.Constants;
 
 namespace Application.Clients.Commands.DeactivateClient
 {
-    [Authorize(Policy = Policies.ClientManagement)]
+    [Authorize(Policy = Policies.DeactiveClient)]
     public record DeactivateClientCommand : IRequest
     {
         public int Id { get; init; }

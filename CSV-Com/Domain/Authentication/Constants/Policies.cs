@@ -30,6 +30,8 @@
 
         public const string GenerateRaport = nameof(GenerateRaport);
 
+        public const string DeactiveClient = nameof(DeactiveClient);
+
 
     }
 }
