@@ -158,8 +158,6 @@ Date.prototype.toJSON = function(){
 export const saveClient = async (client: Client): Promise<ApiResult<Client>> => {
     let method = client.id > 0  ? 'PUT' : 'POST';
 
-    console.log(JSON.stringify(client));
-
     const requestOptions: RequestInit = {
         method: method,
         headers: {
@@ -203,8 +201,6 @@ export const fetchCoachingProgramsByClient = async (clientId: string): Promise<C
 }
 
 export const fetchCoachingProgram = async (id: number): Promise<CoachingProgram> => {
-let tempco = await fetchAPI<CoachingProgram>(`${apiUrl}CoachingProgram/${id}`);
-
     return await fetchAPI<CoachingProgram>(`${apiUrl}CoachingProgram/${id}`);
 }
 
@@ -218,8 +214,6 @@ export const fetchCoachingProgramTypes = async (): Promise<GetCoachingProgramTyp
 
 export const saveCoachingProgram = async (coachingProgram: CoachingProgramEdit): Promise<ApiResult<CoachingProgramEdit>> => {
     let method = coachingProgram.id > 0  ? 'PUT' : 'POST';
-
-    console.log(JSON.stringify(coachingProgram));
 
     coachingProgram.organizationid = coachingProgram.organizationid && coachingProgram.organizationid > 0 ? coachingProgram.organizationid : undefined;
 
