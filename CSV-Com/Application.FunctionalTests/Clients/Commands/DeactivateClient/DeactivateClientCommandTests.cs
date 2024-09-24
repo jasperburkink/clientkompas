@@ -1,4 +1,5 @@
 ﻿using Application.Clients.Commands.DeactivateClient;
+using Domain.Authentication.Constants;
 using Domain.CVS.Domain;
 using FluentValidation;
 using TestData;
@@ -12,17 +13,17 @@ namespace Application.FunctionalTests.Clients.Commands.DeactivateClient
         private ITestDataGenerator<Client> _testDataGeneratorClient;
 
         [SetUp]
-        public void Initialize()
+        public async Task Initialize()
         {
             _testDataGeneratorClient = new ClientDataGenerator();
+
+            await RunAsAsync(Roles.Administrator);
         }
 
         [Test]
         public async Task Handle_CorrectFlow_ShouldDeactivateClient()
         {
             // Arrange
-            // TODO: Turn on authentication 
-            //await RunAsDefaultUserAsync();
             var client = _testDataGeneratorClient.Create();
 
             await AddAsync(client);
@@ -44,8 +45,6 @@ namespace Application.FunctionalTests.Clients.Commands.DeactivateClient
         public void Validate_IdIs0_ThrowsValidationException()
         {
             // Arrange
-            // TODO: Turn on authentication 
-            //await RunAsDefaultUserAsync();
             var command = new DeactivateClientCommand() { Id = 0 };
 
             // Act & Assert
@@ -59,8 +58,6 @@ namespace Application.FunctionalTests.Clients.Commands.DeactivateClient
         public void Validate_IdIsNegative_ThrowsValidationException()
         {
             // Arrange
-            // TODO: Turn on authentication 
-            //await RunAsDefaultUserAsync();
             var command = new DeactivateClientCommand() { Id = -1000 };
 
             // Act & Assert
@@ -74,8 +71,6 @@ namespace Application.FunctionalTests.Clients.Commands.DeactivateClient
         public async Task Validate_ClientWithIdDoesNotExist_ThrowsValidationException()
         {
             // Arrange
-            // TODO: Turn on authentication 
-            //await RunAsDefaultUserAsync();
             var client = _testDataGeneratorClient.Create();
 
             await AddAsync(client);
@@ -93,8 +88,6 @@ namespace Application.FunctionalTests.Clients.Commands.DeactivateClient
         public async Task Handle_ClientIsAlreadyDeactivated_ThrowsInvalidOperationException()
         {
             // Arrange
-            // TODO: Turn on authentication 
-            //await RunAsDefaultUserAsync();
             var client = _testDataGeneratorClient.Create();
             client.SetPrivate(c => c.DeactivationDateTime, new DateTime(2020, 04, 01));
 

@@ -1,4 +1,5 @@
 ﻿using Application.CoachingPrograms.Queries.GetCoachingProgram;
+using Domain.Authentication.Constants;
 using Domain.CVS.Domain;
 using TestData;
 using TestData.CoachingProgram;
@@ -11,17 +12,17 @@ namespace Application.FunctionalTests.CoachingPrograms.Queries.GetCoachingProgra
         private ITestDataGenerator<CoachingProgram> _testDataGeneratorCoachingProgram;
 
         [SetUp]
-        public void Initialize()
+        public async Task Initialize()
         {
             _testDataGeneratorCoachingProgram = new CoachingProgramDataGenerator();
+
+            await RunAsAsync(Roles.Administrator);
         }
 
         [Test]
         public async Task Handle_CorrectFlow_ShouldReturnCoachingProgram()
         {
             // Arrange
-            // TODO: Turn on authentication 
-            //await RunAsDefaultUserAsync();
             var coachingProgram = _testDataGeneratorCoachingProgram.Create();
 
             await AddAsync(coachingProgram);
@@ -43,8 +44,6 @@ namespace Application.FunctionalTests.CoachingPrograms.Queries.GetCoachingProgra
         public void Handle_CoachingProgramDoesNotExists_ThrowsNotFoundException()
         {
             // Arrange
-            // TODO: Turn on authentication 
-            //await RunAsDefaultUserAsync();
             var query = new GetCoachingProgramQuery();
 
             // Act & Assert

@@ -1,4 +1,5 @@
 ﻿using Application.Clients.Queries.GetClient;
+using Domain.Authentication.Constants;
 using Domain.CVS.Domain;
 using TestData;
 using TestData.Client;
@@ -11,9 +12,11 @@ namespace Application.FunctionalTests.Clients.Queries.GetClient
         private ITestDataGenerator<Client> _testDataGeneratorClient;
 
         [SetUp]
-        public void Initialize()
+        public async Task Initialize()
         {
             _testDataGeneratorClient = new ClientDataGenerator();
+
+            await RunAsAsync(Roles.Administrator);
         }
 
         [Test]

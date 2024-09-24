@@ -1,5 +1,4 @@
 ﻿using System.Linq.Expressions;
-using Domain.Authentication.Constants;
 using Domain.Authentication.Domain;
 using Infrastructure.Data.Authentication;
 using Infrastructure.Data.CVS;
@@ -76,17 +75,12 @@ namespace Application.FunctionalTests
             return s_userId;
         }
 
-        public static async Task<string> RunAsDefaultUserAsync()
+        public static async Task<string> RunAsAsync(string role)
         {
-            return await RunAsUserAsync("test@local", "Testing1234!", []);
+            return await RunAsUserAsync(role, $"{role}1!", role);
         }
 
-        public static async Task<string> RunAsAdministratorAsync()
-        {
-            return await RunAsUserAsync("administrator@local", "Administrator1234!", [Roles.Administrator]);
-        }
-
-        public static async Task<string> RunAsUserAsync(string userName, string password, string[] roles)
+        public static async Task<string> RunAsUserAsync(string userName, string password, string role)
         {
             using var scope = s_scopeFactory.CreateScope();
 
@@ -106,17 +100,11 @@ namespace Application.FunctionalTests
 
             var result = await userManager.CreateAsync(user, password);
 
-            if (roles.Any())
-            {
-                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-                foreach (var role in roles)
-                {
-                    await roleManager.CreateAsync(new IdentityRole(role));
-                }
+            await roleManager.CreateAsync(new IdentityRole(role));
 
-                await userManager.AddToRolesAsync(user, roles);
-            }
+            await userManager.AddToRolesAsync(user, [role]);
 
             if (result.Succeeded)
             {

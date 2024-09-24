@@ -3,6 +3,7 @@ using Application.Clients.Dtos;
 using Application.Diagnoses.Queries.GetDiagnosis;
 using Application.DriversLicences.Queries;
 using Application.MaritalStatuses.Queries.GetMaritalStatus;
+using Domain.Authentication.Constants;
 using Domain.CVS.Constants;
 using Domain.CVS.Domain;
 using Domain.CVS.Enums;
@@ -89,6 +90,8 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
                     Function = wc.Function,
                     OrganizationId = organization.Id
                 }).ToList();
+
+            await RunAsAsync(Roles.Administrator);
         }
 
         [Test]

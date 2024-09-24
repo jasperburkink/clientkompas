@@ -22,7 +22,7 @@ namespace Application.FunctionalTests.Authentication.Commands
 
             _password = PasswordGenerator.GenerateSecurePassword(16);
 
-            await RunAsUserAsync(authenticationUser.UserName, _password, [Roles.Coach]);
+            await RunAsUserAsync(authenticationUser.UserName, _password, Roles.Coach);
 
             _command = new LoginCommand
             {
