@@ -157,6 +157,11 @@ namespace Infrastructure
                 {
                     policy.RequireRole(new[] { Roles.SystemOwner, Roles.Licensee, Roles.Administrator, Roles.Coach });
                 });
+
+                options.AddPolicy(Policies.DeactiveClient, policy =>
+                {
+                    policy.RequireRole(new[] { Roles.SystemOwner, Roles.Licensee, Roles.Administrator });
+                });
             });
 
             return services;
