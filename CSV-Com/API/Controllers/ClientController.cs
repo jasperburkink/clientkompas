@@ -16,7 +16,6 @@ namespace API.Controllers
     // [EnableCors(origins: "localhost:3000", headers: "*", methods: "*")]
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
     public class ClientController : ApiControllerBase
     {
         [HttpGet]
