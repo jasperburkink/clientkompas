@@ -1,15 +1,18 @@
 ﻿using Application.BenefitForms.Queries.GetBenefitForm;
 using Application.Clients.Dtos;
 using Application.Common.Interfaces.CVS;
+using Application.Common.Security;
 using Application.Diagnoses.Queries.GetDiagnosis;
 using Application.DriversLicences.Queries;
 using Application.MaritalStatuses.Queries.GetMaritalStatus;
+using Domain.Authentication.Constants;
 using Domain.CVS.Domain;
 using Domain.CVS.Enums;
 using Domain.CVS.ValueObjects;
 
 namespace Application.Clients.Commands.UpdateClient
 {
+    [Authorize(Policy = Policies.ClientManagement)]
     public record UpdateClientCommand : IRequest<ClientDto>
     {
         public int Id { get; set; }

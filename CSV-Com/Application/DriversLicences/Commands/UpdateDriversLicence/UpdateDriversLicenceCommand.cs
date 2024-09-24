@@ -1,11 +1,12 @@
 ﻿using Application.Common.Interfaces.CVS;
+using Application.Common.Security;
 using Application.DriversLicences.Queries;
 using Application.Extensions;
-using AutoMapper;
-using MediatR;
+using Domain.Authentication.Constants;
 
 namespace Application.DriversLicences.Commands.UpdateDriversLicence
 {
+    [Authorize(Policy = Policies.DriversLicenceManagement)]
     public record UpdateDriversLicenceCommand : IRequest<DriversLicenceDto>
     {
         public int Id { get; init; }

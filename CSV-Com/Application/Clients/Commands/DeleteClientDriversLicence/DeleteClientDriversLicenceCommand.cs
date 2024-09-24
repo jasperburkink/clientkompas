@@ -1,8 +1,11 @@
 ﻿using Application.Common.Interfaces.CVS;
+using Application.Common.Security;
+using Domain.Authentication.Constants;
 using Domain.CVS.Domain;
 
 namespace Application.Clients.Commands.DeleteClientDriversLicence
 {
+    [Authorize(Policy = Policies.ClientManagement)]
     public record DeleteClientDriversLicenceCommand : IRequest
     {
         public int ClientId { get; init; }

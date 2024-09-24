@@ -1,12 +1,13 @@
 ﻿using Application.BenefitForms.Queries.GetBenefitForm;
 using Application.Common.Interfaces.CVS;
-using AutoMapper;
+using Application.Common.Security;
+using Domain.Authentication.Constants;
 using Domain.CVS.Domain;
 using Domain.CVS.Events;
-using MediatR;
 
 namespace Application.BenefitForms.Commands.CreateBenefitForm
 {
+    [Authorize(Policy = Policies.BenefitFormManagement)]
     public record CreateBenefitFormCommand : IRequest<BenefitFormDto>
     {
         public string Name { get; init; }

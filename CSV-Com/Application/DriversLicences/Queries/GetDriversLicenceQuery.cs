@@ -1,9 +1,9 @@
 ﻿using Application.Common.Interfaces.CVS;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using MediatR;
+using Application.Common.Security;
+using Domain.Authentication.Constants;
 namespace Application.DriversLicences.Queries
 {
+    [Authorize(Policy = Policies.DriversLicenceManagement)]
     public record GetDriversLicenceQuery : IRequest<IEnumerable<DriversLicenceDto>> { }
     public class GetDriversLicenceQueryHandler : IRequestHandler<GetDriversLicenceQuery, IEnumerable<DriversLicenceDto>>
     {
