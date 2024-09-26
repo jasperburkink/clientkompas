@@ -59,5 +59,21 @@ namespace Application.FunctionalTests.Authentication.Commands
             result.Should().NotBeNull();
             result.Success.Should().BeFalse();
         }
+
+        [Ignore("Logging in via tests is not working yet.")]
+        //[Test]
+        public async Task Handle_LoggingInAnonymous_ShouldBeLoggedIn()
+        {
+            // Arrange
+            await ResetState();
+            await RunAsAsync("Anonymous");
+
+            // Act
+            var result = await SendAsync(_command);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Success.Should().BeTrue();
+        }
     }
 }

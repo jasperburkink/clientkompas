@@ -12,17 +12,17 @@ namespace Application.FunctionalTests.Clients.Queries.GetClients
         private ITestDataGenerator<Client> _testDataGeneratorClient;
 
         [SetUp]
-        public async Task Initialize()
+        public void Initialize()
         {
             _testDataGeneratorClient = new ClientDataGenerator();
-
-            await RunAsAsync(Roles.Administrator);
         }
 
         [Test]
         public async Task Handle_CorrectFlowOneClient_ShouldReturnOneClient()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var client = _testDataGeneratorClient.Create();
 
             await AddAsync(client);
@@ -41,6 +41,8 @@ namespace Application.FunctionalTests.Clients.Queries.GetClients
         public async Task Handle_CorrectFlowMultipleClients_ShouldReturnMultipleClients()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var numberOfClients = 5;
             var clients = _testDataGeneratorClient.Create(numberOfClients);
 
@@ -59,7 +61,7 @@ namespace Application.FunctionalTests.Clients.Queries.GetClients
         }
 
         [Test]
-        public void Handle_UserIsAnomymousUser_ThrowsUnauthorizedAccessException()
+        public async Task Handle_UserIsAnomymousUser_ThrowsUnauthorizedAccessException()
         {
             // Arrange
             var query = new GetClientsQuery();
@@ -68,9 +70,30 @@ namespace Application.FunctionalTests.Clients.Queries.GetClients
             var result = () => SendAsync(query);
 
             // Assert
-            //TODO: Turn on authentication 
-            //await result.Should().ThrowAsync<UnauthorizedAccessException>();
-            result.Should().NotBeNull();
+            await result.Should().ThrowAsync<UnauthorizedAccessException>();
+        }
+
+        [TestCase(Roles.SystemOwner)]
+        [TestCase(Roles.Licensee)]
+        [TestCase(Roles.Administrator)]
+        [TestCase(Roles.Coach)]
+        public async Task Handle_RunAsRole_ShouldReturnOneClient(string role)
+        {
+            // Arrange
+            await RunAsAsync(role);
+
+            var client = _testDataGeneratorClient.Create();
+
+            await AddAsync(client);
+
+            var query = new GetClientsQuery();
+
+            // Act
+            var result = await SendAsync(query);
+
+            // Assert
+            result.Should().NotBeNull().And.HaveCountGreaterThan(0);
+            result.Should().Contain(c => c.LastName == client.LastName);
         }
     }
 }

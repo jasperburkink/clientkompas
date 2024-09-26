@@ -90,14 +90,14 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
                     Function = wc.Function,
                     OrganizationId = organization.Id
                 }).ToList();
-
-            await RunAsAsync(Roles.Administrator);
         }
 
         [Test]
         public async Task Handle_CorrectFlow_ShouldUpdateClient()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var firstName = _command.FirstName;
             var lastName = _command.LastName;
 
@@ -113,9 +113,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_ClientDoesNotExist_ShouldThrowValidationException()
+        public async Task Handle_ClientDoesNotExist_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 Id = _command.Id + 1
@@ -132,6 +134,8 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         public async Task Handle_CorrectFlow_ClientHasEmergencyPeople()
         {
             // Act
+            await RunAsAsync(Roles.Administrator);
+
             await SendAsync(_command);
             var client = (await GetAsync<Client>(c => c.EmergencyPeople)).FirstOrDefault();
 
@@ -143,6 +147,8 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         public async Task Handle_CorrectFlow_ClientHasDriverLicences()
         {
             // Act
+            await RunAsAsync(Roles.Administrator);
+
             await SendAsync(_command);
             var client = (await GetAsync<Client>(c => c.DriversLicences)).FirstOrDefault();
 
@@ -154,6 +160,8 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         public async Task Handle_CorrectFlow_ClientHasDiagnoses()
         {
             // Act
+            await RunAsAsync(Roles.Administrator);
+
             await SendAsync(_command);
             var client = (await GetAsync<Client>(c => c.Diagnoses)).FirstOrDefault();
 
@@ -165,6 +173,8 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         public async Task Handle_CorrectFlow_ClientHasWorkingContracts()
         {
             // Act
+            await RunAsAsync(Roles.Administrator);
+
             await SendAsync(_command);
             var client = (await GetAsync<Client>(c => c.WorkingContracts)).FirstOrDefault();
 
@@ -176,6 +186,8 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         public async Task Handle_MultipleCommands_ShouldUpdateMultipleClients()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var maritalStatus = _testDataGeneratorMartialStatus.Create();
             await AddAsync(maritalStatus);
             var organization = _testDataGeneratorOrganization.Create();
@@ -214,9 +226,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_FirstNameIsEmpty_ShouldThrowValidationException()
+        public async Task Handle_FirstNameIsEmpty_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 FirstName = string.Empty
@@ -230,9 +244,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_FirstNameIsNull_ShouldThrowValidationException()
+        public async Task Handle_FirstNameIsNull_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 FirstName = null
@@ -246,9 +262,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_FirstNameIsToLong_ShouldThrowValidationException()
+        public async Task Handle_FirstNameIsToLong_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 FirstName = FakerConfiguration.Faker.Random.String2(ClientConstants.FirstNameMaxLength + 1, "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
@@ -262,9 +280,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_InitialsIsEmpty_ShouldThrowValidationException()
+        public async Task Handle_InitialsIsEmpty_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 Initials = string.Empty
@@ -278,9 +298,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_InitialsIsNull_ShouldThrowValidationException()
+        public async Task Handle_InitialsIsNull_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 Initials = null
@@ -294,9 +316,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_InitialsIsTooLong_ShouldThrowValidationException()
+        public async Task Handle_InitialsIsTooLong_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 Initials = FakerConfiguration.Faker.Random.String2(ClientConstants.InitialsMaxLength + 1, "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
@@ -310,9 +334,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_PrefixLastNameIsTooLong_ShouldThrowValidationException()
+        public async Task Handle_PrefixLastNameIsTooLong_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 PrefixLastName = FakerConfiguration.Faker.Random.String2(ClientConstants.PrefixLastNameMaxLength + 1, "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
@@ -326,9 +352,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_LastNameIsEmpty_ShouldThrowValidationException()
+        public async Task Handle_LastNameIsEmpty_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 LastName = string.Empty
@@ -342,9 +370,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_LastNameIsNull_ShouldThrowValidationException()
+        public async Task Handle_LastNameIsNull_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 LastName = null
@@ -358,9 +388,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_LastNameIsTooLong_ShouldThrowValidationException()
+        public async Task Handle_LastNameIsTooLong_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 LastName = FakerConfiguration.Faker.Random.String2(ClientConstants.LastNameMaxLength + 1, "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
@@ -374,9 +406,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_GenderIsInvalid_ShouldThrowValidationException()
+        public async Task Handle_GenderIsInvalid_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 Gender = (Gender)99
@@ -390,9 +424,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_StreetNameIsEmpty_ShouldThrowValidationException()
+        public async Task Handle_StreetNameIsEmpty_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 StreetName = string.Empty
@@ -406,9 +442,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_StreetNameIsNull_ShouldThrowValidationException()
+        public async Task Handle_StreetNameIsNull_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 StreetName = null
@@ -422,9 +460,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_StreetNameIsTooLong_ShouldThrowValidationException()
+        public async Task Handle_StreetNameIsTooLong_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 StreetName = FakerConfiguration.Faker.Random.String2(AddressConstants.StreetnameMaxLength + 1, "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
@@ -438,9 +478,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_HouseNumberIsNegative_ShouldThrowValidationException()
+        public async Task Handle_HouseNumberIsNegative_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 HouseNumber = -1
@@ -454,9 +496,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_HouseNumberIsGreaterThanMaxHouseNumber_ShouldThrowValidationException()
+        public async Task Handle_HouseNumberIsGreaterThanMaxHouseNumber_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 HouseNumber = AddressConstants.HouseNumberMaxValue + 1
@@ -470,9 +514,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_HouseNumberAdditionIsTooLong_ShouldThrowValidationException()
+        public async Task Handle_HouseNumberAdditionIsTooLong_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 HouseNumberAddition = FakerConfiguration.Faker.Random.String2(AddressConstants.HouseNumberAdditionMaxLength + 1, "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
@@ -486,9 +532,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_PostalCodeIsInvalid_ShouldThrowValidationException()
+        public async Task Handle_PostalCodeIsInvalid_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 PostalCode = "1234"
@@ -502,9 +550,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_PostalCodeContainsSA_ShouldThrowValidationException()
+        public async Task Handle_PostalCodeContainsSA_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 PostalCode = "1234SA"
@@ -518,9 +568,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_PostalCodeContainsSD_ShouldThrowValidationException()
+        public async Task Handle_PostalCodeContainsSD_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 PostalCode = "1234SD"
@@ -534,9 +586,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_PostalCodeContainsSS_ShouldThrowValidationException()
+        public async Task Handle_PostalCodeContainsSS_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 PostalCode = "1234SS"
@@ -550,9 +604,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_PostalCodeBeginsWithA0_ShouldThrowValidationException()
+        public async Task Handle_PostalCodeBeginsWithA0_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 PostalCode = "0234SA"
@@ -566,9 +622,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_ResidenceIsEmpty_ShouldThrowValidationException()
+        public async Task Handle_ResidenceIsEmpty_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 Residence = string.Empty
@@ -582,9 +640,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_ResidenceIsNull_ShouldThrowValidationException()
+        public async Task Handle_ResidenceIsNull_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 Residence = null
@@ -598,9 +658,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_ResidenceIsTooLong_ShouldThrowValidationException()
+        public async Task Handle_ResidenceIsTooLong_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 Residence = FakerConfiguration.Faker.Random.String2(AddressConstants.ResidenceMaxLength + 1, "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
@@ -614,9 +676,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_TelephoneNumberIsEmpty_ShouldThrowValidationException()
+        public async Task Handle_TelephoneNumberIsEmpty_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 TelephoneNumber = string.Empty
@@ -630,9 +694,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_TelephoneNumberIsNull_ShouldThrowValidationException()
+        public async Task Handle_TelephoneNumberIsNull_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 TelephoneNumber = null
@@ -646,9 +712,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_TelephoneNumberIsTooLong_ShouldThrowValidationException()
+        public async Task Handle_TelephoneNumberIsTooLong_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 TelephoneNumber = FakerConfiguration.Faker.Random.String2(ClientConstants.TelephoneNumberMaxLength + 1, "0123456789")
@@ -662,9 +730,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_DateOfBirthIsInFuture_ShouldThrowValidationException()
+        public async Task Handle_DateOfBirthIsInFuture_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 DateOfBirth = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(1))
@@ -678,9 +748,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_EmailAddressIsInvalid_ShouldThrowValidationException()
+        public async Task Handle_EmailAddressIsInvalid_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 EmailAddress = "invalid.email"
@@ -694,9 +766,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_EmailAddressIsNull_ShouldThrowValidationException()
+        public async Task Handle_EmailAddressIsNull_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 EmailAddress = null
@@ -710,9 +784,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_MaritalStatusIsNull_ShouldNotThrowValidationException()
+        public async Task Handle_MaritalStatusIsNull_ShouldNotThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 MaritalStatus = null
@@ -726,9 +802,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_MaritalStatusDoesNotExist_ShouldThrowNotFoundException()
+        public async Task Handle_MaritalStatusDoesNotExist_ShouldThrowNotFoundException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 MaritalStatus = new MaritalStatusDto
@@ -746,9 +824,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_BenefitFormsIsNull_ShouldThrowValidationException()
+        public async Task Handle_BenefitFormsIsNull_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 BenefitForms = null
@@ -762,9 +842,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_DriversLicencesIsNull_ShouldThrowValidationException()
+        public async Task Handle_DriversLicencesIsNull_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 DriversLicences = null
@@ -781,6 +863,8 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         public async Task Handle_DriversLicenceDoesNotExist_DriversLicenceIsNotAddedToClient()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 DriversLicences =
@@ -804,9 +888,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_DiagnosesIsNull_ShouldThrowValidationException()
+        public async Task Handle_DiagnosesIsNull_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 Diagnoses = null
@@ -823,6 +909,8 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         public async Task Handle_DiagnosisDoesNotExist_DiagnosisIsNotAddedToClient()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 Diagnoses =
@@ -845,9 +933,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_EmergencyPeopleIsNull_ShouldThrowValidationException()
+        public async Task Handle_EmergencyPeopleIsNull_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 EmergencyPeople = null
@@ -861,9 +951,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_WorkingContractsIsNull_ShouldThrowValidationException()
+        public async Task Handle_WorkingContractsIsNull_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 WorkingContracts = null
@@ -877,9 +969,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_RemarksIsTooLong_ShouldThrowValidationException()
+        public async Task Handle_RemarksIsTooLong_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 Remarks = FakerConfiguration.Faker.Random.String2(ClientConstants.RemarksMaxLength + 1, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
@@ -893,9 +987,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_DateOfBirthIsToday_ShouldUpdateClient()
+        public async Task Handle_DateOfBirthIsToday_ShouldUpdateClient()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 DateOfBirth = DateOnly.FromDateTime(DateTime.UtcNow)
@@ -909,9 +1005,11 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
         }
 
         [Test]
-        public void Handle_DateOfBirthIsInTheFuture_ShouldThrowValidationException()
+        public async Task Handle_DateOfBirthIsInTheFuture_ShouldThrowValidationException()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var command = _command with
             {
                 DateOfBirth = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(1)
@@ -921,6 +1019,31 @@ namespace Application.FunctionalTests.Clients.Commands.UpdateClient
             {
                 await SendAsync(command);
             });
+        }
+
+        [TestCase(Roles.SystemOwner)]
+        [TestCase(Roles.Licensee)]
+        [TestCase(Roles.Administrator)]
+        [TestCase(Roles.Coach)]
+        public async Task Handle_RunAsRole_ShouldUpdateClient(string role)
+        {
+            // Arrange
+            await RunAsAsync(role);
+
+            // Act
+            await SendAsync(_command);
+            var client = (await GetAsync<Client>()).FirstOrDefault();
+
+            // Assert
+            client.Should().NotBeNull();
+            client!.Id.Should().BeGreaterThan(0);
+        }
+
+        [Test]
+        public void Handle_UserIsAnomymousUser_ShouldThrowUnauthorizedAccessException()
+        {
+            // Act & Assert
+            Assert.ThrowsAsync<UnauthorizedAccessException>(() => SendAsync(_command));
         }
     }
 }
