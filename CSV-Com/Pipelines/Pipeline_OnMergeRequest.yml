@@ -14,7 +14,7 @@ variables:
 stages: 
   - build
   - test
-  - coverage 
+  # - coverage TODO: Enable when codecoverage works. See task https://sbict.atlassian.net/browse/CVS-521
 
 dotnet-build:
   before_script:
@@ -59,38 +59,39 @@ dotnet-test:
   dependencies:
     - dotnet-build
 
+# TODO: Enable when codecoverage works. See task https://sbict.atlassian.net/browse/CVS-521
 # Coverage can not be retrieved while running tests on a artifact. Also coverage is only needed when running on merge-requests.
-dotnet-coverage:
-  stage: coverage
-  before_script:
-    - apt-get update && apt-get install -y --no-install-recommends libc6-dev libxml2
-    - dotnet tool install --global dotnet-coverage
-    - export PATH="$PATH:/root/.dotnet/tools"
-  script:
-    - export ASPNETCORE_ENVIRONMENT=ocdev
-    - cd $SOLUTION_FOLDER
-    - |
-      RESULTS_DIR="./TestResults"
-      mkdir -p $RESULTS_DIR
-      for project in $(find . -name '*Tests.csproj'); do
-        echo "Collecting coverage for $project"
-        pushd $(dirname $project)
-        dotnet-coverage collect dotnet test -f cobertura -o $RESULTS_DIR/coverage-$(basename $project .csproj).xml
-        popd
-      done
-  image: $DOTNET_IMAGE
-  artifacts:
-    paths:
-      - $SOLUTION_FOLDER/**/TestResults/coverage-*.xml
-    reports:
-      coverage_report:
-        coverage_format: cobertura
-        path: $SOLUTION_FOLDER/**/TestResults/coverage-*.xml
-    when: always
-  coverage: '/TOTAL\s+\d+%\s+\d+/'
-  needs: ["dotnet-test"]
-  dependencies:
-    - dotnet-test
+# dotnet-coverage:
+#   stage: coverage
+#   before_script:
+#     - apt-get update && apt-get install -y --no-install-recommends libc6-dev libxml2
+#     - dotnet tool install --global dotnet-coverage
+#     - export PATH="$PATH:/root/.dotnet/tools"
+#   script:
+#     - export ASPNETCORE_ENVIRONMENT=ocdev
+#     - cd $SOLUTION_FOLDER
+#     - |
+#       RESULTS_DIR="./TestResults"
+#       mkdir -p $RESULTS_DIR
+#       for project in $(find . -name '*Tests.csproj'); do
+#         echo "Collecting coverage for $project"
+#         pushd $(dirname $project)
+#         dotnet-coverage collect dotnet test -f cobertura -o $RESULTS_DIR/coverage-$(basename $project .csproj).xml
+#         popd
+#       done
+#   image: $DOTNET_IMAGE
+#   artifacts:
+#     paths:
+#       - $SOLUTION_FOLDER/**/TestResults/coverage-*.xml
+#     reports:
+#       coverage_report:
+#         coverage_format: cobertura
+#         path: $SOLUTION_FOLDER/**/TestResults/coverage-*.xml
+#     when: always
+#   coverage: '/TOTAL\s+\d+%\s+\d+/'
+#   needs: ["dotnet-test"]
+#   dependencies:
+#     - dotnet-test
 
 node-build:
   before_script:
