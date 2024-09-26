@@ -140,5 +140,86 @@ namespace Application.FunctionalTests.Authentication.Commands
                 await SendAsync(command);
             });
         }
+
+        [Ignore("Logging in via tests is not working yet.")]
+        //[Test]
+        public void Handle_PasswordIsShorterThanAllowed_ShouldHaveValidationError()
+        {
+            // Arrange
+            var command = _command with
+            {
+                Password = FakerConfiguration.Faker.Random.String2(AuthenticationUserConstants.PASSWORD_MINLENGTH - 1)
+            };
+
+            // Act & Assert
+            Assert.ThrowsAsync<ValidationException>(async () =>
+            {
+                await SendAsync(command);
+            });
+        }
+
+        [Ignore("Logging in via tests is not working yet.")]
+        //[Test]
+        public void Handle_PasswordDoesNotContainLowercaseCharacter_ShouldHaveValidationError()
+        {
+            // Arrange
+            var command = _command with
+            {
+                Password = "TESTDERTEST1!"
+            };
+
+            // Act & Assert
+            Assert.ThrowsAsync<ValidationException>(async () =>
+            {
+                await SendAsync(command);
+            });
+        }
+
+        [Ignore("Logging in via tests is not working yet.")]
+        //[Test]
+        public void Handle_PasswordDoesNotContainUppercaseCharacter_ShouldHaveValidationError()
+        {
+            // Arrange
+            var command = _command with
+            {
+                Password = "testtest1!"
+            };
+
+            // Act & Assert
+            Assert.ThrowsAsync<ValidationException>(async () =>
+            {
+                await SendAsync(command);
+            });
+        }
+
+        public void Handle_PasswordDoesNotContainNumber_ShouldHaveValidationError()
+        {
+            // Arrange
+            var command = _command with
+            {
+                Password = "TestTest!?.,"
+            };
+
+            // Act & Assert
+            Assert.ThrowsAsync<ValidationException>(async () =>
+            {
+                await SendAsync(command);
+            });
+        }
+
+        public void Handle_PasswordDoesNotSpecialCharacter_ShouldHaveValidationError()
+        {
+            // Arrange
+            var command = _command with
+            {
+                Password = "TestTest1234"
+            };
+
+            // Act & Assert
+            Assert.ThrowsAsync<ValidationException>(async () =>
+            {
+                await SendAsync(command);
+            });
+        }
     }
 }

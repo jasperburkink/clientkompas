@@ -13,7 +13,7 @@ namespace Application.UnitTests.Authentication.Commands.Login
         private readonly LoginCommandValidator _validator;
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;
         private readonly Mock<IResourceMessageProvider> _resourceMessageProviderMock;
-
+        private const string VALID_PASSWORD = "TestPassword1!";
 
         public LoginCommandValidatorTests()
         {
@@ -35,7 +35,7 @@ namespace Application.UnitTests.Authentication.Commands.Login
             var command = new LoginCommand
             {
                 UserName = "Test",
-                Password = "Test1234"
+                Password = VALID_PASSWORD
             };
 
             // Act
@@ -52,7 +52,7 @@ namespace Application.UnitTests.Authentication.Commands.Login
             var command = new LoginCommand
             {
                 UserName = FakerConfiguration.Faker.Random.String2(AuthenticationUserConstants.USERNAME_MAXLENGTH + 1),
-                Password = "Test1234"
+                Password = VALID_PASSWORD
             };
 
             // Act
@@ -69,7 +69,7 @@ namespace Application.UnitTests.Authentication.Commands.Login
             var command = new LoginCommand
             {
                 UserName = null,
-                Password = "Test1234"
+                Password = VALID_PASSWORD
             };
 
             // Act
@@ -86,7 +86,7 @@ namespace Application.UnitTests.Authentication.Commands.Login
             var command = new LoginCommand
             {
                 UserName = string.Empty,
-                Password = "Test1234"
+                Password = VALID_PASSWORD
             };
 
             // Act
@@ -138,6 +138,91 @@ namespace Application.UnitTests.Authentication.Commands.Login
             {
                 UserName = "Test",
                 Password = string.Empty
+            };
+
+            // Act
+            var result = await _validator.TestValidateAsync(command);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(cp => cp.Password);
+        }
+
+        [Fact]
+        public async Task Validate_PasswordIsTooShort_ShouldHaveValidationError()
+        {
+            // Arrange
+            var command = new LoginCommand
+            {
+                UserName = "Test",
+                Password = FakerConfiguration.Faker.Random.String2(AuthenticationUserConstants.PASSWORD_MINLENGTH - 1)
+            };
+
+            // Act
+            var result = await _validator.TestValidateAsync(command);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(cp => cp.Password);
+        }
+
+        [Fact]
+        public async Task Validate_PasswordDoesNotContainLowercaseCharacter_ShouldHaveValidationError()
+        {
+            // Arrange
+            var command = new LoginCommand
+            {
+                UserName = "Test",
+                Password = "TESTDERTEST1!"
+            };
+
+            // Act
+            var result = await _validator.TestValidateAsync(command);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(cp => cp.Password);
+        }
+
+        [Fact]
+        public async Task Validate_PasswordDoesNotContainUppercaseCharacter_ShouldHaveValidationError()
+        {
+            // Arrange
+            var command = new LoginCommand
+            {
+                UserName = "Test",
+                Password = "testtest1!"
+            };
+
+            // Act
+            var result = await _validator.TestValidateAsync(command);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(cp => cp.Password);
+        }
+
+        [Fact]
+        public async Task Validate_PasswordDoesNotContainNumber_ShouldHaveValidationError()
+        {
+            // Arrange
+            var command = new LoginCommand
+            {
+                UserName = "Test",
+                Password = "TestTest!?.,"
+            };
+
+            // Act
+            var result = await _validator.TestValidateAsync(command);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(cp => cp.Password);
+        }
+
+        [Fact]
+        public async Task Validate_PasswordDoesNotContainSpecialCharacter_ShouldHaveValidationError()
+        {
+            // Arrange
+            var command = new LoginCommand
+            {
+                UserName = "Test",
+                Password = "TestTest1234"
             };
 
             // Act
