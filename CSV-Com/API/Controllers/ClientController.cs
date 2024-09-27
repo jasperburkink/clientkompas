@@ -8,7 +8,6 @@ using Application.Clients.Queries.GetClient;
 using Application.Clients.Queries.GetClientEdit;
 using Application.Clients.Queries.GetClients;
 using Application.Clients.Queries.SearchClients;
-using Application.Common.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -79,52 +78,14 @@ namespace API.Controllers
         [HttpPut]
         public async Task<ActionResult<ClientDto>> Updateclient(UpdateClientCommand command)
         {
-            try
-            {
-                var result = await Mediator.Send(command);
-                return Ok(result);
-            }
-            catch (NotFoundException ex)
-            {
-                return StatusCode(StatusCodes.Status404NotFound, ex);
-            }
-            catch (FluentValidation.ValidationException ex)
-            {
-                return BadRequest(ex.Errors);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex);
-            }
+            return await Mediator.Send(command);
         }
 
         [HttpPut("DeactivateClient")]
         public async Task<IActionResult> DeactivateClient(DeactivateClientCommand command)
         {
-            try
-            {
-                await Mediator.Send(command);
-                return Ok();
-            }
-            catch (NotFoundException ex)
-            {
-                return StatusCode(StatusCodes.Status404NotFound, ex);
-            }
-            catch (FluentValidation.ValidationException ex)
-            {
-                return BadRequest(ex.Errors);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex);
-            }
-        }
-
-        //TODO: implement with new Mediator structure
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-            throw new NotImplementedException();
+            await Mediator.Send(command);
+            return Ok();
         }
 
         [Route("[action]")]
@@ -135,22 +96,14 @@ namespace API.Controllers
         public async Task<IActionResult> DeleteDriversLicence(DeleteClientDriversLicenceCommand command)
         {
             await Mediator.Send(command);
-
             return NoContent();
         }
 
         [HttpGet("[action]")]
         public async Task<ActionResult<IEnumerable<SearchClientDto>>> SearchClients([FromQuery] SearchClientsQuery query)
         {
-            try
-            {
-                var clients = await Mediator.Send(query);
-                return Ok(clients);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex);
-            }
+            var clients = await Mediator.Send(query);
+            return Ok(clients);
         }
     }
 }

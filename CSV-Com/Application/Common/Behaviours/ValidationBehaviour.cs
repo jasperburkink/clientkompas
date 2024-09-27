@@ -1,7 +1,4 @@
-﻿using FluentValidation;
-using MediatR;
-
-namespace Application.Common.Behaviours
+﻿namespace Application.Common.Behaviours
 {
     public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
          where TRequest : notnull
@@ -29,7 +26,7 @@ namespace Application.Common.Behaviours
                     .ToList();
 
                 if (failures.Any())
-                    throw new ValidationException(failures);
+                    throw new Exceptions.ValidationException(failures);
             }
             return await next();
         }
