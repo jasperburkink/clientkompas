@@ -146,7 +146,7 @@ namespace Infrastructure
                 {
                     policy.RequireRole(new[] { Roles.SystemOwner, Roles.Licensee, Roles.Administrator });
                 });
-
+                
                 options.AddPolicy(Policies.EditCoach, policy =>
                 {
                     policy.RequireRole(new[] { Roles.SystemOwner, Roles.Licensee, Roles.Administrator, Roles.Coach });

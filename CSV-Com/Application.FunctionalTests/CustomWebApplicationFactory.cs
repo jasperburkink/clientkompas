@@ -27,7 +27,7 @@ namespace Application.FunctionalTests
             {
                 services
                     .RemoveAll<IUser>()
-                    .AddTransient(provider => Mock.Of<IUser>(s => s.UserId == Testing.GetUserId()));
+                    .AddTransient(provider => Mock.Of<IUser>(s => s.CurrentUserId == Testing.GetCurrentUserId()));
 
                 //services.AddTransient<IIdentityService, IdentityService>();
 
