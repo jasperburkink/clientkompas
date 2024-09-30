@@ -79,7 +79,7 @@ namespace Infrastructure
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<AuthenticationDbContext>();
 
-            services.AddSingleton<IDateTime, DateTimeService>();
+            services.AddSingleton<IDateTime, DateTimeWrapper>();
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IBearerTokenService, BearerTokenService>();
             services.AddScoped<IPasswordHasher<AuthenticationUser>, Argon2PasswordHasher>();
@@ -146,7 +146,7 @@ namespace Infrastructure
                 {
                     policy.RequireRole(new[] { Roles.SystemOwner, Roles.Licensee, Roles.Administrator });
                 });
-                
+
                 options.AddPolicy(Policies.EditCoach, policy =>
                 {
                     policy.RequireRole(new[] { Roles.SystemOwner, Roles.Licensee, Roles.Administrator, Roles.Coach });

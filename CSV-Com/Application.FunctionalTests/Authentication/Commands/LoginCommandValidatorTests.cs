@@ -1,7 +1,7 @@
 ﻿using Application.Authentication.Commands.Login;
+using Application.Common.Exceptions;
 using Domain.Authentication.Constants;
 using Domain.Authentication.Domain;
-using FluentValidation;
 using TestData;
 using TestData.Authentication;
 using static Application.FunctionalTests.Testing;

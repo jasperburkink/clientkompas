@@ -1,5 +1,6 @@
 ﻿using Application.Clients.Commands.UpdateClient;
 using Application.Clients.Dtos;
+using Application.Common.Exceptions;
 using Application.Diagnoses.Queries.GetDiagnosis;
 using Application.DriversLicences.Queries;
 using Application.MaritalStatuses.Queries.GetMaritalStatus;
@@ -7,7 +8,6 @@ using Domain.Authentication.Constants;
 using Domain.CVS.Constants;
 using Domain.CVS.Domain;
 using Domain.CVS.Enums;
-using FluentValidation;
 using TestData;
 using TestData.Client;
 using TestData.Client.Commands.UpdateClient;
