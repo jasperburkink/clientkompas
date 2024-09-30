@@ -43,24 +43,6 @@ Date.prototype.toJSON = function(){
 }
 
 const handleApiResonse = async <T>(response: Response): Promise<ApiResult<T>> => {
-    // Unauthorized 
-    if (response.status === 401) {
-        window.location.href = '/unauthorized';
-        return Promise.reject({
-            Ok: false,
-            Errors: ['Unauthorized access']
-        });
-    }
-    // Forbidden 
-    else if (response.status === 403) {
-        window.location.href = '/forbidden';
-        return Promise.reject({
-            Ok: false,
-            Errors: ['Forbidden access']
-        });
-    }
-    // TODO: Implement all HTTP status codes with the pages. https://sbict.atlassian.net/wiki/spaces/CVS/pages/35356674/Foutafhandeling#Gehele-pagina%E2%80%99s
-    
     // Ok API response
     if(response.ok){
         let ObjectReturn: T = await response.json();
@@ -70,9 +52,11 @@ const handleApiResonse = async <T>(response: Response): Promise<ApiResult<T>> =>
             ReturnObject: ObjectReturn
         }
     }
+    
+    // TODO: Implement all HTTP status codes with the pages. https://sbict.atlassian.net/wiki/spaces/CVS/pages/35356674/Foutafhandeling#Gehele-pagina%E2%80%99s
 
-    // Error
-    try {
+    // Bad request --> Validation errors
+    if(response.status === 400) {
         var responseData = await response.json();
 
         let titleResponse: string | undefined;
@@ -94,20 +78,59 @@ const handleApiResonse = async <T>(response: Response): Promise<ApiResult<T>> =>
         catch(err){
             console.log(`Error while parsing api errors. Error:${err}`);
         }
-        
+
         return {
             Ok: response.ok,
             Title: titleResponse,
             Errors: errorsResponse,
             ValidationErrors: validationErrorsResponse
-        }        
+        }  
+    }    
+    // Unauthorized 
+    else if (response.status === 401) {
+        window.location.href = '/unauthorized';
+        return Promise.reject({
+            Ok: false,
+            Errors: ['Unauthorized access']
+        });
     }
-    catch (err) {
-        console.log(`Error while parsing api response. Error:${err}`);
+    // Forbidden 
+    else if (response.status === 403) {
+        window.location.href = '/forbidden';
+        return Promise.reject({
+            Ok: false,
+            Errors: ['Forbidden access']
+        });
+    }
+    // Internal error
+    else if (response.status === 500) {
+        window.location.href = '/internalerror';
+        return Promise.reject({
+            Ok: false,
+            Errors: ['Internal Error']
+        });
+    }
+    // Error
+    else {
+        let titleResponse: string | undefined;
+        let errorsResponse: string[] | undefined;
+        let validationErrorsResponse: ValidationErrorHash | undefined;
+
+        try{
+            let {title, errors} = responseData;
+            titleResponse = title;
+            errorsResponse = processErrors(errors);
+        }
+        catch(err){
+            console.log(`Error while parsing api errors. Error:${err}`);
+        }
+
         return {
             Ok: response.ok,
-            Errors: [response.statusText]
-        }
+            Title: titleResponse,
+            Errors: errorsResponse,
+            ValidationErrors: validationErrorsResponse
+        }  
     }
 }
 

@@ -26,46 +26,21 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<GetClientDto>> Get(int id)
         {
-            try
-            {
-                var client = await Mediator.Send(new GetClientQuery { ClientId = id });
-                return Ok(client);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex);
-            }
+            var client = await Mediator.Send(new GetClientQuery { ClientId = id });
+            return Ok(client);
         }
 
         [HttpGet("GetClientEditor/{id}")]
         public async Task<ActionResult<GetClientEditDto>> GetClientEditor(int id)
         {
-            try
-            {
-                var client = await Mediator.Send(new GetClientEditQuery { ClientId = id });
-                return Ok(client);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex);
-            }
+            var client = await Mediator.Send(new GetClientEditQuery { ClientId = id });
+            return Ok(client);
         }
 
         [HttpPost]
         public async Task<ActionResult<ClientDto>> Create(CreateClientCommand command)
         {
-            try
-            {
-                return await Mediator.Send(command);
-            }
-            catch (FluentValidation.ValidationException ex)
-            {
-                return BadRequest(ex.Errors);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex);
-            }
+            return await Mediator.Send(command);
         }
 
         [Route("[action]")]

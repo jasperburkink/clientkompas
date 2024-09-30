@@ -1,7 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using Application.Common.Mappings;
-using AutoMapper;
 using Domain.CVS.Domain;
 using Domain.CVS.Enums;
 
@@ -15,9 +14,9 @@ namespace Application.Clients.Dtos
 
         public ContractType ContractType { get; set; }
 
-        public DateOnly FromDate { get; set; }
+        public DateOnly? FromDate { get; set; }
 
-        public DateOnly ToDate { get; set; }
+        public DateOnly? ToDate { get; set; }
 
         public int OrganizationId { get; set; }
 

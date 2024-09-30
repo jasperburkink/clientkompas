@@ -1,8 +1,7 @@
 ﻿using Application.Organizations.Commands.CreateOrganization;
-using Application.Organizations.Dtos;
-using Application.Common.Exceptions;
 using Application.Organizations.Commands.DeleteOrganization;
 using Application.Organizations.Commands.UpdateOrganization;
+using Application.Organizations.Dtos;
 using Application.Organizations.Queries.GetOrganizations;
 using Application.Organizations.Queries.SearchOrganizations;
 using Microsoft.AspNetCore.Mvc;
@@ -23,78 +22,35 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<GetOrganizationDto>> Get(int id)
         {
-            try
-            {
-                var organization = await Mediator.Send(new GetOrganizationQuery { OrganizationId = id });
-                return Ok(organization);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex);
-            }
+            var organization = await Mediator.Send(new GetOrganizationQuery { OrganizationId = id });
+            return Ok(organization);
         }
 
         [HttpPut]
         public async Task<ActionResult<OrganizationDto>> Put(UpdateOrganizationCommand command)
         {
-            try
-            {
-                var result = await Mediator.Send(command);
-                return Ok(result);
-            }
-            catch (NotFoundException ex)
-            {
-                return StatusCode(404, ex);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex);
-            }
+            var result = await Mediator.Send(command);
+            return Ok(result);
         }
 
         [HttpGet("[action]")]
         public async Task<ActionResult<IEnumerable<SearchOrganizationDto>>> SearchOrganizations([FromQuery] SearchOrganizationQuery query)
         {
-            try
-            {
-                var organization = await Mediator.Send(query);
-                return Ok(organization);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex);
-            }
+            var organization = await Mediator.Send(query);
+            return Ok(organization);
         }
 
         [HttpPost]
         public async Task<ActionResult<OrganizationDto>> Create(CreateOrganizationCommand command)
         {
-            try
-            {
-                return await Mediator.Send(command);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex);
-            }
+            return await Mediator.Send(command);
         }
 
         [HttpDelete]
         public async Task<ActionResult> Delete(DeleteOrganizationCommand command)
         {
-            try
-            {
-                await Mediator.Send(command);
-                return Ok();
-            }
-            catch (NotFoundException ex)
-            {
-                return StatusCode(404, ex);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex);
-            }
+            await Mediator.Send(command);
+            return Ok();
         }
     }
 }

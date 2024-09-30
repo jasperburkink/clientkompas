@@ -1,7 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Domain.CVS.Constants;
 using Domain.CVS.Enums;
-using FluentValidation;
 
 namespace Application.Common.Rules
 {
@@ -34,10 +33,10 @@ namespace Application.Common.Rules
                 .WithMessage(resourceMessageProvider.GetMessage(typeof(WorkingContractValidationRules), "FunctionMaxCharacters", WorkingContractConstants.FUNCTION_MAXLENGTH));
         }
 
-        public static IRuleBuilderOptions<T, DateOnly> ValidateWorkingContractFromDate<T>(
-            this IRuleBuilder<T, DateOnly> ruleBuilder,
+        public static IRuleBuilderOptions<T, DateOnly?> ValidateWorkingContractFromDate<T>(
+            this IRuleBuilder<T, DateOnly?> ruleBuilder,
             IResourceMessageProvider resourceMessageProvider,
-            Func<T, DateOnly> toDateSelector)
+            Func<T, DateOnly?> toDateSelector)
         {
             return ruleBuilder
                 .LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.Now))
@@ -46,10 +45,10 @@ namespace Application.Common.Rules
                 .WithMessage(resourceMessageProvider.GetMessage(typeof(WorkingContractValidationRules), "FromDateAfterUntilDate"));
         }
 
-        public static IRuleBuilderOptions<T, DateOnly> ValidateWorkingContractToDate<T>(
-            this IRuleBuilder<T, DateOnly> ruleBuilder,
+        public static IRuleBuilderOptions<T, DateOnly?> ValidateWorkingContractToDate<T>(
+            this IRuleBuilder<T, DateOnly?> ruleBuilder,
             IResourceMessageProvider resourceMessageProvider,
-            Func<T, DateOnly> fromDateSelector)
+            Func<T, DateOnly?> fromDateSelector)
         {
             return ruleBuilder
                 .LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.Now))
