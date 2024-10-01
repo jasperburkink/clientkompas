@@ -23,6 +23,7 @@ import ErrorPopup from "components/common/error-popup";
 import { Copyright } from "components/common/copyright";
 import ConfirmPopup from "components/common/confirm-popup";
 import { useNavigate } from "react-router-dom";
+import { BearerToken } from "types/common/bearer-token";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -38,8 +39,14 @@ const Login = () => {
     const [confirmMessage, setConfirmMessage] = useState<string>('');
     const [isConfirmPopupOneButtonOpen, setConfirmPopupOneButtonOpen] = useState<boolean>(false);
     const [loginCommand, setLoginCommand] = useState<LoginCommand>(initialLoginCommand);
-    const [bearertoken, setBearerToken] = useState<string>('');
+    const [bearertoken, setBearerToken] = useState<BearerToken | null>(sessionStorage.getItem('token') ? BearerToken.deserialize(sessionStorage.getItem('token')!) : null);
     
+    useEffect(() => {         
+        if(bearertoken) {
+            sessionStorage.setItem('token', BearerToken.serialize(bearertoken));
+        }
+    }, [bearertoken]);
+
     const [isErrorPopupOpen, setErrorPopupOpen] = useState<boolean>(false);
     const [cvsError, setCvsError] = useState<CVSError>(() => {
         return {
@@ -62,14 +69,14 @@ const Login = () => {
         setConfirmPopupOneButtonOpen: React.Dispatch<React.SetStateAction<boolean>>, 
         setCvsError: React.Dispatch<React.SetStateAction<CVSError>>, 
         setErrorPopupOpen: React.Dispatch<React.SetStateAction<boolean>>, 
-        setBearerToken: React.Dispatch<React.SetStateAction<string>>) => {
+        setBearerToken: React.Dispatch<React.SetStateAction<BearerToken | null>>) => {
         if (apiResult.Ok) {
             if(apiResult.ReturnObject?.success === true 
                 && apiResult.ReturnObject?.bearertoken) {                
 
                 setConfirmMessage('Inloggen succesvol.');
                 setConfirmPopupOneButtonOpen(true);
-                setBearerToken(apiResult.ReturnObject.bearertoken);
+                setBearerToken(new BearerToken(apiResult.ReturnObject.bearertoken));
             }
             else{
                 setCvsError({
