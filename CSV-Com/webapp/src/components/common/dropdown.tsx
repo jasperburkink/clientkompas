@@ -29,7 +29,7 @@ export const Dropdown = (props: IDropDownProps) => (
                 props.onChange?.(selectedValue);
             }}
             data-testid={props.dataTestId}>
-            {props.required && <option key={0} value='0'>{OPTION_TEXT}</option>}
+            {props.required === false && <option key={0} value='0'>{OPTION_TEXT}</option>}
             {props.options.map((item) => (
                 <option key={item.value} value={item.value} >{item.label}</option>
             ))}

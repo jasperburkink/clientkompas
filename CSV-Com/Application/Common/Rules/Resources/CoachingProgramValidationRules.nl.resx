@@ -135,8 +135,8 @@
   <data name="FromDateAfterUntilDate" xml:space="preserve">
     <value>De van datum kan niet na de tot datum liggen.</value>
   </data>
-  <data name="FromDateInFuture" xml:space="preserve">
-    <value>De van datum kan niet in de toekomst liggen.</value>
+  <data name="FromDateRequired" xml:space="preserve">
+    <value>De van datum is verplicht.</value>
   </data>
   <data name="HourlyRatePositive" xml:space="preserve">
     <value>Het uurtarief mag geen negatieve waarde bevatten.</value>
@@ -156,10 +156,10 @@
   <data name="TitleRequired" xml:space="preserve">
     <value>Titel is verplicht.</value>
   </data>
-  <data name="ToDateInFuture" xml:space="preserve">
-    <value>De tot datum kan niet in de toekomst liggen.</value>
-  </data>
   <data name="UntilDateBeforeFromDate" xml:space="preserve">
     <value>De tot datum kan niet voor de van datum liggen.</value>
+  </data>
+  <data name="UntilDateRequired" xml:space="preserve">
+    <value>De tot datum is verplicht.</value>
   </data>
 </root>

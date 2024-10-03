@@ -14,47 +14,47 @@ namespace Application.Clients.Commands.UpdateClient
     {
         public int Id { get; set; }
 
-        public required string FirstName { get; init; }
+        public string? FirstName { get; init; }
 
-        public required string Initials { get; init; }
+        public string? Initials { get; init; }
 
-        public required string PrefixLastName { get; init; }
+        public string? PrefixLastName { get; init; }
 
-        public required string LastName { get; init; }
+        public string? LastName { get; init; }
 
-        public Gender Gender { get; init; }
+        public Gender? Gender { get; init; }
 
-        public required string StreetName { get; init; }
+        public string? StreetName { get; init; }
 
-        public int HouseNumber { get; init; }
+        public int? HouseNumber { get; init; }
 
-        public required string HouseNumberAddition { get; init; }
+        public string? HouseNumberAddition { get; init; }
 
-        public required string PostalCode { get; init; }
+        public string? PostalCode { get; init; }
 
-        public required string Residence { get; init; }
+        public string? Residence { get; init; }
 
-        public required string TelephoneNumber { get; init; }
+        public string? TelephoneNumber { get; init; }
 
-        public DateOnly DateOfBirth { get; set; }
+        public DateOnly? DateOfBirth { get; set; }
 
-        public required string EmailAddress { get; set; }
+        public string? EmailAddress { get; set; }
 
         public MaritalStatusDto? MaritalStatus { get; set; }
 
-        public required bool IsInTargetGroupRegister { get; set; }
+        public bool? IsInTargetGroupRegister { get; set; }
 
-        public required ICollection<BenefitFormDto> BenefitForms { get; set; }
+        public ICollection<BenefitFormDto> BenefitForms { get; set; }
 
-        public required ICollection<DriversLicenceDto> DriversLicences { get; set; }
+        public ICollection<DriversLicenceDto> DriversLicences { get; set; }
 
-        public required ICollection<DiagnosisDto> Diagnoses { get; set; }
+        public ICollection<DiagnosisDto> Diagnoses { get; set; }
 
-        public required ICollection<EmergencyPersonDto> EmergencyPeople { get; set; }
+        public ICollection<EmergencyPersonDto> EmergencyPeople { get; set; }
 
-        public required ICollection<ClientWorkingContractDto> WorkingContracts { get; set; }
+        public ICollection<ClientWorkingContractDto> WorkingContracts { get; set; }
 
-        public required string Remarks { get; set; }
+        public string? Remarks { get; set; }
     }
 
     public class UpdateClientCommandHandler : IRequestHandler<UpdateClientCommand, ClientDto>
@@ -90,17 +90,17 @@ namespace Application.Clients.Commands.UpdateClient
 
             client.LastName = request.LastName;
 
-            client.Gender = request.Gender;
+            client.Gender = request.Gender.Value;
 
-            client.Address = Address.From(request.StreetName, request.HouseNumber, request.HouseNumberAddition, request.PostalCode, request.Residence);
+            client.Address = Address.From(request.StreetName, request.HouseNumber.Value, request.HouseNumberAddition, request.PostalCode, request.Residence);
 
             client.TelephoneNumber = request.TelephoneNumber;
 
-            client.DateOfBirth = request.DateOfBirth;
+            client.DateOfBirth = request.DateOfBirth.Value;
 
             client.EmailAddress = request.EmailAddress;
 
-            client.IsInTargetGroupRegister = request.IsInTargetGroupRegister;
+            client.IsInTargetGroupRegister = request.IsInTargetGroupRegister.Value;
 
             client.BenefitForms = benefitForms;
 

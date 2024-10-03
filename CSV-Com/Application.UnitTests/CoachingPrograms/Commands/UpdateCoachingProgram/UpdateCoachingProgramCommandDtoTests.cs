@@ -65,11 +65,11 @@ namespace Application.UnitTests.CoachingPrograms.Commands.UpdateCoachingProgram
                 OrderNumber = _command.OrderNumber,
                 OrganizationId = _organization.Id,
                 Organization = _organization,
-                CoachingProgramType = _command.CoachingProgramType,
-                BeginDate = _command.BeginDate,
-                EndDate = _command.EndDate,
+                CoachingProgramType = _command.CoachingProgramType.Value,
+                BeginDate = _command.BeginDate.Value,
+                EndDate = _command.EndDate.Value,
                 BudgetAmmount = _command.BudgetAmmount,
-                HourlyRate = _command.HourlyRate
+                HourlyRate = _command.HourlyRate.Value
             };
 
             _unitOfWorkMock.Setup(uw => uw.CoachingProgramRepository.GetByIDAsync(

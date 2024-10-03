@@ -23,7 +23,7 @@ namespace Application.Common.Rules
                 .WithMessage(id => resourceMessageProvider.GetMessage(typeof(ClientValidationRules), "ClientDoesNotExists", id));
         }
 
-        public static IRuleBuilderOptions<T, string> ValidateClientFirstName<T>(this IRuleBuilder<T, string> ruleBuilder,
+        public static IRuleBuilderOptions<T, string?> ValidateClientFirstName<T>(this IRuleBuilder<T, string?> ruleBuilder,
             IResourceMessageProvider resourceMessageProvider)
         {
             return ruleBuilder
@@ -33,7 +33,7 @@ namespace Application.Common.Rules
                 .WithMessage(resourceMessageProvider.GetMessage(typeof(ClientValidationRules), "FirstNameMaxLength", ClientConstants.FirstNameMaxLength));
         }
 
-        public static IRuleBuilderOptions<T, string> ValidateClientLastName<T>(this IRuleBuilder<T, string> ruleBuilder,
+        public static IRuleBuilderOptions<T, string?> ValidateClientLastName<T>(this IRuleBuilder<T, string?> ruleBuilder,
             IResourceMessageProvider resourceMessageProvider)
         {
             return ruleBuilder
@@ -43,7 +43,7 @@ namespace Application.Common.Rules
                 .WithMessage(resourceMessageProvider.GetMessage(typeof(ClientValidationRules), "LastNameMaxLength", ClientConstants.LastNameMaxLength));
         }
 
-        public static IRuleBuilderOptions<T, string> ValidateClientPrefixLastName<T>(this IRuleBuilder<T, string> ruleBuilder,
+        public static IRuleBuilderOptions<T, string?> ValidateClientPrefixLastName<T>(this IRuleBuilder<T, string?> ruleBuilder,
             IResourceMessageProvider resourceMessageProvider)
         {
             return ruleBuilder
@@ -51,7 +51,7 @@ namespace Application.Common.Rules
                 .WithMessage(resourceMessageProvider.GetMessage(typeof(ClientValidationRules), "TussenvoegselMaxLength", ClientConstants.PrefixLastNameMaxLength));
         }
 
-        public static IRuleBuilderOptions<T, string> ValidateClientInitials<T>(this IRuleBuilder<T, string> ruleBuilder,
+        public static IRuleBuilderOptions<T, string?> ValidateClientInitials<T>(this IRuleBuilder<T, string?> ruleBuilder,
             IResourceMessageProvider resourceMessageProvider)
         {
             return ruleBuilder
@@ -61,7 +61,7 @@ namespace Application.Common.Rules
                 .WithMessage(resourceMessageProvider.GetMessage(typeof(ClientValidationRules), "InitialsMaxLength", ClientConstants.InitialsMaxLength));
         }
 
-        public static IRuleBuilderOptions<T, string> ValidateClientTelephoneNumber<T>(this IRuleBuilder<T, string> ruleBuilder,
+        public static IRuleBuilderOptions<T, string?> ValidateClientTelephoneNumber<T>(this IRuleBuilder<T, string?> ruleBuilder,
             IResourceMessageProvider resourceMessageProvider)
         {
             return ruleBuilder
@@ -71,7 +71,7 @@ namespace Application.Common.Rules
                 .WithMessage(resourceMessageProvider.GetMessage(typeof(ClientValidationRules), "TelephoneNumberMaxLength", ClientConstants.TelephoneNumberMaxLength));
         }
 
-        public static IRuleBuilderOptions<T, bool> ValidateClientIsInTargetGroupRegister<T>(this IRuleBuilder<T, bool> ruleBuilder,
+        public static IRuleBuilderOptions<T, bool?> ValidateClientIsInTargetGroupRegister<T>(this IRuleBuilder<T, bool?> ruleBuilder,
             IResourceMessageProvider resourceMessageProvider)
         {
             return ruleBuilder
@@ -79,7 +79,7 @@ namespace Application.Common.Rules
                 .WithMessage(resourceMessageProvider.GetMessage(typeof(ClientValidationRules), "IsInTargetGroupRegisterRequired"));
         }
 
-        public static IRuleBuilderOptions<T, string> ValidateClientEmailAddress<T>(this IRuleBuilder<T, string> ruleBuilder, IUnitOfWork unitOfWork, Func<T, int> getCurrentClientId,
+        public static IRuleBuilderOptions<T, string?> ValidateClientEmailAddress<T>(this IRuleBuilder<T, string?> ruleBuilder, IUnitOfWork unitOfWork, Func<T, int> getCurrentClientId,
             IResourceMessageProvider resourceMessageProvider)
         {
             return ruleBuilder
@@ -97,7 +97,7 @@ namespace Application.Common.Rules
                 .WithMessage(resourceMessageProvider.GetMessage(typeof(ClientValidationRules), "EmailAddresInUse"));
         }
 
-        public static IRuleBuilderOptions<T, DateOnly> ValidateClientDateOfBirth<T>(this IRuleBuilder<T, DateOnly> ruleBuilder,
+        public static IRuleBuilderOptions<T, DateOnly?> ValidateClientDateOfBirth<T>(this IRuleBuilder<T, DateOnly?> ruleBuilder,
             IResourceMessageProvider resourceMessageProvider)
         {
             return ruleBuilder
@@ -107,7 +107,7 @@ namespace Application.Common.Rules
                 .WithMessage(resourceMessageProvider.GetMessage(typeof(ClientValidationRules), "DateOfBirthNotInFuture"));
         }
 
-        public static IRuleBuilderOptions<T, string> ValidateClientRemarks<T>(this IRuleBuilder<T, string> ruleBuilder,
+        public static IRuleBuilderOptions<T, string?> ValidateClientRemarks<T>(this IRuleBuilder<T, string?> ruleBuilder,
             IResourceMessageProvider resourceMessageProvider)
         {
             return ruleBuilder
@@ -115,7 +115,7 @@ namespace Application.Common.Rules
                 .WithMessage(resourceMessageProvider.GetMessage(typeof(ClientValidationRules), "RemarksMaxLength", ClientConstants.RemarksMaxLength));
         }
 
-        public static IRuleBuilderOptions<T, Gender> ValidateClientGender<T>(this IRuleBuilder<T, Gender> ruleBuilder,
+        public static IRuleBuilderOptions<T, Gender?> ValidateClientGender<T>(this IRuleBuilder<T, Gender?> ruleBuilder,
             IResourceMessageProvider resourceMessageProvider)
         {
             return ruleBuilder
