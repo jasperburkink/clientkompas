@@ -45,7 +45,7 @@ namespace Application.FunctionalTests
             s_databaseCSV = await TestDatabaseFactory<CVSDbContext>.CreateAsync(csvConnectionString!);
 
             var connectionCvs = s_databaseCSV.GetConnection();
-            var connectionAuthentication = s_databaseCSV.GetConnection();
+            var connectionAuthentication = s_databaseAuthentication.GetConnection();
 
             // Configureer andere vereiste diensten en instanties
             s_factory = new CustomWebApplicationFactory(connectionCvs, connectionAuthentication);
@@ -92,7 +92,17 @@ namespace Application.FunctionalTests
 
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AuthenticationUser>>();
 
-            var user = new AuthenticationUser { UserName = userName, Email = userName };
+            var hasher = new Argon2Hasher();
+            var salt = hasher.GenerateSalt();
+            var passwordHash = hasher.HashPassword(password, salt);
+
+            var user = new AuthenticationUser
+            {
+                UserName = userName,
+                Email = userName,
+                Salt = salt,
+                PasswordHash = passwordHash
+            };
 
             var result = await userManager.CreateAsync(user, password);
 
@@ -163,9 +173,16 @@ namespace Application.FunctionalTests
         public static async Task AddAsync<TEntity>(TEntity entity)
             where TEntity : class
         {
+            await AddAsync<TEntity, CVSDbContext>(entity);
+        }
+
+        public static async Task AddAsync<TEntity, TDbContext>(TEntity entity)
+            where TEntity : class
+            where TDbContext : DbContext
+        {
             using var scope = s_scopeFactory.CreateScope();
 
-            var context = scope.ServiceProvider.GetRequiredService<CVSDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<TDbContext>();
 
             context.Add(entity);
 

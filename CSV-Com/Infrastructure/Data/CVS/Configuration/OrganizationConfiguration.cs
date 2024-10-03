@@ -1,4 +1,4 @@
-﻿using Domain.Authentication.Constants;
+﻿using Domain.CVS.Constants;
 using Domain.CVS.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -35,7 +35,7 @@ namespace Infrastructure.Data.CVS.Configuration
 
                 a.Property(p => p.HouseNumber)
                 .HasColumnName("VisitHouseNumber")
-                .HasMaxLength(OrganizationConstants.HouseNumberMaxLength)
+                .HasMaxLength(OrganizationConstants.HouseNumberMaxValue)
                 .IsRequired();
 
                 a.Property(p => p.HouseNumberAddition)
@@ -63,7 +63,7 @@ namespace Infrastructure.Data.CVS.Configuration
 
                 a.Property(p => p.HouseNumber)
                 .HasColumnName("InvoiceHouseNumber")
-                .HasMaxLength(OrganizationConstants.HouseNumberMaxLength)
+                .HasMaxLength(OrganizationConstants.HouseNumberMaxValue)
                 .IsRequired();
 
                 a.Property(p => p.HouseNumberAddition)
@@ -91,7 +91,7 @@ namespace Infrastructure.Data.CVS.Configuration
 
                 a.Property(p => p.HouseNumber)
                 .HasColumnName("PostHouseNumber")
-                .HasMaxLength(OrganizationConstants.HouseNumberMaxLength)
+                .HasMaxLength(OrganizationConstants.HouseNumberMaxValue)
                 .IsRequired();
 
                 a.Property(p => p.HouseNumberAddition)

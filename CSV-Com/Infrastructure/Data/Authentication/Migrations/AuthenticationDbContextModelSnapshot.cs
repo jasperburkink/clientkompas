@@ -64,6 +64,10 @@ namespace Infrastructure.Data.Authentication.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<byte[]>("Salt")
+                        .IsRequired()
+                        .HasColumnType("longblob");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("longtext");
 

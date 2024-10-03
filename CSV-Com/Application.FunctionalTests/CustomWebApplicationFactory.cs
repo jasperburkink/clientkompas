@@ -2,6 +2,7 @@
 using Application.Common.Interfaces.Authentication;
 using Infrastructure.Data.Authentication;
 using Infrastructure.Data.CVS;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -28,6 +29,8 @@ namespace Application.FunctionalTests
                     .RemoveAll<IUser>()
                     .AddTransient(provider => Mock.Of<IUser>(s => s.CurrentUserId == Testing.GetCurrentUserId()));
 
+                //services.AddTransient<IIdentityService, IdentityService>();
+
                 // CVS
                 services
                     .RemoveAll<DbContextOptions<CVSDbContext>>()
@@ -45,6 +48,18 @@ namespace Application.FunctionalTests
                         options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
                         options.UseMySql(_connectionAuthentication, MySqlServerVersion.LatestSupportedServerVersion);
                     });
+            });
+
+            builder.Configure(app =>
+            {
+                // Configure middleware for testing
+                app.UseRouting();
+                app.UseAuthentication();
+                app.UseAuthorization();
+                app.UseEndpoints(endpoints =>
+                {
+                    endpoints.MapControllers();
+                });
             });
         }
     }

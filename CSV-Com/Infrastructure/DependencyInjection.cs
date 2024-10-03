@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Interfaces.CVS;
+using Domain.Authentication.Constants;
 using Domain.Authentication.Domain;
 using Infrastructure.Data.Authentication;
 using Infrastructure.Data.CVS;
@@ -49,7 +50,6 @@ namespace Infrastructure
                             .LogTo(Console.WriteLine, LogLevel.Information)
                             .EnableSensitiveDataLogging();
             });
-            //services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
             services.AddScoped<CVSDbContextInitialiser>();
 
             // Authentication
@@ -70,7 +70,6 @@ namespace Infrastructure
                 .LogTo(Console.WriteLine, LogLevel.Information)
                 .EnableSensitiveDataLogging();
             });
-
             services.AddScoped<AuthenticationDbContextInitialiser>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -80,17 +79,14 @@ namespace Infrastructure
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<AuthenticationDbContext>();
 
-            //services.AddIdentityServer()
-            //    .AddApiAuthorization<ApplicationUser, AuthenticationDbContext>();
-
-            services.AddTransient<IDateTime, DateTimeWrapper>();
-            services.AddTransient<IIdentityService, IdentityService>();
-
-            //services.AddAuthentication()
-            //    .AddIdentityServerJwt();
+            services.AddSingleton<IDateTime, DateTimeWrapper>();
+            services.AddScoped<IIdentityService, IdentityService>();
+            services.AddScoped<IBearerTokenService, BearerTokenService>();
+            services.AddScoped<IPasswordHasher<AuthenticationUser>, Argon2PasswordHasher>();
+            services.AddScoped<IHasher, Argon2Hasher>();
 
             services.AddAuthorization(options =>
-                    options.AddPolicy("CanPurge", policy => policy.RequireRole("Administrator")));
+                    options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator)));
 
             return services;
         }

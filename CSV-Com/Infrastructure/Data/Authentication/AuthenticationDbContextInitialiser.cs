@@ -1,5 +1,6 @@
 ﻿using Domain.Authentication.Constants;
 using Domain.Authentication.Domain;
+using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -74,11 +75,23 @@ namespace Infrastructure.Data.Authentication
             }
 
             // Default users
-            var user = new AuthenticationUser { UserName = $"{role.Name}@localhost", Email = $"{role.Name}@localhost" };
+            var password = $"{role.Name}1!";
+
+            var hasher = new Argon2Hasher();
+            var salt = hasher.GenerateSalt();
+            var passwordHash = hasher.HashPassword(password, salt);
+
+            var user = new AuthenticationUser
+            {
+                UserName = role.Name,
+                Email = role.Name,
+                Salt = salt,
+                PasswordHash = passwordHash
+            };
 
             if (_userManager.Users.All(u => u.UserName != user.UserName))
             {
-                await _userManager.CreateAsync(user, $"{role.Name}1!");
+                await _userManager.CreateAsync(user);
                 if (!string.IsNullOrWhiteSpace(role.Name))
                 {
                     await _userManager.AddToRolesAsync(user, new[] { role.Name });

@@ -13,5 +13,9 @@ namespace Application.Common.Interfaces.Authentication
         Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password);
 
         Task<Result> DeleteUserAsync(string userId);
+
+        Task<LoggedInResult> LoginAsync(string userName, string password);
+
+        Task LogoutAsync();
     }
 }
