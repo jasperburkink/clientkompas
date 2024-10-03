@@ -3,7 +3,7 @@ using Domain.CVS.Enums;
 using FluentAssertions;
 using TestData;
 
-namespace WebApp.FunctionalTests.Pages
+namespace WebApp.FunctionalTests.Pages.Client
 {
     [Parallelizable(ParallelScope.Self)]
     [TestFixture]
@@ -37,61 +37,61 @@ namespace WebApp.FunctionalTests.Pages
             // Act
             await Page.GotoAsync(url);
 
-            await Page.GetByTestId(nameof(Client.FirstName).ToLower()).FillAsync(_firstName);
+            await Page.GetByTestId(nameof(Domain.CVS.Domain.Client.FirstName).ToLower()).FillAsync(_firstName);
 
-            await Page.GetByTestId(nameof(Client.Initials).ToLower()).FillAsync(_initials);
+            await Page.GetByTestId(nameof(Domain.CVS.Domain.Client.Initials).ToLower()).FillAsync(_initials);
 
-            await Page.GetByTestId(nameof(Client.LastName).ToLower()).FillAsync(_lastname);
+            await Page.GetByTestId(nameof(Domain.CVS.Domain.Client.LastName).ToLower()).FillAsync(_lastname);
 
-            await Page.GetByTestId(nameof(Client.Address.StreetName).ToLower()).FillAsync(_streetName);
+            await Page.GetByTestId(nameof(Domain.CVS.Domain.Client.Address.StreetName).ToLower()).FillAsync(_streetName);
 
-            await Page.GetByTestId(nameof(Client.Address.HouseNumber).ToLower()).FillAsync(_housenumber);
+            await Page.GetByTestId(nameof(Domain.CVS.Domain.Client.Address.HouseNumber).ToLower()).FillAsync(_housenumber);
 
-            await Page.GetByTestId(nameof(Client.Address.HouseNumberAddition).ToLower()).FillAsync(_houseNumberAddition);
+            await Page.GetByTestId(nameof(Domain.CVS.Domain.Client.Address.HouseNumberAddition).ToLower()).FillAsync(_houseNumberAddition);
 
-            await Page.GetByTestId(nameof(Client.Address.PostalCode).ToLower()).FillAsync(_postalCode);
+            await Page.GetByTestId(nameof(Domain.CVS.Domain.Client.Address.PostalCode).ToLower()).FillAsync(_postalCode);
 
-            await Page.GetByTestId(nameof(Client.Address.Residence).ToLower()).FillAsync(_residence);
+            await Page.GetByTestId(nameof(Domain.CVS.Domain.Client.Address.Residence).ToLower()).FillAsync(_residence);
 
-            await Page.GetByTestId(nameof(Client.TelephoneNumber).ToLower()).FillAsync(_telephoneNumber);
+            await Page.GetByTestId(nameof(Domain.CVS.Domain.Client.TelephoneNumber).ToLower()).FillAsync(_telephoneNumber);
 
-            await Page.GetByTestId(nameof(Client.EmailAddress).ToLower()).FillAsync(_emailAddress);
+            await Page.GetByTestId(nameof(Domain.CVS.Domain.Client.EmailAddress).ToLower()).FillAsync(_emailAddress);
 
-            await Page.GetByTestId(nameof(Client.DateOfBirth).ToLower()).FillAsync(_dateOfBirth);
+            await Page.GetByTestId(nameof(Domain.CVS.Domain.Client.DateOfBirth).ToLower()).FillAsync(_dateOfBirth);
 
-            await Page.GetByTestId(nameof(Client.Gender).ToLower()).SelectOptionAsync(new[] { ((int)_gender).ToString() });
+            await Page.GetByTestId(nameof(Domain.CVS.Domain.Client.Gender).ToLower()).SelectOptionAsync(new[] { ((int)_gender).ToString() });
 
-            await Page.GetByTestId($"{nameof(Client.EmergencyPeople).ToLower()}.{nameof(EmergencyPerson.Name).ToLower()}.1").FillAsync(_emergencyPerson1Name);
+            await Page.GetByTestId($"{nameof(Domain.CVS.Domain.Client.EmergencyPeople).ToLower()}.{nameof(EmergencyPerson.Name).ToLower()}.1").FillAsync(_emergencyPerson1Name);
 
-            await Page.GetByTestId($"{nameof(Client.EmergencyPeople).ToLower()}.{nameof(EmergencyPerson.TelephoneNumber).ToLower()}.1").FillAsync(_emergencyPerson1TelephoneNumber);
+            await Page.GetByTestId($"{nameof(Domain.CVS.Domain.Client.EmergencyPeople).ToLower()}.{nameof(EmergencyPerson.TelephoneNumber).ToLower()}.1").FillAsync(_emergencyPerson1TelephoneNumber);
 
-            await Page.GetByTestId($"{nameof(Client.EmergencyPeople).ToLower()}.add").ClickAsync();
+            await Page.GetByTestId($"{nameof(Domain.CVS.Domain.Client.EmergencyPeople).ToLower()}.add").ClickAsync();
 
-            await Page.GetByTestId($"{nameof(Client.EmergencyPeople).ToLower()}.{nameof(EmergencyPerson.Name).ToLower()}.2").FillAsync(_emergencyPerson2Name);
+            await Page.GetByTestId($"{nameof(Domain.CVS.Domain.Client.EmergencyPeople).ToLower()}.{nameof(EmergencyPerson.Name).ToLower()}.2").FillAsync(_emergencyPerson2Name);
 
-            await Page.GetByTestId($"{nameof(Client.EmergencyPeople).ToLower()}.{nameof(EmergencyPerson.TelephoneNumber).ToLower()}.2").FillAsync(_emergencyPerson2TelephoneNumber);
+            await Page.GetByTestId($"{nameof(Domain.CVS.Domain.Client.EmergencyPeople).ToLower()}.{nameof(EmergencyPerson.TelephoneNumber).ToLower()}.2").FillAsync(_emergencyPerson2TelephoneNumber);
 
-            await Page.GetByTestId(nameof(Client.Remarks).ToLower()).FillAsync(_remark);
+            await Page.GetByTestId(nameof(Domain.CVS.Domain.Client.Remarks).ToLower()).FillAsync(_remark);
 
-            await Page.GetByTestId(nameof(Client.Diagnoses).ToLower()).SelectOptionAsync(new[] { _diagnosis1 });
-            await Page.GetByTestId($"{nameof(Client.Diagnoses).ToLower()}.add").ClickAsync();
+            await Page.GetByTestId(nameof(Domain.CVS.Domain.Client.Diagnoses).ToLower()).SelectOptionAsync(new[] { _diagnosis1 });
+            await Page.GetByTestId($"{nameof(Domain.CVS.Domain.Client.Diagnoses).ToLower()}.add").ClickAsync();
 
-            await Page.GetByTestId(nameof(Client.Diagnoses).ToLower()).SelectOptionAsync(new[] { _diagnosis2 });
-            await Page.GetByTestId($"{nameof(Client.Diagnoses).ToLower()}.add").ClickAsync();
+            await Page.GetByTestId(nameof(Domain.CVS.Domain.Client.Diagnoses).ToLower()).SelectOptionAsync(new[] { _diagnosis2 });
+            await Page.GetByTestId($"{nameof(Domain.CVS.Domain.Client.Diagnoses).ToLower()}.add").ClickAsync();
 
-            await Page.GetByTestId(nameof(Client.BenefitForms).ToLower()).SelectOptionAsync(new[] { _benefitForm });
-            await Page.GetByTestId($"{nameof(Client.BenefitForms).ToLower()}.add").ClickAsync();
+            await Page.GetByTestId(nameof(Domain.CVS.Domain.Client.BenefitForms).ToLower()).SelectOptionAsync(new[] { _benefitForm });
+            await Page.GetByTestId($"{nameof(Domain.CVS.Domain.Client.BenefitForms).ToLower()}.add").ClickAsync();
 
-            await Page.GetByTestId(nameof(Client.MaritalStatus).ToLower()).SelectOptionAsync(new[] { _maritalStatus });
+            await Page.GetByTestId(nameof(Domain.CVS.Domain.Client.MaritalStatus).ToLower()).SelectOptionAsync(new[] { _maritalStatus });
 
-            await Page.GetByTestId(nameof(Client.DriversLicences).ToLower()).SelectOptionAsync(new[] { _driversLicence });
-            await Page.GetByTestId($"{nameof(Client.DriversLicences).ToLower()}.add").ClickAsync();
+            await Page.GetByTestId(nameof(Domain.CVS.Domain.Client.DriversLicences).ToLower()).SelectOptionAsync(new[] { _driversLicence });
+            await Page.GetByTestId($"{nameof(Domain.CVS.Domain.Client.DriversLicences).ToLower()}.add").ClickAsync();
 
-            await Page.GetByTestId($"{nameof(Client.WorkingContracts).ToLower()}.{nameof(WorkingContract.OrganizationId).ToLower()}.1").SelectOptionAsync(new[] { _workingContractOrganization });
-            await Page.GetByTestId($"{nameof(Client.WorkingContracts).ToLower()}.{nameof(WorkingContract.Function).ToLower()}.1").FillAsync(_workingContractFunction);
-            await Page.GetByTestId($"{nameof(Client.WorkingContracts).ToLower()}.{nameof(WorkingContract.ContractType).ToLower()}.1").SelectOptionAsync(new[] { _workingContractContractType });
-            await Page.GetByTestId($"{nameof(Client.WorkingContracts).ToLower()}.{nameof(WorkingContract.FromDate).ToLower()}.1").FillAsync(_workingContractFromDate);
-            await Page.GetByTestId($"{nameof(Client.WorkingContracts).ToLower()}.{nameof(WorkingContract.ToDate).ToLower()}.1").FillAsync(_workingContractToDate);
+            await Page.GetByTestId($"{nameof(Domain.CVS.Domain.Client.WorkingContracts).ToLower()}.{nameof(WorkingContract.OrganizationId).ToLower()}.1").SelectOptionAsync(new[] { _workingContractOrganization });
+            await Page.GetByTestId($"{nameof(Domain.CVS.Domain.Client.WorkingContracts).ToLower()}.{nameof(WorkingContract.Function).ToLower()}.1").FillAsync(_workingContractFunction);
+            await Page.GetByTestId($"{nameof(Domain.CVS.Domain.Client.WorkingContracts).ToLower()}.{nameof(WorkingContract.ContractType).ToLower()}.1").SelectOptionAsync(new[] { _workingContractContractType });
+            await Page.GetByTestId($"{nameof(Domain.CVS.Domain.Client.WorkingContracts).ToLower()}.{nameof(WorkingContract.FromDate).ToLower()}.1").FillAsync(_workingContractFromDate);
+            await Page.GetByTestId($"{nameof(Domain.CVS.Domain.Client.WorkingContracts).ToLower()}.{nameof(WorkingContract.ToDate).ToLower()}.1").FillAsync(_workingContractToDate);
 
             await Page.GetByTestId("button.save").ClickAsync();
             await Page.GetByTestId("button.confirm").ClickAsync();
@@ -150,7 +150,7 @@ namespace WebApp.FunctionalTests.Pages
             await Page.GotoAsync(url);
             await Task.Delay(TimeSpan.FromSeconds(2)); // NOTE: For strange reasons there's a delay needed. Else an exception will be thrown.
 
-            await Page.GetByTestId(nameof(Client.FirstName).ToLower()).FillAsync(_updatedFirstName);
+            await Page.GetByTestId(nameof(Domain.CVS.Domain.Client.FirstName).ToLower()).FillAsync(_updatedFirstName);
 
             await Page.GetByTestId("button.save").ClickAsync();
             await Page.GetByTestId("button.confirm").ClickAsync();
