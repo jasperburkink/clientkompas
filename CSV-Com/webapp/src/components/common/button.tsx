@@ -28,8 +28,7 @@ export const Button = (props: ButtonProps) => {
         <button
             onClick={handleClick}
             className={combinedClassName}
-            data-testid={props.dataTestId}
-        >
+            data-testid={props.dataTestId}>
             {props.text}
         </button>
     );

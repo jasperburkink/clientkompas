@@ -13,6 +13,8 @@ import { ValidationErrorHash, ValidationError, parseValidationErrors } from "typ
 import { Type } from "typescript";
 import CoachingProgramQuery from "types/model/CoachingProgramQuery";
 import CoachingProgram from "types/model/CoachingProgram";
+import LoginCommand from "types/model/login/login-command";
+import LoginCommandDto from "types/model/login/login-command-dto";
 import CoachingProgramEdit from "types/model/CoachingProgramEdit";
 import GetClientFullnameDto from "types/model/GetClientFullnameDto";
 import GetCoachingProgramTypesDto from "types/model/GetCoachingProgramTypesDto";
@@ -95,6 +97,22 @@ const handleApiResonse = async <T>(response: Response): Promise<ApiResult<T>> =>
             Errors: [response.statusText]
         }
     }
+}
+
+export const login = async (loginCommand: LoginCommand): Promise<ApiResult<LoginCommandDto>> => {
+    let method = 'POST';
+
+    const requestOptions: RequestInit = {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(loginCommand)
+    };
+
+    const response = await fetch(`${apiUrl}Authentication`, requestOptions);     
+    
+    return handleApiResonse<LoginCommandDto>(response);
 }
 
 export const fetchClient = async (clientId: string): Promise<ClientQuery> => {

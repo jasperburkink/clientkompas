@@ -20,7 +20,7 @@ const ConfirmPopup = (props: IConfirmPopupProps) => {
 
             <div className={`confirm-popup ${props.className}`}>
                 <FontAwesomeIcon icon={faXmark} className="flex-none fa-solid fa-xl close-icon" onClick={props.onClose} />
-                <p className='confirm-message'>{props.message}</p>
+                <p className='confirm-message' data-testid='message.confirm'>{props.message}</p>
                 <div className='confirm-button-container'>
                     {props.buttons.map((buttonComponent, index) => (
                         <Button key={index} {...buttonComponent} className='confirm-button'/>
