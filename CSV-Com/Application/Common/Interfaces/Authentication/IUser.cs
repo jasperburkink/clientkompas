@@ -2,6 +2,6 @@
 {
     public interface IUser
     {
-        string? UserId { get; }
+        string? CurrentUserId { get; }
     }
 }
