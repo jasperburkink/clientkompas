@@ -21,6 +21,26 @@
             "L", "T"
         };
 
+        public static ICollection<string> DRIVERSLICENCE_CATEGORIES_DESCRIPTIONS = new[]
+        {
+            "Motor tot 125cc",    // A1
+            "Motor tot 35kW",     // A2
+            "Zware motor",        // A
+            "Auto",               // B
+            "Auto met aanhanger", // BE
+            "Kleine vrachtwagen", // C1
+            "Kleine vrachtwagen met aanhanger", // C1E
+            "Vrachtwagen",        // C
+            "Vrachtwagen met aanhanger", // CE
+            "Kleine bus",         // D1
+            "Kleine bus met aanhanger", // D1E
+            "Bus",                // D
+            "Bus met aanhanger",  // DE
+            "Landbouwvoertuigen", // L
+            "Tractor"             // T
+        };
+
+
         public static ICollection<string> MARITALSTATUSES_OPTIONS = new[]
         {
             "Ongetrouwd",
@@ -37,6 +57,22 @@
             "Ziektewetuitkering",
             "Pensioen",
             "Invaliditeitsuitkering"
+        };
+
+        public static ICollection<string> DIAGNOSIS_OPTIONS = new[]
+        {
+            "ADHD",
+            "Autisme",
+            "Dyslexie",
+            "Dyscalculie",
+            "Obsessieve-Compulsieve Stoornis",
+            "Depressie",
+            "Bipolaire Stoornis",
+            "Angststoornis",
+            "Tourette Syndroom",
+            "Posttraumatische Stressstoornis",
+            "Oppositionele-opstandige stoornis",
+            "Schizofrenie"
         };
     }
 }

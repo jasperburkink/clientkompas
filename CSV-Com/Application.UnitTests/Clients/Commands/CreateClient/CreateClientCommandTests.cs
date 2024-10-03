@@ -64,10 +64,10 @@ namespace Application.UnitTests.Clients.Commands.CreateClient
                 Initials = _command.Initials,
                 PrefixLastName = _command.PrefixLastName,
                 LastName = _command.LastName,
-                Gender = _command.Gender,
-                Address = Address.From(_command.StreetName, _command.HouseNumber, _command.HouseNumberAddition, _command.PostalCode, _command.Residence),
+                Gender = _command.Gender.Value,
+                Address = Address.From(_command.StreetName, _command.HouseNumber.Value, _command.HouseNumberAddition, _command.PostalCode, _command.Residence),
                 TelephoneNumber = _command.TelephoneNumber,
-                DateOfBirth = _command.DateOfBirth,
+                DateOfBirth = _command.DateOfBirth.Value,
                 EmailAddress = _command.EmailAddress,
                 BenefitForms = [],
                 MaritalStatus = new MaritalStatus

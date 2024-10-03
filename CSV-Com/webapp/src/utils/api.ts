@@ -15,6 +15,9 @@ import CoachingProgramQuery from "types/model/CoachingProgramQuery";
 import CoachingProgram from "types/model/CoachingProgram";
 import LoginCommand from "types/model/login/login-command";
 import LoginCommandDto from "types/model/login/login-command-dto";
+import CoachingProgramEdit from "types/model/CoachingProgramEdit";
+import GetClientFullnameDto from "types/model/GetClientFullnameDto";
+import GetCoachingProgramTypesDto from "types/model/GetCoachingProgramTypesDto";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -135,6 +138,10 @@ export const searchClients = async (searchTerm: string): Promise<ClientQuery[]> 
     return fetchAPI<ClientQuery[]>(`${apiUrl}Client/SearchClients?SearchTerm=${searchTerm}`);
 }
 
+export const fetchClientFullname = async (clientId: string): Promise<GetClientFullnameDto> => {
+    return fetchAPI<GetClientFullnameDto>(`${apiUrl}Client/GetClientFullname/${clientId}`);
+}
+
 export const fetchBenefitForms = async (): Promise<BenefitForm[]> => {
     return fetchAPI<BenefitForm[]>(`${apiUrl}BenefitForm`);
 }
@@ -168,9 +175,6 @@ Date.prototype.toJSON = function(){
 
 export const saveClient = async (client: Client): Promise<ApiResult<Client>> => {
     let method = client.id > 0  ? 'PUT' : 'POST';
-
-    console.log(JSON.stringify(client));
-
 
     const requestOptions: RequestInit = {
         method: method,
@@ -215,9 +219,33 @@ export const fetchCoachingProgramsByClient = async (clientId: string): Promise<C
 }
 
 export const fetchCoachingProgram = async (id: number): Promise<CoachingProgram> => {
-let tempco = await fetchAPI<CoachingProgram>(`${apiUrl}CoachingProgram/${id}`);
-
     return await fetchAPI<CoachingProgram>(`${apiUrl}CoachingProgram/${id}`);
+}
+
+export const fetchCoachingProgramEdit = async (id: string): Promise<CoachingProgramEdit> => {
+    return fetchAPI<CoachingProgramEdit>(`${apiUrl}CoachingProgram/GetCoachingProgramsEdit/${id}`);
+}
+
+export const fetchCoachingProgramTypes = async (): Promise<GetCoachingProgramTypesDto[]> => {
+    return await fetchAPI<GetCoachingProgramTypesDto[]>(`${apiUrl}CoachingProgram/GetCoachingProgramTypes`);
+}
+
+export const saveCoachingProgram = async (coachingProgram: CoachingProgramEdit): Promise<ApiResult<CoachingProgramEdit>> => {
+    let method = coachingProgram.id > 0  ? 'PUT' : 'POST';
+
+    coachingProgram.organizationid = coachingProgram.organizationid && coachingProgram.organizationid > 0 ? coachingProgram.organizationid : undefined;
+
+    const requestOptions: RequestInit = {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(coachingProgram)
+    };
+
+    const response = await fetch(`${apiUrl}CoachingProgram`, requestOptions);     
+
+    return handleApiResonse<CoachingProgramEdit>(response);
 }
 
 function processErrors(errors: { [key: string]: string[] }): string[] {

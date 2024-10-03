@@ -143,7 +143,7 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
         public async Task Handle_SearchClientByWrongPrefixLastName_ReturnsNoClients()
         {
             // Arrange
-            var query = new SearchClientsQuery { SearchTerm = $"Wrong{_client.PrefixLastName}Wrong" };
+            var query = new SearchClientsQuery { SearchTerm = $"Wrong{_client.PrefixLastName?.Replace(' ', '_')}Wrong" };
 
             // Act
             var clients = await SendAsync(query);

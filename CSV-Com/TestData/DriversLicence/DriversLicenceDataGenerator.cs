@@ -17,10 +17,13 @@ namespace TestData.DriversLicence
         {
             var faker = new Faker(FakerConfiguration.Localization);
 
+            var random = new Random();
+            var index = random.Next(Constants.DRIVERSLICENCE_CATEGORIES.Count());
+
             return new AutoFaker<Domain.CVS.Domain.DriversLicence>()
                 .RuleFor(dl => dl.Id, 0)
-                .RuleFor(dl => dl.Category, f => f.PickRandom(Constants.DRIVERSLICENCE_CATEGORIES))
-                .RuleFor(dl => dl.Description, f => f.Random.String2(10));
+                .RuleFor(dl => dl.Category, f => Constants.DRIVERSLICENCE_CATEGORIES.ElementAt(index))
+                .RuleFor(dl => dl.Description, f => Constants.DRIVERSLICENCE_CATEGORIES_DESCRIPTIONS.ElementAt(index));
         }
     }
 }
