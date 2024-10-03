@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './input-field.css';
 import { InputFieldType } from 'types/common/InputFieldComponentType';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,47 +8,54 @@ import { ValidationError } from 'types/common/validation-error';
 import Decimal from 'decimal.js-light';
 
 export interface DecimalInputFieldProps {
-    value?: Decimal;
+    value?: string;
     placeholder: string;
     required: boolean;
     inputfieldtype: InputFieldType;
     className?: string;
-    onChange?: (value: Decimal) => void;
+    onChange?: (value: string) => void;
     dataTestId?: string;
     errors?: ValidationError[];
-    readOnly?: boolean; 
+    readOnly?: boolean;
 }
 
 export const DecimalInputField = (props: DecimalInputFieldProps) => {
-
+    
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (props.readOnly) return;
     
         let inputValue = e.target.value;
-    
-        // TODO: NL vs USA notations
-        inputValue = inputValue.replace(',', '.');
+
+        // Regex to allow only numbers, commas, dots, and a minus sign at the start
+        const validInputRegex = /^-?\d*[.,]?\d*$/;
+
+        if (validInputRegex.test(inputValue)) {
+            // Replace comma with dot for internal Decimal parsing, but not for display
+            const normalizedValue = inputValue.replace(',', '.');
             
-        if (/^-?\d*\.?\d*$/.test(inputValue) || inputValue === '') {
-            if (inputValue === '') {
-                props.onChange?.(new Decimal(0));
-            } else {
-                try {
-                    const decimalValue = new Decimal(inputValue);
-                    props.onChange?.(decimalValue);
-                } catch (error) {
-                    console.error('Invalid decimal value:', error);
+            try {
+                // If the input can be parsed as a valid Decimal, propagate it
+                if (inputValue.endsWith('.') || inputValue.endsWith(',') || inputValue === '-') {
+                    // Allow incomplete decimals (e.g., "123.", "123,", or "-")
+                    props.onChange?.(inputValue);
+                } else {
+                    const decimal = new Decimal(normalizedValue);
+                    props.onChange?.(decimal.toString().replace('.', ','));
                 }
+            } catch (err) {
+                console.error('Invalid decimal value:', err);
             }
+        } else {
+            console.error('Invalid character entered');
         }
-    };    
+    };
 
     return (
         <div className={`input-field ${props.className}`}>
             <div className={`input-field-container`}>
                 <input
                     onChange={handleChange}
-                    value={props.value?.toString() || ''}
+                    value={props.value}
                     type={props.inputfieldtype.type}
                     placeholder={props.placeholder}
                     required={props.required}

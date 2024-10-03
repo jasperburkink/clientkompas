@@ -204,6 +204,10 @@ export const fetchCoachingProgram = async (id: number): Promise<CoachingProgram>
     return await fetchAPI<CoachingProgram>(`${apiUrl}CoachingProgram/${id}`);
 }
 
+export const fetchCoachingProgramEdit = async (id: string): Promise<CoachingProgramEdit> => {
+    return fetchAPI<CoachingProgramEdit>(`${apiUrl}CoachingProgram/GetCoachingProgramsEdit/${id}`);
+}
+
 export const fetchCoachingProgramTypes = async (): Promise<GetCoachingProgramTypesDto[]> => {
     return await fetchAPI<GetCoachingProgramTypesDto[]>(`${apiUrl}CoachingProgram/GetCoachingProgramTypes`);
 }
