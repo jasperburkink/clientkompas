@@ -138,6 +138,12 @@
             lg:grid-cols-2;
         }
 
+        .coachingprogram-create-fields{
+            @apply
+            lg:grid
+            lg:grid-cols-2;
+        }
+
         .button-container{
             @apply
             flex

@@ -23,6 +23,8 @@ root.render(
                     <Route path='/organization/:id' element={<OrganizationContextWrapper organizationRoute={OrganizationRoute.VIEW_ORGANIZATION} />} />
                     <Route path='/organization/edit' element={<OrganizationContextWrapper organizationRoute={OrganizationRoute.EDIT_ORGANIZATION} />} />
                     <Route path='/organization/edit/:id' element={<OrganizationContextWrapper organizationRoute={OrganizationRoute.EDIT_ORGANIZATION} />} />
+                    <Route path='/clients/:clientid/coachingprogram-editor' element={<ClientContextWrapper clientRoute={ClientRoute.EDIT_CLIENT_COACHINGPROGRAM} />} />
+                    <Route path='/clients/:clientid/coachingprogram-editor/:id' element={<ClientContextWrapper clientRoute={ClientRoute.EDIT_CLIENT_COACHINGPROGRAM} />} />
                 </Routes>
             </BrowserRouter>
         </React.StrictMode>
