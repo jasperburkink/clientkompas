@@ -88,7 +88,7 @@ namespace Infrastructure.Identity
             }
         }
 
-        public async Task<RefreshToken?> GetRefreshTokenAsync(string refreshToken)
+        public async Task<IRefreshToken?> GetRefreshTokenAsync(string refreshToken)
         {
             return await _authenticationDbContext.RefreshTokens.FirstOrDefaultAsync(rt => rt.Value == refreshToken);
         }

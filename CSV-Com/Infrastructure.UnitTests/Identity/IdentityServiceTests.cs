@@ -18,6 +18,7 @@ namespace Infrastructure.UnitTests.Identity
         private readonly Mock<IUserClaimsPrincipalFactory<AuthenticationUser>> _userClaimsPrincipalFactoryMock;
         private readonly Mock<IAuthorizationService> _authorizationServiceMock;
         private readonly Mock<IHasher> _hasherMock;
+        private readonly Mock<IRefreshTokenService> _refreshTokenServiceMock;
 
         public IdentityServiceTests()
         {
@@ -26,6 +27,7 @@ namespace Infrastructure.UnitTests.Identity
             _userClaimsPrincipalFactoryMock = new Mock<IUserClaimsPrincipalFactory<AuthenticationUser>>();
             _authorizationServiceMock = new Mock<IAuthorizationService>();
             _hasherMock = new Mock<IHasher>();
+            _refreshTokenServiceMock = new Mock<IRefreshTokenService>();
         }
 
         [Fact]
@@ -48,7 +50,8 @@ namespace Infrastructure.UnitTests.Identity
                 _signInManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
-                _hasherMock.Object
+                _hasherMock.Object,
+                _refreshTokenServiceMock.Object
             );
 
             // Act
@@ -95,7 +98,8 @@ namespace Infrastructure.UnitTests.Identity
                 _signInManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
-                _hasherMock.Object
+                _hasherMock.Object,
+                _refreshTokenServiceMock.Object
             );
 
             // Act
@@ -127,7 +131,8 @@ namespace Infrastructure.UnitTests.Identity
                  _signInManagerMock.Object,
                  _userClaimsPrincipalFactoryMock.Object,
                  _authorizationServiceMock.Object,
-                 _hasherMock.Object
+                 _hasherMock.Object,
+                 _refreshTokenServiceMock.Object
              );
 
             // Act
@@ -156,7 +161,8 @@ namespace Infrastructure.UnitTests.Identity
                 _signInManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
-                _hasherMock.Object
+                _hasherMock.Object,
+                _refreshTokenServiceMock.Object
             );
 
             // Act
@@ -181,7 +187,8 @@ namespace Infrastructure.UnitTests.Identity
                 _signInManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
-                _hasherMock.Object
+                _hasherMock.Object,
+                _refreshTokenServiceMock.Object
             );
 
             // Act
@@ -214,7 +221,8 @@ namespace Infrastructure.UnitTests.Identity
                 _signInManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
-                _hasherMock.Object
+                _hasherMock.Object,
+                _refreshTokenServiceMock.Object
             );
 
             // Act
@@ -248,7 +256,8 @@ namespace Infrastructure.UnitTests.Identity
                 _signInManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
-                _hasherMock.Object
+                _hasherMock.Object,
+                _refreshTokenServiceMock.Object
             );
 
             // Act
@@ -276,7 +285,8 @@ namespace Infrastructure.UnitTests.Identity
                 _signInManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
-                _hasherMock.Object
+                _hasherMock.Object,
+                _refreshTokenServiceMock.Object
             );
 
             // Act
@@ -300,7 +310,8 @@ namespace Infrastructure.UnitTests.Identity
                 _signInManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
-                _hasherMock.Object
+                _hasherMock.Object,
+                _refreshTokenServiceMock.Object
             );
 
             // Act
@@ -325,7 +336,8 @@ namespace Infrastructure.UnitTests.Identity
                 _signInManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
-                _hasherMock.Object
+                _hasherMock.Object,
+                _refreshTokenServiceMock.Object
             );
 
             // Act
@@ -347,7 +359,8 @@ namespace Infrastructure.UnitTests.Identity
                 _signInManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
-                _hasherMock.Object
+                _hasherMock.Object,
+                _refreshTokenServiceMock.Object
             );
 
             // Act

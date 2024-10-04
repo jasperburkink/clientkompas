@@ -20,7 +20,8 @@ import { BearerToken } from "types/common/bearer-token";
 const apiUrl = process.env.REACT_APP_API_URL;
 
 async function fetchAPI<T>(url: string, method: string = 'GET', body?: any): Promise<ApiResult<T>> {
-    const bearerTokenJson = sessionStorage.getItem('token');
+    const bearerTokenJson = sessionStorage.getItem('token');    
+    const refreshToken = localStorage.getItem('refreshToken');
     let bearerToken: BearerToken | null = null;
 
     // Token expired?
@@ -172,7 +173,7 @@ export const login = async (loginCommand: LoginCommand): Promise<ApiResult<Login
 }
 
 async function refreshAccessToken(): Promise<string | null> {
-    const refreshToken = sessionStorage.getItem('refreshToken');
+    const refreshToken = localStorage.getItem('refreshToken');
     if (!refreshToken) {
         window.location.href = '/unauthorized';
         return null;
@@ -190,14 +191,13 @@ async function refreshAccessToken(): Promise<string | null> {
         const data = await response.json();
         
         sessionStorage.setItem('token', data.accessToken);
-        sessionStorage.setItem('refreshToken', data.refreshToken);
+        localStorage.setItem('refreshToken', data.refreshToken);
         return data.accessToken;
     } else {
         window.location.href = '/unauthorized';
         return null;
     }
 }
-
 
 export const fetchClient = async (clientId: string): Promise<ClientQuery> => {
     return (await fetchAPI<ClientQuery>(`${apiUrl}Client/${clientId}`)).ReturnObject!;

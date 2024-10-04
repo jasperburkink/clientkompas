@@ -26,7 +26,11 @@ namespace Application.UnitTests.Authentication.Commands.Login
             var bearerTokenServiceMock = new Mock<IBearerTokenService>();
             bearerTokenServiceMock.Setup(btsm => btsm.GenerateBearerTokenAsync(It.IsAny<AuthenticationUser>(), It.IsAny<IList<string>>())).ReturnsAsync(bearerToken);
 
-            var handler = new LoginCommandHandler(identityServiceMock.Object, bearerTokenServiceMock.Object);
+            var refreshToken = "test";
+            var refreshTokenServiceMock = new Mock<IRefreshTokenService>();
+            refreshTokenServiceMock.Setup(rtsm => rtsm.GenerateRefreshTokenAsync(It.IsAny<AuthenticationUser>())).ReturnsAsync(refreshToken);
+
+            var handler = new LoginCommandHandler(identityServiceMock.Object, bearerTokenServiceMock.Object, refreshTokenServiceMock.Object);
 
             var command = new LoginCommand
             {
@@ -59,7 +63,11 @@ namespace Application.UnitTests.Authentication.Commands.Login
 
             var bearerTokenServiceMock = new Mock<IBearerTokenService>();
 
-            var handler = new LoginCommandHandler(identityServiceMock.Object, bearerTokenServiceMock.Object);
+            var refreshToken = "test";
+            var refreshTokenServiceMock = new Mock<IRefreshTokenService>();
+            refreshTokenServiceMock.Setup(rtsm => rtsm.GenerateRefreshTokenAsync(It.IsAny<AuthenticationUser>())).ReturnsAsync(refreshToken);
+
+            var handler = new LoginCommandHandler(identityServiceMock.Object, bearerTokenServiceMock.Object, refreshTokenServiceMock.Object);
 
             var command = new LoginCommand
             {

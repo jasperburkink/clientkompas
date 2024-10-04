@@ -40,12 +40,17 @@ const Login = () => {
     const [isConfirmPopupOneButtonOpen, setConfirmPopupOneButtonOpen] = useState<boolean>(false);
     const [loginCommand, setLoginCommand] = useState<LoginCommand>(initialLoginCommand);
     const [bearertoken, setBearerToken] = useState<BearerToken | null>(sessionStorage.getItem('token') ? BearerToken.deserialize(sessionStorage.getItem('token')!) : null);
+    const [refreshtoken, setRefreshToken] = useState<string | null>(localStorage.getItem('refreshToken') ? localStorage.getItem('refreshToken') : null);
     
     useEffect(() => {         
         if(bearertoken) {
             sessionStorage.setItem('token', BearerToken.serialize(bearertoken));
         }
-    }, [bearertoken]);
+
+        if(refreshtoken) {
+            localStorage.setItem('refreshToken', refreshtoken);
+        }
+    }, [bearertoken, refreshtoken]);
 
     const [isErrorPopupOpen, setErrorPopupOpen] = useState<boolean>(false);
     const [cvsError, setCvsError] = useState<CVSError>(() => {
@@ -72,11 +77,13 @@ const Login = () => {
         setBearerToken: React.Dispatch<React.SetStateAction<BearerToken | null>>) => {
         if (apiResult.Ok) {
             if(apiResult.ReturnObject?.success === true 
-                && apiResult.ReturnObject?.bearertoken) {                
+                && apiResult.ReturnObject?.bearertoken
+                && apiResult.ReturnObject?.refreshtoken) {                
 
                 setConfirmMessage('Inloggen succesvol.');
                 setConfirmPopupOneButtonOpen(true);
                 setBearerToken(new BearerToken(apiResult.ReturnObject.bearertoken));
+                setRefreshToken(apiResult.ReturnObject.refreshtoken);
             }
             else{
                 setCvsError({

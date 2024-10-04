@@ -10,6 +10,6 @@ namespace Application.Common.Interfaces.Authentication
 
         Task RevokeRefreshTokenAsync(string userId, string refreshToken);
 
-        Task<IRefreshToken?> GetRefreshTokenAsync(string refreshToken)
+        Task<IRefreshToken?> GetRefreshTokenAsync(string refreshToken);
     }
 }
