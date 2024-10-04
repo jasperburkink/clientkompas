@@ -38,7 +38,7 @@ namespace Infrastructure.UnitTests.Identity
             var hashedPassword = "hashedpassword";
 
             _hasherMock.Setup(h => h.GenerateSalt(It.IsAny<int>())).Returns(salt);
-            _hasherMock.Setup(h => h.HashPassword(password, salt)).Returns(hashedPassword);
+            _hasherMock.Setup(h => h.HashString(password, salt)).Returns(hashedPassword);
 
             _userManagerMock.Setup(x => x.CreateAsync(It.IsAny<AuthenticationUser>(), It.IsAny<string>()))
                            .ReturnsAsync(IdentityResult.Success);
@@ -88,7 +88,7 @@ namespace Infrastructure.UnitTests.Identity
             _signInManagerMock.Setup(x => x.PasswordSignInAsync(userName, password, true, false))
                              .ReturnsAsync(signInResult);
 
-            _hasherMock.Setup(h => h.HashPassword(password, salt)).Returns(hashedPassword);
+            _hasherMock.Setup(h => h.HashString(password, salt)).Returns(hashedPassword);
 
             var identityService = new IdentityService(
                 _userManagerMock.Object,

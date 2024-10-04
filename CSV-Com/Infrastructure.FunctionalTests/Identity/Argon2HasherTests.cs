@@ -48,7 +48,7 @@ namespace Infrastructure.FunctionalTests.Identity
             var salt = _argon2Hasher.GenerateSalt();
 
             // Act
-            var hashedPassword = _argon2Hasher.HashPassword(password, salt);
+            var hashedPassword = _argon2Hasher.HashString(password, salt);
 
             // Assert
             hashedPassword.Should().NotBeNullOrEmpty();
@@ -62,8 +62,8 @@ namespace Infrastructure.FunctionalTests.Identity
             var salt = _argon2Hasher.GenerateSalt();
 
             // Act
-            var hash1 = _argon2Hasher.HashPassword(password, salt);
-            var hash2 = _argon2Hasher.HashPassword(password, salt);
+            var hash1 = _argon2Hasher.HashString(password, salt);
+            var hash2 = _argon2Hasher.HashString(password, salt);
 
             // Assert
             hash1.Should().Be(hash2);
@@ -78,8 +78,8 @@ namespace Infrastructure.FunctionalTests.Identity
             var salt2 = _argon2Hasher.GenerateSalt();
 
             // Act
-            var hash1 = _argon2Hasher.HashPassword(password, salt1);
-            var hash2 = _argon2Hasher.HashPassword(password, salt2);
+            var hash1 = _argon2Hasher.HashString(password, salt1);
+            var hash2 = _argon2Hasher.HashString(password, salt2);
 
             // Assert
             hash1.Should().NotBe(hash2);
@@ -94,8 +94,8 @@ namespace Infrastructure.FunctionalTests.Identity
             var password2 = "DifferentPassword123";
 
             // Act
-            var hash1 = _argon2Hasher.HashPassword(password1, salt);
-            var hash2 = _argon2Hasher.HashPassword(password2, salt);
+            var hash1 = _argon2Hasher.HashString(password1, salt);
+            var hash2 = _argon2Hasher.HashString(password2, salt);
 
             // Assert
             hash1.Should().NotBe(hash2);
@@ -121,7 +121,7 @@ namespace Infrastructure.FunctionalTests.Identity
             var hashLength = 32;
 
             // Act
-            var hash = _argon2Hasher.HashPassword(password, salt);
+            var hash = _argon2Hasher.HashString(password, salt);
             var hashBytes = Convert.FromBase64String(hash);
 
             // Assert

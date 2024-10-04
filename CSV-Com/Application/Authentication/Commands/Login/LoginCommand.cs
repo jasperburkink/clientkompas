@@ -13,11 +13,13 @@ namespace Application.Authentication.Commands.Login
     {
         private readonly IIdentityService _identityService;
         private readonly IBearerTokenService _bearerTokenService;
+        private readonly IRefreshTokenService _refreshTokenService;
 
-        public LoginCommandHandler(IIdentityService identityService, IBearerTokenService bearerTokenService)
+        public LoginCommandHandler(IIdentityService identityService, IBearerTokenService bearerTokenService, IRefreshTokenService refreshTokenService)
         {
             _identityService = identityService;
             _bearerTokenService = bearerTokenService;
+            _refreshTokenService = refreshTokenService;
         }
 
         public async Task<LoginCommandDto> Handle(LoginCommand request, CancellationToken cancellationToken)
@@ -34,10 +36,13 @@ namespace Application.Authentication.Commands.Login
 
             var bearerToken = await _bearerTokenService.GenerateBearerTokenAsync(loggedInUser.User, loggedInUser.Roles); // UserInfo & roles are processed inside the bearertoken
 
+            var refreshToken = await _refreshTokenService.GetRefreshTokenAsync(bearerToken);
+
             return new LoginCommandDto
             {
                 Success = true,
-                BearerToken = bearerToken
+                BearerToken = bearerToken,
+                RefreshToken = refreshToken?.Value
             };
         }
     }

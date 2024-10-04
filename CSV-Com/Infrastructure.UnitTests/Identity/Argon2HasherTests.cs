@@ -20,7 +20,7 @@ namespace Infrastructure.UnitTests.Identity
             var hashedPasswordLength = 44; // Base64 encoded 32 bytes hash will be 44 characters long
 
             // Act
-            var hashedPassword = _hasher.HashPassword(password, salt);
+            var hashedPassword = _hasher.HashString(password, salt);
 
             // Assert
             Assert.NotNull(hashedPassword);
@@ -65,8 +65,8 @@ namespace Infrastructure.UnitTests.Identity
             var salt2 = _hasher.GenerateSalt();
 
             // Act
-            var hashedPassword1 = _hasher.HashPassword(password, salt1);
-            var hashedPassword2 = _hasher.HashPassword(password, salt2);
+            var hashedPassword1 = _hasher.HashString(password, salt1);
+            var hashedPassword2 = _hasher.HashString(password, salt2);
 
             // Assert
             Assert.NotEqual(hashedPassword1, hashedPassword2);
@@ -80,8 +80,8 @@ namespace Infrastructure.UnitTests.Identity
             var salt = _hasher.GenerateSalt();
 
             // Act
-            var hashedPassword1 = _hasher.HashPassword(password, salt);
-            var hashedPassword2 = _hasher.HashPassword(password, salt);
+            var hashedPassword1 = _hasher.HashString(password, salt);
+            var hashedPassword2 = _hasher.HashString(password, salt);
 
             // Assert
             Assert.Equal(hashedPassword1, hashedPassword2);

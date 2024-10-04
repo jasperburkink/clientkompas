@@ -1,6 +1,6 @@
-﻿namespace Application.Authentication.Commands.Login
+﻿namespace Application.Authentication.Commands.RefreshToken
 {
-    public class LoginCommandDto
+    public class RefreshTokenCommandDto
     {
         public required bool Success { get; set; }
 

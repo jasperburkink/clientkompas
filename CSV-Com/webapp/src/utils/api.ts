@@ -28,11 +28,14 @@ async function fetchAPI<T>(url: string, method: string = 'GET', body?: any): Pro
         bearerToken = BearerToken.deserialize(bearerTokenJson);
 
         if(bearerToken.isExpired()){
-            window.location.href = '/unauthorized'; // TODO: own page for token expiration?
-            return Promise.reject({
-                Ok: false,
-                Errors: ['Unauthorized access']
-            });
+            const newToken = await refreshAccessToken();
+
+            if(!newToken) {
+                return Promise.reject({
+                    Ok: false,
+                    Errors: ['Unauthorized access']
+                });
+            }
         }
     }
 
@@ -167,6 +170,34 @@ export const login = async (loginCommand: LoginCommand): Promise<ApiResult<Login
     
     return handleApiResonse<LoginCommandDto>(response);
 }
+
+async function refreshAccessToken(): Promise<string | null> {
+    const refreshToken = sessionStorage.getItem('refreshToken');
+    if (!refreshToken) {
+        window.location.href = '/unauthorized';
+        return null;
+    }
+
+    const response = await fetch(`${apiUrl}/Authentication/refresh`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ refreshToken })
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+        
+        sessionStorage.setItem('token', data.accessToken);
+        sessionStorage.setItem('refreshToken', data.refreshToken);
+        return data.accessToken;
+    } else {
+        window.location.href = '/unauthorized';
+        return null;
+    }
+}
+
 
 export const fetchClient = async (clientId: string): Promise<ClientQuery> => {
     return (await fetchAPI<ClientQuery>(`${apiUrl}Client/${clientId}`)).ReturnObject!;

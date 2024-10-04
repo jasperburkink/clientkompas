@@ -88,7 +88,7 @@ namespace Application.FunctionalTests
 
             var hasher = new Argon2Hasher();
             var salt = hasher.GenerateSalt();
-            var passwordHash = hasher.HashPassword(password, salt);
+            var passwordHash = hasher.HashString(password, salt);
 
             var user = new AuthenticationUser
             {

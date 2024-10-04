@@ -1,4 +1,5 @@
 ﻿using Application.Common.Models;
+using Domain.Authentication.Domain;
 
 namespace Application.Common.Interfaces.Authentication
 {
@@ -17,5 +18,11 @@ namespace Application.Common.Interfaces.Authentication
         Task<LoggedInResult> LoginAsync(string userName, string password);
 
         Task LogoutAsync();
+
+        Task<IList<string>> GetRolesAsync(string userId);
+
+        Task<bool> UserExistsAsync(string userId);
+
+        Task<AuthenticationUser> GetUserAsync(string userId);
     }
 }
