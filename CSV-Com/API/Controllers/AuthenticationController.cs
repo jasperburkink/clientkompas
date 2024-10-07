@@ -1,4 +1,5 @@
 ﻿using Application.Authentication.Commands.Login;
+using Application.Authentication.Commands.RefreshToken;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,7 +15,21 @@ namespace API.Controllers
         {
             var result = await Mediator.Send(command);
 
-            if (!result.Success || result.BearerToken == null)
+            if (!result.Success || result.BearerToken == null || result.RefreshToken == null)
+            {
+                return Unauthorized();
+            }
+
+            return Ok(result);
+        }
+
+        [HttpPost("[action]")]
+        [AllowAnonymous]
+        public async Task<ActionResult<RefreshTokenCommandDto>> RefreshToken(RefreshTokenCommand command)
+        {
+            var result = await Mediator.Send(command);
+
+            if (!result.Success || result.BearerToken == null || result.RefreshToken == null)
             {
                 return Unauthorized();
             }
