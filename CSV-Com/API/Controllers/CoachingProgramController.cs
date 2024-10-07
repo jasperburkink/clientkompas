@@ -4,7 +4,6 @@ using Application.CoachingPrograms.Queries.GetCoachingProgram;
 using Application.CoachingPrograms.Queries.GetCoachingProgramEdit;
 using Application.CoachingPrograms.Queries.GetCoachingProgramsByClient;
 using Application.CoachingPrograms.Queries.GetCoachingProgramTypes;
-using Application.Common.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -30,22 +29,15 @@ namespace API.Controllers
         [HttpGet("[action]/{id}")]
         public async Task<ActionResult<GetCoachingProgramEditDto>> GetCoachingProgramsEdit(int id)
         {
-                var coachingProgram = await Mediator.Send(new GetCoachingProgramEditQuery { Id = id });
-                return Ok(coachingProgram);
+            var coachingProgram = await Mediator.Send(new GetCoachingProgramEditQuery { Id = id });
+            return Ok(coachingProgram);
         }
 
         [HttpGet("[action]")]
         public async Task<ActionResult<GetCoachingProgramTypesDto>> GetCoachingProgramTypes()
         {
-            try
-            {
-                var coachingProgramTypes = await Mediator.Send(new GetCoachingProgramTypesQuery { });
-                return Ok(coachingProgramTypes);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex);
-            }
+            var coachingProgramTypes = await Mediator.Send(new GetCoachingProgramTypesQuery { });
+            return Ok(coachingProgramTypes);
         }
 
         [HttpPost]
