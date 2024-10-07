@@ -20,7 +20,7 @@ namespace Application.Common.Interfaces.CVS
 
         IRepository<WorkingContract> WorkingContractRepository { get; }
 
-        IRepository<Domain.CVS.Domain.CoachingProgram> CoachingProgramRepository { get; }
+        IRepository<CoachingProgram> CoachingProgramRepository { get; }
 
         public void Save();
 

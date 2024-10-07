@@ -115,11 +115,11 @@ namespace Application.Common.Rules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to De van datum kan niet in de toekomst liggen..
+        ///   Looks up a localized string similar to De van datum is verplicht..
         /// </summary>
-        internal static string FromDateInFuture {
+        internal static string FromDateRequired {
             get {
-                return ResourceManager.GetString("FromDateInFuture", resourceCulture);
+                return ResourceManager.GetString("FromDateRequired", resourceCulture);
             }
         }
         
@@ -178,20 +178,20 @@ namespace Application.Common.Rules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to De tot datum kan niet in de toekomst liggen..
-        /// </summary>
-        internal static string ToDateInFuture {
-            get {
-                return ResourceManager.GetString("ToDateInFuture", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to De tot datum kan niet voor de van datum liggen..
         /// </summary>
         internal static string UntilDateBeforeFromDate {
             get {
                 return ResourceManager.GetString("UntilDateBeforeFromDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to De tot datum is verplicht..
+        /// </summary>
+        internal static string UntilDateRequired {
+            get {
+                return ResourceManager.GetString("UntilDateRequired", resourceCulture);
             }
         }
     }

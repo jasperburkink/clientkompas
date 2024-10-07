@@ -157,7 +157,7 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
             // Arrange
             await RunAsAsync(Roles.Administrator);
 
-            var query = new SearchClientsQuery { SearchTerm = $"Wrong{_client.PrefixLastName}Wrong" };
+            var query = new SearchClientsQuery { SearchTerm = $"Wrong{_client.PrefixLastName?.Replace(' ', '_')}Wrong" };
 
             // Act
             var clients = await SendAsync(query);
