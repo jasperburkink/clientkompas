@@ -36,13 +36,13 @@ namespace Application.Authentication.Commands.Login
 
             var bearerToken = await _bearerTokenService.GenerateBearerTokenAsync(loggedInUser.User, loggedInUser.Roles); // UserInfo & roles are processed inside the bearertoken
 
-            var refreshToken = await _refreshTokenService.GetRefreshTokenAsync(bearerToken);
+            var refreshToken = await _refreshTokenService.GenerateRefreshTokenAsync(loggedInUser.User);
 
             return new LoginCommandDto
             {
                 Success = true,
                 BearerToken = bearerToken,
-                RefreshToken = refreshToken?.Value
+                RefreshToken = refreshToken
             };
         }
     }

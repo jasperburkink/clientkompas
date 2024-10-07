@@ -41,12 +41,6 @@ namespace Infrastructure.Data.Authentication.Migrations
                 table: "AspNetUserTokens",
                 type: "tinyint(1)",
                 nullable: true);
-
-            migrationBuilder.AddColumn<byte[]>(
-                name: "Salt",
-                table: "AspNetUserTokens",
-                type: "longblob",
-                nullable: true);
         }
 
         /// <inheritdoc />
@@ -70,10 +64,6 @@ namespace Infrastructure.Data.Authentication.Migrations
 
             migrationBuilder.DropColumn(
                 name: "IsUsed",
-                table: "AspNetUserTokens");
-
-            migrationBuilder.DropColumn(
-                name: "Salt",
                 table: "AspNetUserTokens");
         }
     }

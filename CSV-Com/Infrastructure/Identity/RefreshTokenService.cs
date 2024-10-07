@@ -29,27 +29,34 @@ namespace Infrastructure.Identity
             {
                 rng.GetBytes(randomNumber);
             }
-            var refreshToken = Convert.ToBase64String(randomNumber);
+            var randomNumberBase64String = Convert.ToBase64String(randomNumber);
 
             var salt = _hasher.GenerateSalt();
-            var hashedToken = _hasher.HashString(refreshToken, salt);
+            var refreshToken = _hasher.HashString(randomNumberBase64String, salt);
 
             var tokenEntry = new RefreshToken
             {
-                Name = RefreshTokenConstants.NAME,
-                Value = hashedToken,
+                Name = $"{RefreshTokenConstants.NAME}_{DateTime.UtcNow.Ticks}",
+                LoginProvider = RefreshTokenConstants.LOGINPROVIDER,
+                Value = refreshToken,
                 UserId = user.Id,
                 ExpiresAt = DateTime.UtcNow.Add(RefreshTokenConstants.TOKEN_TIMEOUT),
                 CreatedAt = DateTime.UtcNow,
-                IsUsed = false,
-                IsRevoked = false,
-                Salt = salt
+                IsUsed = true,
+                IsRevoked = false
             };
 
-            _authenticationDbContext.RefreshTokens.Add(tokenEntry);
+            await _authenticationDbContext.RefreshTokens.AddAsync(tokenEntry);
             await _authenticationDbContext.SaveChangesAsync();
 
-            // TODO: Revoke old tokens for this user
+            foreach (var oldToken in _authenticationDbContext.RefreshTokens.Where(rt =>
+            rt.UserId == user.Id
+            && !rt.IsRevoked
+            && !string.IsNullOrEmpty(rt.Value)
+            && rt.Value != refreshToken))
+            {
+                await RevokeRefreshTokenAsync(user.Id, oldToken.Value!);
+            }
 
             return refreshToken;
         }
@@ -84,6 +91,7 @@ namespace Infrastructure.Identity
             if (token != null)
             {
                 token.IsRevoked = true;
+                token.IsUsed = false;
                 await _authenticationDbContext.SaveChangesAsync();
             }
         }

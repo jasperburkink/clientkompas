@@ -13,7 +13,5 @@
         bool IsUsed { get; set; }
 
         bool IsRevoked { get; set; }
-
-        byte[] Salt { get; set; }
     }
 }

@@ -246,10 +246,6 @@ namespace Infrastructure.Data.Authentication.Migrations
                     b.Property<bool>("IsUsed")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<byte[]>("Salt")
-                        .IsRequired()
-                        .HasColumnType("longblob");
-
                     b.HasDiscriminator().HasValue("RefreshToken");
                 });
 

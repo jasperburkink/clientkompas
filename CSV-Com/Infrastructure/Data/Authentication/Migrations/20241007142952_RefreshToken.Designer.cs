@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Authentication.Migrations
 {
     [DbContext(typeof(AuthenticationDbContext))]
-    [Migration("20241004125826_RefreshToken")]
+    [Migration("20241007142952_RefreshToken")]
     partial class RefreshToken
     {
         /// <inheritdoc />
@@ -248,10 +248,6 @@ namespace Infrastructure.Data.Authentication.Migrations
 
                     b.Property<bool>("IsUsed")
                         .HasColumnType("tinyint(1)");
-
-                    b.Property<byte[]>("Salt")
-                        .IsRequired()
-                        .HasColumnType("longblob");
 
                     b.HasDiscriminator().HasValue("RefreshToken");
                 });
