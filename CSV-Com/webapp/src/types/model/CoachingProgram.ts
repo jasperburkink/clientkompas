@@ -1,7 +1,7 @@
 import Decimal from "decimal.js-light";
 
 export default interface CoachingProgram {
-    id: number;    
+    id: number;
     clientfullname: string;
     title: string;
     ordernumber?: string;

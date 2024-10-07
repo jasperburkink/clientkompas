@@ -1,4 +1,5 @@
-﻿using Application.Common.Interfaces;
+﻿using Application.CoachingPrograms.Commands.CreateCoachingProgram;
+using Application.Common.Interfaces;
 using Application.Common.Interfaces.CVS;
 using Domain.CVS.Constants;
 using Domain.CVS.Enums;
@@ -18,7 +19,7 @@ namespace Application.Common.Rules
                 }).WithMessage(id => resourceMessageProvider.GetMessage(typeof(CoachingProgramValidationRules), "CoachingProgramDoesNotExists", id));
         }
 
-        public static IRuleBuilderOptions<T, int> ValidateCoachingProgramClient<T>(this IRuleBuilder<T, int> ruleBuilder, IUnitOfWork unitOfWork,
+        public static IRuleBuilderOptions<T, int?> ValidateCoachingProgramClient<T>(this IRuleBuilder<T, int?> ruleBuilder, IUnitOfWork unitOfWork,
             IResourceMessageProvider resourceMessageProvider)
         {
             return ruleBuilder
@@ -27,10 +28,20 @@ namespace Application.Common.Rules
                 .MustAsync(async (id, cancellationToken) =>
                 {
                     return await unitOfWork.ClientRepository.ExistsAsync(c => c.Id == id, cancellationToken);
-                }).WithMessage(id => resourceMessageProvider.GetMessage(typeof(CoachingProgramValidationRules), "ClientDoesNotExists", id));
+                })
+                .WithMessage(createCoachingProgramCommandT =>
+                {
+                    var createCoachingProgramCommand = createCoachingProgramCommandT as CreateCoachingProgramCommand;
+                    var clientId = createCoachingProgramCommand?.ClientId ?? 0;
+                    return resourceMessageProvider.GetMessage(
+                        typeof(CoachingProgramValidationRules),
+                        "ClientDoesNotExists",
+                        clientId
+                    );
+                });
         }
 
-        public static IRuleBuilderOptions<T, string> ValidateCoachingProgramTitle<T>(this IRuleBuilder<T, string> ruleBuilder,
+        public static IRuleBuilderOptions<T, string?> ValidateCoachingProgramTitle<T>(this IRuleBuilder<T, string?> ruleBuilder,
             IResourceMessageProvider resourceMessageProvider)
         {
             return ruleBuilder
@@ -54,11 +65,21 @@ namespace Application.Common.Rules
             return ruleBuilder
                 .MustAsync(async (id, cancellationToken) =>
                 {
-                    return await unitOfWork.OrganizationRepository.ExistsAsync(o => o.Id == id, cancellationToken);
-                }).WithMessage(id => resourceMessageProvider.GetMessage(typeof(CoachingProgramValidationRules), "OrganizationDoesNotExists", id));
+                    return id == null || await unitOfWork.OrganizationRepository.ExistsAsync(o => o.Id == id, cancellationToken);
+                })
+                .WithMessage(createCoachingProgramCommandT =>
+                 {
+                     var createCoachingProgramCommand = createCoachingProgramCommandT as CreateCoachingProgramCommand;
+                     var organizationId = createCoachingProgramCommand?.OrganizationId ?? 0;
+                     return resourceMessageProvider.GetMessage(
+                         typeof(CoachingProgramValidationRules),
+                         "OrganizationDoesNotExists",
+                         organizationId
+                     );
+                 });
         }
 
-        public static IRuleBuilderOptions<T, CoachingProgramType> ValidateCoachingProgramCoachingProgramType<T>(this IRuleBuilder<T, CoachingProgramType> ruleBuilder,
+        public static IRuleBuilderOptions<T, CoachingProgramType?> ValidateCoachingProgramCoachingProgramType<T>(this IRuleBuilder<T, CoachingProgramType?> ruleBuilder,
             IResourceMessageProvider resourceMessageProvider)
         {
             return ruleBuilder
@@ -66,26 +87,26 @@ namespace Application.Common.Rules
                 .WithMessage(resourceMessageProvider.GetMessage(typeof(CoachingProgramValidationRules), "CoachingProgramTypeInValid"));
         }
 
-        public static IRuleBuilderOptions<T, DateOnly> ValidateCoachingProgramFromDate<T>(
-            this IRuleBuilder<T, DateOnly> ruleBuilder,
+        public static IRuleBuilderOptions<T, DateOnly?> ValidateCoachingProgramFromDate<T>(
+            this IRuleBuilder<T, DateOnly?> ruleBuilder,
             IResourceMessageProvider resourceMessageProvider,
-            Func<T, DateOnly> toDateSelector)
+            Func<T, DateOnly?> toDateSelector)
         {
             return ruleBuilder
-                .LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.Now))
-                .WithMessage(resourceMessageProvider.GetMessage(typeof(WorkingContractValidationRules), "FromDateInFuture"))
+                .NotEmpty()
+                .WithMessage(resourceMessageProvider.GetMessage(typeof(CoachingProgramValidationRules), "FromDateRequired"))
                 .Must((model, fromDate) => fromDate < toDateSelector(model))
                 .WithMessage(resourceMessageProvider.GetMessage(typeof(WorkingContractValidationRules), "FromDateAfterUntilDate"));
         }
 
-        public static IRuleBuilderOptions<T, DateOnly> ValidateCoachingProgramToDate<T>(
-            this IRuleBuilder<T, DateOnly> ruleBuilder,
+        public static IRuleBuilderOptions<T, DateOnly?> ValidateCoachingProgramToDate<T>(
+            this IRuleBuilder<T, DateOnly?> ruleBuilder,
             IResourceMessageProvider resourceMessageProvider,
-            Func<T, DateOnly> fromDateSelector)
+            Func<T, DateOnly?> fromDateSelector)
         {
             return ruleBuilder
-                .LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.Now))
-                .WithMessage(resourceMessageProvider.GetMessage(typeof(WorkingContractValidationRules), "ToDateInFuture"))
+                .NotEmpty()
+                .WithMessage(resourceMessageProvider.GetMessage(typeof(CoachingProgramValidationRules), "UntilDateRequired"))
                 .Must((model, toDate) => toDate > fromDateSelector(model))
                 .WithMessage(resourceMessageProvider.GetMessage(typeof(WorkingContractValidationRules), "UntilDateBeforeFromDate"));
         }
@@ -98,11 +119,12 @@ namespace Application.Common.Rules
                 .WithMessage(id => resourceMessageProvider.GetMessage(typeof(CoachingProgramValidationRules), "BudgetAmmountPositive", id));
         }
 
-        public static IRuleBuilderOptions<T, decimal> ValidateCoachingProgramHourlyRate<T>(this IRuleBuilder<T, decimal> ruleBuilder,
+        public static IRuleBuilderOptions<T, decimal?> ValidateCoachingProgramHourlyRate<T>(this IRuleBuilder<T, decimal?> ruleBuilder,
             IResourceMessageProvider resourceMessageProvider)
         {
             return ruleBuilder
                 .NotEmpty()
+                .GreaterThan(0)
                 .WithMessage(resourceMessageProvider.GetMessage(typeof(CoachingProgramValidationRules), "HourlyRateRequired"))
                 .GreaterThanOrEqualTo(0)
                 .WithMessage(id => resourceMessageProvider.GetMessage(typeof(CoachingProgramValidationRules), "HourlyRatePositive", id));

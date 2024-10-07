@@ -9,14 +9,14 @@ namespace Infrastructure.Data.Interceptor
 {
     public class AuditableEntityInterceptor : SaveChangesInterceptor
     {
-        private readonly IUser _user;
+        private readonly IUser _currentUser;
         private readonly IDateTime _dateTime;  // TODO: When migrating to .net 8 you can replace this interface with TimeProvider
 
         public AuditableEntityInterceptor(
             IUser currentUserService,
             IDateTime dateTime)
         {
-            _user = currentUserService;
+            _currentUser = currentUserService;
             _dateTime = dateTime;
         }
 
@@ -45,10 +45,10 @@ namespace Infrastructure.Data.Interceptor
                     var utcNow = _dateTime.GetUtcNow();
                     if (entry.State == EntityState.Added)
                     {
-                        entry.Entity.CreatedBy = _user.UserId;
+                        entry.Entity.CreatedBy = _currentUser.CurrentUserId;
                         entry.Entity.Created = utcNow;
                     }
-                    entry.Entity.LastModifiedBy = _user.UserId;
+                    entry.Entity.LastModifiedBy = _currentUser.CurrentUserId;
                     entry.Entity.LastModified = utcNow;
                 }
             }

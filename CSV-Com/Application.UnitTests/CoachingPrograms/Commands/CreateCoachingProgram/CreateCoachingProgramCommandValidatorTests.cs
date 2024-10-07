@@ -83,10 +83,10 @@ namespace Application.UnitTests.CoachingPrograms.Commands.CreateCoachingProgram
         }
 
         [Fact]
-        public async Task Validate_ClientIdIs0_ShouldHaveValidationError()
+        public async Task Validate_ClientIdIsNull_ShouldHaveValidationError()
         {
             // Arrange
-            var command = _command with { ClientId = 0 };
+            var command = _command with { ClientId = null };
 
             // Act
             var result = await _validator.TestValidateAsync(command);
@@ -167,6 +167,19 @@ namespace Application.UnitTests.CoachingPrograms.Commands.CreateCoachingProgram
         }
 
         [Fact]
+        public async Task Validate_OrganizationIsNull_ShouldNotHaveValidationError()
+        {
+            // Arrange
+            _command.ClientId = 1;
+
+            // Act
+            var result = await _validator.TestValidateAsync(_command);
+
+            // Assert
+            result.ShouldNotHaveAnyValidationErrors();
+        }
+
+        [Fact]
         public async Task Validate_OrganizationDoesNotExists_ShouldHaveValidationError()
         {
             // Arrange
@@ -196,33 +209,6 @@ namespace Application.UnitTests.CoachingPrograms.Commands.CreateCoachingProgram
         }
 
         [Fact]
-        public async Task Validate_BeginDateInFuture_ShouldHaveValidationError()
-        {
-            // Arrange
-            var command = _command with { BeginDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)) };
-
-            // Act
-            var result = await _validator.TestValidateAsync(command);
-
-            // Assert
-            result.ShouldHaveValidationErrorFor(cp => cp.BeginDate);
-        }
-
-        [Fact]
-        public async Task Validate_EndDateInFuture_ShouldHaveValidationError()
-        {
-            // Arrange
-            var command = _command with { EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)) };
-
-            // Act
-            var result = await _validator.TestValidateAsync(command);
-
-            // Assert
-            result.ShouldHaveValidationErrorFor(cp => cp.EndDate);
-        }
-
-
-        [Fact]
         public async Task Validate_BeginDateAfterEndDate_ShouldHaveValidationError()
         {
             // Arrange
@@ -238,12 +224,38 @@ namespace Application.UnitTests.CoachingPrograms.Commands.CreateCoachingProgram
         }
 
         [Fact]
+        public async Task Validate_BeginDateIsNull_ShouldHaveValidationError()
+        {
+            // Arrange
+            var command = _command with { BeginDate = null };
+
+            // Act
+            var result = await _validator.TestValidateAsync(command);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(cp => cp.BeginDate);
+        }
+
+        [Fact]
         public async Task Validate_EndDateBeforeBeginDate_ShouldHaveValidationError()
         {
             // Arrange
             var beginDate = DateOnly.FromDateTime(DateTime.Now.Subtract(TimeSpan.FromDays(1)));
             var endDate = DateOnly.FromDateTime(DateTime.Now.Subtract(TimeSpan.FromDays(2)));
             var command = _command with { EndDate = endDate, BeginDate = beginDate };
+
+            // Act
+            var result = await _validator.TestValidateAsync(command);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(cp => cp.EndDate);
+        }
+
+        [Fact]
+        public async Task Validate_EndDateIsNull_ShouldHaveValidationError()
+        {
+            // Arrange
+            var command = _command with { EndDate = null };
 
             // Act
             var result = await _validator.TestValidateAsync(command);
@@ -270,6 +282,19 @@ namespace Application.UnitTests.CoachingPrograms.Commands.CreateCoachingProgram
         {
             // Arrange
             var command = _command with { HourlyRate = 0 };
+
+            // Act
+            var result = await _validator.TestValidateAsync(command);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(cp => cp.HourlyRate);
+        }
+
+        [Fact]
+        public async Task Validate_HourlyRateIsNull_ShouldHaveValidationError()
+        {
+            // Arrange
+            var command = _command with { HourlyRate = null };
 
             // Act
             var result = await _validator.TestValidateAsync(command);
