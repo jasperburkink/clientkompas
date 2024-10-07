@@ -25,7 +25,7 @@ namespace Application.Common.Behaviours
             if (authorizeAttributes.Any())
             {
                 // Must be authenticated user
-                if (_user.UserId == null)
+                if (_user.CurrentUserId == null)
                 {
                     throw new UnauthorizedAccessException();
                 }
@@ -41,7 +41,7 @@ namespace Application.Common.Behaviours
                     {
                         foreach (var role in roles)
                         {
-                            var isInRole = await _identityService.IsInRoleAsync(_user.UserId, role.Trim());
+                            var isInRole = await _identityService.IsInRoleAsync(_user.CurrentUserId, role.Trim());
                             if (isInRole)
                             {
                                 authorized = true;
@@ -63,7 +63,7 @@ namespace Application.Common.Behaviours
                 {
                     foreach (var policy in authorizeAttributesWithPolicies.Select(a => a.Policy))
                     {
-                        var authorized = await _identityService.AuthorizeAsync(_user.UserId, policy);
+                        var authorized = await _identityService.AuthorizeAsync(_user.CurrentUserId, policy);
 
                         if (!authorized)
                         {

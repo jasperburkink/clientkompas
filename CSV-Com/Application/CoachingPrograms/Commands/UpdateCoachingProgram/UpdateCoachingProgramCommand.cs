@@ -12,23 +12,23 @@ namespace Application.CoachingPrograms.Commands.UpdateCoachingProgram
     {
         public required int Id { get; set; }
 
-        public required int ClientId { get; set; }
+        public int? ClientId { get; set; }
 
-        public required string Title { get; set; }
+        public string? Title { get; set; }
 
         public string? OrderNumber { get; set; }
 
         public int? OrganizationId { get; set; }
 
-        public required CoachingProgramType CoachingProgramType { get; set; }
+        public CoachingProgramType? CoachingProgramType { get; set; }
 
-        public required DateOnly BeginDate { get; set; }
+        public DateOnly? BeginDate { get; set; }
 
-        public required DateOnly EndDate { get; set; }
+        public DateOnly? EndDate { get; set; }
 
         public decimal? BudgetAmmount { get; set; }
 
-        public required decimal HourlyRate { get; set; }
+        public decimal? HourlyRate { get; set; }
     }
 
     public class UpdateCoachingProgramCommandHandler : IRequestHandler<UpdateCoachingProgramCommand, UpdateCoachingProgramCommandDto>
@@ -47,14 +47,14 @@ namespace Application.CoachingPrograms.Commands.UpdateCoachingProgram
             var coachingProgram = await _unitOfWork.CoachingProgramRepository.GetByIDAsync(request.Id, includeProperties: "Client,Organization", cancellationToken)
                 ?? throw new NotFoundException(nameof(Client), request.Id);
 
-            coachingProgram.ClientId = request.ClientId;
+            coachingProgram.ClientId = request.ClientId.Value;
             coachingProgram.Title = request.Title;
             coachingProgram.OrderNumber = request.OrderNumber;
             coachingProgram.OrganizationId = request.OrganizationId;
-            coachingProgram.BeginDate = request.BeginDate;
-            coachingProgram.EndDate = request.EndDate;
-            coachingProgram.CoachingProgramType = request.CoachingProgramType;
-            coachingProgram.HourlyRate = request.HourlyRate;
+            coachingProgram.BeginDate = request.BeginDate.Value;
+            coachingProgram.EndDate = request.EndDate.Value;
+            coachingProgram.CoachingProgramType = request.CoachingProgramType.Value;
+            coachingProgram.HourlyRate = request.HourlyRate.Value;
             coachingProgram.BudgetAmmount = request.BudgetAmmount;
 
             await _unitOfWork.CoachingProgramRepository.UpdateAsync(coachingProgram, cancellationToken);

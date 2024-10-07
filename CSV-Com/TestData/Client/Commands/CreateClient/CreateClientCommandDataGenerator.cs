@@ -39,7 +39,7 @@ namespace TestData.Client.Commands.CreateClient
                 .RuleFor(c => c.TelephoneNumber, faker.Phone.PhoneNumber())
                 .RuleFor(c => c.DateOfBirth, f => new DateOnlyBinder().CreateInstance<DateOnly>(null))
                 .RuleFor(c => c.EmailAddress, faker.Person.Email)
-                .RuleFor(c => c.IsInTargetGroupRegister, faker.Random.Bool)
+                .RuleFor(c => c.IsInTargetGroupRegister, faker.Random.Bool())
                 .RuleFor(c => c.MaritalStatus, f => new MaritalStatusDto { Id = f.Random.Int(1, 10), Name = f.Random.String2(10) })
                 .RuleFor(c => c.BenefitForms, f => f.Make(3, () => new BenefitFormDto { Id = f.Random.Int(1, 10), Name = f.Random.String2(10) }))
                 .RuleFor(c => c.DriversLicences, f => f.Make(3, () => new DriversLicenceDto { Id = f.Random.Int(1, 10), Category = f.Random.String2(2, "ABCDEFGHIJKLMNOPQRSTUVWXYZ") }))

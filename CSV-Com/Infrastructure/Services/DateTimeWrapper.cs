@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Services
 {
-    public class DateTimeService : IDateTime
+    public class DateTimeWrapper : IDateTime
     {
         public DateTime Now => DateTime.Now;
 

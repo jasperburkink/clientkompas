@@ -315,25 +315,25 @@ function Clients() {
                                 label: program.title, 
                                 value: program.id
                             }))} 
-                            required={false} 
+                            required={true} 
                             inputfieldname='coaching-program'
                             onChange={(value) => handleCoachingProgramChange(value)}
-                            dataTestId='coaching-program' />
+                            dataTestId='coachingprogram' />
 
                         <div className='traject-default-values'>
                             <div className='traject-label-value'>
                                 <Label text='BeginDatum: ' />
-                                <Label text={currentCoachingProgram ? Moment(currentCoachingProgram.begindate).format(DATE_FORMAT) : ''} />
+                                <Label dataTestId='coachingprogram-begindate' text={currentCoachingProgram ? Moment(currentCoachingProgram.begindate).format(DATE_FORMAT) : ''} />
                             </div>
 
                             <div className='traject-label-value'>
                                 <Label text='EindDatum: ' />
-                                <Label text={currentCoachingProgram ? Moment(currentCoachingProgram.enddate).format(DATE_FORMAT) : ''} />
+                                <Label dataTestId='coachingprogram-enddate' text={currentCoachingProgram ? Moment(currentCoachingProgram.enddate).format(DATE_FORMAT) : ''} />
                             </div>
 
                             <div className='traject-label-value'>
                                 <Label text='Traject type: ' />
-                                <Label text={currentCoachingProgram ? currentCoachingProgram.coachingprogramtype : ''} />
+                                <Label dataTestId='coachingprogram-coachingprogramtype' text={currentCoachingProgram ? currentCoachingProgram.coachingprogramtype : ''} />
                             </div>
                         </div>
 
@@ -347,37 +347,37 @@ function Clients() {
                             <div className='traject-additional-info'>
                                 <div className='traject-label-value'>
                                     <Label text='Client: ' />
-                                    <Label text={currentCoachingProgram.clientfullname} />
+                                    <Label dataTestId='coachingprogram-clientfullname' text={currentCoachingProgram.clientfullname} />
                                 </div>
 
                                 <div className='traject-label-value'>
                                     <Label text='Titel: ' />
-                                    <Label text={currentCoachingProgram.title} />
+                                    <Label dataTestId='coachingprogram-title' text={currentCoachingProgram.title} />
                                 </div>
 
                                 <div className='traject-label-value'>
                                     <Label text='Ordernummer: ' />
-                                    <Label text={currentCoachingProgram.ordernumber ? currentCoachingProgram.ordernumber : ''} />
+                                    <Label dataTestId='coachingprogram-ordernumber' text={currentCoachingProgram.ordernumber ? currentCoachingProgram.ordernumber : ''} />
                                 </div>
 
                                 <div className='traject-label-value'>
                                     <Label text='Organisatie: ' />
-                                    <Label text={currentCoachingProgram.organizationname ? currentCoachingProgram.organizationname : ''} />
+                                    <Label dataTestId='coachingprogram-organizationname' text={currentCoachingProgram.organizationname ? currentCoachingProgram.organizationname : ''} />
                                 </div> 
 
                                 <div className='traject-label-value'>
                                     <Label text='Budget: ' />
-                                    <Label text={currentCoachingProgram.budgetammount ? formatCurrency(currentCoachingProgram.budgetammount) : ''} />
+                                    <Label dataTestId='coachingprogram-budgetammount' text={currentCoachingProgram.budgetammount ? formatCurrency(currentCoachingProgram.budgetammount) : ''} />
                                 </div> 
 
                                 <div className='traject-label-value'>
                                     <Label text='Uurtarief: ' />
-                                    <Label text={currentCoachingProgram.hourlyrate ? formatCurrency(currentCoachingProgram.hourlyrate) : ''} />
+                                    <Label dataTestId='coachingprogram-hourlyrate' text={currentCoachingProgram.hourlyrate ? formatCurrency(currentCoachingProgram.hourlyrate) : ''} />
                                 </div>
 
                                 <div className='traject-label-value'>
                                     <Label text='Te besteden uren: ' />
-                                    <Label text={currentCoachingProgram.remaininghours ? currentCoachingProgram.remaininghours.toLocaleString() : ''} />
+                                    <Label dataTestId='coachingprogram-remaininghours' text={currentCoachingProgram.remaininghours ? formatCurrency(currentCoachingProgram.remaininghours) : ''} />
                                 </div>
                             </div>
 

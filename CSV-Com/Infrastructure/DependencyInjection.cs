@@ -79,7 +79,7 @@ namespace Infrastructure
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<AuthenticationDbContext>();
 
-            services.AddSingleton<IDateTime, DateTimeService>();
+            services.AddSingleton<IDateTime, DateTimeWrapper>();
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IBearerTokenService, BearerTokenService>();
             services.AddScoped<IPasswordHasher<AuthenticationUser>, Argon2PasswordHasher>();

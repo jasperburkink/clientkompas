@@ -19,7 +19,7 @@ namespace TestData.Diagnosis
 
             return new AutoFaker<Domain.CVS.Domain.Diagnosis>()
                 .RuleFor(d => d.Id, 0)
-                .RuleFor(dl => dl.Name, f => f.Random.String2(10));
+                .RuleFor(dl => dl.Name, f => f.PickRandom(Constants.DIAGNOSIS_OPTIONS));
         }
     }
 }
