@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .input-field{
+        @apply 
+        flex
+        flex-col;
+
+        .error{
+            @apply
+            border-redRequired
+            bg-redRequiredLight;
+        }             
+    }
+
+    .input-field-container {
+
+        @apply
+        flex
+        flex-row;
+
+        input{
+            @apply 
+            w-4/5 
+            h-12 
+            bg-mainLightGray 
+            border-2 
+            border-subGray2 
+            placeholder-subGray2 
+            focus:border-mainBlue 
+            focus:ring-1 
+            ring-mainBlue 
+            text-gray-900 
+            outline-none 
+            text-sm 
+            rounded-lg 
+            block 
+            w-full 
+            p-2.5;
+        }
+
+        .error-icon{
+            @apply
+            text-redRequired
+            mx-[-35px]
+            my-[14px]
+            w-8;
+        }
+    }
+    
+    .Mui-focused fieldset.MuiOutlinedInput-notchedOutline {
+        border-color: red;
+      }
+}

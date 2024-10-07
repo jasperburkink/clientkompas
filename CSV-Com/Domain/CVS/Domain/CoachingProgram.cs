@@ -27,6 +27,6 @@ namespace Domain.CVS.Domain
 
         public required decimal HourlyRate { get; set; }
 
-        public decimal RemainingHours => HourlyRate == 0 ? 0 : (BudgetAmmount ?? 0) / HourlyRate;
+        public decimal RemainingHours => HourlyRate == 0 ? 0 : Math.Round((BudgetAmmount ?? 0) / HourlyRate, 2);
     }
 }

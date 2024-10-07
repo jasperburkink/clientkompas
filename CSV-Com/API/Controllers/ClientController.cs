@@ -6,6 +6,7 @@ using Application.Clients.Commands.UpdateClient;
 using Application.Clients.Dtos;
 using Application.Clients.Queries.GetClient;
 using Application.Clients.Queries.GetClientEdit;
+using Application.Clients.Queries.GetClientFullname;
 using Application.Clients.Queries.GetClients;
 using Application.Clients.Queries.SearchClients;
 using Application.Common.Exceptions;
@@ -38,13 +39,28 @@ namespace API.Controllers
             }
         }
 
-        [HttpGet("GetClientEditor/{id}")]
+
+        [HttpGet("[action]/{id}")]
         public async Task<ActionResult<GetClientEditDto>> GetClientEditor(int id)
         {
             try
             {
                 var client = await Mediator.Send(new GetClientEditQuery { ClientId = id });
                 return Ok(client);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+        }
+
+        [HttpGet("[action]/{id}")]
+        public async Task<ActionResult<GetClientFullnameDto>> GetClientFullname(int id)
+        {
+            try
+            {
+                var clientFullname = await Mediator.Send(new GetClientFullnameQuery { ClientId = id });
+                return Ok(clientFullname);
             }
             catch (Exception ex)
             {
@@ -98,7 +114,7 @@ namespace API.Controllers
             }
         }
 
-        [HttpPut("DeactivateClient")]
+        [HttpPut("[action]")]
         public async Task<IActionResult> DeactivateClient(DeactivateClientCommand command)
         {
             try

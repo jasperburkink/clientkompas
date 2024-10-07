@@ -10,23 +10,23 @@ namespace Application.CoachingPrograms.Commands.CreateCoachingProgram
     [Authorize(Policy = Policies.CoachingProgramManagement)]
     public record CreateCoachingProgramCommand : IRequest<CreateCoachingProgramCommandDto>
     {
-        public required int ClientId { get; set; }
+        public int? ClientId { get; set; }
 
-        public required string Title { get; set; }
+        public string? Title { get; set; }
 
         public string? OrderNumber { get; set; }
 
         public int? OrganizationId { get; set; }
 
-        public required CoachingProgramType CoachingProgramType { get; set; }
+        public CoachingProgramType? CoachingProgramType { get; set; }
 
-        public required DateOnly BeginDate { get; set; }
+        public DateOnly? BeginDate { get; set; }
 
-        public required DateOnly EndDate { get; set; }
+        public DateOnly? EndDate { get; set; }
 
         public decimal? BudgetAmmount { get; set; }
 
-        public required decimal HourlyRate { get; set; }
+        public decimal? HourlyRate { get; set; }
     }
 
     public class CreateCoachingProgramCommandHandler : IRequestHandler<CreateCoachingProgramCommand, CreateCoachingProgramCommandDto>
@@ -44,14 +44,14 @@ namespace Application.CoachingPrograms.Commands.CreateCoachingProgram
         {
             var coachingProgram = new CoachingProgram
             {
-                ClientId = request.ClientId,
+                ClientId = request.ClientId.Value,
                 Title = request.Title,
                 OrderNumber = request.OrderNumber,
                 OrganizationId = request.OrganizationId,
-                BeginDate = request.BeginDate,
-                EndDate = request.EndDate,
-                CoachingProgramType = request.CoachingProgramType,
-                HourlyRate = request.HourlyRate,
+                BeginDate = request.BeginDate.Value,
+                EndDate = request.EndDate.Value,
+                CoachingProgramType = request.CoachingProgramType.Value,
+                HourlyRate = request.HourlyRate.Value,
                 BudgetAmmount = request.BudgetAmmount
             };
 
