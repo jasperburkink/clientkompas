@@ -20,8 +20,7 @@ import { BearerToken } from "types/common/bearer-token";
 const apiUrl = process.env.REACT_APP_API_URL;
 
 async function fetchAPI<T>(url: string, method: string = 'GET', body?: any): Promise<ApiResult<T>> {
-    const bearerTokenJson = sessionStorage.getItem('token');    
-    const refreshToken = localStorage.getItem('refreshToken');
+    let bearerTokenJson: string | null = sessionStorage.getItem('token');
     let bearerToken: BearerToken | null = null;
 
     // Token expired?
@@ -37,6 +36,17 @@ async function fetchAPI<T>(url: string, method: string = 'GET', body?: any): Pro
                     Errors: ['Unauthorized access']
                 });
             }
+        }
+    }
+    // Refresh token?
+    else {
+        const newToken = await refreshAccessToken();
+
+        if(!newToken) {
+            return Promise.reject({
+                Ok: false,
+                Errors: ['Unauthorized access']
+            });
         }
     }
 
@@ -173,29 +183,40 @@ export const login = async (loginCommand: LoginCommand): Promise<ApiResult<Login
 }
 
 async function refreshAccessToken(): Promise<string | null> {
+    try
+    {
+
+
     const refreshToken = localStorage.getItem('refreshToken');
     if (!refreshToken) {
         window.location.href = '/unauthorized';
         return null;
     }
 
-    const response = await fetch(`${apiUrl}/Authentication/refresh`, {
+    const response = await fetch(`${apiUrl}Authentication/RefreshToken`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ refreshToken })
+        body: JSON.stringify({ "RefreshToken": refreshToken })
     });
 
-    if (response.ok) {
-        const data = await response.json();
-        
+    const data = await response.json();
+
+    if (response.ok && data.accessToken && data.refreshToken) {        
         sessionStorage.setItem('token', data.accessToken);
         localStorage.setItem('refreshToken', data.refreshToken);
         return data.accessToken;
     } else {
         window.location.href = '/unauthorized';
         return null;
+    }
+
+    }
+    catch(err)
+    {
+      console.debug(err);   
+      throw err;
     }
 }
 
