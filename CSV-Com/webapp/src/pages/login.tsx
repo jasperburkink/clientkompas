@@ -24,6 +24,7 @@ import { Copyright } from "components/common/copyright";
 import ConfirmPopup from "components/common/confirm-popup";
 import { useNavigate } from "react-router-dom";
 import { BearerToken } from "types/common/bearer-token";
+import RefreshTokenService from "utils/refresh-token-service";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -40,7 +41,7 @@ const Login = () => {
     const [isConfirmPopupOneButtonOpen, setConfirmPopupOneButtonOpen] = useState<boolean>(false);
     const [loginCommand, setLoginCommand] = useState<LoginCommand>(initialLoginCommand);
     const [bearertoken, setBearerToken] = useState<BearerToken | null>(sessionStorage.getItem('token') ? BearerToken.deserialize(sessionStorage.getItem('token')!) : null);
-    const [refreshtoken, setRefreshToken] = useState<string | null>(localStorage.getItem('refreshToken') ? localStorage.getItem('refreshToken') : null);
+    const [refreshtoken, setRefreshToken] = useState<string | null>(RefreshTokenService.getInstance().getRefreshToken() ? RefreshTokenService.getInstance().getRefreshToken() : null);
     
     useEffect(() => {         
         if(bearertoken) {
@@ -48,7 +49,7 @@ const Login = () => {
         }
 
         if(refreshtoken) {
-            localStorage.setItem('refreshToken', refreshtoken);
+            RefreshTokenService.getInstance().setRefreshToken(refreshtoken);
         }
     }, [bearertoken, refreshtoken]);
 

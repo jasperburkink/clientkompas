@@ -16,6 +16,7 @@ import CoachingProgram from "types/model/CoachingProgram";
 import LoginCommand from "types/model/login/login-command";
 import LoginCommandDto from "types/model/login/login-command-dto";
 import { BearerToken } from "types/common/bearer-token";
+import RefreshTokenService from "utils/refresh-token-service";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -28,7 +29,7 @@ async function fetchAPI<T>(url: string, method: string = 'GET', body?: any): Pro
         bearerToken = BearerToken.deserialize(bearerTokenJson);
 
         if(bearerToken.isExpired()){
-            const newToken = await refreshAccessToken();
+            const newToken = await RefreshTokenService.getInstance().refreshAccessToken();
 
             if(!newToken) {
                 return Promise.reject({
@@ -40,7 +41,7 @@ async function fetchAPI<T>(url: string, method: string = 'GET', body?: any): Pro
     }
     // Refresh token?
     else {
-        const newToken = await refreshAccessToken();
+        const newToken = await RefreshTokenService.getInstance().refreshAccessToken();
 
         if(!newToken) {
             return Promise.reject({
@@ -70,6 +71,7 @@ const DATE_FORMAT_JSON = 'yyyy-MM-DD';
 moment.prototype.toJSON = function(){
     return moment(this).format(DATE_FORMAT_JSON);
 }
+
 Date.prototype.toJSON = function(){
     return moment(this).format(DATE_FORMAT_JSON);
 }
@@ -182,44 +184,6 @@ export const login = async (loginCommand: LoginCommand): Promise<ApiResult<Login
     return handleApiResonse<LoginCommandDto>(response);
 }
 
-async function refreshAccessToken(): Promise<string | null> {
-    try
-    {
-
-
-    const refreshToken = localStorage.getItem('refreshToken');
-    if (!refreshToken) {
-        window.location.href = '/unauthorized';
-        return null;
-    }
-
-    const response = await fetch(`${apiUrl}Authentication/RefreshToken`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ "RefreshToken": refreshToken })
-    });
-
-    const data = await response.json();
-
-    if (response.ok && data.accessToken && data.refreshToken) {        
-        sessionStorage.setItem('token', data.accessToken);
-        localStorage.setItem('refreshToken', data.refreshToken);
-        return data.accessToken;
-    } else {
-        window.location.href = '/unauthorized';
-        return null;
-    }
-
-    }
-    catch(err)
-    {
-      console.debug(err);   
-      throw err;
-    }
-}
-
 export const fetchClient = async (clientId: string): Promise<ClientQuery> => {
     return (await fetchAPI<ClientQuery>(`${apiUrl}Client/${clientId}`)).ReturnObject!;
 }
@@ -270,6 +234,7 @@ export const deactivateClient = async (clientId: number): Promise<ClientQuery> =
 moment.prototype.toJSON = function(){
     return moment(this).format(DATE_FORMAT_JSON);
 }
+
 Date.prototype.toJSON = function(){
     return moment(this).format(DATE_FORMAT_JSON);
 }
@@ -303,8 +268,6 @@ export const fetchCoachingProgram = async (id: number): Promise<CoachingProgram>
 }
 
 function processErrors(errors: { [key: string]: string[] }): string[] {
-
-    // Verzamel alle foutmeldingen in een enkele array
     const allErrors: string[] = Object.values(errors).flat();
 
     return allErrors;

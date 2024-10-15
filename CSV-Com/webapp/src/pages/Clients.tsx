@@ -138,15 +138,21 @@ function Clients() {
             setStatus(StatusEnum.REJECTED);
             return;
         }
-    
-        fetchClientById();
 
-        const fetchCoachingProgramsData = async () => {
-            const programs = await fetchCoachingProgramsByClient(id!);
-            setCoachingPrograms(programs);
+        const fetchData = async () => {
+            try {
+                await fetchClientById();
+    
+                const programs = await fetchCoachingProgramsByClient(id!);
+                setCoachingPrograms(programs);
+    
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                setStatus(StatusEnum.REJECTED);
+            }
         };
 
-        fetchCoachingProgramsData();        
+        fetchData();        
 
     }, [id]);
 
@@ -400,7 +406,7 @@ function Clients() {
                                 {
                                     setDeactivatedClient(await deactivateClientConfirmed(client, clientContext));
 
-                                    if(deactivateClient !== null){
+                                    if(deactivatedClient !== null){
                                         setDeactivateConfirmedPopupOpen(true);
                                     }
                                 }, buttonType: {type:"Solid"}},
