@@ -1,16 +1,15 @@
 ﻿using Domain.Authentication.Domain;
 using Infrastructure.Data.Authentication.Configuration;
-using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data.Authentication
 {
-    public class AuthenticationDbContext : IdentityDbContext<AuthenticationUser>
+    public class AuthenticationDbContext : IdentityDbContext<AuthenticationUser>, IAuthenticationDbContext
     {
         public DbSet<AuthenticationUser> AuthenticationUsers { get; set; }
 
-        public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<IRefreshToken> RefreshTokens { get; set; }
 
         public AuthenticationDbContext(DbContextOptions<AuthenticationDbContext> options) : base(options) { }
 

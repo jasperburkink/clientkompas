@@ -13,5 +13,7 @@
         bool IsUsed { get; set; }
 
         bool IsRevoked { get; set; }
+
+        bool IsExpired { get; }
     }
 }

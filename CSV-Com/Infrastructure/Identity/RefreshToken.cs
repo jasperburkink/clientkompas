@@ -12,5 +12,7 @@ namespace Infrastructure.Identity
         public required bool IsUsed { get; set; }
 
         public required bool IsRevoked { get; set; }
+
+        public bool IsExpired => ExpiresAt < DateTime.UtcNow;
     }
 }

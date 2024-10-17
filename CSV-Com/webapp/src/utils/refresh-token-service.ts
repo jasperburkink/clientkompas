@@ -1,7 +1,10 @@
+import { BearerToken } from "types/common/bearer-token";
+import RefreshTokenCommandDto from "types/model/refresh-token/refresh-token-command-dto";
+
 export default class RefreshTokenService {
     private static instance: RefreshTokenService | null = null;
     private isRefreshingToken: boolean = false;
-    private refreshSubscribers: ((token: string) => void)[] = [];
+    private refreshSubscribers: ((token: RefreshTokenCommandDto) => void)[] = [];
     private apiUrl = process.env.REACT_APP_API_URL; // Voeg de API-URL hier toe
 
     private constructor() {}
@@ -13,16 +16,16 @@ export default class RefreshTokenService {
         return RefreshTokenService.instance;
     }
 
-    private onTokenRefreshed(token: string) {
+    private onTokenRefreshed(token: RefreshTokenCommandDto) {
         this.refreshSubscribers.forEach(callback => callback(token));
         this.refreshSubscribers = [];
     }
 
-    private addRefreshSubscriber(callback: (token: string) => void) {
+    private addRefreshSubscriber(callback: (token: RefreshTokenCommandDto) => void) {
         this.refreshSubscribers.push(callback);
     }
 
-    public async refreshAccessToken(): Promise<string | null> {
+    public async refreshAccessToken(): Promise<RefreshTokenCommandDto | null> {
         if (this.isRefreshingToken) {
             return new Promise((resolve) => {
                 this.addRefreshSubscriber(resolve);
@@ -46,16 +49,16 @@ export default class RefreshTokenService {
                 body: JSON.stringify({ "RefreshToken": refreshToken })
             });
 
-            const data = await response.json();
+            const data: RefreshTokenCommandDto = await response.json();
 
-            if (response.ok && data.accessToken && data.refreshToken) {
-                this.setAccessToken(data.accessToken);
-                this.setRefreshToken(data.refreshToken);
+            if (response.ok && data.bearertoken && data.refreshtoken) {
+                this.setAccessToken(new BearerToken(data.bearertoken));
+                this.setRefreshToken(data.refreshtoken);
 
                 this.isRefreshingToken = false;
-                this.onTokenRefreshed(data.accessToken);
+                this.onTokenRefreshed(data);
 
-                return data.accessToken;
+                return data;
             } else {
                 window.location.href = '/unauthorized';
                 return null;
@@ -78,7 +81,7 @@ export default class RefreshTokenService {
         return localStorage.getItem('refreshToken') || null;
     }
 
-    private setAccessToken(token: string): void {
-        sessionStorage.setItem('token', token);
+    private setAccessToken(token: BearerToken): void {
+        sessionStorage.setItem('token', BearerToken.serialize(token));
     }
 }

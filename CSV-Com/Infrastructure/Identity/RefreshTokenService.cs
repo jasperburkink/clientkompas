@@ -9,12 +9,12 @@ namespace Infrastructure.Identity
 {
     public class RefreshTokenService : IRefreshTokenService
     {
-        private readonly AuthenticationDbContext _authenticationDbContext;
+        private readonly IAuthenticationDbContext _authenticationDbContext;
         private readonly IHasher _hasher;
 
         public const string REFRESH_SECRET_KEY = "thisisarefreshsecretkey@123"; // TODO: Move to the keyvault
 
-        public RefreshTokenService(AuthenticationDbContext authenticationDbContext, IHasher hasher)
+        public RefreshTokenService(IAuthenticationDbContext authenticationDbContext, IHasher hasher)
         {
             _authenticationDbContext = authenticationDbContext;
             _hasher = hasher;
