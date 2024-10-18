@@ -42,7 +42,7 @@ namespace Infrastructure.Identity
                 UserId = user.Id,
                 ExpiresAt = DateTime.UtcNow.Add(RefreshTokenConstants.TOKEN_TIMEOUT),
                 CreatedAt = DateTime.UtcNow,
-                IsUsed = true,
+                IsUsed = false,
                 IsRevoked = false
             };
 
@@ -52,6 +52,7 @@ namespace Infrastructure.Identity
             foreach (var oldToken in _authenticationDbContext.RefreshTokens.Where(rt =>
             rt.UserId == user.Id
             && !rt.IsRevoked
+            && !rt.IsUsed
             && !string.IsNullOrEmpty(rt.Value)
             && rt.Value != refreshToken))
             {
@@ -91,7 +92,6 @@ namespace Infrastructure.Identity
             if (token != null)
             {
                 token.IsRevoked = true;
-                token.IsUsed = false;
                 await _authenticationDbContext.SaveChangesAsync();
             }
         }

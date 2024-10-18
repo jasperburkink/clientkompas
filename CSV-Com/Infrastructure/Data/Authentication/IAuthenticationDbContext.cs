@@ -1,4 +1,5 @@
 ﻿using Domain.Authentication.Domain;
+using Infrastructure.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data.Authentication
@@ -7,7 +8,7 @@ namespace Infrastructure.Data.Authentication
     {
         DbSet<AuthenticationUser> AuthenticationUsers { get; set; }
 
-        DbSet<IRefreshToken> RefreshTokens { get; set; }
+        DbSet<RefreshToken> RefreshTokens { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }

@@ -24,9 +24,12 @@ namespace Application.Authentication.Commands.RefreshToken
 
         public async Task<RefreshTokenCommandDto> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
         {
-            var refreshTokenCurrent = await _refreshTokenService.GetRefreshTokenAsync(request.RefreshToken);
+            ArgumentNullException.ThrowIfNull(request.RefreshToken);
 
-            if (refreshTokenCurrent == null || refreshTokenCurrent.IsRevoked || refreshTokenCurrent.ExpiresAt < DateTime.UtcNow)
+            var refreshTokenCurrent = await _refreshTokenService.GetRefreshTokenAsync(request.RefreshToken) ?? throw new UnauthorizedAccessException("Token not found.");
+            var validToken = await _refreshTokenService.ValidateRefreshTokenAsync(refreshTokenCurrent.UserId, request.RefreshToken);
+
+            if (!validToken)
             {
                 throw new UnauthorizedAccessException("Invalid or expired refresh token.");
             }
@@ -37,6 +40,9 @@ namespace Application.Authentication.Commands.RefreshToken
             await _refreshTokenService.RevokeRefreshTokenAsync(user.Id, request.RefreshToken);
 
             var bearerToken = await _bearerTokenService.GenerateBearerTokenAsync(user, roles);
+
+
+
 
             var refreshTokenNew = await _refreshTokenService.GenerateRefreshTokenAsync(user);
 

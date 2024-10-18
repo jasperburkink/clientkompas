@@ -19,14 +19,9 @@ namespace Infrastructure.Identity
 
             var hashedProvidedPassword = hasher.HashString(providedPassword, user.Salt);
 
-            if (hashedProvidedPassword == hashedPassword)
-            {
-                return PasswordVerificationResult.Success;
-            }
-            else
-            {
-                return PasswordVerificationResult.Failed;
-            }
+            return hashedProvidedPassword == hashedPassword ?
+                PasswordVerificationResult.Success :
+                PasswordVerificationResult.Failed;
         }
     }
 }

@@ -70,6 +70,7 @@ namespace Infrastructure
                 .LogTo(Console.WriteLine, LogLevel.Information)
                 .EnableSensitiveDataLogging();
             });
+            services.AddScoped<IAuthenticationDbContext, AuthenticationDbContext>();
             services.AddScoped<AuthenticationDbContextInitialiser>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
