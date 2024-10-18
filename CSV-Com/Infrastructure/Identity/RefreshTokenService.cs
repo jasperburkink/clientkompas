@@ -70,7 +70,7 @@ namespace Infrastructure.Identity
             var token = await _authenticationDbContext.RefreshTokens
             .FirstOrDefaultAsync(rt => rt.Value == refreshToken && rt.UserId == userId && !rt.IsUsed && !rt.IsRevoked);
 
-            if (token == null || token.ExpiresAt < DateTime.UtcNow)
+            if (token == null || token.IsExpired)
             {
                 return false;
             }
