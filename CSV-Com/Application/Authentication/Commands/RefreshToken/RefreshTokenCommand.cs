@@ -41,9 +41,6 @@ namespace Application.Authentication.Commands.RefreshToken
 
             var bearerToken = await _bearerTokenService.GenerateBearerTokenAsync(user, roles);
 
-
-
-
             var refreshTokenNew = await _refreshTokenService.GenerateRefreshTokenAsync(user);
 
             return new RefreshTokenCommandDto
