@@ -9,7 +9,7 @@ using TestData;
 
 namespace Infrastructure.FunctionalTests.Identity
 {
-    public class RefreshTokenServiceTests
+    public class RefreshTokenServiceTests : IDisposable
     {
         private readonly IRefreshTokenService _refreshTokenService;
         private readonly AuthenticationUser _authenticationUser;
@@ -19,7 +19,7 @@ namespace Infrastructure.FunctionalTests.Identity
         public RefreshTokenServiceTests()
         {
             var options = new DbContextOptionsBuilder<AuthenticationDbContext>()
-                        .UseInMemoryDatabase(databaseName: "TestDb")
+                        .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                         .Options;
 
             _authenticationDbContext = new AuthenticationDbContext(options);
@@ -313,14 +313,69 @@ namespace Infrastructure.FunctionalTests.Identity
             await _authenticationDbContext.SaveChangesAsync();
 
             // Act
-            var result = await _refreshTokenService.ValidateRefreshTokenAsync(userId, refreshToken);
+            await _refreshTokenService.RevokeRefreshTokenAsync(userId, refreshToken);
+            var token = await _refreshTokenService.GetRefreshTokenAsync(refreshToken);
 
             // Assert
-            refreshTokenObject.IsRevoked.Should().BeTrue();
+            token.Should().NotBeNull();
+            token!.IsRevoked.Should().BeTrue();
         }
 
         [Fact]
-        public async Task RevokeRefreshTokenAsync_CorrectFlow_SaveChangesIsCalledOnce()
+        public async Task RevokeRefreshTokenAsync_UserIdIsNull_ShouldThrowArgumentNullException()
+        {
+            // Arrange
+            string userId = null;
+            var refreshToken = "RefreshToken";
+
+            // Act & Assert
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _refreshTokenService.RevokeRefreshTokenAsync(userId, refreshToken));
+        }
+
+        [Fact]
+        public async Task RevokeRefreshTokenAsync_RefreshTokenIsNull_ShouldThrowArgumentNullException()
+        {
+            // Arrange
+            var userId = "test";
+            string refreshToken = null;
+
+            // Act & Assert
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _refreshTokenService.RevokeRefreshTokenAsync(userId, refreshToken));
+        }
+
+        [Fact]
+        public async Task RevokeRefreshTokenAsync_NoTokensForThisUser_TokenNotRevoked()
+        {
+            // Assert
+            var userId = _authenticationUser.Id;
+            var refreshToken = REFRESH_TOKEN_VALUE;
+
+            var refreshTokenObject = new RefreshToken
+            {
+                CreatedAt = DateTime.UtcNow,
+                ExpiresAt = DateTime.UtcNow.AddDays(-1),
+                IsRevoked = false,
+                IsUsed = false,
+                Name = "Test",
+                UserId = "Test",
+                LoginProvider = "Test",
+                Value = REFRESH_TOKEN_VALUE
+            };
+
+            await _authenticationDbContext.UserTokens.AddAsync(refreshTokenObject);
+            await _authenticationDbContext.SaveChangesAsync();
+
+            // Act
+            await _refreshTokenService.RevokeRefreshTokenAsync(userId, refreshToken);
+            var token = await _refreshTokenService.GetRefreshTokenAsync(refreshToken);
+
+            // Assert
+            token.Should().NotBeNull();
+            token!.IsRevoked.Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task RevokeRefreshTokenAsync_NoTokensWithSpecificValue_TokenNotRevoked()
         {
             // Arrange
             var userId = _authenticationUser.Id;
@@ -335,178 +390,83 @@ namespace Infrastructure.FunctionalTests.Identity
                 Name = "Test",
                 UserId = userId,
                 LoginProvider = "Test",
-                Value = REFRESH_TOKEN_VALUE
+                Value = "Test"
             };
 
             await _authenticationDbContext.UserTokens.AddAsync(refreshTokenObject);
             await _authenticationDbContext.SaveChangesAsync();
 
             // Act
-            var result = await _refreshTokenService.ValidateRefreshTokenAsync(userId, refreshToken);
-
+            await _refreshTokenService.RevokeRefreshTokenAsync(userId, refreshToken);
+            var token = await _refreshTokenService.GetRefreshTokenAsync("Test");
 
             // Assert
-            authenticationDBContextMock.Verify(mock => mock.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
+            token.Should().NotBeNull();
+            token!.IsRevoked.Should().BeFalse();
         }
 
-        //[Fact]
-        //public async Task RevokeRefreshTokenAsync_UserIdIsNull_ShouldThrowArgumentNullException()
-        //{
-        //    // Arrange
-        //    string userId = null;
-        //    var refreshToken = "RefreshToken";
+        [Fact]
+        public async Task GetRefreshTokenAsync_CorrectFlow_ReturnsRefreshToken()
+        {
+            // Arrange
+            var userId = _authenticationUser.Id;
+            var refreshToken = REFRESH_TOKEN_VALUE;
 
-        //    // Act & Assert
-        //    await Assert.ThrowsAsync<ArgumentNullException>(() => _tokenService.RevokeRefreshTokenAsync(userId, refreshToken));
-        //}
+            var refreshTokenObject = new RefreshToken
+            {
+                CreatedAt = DateTime.UtcNow,
+                ExpiresAt = DateTime.UtcNow.AddDays(1),
+                IsRevoked = false,
+                IsUsed = false,
+                Name = "Test",
+                UserId = userId,
+                LoginProvider = "Test",
+                Value = refreshToken
+            };
 
-        //[Fact]
-        //public async Task RevokeRefreshTokenAsync_RefreshTokenIsNull_ShouldThrowArgumentNullException()
-        //{
-        //    // Arrange
-        //    var userId = "test";
-        //    string refreshToken = null;
+            await _authenticationDbContext.UserTokens.AddAsync(refreshTokenObject);
+            await _authenticationDbContext.SaveChangesAsync();
 
-        //    // Act & Assert
-        //    await Assert.ThrowsAsync<ArgumentNullException>(() => _tokenService.RevokeRefreshTokenAsync(userId, refreshToken));
-        //}
+            // Act
+            var result = await _refreshTokenService.GetRefreshTokenAsync(refreshToken);
 
-        //[Fact]
-        //public async Task RevokeRefreshTokenAsync_NoTokensForThisUser_SaveChangesIsNotCalled()
-        //{
-        //    // Arrange
-        //    var userId = USER_ID;
-        //    var refreshToken = REFRESH_TOKEN_VALUE;
+            // Assert
+            result.Should().NotBeNull().And.BeEquivalentTo(refreshTokenObject);
+        }
 
-        //    var refreshTokens = new List<RefreshToken>
-        //    {
-        //        new()
-        //        {
-        //            CreatedAt = DateTime.UtcNow,
-        //            ExpiresAt = DateTime.UtcNow.AddDays(1),
-        //            IsRevoked = false,
-        //            IsUsed = false,
-        //            UserId = "Test",
-        //            Value = REFRESH_TOKEN_VALUE
-        //        }
-        //    };
+        [Fact]
+        public async Task GetRefreshTokenAsync_NotTokensWithSpecificValue_ReturnsNull()
+        {
+            // Arrange
+            var userId = _authenticationUser.Id;
+            var refreshToken = REFRESH_TOKEN_VALUE;
 
-        //    var authenticationDBContextMock = new Mock<IAuthenticationDbContext>();
-        //    authenticationDBContextMock.Setup(mock => mock.RefreshTokens).ReturnsDbSet(refreshTokens);
-        //    authenticationDBContextMock.Setup(mock => mock.SaveChangesAsync(It.IsAny<CancellationToken>()));
+            var refreshTokenObject = new RefreshToken
+            {
+                CreatedAt = DateTime.UtcNow,
+                ExpiresAt = DateTime.UtcNow.AddDays(1),
+                IsRevoked = false,
+                IsUsed = false,
+                Name = "Test",
+                UserId = userId,
+                LoginProvider = "Test",
+                Value = "Test"
+            };
 
-        //    var hasherMock = new Mock<IHasher>();
+            await _authenticationDbContext.UserTokens.AddAsync(refreshTokenObject);
+            await _authenticationDbContext.SaveChangesAsync();
 
-        //    var tokenService = new RefreshTokenService(authenticationDBContextMock.Object, hasherMock.Object);
+            // Act
+            var result = await _refreshTokenService.GetRefreshTokenAsync(refreshToken);
 
-        //    // Act
-        //    await tokenService.RevokeRefreshTokenAsync(userId, refreshToken);
+            // Assert
+            result.Should().BeNull();
+        }
 
-        //    // Assert
-        //    authenticationDBContextMock.Verify(mock => mock.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
-        //}
-
-        //[Fact]
-        //public async Task RevokeRefreshTokenAsync_NoTokensWithSpecificValue_SaveChangesIsNotCalled()
-        //{
-        //    // Arrange
-        //    var userId = USER_ID;
-        //    var refreshToken = REFRESH_TOKEN_VALUE;
-
-        //    var refreshTokens = new List<RefreshToken>
-        //    {
-        //        new()
-        //        {
-        //            CreatedAt = DateTime.UtcNow,
-        //            ExpiresAt = DateTime.UtcNow.AddDays(1),
-        //            IsRevoked = false,
-        //            IsUsed = false,
-        //            UserId = USER_ID,
-        //            Value = "Test"
-        //        }
-        //    };
-
-        //    var authenticationDBContextMock = new Mock<IAuthenticationDbContext>();
-        //    authenticationDBContextMock.Setup(mock => mock.RefreshTokens).ReturnsDbSet(refreshTokens);
-        //    authenticationDBContextMock.Setup(mock => mock.SaveChangesAsync(It.IsAny<CancellationToken>()));
-
-        //    var hasherMock = new Mock<IHasher>();
-
-        //    var tokenService = new RefreshTokenService(authenticationDBContextMock.Object, hasherMock.Object);
-
-        //    // Act
-        //    await tokenService.RevokeRefreshTokenAsync(userId, refreshToken);
-
-        //    // Assert
-        //    authenticationDBContextMock.Verify(mock => mock.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
-        //}
-
-        //[Fact]
-        //public async Task GetRefreshTokenAsync_CorrectFlow_ReturnsRefreshToken()
-        //{
-        //    var refreshToken = REFRESH_TOKEN_VALUE;
-
-        //    var refreshTokenObject = new RefreshToken()
-        //    {
-        //        CreatedAt = DateTime.UtcNow,
-        //        ExpiresAt = DateTime.UtcNow.AddDays(1),
-        //        IsRevoked = false,
-        //        IsUsed = false,
-        //        UserId = USER_ID,
-        //        Value = REFRESH_TOKEN_VALUE
-        //    };
-
-        //    var refreshTokens = new List<RefreshToken>
-        //    {
-        //        refreshTokenObject
-        //    };
-
-        //    var authenticationDBContextMock = new Mock<IAuthenticationDbContext>();
-        //    authenticationDBContextMock.Setup(mock => mock.RefreshTokens).ReturnsDbSet(refreshTokens);
-
-        //    var hasherMock = new Mock<IHasher>();
-
-        //    var tokenService = new RefreshTokenService(authenticationDBContextMock.Object, hasherMock.Object);
-
-        //    // Act
-        //    var result = await tokenService.GetRefreshTokenAsync(refreshToken);
-
-        //    // Assert
-        //    result.Should().NotBeNull().And.BeEquivalentTo(refreshTokenObject);
-        //}
-
-        //[Fact]
-        //public async Task GetRefreshTokenAsync_NotTokensWithSpecificValue_ReturnsNull()
-        //{
-        //    var refreshToken = REFRESH_TOKEN_VALUE;
-
-        //    var refreshTokenObject = new RefreshToken()
-        //    {
-        //        CreatedAt = DateTime.UtcNow,
-        //        ExpiresAt = DateTime.UtcNow.AddDays(1),
-        //        IsRevoked = false,
-        //        IsUsed = false,
-        //        UserId = USER_ID,
-        //        Value = "Test"
-        //    };
-
-        //    var refreshTokens = new List<RefreshToken>
-        //    {
-        //        refreshTokenObject
-        //    };
-
-        //    var authenticationDBContextMock = new Mock<IAuthenticationDbContext>();
-        //    authenticationDBContextMock.Setup(mock => mock.RefreshTokens).ReturnsDbSet(refreshTokens);
-
-        //    var hasherMock = new Mock<IHasher>();
-
-        //    var tokenService = new RefreshTokenService(authenticationDBContextMock.Object, hasherMock.Object);
-
-        //    // Act
-        //    var result = await tokenService.GetRefreshTokenAsync(refreshToken);
-
-        //    // Assert
-        //    result.Should().BeNull();
-        //}
+        public void Dispose()
+        {
+            _authenticationDbContext.Database.EnsureDeleted();
+            _authenticationDbContext.Dispose();
+        }
     }
 }
