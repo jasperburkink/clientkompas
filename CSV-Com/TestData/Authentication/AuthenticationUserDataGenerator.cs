@@ -1,4 +1,5 @@
-﻿using Bogus;
+﻿using System.Text;
+using Bogus;
 using Domain.Authentication.Domain;
 
 namespace TestData.Authentication
@@ -22,7 +23,8 @@ namespace TestData.Authentication
             var autofaker = new AutoFaker<AuthenticationUser>()
                 .RuleFor(c => c.CVSUserId, faker.Random.Int(min: 0))
                 .RuleFor(c => c.Email, faker.Person.Email)
-                .RuleFor(c => c.UserName, faker.Person.UserName);
+                .RuleFor(c => c.UserName, faker.Person.UserName)
+                .RuleFor(c => c.Salt, Encoding.UTF8.GetBytes("Salt"));
 
             return autofaker;
         }

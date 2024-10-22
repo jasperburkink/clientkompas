@@ -134,9 +134,16 @@ namespace Application.FunctionalTests
         public static async Task<TEntity?> FindAsync<TEntity>(params object[] keyValues)
             where TEntity : class
         {
+            return await FindAsync<TEntity, CVSDbContext>(keyValues);
+        }
+
+        public static async Task<TEntity?> FindAsync<TEntity, TDbContext>(params object[] keyValues)
+            where TEntity : class
+            where TDbContext : DbContext
+        {
             using var scope = s_scopeFactory.CreateScope();
 
-            var context = scope.ServiceProvider.GetRequiredService<CVSDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<TDbContext>();
 
             return await context.FindAsync<TEntity>(keyValues);
         }
