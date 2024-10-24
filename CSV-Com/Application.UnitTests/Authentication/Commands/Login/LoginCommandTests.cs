@@ -41,7 +41,8 @@ namespace Application.UnitTests.Authentication.Commands.Login
             var loginCommandDto = new LoginCommandDto
             {
                 Success = isUserLoggedIn,
-                BearerToken = bearerToken
+                BearerToken = bearerToken,
+                RefreshToken = refreshToken
             };
 
             // Act

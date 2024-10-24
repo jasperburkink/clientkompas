@@ -3,7 +3,6 @@ using Domain.Authentication.Domain;
 using Infrastructure.Data.Authentication;
 using TestData;
 using TestData.Authentication;
-using static Application.FunctionalTests.Testing;
 
 namespace Application.FunctionalTests.Authentication.Commands.RefreshToken
 {
@@ -82,6 +81,94 @@ namespace Application.FunctionalTests.Authentication.Commands.RefreshToken
             result.Should().NotBeNull();
             result.Success.Should().BeTrue();
             refreshToken.IsUsed.Should().BeTrue();
+        }
+
+        [Test]
+        public async Task Handle_RefreshTokenNotFound_ShouldThrowUnauthorizedAccessException()
+        {
+            // Arrange
+            await AddAsync<Infrastructure.Identity.RefreshToken, AuthenticationDbContext>(_refreshToken);
+
+            var command = new RefreshTokenCommand
+            {
+                RefreshToken = "TestToken"
+            };
+
+            // Act & Assert
+            Assert.ThrowsAsync<UnauthorizedAccessException>(async () =>
+            {
+                await SendAsync(command);
+            });
+        }
+
+        [Test]
+        public async Task Handle_TokenAlreadyUsed_ShouldThrowUnauthorizedAccessException()
+        {
+            // Arrange
+            _refreshToken.IsUsed = true;
+
+            await AddAsync<Infrastructure.Identity.RefreshToken, AuthenticationDbContext>(_refreshToken);
+
+            // Act & Assert
+            Assert.ThrowsAsync<UnauthorizedAccessException>(async () =>
+            {
+                await SendAsync(_command);
+            });
+        }
+
+        [Test]
+        public async Task Handle_TokenRevoked_ShouldThrowUnauthorizedAccessException()
+        {
+            // Arrange
+            _refreshToken.IsRevoked = true;
+
+            await AddAsync<Infrastructure.Identity.RefreshToken, AuthenticationDbContext>(_refreshToken);
+
+            // Act & Assert
+            Assert.ThrowsAsync<UnauthorizedAccessException>(async () =>
+            {
+                await SendAsync(_command);
+            });
+        }
+
+        [Test]
+        public async Task Handle_TokenExpired_ShouldThrowUnauthorizedAccessException()
+        {
+            // Arrange
+            _refreshToken.ExpiresAt = DateTime.UtcNow.AddDays(-1);
+
+            await AddAsync<Infrastructure.Identity.RefreshToken, AuthenticationDbContext>(_refreshToken);
+
+            // Act & Assert
+            Assert.ThrowsAsync<UnauthorizedAccessException>(async () =>
+            {
+                await SendAsync(_command);
+            });
+        }
+
+        [Test]
+        public async Task Handle_TwoRequestsWithSameRefreshToken_SecondRequestShouldThrowUnauthorizedAccessException()
+        {
+            // Arrange
+            var command1 = new RefreshTokenCommand
+            {
+                RefreshToken = _refreshToken.Value
+            };
+
+            var command2 = new RefreshTokenCommand
+            {
+                RefreshToken = _refreshToken.Value
+            };
+
+            await AddAsync<Infrastructure.Identity.RefreshToken, AuthenticationDbContext>(_refreshToken);
+
+            // Act & Assert
+            var result = await SendAsync(command1);
+
+            Assert.ThrowsAsync<UnauthorizedAccessException>(async () =>
+            {
+                await SendAsync(command2);
+            });
         }
     }
 }
