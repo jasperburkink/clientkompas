@@ -283,7 +283,9 @@ export const fetchCoachingProgramTypes = async (): Promise<GetCoachingProgramTyp
 }
 
 export const saveCoachingProgram = async (coachingProgram: CoachingProgramEdit): Promise<ApiResult<CoachingProgramEdit>> => {
-    return (await (fetchAPI<CoachingProgramEdit>(`${apiUrl}CoachingProgram/${coachingProgram.id}`)));
+    let method = coachingProgram.id > 0  ? 'PUT' : 'POST';
+
+    return await fetchAPI(`${apiUrl}CoachingProgram`, method, coachingProgram);
 }
 
 function processErrors(errors: { [key: string]: string[] }): string[] {
