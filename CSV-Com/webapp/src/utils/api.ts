@@ -211,7 +211,7 @@ export const searchClients = async (searchTerm: string): Promise<ClientQuery[]> 
 }
 
 export const fetchClientFullname = async (clientId: string): Promise<GetClientFullnameDto> => {
-    return fetchAPI<GetClientFullnameDto>(`${apiUrl}Client/GetClientFullname/${clientId}`);
+    return (await (fetchAPI<GetClientFullnameDto>(`${apiUrl}Client/GetClientFullname/${clientId}`))).ReturnObject!;
 }
 
 export const fetchBenefitForms = async (): Promise<BenefitForm[]> => {
@@ -271,19 +271,19 @@ export const fetchCoachingProgramsByClient = async (clientId: string): Promise<C
 }
 
 export const fetchCoachingProgram = async (id: number): Promise<CoachingProgram> => {
-    return await fetchAPI<CoachingProgram>(`${apiUrl}CoachingProgram/${id}`);
+    return (await (fetchAPI<CoachingProgram>(`${apiUrl}CoachingProgram/${id}`))).ReturnObject!;
 }
 
 export const fetchCoachingProgramEdit = async (id: string): Promise<CoachingProgramEdit> => {
-    return fetchAPI<CoachingProgramEdit>(`${apiUrl}CoachingProgram/GetCoachingProgramsEdit/${id}`);
+    return (await (fetchAPI<CoachingProgramEdit>(`${apiUrl}CoachingProgram/GetCoachingProgramsEdit/${id}`))).ReturnObject!;
 }
 
 export const fetchCoachingProgramTypes = async (): Promise<GetCoachingProgramTypesDto[]> => {
-    return await fetchAPI<GetCoachingProgramTypesDto[]>(`${apiUrl}CoachingProgram/GetCoachingProgramTypes`);
+    return (await (fetchAPI<GetCoachingProgramTypesDto[]>(`${apiUrl}CoachingProgram/GetCoachingProgramTypes`))).ReturnObject!;
 }
 
 export const saveCoachingProgram = async (coachingProgram: CoachingProgramEdit): Promise<ApiResult<CoachingProgramEdit>> => {
-    return (await fetchAPI<CoachingProgram>(`${apiUrl}CoachingProgram/${id}`)).ReturnObject!;
+    return (await (fetchAPI<CoachingProgramEdit>(`${apiUrl}CoachingProgram/${coachingProgram.id}`)));
 }
 
 function processErrors(errors: { [key: string]: string[] }): string[] {
