@@ -1,9 +1,11 @@
 ﻿using Application.Common.Interfaces.CVS;
+using Application.Common.Security;
 using Application.Extensions;
-using MediatR;
+using Domain.Authentication.Constants;
 
 namespace Application.DriversLicences.Commands.DeleteDriversLicence
 {
+    [Authorize(Policy = Policies.DriversLicenceManagement)]
     public record DeleteDriversLicenceCommand : IRequest
     {
         public int Id { get; init; }

@@ -2,6 +2,7 @@
 using Application.Diagnoses.Queries.GetDiagnosis;
 using Application.DriversLicences.Queries;
 using Application.MaritalStatuses.Queries.GetMaritalStatus;
+using Domain.Authentication.Constants;
 using Domain.CVS.Constants;
 using Domain.CVS.Domain;
 using Domain.CVS.Enums;
@@ -62,6 +63,8 @@ namespace Application.FunctionalTests.Clients.Commands.CreateClient
 
             _command.DriversLicences = driversLicences.OrderBy(x => Guid.NewGuid()).Take(NumOfDriversLicences).Select(dl => new DriversLicenceDto { Category = dl.Category, Description = dl.Description, Id = dl.Id }).ToList();
             _command.Diagnoses = diagnoses.OrderBy(x => Guid.NewGuid()).Take(NumOfDiagnoses).Select(d => new DiagnosisDto { Name = d.Name, Id = d.Id }).ToList();
+
+            await RunAsAsync(Roles.Administrator);
         }
 
         [Test]
@@ -688,6 +691,8 @@ namespace Application.FunctionalTests.Clients.Commands.CreateClient
         public void Handle_BenefitFormsIsNull_ShouldThrowValidationException()
         {
             // Arrange
+
+
             var command = _command with
             {
                 BenefitForms = null

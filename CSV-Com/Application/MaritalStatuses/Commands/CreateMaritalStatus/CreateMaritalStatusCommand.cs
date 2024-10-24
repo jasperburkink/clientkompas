@@ -1,12 +1,13 @@
 ﻿using Application.Common.Interfaces.CVS;
+using Application.Common.Security;
 using Application.MaritalStatuses.Queries.GetMaritalStatus;
-using AutoMapper;
+using Domain.Authentication.Constants;
 using Domain.CVS.Domain;
 using Domain.CVS.Events;
-using MediatR;
 
 namespace Application.MaritalStatuses.Commands.CreateMaritalStatus
 {
+    [Authorize(Policy = Policies.MaritalStatusManagement)]
     public record CreateMaritalStatusCommand : IRequest<MaritalStatusDto>
     {
         public string Name { get; init; }

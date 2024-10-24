@@ -1,9 +1,12 @@
 ﻿using Application.BenefitForms.Queries.GetBenefitForm;
 using Application.Common.Interfaces.CVS;
+using Application.Common.Security;
+using Domain.Authentication.Constants;
 using Domain.CVS.Domain;
 
 namespace Application.BenefitForms.Commands.UpdateBenefitForm
 {
+    [Authorize(Policy = Policies.BenefitFormManagement)]
     public record UpdateBenefitFormCommand : IRequest<BenefitFormDto>
     {
         public int Id { get; init; }

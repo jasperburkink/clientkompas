@@ -31,13 +31,13 @@ namespace Application.Common.Behaviours
                 }
 
                 // Role-based authorization
-                var authorizeAttributesWithRoles = authorizeAttributes.Where(a => !string.IsNullOrWhiteSpace(a.Roles));
+                var authorizeAttributesWithRoles = authorizeAttributes.Where(a => a.Roles.Length > 0);
 
                 if (authorizeAttributesWithRoles.Any())
                 {
                     var authorized = false;
 
-                    foreach (var roles in authorizeAttributesWithRoles.Select(a => a.Roles.Split(',')))
+                    foreach (var roles in authorizeAttributesWithRoles.Select(a => a.Roles))
                     {
                         foreach (var role in roles)
                         {

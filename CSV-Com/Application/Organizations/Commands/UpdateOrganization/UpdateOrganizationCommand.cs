@@ -1,11 +1,14 @@
 ﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces.CVS;
+using Application.Common.Security;
 using Application.Organizations.Dtos;
+using Domain.Authentication.Constants;
 using Domain.CVS.Domain;
 using Domain.CVS.ValueObjects;
 
 namespace Application.Organizations.Commands.UpdateOrganization
 {
+    [Authorize(Policy = Policies.OrganizationManagement)]
     public record UpdateOrganizationCommand : IRequest<OrganizationDto>
     {
         public int Id { get; init; }

@@ -1,10 +1,10 @@
 ﻿using Application.Common.Interfaces.CVS;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using MediatR;
+using Application.Common.Security;
+using Domain.Authentication.Constants;
 
 namespace Application.CoachingPrograms.Queries.GetCoachingProgramsByClient
 {
+    [Authorize(Policy = Policies.CoachingProgramManagement)]
     public record GetCoachingProgramsByClientQuery : IRequest<IEnumerable<GetCoachingProgramsByClientDto>>
     {
         public int ClientId { get; init; }

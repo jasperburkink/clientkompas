@@ -1,4 +1,5 @@
 ﻿using Application.CoachingPrograms.Commands.CreateCoachingProgram;
+using Domain.Authentication.Constants;
 using Domain.CVS.Constants;
 using Domain.CVS.Domain;
 using Domain.CVS.Enums;
@@ -34,6 +35,8 @@ namespace Application.FunctionalTests.CoachingPrograms.Commands.CreateCoachingPr
             _command = _testDataGeneratorCreateCoachingProgramCommand.Create();
             _command.ClientId = client.Id;
             _command.OrganizationId = organization.Id;
+
+            await RunAsAsync(Roles.Administrator);
         }
 
         [Test]

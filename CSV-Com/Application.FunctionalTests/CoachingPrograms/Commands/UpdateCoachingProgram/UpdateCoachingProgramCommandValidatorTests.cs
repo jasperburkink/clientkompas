@@ -1,4 +1,5 @@
 ﻿using Application.CoachingPrograms.Commands.UpdateCoachingProgram;
+using Domain.Authentication.Constants;
 using Domain.CVS.Constants;
 using Domain.CVS.Domain;
 using Domain.CVS.Enums;
@@ -46,6 +47,8 @@ namespace Application.FunctionalTests.CoachingPrograms.Commands.UpdateCoachingPr
             await AddAsync(_coachingProgram);
 
             _command.Id = _coachingProgram.Id;
+
+            await RunAsAsync(Roles.Administrator);
         }
 
         [Test]

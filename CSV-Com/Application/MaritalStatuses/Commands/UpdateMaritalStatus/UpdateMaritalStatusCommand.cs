@@ -1,9 +1,12 @@
 ﻿using Application.Common.Interfaces.CVS;
+using Application.Common.Security;
 using Application.MaritalStatuses.Queries.GetMaritalStatus;
+using Domain.Authentication.Constants;
 using Domain.CVS.Domain;
 
 namespace Application.MaritalStatuses.Commands.UpdateMaritalStatus
 {
+    [Authorize(Policy = Policies.MaritalStatusManagement)]
     public record UpdateMaritalStatusCommand : IRequest<MaritalStatusDto>
     {
         public int Id { get; init; }

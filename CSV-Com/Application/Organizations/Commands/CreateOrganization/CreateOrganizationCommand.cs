@@ -1,14 +1,15 @@
 ﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces.CVS;
+using Application.Common.Security;
 using Application.Organizations.Dtos;
-using AutoMapper;
+using Domain.Authentication.Constants;
 using Domain.CVS.Domain;
 using Domain.CVS.Events;
 using Domain.CVS.ValueObjects;
-using MediatR;
 
 namespace Application.Organizations.Commands.CreateOrganization
 {
+    [Authorize(Policy = Policies.OrganizationManagement)]
     public record CreateOrganizationCommand : IRequest<OrganizationDto>
     {
         public string OrganizationName { get; set; }

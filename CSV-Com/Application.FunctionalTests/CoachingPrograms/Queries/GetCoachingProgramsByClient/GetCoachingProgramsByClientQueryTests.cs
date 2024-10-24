@@ -1,4 +1,5 @@
 ﻿using Application.CoachingPrograms.Queries.GetCoachingProgramsByClient;
+using Domain.Authentication.Constants;
 using Domain.CVS.Domain;
 using TestData;
 using TestData.Client;
@@ -13,18 +14,18 @@ namespace Application.FunctionalTests.CoachingPrograms.Queries.GetCoachingProgra
         private ITestDataGenerator<CoachingProgram> _testDataGeneratorCoachingProgram;
 
         [SetUp]
-        public void Initialize()
+        public async Task Initialize()
         {
             _testDataGeneratorClient = new ClientDataGenerator();
             _testDataGeneratorCoachingProgram = new CoachingProgramDataGenerator();
+
+            await RunAsAsync(Roles.Administrator);
         }
 
         [Test]
         public async Task Handle_CorrectFlow_ShouldReturnCoachingPrograms()
         {
             // Arrange
-            // TODO: Turn on authentication 
-            //await RunAsDefaultUserAsync();
             var client = _testDataGeneratorClient.Create();
 
             await AddAsync(client);

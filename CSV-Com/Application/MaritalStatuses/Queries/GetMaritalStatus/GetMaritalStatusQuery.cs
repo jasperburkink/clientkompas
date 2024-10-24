@@ -1,10 +1,10 @@
 ﻿using Application.Common.Interfaces.CVS;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using MediatR;
+using Application.Common.Security;
+using Domain.Authentication.Constants;
 
 namespace Application.MaritalStatuses.Queries.GetMaritalStatus
 {
+    [Authorize(Policy = Policies.MaritalStatusManagement)]
     public record GetMaritalStatusQuery : IRequest<IEnumerable<MaritalStatusDto>> { }
 
     public class GetMaritalStatusQueryHandler : IRequestHandler<GetMaritalStatusQuery, IEnumerable<MaritalStatusDto>>

@@ -1,11 +1,12 @@
 ﻿using Application.Common.Interfaces.CVS;
+using Application.Common.Security;
 using Application.DriversLicences.Queries;
-using AutoMapper;
+using Domain.Authentication.Constants;
 using Domain.CVS.Events;
-using MediatR;
 
 namespace Application.DriversLicences.Commands.CreateDriversLicence
 {
+    [Authorize(Policy = Policies.DriversLicenceManagement)]
     public record CreateDriversLicenceCommand : IRequest<DriversLicenceDto>
     {
         public string Category { get; set; }

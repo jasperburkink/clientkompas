@@ -1,4 +1,5 @@
 ﻿using Application.Clients.Queries.SearchClients;
+using Domain.Authentication.Constants;
 using Domain.CVS.Domain;
 using TestData;
 using TestData.Client;
@@ -15,9 +16,6 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
         public async Task Initialize()
         {
             // Arrange
-            // TODO: Turn on authentication 
-            //await RunAsDefaultUserAsync();
-
             ITestDataGenerator<Client> testDataGeneratorClient = new ClientDataGenerator();
 
             _client = testDataGeneratorClient.Create();
@@ -32,6 +30,8 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
                 Initials = _client.Initials,
                 PrefixLastName = _client.PrefixLastName
             };
+
+            await RunAsAsync(Roles.Administrator);
         }
 
         [Test]
@@ -163,6 +163,8 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
 
             var query = new SearchClientsQuery { SearchTerm = "PrefixLastName" };
 
+            await RunAsAsync(Roles.Administrator);
+
             // Act
             var clients = await SendAsync(query);
 
@@ -196,6 +198,8 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
 
             var partionFullname = $"{_client.FirstName[(_client.FirstName.Length - 1)..]} {_client.PrefixLastName[..(_client.PrefixLastName.Length - 1)]}";
             var query = new SearchClientsQuery { SearchTerm = partionFullname };
+
+            await RunAsAsync(Roles.Administrator);
 
             // Act
             var clients = await SendAsync(query);

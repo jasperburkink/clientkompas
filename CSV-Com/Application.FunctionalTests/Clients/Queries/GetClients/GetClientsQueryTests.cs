@@ -1,4 +1,5 @@
 ﻿using Application.Clients.Queries.GetClients;
+using Domain.Authentication.Constants;
 using Domain.CVS.Domain;
 using TestData;
 using TestData.Client;
@@ -11,17 +12,17 @@ namespace Application.FunctionalTests.Clients.Queries.GetClients
         private ITestDataGenerator<Client> _testDataGeneratorClient;
 
         [SetUp]
-        public void Initialize()
+        public async Task Initialize()
         {
             _testDataGeneratorClient = new ClientDataGenerator();
+
+            await RunAsAsync(Roles.Administrator);
         }
 
         [Test]
         public async Task Handle_CorrectFlowOneClient_ShouldReturnOneClient()
         {
             // Arrange
-            // TODO: Turn on authentication 
-            //await RunAsDefaultUserAsync();
             var client = _testDataGeneratorClient.Create();
 
             await AddAsync(client);
@@ -40,8 +41,6 @@ namespace Application.FunctionalTests.Clients.Queries.GetClients
         public async Task Handle_CorrectFlowMultipleClients_ShouldReturnMultipleClients()
         {
             // Arrange
-            // TODO: Turn on authentication 
-            //await RunAsDefaultUserAsync();
             var numberOfClients = 5;
             var clients = _testDataGeneratorClient.Create(numberOfClients);
 

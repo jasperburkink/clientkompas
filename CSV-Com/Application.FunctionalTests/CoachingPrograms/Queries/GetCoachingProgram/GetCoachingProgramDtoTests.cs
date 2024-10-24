@@ -1,4 +1,5 @@
 ﻿using Application.CoachingPrograms.Queries.GetCoachingProgram;
+using Domain.Authentication.Constants;
 using Domain.CVS.Domain;
 using TestData;
 using TestData.CoachingProgram;
@@ -11,9 +12,11 @@ namespace Application.FunctionalTests.CoachingPrograms.Queries.GetCoachingProgra
         private ITestDataGenerator<CoachingProgram> _testDataGeneratorCoachingProgram;
 
         [SetUp]
-        public void Initialize()
+        public async Task Initialize()
         {
             _testDataGeneratorCoachingProgram = new CoachingProgramDataGenerator();
+
+            await RunAsAsync(Roles.Administrator);
         }
 
 
