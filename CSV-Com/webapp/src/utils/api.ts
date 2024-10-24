@@ -17,6 +17,9 @@ import LoginCommand from "types/model/login/login-command";
 import LoginCommandDto from "types/model/login/login-command-dto";
 import { BearerToken } from "types/common/bearer-token";
 import RefreshTokenService from "utils/refresh-token-service";
+import CoachingProgramEdit from "types/model/CoachingProgramEdit";
+import GetClientFullnameDto from "types/model/GetClientFullnameDto";
+import GetCoachingProgramTypesDto from "types/model/GetCoachingProgramTypesDto";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -207,6 +210,10 @@ export const searchClients = async (searchTerm: string): Promise<ClientQuery[]> 
     return (await fetchAPI<ClientQuery[]>(`${apiUrl}Client/SearchClients?SearchTerm=${searchTerm}`)).ReturnObject!;
 }
 
+export const fetchClientFullname = async (clientId: string): Promise<GetClientFullnameDto> => {
+    return fetchAPI<GetClientFullnameDto>(`${apiUrl}Client/GetClientFullname/${clientId}`);
+}
+
 export const fetchBenefitForms = async (): Promise<BenefitForm[]> => {
     return (await (fetchAPI<BenefitForm[]>(`${apiUrl}BenefitForm`))).ReturnObject!;
 }
@@ -264,6 +271,18 @@ export const fetchCoachingProgramsByClient = async (clientId: string): Promise<C
 }
 
 export const fetchCoachingProgram = async (id: number): Promise<CoachingProgram> => {
+    return await fetchAPI<CoachingProgram>(`${apiUrl}CoachingProgram/${id}`);
+}
+
+export const fetchCoachingProgramEdit = async (id: string): Promise<CoachingProgramEdit> => {
+    return fetchAPI<CoachingProgramEdit>(`${apiUrl}CoachingProgram/GetCoachingProgramsEdit/${id}`);
+}
+
+export const fetchCoachingProgramTypes = async (): Promise<GetCoachingProgramTypesDto[]> => {
+    return await fetchAPI<GetCoachingProgramTypesDto[]>(`${apiUrl}CoachingProgram/GetCoachingProgramTypes`);
+}
+
+export const saveCoachingProgram = async (coachingProgram: CoachingProgramEdit): Promise<ApiResult<CoachingProgramEdit>> => {
     return (await fetchAPI<CoachingProgram>(`${apiUrl}CoachingProgram/${id}`)).ReturnObject!;
 }
 

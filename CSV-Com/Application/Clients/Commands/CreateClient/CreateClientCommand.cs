@@ -16,47 +16,47 @@ namespace Application.Clients.Commands.CreateClient
     [Authorize(Policy = Policies.ClientManagement)]
     public record CreateClientCommand : IRequest<ClientDto>
     {
-        public required string FirstName { get; set; }
+        public string? FirstName { get; set; }
 
-        public required string Initials { get; set; }
+        public string? Initials { get; set; }
 
-        public required string PrefixLastName { get; set; }
+        public string? PrefixLastName { get; set; }
 
-        public required string LastName { get; set; }
+        public string? LastName { get; set; }
 
-        public required Gender Gender { get; set; }
+        public Gender? Gender { get; set; }
 
-        public required string StreetName { get; set; }
+        public string? StreetName { get; set; }
 
-        public required int HouseNumber { get; set; }
+        public int? HouseNumber { get; set; }
 
-        public required string HouseNumberAddition { get; set; }
+        public string? HouseNumberAddition { get; set; }
 
-        public required string PostalCode { get; set; }
+        public string? PostalCode { get; set; }
 
-        public required string Residence { get; set; }
+        public string? Residence { get; set; }
 
-        public required string TelephoneNumber { get; set; }
+        public string? TelephoneNumber { get; set; }
 
-        public required DateOnly DateOfBirth { get; set; }
+        public DateOnly? DateOfBirth { get; set; }
 
-        public required string EmailAddress { get; set; }
+        public string? EmailAddress { get; set; }
 
-        public required MaritalStatusDto? MaritalStatus { get; set; }
+        public MaritalStatusDto? MaritalStatus { get; set; }
 
-        public required bool IsInTargetGroupRegister { get; set; }
+        public bool? IsInTargetGroupRegister { get; set; }
 
-        public required ICollection<BenefitFormDto> BenefitForms { get; set; }
+        public ICollection<BenefitFormDto> BenefitForms { get; set; }
 
-        public required ICollection<DriversLicenceDto> DriversLicences { get; set; }
+        public ICollection<DriversLicenceDto> DriversLicences { get; set; }
 
-        public required ICollection<DiagnosisDto> Diagnoses { get; set; }
+        public ICollection<DiagnosisDto> Diagnoses { get; set; }
 
-        public required ICollection<EmergencyPersonDto> EmergencyPeople { get; set; }
+        public ICollection<EmergencyPersonDto> EmergencyPeople { get; set; }
 
-        public required ICollection<ClientWorkingContractDto> WorkingContracts { get; set; }
+        public ICollection<ClientWorkingContractDto> WorkingContracts { get; set; }
 
-        public required string Remarks { get; set; }
+        public string Remarks { get; set; }
 
         public CreateClientCommand()
         {
@@ -99,12 +99,12 @@ namespace Application.Clients.Commands.CreateClient
                 Initials = request.Initials,
                 PrefixLastName = request.PrefixLastName,
                 LastName = request.LastName,
-                Gender = request.Gender,
-                Address = Address.From(request.StreetName, request.HouseNumber, request.HouseNumberAddition, request.PostalCode, request.Residence),
+                Gender = request.Gender.Value,
+                Address = Address.From(request.StreetName, request.HouseNumber.Value, request.HouseNumberAddition, request.PostalCode, request.Residence),
                 TelephoneNumber = request.TelephoneNumber,
-                DateOfBirth = request.DateOfBirth,
+                DateOfBirth = request.DateOfBirth.Value,
                 EmailAddress = request.EmailAddress,
-                IsInTargetGroupRegister = request.IsInTargetGroupRegister,
+                IsInTargetGroupRegister = request.IsInTargetGroupRegister.Value,
                 BenefitForms = benefitForms,
                 MaritalStatus = maritalStatus,
                 DriversLicences = driversLicences,

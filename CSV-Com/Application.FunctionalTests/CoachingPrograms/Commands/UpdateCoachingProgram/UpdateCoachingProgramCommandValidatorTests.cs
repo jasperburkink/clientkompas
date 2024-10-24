@@ -171,28 +171,22 @@ namespace Application.FunctionalTests.CoachingPrograms.Commands.UpdateCoachingPr
         }
 
         [Test]
+        public void Handle_OrganizationIsNull_NoValidationExcceptions()
+        {
+            // Arrange
+            _command.OrganizationId = null;
+
+            // Act & Assert
+            Assert.DoesNotThrowAsync(() => SendAsync(_command));
+        }
+
+        [Test]
         public void Handle_CoachingProgramTypeInvalid_ShouldThrowValidationException()
         {
             // Arrange
             var command = _command with
             {
                 CoachingProgramType = (CoachingProgramType)99
-            };
-
-            // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () =>
-            {
-                await SendAsync(command);
-            });
-        }
-
-        [Test]
-        public void Handle_BeginDateInFuture_ShouldThrowValidationException()
-        {
-            // Arrange
-            var command = _command with
-            {
-                BeginDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1))
             };
 
             // Act & Assert
@@ -218,12 +212,12 @@ namespace Application.FunctionalTests.CoachingPrograms.Commands.UpdateCoachingPr
             });
         }
 
-        public void Handle_EndDateInFuture_ShouldThrowValidationException()
+        public void Handle_BeginDateIsNull_ShouldThrowValidationException()
         {
             // Arrange
             var command = _command with
             {
-                EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1))
+                BeginDate = null
             };
 
             // Act & Assert
@@ -249,6 +243,21 @@ namespace Application.FunctionalTests.CoachingPrograms.Commands.UpdateCoachingPr
             });
         }
 
+        public void Handle_EndDateIsNull_ShouldThrowValidationException()
+        {
+            // Arrange
+            var command = _command with
+            {
+                EndDate = null
+            };
+
+            // Act & Assert
+            Assert.ThrowsAsync<ValidationException>(async () =>
+            {
+                await SendAsync(command);
+            });
+        }
+
         public void Handle_BudgetAmmountNegative_ShouldThrowValidationException()
         {
             // Arrange
@@ -265,6 +274,21 @@ namespace Application.FunctionalTests.CoachingPrograms.Commands.UpdateCoachingPr
         }
 
         public void Handle_HourlyRateIsEmpty_ShouldThrowValidationException()
+        {
+            // Arrange
+            var command = _command with
+            {
+                HourlyRate = null
+            };
+
+            // Act & Assert
+            Assert.ThrowsAsync<ValidationException>(async () =>
+            {
+                await SendAsync(command);
+            });
+        }
+
+        public void Handle_HourlyRateIs0_ShouldThrowValidationException()
         {
             // Arrange
             var command = _command with

@@ -1,6 +1,7 @@
 ﻿using Application.CoachingPrograms.Commands.CreateCoachingProgram;
 using Application.CoachingPrograms.Commands.UpdateCoachingProgram;
 using Application.CoachingPrograms.Queries.GetCoachingProgram;
+using Application.CoachingPrograms.Queries.GetCoachingProgramEdit;
 using Application.CoachingPrograms.Queries.GetCoachingProgramsByClient;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,15 +14,15 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<GetCoachingProgramDto>> Get(int id)
         {
-            var client = await Mediator.Send(new GetCoachingProgramQuery { Id = id });
-            return Ok(client);
+            var coachingProgram = await Mediator.Send(new GetCoachingProgramQuery { Id = id });
+            return Ok(coachingProgram);
         }
 
         [HttpGet("[action]/{id}")]
         public async Task<ActionResult<GetCoachingProgramsByClientDto>> GetCoachingProgramsByClient(int id)
         {
-            var client = await Mediator.Send(new GetCoachingProgramsByClientQuery { ClientId = id });
-            return Ok(client);
+            var coachingProgram = await Mediator.Send(new GetCoachingProgramsByClientQuery { ClientId = id });
+            return Ok(coachingProgram);
         }
 
         [HttpPost]
