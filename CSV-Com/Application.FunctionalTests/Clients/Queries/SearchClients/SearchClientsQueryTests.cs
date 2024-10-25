@@ -30,14 +30,14 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
                 Initials = _client.Initials,
                 PrefixLastName = _client.PrefixLastName
             };
-
-            await RunAsAsync(Roles.Administrator);
         }
 
         [Test]
         public async Task Handle_ClientIsNotDeactivated_ReturnClient()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var query = new SearchClientsQuery { SearchTerm = _client.LastName };
 
             // Act
@@ -51,6 +51,8 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
         public async Task Handle_ClientIsAlreadyDeactivated_DoesNotReturnClient()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var client = await FindAsync<Client>(_client.Id);
             if (client is null)
             {
@@ -75,6 +77,8 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
         public async Task Handle_SearchClientByRightFirstName_ReturnsClients()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var query = new SearchClientsQuery { SearchTerm = _client.FirstName };
 
             // Act
@@ -89,6 +93,8 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
         public async Task Handle_SearchClientByWrongFirstName_ReturnsNoClients()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var query = new SearchClientsQuery { SearchTerm = $"Wrong{_client.FirstName}" };
 
             // Act
@@ -102,6 +108,8 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
         public async Task Handle_SearchClientByRightLastName_ReturnsClients()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var query = new SearchClientsQuery { SearchTerm = _client.LastName };
 
             // Act
@@ -116,6 +124,8 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
         public async Task Handle_SearchClientByWrongLastName_ReturnsNoClients()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var query = new SearchClientsQuery { SearchTerm = $"Wrong{_client.LastName}" };
 
             // Act
@@ -129,6 +139,8 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
         public async Task Handle_SearchClientByRightPrefixLastName_ReturnsClients()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var query = new SearchClientsQuery { SearchTerm = _client.PrefixLastName };
 
             // Act
@@ -143,6 +155,8 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
         public async Task Handle_SearchClientByWrongPrefixLastName_ReturnsNoClients()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var query = new SearchClientsQuery { SearchTerm = $"Wrong{_client.PrefixLastName?.Replace(' ', '_')}Wrong" };
 
             // Act
@@ -156,6 +170,8 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
         public async Task Handle_SearchClientWithEmptyPrefixLastName_ReturnsNoClients()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var prefixLastName = string.Empty;
             await ResetState();
             _client.PrefixLastName = prefixLastName;
@@ -176,6 +192,8 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
         public async Task Handle_SearchClientByFullName_ReturnsClient()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var query = new SearchClientsQuery { SearchTerm = _client.FullName };
 
             // Act
@@ -190,6 +208,8 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
         public async Task Handle_SearchClientByPartionOfFullNameMiddle_ReturnsClient()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var prefixLastName = "van";
             await ResetState();
             _client.PrefixLastName = prefixLastName;
@@ -213,6 +233,8 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
         public async Task Handle_SearchClientByPartionOfFullNameEndAndBeginning_ReturnsClient()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var partionFullname = $"{_client.FirstName[..(_client.FirstName.Length - 1)]} {_client.LastName[(_client.LastName.Length - 1)..]}";
             var query = new SearchClientsQuery { SearchTerm = partionFullname };
 
@@ -228,6 +250,8 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
         public async Task Handle_SearchTermIsEmpty_ReturnsAllClients()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var searchTerm = string.Empty;
             var query = new SearchClientsQuery { SearchTerm = searchTerm };
 
@@ -243,6 +267,8 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
         public async Task Handle_SearchTermIsNull_ReturnsAllClients()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             string searchTerm = null;
             var query = new SearchClientsQuery { SearchTerm = searchTerm };
 
@@ -258,6 +284,8 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
         public async Task Handle_SearchByPartOfFirstName_ReturnsClient()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var searchTerm = $"{_client.FirstName[..(_client.FirstName.Length - 1)]}";
             var query = new SearchClientsQuery { SearchTerm = searchTerm };
 
@@ -273,6 +301,8 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
         public async Task Handle_SearchByOneRightLetter_ReturnsClient()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var searchTerm = _client.FirstName.First().ToString();
             var query = new SearchClientsQuery { SearchTerm = searchTerm };
 
@@ -288,6 +318,8 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
         public async Task Handle_SearchByOneWrongLetter_ReturnsNoClient()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var existingClients = await GetAsync<Client>();
             var searchTerm = GetLetterNotInClientNames(existingClients);
             var query = new SearchClientsQuery { SearchTerm = searchTerm };
@@ -299,6 +331,25 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
             clients.Should().BeEmpty();
         }
 
+        [TestCase(Roles.SystemOwner)]
+        [TestCase(Roles.Licensee)]
+        [TestCase(Roles.Administrator)]
+        [TestCase(Roles.Coach)]
+        public async Task Handle_RunAsRole_ReturnClient(string role)
+        {
+            // Arrange
+            await RunAsAsync(role);
+
+            var query = new SearchClientsQuery { SearchTerm = _client.LastName };
+
+            // Act
+            var clients = await SendAsync(query);
+
+            // Assert
+            Assert.IsTrue(clients.Any(c => c.Id == _client.Id));
+        }
+
+        // TODO: Move this method to a utils class in a test library
         private string GetLetterNotInClientNames(ICollection<Client> clients)
         {
             const string Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
