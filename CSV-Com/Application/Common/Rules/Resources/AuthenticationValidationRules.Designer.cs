@@ -61,11 +61,56 @@ namespace Application.Common.Rules.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Wachtwoord moet ten minste één kleine letter bevatten..
+        /// </summary>
+        internal static string PasswordContainsLowerCaseCharacter {
+            get {
+                return ResourceManager.GetString("PasswordContainsLowerCaseCharacter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wachtwoord moet ten minste één cijfer bevatten..
+        /// </summary>
+        internal static string PasswordContainsNumber {
+            get {
+                return ResourceManager.GetString("PasswordContainsNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wachtwoord moet ten minste één speciaal karakter bevatten..
+        /// </summary>
+        internal static string PasswordContainsSpecialCharacter {
+            get {
+                return ResourceManager.GetString("PasswordContainsSpecialCharacter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wachtwoord moet ten minste één hoofdletter bevatten..
+        /// </summary>
+        internal static string PasswordContainsUpperCaseCharacter {
+            get {
+                return ResourceManager.GetString("PasswordContainsUpperCaseCharacter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Wachtwoord mag niet langer zijn dan {0} karakters..
         /// </summary>
         internal static string PasswordMaxLength {
             get {
                 return ResourceManager.GetString("PasswordMaxLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wachtwoord moet ten minste {0} karakters bevatten..
+        /// </summary>
+        internal static string PasswordMinLength {
+            get {
+                return ResourceManager.GetString("PasswordMinLength", resourceCulture);
             }
         }
         

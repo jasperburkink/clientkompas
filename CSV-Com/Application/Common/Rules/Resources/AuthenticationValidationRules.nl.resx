@@ -117,8 +117,23 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="PasswordContainsLowerCaseCharacter" xml:space="preserve">
+    <value>Wachtwoord moet ten minste één kleine letter bevatten.</value>
+  </data>
+  <data name="PasswordContainsNumber" xml:space="preserve">
+    <value>Wachtwoord moet ten minste één cijfer bevatten.</value>
+  </data>
+  <data name="PasswordContainsSpecialCharacter" xml:space="preserve">
+    <value>Wachtwoord moet ten minste één speciaal karakter bevatten.</value>
+  </data>
+  <data name="PasswordContainsUpperCaseCharacter" xml:space="preserve">
+    <value>Wachtwoord moet ten minste één hoofdletter bevatten.</value>
+  </data>
   <data name="PasswordMaxLength" xml:space="preserve">
     <value>Wachtwoord mag niet langer zijn dan {0} karakters.</value>
+  </data>
+  <data name="PasswordMinLength" xml:space="preserve">
+    <value>Wachtwoord moet ten minste {0} karakters bevatten.</value>
   </data>
   <data name="PasswordRequired" xml:space="preserve">
     <value>Wachtwoord is verplicht.</value>
