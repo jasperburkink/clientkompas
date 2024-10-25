@@ -11,5 +11,7 @@ namespace Application.Common.Interfaces.Authentication
         Task RevokeRefreshTokenAsync(string userId, string refreshToken);
 
         Task<IRefreshToken?> GetRefreshTokenAsync(string refreshToken);
+
+        Task<IList<IRefreshToken>> GetValidRefreshTokensByUserAsync(string userId);
     }
 }

@@ -577,5 +577,85 @@ namespace Infrastructure.UnitTests.Identity
             // Assert
             result.Should().BeNull();
         }
+
+        [Fact]
+        public async Task GetValidRefreshTokensByUserAsync_CorrectFlowMultipleTokens_ReturnsMultipleValidRefreshToken()
+        {
+            var refreshTokens = new List<RefreshToken>
+            {
+                new()
+                {
+                    CreatedAt = DateTime.UtcNow,
+                    ExpiresAt = DateTime.UtcNow.AddDays(1),
+                    IsRevoked = false,
+                    IsUsed = false,
+                    UserId = USER_ID,
+                    Value = "Test"
+                },
+                new()
+                {
+                    CreatedAt = DateTime.UtcNow.AddDays(-30),
+                    ExpiresAt = DateTime.UtcNow.AddDays(-1),
+                    IsRevoked = false,
+                    IsUsed = false,
+                    UserId = USER_ID,
+                    Value = "Test2"
+                }
+            };
+
+            var authenticationDBContextMock = new Mock<IAuthenticationDbContext>();
+            authenticationDBContextMock.Setup(mock => mock.RefreshTokens).ReturnsDbSet(refreshTokens);
+
+            var hasherMock = new Mock<IHasher>();
+
+            var tokenService = new RefreshTokenService(authenticationDBContextMock.Object, hasherMock.Object);
+
+            // Act
+            var result = await tokenService.GetValidRefreshTokensByUserAsync(USER_ID);
+
+            // Assert
+            result.Should().NotBeNull().And.BeEquivalentTo(refreshTokens);
+            result.Count.Should().Be(refreshTokens.Count);
+        }
+
+        [Fact]
+        public async Task GetValidRefreshTokensByUserAsync_NoValidTokens_ReturnsEmptyList()
+        {
+            var refreshTokens = new List<RefreshToken>
+            {
+                new()
+                {
+                    CreatedAt = DateTime.UtcNow,
+                    ExpiresAt = DateTime.UtcNow.AddDays(1),
+                    IsRevoked = false,
+                    IsUsed = true,
+                    UserId = USER_ID,
+                    Value = "Test"
+                },
+                new()
+                {
+                    CreatedAt = DateTime.UtcNow.AddDays(-30),
+                    ExpiresAt = DateTime.UtcNow.AddDays(-1),
+                    IsRevoked = true,
+                    IsUsed = false,
+                    UserId = USER_ID,
+                    Value = "Test2"
+                }
+            };
+
+            var authenticationDBContextMock = new Mock<IAuthenticationDbContext>();
+            authenticationDBContextMock.Setup(mock => mock.RefreshTokens).ReturnsDbSet(refreshTokens);
+
+            var hasherMock = new Mock<IHasher>();
+
+            var tokenService = new RefreshTokenService(authenticationDBContextMock.Object, hasherMock.Object);
+
+            // Act
+            var result = await tokenService.GetValidRefreshTokensByUserAsync(USER_ID);
+
+            // Assert
+            result.Should().NotBeNull().And.BeEmpty();
+            result.Count.Should().Be(0);
+        }
     }
 }
