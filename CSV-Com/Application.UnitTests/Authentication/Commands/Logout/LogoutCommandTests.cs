@@ -8,7 +8,7 @@ namespace Application.UnitTests.Authentication.Commands.Logout
     public class LogoutCommandTests
     {
         [Fact]
-        public async Task Handle_SuccessFlow_ReturnsNewTokens()
+        public async Task Handle_SuccessFlow_LoggedOut()
         {
             // Arrange
             var userId = Guid.NewGuid();

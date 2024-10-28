@@ -76,6 +76,5 @@ namespace Application.FunctionalTests.Authentication.Commands.Logout
             result.Should().NotBeNull();
             result.Success.Should().BeTrue();
         }
-
     }
 }

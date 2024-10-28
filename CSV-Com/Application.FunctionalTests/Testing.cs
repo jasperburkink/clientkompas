@@ -150,9 +150,16 @@ namespace Application.FunctionalTests
         public static async Task<ICollection<TEntity>> GetAsync<TEntity>(params Expression<Func<TEntity, object>>[] includes)
             where TEntity : class
         {
+            return await GetAsync<TEntity, CVSDbContext>(includes);
+        }
+
+        public static async Task<ICollection<TEntity>> GetAsync<TEntity, TDbContext>(params Expression<Func<TEntity, object>>[] includes)
+            where TEntity : class
+            where TDbContext : DbContext
+        {
             using var scope = s_scopeFactory.CreateScope();
 
-            var context = scope.ServiceProvider.GetRequiredService<CVSDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<TDbContext>();
 
             IQueryable<TEntity> query = context.Set<TEntity>();
 
