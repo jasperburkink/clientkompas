@@ -20,6 +20,8 @@ import RefreshTokenService from "utils/refresh-token-service";
 import CoachingProgramEdit from "types/model/CoachingProgramEdit";
 import GetClientFullnameDto from "types/model/GetClientFullnameDto";
 import GetCoachingProgramTypesDto from "types/model/GetCoachingProgramTypesDto";
+import LogoutCommand from "types/model/logout/logout-command";
+import LogoutCommandDto from "types/model/logout/logout-command-dto";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -183,6 +185,22 @@ export const login = async (loginCommand: LoginCommand): Promise<ApiResult<Login
     };
 
     const response = await fetch(`${apiUrl}Authentication`, requestOptions);     
+    
+    return handleApiResonse<LoginCommandDto>(response);
+}
+
+export const logout = async (logoutCommand: LogoutCommand): Promise<ApiResult<LogoutCommandDto>> => {
+    let method = 'POST';
+
+    const requestOptions: RequestInit = {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(logoutCommand)
+    };
+
+    const response = await fetch(`${apiUrl}Authentication/Logout`, requestOptions);     
     
     return handleApiResonse<LoginCommandDto>(response);
 }

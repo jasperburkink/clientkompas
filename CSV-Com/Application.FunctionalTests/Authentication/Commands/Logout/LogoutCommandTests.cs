@@ -85,7 +85,6 @@ namespace Application.FunctionalTests.Authentication.Commands.Logout
             await AddAsync<Infrastructure.Identity.RefreshToken, AuthenticationDbContext>(_refreshToken2);
             await AddAsync<Infrastructure.Identity.RefreshToken, AuthenticationDbContext>(_refreshToken3);
 
-
             // Act
             var result = await SendAsync(_command);
             var tokens = (await GetAsync<Infrastructure.Identity.RefreshToken, AuthenticationDbContext>())
