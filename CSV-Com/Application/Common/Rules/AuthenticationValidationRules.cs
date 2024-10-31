@@ -15,8 +15,16 @@ namespace Application.Common.Rules
                 .WithMessage(resourceMessageProvider.GetMessage(typeof(AuthenticationValidationRules), "UserNameMaxLength", AuthenticationUserConstants.USERNAME_MAXLENGTH));
         }
 
-        public static IRuleBuilderOptions<T, string> ValidatePassword<T>(this IRuleBuilder<T, string> ruleBuilder,
+        public static IRuleBuilderOptions<T, string> ValidatePasswordLogin<T>(this IRuleBuilder<T, string> ruleBuilder,
             IResourceMessageProvider resourceMessageProvider)
+        {
+            return ruleBuilder
+                .NotEmpty()
+                .WithMessage(resourceMessageProvider.GetMessage(typeof(AuthenticationValidationRules), "PasswordRequired"));
+        }
+
+        public static IRuleBuilderOptions<T, string> ValidatePassword<T>(this IRuleBuilder<T, string> ruleBuilder,
+            IResourceMessageProvider resourceMessageProvider, Func<T, string> passwordRepeatSelector)
         {
             return ruleBuilder
                 .NotEmpty()
@@ -32,7 +40,17 @@ namespace Application.Common.Rules
                 .Matches(@"[0-9]")
                 .WithMessage(resourceMessageProvider.GetMessage(typeof(AuthenticationValidationRules), "PasswordContainsNumber"))
                 .Matches(@"[\W]")
-                .WithMessage(resourceMessageProvider.GetMessage(typeof(AuthenticationValidationRules), "PasswordContainsSpecialCharacter"));
+                .WithMessage(resourceMessageProvider.GetMessage(typeof(AuthenticationValidationRules), "PasswordContainsSpecialCharacter"))
+                .Must((instance, password) => password == passwordRepeatSelector(instance))
+                .WithMessage(resourceMessageProvider.GetMessage(typeof(AuthenticationValidationRules), "PasswordsDoNotMatch"));
+        }
+
+        public static IRuleBuilderOptions<T, string> ValidateToken<T>(this IRuleBuilder<T, string> ruleBuilder,
+            IResourceMessageProvider resourceMessageProvider)
+        {
+            return ruleBuilder
+                .NotEmpty()
+                .WithMessage(resourceMessageProvider.GetMessage(typeof(AuthenticationValidationRules), "TokenRequired"));
         }
     }
 }

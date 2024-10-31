@@ -39,6 +39,7 @@ namespace Infrastructure.Identity
 
         public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password)
         {
+            // TODO: Is this necessary? Pashwordhasher with usermanager should do this under water.
             var salt = _hasher.GenerateSalt();
             var passwordHash = _hasher.HashString(password, salt);
 
@@ -134,5 +135,19 @@ namespace Infrastructure.Identity
         }
 
         public async Task<AuthenticationUser> GetUserAsync(string userId) => await _userManager.FindByIdAsync(userId);
+
+        public async Task<Result> ResetPasswordAsync(string emailAddress, string token, string newPassword)
+        {
+            var user = await _userManager.FindByEmailAsync(emailAddress);
+
+            if (user == null)
+            {
+                return Result.Failure(new List<string> { "User is not found with the given emailaddress." });
+            }
+
+            var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
+
+            return result.ToApplicationResult();
+        }
     }
 }

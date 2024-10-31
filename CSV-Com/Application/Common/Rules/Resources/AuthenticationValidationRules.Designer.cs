@@ -124,6 +124,24 @@ namespace Application.Common.Rules.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Wachtwoorden komen niet overeen..
+        /// </summary>
+        internal static string PasswordsDoNotMatch {
+            get {
+                return ResourceManager.GetString("PasswordsDoNotMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Token is verplicht..
+        /// </summary>
+        internal static string TokenRequired {
+            get {
+                return ResourceManager.GetString("TokenRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Gebruikersnaam mag niet langer zijn dan {0} karakters..
         /// </summary>
         internal static string UserNameMaxLength {
