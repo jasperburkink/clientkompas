@@ -5,20 +5,27 @@ export interface ValidationErrorHash {
 export interface ValidationError {
     propertyname: string;
     errormessage: string;
-    errorcode: string;
 }
 
 export const parseValidationErrors = (json: any): ValidationErrorHash => {
-    const validationErrors: ValidationError[] = json;
+    const validationErrorHash: ValidationErrorHash = {};
 
-    const validationErrorHash: ValidationErrorHash = validationErrors.reduce((acc, error) => {
-        const key = error.propertyname.toLocaleLowerCase();
-        if (!acc[key]) {
-            acc[key] = [];
-        }
-        acc[key].push(error);
-        return acc;
-    }, {} as ValidationErrorHash);
+    if (json.errors) {
+        Object.keys(json.errors).forEach((key: string) => {
+            const field = key.toLocaleLowerCase();
+            
+            if (!validationErrorHash[field]) {
+                validationErrorHash[field] = [];
+            }
+
+            json.errors[key].forEach((message: string) => {
+                validationErrorHash[field].push({
+                    propertyname: field,
+                    errormessage: message
+                });
+            });
+        });
+    }
 
     return validationErrorHash;
 };

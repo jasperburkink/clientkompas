@@ -4,21 +4,24 @@ import logo from "assets/CK_dark_logo.svg";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { MenuComponentProps } from 'components/common/menu';
 
-export function Sidebar(props) {
+export function Sidebar(props: MenuComponentProps) {
   const openCloseBlueSideBar = () => {
-    var rotatedeg = document.getElementById("hamburger").style.rotate;
+
+    // TODO: Refactor this code into react code
+    var rotatedeg = document.getElementById("hamburger")!.style.rotate;
 
     if(rotatedeg === "90deg")
     {
-      document.getElementById("sidebar").style.height ="0px";
-      document.getElementById("hamburger").style.rotate = "0deg";
+      document.getElementById("sidebar")!.style.height ="0px";
+      document.getElementById("hamburger")!.style.rotate = "0deg";
       document.body.style.overflow ="hidden";
     }
     else
     {
-      document.getElementById("sidebar").style.height ="100vh";
-      document.getElementById("hamburger").style.rotate = "90deg";
+      document.getElementById("sidebar")!.style.height ="100vh";
+      document.getElementById("hamburger")!.style.rotate = "90deg";
       document.body.style.overflow ="hidden";
     }
   }

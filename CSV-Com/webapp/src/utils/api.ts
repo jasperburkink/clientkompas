@@ -21,7 +21,7 @@ import GetCoachingProgramTypesDto from "types/model/GetCoachingProgramTypesDto";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
-async function fetchAPI<T>(url: string, method: string = 'GET', body?: any): Promise<T> {
+async function fetchAPI<T>(url: string, method: string = 'GET', body?: any): Promise<ApiResult<T>> {
     const options: RequestInit = {
         method,
         headers: {
@@ -32,11 +32,7 @@ async function fetchAPI<T>(url: string, method: string = 'GET', body?: any): Pro
     
     const response = await fetch(url, options);
     
-    if (!response.ok) {
-        throw new Error(`An error has occured while executing an API operation to '${url}'.`);
-    }
-    
-    return response.json() as Promise<T>;
+    return handleApiResonse<T>(response);
 }
 
 //TODO: move this to global file
@@ -50,6 +46,7 @@ Date.prototype.toJSON = function(){
 }
 
 const handleApiResonse = async <T>(response: Response): Promise<ApiResult<T>> => {
+    // Ok API response
     if(response.ok){
         let ObjectReturn: T = await response.json();
 
@@ -58,9 +55,11 @@ const handleApiResonse = async <T>(response: Response): Promise<ApiResult<T>> =>
             ReturnObject: ObjectReturn
         }
     }
+    
+    // TODO: Implement all HTTP status codes with the pages. https://sbict.atlassian.net/wiki/spaces/CVS/pages/35356674/Foutafhandeling#Gehele-pagina%E2%80%99s
 
-    // Error
-    try {
+    // Bad request --> Validation errors
+    if(response.status === 400) {
         var responseData = await response.json();
 
         let titleResponse: string | undefined;
@@ -82,20 +81,59 @@ const handleApiResonse = async <T>(response: Response): Promise<ApiResult<T>> =>
         catch(err){
             console.log(`Error while parsing api errors. Error:${err}`);
         }
-        
+
         return {
             Ok: response.ok,
             Title: titleResponse,
             Errors: errorsResponse,
             ValidationErrors: validationErrorsResponse
-        }        
+        }  
+    }    
+    // Unauthorized 
+    else if (response.status === 401) {
+        window.location.href = '/unauthorized';
+        return Promise.reject({
+            Ok: false,
+            Errors: ['Unauthorized access']
+        });
     }
-    catch (err) {
-        console.log(`Error while parsing api response. Error:${err}`);
+    // Forbidden 
+    else if (response.status === 403) {
+        window.location.href = '/forbidden';
+        return Promise.reject({
+            Ok: false,
+            Errors: ['Forbidden access']
+        });
+    }
+    // Internal error
+    else if (response.status === 500) {
+        window.location.href = '/internalerror';
+        return Promise.reject({
+            Ok: false,
+            Errors: ['Internal Error']
+        });
+    }
+    // Error
+    else {
+        let titleResponse: string | undefined;
+        let errorsResponse: string[] | undefined;
+        let validationErrorsResponse: ValidationErrorHash | undefined;
+
+        try{
+            let {title, errors} = responseData;
+            titleResponse = title;
+            errorsResponse = processErrors(errors);
+        }
+        catch(err){
+            console.log(`Error while parsing api errors. Error:${err}`);
+        }
+
         return {
             Ok: response.ok,
-            Errors: [response.statusText]
-        }
+            Title: titleResponse,
+            Errors: errorsResponse,
+            ValidationErrors: validationErrorsResponse
+        }  
     }
 }
 
@@ -116,11 +154,11 @@ export const login = async (loginCommand: LoginCommand): Promise<ApiResult<Login
 }
 
 export const fetchClient = async (clientId: string): Promise<ClientQuery> => {
-    return fetchAPI<ClientQuery>(`${apiUrl}Client/${clientId}`);
+    return (await fetchAPI<ClientQuery>(`${apiUrl}Client/${clientId}`)).ReturnObject!;
 }
 
 export const fetchClientEditor = async (clientId: string): Promise<Client> => {
-    let client = await fetchAPI<Client>(`${apiUrl}Client/GetClientEditor/${clientId}`);
+    let client = (await fetchAPI<Client>(`${apiUrl}Client/GetClientEditor/${clientId}`)).ReturnObject!;
 
     // Parse dates in client object
     client.dateofbirth = client.dateofbirth ? new Date(client.dateofbirth) : undefined;
@@ -135,35 +173,35 @@ export const fetchClientEditor = async (clientId: string): Promise<Client> => {
 }
 
 export const searchClients = async (searchTerm: string): Promise<ClientQuery[]> => {
-    return fetchAPI<ClientQuery[]>(`${apiUrl}Client/SearchClients?SearchTerm=${searchTerm}`);
+    return (await fetchAPI<ClientQuery[]>(`${apiUrl}Client/SearchClients?SearchTerm=${searchTerm}`)).ReturnObject!;
 }
 
 export const fetchClientFullname = async (clientId: string): Promise<GetClientFullnameDto> => {
-    return fetchAPI<GetClientFullnameDto>(`${apiUrl}Client/GetClientFullname/${clientId}`);
+    return (await (fetchAPI<GetClientFullnameDto>(`${apiUrl}Client/GetClientFullname/${clientId}`))).ReturnObject!;
 }
 
 export const fetchBenefitForms = async (): Promise<BenefitForm[]> => {
-    return fetchAPI<BenefitForm[]>(`${apiUrl}BenefitForm`);
+    return (await (fetchAPI<BenefitForm[]>(`${apiUrl}BenefitForm`))).ReturnObject!;
 }
 
 export const fetchDiagnosis = async (): Promise<Diagnosis[]> => {
-    return fetchAPI<Diagnosis[]>(`${apiUrl}Diagnosis`);
+    return (await (fetchAPI<Diagnosis[]>(`${apiUrl}Diagnosis`))).ReturnObject!;
 }
 
 export const fetchMaritalStatuses = async (): Promise<MaritalStatus[]> => {
-    return fetchAPI<MaritalStatus[]>(`${apiUrl}MaritalStatus`);
+    return (await (fetchAPI<MaritalStatus[]>(`${apiUrl}MaritalStatus`))).ReturnObject!;
 }
 
 export const fetchDriversLicences = async (): Promise<DriversLicence[]> => {
-    return fetchAPI<DriversLicence[]>(`${apiUrl}DriversLicence`);
+    return (await fetchAPI<DriversLicence[]>(`${apiUrl}DriversLicence`)).ReturnObject!;
 }
 
 export const fetchOrganizations = async (): Promise<Organization[]> => {
-    return fetchAPI<Organization[]>(`${apiUrl}Organization`);
+    return (await fetchAPI<Organization[]>(`${apiUrl}Organization`)).ReturnObject!;
 }
 
 export const deactivateClient = async (clientId: number): Promise<ClientQuery> => {
-    return fetchAPI<ClientQuery>(`${apiUrl}Client/DeactivateClient`, 'PUT', { id: clientId });
+    return (await fetchAPI<ClientQuery>(`${apiUrl}Client/DeactivateClient`, 'PUT', { id: clientId })).ReturnObject!;
 }
     
 moment.prototype.toJSON = function(){
@@ -190,12 +228,11 @@ export const saveClient = async (client: Client): Promise<ApiResult<Client>> => 
 }
 
 export const fetchOrganization = async (organizationId: string): Promise<Organization> => {
-    return fetchAPI<Organization>(`${apiUrl}organization/${organizationId}`);
+    return (await fetchAPI<Organization>(`${apiUrl}organization/${organizationId}`)).ReturnObject!;
 }
 
 export const fetchOrganizationEditor = async (organizationId: string): Promise<Organization> => {
-    let organization = await fetchAPI<Organization>(`${apiUrl}Organization/${organizationId}`);
-    return organization;
+    return (await fetchAPI<Organization>(`${apiUrl}Organization/${organizationId}`)).ReturnObject!;
 }
 
 export const saveOrganization = async (organization: Organization): Promise<ApiResult<Organization>> => {
@@ -215,20 +252,21 @@ export const saveOrganization = async (organization: Organization): Promise<ApiR
 }
 
 export const fetchCoachingProgramsByClient = async (clientId: string): Promise<CoachingProgramQuery[]> => {
-    return await fetchAPI<CoachingProgramQuery[]>(`${apiUrl}CoachingProgram/GetCoachingProgramsByClient/${clientId}`);
+    return (await fetchAPI<CoachingProgramQuery[]>(`${apiUrl}CoachingProgram/GetCoachingProgramsByClient/${clientId}`)).ReturnObject!;
 }
 
 export const fetchCoachingProgram = async (id: number): Promise<CoachingProgram> => {
-    return await fetchAPI<CoachingProgram>(`${apiUrl}CoachingProgram/${id}`);
+    return (await (fetchAPI<CoachingProgram>(`${apiUrl}CoachingProgram/${id}`))).ReturnObject!;
 }
 
 export const fetchCoachingProgramEdit = async (id: string): Promise<CoachingProgramEdit> => {
-    return fetchAPI<CoachingProgramEdit>(`${apiUrl}CoachingProgram/GetCoachingProgramsEdit/${id}`);
+    return (await (fetchAPI<CoachingProgramEdit>(`${apiUrl}CoachingProgram/GetCoachingProgramsEdit/${id}`))).ReturnObject!;
 }
 
 export const fetchCoachingProgramTypes = async (): Promise<GetCoachingProgramTypesDto[]> => {
-    return await fetchAPI<GetCoachingProgramTypesDto[]>(`${apiUrl}CoachingProgram/GetCoachingProgramTypes`);
+    return (await (fetchAPI<GetCoachingProgramTypesDto[]>(`${apiUrl}CoachingProgram/GetCoachingProgramTypes`))).ReturnObject!;
 }
+
 
 export const saveCoachingProgram = async (coachingProgram: CoachingProgramEdit): Promise<ApiResult<CoachingProgramEdit>> => {
     let method = coachingProgram.id > 0  ? 'PUT' : 'POST';

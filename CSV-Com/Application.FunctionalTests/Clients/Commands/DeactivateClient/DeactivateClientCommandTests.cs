@@ -5,7 +5,6 @@ using Domain.CVS.Domain;
 using TestData;
 using TestData.Client;
 using static Application.FunctionalTests.Testing;
-using ValidationException = FluentValidation.ValidationException;
 
 namespace Application.FunctionalTests.Clients.Commands.DeactivateClient
 {
