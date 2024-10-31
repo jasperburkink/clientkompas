@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Application.Common.Interfaces.Authentication;
 using Domain.Authentication.Domain;
 using Infrastructure.Data.Authentication;
 using Infrastructure.Data.CVS;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Moq;
 
 namespace Application.FunctionalTests
 {
@@ -22,6 +24,7 @@ namespace Application.FunctionalTests
         private static IServiceScopeFactory s_scopeFactory = null!;
         private static string? s_currentUserId;
         private static readonly string? s_databasePrefix = GenerateRandomPrefix();
+        private static IIdentityService? s_identityService;
 
         [OneTimeSetUp]
         public async Task RunBeforeAnyTests()
@@ -229,6 +232,25 @@ namespace Application.FunctionalTests
                 prefix += characters[Random.Shared.Next(0, characters.Length)];
             }
             return prefix;
+        }
+
+        public static void EnableMocks(bool useMocks)
+        {
+            using var scope = s_factory.Services.CreateScope();
+            var serviceProvider = scope.ServiceProvider;
+            var existingIdentityService = serviceProvider.GetService<IIdentityService>();
+
+            if (useMocks)
+            {
+                var mockIdentityService = new Mock<IIdentityService>();
+                mockIdentityService.Setup(s => s.LoginAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new Common.Models.LoggedInResult(true));
+                mockIdentityService.Setup(s => s.LogoutAsync()).Returns(Task.CompletedTask);
+                s_factory.ConfigureIdentityService(mockIdentityService.Object);
+            }
+            else if (existingIdentityService != null)
+            {
+                s_factory.ConfigureIdentityService(existingIdentityService);
+            }
         }
     }
 }
