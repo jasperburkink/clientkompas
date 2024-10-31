@@ -1,6 +1,6 @@
-﻿namespace Application.Authentication.Commands.ResetPassword
+﻿namespace Application.Authentication.Commands.RequestResetPassword
 {
-    public class ResetPasswordCommandDto
+    public class RequestResetPasswordCommandDto
     {
         public required bool Success { get; set; }
 

@@ -84,7 +84,7 @@ namespace Infrastructure.Data.Authentication
             var user = new AuthenticationUser
             {
                 UserName = role.Name,
-                Email = role.Name,
+                Email = role.Name == nameof(Roles.SystemOwner) ? "jasper.burkink@specializedbrainsict.nl" : role.Name,
                 Salt = salt,
                 PasswordHash = passwordHash
             };

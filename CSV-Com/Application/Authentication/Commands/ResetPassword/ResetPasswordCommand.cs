@@ -1,4 +1,6 @@
-﻿namespace Application.Authentication.Commands.ResetPassword
+﻿using Application.Common.Interfaces.Authentication;
+
+namespace Application.Authentication.Commands.ResetPassword
 {
     public class ResetPasswordCommand : IRequest<ResetPasswordCommandDto>
     {
@@ -13,33 +15,35 @@
 
     public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand, ResetPasswordCommandDto>
     {
-        private readonly IResetPasswordService _resetPasswordService;
+        private readonly IIdentityService _identityService;
 
-        public ResetPasswordCommandHandler(IResetPasswordService resetPasswordService)
+        public ResetPasswordCommandHandler(IIdentityService identityService)
         {
-            _resetPasswordService = resetPasswordService;
+            _identityService = identityService;
         }
 
         public async Task<ResetPasswordCommandDto> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
         {
             try
             {
+                ArgumentNullException.ThrowIfNull(request.EmailAddress);
                 ArgumentNullException.ThrowIfNull(request.Token);
                 ArgumentNullException.ThrowIfNull(request.NewPassword);
 
-                await _resetPasswordService.ResetPassword(request.Token, request.NewPassword);
+                var result = await _identityService.ResetPasswordAsync(request.EmailAddress, request.Token, request.NewPassword);
 
                 return new ResetPasswordCommandDto
                 {
-                    Success = true
+                    Success = result.Succeeded,
+                    Errors = result.Errors
                 };
             }
             catch (Exception ex)
             {
-                return new ResetPasswordCommandDto // TODO: Return an object with error and success false, or return result object or let API handle the exception?
+                return new ResetPasswordCommandDto
                 {
                     Success = false,
-                    Error = ex.Message
+                    Errors = new List<string> { ex.Message }
                 };
             }
         }

@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces.Authentication;
 using Application.Common.Models;
 using Domain.Authentication.Domain;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 
@@ -135,6 +136,28 @@ namespace Infrastructure.Identity
         }
 
         public async Task<AuthenticationUser> GetUserAsync(string userId) => await _userManager.FindByIdAsync(userId);
+
+        public async Task<Result> SendResetPasswordEmailAsync(string emailAddress)
+        {
+            var user = await _userManager.FindByEmailAsync(emailAddress);
+
+            if (user == null)
+            {
+                return Result.Success();
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            var link = new Uri($"http://localhost:3000/ResetPassword?Token={token}");
+
+            var emailService = new EmailService();
+            emailService.SendEmail(emailAddress, $"Wachtwoord opnieuw instellen", """"
+                Via deze link kunt U uw wachtwoord opnieuw instellen.
+                {link}
+                """");
+
+            return Result.Success();
+        }
 
         public async Task<Result> ResetPasswordAsync(string emailAddress, string token, string newPassword)
         {
