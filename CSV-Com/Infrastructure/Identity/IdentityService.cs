@@ -1,7 +1,7 @@
-﻿using Application.Common.Interfaces.Authentication;
+﻿using Application.Common.Interfaces;
+using Application.Common.Interfaces.Authentication;
 using Application.Common.Models;
 using Domain.Authentication.Domain;
-using Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 
@@ -15,6 +15,7 @@ namespace Infrastructure.Identity
         private readonly IAuthorizationService _authorizationService;
         private readonly IHasher _hasher;
         private readonly IRefreshTokenService _refreshTokenService;
+        private readonly IEmailService _emailService;
         private const string WEBAPP_URL = "http://localhost:3000"; // TODO: Move this url to the appsettings or get the url from constants?
 
         public IdentityService(
@@ -23,7 +24,8 @@ namespace Infrastructure.Identity
             IUserClaimsPrincipalFactory<AuthenticationUser> userClaimsPrincipalFactory,
             IAuthorizationService authorizationService,
             IHasher hasher,
-            IRefreshTokenService refreshTokenService)
+            IRefreshTokenService refreshTokenService,
+            IEmailService emailService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -31,6 +33,7 @@ namespace Infrastructure.Identity
             _authorizationService = authorizationService;
             _hasher = hasher;
             _refreshTokenService = refreshTokenService;
+            _emailService = emailService;
         }
 
         public async Task<string?> GetUserNameAsync(string userId)
@@ -136,6 +139,7 @@ namespace Infrastructure.Identity
         {
             var user = await _userManager.FindByEmailAsync(emailAddress);
 
+            // When user is unknown, still show a success result. No polling if emailaddresses are in the system.
             if (user == null)
             {
                 return Result.Success();
@@ -145,8 +149,7 @@ namespace Infrastructure.Identity
 
             var link = new Uri($"{WEBAPP_URL}/ResetPassword?Token={token}");
 
-            var emailService = new EmailService(); // TODO: Use the new emailservice and take the text from resources.
-            emailService.SendEmail(emailAddress, "Wachtwoord opnieuw instellen",
+            await _emailService.SendEmailAsync(emailAddress, "Wachtwoord opnieuw instellen", // TODO: Use the new emailservice and take the text from resources.
                 $""""
                 Via deze link kunt U uw wachtwoord opnieuw instellen.
                 {link}

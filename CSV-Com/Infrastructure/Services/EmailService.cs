@@ -1,9 +1,10 @@
 ﻿using System.Net;
 using System.Net.Mail;
+using Application.Common.Interfaces;
 
 namespace Infrastructure.Services
 {
-    internal class EmailService // TODO: This service can be removed when emailmodule is ready
+    internal class EmailService : IEmailService // TODO: This service can be removed when emailmodule is ready
     {
         private const string EMAIL_ADDRESS = "ontwikkelaar@clientkompas.nl";
         private const string PASSWORD = "iaOQ6m6hsm4cK5yAEi1X";
@@ -11,25 +12,28 @@ namespace Infrastructure.Services
 
         public EmailService() { }
 
-        public void SendEmail(string emailAddress, string subject, string message)
+        public async Task SendEmailAsync(string emailAddress, string subject, string message)
         {
-            var smtpClient = new SmtpClient(SMTP_SERVER)
+            await Task.Run(() =>
             {
-                Port = 587,
-                Credentials = new NetworkCredential(EMAIL_ADDRESS, PASSWORD),
-                EnableSsl = true,
-            };
+                var smtpClient = new SmtpClient(SMTP_SERVER)
+                {
+                    Port = 587,
+                    Credentials = new NetworkCredential(EMAIL_ADDRESS, PASSWORD),
+                    EnableSsl = true,
+                };
 
-            var mail = new MailMessage
-            {
-                From = new MailAddress(EMAIL_ADDRESS),
-                Subject = subject,
-                Body = message
-            };
+                var mail = new MailMessage
+                {
+                    From = new MailAddress(EMAIL_ADDRESS),
+                    Subject = subject,
+                    Body = message
+                };
 
-            mail.To.Add(emailAddress);
+                mail.To.Add(emailAddress);
 
-            smtpClient.Send(mail);
+                smtpClient.Send(mail);
+            });
         }
     }
 }
