@@ -61,6 +61,24 @@ namespace Application.Common.Rules.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to E-mailadres is geen geldig e-mailadres..
+        /// </summary>
+        internal static string EmailAddressInvalid {
+            get {
+                return ResourceManager.GetString("EmailAddressInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to E-mailadres is verplicht..
+        /// </summary>
+        internal static string EmailAddressRequired {
+            get {
+                return ResourceManager.GetString("EmailAddressRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Wachtwoord moet ten minste één kleine letter bevatten..
         /// </summary>
         internal static string PasswordContainsLowerCaseCharacter {

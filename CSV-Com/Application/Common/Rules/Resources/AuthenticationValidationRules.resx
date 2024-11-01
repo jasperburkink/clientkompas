@@ -150,4 +150,10 @@
   <data name="TokenRequired" xml:space="preserve">
     <value>Token is verplicht.</value>
   </data>
+  <data name="EmailAddressInvalid" xml:space="preserve">
+    <value>E-mailadres is geen geldig e-mailadres.</value>
+  </data>
+  <data name="EmailAddressRequired" xml:space="preserve">
+    <value>E-mailadres is verplicht.</value>
+  </data>
 </root>

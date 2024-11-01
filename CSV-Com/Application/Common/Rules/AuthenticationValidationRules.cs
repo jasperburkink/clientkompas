@@ -52,5 +52,15 @@ namespace Application.Common.Rules
                 .NotEmpty()
                 .WithMessage(resourceMessageProvider.GetMessage(typeof(AuthenticationValidationRules), "TokenRequired"));
         }
+
+        public static IRuleBuilderOptions<T, string> ValidateEmailAddress<T>(this IRuleBuilder<T, string> ruleBuilder,
+            IResourceMessageProvider resourceMessageProvider)
+        {
+            return ruleBuilder
+                .NotEmpty()
+                .WithMessage(resourceMessageProvider.GetMessage(typeof(AuthenticationValidationRules), "EmailAddressRequired"))
+                .EmailAddress()
+                .WithMessage(resourceMessageProvider.GetMessage(typeof(AuthenticationValidationRules), "EmailAddressInvalid"));
+        }
     }
 }
