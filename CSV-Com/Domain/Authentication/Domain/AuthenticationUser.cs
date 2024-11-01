@@ -6,6 +6,6 @@ namespace Domain.Authentication.Domain
     {
         public int? CVSUserId { get; set; }
 
-        public required byte[] Salt { get; set; }
+        public byte[]? Salt { get; set; }
     }
 }

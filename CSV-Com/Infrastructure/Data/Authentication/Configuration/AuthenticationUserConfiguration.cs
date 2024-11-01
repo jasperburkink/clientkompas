@@ -15,6 +15,9 @@ namespace Infrastructure.Data.Authentication.Configuration
         {
             builder.Property(u => u.CVSUserId) // TODO: Perhaps this prop must be required when adding the logics for copuling the CVS user to this user. A foreign key is not posible between different contexts.
                .IsRequired(false);
+
+            builder.Property(u => u.Salt)
+               .IsRequired(true);
         }
     }
 }

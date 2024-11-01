@@ -15,6 +15,7 @@ namespace Infrastructure.Identity
         private readonly IAuthorizationService _authorizationService;
         private readonly IHasher _hasher;
         private readonly IRefreshTokenService _refreshTokenService;
+        private const string WEBAPP_URL = "http://localhost:3000"; // TODO: Move this url to the appsettings or get the url from constants?
 
         public IdentityService(
             UserManager<AuthenticationUser> userManager,
@@ -40,16 +41,10 @@ namespace Infrastructure.Identity
 
         public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password)
         {
-            // TODO: Is this necessary? Pashwordhasher with usermanager should do this under water.
-            var salt = _hasher.GenerateSalt();
-            var passwordHash = _hasher.HashString(password, salt);
-
             var user = new AuthenticationUser
             {
                 UserName = userName,
-                Email = userName,
-                PasswordHash = passwordHash,
-                Salt = salt
+                Email = userName
             };
 
             var result = await _userManager.CreateAsync(user, password);
@@ -148,10 +143,11 @@ namespace Infrastructure.Identity
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-            var link = new Uri($"http://localhost:3000/ResetPassword?Token={token}");
+            var link = new Uri($"{WEBAPP_URL}/ResetPassword?Token={token}");
 
-            var emailService = new EmailService();
-            emailService.SendEmail(emailAddress, $"Wachtwoord opnieuw instellen", """"
+            var emailService = new EmailService(); // TODO: Use the new emailservice and take the text from resources.
+            emailService.SendEmail(emailAddress, "Wachtwoord opnieuw instellen",
+                $""""
                 Via deze link kunt U uw wachtwoord opnieuw instellen.
                 {link}
                 """");
