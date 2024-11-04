@@ -3,7 +3,6 @@ using Domain.Authentication.Domain;
 using Infrastructure.Data.Authentication;
 using TestData;
 using TestData.Authentication;
-using static Application.FunctionalTests.Testing;
 
 namespace Application.FunctionalTests.Authentication.Commands.RefreshToken
 {

@@ -90,16 +90,16 @@ namespace Application.FunctionalTests
 
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AuthenticationUser>>();
 
-            var hasher = new Argon2Hasher();
-            var salt = hasher.GenerateSalt();
-            var passwordHash = hasher.HashString(password, salt);
+            //var hasher = new Argon2Hasher();
+            //var salt = hasher.GenerateSalt();
+            //var passwordHash = hasher.HashString(password, salt);
 
             var user = new AuthenticationUser
             {
                 UserName = userName,
                 Email = userName,
-                Salt = salt,
-                PasswordHash = passwordHash
+                //Salt = salt,
+                //PasswordHash = passwordHash
             };
 
             var result = await userManager.CreateAsync(user, password);
@@ -214,6 +214,44 @@ namespace Application.FunctionalTests
             var context = scope.ServiceProvider.GetRequiredService<CVSDbContext>();
 
             return await context.Set<TEntity>().CountAsync();
+        }
+
+        public static async Task<string> CreateUserAsync(string userName, string password)
+        {
+            using var scope = CreateScope();
+
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AuthenticationUser>>();
+
+
+            var user = new AuthenticationUser
+            {
+                UserName = userName,
+                Email = userName
+            };
+
+            var result = await userManager.CreateAsync(user, password);
+
+            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+            if (result.Succeeded)
+            {
+                s_currentUserId = user.Id;
+
+                return s_currentUserId;
+            }
+
+            var errors = string.Join(Environment.NewLine, result.ToApplicationResult().Errors);
+
+            throw new Exception($"Unable to create {userName}.{Environment.NewLine}{errors}");
+        }
+
+        public static async Task<string> GetPasswordResetAsync(AuthenticationUser user)
+        {
+            using var scope = CreateScope();
+
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AuthenticationUser>>();
+
+            return await userManager.GeneratePasswordResetTokenAsync(user);
         }
 
         private static IServiceScope CreateScope()

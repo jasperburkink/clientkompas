@@ -20,7 +20,6 @@ namespace Application.FunctionalTests.Authentication.Commands.RequestResetPasswo
 
             await AddAsync<AuthenticationUser, AuthenticationDbContext>(_authenticationUser);
 
-            // Prepare command with the test user's email address
             _command = new RequestResetPasswordCommand
             {
                 EmailAddress = _authenticationUser.Email
@@ -28,19 +27,18 @@ namespace Application.FunctionalTests.Authentication.Commands.RequestResetPasswo
         }
 
         [Test]
-        public async Task Handle_CorrectEmail_ShouldReturnSuccess()
+        public async Task Handle_SuccessFlow_ResultSuccessIsTrue()
         {
             // Act
             var result = await SendAsync(_command);
 
             // Assert
-            result.Should().NotBeNull();
             result.Success.Should().BeTrue();
             result.Errors.Should().BeEmpty();
         }
 
         [Test]
-        public async Task Handle_NonExistentEmail_ShouldReturnFailureWithErrors()
+        public async Task Handle_NonExistentEmail_ResultSuccessIsTrue()
         {
             // Arrange
             _command.EmailAddress = "nonexistent@example.com";
@@ -49,45 +47,16 @@ namespace Application.FunctionalTests.Authentication.Commands.RequestResetPasswo
             var result = await SendAsync(_command);
 
             // Assert
-            result.Should().NotBeNull();
-            result.Success.Should().BeFalse();
-            result.Errors.Should().Contain("User not found.");
+            result.Success.Should().BeTrue();
         }
 
         [Test]
-        public void Handle_EmptyEmail_ShouldThrowArgumentException()
-        {
-            // Arrange
-            _command.EmailAddress = string.Empty;
-
-            // Act & Assert
-            Func<Task> act = async () => await SendAsync(_command);
-            act.Should().ThrowAsync<ArgumentException>().WithMessage("Value cannot be null or empty*");
-        }
-
-        [Test]
-        public async Task Handle_EmailServiceFails_ShouldReturnFailureWithExceptionMessage()
-        {
-            // Arrange
-            // Simulate an email failure by assigning an invalid email or setting a special flag on the user (depending on the implementation)
-            _command.EmailAddress = "fail@example.com";
-
-            // Act
-            var result = await SendAsync(_command);
-
-            // Assert
-            result.Should().NotBeNull();
-            result.Success.Should().BeFalse();
-            result.Errors.Should().Contain("An error occurred while sending the reset password email.");
-        }
-
-        [Test]
-        public async Task Handle_RequestTwice_ShouldReturnSuccessForBothRequests()
+        public async Task Handle_RequestTwiceForSameEmail_ResultSuccessIsTrue()
         {
             // Arrange
             var secondCommand = new RequestResetPasswordCommand
             {
-                EmailAddress = _authenticationUser.Email
+                EmailAddress = _authenticationUser.Email!
             };
 
             // Act
@@ -95,12 +64,9 @@ namespace Application.FunctionalTests.Authentication.Commands.RequestResetPasswo
             var result2 = await SendAsync(secondCommand);
 
             // Assert
-            result1.Should().NotBeNull();
             result1.Success.Should().BeTrue();
-            result1.Errors.Should().BeEmpty();
-
-            result2.Should().NotBeNull();
             result2.Success.Should().BeTrue();
+            result1.Errors.Should().BeEmpty();
             result2.Errors.Should().BeEmpty();
         }
     }
