@@ -1,5 +1,4 @@
 ﻿using System.Linq.Expressions;
-using Application.Common.Interfaces.Authentication;
 using Domain.Authentication.Domain;
 using Infrastructure.Data.Authentication;
 using Infrastructure.Data.CVS;
@@ -9,7 +8,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
 
 namespace Application.FunctionalTests
 {
@@ -21,10 +19,11 @@ namespace Application.FunctionalTests
         private static ITestDatabase s_databaseCSV;
         private static ITestDatabase s_databaseAuthentication;
         private static CustomWebApplicationFactory s_factory = null!;
-        private static IServiceScopeFactory s_scopeFactory = null!;
+        private static CustomWebApplicationFactoryWithMocks s_factoryWithMocks = null!;
+        private static IServiceScopeFactory s_scopeFactory = null!, s_scopeFactoryWithMocks = null!;
         private static string? s_currentUserId;
         private static readonly string? s_databasePrefix = GenerateRandomPrefix();
-        private static IIdentityService? s_identityService;
+        public static bool UseMocks { get; set; } = false;
 
         [OneTimeSetUp]
         public async Task RunBeforeAnyTests()
@@ -52,11 +51,14 @@ namespace Application.FunctionalTests
 
             s_factory = new CustomWebApplicationFactory(connectionCvs, connectionAuthentication);
             s_scopeFactory = s_factory.Services.GetRequiredService<IServiceScopeFactory>();
+
+            s_factoryWithMocks = new CustomWebApplicationFactoryWithMocks(connectionCvs, connectionAuthentication);
+            s_scopeFactoryWithMocks = s_factoryWithMocks.Services.GetRequiredService<IServiceScopeFactory>();
         }
 
         public static async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
         {
-            using var scope = s_scopeFactory.CreateScope();
+            using var scope = CreateScope();
 
             var mediator = scope.ServiceProvider.GetRequiredService<ISender>();
 
@@ -65,7 +67,7 @@ namespace Application.FunctionalTests
 
         public static async Task SendAsync(IBaseRequest request)
         {
-            using var scope = s_scopeFactory.CreateScope();
+            using var scope = CreateScope();
 
             var mediator = scope.ServiceProvider.GetRequiredService<ISender>();
 
@@ -84,7 +86,7 @@ namespace Application.FunctionalTests
 
         public static async Task<string> RunAsUserAsync(string userName, string password, string role)
         {
-            using var scope = s_scopeFactory.CreateScope();
+            using var scope = CreateScope();
 
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AuthenticationUser>>();
 
@@ -143,7 +145,7 @@ namespace Application.FunctionalTests
             where TEntity : class
             where TDbContext : DbContext
         {
-            using var scope = s_scopeFactory.CreateScope();
+            using var scope = CreateScope();
 
             var context = scope.ServiceProvider.GetRequiredService<TDbContext>();
 
@@ -160,7 +162,7 @@ namespace Application.FunctionalTests
             where TEntity : class
             where TDbContext : DbContext
         {
-            using var scope = s_scopeFactory.CreateScope();
+            using var scope = CreateScope();
 
             var context = scope.ServiceProvider.GetRequiredService<TDbContext>();
 
@@ -184,7 +186,7 @@ namespace Application.FunctionalTests
             where TEntity : class
             where TDbContext : DbContext
         {
-            using var scope = s_scopeFactory.CreateScope();
+            using var scope = CreateScope();
 
             var context = scope.ServiceProvider.GetRequiredService<TDbContext>();
 
@@ -207,11 +209,16 @@ namespace Application.FunctionalTests
 
         public static async Task<int> CountAsync<TEntity>() where TEntity : class
         {
-            using var scope = s_scopeFactory.CreateScope();
+            using var scope = CreateScope();
 
             var context = scope.ServiceProvider.GetRequiredService<CVSDbContext>();
 
             return await context.Set<TEntity>().CountAsync();
+        }
+
+        private static IServiceScope CreateScope()
+        {
+            return UseMocks ? s_scopeFactoryWithMocks.CreateScope() : s_scopeFactory.CreateScope();
         }
 
         [OneTimeTearDown]
@@ -220,6 +227,7 @@ namespace Application.FunctionalTests
             await s_databaseAuthentication.DropAsync();
             await s_databaseCSV.DropAsync();
             await s_databaseCSV.DisposeAsync();
+            await s_factory.DisposeAsync();
             await s_factory.DisposeAsync();
         }
 
@@ -232,25 +240,6 @@ namespace Application.FunctionalTests
                 prefix += characters[Random.Shared.Next(0, characters.Length)];
             }
             return prefix;
-        }
-
-        public static void EnableMocks(bool useMocks)
-        {
-            using var scope = s_factory.Services.CreateScope();
-            var serviceProvider = scope.ServiceProvider;
-            var existingIdentityService = serviceProvider.GetService<IIdentityService>();
-
-            if (useMocks)
-            {
-                var mockIdentityService = new Mock<IIdentityService>();
-                mockIdentityService.Setup(s => s.LoginAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new Common.Models.LoggedInResult(true));
-                mockIdentityService.Setup(s => s.LogoutAsync()).Returns(Task.CompletedTask);
-                s_factory.ConfigureIdentityService(mockIdentityService.Object);
-            }
-            else if (existingIdentityService != null)
-            {
-                s_factory.ConfigureIdentityService(existingIdentityService);
-            }
         }
     }
 }

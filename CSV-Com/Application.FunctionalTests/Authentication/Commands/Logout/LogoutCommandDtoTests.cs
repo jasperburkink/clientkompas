@@ -15,7 +15,7 @@ namespace Application.FunctionalTests.Authentication.Commands.Logout
         [SetUp]
         public async Task SetUp()
         {
-            EnableMocks(true);
+            UseMocks = true;
 
             ITestDataGenerator<AuthenticationUser> testDataGeneratorAuthenticationUser = new AuthenticationUserDataGenerator();
             _authenticationUser = testDataGeneratorAuthenticationUser.Create();
@@ -80,6 +80,6 @@ namespace Application.FunctionalTests.Authentication.Commands.Logout
         }
 
         [TearDown]
-        public void TearDown() => EnableMocks(false);
+        public void TearDown() => UseMocks = false;
     }
 }
