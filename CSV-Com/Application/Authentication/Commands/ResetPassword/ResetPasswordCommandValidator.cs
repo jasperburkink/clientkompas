@@ -13,7 +13,10 @@ namespace Application.Authentication.Commands.ResetPassword
         {
             _unitOfWork = unitOfWork;
             _resourceMessageProvider = resourceMessageProvider;
+            RuleFor(rpc => rpc.EmailAddress).ValidateEmailAddress(_resourceMessageProvider);
             RuleFor(rpc => rpc.NewPassword).ValidatePassword(_resourceMessageProvider, rpc => rpc.NewPasswordRepeat);
+            RuleFor(rpc => rpc.NewPasswordRepeat).ValidatePassword(_resourceMessageProvider, rpc => rpc.NewPasswordRepeat); // Same selector as value, don't want to check same value of password repeat.
+            RuleFor(rpc => rpc.Token).ValidateToken(_resourceMessageProvider);
         }
     }
 }
