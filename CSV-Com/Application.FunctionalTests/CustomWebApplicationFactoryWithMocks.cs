@@ -14,7 +14,7 @@ using Moq;
 
 namespace Application.FunctionalTests
 {
-    public class CustomWebApplicationFactory(DbConnection connectionCvs, DbConnection connectionAuthentication) : WebApplicationFactory<Program>
+    public class CustomWebApplicationFactoryWithMocks(DbConnection connectionCvs, DbConnection connectionAuthentication) : WebApplicationFactory<Program>
     {
         private readonly DbConnection _connectionCvs = connectionCvs;
         private readonly DbConnection _connectionAuthentication = connectionAuthentication;
@@ -26,6 +26,13 @@ namespace Application.FunctionalTests
                 services
                     .RemoveAll<IUser>()
                     .AddTransient(provider => Mock.Of<IUser>(s => s.CurrentUserId == GetCurrentUserId()));
+
+                // Mock 
+                var mockIdentityService = new Mock<IIdentityService>();
+                mockIdentityService.Setup(s => s.LoginAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new Common.Models.LoggedInResult(true));
+                mockIdentityService.Setup(s => s.LogoutAsync()).Returns(Task.CompletedTask);
+                services.RemoveAll<IIdentityService>();
+                services.AddSingleton(mockIdentityService.Object);
 
                 // CVS
                 services
@@ -55,19 +62,6 @@ namespace Application.FunctionalTests
                 app.UseEndpoints(endpoints =>
                 {
                     endpoints.MapControllers();
-                });
-            });
-        }
-
-        public void ConfigureIdentityService(IIdentityService identityService)
-        {
-            WithWebHostBuilder(builder =>
-            {
-                builder.ConfigureTestServices(services =>
-                {
-                    Console.WriteLine("ConfigureTestServices called"); // Voor debugging
-                    services.RemoveAll<IIdentityService>();
-                    services.AddSingleton(identityService);
                 });
             });
         }

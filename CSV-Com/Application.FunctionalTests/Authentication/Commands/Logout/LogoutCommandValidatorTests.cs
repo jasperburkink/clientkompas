@@ -16,6 +16,8 @@ namespace Application.FunctionalTests.Authentication.Commands.Logout
         [SetUp]
         public async Task SetUp()
         {
+            UseMocks = true;
+
             ITestDataGenerator<AuthenticationUser> testDataGeneratorAuthenticationUser = new AuthenticationUserDataGenerator();
             _authenticationUser = testDataGeneratorAuthenticationUser.Create();
             await AddAsync<AuthenticationUser, AuthenticationDbContext>(_authenticationUser);
@@ -110,5 +112,8 @@ namespace Application.FunctionalTests.Authentication.Commands.Logout
             // Assert
             await act.Should().ThrowAsync<ValidationException>();
         }
+
+        [TearDown]
+        public void TearDown() => UseMocks = false;
     }
 }
