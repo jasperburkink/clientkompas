@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Application.Common.Interfaces.Authentication;
 using Domain.Authentication.Domain;
 using Infrastructure.Data.Authentication;
 using Infrastructure.Data.CVS;
@@ -24,6 +25,7 @@ namespace Application.FunctionalTests
         private static string? s_currentUserId;
         private static readonly string? s_databasePrefix = GenerateRandomPrefix();
         public static bool UseMocks { get; set; } = false;
+        public static IIdentityService IdentityService => CreateScope().ServiceProvider.GetRequiredService<IIdentityService>();
 
         [OneTimeSetUp]
         public async Task RunBeforeAnyTests()
@@ -90,16 +92,10 @@ namespace Application.FunctionalTests
 
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AuthenticationUser>>();
 
-            //var hasher = new Argon2Hasher();
-            //var salt = hasher.GenerateSalt();
-            //var passwordHash = hasher.HashString(password, salt);
-
             var user = new AuthenticationUser
             {
                 UserName = userName,
-                Email = userName,
-                //Salt = salt,
-                //PasswordHash = passwordHash
+                Email = userName
             };
 
             var result = await userManager.CreateAsync(user, password);
@@ -245,7 +241,7 @@ namespace Application.FunctionalTests
             throw new Exception($"Unable to create {userName}.{Environment.NewLine}{errors}");
         }
 
-        public static async Task<string> GetPasswordResetAsync(AuthenticationUser user)
+        public static async Task<string> GetPasswordResetTokenAsync(AuthenticationUser user)
         {
             using var scope = CreateScope();
 

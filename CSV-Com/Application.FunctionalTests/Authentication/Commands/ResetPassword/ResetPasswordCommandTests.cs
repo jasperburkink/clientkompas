@@ -1,5 +1,4 @@
 ﻿using Application.Authentication.Commands.ResetPassword;
-using Domain.Authentication.Constants;
 using Domain.Authentication.Domain;
 using TestData;
 using TestData.Authentication;
@@ -14,31 +13,30 @@ namespace Application.FunctionalTests.Authentication.Commands.ResetPassword
         [SetUp]
         public async Task SetUp()
         {
+            UseMocks = true;
+
             ITestDataGenerator<AuthenticationUser> testDataGeneratorAuthenticationUser = new AuthenticationUserDataGenerator();
             _authenticationUser = testDataGeneratorAuthenticationUser.Create();
 
-            //await AddAsync<AuthenticationUser, AuthenticationDbContext>(_authenticationUser);
-            var initialPassword = FakerConfiguration.Faker.Internet.Password(AuthenticationUserConstants.PASSWORD_MINLENGTH) + "!";
+            var initialPassword = Utils.GeneratePassword();
             await CreateUserAsync(_authenticationUser.Email!, initialPassword);
 
-            var password = FakerConfiguration.Faker.Internet.Password(AuthenticationUserConstants.PASSWORD_MINLENGTH) + "!";
+            var password = Utils.GeneratePassword();
 
-            var token =
+            var token = await GetPasswordResetTokenAsync(_authenticationUser);
 
             _command = new ResetPasswordCommand
             {
                 EmailAddress = _authenticationUser.Email!,
                 NewPassword = password,
                 NewPasswordRepeat = password,
-                Token = FakerConfiguration.Faker.Random.String2(20)
+                Token = token
             };
         }
 
         [Test]
         public async Task Handle_CorrectFlow_SuccessIsTrue()
         {
-            // Arrange
-
             // Act
             var result = await SendAsync(_command);
 
@@ -47,17 +45,65 @@ namespace Application.FunctionalTests.Authentication.Commands.ResetPassword
             result.Success.Should().BeTrue();
         }
 
+        [Test]
+        public async Task Handle_EmailAddressIsNull_SuccessIsFalse()
+        {
+            // Arrange
+            var command = _command with
+            {
+                EmailAddress = null
+            };
 
-        //Handle_CorrectFlow_SuccessIsTrue
+            var handler = new ResetPasswordCommandHandler(IdentityService);
 
-        //    Handle_EmailAddressIsNull_SuccessIsFalse
+            // Act
+            var result = await handler.Handle(command, default);
 
-        //    Handle_TokenIsNull_SuccessIsFalse
+            // Assert
+            result.Should().NotBeNull();
+            result.Success.Should().BeFalse();
+        }
 
-        //    Handle_NewPasswordIsNull_SuccessIsFalse
+        [Test]
+        public async Task Handle_TokenIsNull_SuccessIsFalse()
+        {
+            // Arrange
+            var command = _command with
+            {
+                Token = null
+            };
 
-        //    Handle_ResetPasswordAsyncThrowsException_SuccessIsFalse
+            var handler = new ResetPasswordCommandHandler(IdentityService);
+
+            // Act
+            var result = await handler.Handle(command, default);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Success.Should().BeFalse();
+        }
+
+        [Test]
+        public async Task Handle_NewPasswordIsNull_SuccessIsFalse()
+        {
+            // Arrange
+            var command = _command with
+            {
+                NewPassword = null
+            };
+
+            var handler = new ResetPasswordCommandHandler(IdentityService);
+
+            // Act
+            var result = await handler.Handle(command, default);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Success.Should().BeFalse();
+        }
+
+
+        [TearDown]
+        public void TearDown() => UseMocks = false;
     }
-
-
 }

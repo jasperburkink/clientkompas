@@ -2,7 +2,7 @@
 
 namespace Application.Authentication.Commands.ResetPassword
 {
-    public class ResetPasswordCommand : IRequest<ResetPasswordCommandDto>
+    public record ResetPasswordCommand : IRequest<ResetPasswordCommandDto>
     {
         public string EmailAddress { get; set; } = null!;
 
