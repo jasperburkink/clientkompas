@@ -266,5 +266,8 @@ namespace Application.FunctionalTests.Authentication.Commands.ResetPassword
                 await SendAsync(command);
             });
         }
+
+        [TearDown]
+        public void TearDown() => UseMocks = false;
     }
 }

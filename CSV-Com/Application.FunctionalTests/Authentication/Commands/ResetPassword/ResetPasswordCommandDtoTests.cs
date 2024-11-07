@@ -89,5 +89,8 @@ namespace Application.FunctionalTests.Authentication.Commands.ResetPassword
             // Assert
             result.Errors.Should().NotBeEmpty();
         }
+
+        [TearDown]
+        public void TearDown() => UseMocks = false;
     }
 }
