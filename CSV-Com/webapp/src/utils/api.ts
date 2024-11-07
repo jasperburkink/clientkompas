@@ -22,6 +22,8 @@ import GetClientFullnameDto from "types/model/GetClientFullnameDto";
 import GetCoachingProgramTypesDto from "types/model/GetCoachingProgramTypesDto";
 import LogoutCommand from "types/model/logout/logout-command";
 import LogoutCommandDto from "types/model/logout/logout-command-dto";
+import RequestResetPasswordCommand from "types/model/request-reset-password/request-reset-password-command";
+import RequestResetPasswordCommandDto from "types/model/request-reset-password/request-reset-password-command-dto";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -300,11 +302,14 @@ export const fetchCoachingProgramTypes = async (): Promise<GetCoachingProgramTyp
     return (await (fetchAPI<GetCoachingProgramTypesDto[]>(`${apiUrl}CoachingProgram/GetCoachingProgramTypes`))).ReturnObject!;
 }
 
-
 export const saveCoachingProgram = async (coachingProgram: CoachingProgramEdit): Promise<ApiResult<CoachingProgramEdit>> => {
     let method = coachingProgram.id > 0  ? 'PUT' : 'POST';
 
     return await fetchAPI(`${apiUrl}CoachingProgram`, method, coachingProgram);
+}
+
+export const requestResetPassword = async (request: RequestResetPasswordCommand): Promise<ApiResult<RequestResetPasswordCommandDto>> => {
+    return await fetchAPI<RequestResetPasswordCommandDto>(`${apiUrl}Authentication/RequestResetPassword`, "POST", request);
 }
 
 function processErrors(errors: { [key: string]: string[] }): string[] {

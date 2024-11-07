@@ -7,16 +7,15 @@ import StatusEnum from "types/common/StatusEnum";
 import { ReactComponent as LogoLightSVG } from 'assets/CK_light_logo.svg';
 import { ReactComponent as LogoDarkSVG } from 'assets/CK_dark_logo.svg';
 import { Sidebar } from "components/sidebar/sidebar";
-import './login.css';
+import './request-reset-password.css';
 import SidebarEmpty from "components/sidebar/sidebar-empty";
 import { InputField } from "components/common/input-field";
 import PasswordField from "components/common/password-field";
 import { LinkButton } from "components/common/link-button";
 import { Button } from "components/common/button";
 import SaveButton from "components/common/save-button";
-import { login } from "utils/api";
-import LoginCommand from "types/model/login/login-command";
-import LoginCommandDto from "types/model/login/login-command-dto";
+import RequestResetPasswordCommand from "types/model/request-reset-password/request-reset-password-command";
+import RequestResetPasswordCommandDto from "types/model/request-reset-password/request-reset-password-command-dto";
 import ApiResult, { getErrorMessage } from "types/common/api-result";
 import CVSError from "types/common/cvs-error";
 import ErrorPopup from "components/common/error-popup";
@@ -25,13 +24,14 @@ import ConfirmPopup from "components/common/confirm-popup";
 import { useNavigate } from "react-router-dom";
 import { BearerToken } from "types/common/bearer-token";
 import RefreshTokenService from "utils/refresh-token-service";
+import { requestResetPassword } from "utils/api";
+import { Label } from "components/common/label";
 
-const Login = () => {
+const RequestResetPassword = () => {
     const navigate = useNavigate();
 
-    const initialLoginCommand: LoginCommand = { 
-        username: '',
-        password: ''
+    const initialRequestResetPasswordCommand: RequestResetPasswordCommand = { 
+        emailaddress: ''
     };
 
     const [validationErrors, setValidationErrors] = useState<ValidationErrorHash>({});
@@ -39,20 +39,8 @@ const Login = () => {
     const [status, setStatus] = useState(StatusEnum.IDLE);
     const [confirmMessage, setConfirmMessage] = useState<string>('');
     const [isConfirmPopupOneButtonOpen, setConfirmPopupOneButtonOpen] = useState<boolean>(false);
-    const [loginCommand, setLoginCommand] = useState<LoginCommand>(initialLoginCommand);
-    const [bearertoken, setBearerToken] = useState<BearerToken | null>(sessionStorage.getItem('token') ? BearerToken.deserialize(sessionStorage.getItem('token')!) : null);
-    const [refreshtoken, setRefreshToken] = useState<string | null>(RefreshTokenService.getInstance().getRefreshToken() ? RefreshTokenService.getInstance().getRefreshToken() : null);
-    
-    useEffect(() => {         
-        if(bearertoken) {
-            sessionStorage.setItem('token', BearerToken.serialize(bearertoken));
-        }
-
-        if(refreshtoken) {
-            RefreshTokenService.getInstance().setRefreshToken(refreshtoken);
-        }
-    }, [bearertoken, refreshtoken]);
-
+    const [requestresetpasswordCommand, setrequestresetpasswordCommand] = useState<RequestResetPasswordCommand>(initialRequestResetPasswordCommand);
+   
     const [isErrorPopupOpen, setErrorPopupOpen] = useState<boolean>(false);
     const [cvsError, setCvsError] = useState<CVSError>(() => {
         return {
@@ -62,35 +50,30 @@ const Login = () => {
         }
     });
 
-    const handleLoginCommandInputChange = (fieldName: string, value: string) => {
-        setLoginCommand(prevOrganization => ({
+    const handlerequestresetpasswordCommandInputChange = (fieldName: string, value: string) => {
+        setrequestresetpasswordCommand(prevOrganization => ({
             ...prevOrganization,
             [fieldName]: value
         }));
     };
 
-    const handleLoginResult = (
-        apiResult: ApiResult<LoginCommandDto>, 
+    const handleRequestResetPasswordResult = (
+        apiResult: ApiResult<RequestResetPasswordCommandDto>, 
         setConfirmMessage: React.Dispatch<React.SetStateAction<string>>, 
         setConfirmPopupOneButtonOpen: React.Dispatch<React.SetStateAction<boolean>>, 
         setCvsError: React.Dispatch<React.SetStateAction<CVSError>>, 
-        setErrorPopupOpen: React.Dispatch<React.SetStateAction<boolean>>, 
-        setBearerToken: React.Dispatch<React.SetStateAction<BearerToken | null>>) => {
+        setErrorPopupOpen: React.Dispatch<React.SetStateAction<boolean>>) => {
         if (apiResult.Ok) {
-            if(apiResult.ReturnObject?.success === true 
-                && apiResult.ReturnObject?.bearertoken
-                && apiResult.ReturnObject?.refreshtoken) {                
+            if(apiResult.ReturnObject?.success === true) {                
 
-                setConfirmMessage('Inloggen succesvol.');
+                setConfirmMessage('Als dat e-mailadres in onze database staat, sturen wij u een e-mail om uw wachtwoord opnieuw in te stellen.');
                 setConfirmPopupOneButtonOpen(true);
-                setBearerToken(new BearerToken(apiResult.ReturnObject.bearertoken));
-                setRefreshToken(apiResult.ReturnObject.refreshtoken);
             }
             else{
                 setCvsError({
                     id: 0,
                     errorcode: 'E',
-                    message: `Er is een opgetreden tijdens het inloggen. Foutmelding: ${getErrorMessage<LoginCommandDto>(apiResult)}.`
+                    message: `Er is een opgetreden tijdens aanvragen van een nieuw wachtwoord. Foutmelding: ${getErrorMessage<RequestResetPasswordCommandDto>(apiResult)}.`
                 });
                 setErrorPopupOpen(true);
 
@@ -105,7 +88,7 @@ const Login = () => {
                 setCvsError({
                     id: 0,
                     errorcode: 'E',
-                    message: `Er is een opgetreden tijdens het inloggen. Foutmelding: ${getErrorMessage<LoginCommandDto>(apiResult)}.`
+                    message: `Er is een opgetreden tijdens aanvragen van een nieuw wachtwoord. Foutmelding: ${getErrorMessage<RequestResetPasswordCommandDto>(apiResult)}.`
                 });
                 setErrorPopupOpen(true);  
 
@@ -116,7 +99,7 @@ const Login = () => {
         setStatus(StatusEnum.SUCCESSFUL);
     }
 
-    const handleLoginConfirmedClick = () => {
+    const handlerequestresetpasswordConfirmedClick = () => {
         setConfirmPopupOneButtonOpen(false);
         navigate(`/clients/`); // TODO: navigate to homepage
     };    
@@ -127,64 +110,51 @@ const Login = () => {
             <FontAwesomeIcon icon={faSpinner} className="fa fa-2x fa-refresh fa-spin" />
         </div>
 
-        <div className="flex flex-col lg:flex-row h-screen lg:h-auto login-page">
+        <div className="flex flex-col lg:flex-row h-screen lg:h-auto request-reset-password-page">
             <div className='lg:flex w-full'>        
                 <SidebarEmpty>
                     <LogoDarkSVG className="logo-dark" />
                 </SidebarEmpty>
 
-                <div className="login-container">
-                    <div className="login-logo-container">
+                <div className="request-reset-password-container">
+                    <div className="request-reset-password-logo-container">
                         <LogoLightSVG className="logo-light" />                    
                     </div>
 
-                    <div className="login-fields-container">
+                    <div className="request-reset-password-fields-container">
+                        <Label 
+                            className="request-reset-password-label"
+                            text="Vul uw email in om uw wachtwoord te resetten" />
+
                         <InputField 
                             inputfieldtype={{type:'text'}} 
                             required={true} 
-                            placeholder='Email' 
-                            className="login-username" 
-                            value={loginCommand.username}                            
-                            onChange={(value) => handleLoginCommandInputChange('username', value)}
-                            errors={validationErrors.username} 
-                            dataTestId='username' />
-
-                        <PasswordField 
-                            inputfieldname='password' 
-                            placeholder='Wachtwoord' 
-                            className="login-password" 
-                            value={loginCommand.password}
-                            onChange={(value) => handleLoginCommandInputChange('password', value)}
-                            errors={validationErrors.password}
-                            dataTestId='password' />
-
-                        <LinkButton 
-                            buttonType={{type:"Underline"}} 
-                            text="Wachtwoord vergeten?" 
-                            href="../password-forgotten" 
-                            className="login-password-forgotten"
-                            dataTestId='login-password-forgotten' />
+                            placeholder='E-mailadres' 
+                            className="request-reset-password-emailaddress" 
+                            value={requestresetpasswordCommand.emailaddress}                            
+                            onChange={(value) => handlerequestresetpasswordCommandInputChange('emailaddress', value)}
+                            errors={validationErrors.emailaddress} 
+                            dataTestId='emailaddress' />
 
                         <SaveButton 
-                            buttonText="Inloggen" 
-                            className='login-button'
-                            loadingText = "Bezig met inloggen"
-                            successText = "Inloggen succesvol"
-                            errorText = "Fout tijdens inloggen"
+                            buttonText="Versturen" 
+                            className='request-reset-password-button'
+                            loadingText = "Bezig met aanvragen"
+                            successText = "Aanvraag succesvol"
+                            errorText = "Fout tijdens aanvragen"
                             onSave={async () => {  
                                     setStatus(StatusEnum.PENDING);
 
-                                    return await login(loginCommand);                                    
+                                    return await requestResetPassword(requestresetpasswordCommand);                                    
                                 }
                             }
-                            onResult={(apiResult) => handleLoginResult(
+                            onResult={(apiResult) => handleRequestResetPasswordResult(
                                 apiResult, 
                                 setConfirmMessage, 
                                 setConfirmPopupOneButtonOpen, 
                                 setCvsError, 
-                                setErrorPopupOpen, 
-                                setBearerToken)}
-                            dataTestId='button.login'
+                                setErrorPopupOpen)}
+                            dataTestId='button.request-reset-password'
                         />
                     </div>
                 </div>
@@ -194,8 +164,8 @@ const Login = () => {
                 data-testid='confirm-popup'
                 message={confirmMessage}
                 isOpen={isConfirmPopupOneButtonOpen}
-                onClose={handleLoginConfirmedClick}
-                buttons={[{ text: 'Bevestigen', dataTestId: 'button.confirm', onClick: handleLoginConfirmedClick, buttonType: {type:"Solid"}}]} />
+                onClose={handlerequestresetpasswordConfirmedClick}
+                buttons={[{ text: 'Bevestigen', dataTestId: 'button.confirm', onClick: handlerequestresetpasswordConfirmedClick, buttonType: {type:"Solid"}}]} />
 
             <ErrorPopup 
                 error={cvsError} 
@@ -209,7 +179,7 @@ const Login = () => {
     );
 }
 
-export default Login;
+export default RequestResetPassword;
 
 function showLoadingScreen(status: string): string | undefined {
     return ` ${status === StatusEnum.PENDING ? 'loading-spinner-visible' : 'loading-spinner-hidden'}`;

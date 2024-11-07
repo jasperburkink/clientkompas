@@ -11,6 +11,7 @@ import { OrganizationContextWrapper, OrganizationRoute } from 'pages/organizatio
 import Login from 'pages/login';
 import Unauthorized from 'pages/statuspages/unauthorized';
 import Forbidden from 'pages/statuspages/forbidden';
+import RequestResetPassword from 'pages/request-reset-password';
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 root.render(
@@ -20,6 +21,7 @@ root.render(
                 <Routes>
                     <Route path='/' element={<App />} />
                     <Route path='/login' element={<Login />} />
+                    <Route path='/password-forgotten' element={<RequestResetPassword />} />
                     <Route path='/unauthorized' element={<Unauthorized />} />
                     <Route path='/forbidden' element={<Forbidden />} />
                     <Route path='/clients' element={<ClientContextWrapper clientRoute={ClientRoute.VIEW_CLIENT} />} />
