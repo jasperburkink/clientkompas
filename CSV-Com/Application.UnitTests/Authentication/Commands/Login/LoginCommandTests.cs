@@ -1,4 +1,5 @@
 ﻿using Application.Authentication.Commands.Login;
+using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Models;
 using Domain.Authentication.Domain;
@@ -8,6 +9,17 @@ namespace Application.UnitTests.Authentication.Commands.Login
 {
     public class LoginCommandTests
     {
+        private readonly Mock<IResourceMessageProvider> _resourceMessageProviderMock;
+
+        public LoginCommandTests()
+        {
+            _resourceMessageProviderMock = new Mock<IResourceMessageProvider>();
+            _resourceMessageProviderMock
+                .Setup(m => m.GetMessage(It.IsAny<Type>(), It.IsAny<string>(), It.IsAny<object[]>()))
+                .Returns((Type type, string key, object[] args) =>
+                    $"Mock validation message for Type: {type.Name}, Key: {key}, Args: {string.Join(", ", args ?? [])}");
+        }
+
         [Fact]
         public async Task Handle_LoginUser_ShouldReturnTrue()
         {
@@ -30,7 +42,7 @@ namespace Application.UnitTests.Authentication.Commands.Login
             var refreshTokenServiceMock = new Mock<IRefreshTokenService>();
             refreshTokenServiceMock.Setup(rtsm => rtsm.GenerateRefreshTokenAsync(It.IsAny<AuthenticationUser>())).ReturnsAsync(refreshToken);
 
-            var handler = new LoginCommandHandler(identityServiceMock.Object, bearerTokenServiceMock.Object, refreshTokenServiceMock.Object);
+            var handler = new LoginCommandHandler(identityServiceMock.Object, bearerTokenServiceMock.Object, refreshTokenServiceMock.Object, _resourceMessageProviderMock.Object);
 
             var command = new LoginCommand
             {
@@ -68,7 +80,7 @@ namespace Application.UnitTests.Authentication.Commands.Login
             var refreshTokenServiceMock = new Mock<IRefreshTokenService>();
             refreshTokenServiceMock.Setup(rtsm => rtsm.GenerateRefreshTokenAsync(It.IsAny<AuthenticationUser>())).ReturnsAsync(refreshToken);
 
-            var handler = new LoginCommandHandler(identityServiceMock.Object, bearerTokenServiceMock.Object, refreshTokenServiceMock.Object);
+            var handler = new LoginCommandHandler(identityServiceMock.Object, bearerTokenServiceMock.Object, refreshTokenServiceMock.Object, _resourceMessageProviderMock.Object);
 
             var command = new LoginCommand
             {
