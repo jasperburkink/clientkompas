@@ -1,4 +1,5 @@
 ﻿using Application.Authentication.Commands.Login;
+using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Models;
@@ -65,7 +66,7 @@ namespace Application.UnitTests.Authentication.Commands.Login
         }
 
         [Fact]
-        public async Task Handle_LoginUser_ShouldReturnFalse()
+        public async Task Handle_LoginUser_ShouldThrowInvalidLoginException()
         {
             // Arrange
             var isUserLoggedIn = false;
@@ -93,11 +94,11 @@ namespace Application.UnitTests.Authentication.Commands.Login
                 Success = isUserLoggedIn
             };
 
-            // Act
-            var result = await handler.Handle(command, default);
+            // Act & Assert
+            Func<Task> act = async () => await handler.Handle(command, default);
 
             // Assert
-            result.Should().BeEquivalentTo(loginCommandDto);
+            await act.Should().ThrowAsync<InvalidLoginException>();
         }
     }
 }

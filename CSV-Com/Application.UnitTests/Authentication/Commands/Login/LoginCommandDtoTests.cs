@@ -1,4 +1,5 @@
 ﻿using Application.Authentication.Commands.Login;
+using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Models;
@@ -58,7 +59,7 @@ namespace Application.UnitTests.Authentication.Commands.Login
         }
 
         [Fact]
-        public async Task Handle_Login_LoginResultShouldBeFalse()
+        public async Task Handle_Login_ShouldThrowInvalidLoginException()
         {
             // Arrange
             var isUserLoggedIn = false;
@@ -82,10 +83,10 @@ namespace Application.UnitTests.Authentication.Commands.Login
             };
 
             // Act
-            var result = await handler.Handle(command, default);
+            Func<Task> act = async () => await handler.Handle(command, default);
 
             // Assert
-            result.Success.Should().Be(isUserLoggedIn);
+            await act.Should().ThrowAsync<InvalidLoginException>();
         }
 
         [Fact]
@@ -123,38 +124,6 @@ namespace Application.UnitTests.Authentication.Commands.Login
 
             // Assert
             result.BearerToken.Should().NotBeEmpty().And.Be(bearerToken);
-        }
-
-        [Fact]
-        public async Task Handle_Login_BearerTokenShouldBeNull()
-        {
-            // Arrange
-            var isUserLoggedIn = false;
-            var loggedInUser = new LoggedInResult(isUserLoggedIn);
-
-            var identityServiceMock = new Mock<IIdentityService>();
-            identityServiceMock.Setup(mis => mis.LoginAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(loggedInUser);
-
-            var bearerTokenServiceMock = new Mock<IBearerTokenService>();
-            bearerTokenServiceMock.Setup(btsm => btsm.GenerateBearerTokenAsync(It.IsAny<AuthenticationUser>(), It.IsAny<IList<string>>())).ReturnsAsync(string.Empty);
-
-            var refreshToken = "test";
-            var refreshTokenServiceMock = new Mock<IRefreshTokenService>();
-            refreshTokenServiceMock.Setup(rtsm => rtsm.GenerateRefreshTokenAsync(It.IsAny<AuthenticationUser>())).ReturnsAsync(refreshToken);
-
-            var handler = new LoginCommandHandler(identityServiceMock.Object, bearerTokenServiceMock.Object, refreshTokenServiceMock.Object, _resourceMessageProviderMock.Object);
-
-            var command = new LoginCommand
-            {
-                UserName = "Test",
-                Password = "Test1234"
-            };
-
-            // Act
-            var result = await handler.Handle(command, default);
-
-            // Assert
-            result.BearerToken.Should().BeNull();
         }
     }
 }
