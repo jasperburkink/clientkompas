@@ -1,18 +1,13 @@
-import React, { useEffect, useState, useContext } from "react";
-import Menu from 'components/common/menu';
+import React, { useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { ValidationErrorHash } from "types/common/validation-error";
 import StatusEnum from "types/common/StatusEnum";
 import { ReactComponent as LogoLightSVG } from 'assets/CK_light_logo.svg';
 import { ReactComponent as LogoDarkSVG } from 'assets/CK_dark_logo.svg';
-import { Sidebar } from "components/sidebar/sidebar";
 import './request-reset-password.css';
 import SidebarEmpty from "components/sidebar/sidebar-empty";
 import { InputField } from "components/common/input-field";
-import PasswordField from "components/common/password-field";
-import { LinkButton } from "components/common/link-button";
-import { Button } from "components/common/button";
 import SaveButton from "components/common/save-button";
 import RequestResetPasswordCommand from "types/model/request-reset-password/request-reset-password-command";
 import RequestResetPasswordCommandDto from "types/model/request-reset-password/request-reset-password-command-dto";
@@ -22,8 +17,6 @@ import ErrorPopup from "components/common/error-popup";
 import { Copyright } from "components/common/copyright";
 import ConfirmPopup from "components/common/confirm-popup";
 import { useNavigate } from "react-router-dom";
-import { BearerToken } from "types/common/bearer-token";
-import RefreshTokenService from "utils/refresh-token-service";
 import { requestResetPassword } from "utils/api";
 import { Label } from "components/common/label";
 
@@ -39,7 +32,7 @@ const RequestResetPassword = () => {
     const [status, setStatus] = useState(StatusEnum.IDLE);
     const [confirmMessage, setConfirmMessage] = useState<string>('');
     const [isConfirmPopupOneButtonOpen, setConfirmPopupOneButtonOpen] = useState<boolean>(false);
-    const [requestresetpasswordCommand, setrequestresetpasswordCommand] = useState<RequestResetPasswordCommand>(initialRequestResetPasswordCommand);
+    const [requestResetPasswordCommand, setRequestResetPasswordCommand] = useState<RequestResetPasswordCommand>(initialRequestResetPasswordCommand);
    
     const [isErrorPopupOpen, setErrorPopupOpen] = useState<boolean>(false);
     const [cvsError, setCvsError] = useState<CVSError>(() => {
@@ -50,9 +43,9 @@ const RequestResetPassword = () => {
         }
     });
 
-    const handlerequestresetpasswordCommandInputChange = (fieldName: string, value: string) => {
-        setrequestresetpasswordCommand(prevOrganization => ({
-            ...prevOrganization,
+    const handleRequestResetPasswordCommandInputChange = (fieldName: string, value: string) => {
+        setRequestResetPasswordCommand(prevCommand => ({
+            ...prevCommand,
             [fieldName]: value
         }));
     };
@@ -65,11 +58,10 @@ const RequestResetPassword = () => {
         setErrorPopupOpen: React.Dispatch<React.SetStateAction<boolean>>) => {
         if (apiResult.Ok) {
             if(apiResult.ReturnObject?.success === true) {                
-
-                setConfirmMessage('Als dat e-mailadres in onze database staat, sturen wij u een e-mail om uw wachtwoord opnieuw in te stellen.');
+                setConfirmMessage('Als het opegeven e-mailadres bij ons bekend is, sturen wij u een e-mail om uw wachtwoord opnieuw in te stellen.');
                 setConfirmPopupOneButtonOpen(true);
             }
-            else{
+            else {
                 setCvsError({
                     id: 0,
                     errorcode: 'E',
@@ -101,7 +93,7 @@ const RequestResetPassword = () => {
 
     const handlerequestresetpasswordConfirmedClick = () => {
         setConfirmPopupOneButtonOpen(false);
-        navigate(`/clients/`); // TODO: navigate to homepage
+        navigate(`/login`);
     };    
 
     return(
@@ -131,8 +123,8 @@ const RequestResetPassword = () => {
                             required={true} 
                             placeholder='E-mailadres' 
                             className="request-reset-password-emailaddress" 
-                            value={requestresetpasswordCommand.emailaddress}                            
-                            onChange={(value) => handlerequestresetpasswordCommandInputChange('emailaddress', value)}
+                            value={requestResetPasswordCommand.emailaddress}                            
+                            onChange={(value) => handleRequestResetPasswordCommandInputChange('emailaddress', value)}
                             errors={validationErrors.emailaddress} 
                             dataTestId='emailaddress' />
 
@@ -145,7 +137,7 @@ const RequestResetPassword = () => {
                             onSave={async () => {  
                                     setStatus(StatusEnum.PENDING);
 
-                                    return await requestResetPassword(requestresetpasswordCommand);                                    
+                                    return await requestResetPassword(requestResetPasswordCommand);                                    
                                 }
                             }
                             onResult={(apiResult) => handleRequestResetPasswordResult(

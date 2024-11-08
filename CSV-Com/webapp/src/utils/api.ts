@@ -308,8 +308,20 @@ export const saveCoachingProgram = async (coachingProgram: CoachingProgramEdit):
     return await fetchAPI(`${apiUrl}CoachingProgram`, method, coachingProgram);
 }
 
-export const requestResetPassword = async (request: RequestResetPasswordCommand): Promise<ApiResult<RequestResetPasswordCommandDto>> => {
-    return await fetchAPI<RequestResetPasswordCommandDto>(`${apiUrl}Authentication/RequestResetPassword`, "POST", request);
+export const requestResetPassword = async (requestResetPasswordCommand: RequestResetPasswordCommand): Promise<ApiResult<RequestResetPasswordCommandDto>> => {
+    let method = 'POST';
+
+    const requestOptions: RequestInit = {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestResetPasswordCommand)
+    };
+
+    const response = await fetch(`${apiUrl}Authentication/RequestResetPassword`, requestOptions);     
+    
+    return handleApiResonse<RequestResetPasswordCommandDto>(response);
 }
 
 function processErrors(errors: { [key: string]: string[] }): string[] {
