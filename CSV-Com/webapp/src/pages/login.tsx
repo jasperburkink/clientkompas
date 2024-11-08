@@ -101,11 +101,12 @@ const Login = () => {
             if(apiResult.ValidationErrors) {
                 setValidationErrors(apiResult.ValidationErrors);
             }
-            else {
+
+            if(apiResult.Title) {
                 setCvsError({
                     id: 0,
                     errorcode: 'E',
-                    message: `Er is een opgetreden tijdens het inloggen. Foutmelding: ${getErrorMessage<LoginCommandDto>(apiResult)}.`
+                    message: `Er is een opgetreden tijdens het inloggen. Foutmelding: ${getErrorMessage<LoginCommandDto>(apiResult)}`
                 });
                 setErrorPopupOpen(true);  
 

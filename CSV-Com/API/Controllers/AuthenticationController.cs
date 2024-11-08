@@ -17,12 +17,6 @@ namespace API.Controllers
         public async Task<ActionResult<LoginCommandDto>> Login(LoginCommand command)
         {
             var result = await Mediator.Send(command);
-
-            if (!result.Success || result.BearerToken == null || result.RefreshToken == null)
-            {
-                return Unauthorized();
-            }
-
             return Ok(result);
         }
 

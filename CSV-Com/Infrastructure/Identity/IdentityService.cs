@@ -147,7 +147,9 @@ namespace Infrastructure.Identity
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-            var link = new Uri($"{WEBAPP_URL}/ResetPassword?Token={token}");
+            var encodedToken = Uri.EscapeDataString(token);
+
+            var link = new Uri($"{WEBAPP_URL}/reset-password/{emailAddress}/{encodedToken}");
 
             await _emailService.SendEmailAsync(emailAddress, "Wachtwoord opnieuw instellen", // TODO: Use the new emailservice and take the text from resources.
                 $""""

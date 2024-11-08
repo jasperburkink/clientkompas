@@ -9,6 +9,7 @@ namespace Infrastructure.Data.Authentication
 {
     public class AuthenticationDbContextInitialiser
     {
+        private const string DEFAULT_TEST_EMAILADDRESS = "ontwikkelaar@clientkompas.nl";
         private readonly ILogger<AuthenticationDbContextInitialiser> _logger;
         private readonly AuthenticationDbContext _context;
         private readonly UserManager<AuthenticationUser> _userManager;
@@ -79,7 +80,7 @@ namespace Infrastructure.Data.Authentication
             // Default users
             var password = $"{role.Name}{role.Name}1!";
 
-            var email = role.Name == nameof(Roles.SystemOwner) ? "jasper.burkink@specializedbrainsict.nl" : role.Name;
+            var email = role.Name == nameof(Roles.SystemOwner) ? DEFAULT_TEST_EMAILADDRESS : role.Name;
 
             if (_userManager.Users.All(u => u.UserName != email))
             {
