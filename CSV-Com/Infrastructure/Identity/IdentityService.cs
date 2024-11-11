@@ -17,6 +17,7 @@ namespace Infrastructure.Identity
         private readonly IRefreshTokenService _refreshTokenService;
         private readonly IEmailService _emailService;
         private const string WEBAPP_URL = "http://localhost:3000"; // TODO: Move this url to the appsettings or get the url from constants?
+        private const string TOKEN_PROVIDER = "Email";
 
         public IdentityService(
             UserManager<AuthenticationUser> userManager,
@@ -149,6 +150,7 @@ namespace Infrastructure.Identity
 
             var encodedToken = Uri.EscapeDataString(token);
 
+            // TODO: Email logic should not be in this class
             var link = new Uri($"{WEBAPP_URL}/reset-password/{emailAddress}/{encodedToken}");
 
             await _emailService.SendEmailAsync(emailAddress, "Wachtwoord opnieuw instellen", // TODO: Use the new emailservice and take the text from resources.
@@ -172,6 +174,24 @@ namespace Infrastructure.Identity
             var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
 
             return result.ToApplicationResult();
+        }
+
+        public async Task<string> Get2FATokenAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            return await _userManager.GenerateTwoFactorTokenAsync(user, TOKEN_PROVIDER);
+        }
+
+        public async Task<LoggedInResult> Login2FAAsync(string userId, string token)
+        {
+            var result = await _signInManager.TwoFactorSignInAsync(TOKEN_PROVIDER, token, true, false);
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            return new LoggedInResult(result.Succeeded, user, roles);
         }
     }
 }

@@ -33,7 +33,7 @@ namespace Application.Authentication.Commands.TwoFactorAuthentication
 
             if (!loggedInUser.Succeeded || loggedInUser.User == null || loggedInUser.Roles == null)
             {
-                throw new InvalidLoginException(_resourceMessageProvider.GetMessage(typeof(LoginCommandHandler), "InvalidLogin"));
+                throw new InvalidLoginException(_resourceMessageProvider.GetMessage(typeof(LoginCommandHandler), "InvalidToken"));
             }
 
             var bearerToken = await _bearerTokenService.GenerateBearerTokenAsync(loggedInUser.User, loggedInUser.Roles); // UserInfo & roles are processed inside the bearertoken

@@ -17,13 +17,15 @@ namespace Application.Authentication.Commands.Login
         private readonly IBearerTokenService _bearerTokenService;
         private readonly IRefreshTokenService _refreshTokenService;
         private readonly IResourceMessageProvider _resourceMessageProvider;
+        private readonly IEmailService _emailService;
 
-        public LoginCommandHandler(IIdentityService identityService, IBearerTokenService bearerTokenService, IRefreshTokenService refreshTokenService, IResourceMessageProvider resourceMessageProvider)
+        public LoginCommandHandler(IIdentityService identityService, IBearerTokenService bearerTokenService, IRefreshTokenService refreshTokenService, IResourceMessageProvider resourceMessageProvider, IEmailService emailService)
         {
             _identityService = identityService;
             _bearerTokenService = bearerTokenService;
             _refreshTokenService = refreshTokenService;
             _resourceMessageProvider = resourceMessageProvider;
+            _emailService = emailService;
         }
 
         public async Task<LoginCommandDto> Handle(LoginCommand request, CancellationToken cancellationToken)
@@ -38,6 +40,9 @@ namespace Application.Authentication.Commands.Login
             if (loggedInUser.User.TwoFactorEnabled)
             {
                 var twoFactorAuthenticationToken = await _identityService.Get2FATokenAsync(loggedInUser.User.Id);
+
+                // Send the token via email
+                await _emailService.SendEmailAsync(loggedInUser.User.Email, "Two-factor authentication token", twoFactorAuthenticationToken);
 
                 return new LoginCommandDto
                 {

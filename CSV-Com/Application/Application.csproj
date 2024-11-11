@@ -54,6 +54,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>LoginCommandHandler.nl.resx</DependentUpon>
     </Compile>
+    <Compile Update="Authentication\Commands\TwoFactorAuthentication\Resources\TwoFactorAuthenticationCommandHandler.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>TwoFactorAuthenticationCommandHandler.resx</DependentUpon>
+    </Compile>
     <Compile Update="CoachingPrograms\Queries\GetCoachingProgram\Resources\GetCoachingProgramDto.nl.Designer.cs">
       <DependentUpon>GetCoachingProgramDto.nl.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -149,6 +154,10 @@
     <EmbeddedResource Update="Authentication\Commands\Login\Resources\LoginCommandHandler.nl.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>LoginCommandHandler.nl.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Authentication\Commands\TwoFactorAuthentication\Resources\TwoFactorAuthenticationCommandHandler.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TwoFactorAuthenticationCommandHandler.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="CoachingPrograms\Queries\GetCoachingProgram\Resources\GetCoachingProgramDto.nl.resx">
       <LastGenOutput>GetCoachingProgramDto.nl.Designer.cs</LastGenOutput>
