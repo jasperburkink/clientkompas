@@ -68,5 +68,14 @@ namespace Application.Authentication.Commands.Login.Resources {
                 return ResourceManager.GetString("InvalidLogin", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UserId is verplicht..
+        /// </summary>
+        internal static string UserIdRequired {
+            get {
+                return ResourceManager.GetString("UserIdRequired", resourceCulture);
+            }
+        }
     }
 }

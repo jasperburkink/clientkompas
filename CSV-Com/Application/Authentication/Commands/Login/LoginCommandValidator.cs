@@ -13,6 +13,7 @@ namespace Application.Authentication.Commands.Login
         {
             _unitOfWork = unitOfWork;
             _resourceMessageProvider = resourceMessageProvider;
+
             RuleFor(lc => lc.UserName).ValidateUserName(_resourceMessageProvider);
             RuleFor(lc => lc.Password).ValidatePasswordLogin(_resourceMessageProvider);
         }

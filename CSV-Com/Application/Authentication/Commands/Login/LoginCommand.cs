@@ -6,9 +6,9 @@ namespace Application.Authentication.Commands.Login
 {
     public record LoginCommand : IRequest<LoginCommandDto>
     {
-        public string? UserName { get; set; }
+        public string UserName { get; set; } = null!;
 
-        public string? Password { get; set; }
+        public string Password { get; set; } = null!;
     }
 
     public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginCommandDto>
@@ -35,16 +35,29 @@ namespace Application.Authentication.Commands.Login
                 throw new InvalidLoginException(_resourceMessageProvider.GetMessage(typeof(LoginCommandHandler), "InvalidLogin"));
             }
 
-            var bearerToken = await _bearerTokenService.GenerateBearerTokenAsync(loggedInUser.User, loggedInUser.Roles); // UserInfo & roles are processed inside the bearertoken
-
-            var refreshToken = await _refreshTokenService.GenerateRefreshTokenAsync(loggedInUser.User);
-
-            return new LoginCommandDto
+            if (loggedInUser.User.TwoFactorEnabled)
             {
-                Success = true,
-                BearerToken = bearerToken,
-                RefreshToken = refreshToken
-            };
+                var twoFactorAuthenticationToken = await _identityService.Get2FATokenAsync(loggedInUser.User.Id);
+
+                return new LoginCommandDto
+                {
+                    Success = true,
+                    UserId = loggedInUser.User.Id,
+                    TwoFactorAuthenticationToken = twoFactorAuthenticationToken
+                };
+            }
+            else
+            {
+                var bearerToken = await _bearerTokenService.GenerateBearerTokenAsync(loggedInUser.User, loggedInUser.Roles); // UserInfo & roles are processed inside the bearertoken
+                var refreshToken = await _refreshTokenService.GenerateRefreshTokenAsync(loggedInUser.User);
+
+                return new LoginCommandDto
+                {
+                    Success = true,
+                    BearerToken = bearerToken,
+                    RefreshToken = refreshToken
+                };
+            }
         }
     }
 }

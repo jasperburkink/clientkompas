@@ -62,5 +62,13 @@ namespace Application.Common.Rules
                 .EmailAddress()
                 .WithMessage(resourceMessageProvider.GetMessage(typeof(AuthenticationValidationRules), "EmailAddressInvalid"));
         }
+
+        public static IRuleBuilderOptions<T, string> ValidateUserId<T>(this IRuleBuilder<T, string> ruleBuilder,
+            IResourceMessageProvider resourceMessageProvider)
+        {
+            return ruleBuilder
+                .NotEmpty()
+                .WithMessage(resourceMessageProvider.GetMessage(typeof(AuthenticationValidationRules), "UserIdRequired"));
+        }
     }
 }

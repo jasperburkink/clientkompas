@@ -28,5 +28,9 @@ namespace Application.Common.Interfaces.Authentication
         Task<Result> SendResetPasswordEmailAsync(string emailAddress);
 
         Task<Result> ResetPasswordAsync(string emailAddress, string token, string newPassword);
+
+        Task<string> Get2FATokenAsync(string userId);
+
+        Task<LoggedInResult> Login2FAAsync(string userId, string token);
     }
 }
