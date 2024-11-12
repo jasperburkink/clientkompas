@@ -178,7 +178,8 @@ namespace Infrastructure.Identity
 
         public async Task<string> Get2FATokenAsync(string userId)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.FindByIdAsync(userId)
+                ?? throw new Application.Common.Exceptions.NotFoundException("AuthenticationUser not found.", userId);
 
             return await _userManager.GenerateTwoFactorTokenAsync(user, TOKEN_PROVIDER);
         }
@@ -187,7 +188,8 @@ namespace Infrastructure.Identity
         {
             var result = await _signInManager.TwoFactorSignInAsync(TOKEN_PROVIDER, token, true, false);
 
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.FindByIdAsync(userId)
+                ?? throw new Application.Common.Exceptions.NotFoundException("AuthenticationUser not found.", userId);
 
             var roles = await _userManager.GetRolesAsync(user);
 

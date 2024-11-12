@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Models;
@@ -527,6 +528,129 @@ namespace Infrastructure.UnitTests.Identity
 
             // Assert
             result.Should().BeEquivalentTo(Result.Failure(["User is not found with the given emailaddress."]));
+        }
+
+
+        [Fact]
+        public async Task Get2FATokenAsync_CorrectFlow_ShouldReturn2FAToken()
+        {
+            // Arrange
+            var userId = Guid.NewGuid().ToString();
+            var token = "012345";
+
+            var user = new AuthenticationUser
+            {
+                Id = userId
+            };
+
+            _userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(user);
+            _userManagerMock.Setup(x => x.GenerateTwoFactorTokenAsync(It.IsAny<AuthenticationUser>(), It.IsAny<string>())).ReturnsAsync(token);
+
+            var identityService = new IdentityService(
+                _userManagerMock.Object,
+                _signInManagerMock.Object,
+                _userClaimsPrincipalFactoryMock.Object,
+                _authorizationServiceMock.Object,
+                _hasherMock.Object,
+                _refreshTokenServiceMock.Object,
+                _emailServiceMock.Object
+            );
+
+            // Act
+            var result = await identityService.Get2FATokenAsync(userId);
+
+            // Assert
+            result.Should().NotBeNullOrEmpty();
+        }
+
+        [Fact]
+        public async Task Get2FATokenAsync_UserNotFound_ShouldThrowNotFoundException()
+        {
+            // Arrange
+            var userId = Guid.NewGuid().ToString();
+
+            _userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>()));
+
+            var identityService = new IdentityService(
+                _userManagerMock.Object,
+                _signInManagerMock.Object,
+                _userClaimsPrincipalFactoryMock.Object,
+                _authorizationServiceMock.Object,
+                _hasherMock.Object,
+                _refreshTokenServiceMock.Object,
+                _emailServiceMock.Object
+            );
+
+            // Act
+            Func<Task<string>> act = async () => await identityService.Get2FATokenAsync(userId);
+
+            // Assert
+            await act.Should().ThrowAsync<NotFoundException>();
+        }
+
+        [Fact]
+        public async Task Login2FAAsync_CorrectFlow_ShouldBeLoggedIn()
+        {
+            // Arrange
+            var userId = Guid.NewGuid().ToString();
+            var token = "012345";
+
+            var user = new AuthenticationUser
+            {
+                Id = userId
+            };
+
+            var signInResult = SignInResult.Success;
+
+            _signInManagerMock.Setup(mock => mock.TwoFactorSignInAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>())).ReturnsAsync(signInResult);
+            _userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(user);
+            _userManagerMock.Setup(x => x.GetRolesAsync(user));
+
+            var identityService = new IdentityService(
+                _userManagerMock.Object,
+                _signInManagerMock.Object,
+                _userClaimsPrincipalFactoryMock.Object,
+                _authorizationServiceMock.Object,
+                _hasherMock.Object,
+                _refreshTokenServiceMock.Object,
+                _emailServiceMock.Object
+            );
+
+            // Act
+            var result = await identityService.Login2FAAsync(userId, token);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Succeeded.Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task Login2FAAsync_UserIsNull_ShouldThrowNotFoundException()
+        {
+            // Arrange
+            var userId = Guid.NewGuid().ToString();
+            var token = "012345";
+
+            var signInResult = SignInResult.Success;
+
+            _signInManagerMock.Setup(mock => mock.TwoFactorSignInAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>())).ReturnsAsync(signInResult);
+            _userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>()));
+
+            var identityService = new IdentityService(
+                _userManagerMock.Object,
+                _signInManagerMock.Object,
+                _userClaimsPrincipalFactoryMock.Object,
+                _authorizationServiceMock.Object,
+                _hasherMock.Object,
+                _refreshTokenServiceMock.Object,
+                _emailServiceMock.Object
+            );
+
+            // Act
+            Func<Task<LoggedInResult>> act = async () => await identityService.Login2FAAsync(userId, token);
+
+            // Assert
+            await act.Should().ThrowAsync<NotFoundException>();
         }
     }
 }
