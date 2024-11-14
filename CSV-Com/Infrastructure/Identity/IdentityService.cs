@@ -18,6 +18,7 @@ namespace Infrastructure.Identity
         private readonly IEmailService _emailService;
         private const string WEBAPP_URL = "http://localhost:3000"; // TODO: Move this url to the appsettings or get the url from constants?
         private const string TOKEN_PROVIDER = "Email";
+        private const bool TWOFACTORAUTHENTICATION_DEFAULT_ENABLED = true;
 
         public IdentityService(
             UserManager<AuthenticationUser> userManager,
@@ -48,7 +49,8 @@ namespace Infrastructure.Identity
             var user = new AuthenticationUser
             {
                 UserName = userName,
-                Email = userName
+                Email = userName,
+                TwoFactorEnabled = TWOFACTORAUTHENTICATION_DEFAULT_ENABLED // NOTE: 
             };
 
             var result = await _userManager.CreateAsync(user, password);
@@ -186,10 +188,10 @@ namespace Infrastructure.Identity
 
         public async Task<LoggedInResult> Login2FAAsync(string userId, string token)
         {
-            var result = await _signInManager.TwoFactorSignInAsync(TOKEN_PROVIDER, token, true, false);
-
             var user = await _userManager.FindByIdAsync(userId)
                 ?? throw new Application.Common.Exceptions.NotFoundException("AuthenticationUser not found.", userId);
+
+            var result = await _signInManager.TwoFactorSignInAsync(TOKEN_PROVIDER, token, true, false);
 
             var roles = await _userManager.GetRolesAsync(user);
 

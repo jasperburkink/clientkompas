@@ -3,7 +3,6 @@ using Domain.Authentication.Constants;
 using Domain.Authentication.Domain;
 using TestData;
 using TestData.Authentication;
-using static Application.FunctionalTests.Testing;
 
 namespace Application.FunctionalTests.Authentication.Commands.Login
 {
@@ -30,8 +29,7 @@ namespace Application.FunctionalTests.Authentication.Commands.Login
             };
         }
 
-        [Ignore("Logging in via tests is not working yet.")]
-        //[Test]
+        [Test]
         public async Task Handle_CorrectFlow_SuccessShouldBeTrue()
         {
             // Act
@@ -41,8 +39,7 @@ namespace Application.FunctionalTests.Authentication.Commands.Login
             result.Success.Should().BeTrue();
         }
 
-        [Ignore("Logging in via tests is not working yet.")]
-        //[Test]
+        [Test]
         public async Task Handle_InvalidLoginData_SuccessShouldBeFalse()
         {
             // Arrange

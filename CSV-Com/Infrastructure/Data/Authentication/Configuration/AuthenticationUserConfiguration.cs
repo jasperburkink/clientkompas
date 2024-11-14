@@ -17,7 +17,7 @@ namespace Infrastructure.Data.Authentication.Configuration
                .IsRequired(false);
 
             builder.Property(u => u.Salt)
-               .IsRequired(true);
+               .IsRequired(false);
         }
     }
 }
