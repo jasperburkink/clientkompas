@@ -4,7 +4,7 @@ using Application.Common.Rules;
 
 namespace Application.Authentication.Commands.TwoFactorAuthentication
 {
-    internal class TwoFactorAuthenticationCommandValidator : AbstractValidator<TwoFactorAuthenticationCommand>
+    public class TwoFactorAuthenticationCommandValidator : AbstractValidator<TwoFactorAuthenticationCommand>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IResourceMessageProvider _resourceMessageProvider;

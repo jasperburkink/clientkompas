@@ -2,6 +2,7 @@
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
+using Application.Common.Models;
 
 namespace Application.Authentication.Commands.TwoFactorAuthentication
 {
@@ -29,16 +30,16 @@ namespace Application.Authentication.Commands.TwoFactorAuthentication
 
         public async Task<TwoFactorAuthenticationCommandDto> Handle(TwoFactorAuthenticationCommand request, CancellationToken cancellationToken)
         {
-            var loggedInUser = await _identityService.Login2FAAsync(request.UserId, request.Token);
+            var loggedInResult = await _identityService.Login2FAAsync(request.UserId, request.Token);
 
-            if (!loggedInUser.Succeeded || loggedInUser.User == null || loggedInUser.Roles == null)
+            if (IsInvalidLogin(loggedInResult))
             {
                 throw new InvalidLoginException(_resourceMessageProvider.GetMessage(typeof(LoginCommandHandler), "InvalidToken"));
             }
 
-            var bearerToken = await _bearerTokenService.GenerateBearerTokenAsync(loggedInUser.User, loggedInUser.Roles); // UserInfo & roles are processed inside the bearertoken
+            var bearerToken = await _bearerTokenService.GenerateBearerTokenAsync(loggedInResult.User, loggedInResult.Roles); // UserInfo & roles are processed inside the bearertoken
 
-            var refreshToken = await _refreshTokenService.GenerateRefreshTokenAsync(loggedInUser.User);
+            var refreshToken = await _refreshTokenService.GenerateRefreshTokenAsync(loggedInResult.User);
 
             return new TwoFactorAuthenticationCommandDto
             {
@@ -46,6 +47,11 @@ namespace Application.Authentication.Commands.TwoFactorAuthentication
                 BearerToken = bearerToken,
                 RefreshToken = refreshToken
             };
+        }
+
+        private static bool IsInvalidLogin(LoggedInResult loggedInUser)
+        {
+            return !loggedInUser.Succeeded || loggedInUser.User == null || loggedInUser.Roles == null;
         }
     }
 }
