@@ -120,7 +120,4 @@
   <data name="InvalidLogin" xml:space="preserve">
     <value>Login is mislukt. Onjuiste gebruikersnaam en/of wachtwoord.</value>
   </data>
-  <data name="UserIdRequired" xml:space="preserve">
-    <value>UserId is verplicht.</value>
-  </data>
 </root>

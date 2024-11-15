@@ -86,7 +86,7 @@ namespace Application.FunctionalTests
             return await RunAsUserAsync(role, $"{role}1!", role);
         }
 
-        public static async Task<string> RunAsUserAsync(string userName, string password, string role)
+        public static async Task<string> RunAsUserAsync(string userName, string password, string role, string id = "")
         {
             using var scope = CreateScope();
 
@@ -94,6 +94,7 @@ namespace Application.FunctionalTests
 
             var user = new AuthenticationUser
             {
+                Id = id,
                 UserName = userName,
                 Email = userName
             };

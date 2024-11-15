@@ -69,5 +69,14 @@ namespace Application.Authentication.Commands.TwoFactorAuthentication.Resources 
                 return ResourceManager.GetString("InvalidToken", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UserId is verplicht..
+        /// </summary>
+        internal static string UserIdRequired {
+            get {
+                return ResourceManager.GetString("UserIdRequired", resourceCulture);
+            }
+        }
     }
 }

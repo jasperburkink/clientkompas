@@ -1,5 +1,4 @@
-﻿using Application.Authentication.Commands.Login;
-using Application.Common.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Models;
@@ -34,7 +33,7 @@ namespace Application.Authentication.Commands.TwoFactorAuthentication
 
             if (IsInvalidLogin(loggedInResult))
             {
-                throw new InvalidLoginException(_resourceMessageProvider.GetMessage(typeof(LoginCommandHandler), "InvalidToken"));
+                throw new InvalidLoginException(_resourceMessageProvider.GetMessage(typeof(TwoFactorAuthenticationCommandHandler), "InvalidToken"));
             }
 
             var bearerToken = await _bearerTokenService.GenerateBearerTokenAsync(loggedInResult.User, loggedInResult.Roles); // UserInfo & roles are processed inside the bearertoken

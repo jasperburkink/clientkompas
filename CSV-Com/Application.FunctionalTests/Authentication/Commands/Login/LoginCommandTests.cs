@@ -1,9 +1,5 @@
 ﻿using Application.Authentication.Commands.Login;
-using Domain.Authentication.Constants;
-using Domain.Authentication.Domain;
 using TestData;
-using TestData.Authentication;
-using static Application.FunctionalTests.Testing;
 
 namespace Application.FunctionalTests.Authentication.Commands.Login
 {
@@ -11,27 +7,22 @@ namespace Application.FunctionalTests.Authentication.Commands.Login
     {
         private string _password;
         private LoginCommand _command;
-        private ITestDataGenerator<AuthenticationUser> _testDataGeneratorAuthenticationUser;
 
         [SetUp]
         public async Task SetUp()
         {
-            _testDataGeneratorAuthenticationUser = new AuthenticationUserDataGenerator();
-            var authenticationUser = _testDataGeneratorAuthenticationUser.Create();
+            UseMocks = true;
 
             _password = PasswordGenerator.GenerateSecurePassword(16);
 
-            await RunAsUserAsync(authenticationUser.UserName, _password, Roles.Coach);
-
             _command = new LoginCommand
             {
-                UserName = authenticationUser.UserName,
+                UserName = CustomWebApplicationFactoryWithMocks.AuthenticationUser.UserName,
                 Password = _password
             };
         }
 
-        [Ignore("Logging in via tests is not working yet.")]
-        //[Test]
+        [Test]
         public async Task Handle_CorrectFlow_ShouldBeLoggedIn()
         {
             // Act
@@ -42,8 +33,8 @@ namespace Application.FunctionalTests.Authentication.Commands.Login
             result.Success.Should().BeTrue();
         }
 
-        [Ignore("Logging in via tests is not working yet.")]
-        //[Test]
+        [Test]
+        [Ignore("Cannot mock identityservice login multiple times for login. Skip until mock is removed from this project.")]
         public async Task Handle_InvalidLoginData_ShouldNoBeLoggedIn()
         {
             // Arrange
@@ -60,8 +51,8 @@ namespace Application.FunctionalTests.Authentication.Commands.Login
             result.Success.Should().BeFalse();
         }
 
-        [Ignore("Logging in via tests is not working yet.")]
-        //[Test]
+        [Test]
+        [Ignore("Cannot mock identityservice login multiple times for login. Skip until mock is removed from this project.")]
         public async Task Handle_LoggingInAnonymous_ShouldBeLoggedIn()
         {
             // Arrange
@@ -75,5 +66,8 @@ namespace Application.FunctionalTests.Authentication.Commands.Login
             result.Should().NotBeNull();
             result.Success.Should().BeTrue();
         }
+
+        [TearDown]
+        public void TearDown() => UseMocks = false;
     }
 }

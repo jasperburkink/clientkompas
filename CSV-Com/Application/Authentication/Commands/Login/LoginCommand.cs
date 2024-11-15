@@ -1,6 +1,7 @@
 ﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
+using Application.Common.Models;
 
 namespace Application.Authentication.Commands.Login
 {
@@ -32,7 +33,7 @@ namespace Application.Authentication.Commands.Login
         {
             var loggedInUser = await _identityService.LoginAsync(request.UserName!, request.Password!);
 
-            if (!loggedInUser.Succeeded || loggedInUser.User == null || loggedInUser.Roles == null)
+            if (IsInvalidLogin(loggedInUser))
             {
                 throw new InvalidLoginException(_resourceMessageProvider.GetMessage(typeof(LoginCommandHandler), "InvalidLogin"));
             }
@@ -53,7 +54,7 @@ namespace Application.Authentication.Commands.Login
             }
             else
             {
-                var bearerToken = await _bearerTokenService.GenerateBearerTokenAsync(loggedInUser.User, loggedInUser.Roles); // UserInfo & roles are processed inside the bearertoken
+                var bearerToken = await _bearerTokenService.GenerateBearerTokenAsync(loggedInUser.User, loggedInUser.Roles); // UserInfo & roles are processed inside the bearertoken claims
                 var refreshToken = await _refreshTokenService.GenerateRefreshTokenAsync(loggedInUser.User);
 
                 return new LoginCommandDto
@@ -63,6 +64,11 @@ namespace Application.Authentication.Commands.Login
                     RefreshToken = refreshToken
                 };
             }
+        }
+
+        private static bool IsInvalidLogin(LoggedInResult loggedInUser)
+        {
+            return !loggedInUser.Succeeded || loggedInUser.User == null || loggedInUser.Roles == null;
         }
     }
 }
