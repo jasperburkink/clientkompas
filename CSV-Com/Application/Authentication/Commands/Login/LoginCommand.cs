@@ -49,7 +49,7 @@ namespace Application.Authentication.Commands.Login
                 {
                     Success = true,
                     UserId = loggedInUser.User.Id,
-                    TwoFactorAuthenticationToken = twoFactorAuthenticationToken
+                    TwoFactorAuthenticationEnabled = loggedInUser.User.TwoFactorEnabled
                 };
             }
             else

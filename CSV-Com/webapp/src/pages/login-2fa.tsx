@@ -7,7 +7,7 @@ import StatusEnum from "types/common/StatusEnum";
 import { ReactComponent as LogoLightSVG } from 'assets/CK_light_logo.svg';
 import { ReactComponent as LogoDarkSVG } from 'assets/CK_dark_logo.svg';
 import { Sidebar } from "components/sidebar/sidebar";
-import './login.css';
+import './login-2fa.css';
 import SidebarEmpty from "components/sidebar/sidebar-empty";
 import { InputField } from "components/common/input-field";
 import PasswordField from "components/common/password-field";
@@ -22,16 +22,19 @@ import CVSError from "types/common/cvs-error";
 import ErrorPopup from "components/common/error-popup";
 import { Copyright } from "components/common/copyright";
 import ConfirmPopup from "components/common/confirm-popup";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { BearerToken } from "types/common/bearer-token";
 import RefreshTokenService from "utils/refresh-token-service";
+import TwoFactorAuthenticationCommand from "types/model/login-2fa/login-2fa-command";
 
-const Login = () => {
+const Login2FA = () => {
     const navigate = useNavigate();
 
-    const initialLoginCommand: LoginCommand = { 
-        username: '',
-        password: ''
+    const { userid } = useParams();    
+
+    const initialLogin2FACommand: TwoFactorAuthenticationCommand = { 
+        userid: userid!,
+        token: ""
     };
 
     const [validationErrors, setValidationErrors] = useState<ValidationErrorHash>({});
@@ -39,7 +42,7 @@ const Login = () => {
     const [status, setStatus] = useState(StatusEnum.IDLE);
     const [confirmMessage, setConfirmMessage] = useState<string>('');
     const [isConfirmPopupOneButtonOpen, setConfirmPopupOneButtonOpen] = useState<boolean>(false);
-    const [loginCommand, setLoginCommand] = useState<LoginCommand>(initialLoginCommand);
+    const [login2FACommand, setLogin2FACommand] = useState<TwoFactorAuthenticationCommand>(initialLogin2FACommand);
     const [bearertoken, setBearerToken] = useState<BearerToken | null>(sessionStorage.getItem('token') ? BearerToken.deserialize(sessionStorage.getItem('token')!) : null);
     const [refreshtoken, setRefreshToken] = useState<string | null>(RefreshTokenService.getInstance().getRefreshToken() ? RefreshTokenService.getInstance().getRefreshToken() : null);
     
@@ -62,33 +65,29 @@ const Login = () => {
         }
     });
 
-    const handleLoginCommandInputChange = (fieldName: string, value: string) => {
-        setLoginCommand(prevOrganization => ({
+    const handleLogin2FACommandInputChange = (fieldName: string, value: string) => {
+        setLogin2FACommand(prevOrganization => ({
             ...prevOrganization,
             [fieldName]: value
         }));
     };
 
-    const handleLoginResult = (
+    const handleLogin2FAResult = (
         apiResult: ApiResult<LoginCommandDto>, 
         setConfirmMessage: React.Dispatch<React.SetStateAction<string>>, 
         setConfirmPopupOneButtonOpen: React.Dispatch<React.SetStateAction<boolean>>, 
         setCvsError: React.Dispatch<React.SetStateAction<CVSError>>, 
         setErrorPopupOpen: React.Dispatch<React.SetStateAction<boolean>>, 
         setBearerToken: React.Dispatch<React.SetStateAction<BearerToken | null>>) => {
-        if (apiResult.Ok) {            
-            if(apiResult.ReturnObject?.success === true){
-                // Check if the user needs to supply a 2FA token to login
-                if(apiResult.ReturnObject?.twofactorauthenticationenabled === true && apiResult.ReturnObject?.userid) {
-                    navigate(`/login-2fa/${apiResult.ReturnObject?.userid}`);
-                }
-                // User logged in successfully
-                else if (apiResult.ReturnObject?.bearertoken && apiResult.ReturnObject?.refreshtoken) {
-                    setConfirmMessage('Inloggen succesvol.');
-                    setConfirmPopupOneButtonOpen(true);
-                    setBearerToken(new BearerToken(apiResult.ReturnObject.bearertoken));
-                    setRefreshToken(apiResult.ReturnObject.refreshtoken);
-                }
+        if (apiResult.Ok) {           
+            if(apiResult.ReturnObject?.success === true 
+                && apiResult.ReturnObject?.bearertoken
+                && apiResult.ReturnObject?.refreshtoken) {                
+
+                setConfirmMessage('Inloggen succesvol.');
+                setConfirmPopupOneButtonOpen(true);
+                setBearerToken(new BearerToken(apiResult.ReturnObject.bearertoken));
+                setRefreshToken(apiResult.ReturnObject.refreshtoken);
             }
             else{
                 setCvsError({
@@ -147,28 +146,12 @@ const Login = () => {
                         <InputField 
                             inputfieldtype={{type:'text'}} 
                             required={true} 
-                            placeholder='Email' 
-                            className="login-username" 
-                            value={loginCommand.username}                            
-                            onChange={(value) => handleLoginCommandInputChange('username', value)}
+                            placeholder='Code' 
+                            className="login-token" 
+                            value={login2FACommand.token}                            
+                            onChange={(value) => handleLogin2FACommandInputChange('token', value)}
                             errors={validationErrors.username} 
-                            dataTestId='username' />
-
-                        <PasswordField 
-                            inputfieldname='password' 
-                            placeholder='Wachtwoord' 
-                            className="login-password" 
-                            value={loginCommand.password}
-                            onChange={(value) => handleLoginCommandInputChange('password', value)}
-                            errors={validationErrors.password}
-                            dataTestId='password' />
-
-                        <LinkButton 
-                            buttonType={{type:"Underline"}} 
-                            text="Wachtwoord vergeten?" 
-                            href="../password-forgotten" 
-                            className="login-password-forgotten"
-                            dataTestId='login-password-forgotten' />
+                            dataTestId='token' />
 
                         <SaveButton 
                             buttonText="Inloggen" 
@@ -179,7 +162,7 @@ const Login = () => {
                             onSave={async () => {  
                                     setStatus(StatusEnum.PENDING);
 
-                                    return await login(loginCommand);                                    
+                                    return await login(login2FACommand);                                    
                                 }
                             }
                             onResult={(apiResult) => handleLoginResult(
@@ -214,7 +197,7 @@ const Login = () => {
     );
 }
 
-export default Login;
+export default Login2FA;
 
 function showLoadingScreen(status: string): string | undefined {
     return ` ${status === StatusEnum.PENDING ? 'loading-spinner-visible' : 'loading-spinner-hidden'}`;

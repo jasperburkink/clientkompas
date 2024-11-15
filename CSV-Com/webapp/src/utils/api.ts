@@ -26,6 +26,8 @@ import RequestResetPasswordCommand from "types/model/request-reset-password/requ
 import RequestResetPasswordCommandDto from "types/model/request-reset-password/request-reset-password-command-dto";
 import ResetPasswordCommandDto from "types/model/reset-password/reset-password-command-dto";
 import ResetPasswordCommand from "types/model/reset-password/reset-password-command";
+import TwoFactorAuthenticationCommandDto from "types/model/login-2fa/login-2fa-command-dto";
+import TwoFactorAuthenticationCommand from "types/model/login-2fa/login-2fa-command";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -207,6 +209,22 @@ export const logout = async (logoutCommand: LogoutCommand): Promise<ApiResult<Lo
     const response = await fetch(`${apiUrl}Authentication/Logout`, requestOptions);     
     
     return handleApiResonse<LoginCommandDto>(response);
+}
+
+export const login2FA = async (loginCommand: TwoFactorAuthenticationCommand): Promise<ApiResult<TwoFactorAuthenticationCommandDto>> => {
+    let method = 'POST';
+
+    const requestOptions: RequestInit = {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(loginCommand)
+    };
+
+    const response = await fetch(`${apiUrl}Authentication`, requestOptions);     
+    
+    return handleApiResonse<TwoFactorAuthenticationCommandDto>(response);
 }
 
 export const fetchClient = async (clientId: string): Promise<ClientQuery> => {

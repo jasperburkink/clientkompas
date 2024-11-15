@@ -10,6 +10,6 @@
 
         public string UserId { get; set; } = null!;
 
-        public string TwoFactorAuthenticationToken { get; set; } = null!;
+        public bool TwoFactorAuthenticationEnabled { get; set; }
     }
 }

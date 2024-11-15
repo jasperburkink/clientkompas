@@ -59,7 +59,7 @@ namespace API.Controllers
             return Ok(result);
         }
 
-        [HttpPost]
+        [HttpPost("[action]")]
         [AllowAnonymous]
         public async Task<ActionResult<TwoFactorAuthenticationCommandDto>> TwoFactorLogin(TwoFactorAuthenticationCommand command)
         {
