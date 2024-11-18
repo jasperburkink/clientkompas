@@ -3,5 +3,6 @@ export default interface LoginCommandDto {
     bearertoken?: string;
     refreshtoken?: string;
     userid?: string;
-    twofactorauthenticationenabled: boolean;
+    twofactorpendingtoken: string;
+    expiresat: string;
 }

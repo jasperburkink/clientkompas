@@ -40,8 +40,8 @@ namespace Application.UnitTests.Authentication.Commands.Login
             bearerTokenServiceMock.Setup(btsm => btsm.GenerateBearerTokenAsync(It.IsAny<AuthenticationUser>(), It.IsAny<IList<string>>())).ReturnsAsync(bearerToken);
 
             var refreshToken = "test";
-            var refreshTokenServiceMock = new Mock<IRefreshTokenService>();
-            refreshTokenServiceMock.Setup(rtsm => rtsm.GenerateRefreshTokenAsync(It.IsAny<AuthenticationUser>())).ReturnsAsync(refreshToken);
+            var refreshTokenServiceMock = new Mock<ITokenService>();
+            refreshTokenServiceMock.Setup(rtsm => rtsm.GenerateTokenAsync(It.IsAny<AuthenticationUser>(), It.IsAny<string>())).ReturnsAsync(refreshToken);
 
             var emailServiceMock = new Mock<IEmailService>();
             emailServiceMock.Setup(mock => mock.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
@@ -81,8 +81,8 @@ namespace Application.UnitTests.Authentication.Commands.Login
             var bearerTokenServiceMock = new Mock<IBearerTokenService>();
 
             var refreshToken = "test";
-            var refreshTokenServiceMock = new Mock<IRefreshTokenService>();
-            refreshTokenServiceMock.Setup(rtsm => rtsm.GenerateRefreshTokenAsync(It.IsAny<AuthenticationUser>())).ReturnsAsync(refreshToken);
+            var refreshTokenServiceMock = new Mock<ITokenService>();
+            refreshTokenServiceMock.Setup(rtsm => rtsm.GenerateTokenAsync(It.IsAny<AuthenticationUser>(), It.IsAny<string>())).ReturnsAsync(refreshToken);
 
             var emailServiceMock = new Mock<IEmailService>();
             emailServiceMock.Setup(mock => mock.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));

@@ -14,7 +14,7 @@ import PasswordField from "components/common/password-field";
 import { LinkButton } from "components/common/link-button";
 import { Button } from "components/common/button";
 import SaveButton from "components/common/save-button";
-import { login } from "utils/api";
+import { login, login2FA } from "utils/api";
 import LoginCommand from "types/model/login/login-command";
 import LoginCommandDto from "types/model/login/login-command-dto";
 import ApiResult, { getErrorMessage } from "types/common/api-result";
@@ -26,13 +26,15 @@ import { useNavigate, useParams } from "react-router-dom";
 import { BearerToken } from "types/common/bearer-token";
 import RefreshTokenService from "utils/refresh-token-service";
 import TwoFactorAuthenticationCommand from "types/model/login-2fa/login-2fa-command";
+import TwoFactorAuthenticationCommandDto from "types/model/login-2fa/login-2fa-command-dto";
+import { Label } from "components/common/label";
 
 const Login2FA = () => {
     const navigate = useNavigate();
 
     const { userid } = useParams();    
 
-    const initialLogin2FACommand: TwoFactorAuthenticationCommand = { 
+    const initialLogin2FACommand: TwoFactorAuthenticationCommand = {
         userid: userid!,
         token: ""
     };
@@ -46,7 +48,7 @@ const Login2FA = () => {
     const [bearertoken, setBearerToken] = useState<BearerToken | null>(sessionStorage.getItem('token') ? BearerToken.deserialize(sessionStorage.getItem('token')!) : null);
     const [refreshtoken, setRefreshToken] = useState<string | null>(RefreshTokenService.getInstance().getRefreshToken() ? RefreshTokenService.getInstance().getRefreshToken() : null);
     
-    useEffect(() => {         
+    useEffect(() => {
         if(bearertoken) {
             sessionStorage.setItem('token', BearerToken.serialize(bearertoken));
         }
@@ -73,7 +75,7 @@ const Login2FA = () => {
     };
 
     const handleLogin2FAResult = (
-        apiResult: ApiResult<LoginCommandDto>, 
+        apiResult: ApiResult<TwoFactorAuthenticationCommandDto>, 
         setConfirmMessage: React.Dispatch<React.SetStateAction<string>>, 
         setConfirmPopupOneButtonOpen: React.Dispatch<React.SetStateAction<boolean>>, 
         setCvsError: React.Dispatch<React.SetStateAction<CVSError>>, 
@@ -82,7 +84,7 @@ const Login2FA = () => {
         if (apiResult.Ok) {           
             if(apiResult.ReturnObject?.success === true 
                 && apiResult.ReturnObject?.bearertoken
-                && apiResult.ReturnObject?.refreshtoken) {                
+                && apiResult.ReturnObject?.refreshtoken) {
 
                 setConfirmMessage('Inloggen succesvol.');
                 setConfirmPopupOneButtonOpen(true);
@@ -93,7 +95,7 @@ const Login2FA = () => {
                 setCvsError({
                     id: 0,
                     errorcode: 'E',
-                    message: `Er is een opgetreden tijdens het inloggen. Foutmelding: ${getErrorMessage<LoginCommandDto>(apiResult)}.`
+                    message: `Er is een opgetreden tijdens het inloggen. Foutmelding: ${getErrorMessage<TwoFactorAuthenticationCommandDto>(apiResult)}.`
                 });
                 setErrorPopupOpen(true);
 
@@ -109,9 +111,9 @@ const Login2FA = () => {
                 setCvsError({
                     id: 0,
                     errorcode: 'E',
-                    message: `Er is een opgetreden tijdens het inloggen. Foutmelding: ${getErrorMessage<LoginCommandDto>(apiResult)}`
+                    message: `Er is een opgetreden tijdens het inloggen. Foutmelding: ${getErrorMessage<TwoFactorAuthenticationCommandDto>(apiResult)}`
                 });
-                setErrorPopupOpen(true);  
+                setErrorPopupOpen(true);
 
                 setValidationErrors({});
             }
@@ -123,7 +125,7 @@ const Login2FA = () => {
     const handleLoginConfirmedClick = () => {
         setConfirmPopupOneButtonOpen(false);
         navigate(`/clients/`); // TODO: navigate to homepage
-    };    
+    };
 
     return(
         <>
@@ -143,6 +145,8 @@ const Login2FA = () => {
                     </div>
 
                     <div className="login-fields-container">
+                        <Label text="Vul de code in die u op uw e-mail heeft ontvangen om in te loggen" />
+
                         <InputField 
                             inputfieldtype={{type:'text'}} 
                             required={true} 
@@ -162,10 +166,10 @@ const Login2FA = () => {
                             onSave={async () => {  
                                     setStatus(StatusEnum.PENDING);
 
-                                    return await login(login2FACommand);                                    
+                                    return await login2FA(login2FACommand);                                    
                                 }
                             }
-                            onResult={(apiResult) => handleLoginResult(
+                            onResult={(apiResult) => handleLogin2FAResult(
                                 apiResult, 
                                 setConfirmMessage, 
                                 setConfirmPopupOneButtonOpen, 
@@ -174,6 +178,8 @@ const Login2FA = () => {
                                 setBearerToken)}
                             dataTestId='button.login'
                         />
+
+                        <Button buttonType={{type:"NotSolid"}} text="Button2" className='w-200px h-50px' onClick={()=> {alert('Button2');}} />
                     </div>
                 </div>
             </div>

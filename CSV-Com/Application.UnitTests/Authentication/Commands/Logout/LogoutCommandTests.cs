@@ -52,16 +52,16 @@ namespace Application.UnitTests.Authentication.Commands.Logout
                 Value = "Test3"
             };
 
-            var userRefreshTokens = new List<IRefreshToken>
+            var userRefreshTokens = new List<IToken>
             {
                 refreshToken,
                 refreshTokenUser1,
                 refreshTokenUser2
             };
 
-            var refreshTokenServiceMock = new Mock<IRefreshTokenService>();
-            refreshTokenServiceMock.Setup(mock => mock.GetRefreshTokenAsync(It.IsAny<string>())).ReturnsAsync(refreshToken);
-            refreshTokenServiceMock.Setup(mock => mock.GetValidRefreshTokensByUserAsync(It.IsAny<string>())).ReturnsAsync(userRefreshTokens);
+            var refreshTokenServiceMock = new Mock<ITokenService>();
+            refreshTokenServiceMock.Setup(mock => mock.GetTokenAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(refreshToken);
+            refreshTokenServiceMock.Setup(mock => mock.GetValidTokensByUserAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(userRefreshTokens);
 
             var command = new LogoutCommand()
             {
@@ -77,9 +77,9 @@ namespace Application.UnitTests.Authentication.Commands.Logout
             result.Should().NotBeNull();
             result.Success.Should().BeTrue();
             identityServiceMock.Verify(mock => mock.LogoutAsync(), Times.Once);
-            refreshTokenServiceMock.Verify(mock => mock.GetRefreshTokenAsync(It.IsAny<string>()), Times.Once);
-            refreshTokenServiceMock.Verify(mock => mock.GetValidRefreshTokensByUserAsync(It.IsAny<string>()), Times.Once);
-            refreshTokenServiceMock.Verify(mock => mock.RevokeRefreshTokenAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Exactly(userRefreshTokens.Count));
+            refreshTokenServiceMock.Verify(mock => mock.GetTokenAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            refreshTokenServiceMock.Verify(mock => mock.GetValidTokensByUserAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            refreshTokenServiceMock.Verify(mock => mock.RevokeTokenAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Exactly(userRefreshTokens.Count));
         }
 
         [Fact]
@@ -103,13 +103,13 @@ namespace Application.UnitTests.Authentication.Commands.Logout
                 Value = "Test1"
             };
 
-            var userRefreshTokens = new List<IRefreshToken>
+            var userRefreshTokens = new List<IToken>
             {
             };
 
-            var refreshTokenServiceMock = new Mock<IRefreshTokenService>();
-            refreshTokenServiceMock.Setup(mock => mock.GetRefreshTokenAsync(It.IsAny<string>())).ReturnsAsync(refreshToken);
-            refreshTokenServiceMock.Setup(mock => mock.GetValidRefreshTokensByUserAsync(It.IsAny<string>())).ReturnsAsync(userRefreshTokens);
+            var refreshTokenServiceMock = new Mock<ITokenService>();
+            refreshTokenServiceMock.Setup(mock => mock.GetTokenAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(refreshToken);
+            refreshTokenServiceMock.Setup(mock => mock.GetValidTokensByUserAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(userRefreshTokens);
 
             var command = new LogoutCommand()
             {
@@ -125,9 +125,9 @@ namespace Application.UnitTests.Authentication.Commands.Logout
             result.Should().NotBeNull();
             result.Success.Should().BeTrue();
             identityServiceMock.Verify(mock => mock.LogoutAsync(), Times.Once);
-            refreshTokenServiceMock.Verify(mock => mock.GetRefreshTokenAsync(It.IsAny<string>()), Times.Once);
-            refreshTokenServiceMock.Verify(mock => mock.GetValidRefreshTokensByUserAsync(It.IsAny<string>()), Times.Once);
-            refreshTokenServiceMock.Verify(mock => mock.RevokeRefreshTokenAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            refreshTokenServiceMock.Verify(mock => mock.GetTokenAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            refreshTokenServiceMock.Verify(mock => mock.GetValidTokensByUserAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            refreshTokenServiceMock.Verify(mock => mock.RevokeTokenAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
 
         [Fact]
@@ -139,8 +139,8 @@ namespace Application.UnitTests.Authentication.Commands.Logout
             var identityServiceMock = new Mock<IIdentityService>();
             identityServiceMock.Setup(mock => mock.LogoutAsync());
 
-            var refreshTokenServiceMock = new Mock<IRefreshTokenService>();
-            refreshTokenServiceMock.Setup(mock => mock.GetRefreshTokenAsync(It.IsAny<string>())).ReturnsAsync((IRefreshToken)null);
+            var refreshTokenServiceMock = new Mock<ITokenService>();
+            refreshTokenServiceMock.Setup(mock => mock.GetTokenAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync((IToken)null);
 
             var command = new LogoutCommand()
             {
@@ -156,9 +156,9 @@ namespace Application.UnitTests.Authentication.Commands.Logout
             result.Should().NotBeNull();
             result.Success.Should().BeTrue();
             identityServiceMock.Verify(mock => mock.LogoutAsync(), Times.Once);
-            refreshTokenServiceMock.Verify(mock => mock.GetRefreshTokenAsync(It.IsAny<string>()), Times.Once);
-            refreshTokenServiceMock.Verify(mock => mock.GetValidRefreshTokensByUserAsync(It.IsAny<string>()), Times.Never);
-            refreshTokenServiceMock.Verify(mock => mock.RevokeRefreshTokenAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            refreshTokenServiceMock.Verify(mock => mock.GetTokenAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            refreshTokenServiceMock.Verify(mock => mock.GetValidTokensByUserAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            refreshTokenServiceMock.Verify(mock => mock.RevokeTokenAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Infrastructure.Identity
         private readonly IUserClaimsPrincipalFactory<AuthenticationUser> _userClaimsPrincipalFactory;
         private readonly IAuthorizationService _authorizationService;
         private readonly IHasher _hasher;
-        private readonly IRefreshTokenService _refreshTokenService;
+        private readonly ITokenService _refreshTokenService;
         private readonly IEmailService _emailService;
         private const string WEBAPP_URL = "http://localhost:3000"; // TODO: Move this url to the appsettings or get the url from constants?
         private const string TOKEN_PROVIDER = "Email";
@@ -26,7 +26,7 @@ namespace Infrastructure.Identity
             IUserClaimsPrincipalFactory<AuthenticationUser> userClaimsPrincipalFactory,
             IAuthorizationService authorizationService,
             IHasher hasher,
-            IRefreshTokenService refreshTokenService,
+            ITokenService refreshTokenService,
             IEmailService emailService)
         {
             _userManager = userManager;
@@ -191,11 +191,11 @@ namespace Infrastructure.Identity
             var user = await _userManager.FindByIdAsync(userId)
                 ?? throw new Application.Common.Exceptions.NotFoundException("AuthenticationUser not found.", userId);
 
-            var result = await _signInManager.TwoFactorSignInAsync(TOKEN_PROVIDER, token, true, false);
+            var tokenValid = await _userManager.VerifyTwoFactorTokenAsync(user, TOKEN_PROVIDER, token);
 
             var roles = await _userManager.GetRolesAsync(user);
 
-            return new LoggedInResult(result.Succeeded, user, roles);
+            return new LoggedInResult(tokenValid, user, roles);
         }
     }
 }

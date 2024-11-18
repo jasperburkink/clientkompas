@@ -69,18 +69,7 @@
                 gap-y-2
                 items-center;
 
-                .login-username{
-                    @apply
-                    w-64;
-                }
-
-                .login-password{
-                    @apply
-                    w-64
-                    ml-[-10px];
-                }
-
-                .login-password-forgotten{
+                .login-token{
                     @apply
                     w-64;
                 }

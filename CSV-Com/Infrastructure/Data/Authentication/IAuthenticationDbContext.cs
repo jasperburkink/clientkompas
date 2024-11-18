@@ -10,6 +10,8 @@ namespace Infrastructure.Data.Authentication
 
         DbSet<RefreshToken> RefreshTokens { get; set; }
 
+        DbSet<TwoFactorPendingToken> TwoFactorPendingTokens { get; set; }
+
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

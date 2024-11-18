@@ -11,7 +11,7 @@ namespace Infrastructure.FunctionalTests.Identity
 {
     public class RefreshTokenServiceTests : IDisposable
     {
-        private readonly IRefreshTokenService _refreshTokenService;
+        private readonly ITokenService _refreshTokenService;
         private readonly AuthenticationUser _authenticationUser;
         private readonly AuthenticationDbContext _authenticationDbContext;
         private const string REFRESH_TOKEN_VALUE = nameof(REFRESH_TOKEN_VALUE);
@@ -38,7 +38,7 @@ namespace Infrastructure.FunctionalTests.Identity
 
             var hasher = new Argon2Hasher();
 
-            _refreshTokenService = new RefreshTokenService(_authenticationDbContext, hasher);
+            _refreshTokenService = new TokenService(_authenticationDbContext, hasher);
         }
 
         [Fact]
@@ -48,7 +48,7 @@ namespace Infrastructure.FunctionalTests.Identity
             var user = _authenticationUser;
 
             // Act
-            var token = await _refreshTokenService.GenerateRefreshTokenAsync(user);
+            var token = await _refreshTokenService.GenerateTokenAsync(user, "RefreshToken");
 
             // Assert
             token.Should().NotBeNull();
@@ -62,7 +62,7 @@ namespace Infrastructure.FunctionalTests.Identity
             AuthenticationUser user = null;
 
             // Act & Assert
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _refreshTokenService.GenerateRefreshTokenAsync(user));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _refreshTokenService.GenerateTokenAsync(user, "RefreshToken"));
         }
 
         [Fact]
@@ -88,7 +88,7 @@ namespace Infrastructure.FunctionalTests.Identity
             await _authenticationDbContext.SaveChangesAsync();
 
             // Act
-            var result = await _refreshTokenService.ValidateRefreshTokenAsync(userId, refreshToken);
+            var result = await _refreshTokenService.ValidateTokenAsync(userId, refreshToken, "RefreshToken");
 
             // Assert
             result.Should().BeTrue();
@@ -117,7 +117,7 @@ namespace Infrastructure.FunctionalTests.Identity
             await _authenticationDbContext.SaveChangesAsync();
 
             // Act
-            await _refreshTokenService.ValidateRefreshTokenAsync(userId, refreshToken);
+            await _refreshTokenService.ValidateTokenAsync(userId, refreshToken, "RefreshToken");
 
             // Assert
             refreshTokenObject.IsUsed.Should().BeTrue();
@@ -146,7 +146,7 @@ namespace Infrastructure.FunctionalTests.Identity
             await _authenticationDbContext.SaveChangesAsync();
 
             // Act
-            var result = await _refreshTokenService.ValidateRefreshTokenAsync(userId, refreshToken);
+            var result = await _refreshTokenService.ValidateTokenAsync(userId, refreshToken, "RefreshToken");
 
             // Assert
             result.Should().BeFalse();
@@ -175,7 +175,7 @@ namespace Infrastructure.FunctionalTests.Identity
             await _authenticationDbContext.SaveChangesAsync();
 
             // Act
-            var result = await _refreshTokenService.ValidateRefreshTokenAsync(userId, refreshToken);
+            var result = await _refreshTokenService.ValidateTokenAsync(userId, refreshToken, "RefreshToken");
 
             // Assert
             result.Should().BeFalse();
@@ -204,7 +204,7 @@ namespace Infrastructure.FunctionalTests.Identity
             await _authenticationDbContext.SaveChangesAsync();
 
             // Act
-            var result = await _refreshTokenService.ValidateRefreshTokenAsync(userId, refreshToken);
+            var result = await _refreshTokenService.ValidateTokenAsync(userId, refreshToken, "RefreshToken");
 
             // Assert
             result.Should().BeFalse();
@@ -233,7 +233,7 @@ namespace Infrastructure.FunctionalTests.Identity
             await _authenticationDbContext.SaveChangesAsync();
 
             // Act
-            var result = await _refreshTokenService.ValidateRefreshTokenAsync(userId, refreshToken);
+            var result = await _refreshTokenService.ValidateTokenAsync(userId, refreshToken, "RefreshToken");
 
             // Assert
             result.Should().BeFalse();
@@ -262,7 +262,7 @@ namespace Infrastructure.FunctionalTests.Identity
             await _authenticationDbContext.SaveChangesAsync();
 
             // Act
-            var result = await _refreshTokenService.ValidateRefreshTokenAsync(userId, refreshToken);
+            var result = await _refreshTokenService.ValidateTokenAsync(userId, refreshToken, "RefreshToken");
 
             // Assert
             result.Should().BeFalse();
@@ -276,7 +276,7 @@ namespace Infrastructure.FunctionalTests.Identity
             var refreshToken = "RefreshToken";
 
             // Act & Assert
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _refreshTokenService.ValidateRefreshTokenAsync(userId, refreshToken));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _refreshTokenService.ValidateTokenAsync(userId, refreshToken, "RefreshToken"));
         }
 
         [Fact]
@@ -287,7 +287,7 @@ namespace Infrastructure.FunctionalTests.Identity
             var refreshToken = "RefreshToken";
 
             // Act & Assert
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _refreshTokenService.ValidateRefreshTokenAsync(userId, refreshToken));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _refreshTokenService.ValidateTokenAsync(userId, refreshToken, "RefreshToken"));
         }
 
         [Fact]
@@ -313,8 +313,8 @@ namespace Infrastructure.FunctionalTests.Identity
             await _authenticationDbContext.SaveChangesAsync();
 
             // Act
-            await _refreshTokenService.RevokeRefreshTokenAsync(userId, refreshToken);
-            var token = await _refreshTokenService.GetRefreshTokenAsync(refreshToken);
+            await _refreshTokenService.RevokeTokenAsync(userId, refreshToken, "RefreshToken");
+            var token = await _refreshTokenService.GetTokenAsync(refreshToken, "RefreshToken");
 
             // Assert
             token.Should().NotBeNull();
@@ -329,7 +329,7 @@ namespace Infrastructure.FunctionalTests.Identity
             var refreshToken = "RefreshToken";
 
             // Act & Assert
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _refreshTokenService.RevokeRefreshTokenAsync(userId, refreshToken));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _refreshTokenService.RevokeTokenAsync(userId, refreshToken, "RefreshToken"));
         }
 
         [Fact]
@@ -340,7 +340,7 @@ namespace Infrastructure.FunctionalTests.Identity
             string refreshToken = null;
 
             // Act & Assert
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _refreshTokenService.RevokeRefreshTokenAsync(userId, refreshToken));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _refreshTokenService.RevokeTokenAsync(userId, refreshToken, "RefreshToken"));
         }
 
         [Fact]
@@ -366,8 +366,8 @@ namespace Infrastructure.FunctionalTests.Identity
             await _authenticationDbContext.SaveChangesAsync();
 
             // Act
-            await _refreshTokenService.RevokeRefreshTokenAsync(userId, refreshToken);
-            var token = await _refreshTokenService.GetRefreshTokenAsync(refreshToken);
+            await _refreshTokenService.RevokeTokenAsync(userId, refreshToken, "RefreshToken");
+            var token = await _refreshTokenService.GetTokenAsync(refreshToken, "RefreshToken");
 
             // Assert
             token.Should().NotBeNull();
@@ -397,8 +397,8 @@ namespace Infrastructure.FunctionalTests.Identity
             await _authenticationDbContext.SaveChangesAsync();
 
             // Act
-            await _refreshTokenService.RevokeRefreshTokenAsync(userId, refreshToken);
-            var token = await _refreshTokenService.GetRefreshTokenAsync("Test");
+            await _refreshTokenService.RevokeTokenAsync(userId, refreshToken, "RefreshToken");
+            var token = await _refreshTokenService.GetTokenAsync("Test", "RefreshToken");
 
             // Assert
             token.Should().NotBeNull();
@@ -428,7 +428,7 @@ namespace Infrastructure.FunctionalTests.Identity
             await _authenticationDbContext.SaveChangesAsync();
 
             // Act
-            var result = await _refreshTokenService.GetRefreshTokenAsync(refreshToken);
+            var result = await _refreshTokenService.GetTokenAsync(refreshToken, "RefreshToken");
 
             // Assert
             result.Should().NotBeNull().And.BeEquivalentTo(refreshTokenObject);
@@ -457,7 +457,7 @@ namespace Infrastructure.FunctionalTests.Identity
             await _authenticationDbContext.SaveChangesAsync();
 
             // Act
-            var result = await _refreshTokenService.GetRefreshTokenAsync(refreshToken);
+            var result = await _refreshTokenService.GetTokenAsync(refreshToken, "RefreshToken");
 
             // Assert
             result.Should().BeNull();
@@ -500,7 +500,7 @@ namespace Infrastructure.FunctionalTests.Identity
             await _authenticationDbContext.SaveChangesAsync();
 
             // Act
-            var result = await _refreshTokenService.GetValidRefreshTokensByUserAsync(userId);
+            var result = await _refreshTokenService.GetValidTokensByUserAsync(userId, "RefreshToken");
 
             // Assert
             result.Should().NotBeNull().And.BeEquivalentTo(new List<RefreshToken> { refreshTokenObject1, refreshTokenObject2 });
@@ -543,7 +543,7 @@ namespace Infrastructure.FunctionalTests.Identity
             await _authenticationDbContext.SaveChangesAsync();
 
             // Act
-            var result = await _refreshTokenService.GetValidRefreshTokensByUserAsync(userId);
+            var result = await _refreshTokenService.GetValidTokensByUserAsync(userId, "RefreshToken");
 
             // Assert
             result.Should().NotBeNull().And.BeEmpty();

@@ -10,6 +10,8 @@
 
         public string UserId { get; set; } = null!;
 
-        public bool TwoFactorAuthenticationEnabled { get; set; }
+        public string TwoFactorPendingToken { get; set; } = null!;
+
+        public DateTime? ExpiresAt { get; set; }
     }
 }

@@ -79,8 +79,8 @@ const Login = () => {
         if (apiResult.Ok) {            
             if(apiResult.ReturnObject?.success === true){
                 // Check if the user needs to supply a 2FA token to login
-                if(apiResult.ReturnObject?.twofactorauthenticationenabled === true && apiResult.ReturnObject?.userid) {
-                    navigate(`/login-2fa/${apiResult.ReturnObject?.userid}`);
+                if(apiResult.ReturnObject?.twofactorpendingtoken && apiResult.ReturnObject?.userid) {                    
+                    navigate(`/login-2fa/${apiResult.ReturnObject?.userid}`); // TODO: waar bewaar ik de expiredat? apiResult.ReturnObject?.expiresat
                 }
                 // User logged in successfully
                 else if (apiResult.ReturnObject?.bearertoken && apiResult.ReturnObject?.refreshtoken) {
@@ -88,6 +88,16 @@ const Login = () => {
                     setConfirmPopupOneButtonOpen(true);
                     setBearerToken(new BearerToken(apiResult.ReturnObject.bearertoken));
                     setRefreshToken(apiResult.ReturnObject.refreshtoken);
+                }
+                else {
+                    setCvsError({
+                        id: 0,
+                        errorcode: 'E',
+                        message: `Er is een opgetreden tijdens het inloggen. Foutmelding: Not a valid loginresult.`
+                    });
+                    setErrorPopupOpen(true);
+    
+                    setValidationErrors({});
                 }
             }
             else{

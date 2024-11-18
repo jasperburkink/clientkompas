@@ -9,15 +9,15 @@ namespace Application.Authentication.Commands.RefreshToken
 
     public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, RefreshTokenCommandDto>
     {
-        private readonly IRefreshTokenService _refreshTokenService;
+        private readonly ITokenService _tokenService;
 
         private readonly IBearerTokenService _bearerTokenService;
 
         private readonly IIdentityService _identityService;
 
-        public RefreshTokenCommandHandler(IRefreshTokenService refreshTokenService, IBearerTokenService bearerTokenService, IIdentityService identityService)
+        public RefreshTokenCommandHandler(ITokenService tokenService, IBearerTokenService bearerTokenService, IIdentityService identityService)
         {
-            _refreshTokenService = refreshTokenService;
+            _tokenService = tokenService;
             _bearerTokenService = bearerTokenService;
             _identityService = identityService;
         }
@@ -26,8 +26,8 @@ namespace Application.Authentication.Commands.RefreshToken
         {
             ArgumentNullException.ThrowIfNull(request.RefreshToken);
 
-            var refreshTokenCurrent = await _refreshTokenService.GetRefreshTokenAsync(request.RefreshToken) ?? throw new UnauthorizedAccessException("Token not found.");
-            var validToken = await _refreshTokenService.ValidateRefreshTokenAsync(refreshTokenCurrent.UserId, request.RefreshToken);
+            var refreshTokenCurrent = await _tokenService.GetTokenAsync(request.RefreshToken, "RefreshToken") ?? throw new UnauthorizedAccessException("Token not found.");
+            var validToken = await _tokenService.ValidateTokenAsync(refreshTokenCurrent.UserId, request.RefreshToken, "RefreshToken");
 
             if (!validToken)
             {
@@ -37,11 +37,11 @@ namespace Application.Authentication.Commands.RefreshToken
             var user = await _identityService.GetUserAsync(refreshTokenCurrent.UserId) ?? throw new UnauthorizedAccessException("User not found.");
             var roles = await _identityService.GetRolesAsync(refreshTokenCurrent.UserId);
 
-            await _refreshTokenService.RevokeRefreshTokenAsync(user.Id, request.RefreshToken);
+            await _tokenService.RevokeTokenAsync(user.Id, request.RefreshToken, "RefreshToken");
 
             var bearerToken = await _bearerTokenService.GenerateBearerTokenAsync(user, roles);
 
-            var refreshTokenNew = await _refreshTokenService.GenerateRefreshTokenAsync(user);
+            var refreshTokenNew = await _tokenService.GenerateTokenAsync(user, "RefreshToken");
 
             return new RefreshTokenCommandDto
             {

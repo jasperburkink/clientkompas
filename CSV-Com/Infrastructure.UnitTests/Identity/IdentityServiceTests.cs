@@ -21,7 +21,7 @@ namespace Infrastructure.UnitTests.Identity
         private readonly Mock<IUserClaimsPrincipalFactory<AuthenticationUser>> _userClaimsPrincipalFactoryMock;
         private readonly Mock<IAuthorizationService> _authorizationServiceMock;
         private readonly Mock<IHasher> _hasherMock;
-        private readonly Mock<IRefreshTokenService> _refreshTokenServiceMock;
+        private readonly Mock<ITokenService> _refreshTokenServiceMock;
         private readonly Mock<IEmailService> _emailServiceMock;
 
         public IdentityServiceTests()
@@ -31,7 +31,7 @@ namespace Infrastructure.UnitTests.Identity
             _userClaimsPrincipalFactoryMock = new Mock<IUserClaimsPrincipalFactory<AuthenticationUser>>();
             _authorizationServiceMock = new Mock<IAuthorizationService>();
             _hasherMock = new Mock<IHasher>();
-            _refreshTokenServiceMock = new Mock<IRefreshTokenService>();
+            _refreshTokenServiceMock = new Mock<ITokenService>();
             _emailServiceMock = new Mock<IEmailService>();
         }
 

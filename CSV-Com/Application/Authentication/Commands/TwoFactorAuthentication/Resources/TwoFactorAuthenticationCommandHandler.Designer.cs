@@ -71,11 +71,11 @@ namespace Application.Authentication.Commands.TwoFactorAuthentication.Resources 
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to UserId is verplicht..
+        ///   Looks up a localized string similar to U bent niet ingelogd..
         /// </summary>
-        internal static string UserIdRequired {
+        internal static string UserNotLoggedIn {
             get {
-                return ResourceManager.GetString("UserIdRequired", resourceCulture);
+                return ResourceManager.GetString("UserNotLoggedIn", resourceCulture);
             }
         }
     }

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure.Identity
 {
-    public class RefreshToken : IdentityUserToken<string>, IToken
+    public class TwoFactorPendingToken : IdentityUserToken<string>, IToken
     {
         public required DateTime ExpiresAt { get; set; }
 

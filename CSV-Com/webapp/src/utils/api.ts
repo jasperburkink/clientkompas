@@ -222,7 +222,7 @@ export const login2FA = async (loginCommand: TwoFactorAuthenticationCommand): Pr
         body: JSON.stringify(loginCommand)
     };
 
-    const response = await fetch(`${apiUrl}Authentication`, requestOptions);     
+    const response = await fetch(`${apiUrl}Authentication/TwoFactorLogin`, requestOptions);     
     
     return handleApiResonse<TwoFactorAuthenticationCommandDto>(response);
 }

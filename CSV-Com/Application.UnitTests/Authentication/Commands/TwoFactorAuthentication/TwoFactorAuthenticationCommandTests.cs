@@ -17,7 +17,7 @@ namespace Application.UnitTests.Authentication.Commands.TwoFactorAuthentication
         private const string TOKEN = "123456";
         private readonly Mock<IIdentityService> _identityServiceMock;
         private readonly Mock<IBearerTokenService> _bearerTokenServiceMock;
-        private readonly Mock<IRefreshTokenService> _refreshTokenServiceMock;
+        private readonly Mock<ITokenService> _tokenServiceMock;
         private readonly Mock<IResourceMessageProvider> _resourceMessageProviderMock;
 
         public TwoFactorAuthenticationCommandTests()
@@ -48,8 +48,8 @@ namespace Application.UnitTests.Authentication.Commands.TwoFactorAuthentication
                 It.IsAny<List<string>>())
             ).ReturnsAsync(nameof(TOKEN));
 
-            _refreshTokenServiceMock = new Mock<IRefreshTokenService>();
-            _refreshTokenServiceMock.Setup(mock => mock.GenerateRefreshTokenAsync(It.IsAny<AuthenticationUser>())).ReturnsAsync("RefreshToken");
+            _tokenServiceMock = new Mock<ITokenService>();
+            _tokenServiceMock.Setup(mock => mock.GenerateTokenAsync(It.IsAny<AuthenticationUser>(), It.IsAny<string>())).ReturnsAsync("RefreshToken");
 
             _resourceMessageProviderMock = new Mock<IResourceMessageProvider>();
             _resourceMessageProviderMock.Setup(mock => mock.GetMessage(It.IsAny<Type>(), It.IsAny<string>())).Returns("InvalidToken");
@@ -57,7 +57,7 @@ namespace Application.UnitTests.Authentication.Commands.TwoFactorAuthentication
             _handler = new TwoFactorAuthenticationCommandHandler(
                 _identityServiceMock.Object,
                 _bearerTokenServiceMock.Object,
-                _refreshTokenServiceMock.Object,
+                _tokenServiceMock.Object,
                 _resourceMessageProviderMock.Object);
         }
 

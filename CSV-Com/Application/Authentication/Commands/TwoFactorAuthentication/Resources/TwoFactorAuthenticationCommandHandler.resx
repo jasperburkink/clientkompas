@@ -120,4 +120,7 @@
   <data name="InvalidToken" xml:space="preserve">
     <value>Ongeldige token.</value>
   </data>
+  <data name="UserNotLoggedIn" xml:space="preserve">
+    <value>U bent niet ingelogd.</value>
+  </data>
 </root>

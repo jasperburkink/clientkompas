@@ -2,6 +2,7 @@
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Models;
+using Domain.Authentication.Constants;
 
 namespace Application.Authentication.Commands.Login
 {
@@ -16,11 +17,11 @@ namespace Application.Authentication.Commands.Login
     {
         private readonly IIdentityService _identityService;
         private readonly IBearerTokenService _bearerTokenService;
-        private readonly IRefreshTokenService _refreshTokenService;
+        private readonly ITokenService _refreshTokenService;
         private readonly IResourceMessageProvider _resourceMessageProvider;
         private readonly IEmailService _emailService;
 
-        public LoginCommandHandler(IIdentityService identityService, IBearerTokenService bearerTokenService, IRefreshTokenService refreshTokenService, IResourceMessageProvider resourceMessageProvider, IEmailService emailService)
+        public LoginCommandHandler(IIdentityService identityService, IBearerTokenService bearerTokenService, ITokenService refreshTokenService, IResourceMessageProvider resourceMessageProvider, IEmailService emailService)
         {
             _identityService = identityService;
             _bearerTokenService = bearerTokenService;
@@ -40,22 +41,27 @@ namespace Application.Authentication.Commands.Login
 
             if (loggedInUser.User.TwoFactorEnabled)
             {
-                var twoFactorAuthenticationToken = await _identityService.Get2FATokenAsync(loggedInUser.User.Id);
+                // Token value that user needs to enter
+                var twoFactorAuthenticationTokenValue = await _identityService.Get2FATokenAsync(loggedInUser.User.Id);
+
+                // Security token for checking loginstatus user
+                var twoFactorPendingTokenValue = await _refreshTokenService.GenerateTokenAsync(loggedInUser.User, "TwoFactorPendingToken");
 
                 // Send the token via email
-                await _emailService.SendEmailAsync(loggedInUser.User.Email, "Two-factor authentication token", twoFactorAuthenticationToken);
+                await _emailService.SendEmailAsync(loggedInUser.User.Email, "Two-factor authentication token", twoFactorAuthenticationTokenValue);
 
                 return new LoginCommandDto
                 {
                     Success = true,
                     UserId = loggedInUser.User.Id,
-                    TwoFactorAuthenticationEnabled = loggedInUser.User.TwoFactorEnabled
+                    TwoFactorPendingToken = twoFactorPendingTokenValue,
+                    ExpiresAt = DateTime.UtcNow.Add(TwoFactorPendingTokenConstants.TOKEN_TIMEOUT)
                 };
             }
             else
             {
                 var bearerToken = await _bearerTokenService.GenerateBearerTokenAsync(loggedInUser.User, loggedInUser.Roles); // UserInfo & roles are processed inside the bearertoken claims
-                var refreshToken = await _refreshTokenService.GenerateRefreshTokenAsync(loggedInUser.User);
+                var refreshToken = await _refreshTokenService.GenerateTokenAsync(loggedInUser.User, "RefreshToken");
 
                 return new LoginCommandDto
                 {

@@ -1,6 +1,6 @@
 ﻿namespace Domain.Authentication.Domain
 {
-    public interface IRefreshToken
+    public interface IToken
     {
         string UserId { get; set; }
 

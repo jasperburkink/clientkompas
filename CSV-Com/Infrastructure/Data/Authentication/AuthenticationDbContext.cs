@@ -12,6 +12,8 @@ namespace Infrastructure.Data.Authentication
 
         public DbSet<RefreshToken> RefreshTokens { get; set; }
 
+        public DbSet<TwoFactorPendingToken> TwoFactorPendingTokens { get; set; }
+
         public AuthenticationDbContext(DbContextOptions<AuthenticationDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder builder)
