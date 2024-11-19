@@ -79,7 +79,10 @@ const Login = () => {
         if (apiResult.Ok) {            
             if(apiResult.ReturnObject?.success === true){
                 // Check if the user needs to supply a 2FA token to login
-                if(apiResult.ReturnObject?.twofactorpendingtoken && apiResult.ReturnObject?.userid) {                    
+                if(apiResult.ReturnObject?.twofactorpendingtoken && apiResult.ReturnObject?.userid) {  
+                    // Add token to the session
+                    sessionStorage.setItem('twofactorpendingtoken', apiResult.ReturnObject?.twofactorpendingtoken);
+                    
                     navigate(`/login-2fa/${apiResult.ReturnObject?.userid}`); // TODO: waar bewaar ik de expiredat? apiResult.ReturnObject?.expiresat
                 }
                 // User logged in successfully

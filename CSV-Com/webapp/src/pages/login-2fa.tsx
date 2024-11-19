@@ -36,7 +36,8 @@ const Login2FA = () => {
 
     const initialLogin2FACommand: TwoFactorAuthenticationCommand = {
         userid: userid!,
-        token: ""
+        token: "",
+        twofactorpendingtoken: localStorage.getItem('twofactorpendingtoken')!
     };
 
     const [validationErrors, setValidationErrors] = useState<ValidationErrorHash>({});
@@ -179,7 +180,9 @@ const Login2FA = () => {
                             dataTestId='button.login'
                         />
 
-                        <Button buttonType={{type:"NotSolid"}} text="Button2" className='w-200px h-50px' onClick={()=> {alert('Button2');}} />
+                        <Button buttonType={{type:"NotSolid"}} text="Button2" className='w-200px h-50px' onClick={()=> {
+                            
+                        }} />
                     </div>
                 </div>
             </div>
