@@ -25,6 +25,7 @@ import ConfirmPopup from "components/common/confirm-popup";
 import { useNavigate } from "react-router-dom";
 import { BearerToken } from "types/common/bearer-token";
 import RefreshTokenService from "utils/refresh-token-service";
+import moment from "moment";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -83,7 +84,10 @@ const Login = () => {
                     // Add token to the session
                     sessionStorage.setItem('twofactorpendingtoken', apiResult.ReturnObject?.twofactorpendingtoken);
                     
-                    navigate(`/login-2fa/${apiResult.ReturnObject?.userid}`); // TODO: waar bewaar ik de expiredat? apiResult.ReturnObject?.expiresat
+                    const expiryDate = new Date(apiResult.ReturnObject?.expiresat);                    
+                    const remainingTimeInSeconds = Math.floor((expiryDate.getTime() - new Date().getTime()) / 1000);
+
+                    navigate(`/login-2fa/${apiResult.ReturnObject?.userid}/${remainingTimeInSeconds}`);
                 }
                 // User logged in successfully
                 else if (apiResult.ReturnObject?.bearertoken && apiResult.ReturnObject?.refreshtoken) {

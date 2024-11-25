@@ -28,6 +28,7 @@ import RefreshTokenService from "utils/refresh-token-service";
 import TwoFactorAuthenticationCommand from "types/model/login-2fa/login-2fa-command";
 import TwoFactorAuthenticationCommandDto from "types/model/login-2fa/login-2fa-command-dto";
 import { Label } from "components/common/label";
+import { Moment } from "moment";
 
 const Login2FA = () => {
     const navigate = useNavigate();
@@ -37,7 +38,7 @@ const Login2FA = () => {
     const initialLogin2FACommand: TwoFactorAuthenticationCommand = {
         userid: userid!,
         token: "",
-        twofactorpendingtoken: localStorage.getItem('twofactorpendingtoken')!
+        twofactorpendingtoken: sessionStorage.getItem('twofactorpendingtoken')!
     };
 
     const [validationErrors, setValidationErrors] = useState<ValidationErrorHash>({});
@@ -48,6 +49,7 @@ const Login2FA = () => {
     const [login2FACommand, setLogin2FACommand] = useState<TwoFactorAuthenticationCommand>(initialLogin2FACommand);
     const [bearertoken, setBearerToken] = useState<BearerToken | null>(sessionStorage.getItem('token') ? BearerToken.deserialize(sessionStorage.getItem('token')!) : null);
     const [refreshtoken, setRefreshToken] = useState<string | null>(RefreshTokenService.getInstance().getRefreshToken() ? RefreshTokenService.getInstance().getRefreshToken() : null);
+    const [validUntilDateTime, setValidUntilDateTime] = useState<Moment>();
     
     useEffect(() => {
         if(bearertoken) {
@@ -157,6 +159,8 @@ const Login2FA = () => {
                             onChange={(value) => handleLogin2FACommandInputChange('token', value)}
                             errors={validationErrors.username} 
                             dataTestId='token' />
+
+                        <Label text={`De verstuurde code is nog ${validUntilDateTime} geldig.`} />
 
                         <SaveButton 
                             buttonText="Inloggen" 
