@@ -22,7 +22,7 @@ root.render(
                 <Routes>
                     <Route path='/' element={<App />} />
                     <Route path='/login' element={<Login />} />
-                    <Route path='/login-2fa/:userid' element={<Login2FA />} />
+                    <Route path='/login-2fa/:userid/:remainingtimeinseconds' element={<Login2FA />} />
                     <Route path='/password-forgotten' element={<RequestResetPassword />} />
                     <Route path='/reset-password/:emailaddress/:token' element={<ResetPassword />} />
                     <Route path='/unauthorized' element={<Unauthorized />} />

@@ -29,11 +29,13 @@ import TwoFactorAuthenticationCommand from "types/model/login-2fa/login-2fa-comm
 import TwoFactorAuthenticationCommandDto from "types/model/login-2fa/login-2fa-command-dto";
 import { Label } from "components/common/label";
 import { Moment } from "moment";
+import moment from "moment";
+import { CountdownButton } from "components/common/countdown-button";
 
 const Login2FA = () => {
     const navigate = useNavigate();
 
-    const { userid } = useParams();    
+    const { userid, remainingtimeinseconds } = useParams();
 
     const initialLogin2FACommand: TwoFactorAuthenticationCommand = {
         userid: userid!,
@@ -49,7 +51,7 @@ const Login2FA = () => {
     const [login2FACommand, setLogin2FACommand] = useState<TwoFactorAuthenticationCommand>(initialLogin2FACommand);
     const [bearertoken, setBearerToken] = useState<BearerToken | null>(sessionStorage.getItem('token') ? BearerToken.deserialize(sessionStorage.getItem('token')!) : null);
     const [refreshtoken, setRefreshToken] = useState<string | null>(RefreshTokenService.getInstance().getRefreshToken() ? RefreshTokenService.getInstance().getRefreshToken() : null);
-    const [validUntilDateTime, setValidUntilDateTime] = useState<Moment>();
+    const [remainingSecondsTokenValid, setRemainingSecondsTokenValid] = useState<number>(parseInt(remainingtimeinseconds!, 10));
     
     useEffect(() => {
         if(bearertoken) {
@@ -69,6 +71,20 @@ const Login2FA = () => {
             message: "Dit is een foutmelding"
         }
     });
+
+    // Countdown seconds token is valid
+    useEffect(() => {
+        const interval = setInterval(() => {
+          setRemainingSecondsTokenValid((prev) => Math.max(prev - 1, 0)); 
+        }, 1000);
+    
+        return () => clearInterval(interval);
+      }, []);
+
+    const formatTime = (seconds: number) => {
+        const duration = moment.duration(seconds, "seconds");
+        return `${duration.minutes()} minuten en ${duration.seconds()} seconden`;
+      };
 
     const handleLogin2FACommandInputChange = (fieldName: string, value: string) => {
         setLogin2FACommand(prevOrganization => ({
@@ -160,7 +176,7 @@ const Login2FA = () => {
                             errors={validationErrors.username} 
                             dataTestId='token' />
 
-                        <Label text={`De verstuurde code is nog ${validUntilDateTime} geldig.`} />
+                        <Label text={`De verstuurde code is nog ${formatTime(remainingSecondsTokenValid)} geldig.`} />
 
                         <SaveButton 
                             buttonText="Inloggen" 
@@ -184,9 +200,14 @@ const Login2FA = () => {
                             dataTestId='button.login'
                         />
 
-                        <Button buttonType={{type:"NotSolid"}} text="Button2" className='w-200px h-50px' onClick={()=> {
+                        <CountdownButton
+                            buttonType={{ type: "NotSolid" }}
+                            text={`Countdown from ${COUNTDOWN_SECONDS}`}
+                            className='w-200px h-50px' 
+                            countdownMax={COUNTDOWN_SECONDS}
+                            onClick={()=> {
                             
-                        }} />
+                            }} />
                     </div>
                 </div>
             </div>
