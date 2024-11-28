@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Application.Authentication.Commands.Login.Resources {
+namespace Application.Authentication.Commands.ResendTwoFactorAuthenticationToken.Resources {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace Application.Authentication.Commands.Login.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class LoginCommandHandler {
+    internal class ResendTwoFactorAuthenticationTokenCommandHandler {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal LoginCommandHandler() {
+        internal ResendTwoFactorAuthenticationTokenCommandHandler() {
         }
         
         /// <summary>
@@ -39,7 +39,8 @@ namespace Application.Authentication.Commands.Login.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Application.Authentication.Commands.Login.Resources.LoginCommandHandler", typeof(LoginCommandHandler).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Application.Authentication.Commands.ResendTwoFactorAuthenticationToken.Resources." +
+                            "ResendTwoFactorAuthenticationTokenCommandHandler", typeof(ResendTwoFactorAuthenticationTokenCommandHandler).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,11 +62,11 @@ namespace Application.Authentication.Commands.Login.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Login is mislukt. Onjuiste gebruikersnaam en/of wachtwoord..
+        ///   Looks up a localized string similar to Er is geen e-mailadres bekend..
         /// </summary>
-        internal static string InvalidLogin {
+        internal static string NoEmailAddress {
             get {
-                return ResourceManager.GetString("InvalidLogin", resourceCulture);
+                return ResourceManager.GetString("NoEmailAddress", resourceCulture);
             }
         }
         

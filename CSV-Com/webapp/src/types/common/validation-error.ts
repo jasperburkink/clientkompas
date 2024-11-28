@@ -42,3 +42,7 @@ export const filterValidationErrors = (errors: ValidationErrorHash, name: string
 
     return validationErrors;
 };
+
+export const isHashEmpty = (hash: object): boolean => {
+    return Object.keys(hash).length === 0;
+};

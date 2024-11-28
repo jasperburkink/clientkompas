@@ -17,6 +17,8 @@ namespace Application.Authentication.Commands.TwoFactorAuthentication
 
     public class TwoFactorAuthenticationCommandHandler : IRequestHandler<TwoFactorAuthenticationCommand, TwoFactorAuthenticationCommandDto>
     {
+        private const string RESOURCE_KEY_USERNOTLOGGEDIN = "UserNotLoggedIn";
+        private const string RESOURCE_KEY_INVALIDTOKEN = "InvalidToken";
         private readonly IIdentityService _identityService;
         private readonly IBearerTokenService _bearerTokenService;
         private readonly ITokenService _tokenService;
@@ -33,23 +35,23 @@ namespace Application.Authentication.Commands.TwoFactorAuthentication
         public async Task<TwoFactorAuthenticationCommandDto> Handle(TwoFactorAuthenticationCommand request, CancellationToken cancellationToken)
         {
             var user = await _identityService.GetUserAsync(request.UserId);
-            var twoFactorPendingToken = await _tokenService.GetTokenAsync(request.TwoFactorPendingToken, "TwoFactorPendingToken");
+            var twoFactorPendingToken = await _tokenService.GetTokenAsync(request.TwoFactorPendingToken, nameof(request.TwoFactorPendingToken));
 
             if (!IsUserLoggedIn(request, user, twoFactorPendingToken))
             {
-                throw new InvalidLoginException(_resourceMessageProvider.GetMessage(typeof(TwoFactorAuthenticationCommandHandler), "UserNotLoggedIn"));
+                throw new InvalidLoginException(_resourceMessageProvider.GetMessage(typeof(TwoFactorAuthenticationCommandHandler), RESOURCE_KEY_USERNOTLOGGEDIN));
             }
 
             var loggedInResult = await _identityService.Login2FAAsync(request.UserId, request.Token);
 
-            if (IsInvalidLogin(loggedInResult))
+            if (IsInvalidLogin(loggedInResult) || !await _tokenService.ValidateTokenAsync(user.Id, twoFactorPendingToken.Value, nameof(request.TwoFactorPendingToken)))
             {
-                throw new InvalidLoginException(_resourceMessageProvider.GetMessage(typeof(TwoFactorAuthenticationCommandHandler), "InvalidToken"));
+                throw new InvalidLoginException(_resourceMessageProvider.GetMessage(typeof(TwoFactorAuthenticationCommandHandler), RESOURCE_KEY_INVALIDTOKEN));
             }
 
             var bearerToken = await _bearerTokenService.GenerateBearerTokenAsync(loggedInResult.User, loggedInResult.Roles); // UserInfo & roles are processed inside the bearertoken
 
-            var refreshToken = await _tokenService.GenerateTokenAsync(loggedInResult.User, "RefreshToken");
+            var refreshToken = await _tokenService.GenerateTokenAsync(loggedInResult.User, nameof(TwoFactorAuthenticationCommandDto.RefreshToken));
 
             return new TwoFactorAuthenticationCommandDto
             {
@@ -59,9 +61,11 @@ namespace Application.Authentication.Commands.TwoFactorAuthentication
             };
         }
 
-        private static bool IsUserLoggedIn(TwoFactorAuthenticationCommand request, AuthenticationUser user, IToken? twoFactorPendingToken)
+        private bool IsUserLoggedIn(TwoFactorAuthenticationCommand request, AuthenticationUser user, IToken? twoFactorPendingToken)
         {
-            return user != null && twoFactorPendingToken != null && twoFactorPendingToken.UserId == request.UserId;
+            return user != null
+                && twoFactorPendingToken != null
+                && twoFactorPendingToken.UserId == request.UserId;
         }
 
         private static bool IsInvalidLogin(LoggedInResult loggedInUser)

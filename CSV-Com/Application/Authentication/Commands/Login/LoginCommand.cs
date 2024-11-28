@@ -15,17 +15,19 @@ namespace Application.Authentication.Commands.Login
 
     public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginCommandDto>
     {
+        private const string RESOURCE_KEY_INVALIDLOGIN = "InvalidLogin";
+        private const string RESOURCE_KEY_NOEMAILADDRESS = "NoEmailAddress";
         private readonly IIdentityService _identityService;
         private readonly IBearerTokenService _bearerTokenService;
-        private readonly ITokenService _refreshTokenService;
+        private readonly ITokenService _tokenService;
         private readonly IResourceMessageProvider _resourceMessageProvider;
         private readonly IEmailService _emailService;
 
-        public LoginCommandHandler(IIdentityService identityService, IBearerTokenService bearerTokenService, ITokenService refreshTokenService, IResourceMessageProvider resourceMessageProvider, IEmailService emailService)
+        public LoginCommandHandler(IIdentityService identityService, IBearerTokenService bearerTokenService, ITokenService tokenService, IResourceMessageProvider resourceMessageProvider, IEmailService emailService)
         {
             _identityService = identityService;
             _bearerTokenService = bearerTokenService;
-            _refreshTokenService = refreshTokenService;
+            _tokenService = tokenService;
             _resourceMessageProvider = resourceMessageProvider;
             _emailService = emailService;
         }
@@ -36,7 +38,7 @@ namespace Application.Authentication.Commands.Login
 
             if (IsInvalidLogin(loggedInUser))
             {
-                throw new InvalidLoginException(_resourceMessageProvider.GetMessage(typeof(LoginCommandHandler), "InvalidLogin"));
+                throw new InvalidLoginException(_resourceMessageProvider.GetMessage(typeof(LoginCommandHandler), RESOURCE_KEY_INVALIDLOGIN));
             }
 
             if (loggedInUser.User.TwoFactorEnabled)
@@ -44,10 +46,15 @@ namespace Application.Authentication.Commands.Login
                 // Token value that user needs to enter
                 var twoFactorAuthenticationTokenValue = await _identityService.Get2FATokenAsync(loggedInUser.User.Id);
 
-                // Security token for checking loginstatus user
-                var twoFactorPendingTokenValue = await _refreshTokenService.GenerateTokenAsync(loggedInUser.User, "TwoFactorPendingToken");
+                if (string.IsNullOrEmpty(loggedInUser.User.Email))
+                {
+                    throw new NotFoundException(_resourceMessageProvider.GetMessage(typeof(LoginCommandHandler), RESOURCE_KEY_NOEMAILADDRESS));
+                }
 
-                // Send the token via email
+                // Security token for checking loginstatus user
+                var twoFactorPendingTokenValue = await _tokenService.GenerateTokenAsync(loggedInUser.User, nameof(LoginCommandDto.TwoFactorPendingToken));
+
+                // Send the token via email TODO: user emailmodule
                 await _emailService.SendEmailAsync(loggedInUser.User.Email, "Two-factor authentication token", twoFactorAuthenticationTokenValue);
 
                 return new LoginCommandDto
@@ -61,7 +68,7 @@ namespace Application.Authentication.Commands.Login
             else
             {
                 var bearerToken = await _bearerTokenService.GenerateBearerTokenAsync(loggedInUser.User, loggedInUser.Roles); // UserInfo & roles are processed inside the bearertoken claims
-                var refreshToken = await _refreshTokenService.GenerateTokenAsync(loggedInUser.User, "RefreshToken");
+                var refreshToken = await _tokenService.GenerateTokenAsync(loggedInUser.User, nameof(LoginCommandDto.RefreshToken));
 
                 return new LoginCommandDto
                 {

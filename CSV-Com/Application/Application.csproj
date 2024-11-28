@@ -54,6 +54,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>LoginCommandHandler.nl.resx</DependentUpon>
     </Compile>
+    <Compile Update="Authentication\Commands\ResendTwoFactorAuthenticationToken\Resources\ResendTwoFactorAuthenticationTokenCommandHandler.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResendTwoFactorAuthenticationTokenCommandHandler.resx</DependentUpon>
+    </Compile>
     <Compile Update="Authentication\Commands\TwoFactorAuthentication\Resources\TwoFactorAuthenticationCommandHandler.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -154,6 +159,10 @@
     <EmbeddedResource Update="Authentication\Commands\Login\Resources\LoginCommandHandler.nl.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>LoginCommandHandler.nl.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Authentication\Commands\ResendTwoFactorAuthenticationToken\Resources\ResendTwoFactorAuthenticationTokenCommandHandler.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResendTwoFactorAuthenticationTokenCommandHandler.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Authentication\Commands\TwoFactorAuthentication\Resources\TwoFactorAuthenticationCommandHandler.resx">
       <Generator>ResXFileCodeGenerator</Generator>

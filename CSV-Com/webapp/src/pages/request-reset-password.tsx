@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-import { ValidationErrorHash } from "types/common/validation-error";
+import { isHashEmpty, ValidationErrorHash } from "types/common/validation-error";
 import StatusEnum from "types/common/StatusEnum";
 import { ReactComponent as LogoLightSVG } from 'assets/CK_light_logo.svg';
 import { ReactComponent as LogoDarkSVG } from 'assets/CK_dark_logo.svg';
@@ -73,7 +73,7 @@ const RequestResetPassword = () => {
             }
         }
         else {
-            if(apiResult.ValidationErrors) {
+            if(apiResult.ValidationErrors && !isHashEmpty(apiResult.ValidationErrors)) {
                 setValidationErrors(apiResult.ValidationErrors);
             }
             else {

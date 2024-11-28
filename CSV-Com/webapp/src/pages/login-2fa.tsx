@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import Menu from 'components/common/menu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-import { ValidationErrorHash } from "types/common/validation-error";
+import { isHashEmpty, ValidationErrorHash } from "types/common/validation-error";
 import StatusEnum from "types/common/StatusEnum";
 import { ReactComponent as LogoLightSVG } from 'assets/CK_light_logo.svg';
 import { ReactComponent as LogoDarkSVG } from 'assets/CK_dark_logo.svg';
@@ -14,7 +14,7 @@ import PasswordField from "components/common/password-field";
 import { LinkButton } from "components/common/link-button";
 import { Button } from "components/common/button";
 import SaveButton from "components/common/save-button";
-import { login, login2FA } from "utils/api";
+import { login2FA, resend2FAToken } from "utils/api";
 import LoginCommand from "types/model/login/login-command";
 import LoginCommandDto from "types/model/login/login-command-dto";
 import ApiResult, { getErrorMessage } from "types/common/api-result";
@@ -31,8 +31,11 @@ import { Label } from "components/common/label";
 import { Moment } from "moment";
 import moment from "moment";
 import { CountdownButton } from "components/common/countdown-button";
+import ResendTwoFactorAuthenticationTokenCommand from "types/model/resend-2fa-token/resend-2fa-token-command";
 
 const Login2FA = () => {
+    const COUNTDOWN_SECONDS: number = 60;
+
     const navigate = useNavigate();
 
     const { userid, remainingtimeinseconds } = useParams();
@@ -48,6 +51,7 @@ const Login2FA = () => {
     const [status, setStatus] = useState(StatusEnum.IDLE);
     const [confirmMessage, setConfirmMessage] = useState<string>('');
     const [isConfirmPopupOneButtonOpen, setConfirmPopupOneButtonOpen] = useState<boolean>(false);
+    const [confirmOnClose, setConfirmOnClose] = useState<() => void>(() => {});
     const [login2FACommand, setLogin2FACommand] = useState<TwoFactorAuthenticationCommand>(initialLogin2FACommand);
     const [bearertoken, setBearerToken] = useState<BearerToken | null>(sessionStorage.getItem('token') ? BearerToken.deserialize(sessionStorage.getItem('token')!) : null);
     const [refreshtoken, setRefreshToken] = useState<string | null>(RefreshTokenService.getInstance().getRefreshToken() ? RefreshTokenService.getInstance().getRefreshToken() : null);
@@ -96,7 +100,8 @@ const Login2FA = () => {
     const handleLogin2FAResult = (
         apiResult: ApiResult<TwoFactorAuthenticationCommandDto>, 
         setConfirmMessage: React.Dispatch<React.SetStateAction<string>>, 
-        setConfirmPopupOneButtonOpen: React.Dispatch<React.SetStateAction<boolean>>, 
+        setConfirmPopupOneButtonOpen: React.Dispatch<React.SetStateAction<boolean>>,
+        setConfirmOnClose: React.Dispatch<React.SetStateAction<() => void>>, 
         setCvsError: React.Dispatch<React.SetStateAction<CVSError>>, 
         setErrorPopupOpen: React.Dispatch<React.SetStateAction<boolean>>, 
         setBearerToken: React.Dispatch<React.SetStateAction<BearerToken | null>>) => {
@@ -107,6 +112,7 @@ const Login2FA = () => {
 
                 setConfirmMessage('Inloggen succesvol.');
                 setConfirmPopupOneButtonOpen(true);
+                setConfirmOnClose(() => handleLoginConfirmedClick);
                 setBearerToken(new BearerToken(apiResult.ReturnObject.bearertoken));
                 setRefreshToken(apiResult.ReturnObject.refreshtoken);
             }
@@ -122,19 +128,20 @@ const Login2FA = () => {
             }
         }
         else {
-            if(apiResult.ValidationErrors) {
+            if(apiResult.ValidationErrors && !isHashEmpty(apiResult.ValidationErrors)) {
                 setValidationErrors(apiResult.ValidationErrors);
             }
+            else {
+                if(apiResult.Title) {
+                    setCvsError({
+                        id: 0,
+                        errorcode: 'E',
+                        message: `Er is een opgetreden tijdens het inloggen.\n\nFoutmelding: ${getErrorMessage<TwoFactorAuthenticationCommandDto>(apiResult)}`
+                    });
+                    setErrorPopupOpen(true);
 
-            if(apiResult.Title) {
-                setCvsError({
-                    id: 0,
-                    errorcode: 'E',
-                    message: `Er is een opgetreden tijdens het inloggen. Foutmelding: ${getErrorMessage<TwoFactorAuthenticationCommandDto>(apiResult)}`
-                });
-                setErrorPopupOpen(true);
-
-                setValidationErrors({});
+                    setValidationErrors({});
+                }
             }
         }
 
@@ -144,6 +151,56 @@ const Login2FA = () => {
     const handleLoginConfirmedClick = () => {
         setConfirmPopupOneButtonOpen(false);
         navigate(`/clients/`); // TODO: navigate to homepage
+    };
+
+    const handleResend2FATokenConfirmedClick = () => {
+        setConfirmPopupOneButtonOpen(false);
+    };
+
+    const resendToken = async () => {
+        try {
+            let command: ResendTwoFactorAuthenticationTokenCommand = {
+                userid: userid!,
+                twofactorpendingtoken: sessionStorage.getItem('twofactorpendingtoken')!
+            }
+
+            var apiResult = await resend2FAToken(command);
+
+            if(apiResult.Ok && apiResult.ReturnObject){
+                const expiryDate = new Date(apiResult.ReturnObject.expiresat);                    
+                const remainingTimeInSeconds = Math.floor((expiryDate.getTime() - new Date().getTime()) / 1000);
+                setRemainingSecondsTokenValid(remainingTimeInSeconds);
+                sessionStorage.setItem('twofactorpendingtoken', apiResult.ReturnObject.twofactorpendingtoken);
+                handleLogin2FACommandInputChange('twofactorpendingtoken', apiResult.ReturnObject.twofactorpendingtoken);
+                
+                setConfirmMessage('Token is opnieuw verstuurd.');
+                setConfirmPopupOneButtonOpen(true);
+                setConfirmOnClose(() => handleResend2FATokenConfirmedClick);
+            }
+            else{
+                if(apiResult.ValidationErrors && !isHashEmpty(apiResult.ValidationErrors)){
+                    setValidationErrors(apiResult.ValidationErrors);
+                }
+                else{
+                    setCvsError({
+                        id: 0,
+                        errorcode: 'E',
+                        message: `Er is een opgetreden tijdens het opnieuw aanvragen van een token. Foutmelding: ${getErrorMessage<ResendTwoFactorAuthenticationTokenCommand>(apiResult)}.`
+                    });
+                    setErrorPopupOpen(true);
+                }
+        }
+        }
+        catch(error: any) {
+            setCvsError({
+                id: 0,
+                errorcode: 'E',
+                message: `Er is een opgetreden tijdens het opnieuw aanvragen van een token. Foutmelding: ${error.message})}`
+            });
+            setErrorPopupOpen(true);
+
+            setValidationErrors({});
+        }
     };
 
     return(
@@ -173,10 +230,12 @@ const Login2FA = () => {
                             className="login-token" 
                             value={login2FACommand.token}                            
                             onChange={(value) => handleLogin2FACommandInputChange('token', value)}
-                            errors={validationErrors.username} 
+                            errors={validationErrors.token} 
                             dataTestId='token' />
 
-                        <Label text={`De verstuurde code is nog ${formatTime(remainingSecondsTokenValid)} geldig.`} />
+                        <Label 
+                            text={`De verstuurde code is nog ${formatTime(remainingSecondsTokenValid)} geldig.`}
+                            className="token-validity" />
 
                         <SaveButton 
                             buttonText="Inloggen" 
@@ -193,7 +252,8 @@ const Login2FA = () => {
                             onResult={(apiResult) => handleLogin2FAResult(
                                 apiResult, 
                                 setConfirmMessage, 
-                                setConfirmPopupOneButtonOpen, 
+                                setConfirmPopupOneButtonOpen,
+                                setConfirmOnClose,
                                 setCvsError, 
                                 setErrorPopupOpen, 
                                 setBearerToken)}
@@ -202,12 +262,10 @@ const Login2FA = () => {
 
                         <CountdownButton
                             buttonType={{ type: "NotSolid" }}
-                            text={`Countdown from ${COUNTDOWN_SECONDS}`}
-                            className='w-200px h-50px' 
+                            text="Code niet ontvangen"
+                            className='resend-button'
                             countdownMax={COUNTDOWN_SECONDS}
-                            onClick={()=> {
-                            
-                            }} />
+                            onClick={()=> resendToken()} />
                     </div>
                 </div>
             </div>
@@ -217,7 +275,7 @@ const Login2FA = () => {
                 message={confirmMessage}
                 isOpen={isConfirmPopupOneButtonOpen}
                 onClose={handleLoginConfirmedClick}
-                buttons={[{ text: 'Bevestigen', dataTestId: 'button.confirm', onClick: handleLoginConfirmedClick, buttonType: {type:"Solid"}}]} />
+                buttons={[{ text: 'Bevestigen', dataTestId: 'button.confirm', onClick: () => {confirmOnClose();}, buttonType: {type:"Solid"}}]} />
 
             <ErrorPopup 
                 error={cvsError} 

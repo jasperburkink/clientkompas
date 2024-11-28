@@ -127,12 +127,14 @@ namespace API.Filters
 
             var details = new ProblemDetails
             {
-                Status = StatusCodes.Status400BadRequest,
-                Title = exception.Message,
-                Type = "https://tools.ietf.org/html/rfc7235#section-3.1"
+                Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+                Title = exception.Message
             };
 
-            context.Result = new BadRequestObjectResult(details);
+            context.Result = new ObjectResult(details)
+            {
+                StatusCode = StatusCodes.Status400BadRequest
+            };
 
             context.ExceptionHandled = true;
         }

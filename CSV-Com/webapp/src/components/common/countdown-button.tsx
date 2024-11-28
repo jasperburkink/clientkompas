@@ -26,7 +26,7 @@ export const CountdownButton = (props: CountdownButtonProps) => {
         }
 
         let duration = moment.duration(remainingSeconds, 'seconds');
-        return `${duration.seconds()} seconden`;
+        return `${duration.asSeconds()} seconden`;
     };
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -43,8 +43,7 @@ export const CountdownButton = (props: CountdownButtonProps) => {
 
     return (
         <>
-        <Button {...props} buttonType={props.buttonType} onClick={handleClick} text={getTimeoutText(timeoutSeconds)} /> 
-        <p>{getTimeoutText(timeoutSeconds)}</p>
+        <Button {...props} buttonType={props.buttonType} onClick={handleClick} text={getTimeoutText(timeoutSeconds)} />
         </>
     )
 }
