@@ -176,15 +176,5 @@ namespace Application.FunctionalTests.Authentication.Commands.ResendTwoFactorAut
             // Assert
             await act.Should().ThrowAsync<InvalidLoginException>();
         }
-
-        [Test]
-        public async Task Handle_CorrectFlow_SuccessIsTrue()
-        {
-            // Act
-            var result = await SendAsync(_command);
-
-            // Assert
-
-        }
     }
 }

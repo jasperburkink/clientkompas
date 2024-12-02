@@ -43,6 +43,7 @@ namespace Application.FunctionalTests
                 mockIdentityService.Setup(s => s.LogoutAsync()).Returns(Task.CompletedTask);
                 mockIdentityService.Setup(s => s.ResetPasswordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(Result.Success);
                 mockIdentityService.Setup(s => s.Login2FAAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new LoggedInResult(true, AuthenticationUser, [Roles.Coach]));
+                mockIdentityService.Setup(s => s.Get2FATokenAsync(It.IsAny<string>())).ReturnsAsync("2FA");
                 services.RemoveAll<IIdentityService>();
                 services.AddSingleton(mockIdentityService.Object);
 

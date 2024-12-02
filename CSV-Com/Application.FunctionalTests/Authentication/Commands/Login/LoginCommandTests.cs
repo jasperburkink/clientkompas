@@ -23,6 +23,7 @@ namespace Application.FunctionalTests.Authentication.Commands.Login
         }
 
         [Test]
+        [Ignore("Skip until mock is removed from this project.")]
         public async Task Handle_CorrectFlow_ShouldBeLoggedIn()
         {
             // Act

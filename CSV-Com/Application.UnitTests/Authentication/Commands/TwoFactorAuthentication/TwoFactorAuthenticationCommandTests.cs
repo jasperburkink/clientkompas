@@ -5,6 +5,7 @@ using Application.Common.Interfaces.Authentication;
 using Application.Common.Models;
 using Domain.Authentication.Constants;
 using Domain.Authentication.Domain;
+using Infrastructure.Identity;
 using Moq;
 
 namespace Application.UnitTests.Authentication.Commands.TwoFactorAuthentication
@@ -31,6 +32,11 @@ namespace Application.UnitTests.Authentication.Commands.TwoFactorAuthentication
             };
 
             _identityServiceMock = new Mock<IIdentityService>();
+            _identityServiceMock.Setup(mock => mock.GetUserAsync(It.IsAny<string>())).ReturnsAsync(
+            new AuthenticationUser
+            {
+                Id = _userId,
+            });
             _identityServiceMock.Setup(mock => mock.Login2FAAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(
                 new LoggedInResult(
                     true,
@@ -49,7 +55,19 @@ namespace Application.UnitTests.Authentication.Commands.TwoFactorAuthentication
             ).ReturnsAsync(nameof(TOKEN));
 
             _tokenServiceMock = new Mock<ITokenService>();
+            _tokenServiceMock.Setup(mock => mock.GetTokenAsync(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(new TwoFactorPendingToken
+                {
+                    CreatedAt = DateTime.UtcNow,
+                    ExpiresAt = DateTime.UtcNow.AddMinutes(1),
+                    IsRevoked = false,
+                    IsUsed = false,
+                    Value = "RefreshToken",
+                    UserId = _userId
+                }
+                );
             _tokenServiceMock.Setup(mock => mock.GenerateTokenAsync(It.IsAny<AuthenticationUser>(), It.IsAny<string>())).ReturnsAsync("RefreshToken");
+            _tokenServiceMock.Setup(mock => mock.ValidateTokenAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
 
             _resourceMessageProviderMock = new Mock<IResourceMessageProvider>();
             _resourceMessageProviderMock.Setup(mock => mock.GetMessage(It.IsAny<Type>(), It.IsAny<string>())).Returns("InvalidToken");

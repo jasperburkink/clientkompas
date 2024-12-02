@@ -602,7 +602,7 @@ namespace Infrastructure.UnitTests.Identity
 
             var signInResult = SignInResult.Success;
 
-            _signInManagerMock.Setup(mock => mock.TwoFactorSignInAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>())).ReturnsAsync(signInResult);
+            _userManagerMock.Setup(mock => mock.VerifyTwoFactorTokenAsync(It.IsAny<AuthenticationUser>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
             _userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(user);
             _userManagerMock.Setup(x => x.GetRolesAsync(user));
 
