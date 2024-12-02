@@ -1,5 +1,6 @@
 ﻿using System.Data.Common;
 using Application.Common.Interfaces.Authentication;
+using Application.Common.Models;
 using Infrastructure.Data.Authentication;
 using Infrastructure.Data.CVS;
 using Microsoft.AspNetCore.Builder;
@@ -29,8 +30,9 @@ namespace Application.FunctionalTests
 
                 // Mock 
                 var mockIdentityService = new Mock<IIdentityService>();
-                mockIdentityService.Setup(s => s.LoginAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new Common.Models.LoggedInResult(true));
+                mockIdentityService.Setup(s => s.LoginAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new LoggedInResult(true));
                 mockIdentityService.Setup(s => s.LogoutAsync()).Returns(Task.CompletedTask);
+                mockIdentityService.Setup(s => s.ResetPasswordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(Result.Success);
                 services.RemoveAll<IIdentityService>();
                 services.AddSingleton(mockIdentityService.Object);
 

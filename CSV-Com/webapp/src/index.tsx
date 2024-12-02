@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './pages/App';
 import reportWebVitals from './utils/reportWebVitals';
-import preval from 'preval.macro'
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ClientContextWrapper, ClientRoute } from './pages/client-context';
@@ -11,6 +10,8 @@ import { OrganizationContextWrapper, OrganizationRoute } from 'pages/organizatio
 import Login from 'pages/login';
 import Unauthorized from 'pages/statuspages/unauthorized';
 import Forbidden from 'pages/statuspages/forbidden';
+import RequestResetPassword from 'pages/request-reset-password';
+import ResetPassword from 'pages/reset-password';
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 root.render(
@@ -20,6 +21,8 @@ root.render(
                 <Routes>
                     <Route path='/' element={<App />} />
                     <Route path='/login' element={<Login />} />
+                    <Route path='/password-forgotten' element={<RequestResetPassword />} />
+                    <Route path='/reset-password/:emailaddress/:token' element={<ResetPassword />} />
                     <Route path='/unauthorized' element={<Unauthorized />} />
                     <Route path='/forbidden' element={<Forbidden />} />
                     <Route path='/clients' element={<ClientContextWrapper clientRoute={ClientRoute.VIEW_CLIENT} />} />

@@ -24,5 +24,9 @@ namespace Application.Common.Interfaces.Authentication
         Task<bool> UserExistsAsync(string userId);
 
         Task<AuthenticationUser> GetUserAsync(string userId);
+
+        Task<Result> SendResetPasswordEmailAsync(string emailAddress);
+
+        Task<Result> ResetPasswordAsync(string emailAddress, string token, string newPassword);
     }
 }

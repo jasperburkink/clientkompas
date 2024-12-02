@@ -88,6 +88,7 @@ namespace Infrastructure
             services.AddScoped<IRefreshTokenService, RefreshTokenService>();
             services.AddScoped<IPasswordHasher<AuthenticationUser>, Argon2PasswordHasher>();
             services.AddScoped<IHasher, Argon2Hasher>();
+            services.AddScoped<IEmailService, EmailService>();
 
             services.AddAuthorization(options =>
             {

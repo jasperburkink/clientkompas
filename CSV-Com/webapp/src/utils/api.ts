@@ -22,6 +22,10 @@ import GetClientFullnameDto from "types/model/GetClientFullnameDto";
 import GetCoachingProgramTypesDto from "types/model/GetCoachingProgramTypesDto";
 import LogoutCommand from "types/model/logout/logout-command";
 import LogoutCommandDto from "types/model/logout/logout-command-dto";
+import RequestResetPasswordCommand from "types/model/request-reset-password/request-reset-password-command";
+import RequestResetPasswordCommandDto from "types/model/request-reset-password/request-reset-password-command-dto";
+import ResetPasswordCommandDto from "types/model/reset-password/reset-password-command-dto";
+import ResetPasswordCommand from "types/model/reset-password/reset-password-command";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -300,11 +304,42 @@ export const fetchCoachingProgramTypes = async (): Promise<GetCoachingProgramTyp
     return (await (fetchAPI<GetCoachingProgramTypesDto[]>(`${apiUrl}CoachingProgram/GetCoachingProgramTypes`))).ReturnObject!;
 }
 
-
 export const saveCoachingProgram = async (coachingProgram: CoachingProgramEdit): Promise<ApiResult<CoachingProgramEdit>> => {
     let method = coachingProgram.id > 0  ? 'PUT' : 'POST';
 
     return await fetchAPI(`${apiUrl}CoachingProgram`, method, coachingProgram);
+}
+
+export const requestResetPassword = async (requestResetPasswordCommand: RequestResetPasswordCommand): Promise<ApiResult<RequestResetPasswordCommandDto>> => {
+    let method = 'POST';
+
+    const requestOptions: RequestInit = {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestResetPasswordCommand)
+    };
+
+    const response = await fetch(`${apiUrl}Authentication/RequestResetPassword`, requestOptions);     
+    
+    return handleApiResonse<RequestResetPasswordCommandDto>(response);
+}
+
+export const resetPassword = async (resetPasswordCommand: ResetPasswordCommand): Promise<ApiResult<ResetPasswordCommandDto>> => {
+    let method = 'POST';
+
+    const requestOptions: RequestInit = {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(resetPasswordCommand)
+    };
+
+    const response = await fetch(`${apiUrl}Authentication/ResetPassword`, requestOptions);
+    
+    return handleApiResonse<ResetPasswordCommandDto>(response);
 }
 
 function processErrors(errors: { [key: string]: string[] }): string[] {

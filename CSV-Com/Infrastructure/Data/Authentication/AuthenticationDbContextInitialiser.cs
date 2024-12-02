@@ -1,6 +1,6 @@
-﻿using Domain.Authentication.Constants;
+﻿using Application.Common.Interfaces.Authentication;
+using Domain.Authentication.Constants;
 using Domain.Authentication.Domain;
-using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -9,17 +9,20 @@ namespace Infrastructure.Data.Authentication
 {
     public class AuthenticationDbContextInitialiser
     {
+        private const string DEFAULT_TEST_EMAILADDRESS = "ontwikkelaar@clientkompas.nl";
         private readonly ILogger<AuthenticationDbContextInitialiser> _logger;
         private readonly AuthenticationDbContext _context;
         private readonly UserManager<AuthenticationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IIdentityService _identityService;
 
-        public AuthenticationDbContextInitialiser(ILogger<AuthenticationDbContextInitialiser> logger, AuthenticationDbContext context, UserManager<AuthenticationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public AuthenticationDbContextInitialiser(ILogger<AuthenticationDbContextInitialiser> logger, AuthenticationDbContext context, UserManager<AuthenticationUser> userManager, RoleManager<IdentityRole> roleManager, IIdentityService identityService)
         {
             _logger = logger;
             _context = context;
             _userManager = userManager;
             _roleManager = roleManager;
+            _identityService = identityService;
         }
 
         public async Task InitialiseAsync()
@@ -77,24 +80,17 @@ namespace Infrastructure.Data.Authentication
             // Default users
             var password = $"{role.Name}{role.Name}1!";
 
-            var hasher = new Argon2Hasher();
-            var salt = hasher.GenerateSalt();
-            var passwordHash = hasher.HashString(password, salt);
+            var email = role.Name == nameof(Roles.SystemOwner) ? DEFAULT_TEST_EMAILADDRESS : role.Name;
 
-            var user = new AuthenticationUser
+            if (_userManager.Users.All(u => u.UserName != email))
             {
-                UserName = role.Name,
-                Email = role.Name,
-                Salt = salt,
-                PasswordHash = passwordHash
-            };
+                var (result, userId) = await _identityService.CreateUserAsync(email, password);
 
-            if (_userManager.Users.All(u => u.UserName != user.UserName))
-            {
-                await _userManager.CreateAsync(user);
+                var user = await _identityService.GetUserAsync(userId);
+
                 if (!string.IsNullOrWhiteSpace(role.Name))
                 {
-                    await _userManager.AddToRolesAsync(user, new[] { role.Name });
+                    await _userManager.AddToRolesAsync(user, new[] { role.Name }); // TODO: move the addroles to the indetityservice and remove usermanager from this class
                 }
             }
         }

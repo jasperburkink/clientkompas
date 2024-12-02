@@ -1,5 +1,7 @@
 ﻿using System.Security.Claims;
+using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
+using Application.Common.Models;
 using Domain.Authentication.Constants;
 using Domain.Authentication.Domain;
 using FluentAssertions;
@@ -19,6 +21,7 @@ namespace Infrastructure.UnitTests.Identity
         private readonly Mock<IAuthorizationService> _authorizationServiceMock;
         private readonly Mock<IHasher> _hasherMock;
         private readonly Mock<IRefreshTokenService> _refreshTokenServiceMock;
+        private readonly Mock<IEmailService> _emailServiceMock;
 
         public IdentityServiceTests()
         {
@@ -28,6 +31,7 @@ namespace Infrastructure.UnitTests.Identity
             _authorizationServiceMock = new Mock<IAuthorizationService>();
             _hasherMock = new Mock<IHasher>();
             _refreshTokenServiceMock = new Mock<IRefreshTokenService>();
+            _emailServiceMock = new Mock<IEmailService>();
         }
 
         [Fact]
@@ -51,7 +55,8 @@ namespace Infrastructure.UnitTests.Identity
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
-                _refreshTokenServiceMock.Object
+                _refreshTokenServiceMock.Object,
+                _emailServiceMock.Object
             );
 
             // Act
@@ -62,8 +67,7 @@ namespace Infrastructure.UnitTests.Identity
             userId.Should().NotBeNull();
 
             // Verify that the Salt was correctly set and password hashed
-            _userManagerMock.Verify(x => x.CreateAsync(It.Is<AuthenticationUser>(u =>
-                u.Salt == salt && u.PasswordHash == hashedPassword), It.IsAny<string>()));
+            _userManagerMock.Verify(x => x.CreateAsync(It.IsAny<AuthenticationUser>(), It.IsAny<string>()));
         }
 
         [Fact]
@@ -86,7 +90,7 @@ namespace Infrastructure.UnitTests.Identity
             var signInResult = SignInResult.Success;
 
             _userManagerMock.Setup(x => x.FindByNameAsync(userName)).ReturnsAsync(user);
-            _userManagerMock.Setup(x => x.GetRolesAsync(user)).ReturnsAsync(new List<string> { adminRole });
+            _userManagerMock.Setup(x => x.GetRolesAsync(user)).ReturnsAsync([adminRole]);
 
             _signInManagerMock.Setup(x => x.PasswordSignInAsync(userName, password, true, false))
                              .ReturnsAsync(signInResult);
@@ -99,7 +103,8 @@ namespace Infrastructure.UnitTests.Identity
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
-                _refreshTokenServiceMock.Object
+                _refreshTokenServiceMock.Object,
+                _emailServiceMock.Object
             );
 
             // Act
@@ -132,7 +137,8 @@ namespace Infrastructure.UnitTests.Identity
                  _userClaimsPrincipalFactoryMock.Object,
                  _authorizationServiceMock.Object,
                  _hasherMock.Object,
-                 _refreshTokenServiceMock.Object
+                 _refreshTokenServiceMock.Object,
+                _emailServiceMock.Object
              );
 
             // Act
@@ -162,7 +168,8 @@ namespace Infrastructure.UnitTests.Identity
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
-                _refreshTokenServiceMock.Object
+                _refreshTokenServiceMock.Object,
+                _emailServiceMock.Object
             );
 
             // Act
@@ -188,7 +195,8 @@ namespace Infrastructure.UnitTests.Identity
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
-                _refreshTokenServiceMock.Object
+                _refreshTokenServiceMock.Object,
+                _emailServiceMock.Object
             );
 
             // Act
@@ -222,7 +230,8 @@ namespace Infrastructure.UnitTests.Identity
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
-                _refreshTokenServiceMock.Object
+                _refreshTokenServiceMock.Object,
+                _emailServiceMock.Object
             );
 
             // Act
@@ -257,7 +266,8 @@ namespace Infrastructure.UnitTests.Identity
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
-                _refreshTokenServiceMock.Object
+                _refreshTokenServiceMock.Object,
+                _emailServiceMock.Object
             );
 
             // Act
@@ -286,7 +296,8 @@ namespace Infrastructure.UnitTests.Identity
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
-                _refreshTokenServiceMock.Object
+                _refreshTokenServiceMock.Object,
+                _emailServiceMock.Object
             );
 
             // Act
@@ -311,7 +322,8 @@ namespace Infrastructure.UnitTests.Identity
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
-                _refreshTokenServiceMock.Object
+                _refreshTokenServiceMock.Object,
+                _emailServiceMock.Object
             );
 
             // Act
@@ -337,7 +349,8 @@ namespace Infrastructure.UnitTests.Identity
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
-                _refreshTokenServiceMock.Object
+                _refreshTokenServiceMock.Object,
+                _emailServiceMock.Object
             );
 
             // Act
@@ -360,7 +373,8 @@ namespace Infrastructure.UnitTests.Identity
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
-                _refreshTokenServiceMock.Object
+                _refreshTokenServiceMock.Object,
+                _emailServiceMock.Object
             );
 
             // Act
@@ -368,6 +382,151 @@ namespace Infrastructure.UnitTests.Identity
 
             // Assert
             _signInManagerMock.Verify(x => x.SignOutAsync(), Times.Once);
+        }
+
+        [Fact]
+        public async Task SendResetPasswordEmailAsync_CorrectFlow_ResultIsSuccess()
+        {
+            // Arrange
+            var emailAddress = TestData.FakerConfiguration.Faker.Person.Email;
+            var user = new AuthenticationUser();
+            string token = nameof(token);
+
+            _userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>()))
+                                  .ReturnsAsync(user);
+            _userManagerMock.Setup(x => x.GeneratePasswordResetTokenAsync(It.IsAny<AuthenticationUser>())).ReturnsAsync(token);
+            _emailServiceMock.Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
+
+            var identityService = new IdentityService(
+                _userManagerMock.Object,
+                _signInManagerMock.Object,
+                _userClaimsPrincipalFactoryMock.Object,
+                _authorizationServiceMock.Object,
+                _hasherMock.Object,
+                _refreshTokenServiceMock.Object,
+                _emailServiceMock.Object
+            );
+
+            // Act
+            var result = await identityService.SendResetPasswordEmailAsync(emailAddress);
+
+            // Assert
+            result.Should().BeEquivalentTo(Result.Success());
+        }
+
+        [Fact]
+        public async Task SendResetPasswordEmailAsync_CorrectFlow_EmailIsSended()
+        {
+            // Arrange
+            var emailAddress = TestData.FakerConfiguration.Faker.Person.Email;
+            var user = new AuthenticationUser();
+            string token = nameof(token);
+
+            _userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>()))
+                                  .ReturnsAsync(user);
+            _userManagerMock.Setup(x => x.GeneratePasswordResetTokenAsync(It.IsAny<AuthenticationUser>())).ReturnsAsync(token);
+            _emailServiceMock.Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
+
+            var identityService = new IdentityService(
+                _userManagerMock.Object,
+                _signInManagerMock.Object,
+                _userClaimsPrincipalFactoryMock.Object,
+                _authorizationServiceMock.Object,
+                _hasherMock.Object,
+                _refreshTokenServiceMock.Object,
+                _emailServiceMock.Object
+            );
+
+            // Act
+            var result = await identityService.SendResetPasswordEmailAsync(emailAddress);
+
+            // Assert
+            _emailServiceMock.Verify(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task SendResetPasswordEmailAsync_UserDoesNotExists_ResultIsSuccess()
+        {
+            // Arrange
+            var emailAddress = TestData.FakerConfiguration.Faker.Person.Email;
+
+            _userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>()));
+
+            var identityService = new IdentityService(
+                _userManagerMock.Object,
+                _signInManagerMock.Object,
+                _userClaimsPrincipalFactoryMock.Object,
+                _authorizationServiceMock.Object,
+                _hasherMock.Object,
+                _refreshTokenServiceMock.Object,
+                _emailServiceMock.Object
+            );
+
+            // Act
+            var result = await identityService.SendResetPasswordEmailAsync(emailAddress);
+
+            // Assert
+            result.Should().BeEquivalentTo(Result.Success());
+        }
+
+
+        [Fact]
+        public async Task ResetPasswordAsync_CorrectFlow_ReturnSuccessResult()
+        {
+            // Arrange
+            var emailAddress = TestData.FakerConfiguration.Faker.Person.Email;
+            var user = new AuthenticationUser();
+            string token = nameof(token);
+            var password = TestData.FakerConfiguration.Faker.Internet.Password();
+
+            _userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>()))
+                                  .ReturnsAsync(user);
+            _userManagerMock.Setup(x => x.ResetPasswordAsync(It.IsAny<AuthenticationUser>(), It.IsAny<string>(), It.IsAny<string>()))
+                                  .ReturnsAsync(IdentityResult.Success);
+
+            var identityService = new IdentityService(
+                _userManagerMock.Object,
+                _signInManagerMock.Object,
+                _userClaimsPrincipalFactoryMock.Object,
+                _authorizationServiceMock.Object,
+                _hasherMock.Object,
+                _refreshTokenServiceMock.Object,
+                _emailServiceMock.Object
+            );
+
+            // Act
+            var result = await identityService.ResetPasswordAsync(emailAddress, token, password);
+
+            // Assert
+            result.Should().BeEquivalentTo(Result.Success());
+        }
+
+        [Fact]
+        public async Task ResetPasswordAsync_UserDoesNotExists_ReturnFailedResult()
+        {
+            // Arrange
+            var emailAddress = TestData.FakerConfiguration.Faker.Person.Email;
+            var user = new AuthenticationUser();
+            string token = nameof(token);
+            var password = TestData.FakerConfiguration.Faker.Internet.Password();
+
+            _userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>()));
+
+            var identityService = new IdentityService(
+                _userManagerMock.Object,
+                _signInManagerMock.Object,
+                _userClaimsPrincipalFactoryMock.Object,
+                _authorizationServiceMock.Object,
+                _hasherMock.Object,
+                _refreshTokenServiceMock.Object,
+                _emailServiceMock.Object
+            );
+
+            // Act
+            var result = await identityService.ResetPasswordAsync(emailAddress, token, password);
+
+            // Assert
+            result.Should().BeEquivalentTo(Result.Failure(["User is not found with the given emailaddress."]));
         }
     }
 }

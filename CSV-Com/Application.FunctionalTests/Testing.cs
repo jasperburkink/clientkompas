@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Application.Common.Interfaces.Authentication;
 using Domain.Authentication.Domain;
 using Infrastructure.Data.Authentication;
 using Infrastructure.Data.CVS;
@@ -24,6 +25,7 @@ namespace Application.FunctionalTests
         private static string? s_currentUserId;
         private static readonly string? s_databasePrefix = GenerateRandomPrefix();
         public static bool UseMocks { get; set; } = false;
+        public static IIdentityService IdentityService => CreateScope().ServiceProvider.GetRequiredService<IIdentityService>();
 
         [OneTimeSetUp]
         public async Task RunBeforeAnyTests()
@@ -90,16 +92,10 @@ namespace Application.FunctionalTests
 
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AuthenticationUser>>();
 
-            var hasher = new Argon2Hasher();
-            var salt = hasher.GenerateSalt();
-            var passwordHash = hasher.HashString(password, salt);
-
             var user = new AuthenticationUser
             {
                 UserName = userName,
-                Email = userName,
-                Salt = salt,
-                PasswordHash = passwordHash
+                Email = userName
             };
 
             var result = await userManager.CreateAsync(user, password);
@@ -214,6 +210,44 @@ namespace Application.FunctionalTests
             var context = scope.ServiceProvider.GetRequiredService<CVSDbContext>();
 
             return await context.Set<TEntity>().CountAsync();
+        }
+
+        public static async Task<string> CreateUserAsync(string userName, string password)
+        {
+            using var scope = CreateScope();
+
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AuthenticationUser>>();
+
+
+            var user = new AuthenticationUser
+            {
+                UserName = userName,
+                Email = userName
+            };
+
+            var result = await userManager.CreateAsync(user, password);
+
+            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+            if (result.Succeeded)
+            {
+                s_currentUserId = user.Id;
+
+                return s_currentUserId;
+            }
+
+            var errors = string.Join(Environment.NewLine, result.ToApplicationResult().Errors);
+
+            throw new Exception($"Unable to create {userName}.{Environment.NewLine}{errors}");
+        }
+
+        public static async Task<string> GetPasswordResetTokenAsync(AuthenticationUser user)
+        {
+            using var scope = CreateScope();
+
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AuthenticationUser>>();
+
+            return await userManager.GeneratePasswordResetTokenAsync(user);
         }
 
         private static IServiceScope CreateScope()

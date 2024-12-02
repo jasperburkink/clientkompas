@@ -61,6 +61,24 @@ namespace Application.Common.Rules.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to E-mailadres is geen geldig e-mailadres..
+        /// </summary>
+        internal static string EmailAddressInvalid {
+            get {
+                return ResourceManager.GetString("EmailAddressInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to E-mailadres is verplicht..
+        /// </summary>
+        internal static string EmailAddressRequired {
+            get {
+                return ResourceManager.GetString("EmailAddressRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Wachtwoord moet ten minste één kleine letter bevatten..
         /// </summary>
         internal static string PasswordContainsLowerCaseCharacter {
@@ -120,6 +138,24 @@ namespace Application.Common.Rules.Resources {
         internal static string PasswordRequired {
             get {
                 return ResourceManager.GetString("PasswordRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wachtwoorden komen niet overeen..
+        /// </summary>
+        internal static string PasswordsDoNotMatch {
+            get {
+                return ResourceManager.GetString("PasswordsDoNotMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Token is verplicht..
+        /// </summary>
+        internal static string TokenRequired {
+            get {
+                return ResourceManager.GetString("TokenRequired", resourceCulture);
             }
         }
         

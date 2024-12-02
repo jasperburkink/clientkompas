@@ -84,7 +84,7 @@ namespace Infrastructure.FunctionalTests.Identity
                 Value = REFRESH_TOKEN_VALUE
             };
 
-            await _authenticationDbContext.UserTokens.AddAsync(refreshTokenObject);
+            await _authenticationDbContext.RefreshTokens.AddAsync(refreshTokenObject);
             await _authenticationDbContext.SaveChangesAsync();
 
             // Act
@@ -113,7 +113,7 @@ namespace Infrastructure.FunctionalTests.Identity
                 Value = REFRESH_TOKEN_VALUE
             };
 
-            await _authenticationDbContext.UserTokens.AddAsync(refreshTokenObject);
+            await _authenticationDbContext.RefreshTokens.AddAsync(refreshTokenObject);
             await _authenticationDbContext.SaveChangesAsync();
 
             // Act
@@ -142,7 +142,7 @@ namespace Infrastructure.FunctionalTests.Identity
                 Value = REFRESH_TOKEN_VALUE
             };
 
-            await _authenticationDbContext.UserTokens.AddAsync(refreshTokenObject);
+            await _authenticationDbContext.RefreshTokens.AddAsync(refreshTokenObject);
             await _authenticationDbContext.SaveChangesAsync();
 
             // Act
@@ -171,7 +171,7 @@ namespace Infrastructure.FunctionalTests.Identity
                 Value = REFRESH_TOKEN_VALUE
             };
 
-            await _authenticationDbContext.UserTokens.AddAsync(refreshTokenObject);
+            await _authenticationDbContext.RefreshTokens.AddAsync(refreshTokenObject);
             await _authenticationDbContext.SaveChangesAsync();
 
             // Act
@@ -200,7 +200,7 @@ namespace Infrastructure.FunctionalTests.Identity
                 Value = REFRESH_TOKEN_VALUE
             };
 
-            await _authenticationDbContext.UserTokens.AddAsync(refreshTokenObject);
+            await _authenticationDbContext.RefreshTokens.AddAsync(refreshTokenObject);
             await _authenticationDbContext.SaveChangesAsync();
 
             // Act
@@ -229,7 +229,7 @@ namespace Infrastructure.FunctionalTests.Identity
                 Value = "Test"
             };
 
-            await _authenticationDbContext.UserTokens.AddAsync(refreshTokenObject);
+            await _authenticationDbContext.RefreshTokens.AddAsync(refreshTokenObject);
             await _authenticationDbContext.SaveChangesAsync();
 
             // Act
@@ -258,7 +258,7 @@ namespace Infrastructure.FunctionalTests.Identity
                 Value = REFRESH_TOKEN_VALUE
             };
 
-            await _authenticationDbContext.UserTokens.AddAsync(refreshTokenObject);
+            await _authenticationDbContext.RefreshTokens.AddAsync(refreshTokenObject);
             await _authenticationDbContext.SaveChangesAsync();
 
             // Act
@@ -309,7 +309,7 @@ namespace Infrastructure.FunctionalTests.Identity
                 Value = REFRESH_TOKEN_VALUE
             };
 
-            await _authenticationDbContext.UserTokens.AddAsync(refreshTokenObject);
+            await _authenticationDbContext.RefreshTokens.AddAsync(refreshTokenObject);
             await _authenticationDbContext.SaveChangesAsync();
 
             // Act
@@ -362,7 +362,7 @@ namespace Infrastructure.FunctionalTests.Identity
                 Value = REFRESH_TOKEN_VALUE
             };
 
-            await _authenticationDbContext.UserTokens.AddAsync(refreshTokenObject);
+            await _authenticationDbContext.RefreshTokens.AddAsync(refreshTokenObject);
             await _authenticationDbContext.SaveChangesAsync();
 
             // Act
@@ -393,7 +393,7 @@ namespace Infrastructure.FunctionalTests.Identity
                 Value = "Test"
             };
 
-            await _authenticationDbContext.UserTokens.AddAsync(refreshTokenObject);
+            await _authenticationDbContext.RefreshTokens.AddAsync(refreshTokenObject);
             await _authenticationDbContext.SaveChangesAsync();
 
             // Act
@@ -424,7 +424,7 @@ namespace Infrastructure.FunctionalTests.Identity
                 Value = refreshToken
             };
 
-            await _authenticationDbContext.UserTokens.AddAsync(refreshTokenObject);
+            await _authenticationDbContext.RefreshTokens.AddAsync(refreshTokenObject);
             await _authenticationDbContext.SaveChangesAsync();
 
             // Act
@@ -453,7 +453,7 @@ namespace Infrastructure.FunctionalTests.Identity
                 Value = "Test"
             };
 
-            await _authenticationDbContext.UserTokens.AddAsync(refreshTokenObject);
+            await _authenticationDbContext.RefreshTokens.AddAsync(refreshTokenObject);
             await _authenticationDbContext.SaveChangesAsync();
 
             // Act
@@ -495,8 +495,8 @@ namespace Infrastructure.FunctionalTests.Identity
                 Value = refreshToken2
             };
 
-            await _authenticationDbContext.UserTokens.AddAsync(refreshTokenObject1);
-            await _authenticationDbContext.UserTokens.AddAsync(refreshTokenObject2);
+            await _authenticationDbContext.RefreshTokens.AddAsync(refreshTokenObject1);
+            await _authenticationDbContext.RefreshTokens.AddAsync(refreshTokenObject2);
             await _authenticationDbContext.SaveChangesAsync();
 
             // Act
@@ -538,8 +538,8 @@ namespace Infrastructure.FunctionalTests.Identity
                 Value = refreshToken2
             };
 
-            await _authenticationDbContext.UserTokens.AddAsync(refreshTokenObject1);
-            await _authenticationDbContext.UserTokens.AddAsync(refreshTokenObject2);
+            await _authenticationDbContext.RefreshTokens.AddAsync(refreshTokenObject1);
+            await _authenticationDbContext.RefreshTokens.AddAsync(refreshTokenObject2);
             await _authenticationDbContext.SaveChangesAsync();
 
             // Act
