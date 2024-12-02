@@ -81,7 +81,16 @@ export default class RefreshTokenService {
         return localStorage.getItem('refreshToken') || null;
     }
 
-    private setAccessToken(token: BearerToken): void {
+    public removeRefreshToken(): void {
+        localStorage.removeItem('refreshToken');
+        this.removeAccessToken();
+    }
+
+    private setAccessToken(token: BearerToken): void { // TODO: Move this to own accesstokenservice
         sessionStorage.setItem('token', BearerToken.serialize(token));
+    }
+
+    private removeAccessToken(): void { // TODO: Move this to own accesstokenservice
+        sessionStorage.removeItem('token');
     }
 }

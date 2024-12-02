@@ -100,5 +100,15 @@ namespace Infrastructure.Identity
         {
             return await _authenticationDbContext.RefreshTokens.FirstOrDefaultAsync(rt => rt.Value == refreshToken);
         }
+
+        public async Task<IList<IRefreshToken>> GetValidRefreshTokensByUserAsync(string userId)
+        {
+            return await _authenticationDbContext.RefreshTokens
+                .Where(rt =>
+                    rt.UserId == userId
+                    && !rt.IsUsed
+                    && !rt.IsRevoked)
+                .ToListAsync<IRefreshToken>();
+        }
     }
 }

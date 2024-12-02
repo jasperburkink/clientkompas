@@ -680,7 +680,7 @@ const ClientEditor = () => {
                             loadingText = "Bezig met oplaan"
                             successText = "Cliënt opgeslagen"
                             errorText = "Fout tijdens opslaan"
-                            onSave={async () => await saveClient(client!)}                            
+                            onSave={async () => await saveClient(client!)}
                             onResult={(apiResult) => handleSaveResult(apiResult, setConfirmMessage, setConfirmPopupOneButtonOpen, setCvsError, setErrorPopupOpen, setClient)}
                             dataTestId='button.save' />
                     </div>

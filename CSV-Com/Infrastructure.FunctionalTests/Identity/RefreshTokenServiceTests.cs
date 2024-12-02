@@ -463,6 +463,92 @@ namespace Infrastructure.FunctionalTests.Identity
             result.Should().BeNull();
         }
 
+        [Fact]
+        public async Task GetValidRefreshTokensByUserAsync_CorrectFlowMultipleTokens_ReturnsMultipleValidRefreshToken()
+        {
+            // Arrange
+            var userId = _authenticationUser.Id;
+            var refreshToken1 = REFRESH_TOKEN_VALUE;
+            var refreshToken2 = "AlsoARefreshToken";
+
+            var refreshTokenObject1 = new RefreshToken
+            {
+                CreatedAt = DateTime.UtcNow,
+                ExpiresAt = DateTime.UtcNow.AddDays(1),
+                IsRevoked = false,
+                IsUsed = false,
+                Name = "Test1",
+                UserId = userId,
+                LoginProvider = "Test",
+                Value = refreshToken1
+            };
+
+            var refreshTokenObject2 = new RefreshToken
+            {
+                CreatedAt = DateTime.UtcNow,
+                ExpiresAt = DateTime.UtcNow.AddDays(1),
+                IsRevoked = false,
+                IsUsed = false,
+                Name = "Test2",
+                UserId = userId,
+                LoginProvider = "Test",
+                Value = refreshToken2
+            };
+
+            await _authenticationDbContext.UserTokens.AddAsync(refreshTokenObject1);
+            await _authenticationDbContext.UserTokens.AddAsync(refreshTokenObject2);
+            await _authenticationDbContext.SaveChangesAsync();
+
+            // Act
+            var result = await _refreshTokenService.GetValidRefreshTokensByUserAsync(userId);
+
+            // Assert
+            result.Should().NotBeNull().And.BeEquivalentTo(new List<RefreshToken> { refreshTokenObject1, refreshTokenObject2 });
+        }
+
+        [Fact]
+        public async Task GetValidRefreshTokensByUserAsync_NoValidTokens_ReturnsEmptyList()
+        {
+            // Arrange
+            var userId = _authenticationUser.Id;
+            var refreshToken1 = REFRESH_TOKEN_VALUE;
+            var refreshToken2 = "AlsoARefreshToken";
+
+            var refreshTokenObject1 = new RefreshToken
+            {
+                CreatedAt = DateTime.UtcNow,
+                ExpiresAt = DateTime.UtcNow.AddDays(1),
+                IsRevoked = true,
+                IsUsed = false,
+                Name = "Test1",
+                UserId = userId,
+                LoginProvider = "Test",
+                Value = refreshToken1
+            };
+
+            var refreshTokenObject2 = new RefreshToken
+            {
+                CreatedAt = DateTime.UtcNow,
+                ExpiresAt = DateTime.UtcNow.AddDays(1),
+                IsRevoked = false,
+                IsUsed = true,
+                Name = "Test2",
+                UserId = userId,
+                LoginProvider = "Test",
+                Value = refreshToken2
+            };
+
+            await _authenticationDbContext.UserTokens.AddAsync(refreshTokenObject1);
+            await _authenticationDbContext.UserTokens.AddAsync(refreshTokenObject2);
+            await _authenticationDbContext.SaveChangesAsync();
+
+            // Act
+            var result = await _refreshTokenService.GetValidRefreshTokensByUserAsync(userId);
+
+            // Assert
+            result.Should().NotBeNull().And.BeEmpty();
+        }
+
         public void Dispose()
         {
             _authenticationDbContext.Database.EnsureDeleted();
