@@ -4,7 +4,7 @@ namespace Application.Authentication.Commands.Logout
 {
     public class LogoutCommand : IRequest<LogoutCommandDto>
     {
-        public string? RefreshToken { get; set; }
+        public string RefreshToken { get; set; } = null!;
     }
 
     public class LogoutCommandHandler : IRequestHandler<LogoutCommand, LogoutCommandDto>
