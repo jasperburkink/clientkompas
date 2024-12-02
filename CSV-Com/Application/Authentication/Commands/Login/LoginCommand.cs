@@ -6,9 +6,9 @@ namespace Application.Authentication.Commands.Login
 {
     public record LoginCommand : IRequest<LoginCommandDto>
     {
-        public string? UserName { get; set; }
+        public string UserName { get; set; } = null!;
 
-        public string? Password { get; set; }
+        public string Password { get; set; } = null!;
     }
 
     public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginCommandDto>
