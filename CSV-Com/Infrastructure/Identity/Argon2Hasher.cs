@@ -13,11 +13,11 @@ namespace Infrastructure.Identity
         private const int HASH_BYTES = 32;
         private const int SALT_BYTES = 16;
 
-        public string HashPassword(string password, byte[] salt)
+        public string HashString(string stringValue, byte[] salt)
         {
-            var passwordBytes = Encoding.UTF8.GetBytes(password);
+            var bytes = Encoding.UTF8.GetBytes(stringValue);
 
-            var argon2 = new Argon2id(passwordBytes)
+            var argon2 = new Argon2id(bytes)
             {
                 Salt = salt,
                 DegreeOfParallelism = NUM_OF_THREADS,

@@ -26,7 +26,7 @@ namespace Application.FunctionalTests
         [OneTimeSetUp]
         public async Task RunBeforeAnyTests()
         {
-            // Stel de configuratie in
+            // Configuration + Connectionstrings
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
             var configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
@@ -34,6 +34,7 @@ namespace Application.FunctionalTests
                 .AddEnvironmentVariables()
                 .Build();
 
+            // Temporary databases for testing
             var authenticationConnectionString = configuration.GetConnectionString("AuthenticationConnectionString")
                 ?.Replace("<<test_db_name>>", $"{s_databasePrefix}_Authentication");
 
@@ -46,11 +47,9 @@ namespace Application.FunctionalTests
             var connectionCvs = s_databaseCSV.GetConnection();
             var connectionAuthentication = s_databaseAuthentication.GetConnection();
 
-            // Configureer andere vereiste diensten en instanties
             s_factory = new CustomWebApplicationFactory(connectionCvs, connectionAuthentication);
             s_scopeFactory = s_factory.Services.GetRequiredService<IServiceScopeFactory>();
         }
-
 
         public static async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
         {
@@ -88,7 +87,7 @@ namespace Application.FunctionalTests
 
             var hasher = new Argon2Hasher();
             var salt = hasher.GenerateSalt();
-            var passwordHash = hasher.HashPassword(password, salt);
+            var passwordHash = hasher.HashString(password, salt);
 
             var user = new AuthenticationUser
             {
@@ -134,9 +133,16 @@ namespace Application.FunctionalTests
         public static async Task<TEntity?> FindAsync<TEntity>(params object[] keyValues)
             where TEntity : class
         {
+            return await FindAsync<TEntity, CVSDbContext>(keyValues);
+        }
+
+        public static async Task<TEntity?> FindAsync<TEntity, TDbContext>(params object[] keyValues)
+            where TEntity : class
+            where TDbContext : DbContext
+        {
             using var scope = s_scopeFactory.CreateScope();
 
-            var context = scope.ServiceProvider.GetRequiredService<CVSDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<TDbContext>();
 
             return await context.FindAsync<TEntity>(keyValues);
         }

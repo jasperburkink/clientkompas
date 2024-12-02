@@ -2,7 +2,7 @@
 {
     public interface IHasher
     {
-        string HashPassword(string password, byte[] salt);
+        string HashString(string stringValue, byte[] salt);
 
         byte[] GenerateSalt(int size = 16);
     }

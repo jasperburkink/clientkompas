@@ -17,7 +17,7 @@ const Forbidden = () => {
                     <p>
                         Het lijkt erop dat u geen toegang heeft tot deze pagina. <br />
                         Is dat wel de bedoeling? Neem dan contact op met uw systeembeheerder. <br />
-                        U kunt uw weg vervolgend door het menu links te gebruiken.
+                        U kunt uw weg vervolgen door het menu links te gebruiken.
                     </p>
                 </section>
             </div>

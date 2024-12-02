@@ -15,6 +15,8 @@ import CoachingProgramQuery from "types/model/CoachingProgramQuery";
 import CoachingProgram from "types/model/CoachingProgram";
 import LoginCommand from "types/model/login/login-command";
 import LoginCommandDto from "types/model/login/login-command-dto";
+import { BearerToken } from "types/common/bearer-token";
+import RefreshTokenService from "utils/refresh-token-service";
 import CoachingProgramEdit from "types/model/CoachingProgramEdit";
 import GetClientFullnameDto from "types/model/GetClientFullnameDto";
 import GetCoachingProgramTypesDto from "types/model/GetCoachingProgramTypesDto";
@@ -22,10 +24,41 @@ import GetCoachingProgramTypesDto from "types/model/GetCoachingProgramTypesDto";
 const apiUrl = process.env.REACT_APP_API_URL;
 
 async function fetchAPI<T>(url: string, method: string = 'GET', body?: any): Promise<ApiResult<T>> {
+    let bearerTokenJson: string | null = sessionStorage.getItem('token');
+    let bearerToken: BearerToken | null = null;
+
+    // Token expired?
+    if(bearerTokenJson){
+        bearerToken = BearerToken.deserialize(bearerTokenJson);
+
+        if(bearerToken.isExpired()){
+            const newToken = await RefreshTokenService.getInstance().refreshAccessToken();
+
+            if(!newToken) {
+                return Promise.reject({
+                    Ok: false,
+                    Errors: ['Unauthorized access']
+                });
+            }
+        }
+    }
+    // Refresh token?
+    else {
+        const newToken = await RefreshTokenService.getInstance().refreshAccessToken();
+
+        if(!newToken) {
+            return Promise.reject({
+                Ok: false,
+                Errors: ['Unauthorized access']
+            });
+        }
+    }
+
     const options: RequestInit = {
         method,
         headers: {
-          'Content-Type': 'application/json'
+          'Content-type': 'application/json',
+          ...(bearerToken ? {'Authorization': `Bearer ${bearerToken.getToken()}`} : {})
         },
         body: body ? JSON.stringify(body) : undefined,
       };
@@ -41,6 +74,7 @@ const DATE_FORMAT_JSON = 'yyyy-MM-DD';
 moment.prototype.toJSON = function(){
     return moment(this).format(DATE_FORMAT_JSON);
 }
+
 Date.prototype.toJSON = function(){
     return moment(this).format(DATE_FORMAT_JSON);
 }
@@ -55,7 +89,7 @@ const handleApiResonse = async <T>(response: Response): Promise<ApiResult<T>> =>
             ReturnObject: ObjectReturn
         }
     }
-    
+
     // TODO: Implement all HTTP status codes with the pages. https://sbict.atlassian.net/wiki/spaces/CVS/pages/35356674/Foutafhandeling#Gehele-pagina%E2%80%99s
 
     // Bad request --> Validation errors
@@ -207,6 +241,7 @@ export const deactivateClient = async (clientId: number): Promise<ClientQuery> =
 moment.prototype.toJSON = function(){
     return moment(this).format(DATE_FORMAT_JSON);
 }
+
 Date.prototype.toJSON = function(){
     return moment(this).format(DATE_FORMAT_JSON);
 }
@@ -214,17 +249,7 @@ Date.prototype.toJSON = function(){
 export const saveClient = async (client: Client): Promise<ApiResult<Client>> => {
     let method = client.id > 0  ? 'PUT' : 'POST';
 
-    const requestOptions: RequestInit = {
-        method: method,
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(client)
-    };
-
-    const response = await fetch(`${apiUrl}Client`, requestOptions);     
-
-    return handleApiResonse<Client>(response);
+    return await fetchAPI(`${apiUrl}Client`, method, client);     
 }
 
 export const fetchOrganization = async (organizationId: string): Promise<Organization> => {
@@ -238,17 +263,7 @@ export const fetchOrganizationEditor = async (organizationId: string): Promise<O
 export const saveOrganization = async (organization: Organization): Promise<ApiResult<Organization>> => {
     let method = organization.id > 0  ? 'PUT' : 'POST';
 
-    const requestOptions: RequestInit = {
-        method: method,
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(organization)
-    };
-
-    const response = await fetch(`${apiUrl}Organization`, requestOptions);     
-    
-    return handleApiResonse<Organization>(response);
+    return await fetchAPI(`${apiUrl}Organization`, method, organization);
 }
 
 export const fetchCoachingProgramsByClient = async (clientId: string): Promise<CoachingProgramQuery[]> => {
@@ -271,24 +286,10 @@ export const fetchCoachingProgramTypes = async (): Promise<GetCoachingProgramTyp
 export const saveCoachingProgram = async (coachingProgram: CoachingProgramEdit): Promise<ApiResult<CoachingProgramEdit>> => {
     let method = coachingProgram.id > 0  ? 'PUT' : 'POST';
 
-    coachingProgram.organizationid = coachingProgram.organizationid && coachingProgram.organizationid > 0 ? coachingProgram.organizationid : undefined;
-
-    const requestOptions: RequestInit = {
-        method: method,
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(coachingProgram)
-    };
-
-    const response = await fetch(`${apiUrl}CoachingProgram`, requestOptions);     
-
-    return handleApiResonse<CoachingProgramEdit>(response);
+    return await fetchAPI(`${apiUrl}CoachingProgram`, method, coachingProgram);
 }
 
 function processErrors(errors: { [key: string]: string[] }): string[] {
-
-    // Verzamel alle foutmeldingen in een enkele array
     const allErrors: string[] = Object.values(errors).flat();
 
     return allErrors;

@@ -18,45 +18,38 @@ namespace Infrastructure.Identity
             ArgumentNullException.ThrowIfNull(user);
             ArgumentNullException.ThrowIfNull(roles);
 
-            try
+            return Task.Run(() =>
             {
-                return Task.Run(() =>
+                var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SECRET_KEY));
+
+                var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+
+                var expires = DateTime.Now.Add(BearerTokenConstants.TOKEN_TIMEOUT);
+
+                var claims = new List<Claim>
                 {
-                    var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SECRET_KEY));
+                    new (JwtRegisteredClaimNames.Sub, user.Id),
+                    new (JwtRegisteredClaimNames.Name, user.UserName ?? ""),
+                    new (JwtRegisteredClaimNames.Email, user.Email ?? ""),
+                    new (JwtRegisteredClaimNames.Exp, expires.Ticks.ToString()),
+                    new (CLAIM_NAME_CVSUSERID, (user.CVSUserId ?? 0).ToString()),
+                };
 
-                    var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+                foreach (var role in roles)
+                {
+                    claims.Add(new(ClaimTypes.Role, role));
+                }
 
-                    var expires = DateTime.Now.Add(BearerTokenConstants.TOKEN_TIMEOUT);
+                var token = new JwtSecurityToken(
+                    issuer: BearerTokenConstants.ISSUER,
+                    audience: BearerTokenConstants.AUDIENCE,
+                    claims: claims,
+                    expires: expires,
+                    signingCredentials: signinCredentials
+                );
 
-                    var claims = new List<Claim>
-                    {
-                        new (JwtRegisteredClaimNames.Sub, user.Id),
-                        new (JwtRegisteredClaimNames.Name, user.UserName ?? ""),
-                        new (JwtRegisteredClaimNames.Email, user.Email ?? ""),
-                        new (JwtRegisteredClaimNames.Exp, expires.Ticks.ToString()),
-                        new (CLAIM_NAME_CVSUSERID, (user.CVSUserId ?? 0).ToString()),
-                    };
-
-                    foreach (var role in roles)
-                    {
-                        claims.Add(new(ClaimTypes.Role, role));
-                    }
-
-                    var token = new JwtSecurityToken(
-                        issuer: BearerTokenConstants.ISSUER,
-                        audience: BearerTokenConstants.AUDIENCE,
-                        claims: claims,
-                        expires: expires,
-                        signingCredentials: signinCredentials
-                    );
-
-                    return new JwtSecurityTokenHandler().WriteToken(token);
-                });
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("An error has occured while generating the JWT Bearer token.", ex);
-            }
+                return new JwtSecurityTokenHandler().WriteToken(token);
+            });
         }
 
         public static TokenValidationParameters GetTokenValidationParameters()

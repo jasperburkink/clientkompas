@@ -13,19 +13,22 @@ namespace Infrastructure.Identity
         private readonly IUserClaimsPrincipalFactory<AuthenticationUser> _userClaimsPrincipalFactory;
         private readonly IAuthorizationService _authorizationService;
         private readonly IHasher _hasher;
+        private readonly IRefreshTokenService _refreshTokenService;
 
         public IdentityService(
             UserManager<AuthenticationUser> userManager,
             SignInManager<AuthenticationUser> signInManager,
             IUserClaimsPrincipalFactory<AuthenticationUser> userClaimsPrincipalFactory,
             IAuthorizationService authorizationService,
-            IHasher hasher)
+            IHasher hasher,
+            IRefreshTokenService refreshTokenService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
             _authorizationService = authorizationService;
             _hasher = hasher;
+            _refreshTokenService = refreshTokenService;
         }
 
         public async Task<string?> GetUserNameAsync(string userId)
@@ -37,7 +40,7 @@ namespace Infrastructure.Identity
         public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password)
         {
             var salt = _hasher.GenerateSalt();
-            var passwordHash = _hasher.HashPassword(password, salt);
+            var passwordHash = _hasher.HashString(password, salt);
 
             var user = new AuthenticationUser
             {
@@ -112,5 +115,24 @@ namespace Infrastructure.Identity
         {
             await _signInManager.SignOutAsync();
         }
+
+        public async Task<IList<string>> GetRolesAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return new List<string>();
+            }
+
+            return await _userManager.GetRolesAsync(user);
+        }
+
+        public async Task<bool> UserExistsAsync(string userId)
+        {
+            return await _userManager.FindByIdAsync(userId) != null;
+        }
+
+        public async Task<AuthenticationUser> GetUserAsync(string userId) => await _userManager.FindByIdAsync(userId);
     }
 }

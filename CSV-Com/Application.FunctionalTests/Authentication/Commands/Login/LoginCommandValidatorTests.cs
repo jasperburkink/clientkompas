@@ -6,7 +6,7 @@ using TestData;
 using TestData.Authentication;
 using static Application.FunctionalTests.Testing;
 
-namespace Application.FunctionalTests.Authentication.Commands
+namespace Application.FunctionalTests.Authentication.Commands.Login
 {
     public class LoginCommandValidatorTests : BaseTestFixture
     {

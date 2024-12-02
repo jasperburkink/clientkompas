@@ -70,6 +70,7 @@ namespace Infrastructure
                 .LogTo(Console.WriteLine, LogLevel.Information)
                 .EnableSensitiveDataLogging();
             });
+            services.AddScoped<IAuthenticationDbContext, AuthenticationDbContext>();
             services.AddScoped<AuthenticationDbContextInitialiser>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -82,6 +83,7 @@ namespace Infrastructure
             services.AddSingleton<IDateTime, DateTimeWrapper>();
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IBearerTokenService, BearerTokenService>();
+            services.AddScoped<IRefreshTokenService, RefreshTokenService>();
             services.AddScoped<IPasswordHasher<AuthenticationUser>, Argon2PasswordHasher>();
             services.AddScoped<IHasher, Argon2Hasher>();
 

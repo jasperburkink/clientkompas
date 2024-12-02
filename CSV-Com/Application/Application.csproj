@@ -109,6 +109,16 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>BenefitFormValidationRules.nl.resx</DependentUpon>
     </Compile>
+    <Compile Update="Common\Rules\Resources\RefreshTokenValidationRules.nl.Designer.cs">
+      <DependentUpon>RefreshTokenValidationRules.nl.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Common\Rules\Resources\RefreshTokenValidationRules.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>RefreshTokenValidationRules.resx</DependentUpon>
+    </Compile>
     <Compile Update="Common\Rules\Resources\WorkingContractValidationRules.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -173,6 +183,14 @@
     <EmbeddedResource Update="Common\Rules\Resources\BenefitFormValidationRules.nl.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>BenefitFormValidationRules.nl.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Rules\Resources\RefreshTokenValidationRules.nl.resx">
+      <LastGenOutput>RefreshTokenValidationRules.nl.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Rules\Resources\RefreshTokenValidationRules.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>RefreshTokenValidationRules.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Common\Rules\Resources\WorkingContractValidationRules.resx">
       <Generator>ResXFileCodeGenerator</Generator>

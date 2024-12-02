@@ -75,11 +75,11 @@ namespace Infrastructure.Data.Authentication
             }
 
             // Default users
-            var password = $"{role.Name}1!";
+            var password = $"{role.Name}{role.Name}1!";
 
             var hasher = new Argon2Hasher();
             var salt = hasher.GenerateSalt();
-            var passwordHash = hasher.HashPassword(password, salt);
+            var passwordHash = hasher.HashString(password, salt);
 
             var user = new AuthenticationUser
             {
