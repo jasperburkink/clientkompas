@@ -4,7 +4,7 @@ namespace Application.Authentication.Commands.RefreshToken
 {
     public record RefreshTokenCommand : IRequest<RefreshTokenCommandDto>
     {
-        public string? RefreshToken { get; set; }
+        public string RefreshToken { get; set; } = null!;
     }
 
     public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, RefreshTokenCommandDto>
