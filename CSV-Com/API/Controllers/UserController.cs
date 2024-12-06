@@ -10,7 +10,6 @@ namespace API.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-
         private readonly IUnitOfWork _unitOfWork;
 
         public UserController(IUnitOfWork unitOfWork)

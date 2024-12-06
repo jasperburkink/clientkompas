@@ -1,0 +1,175 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html dir="ltr"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:o="urn:schemas-microsoft-com:office:office"
+      lang="nl">
+<link rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Poppins" />
+
+<head>
+    <meta charset="UTF-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta name="x-apple-disable-message-reformatting" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta content="telephone=no" name="format-detection" />
+    <title>New Message</title>
+    <style type="text/css"></style>
+</head>
+
+<body class="body" style="background-color: rgb(245, 245, 245)">
+    <div style="
+            text-align: center;
+            background-color: white;
+            width: 600px;
+            height: 655px;
+            margin: 0 auto;
+            margin-top: -10px;
+            margin-bottom: -100px;
+            padding: 0;
+         ">
+        <img src="https://i.gyazo.com/12f0c131fbf2a9ed283c7d76f464d5cf.png"
+             width="250"
+             style="margin-top: 10px" />
+
+        <h1 id="title-email"
+            style="
+               color: rgb(50, 50, 50);
+               font-family: 'Poppins', arial;
+               font-size: 45px;
+               font-weight: 600;
+               margin-top: 20px;
+            ">
+            Dank voor uw aankoop!
+        </h1>
+
+        <p style="text-align: center; font-family: 'Poppins', arial">
+            Hartelijk dank voor uw aankoop bij CliëntKompas. We bevestigen
+            hierbij dat uw abonnement succesvol is geactiveerd.
+        </p>
+
+        <table style="
+               border: 2px solid rgb(173, 200, 223);
+               border-collapse: collapse;
+               text-align: center;
+               margin: 0 auto;
+               font-family: '' Poppins ', arial';
+            ">
+            <!--  -->
+            <tr>
+                <th style="
+                     border: 2px solid rgb(173, 200, 223);
+                     border-collapse: collapse;
+                     text-align: right;
+                     background-color: rgb(173, 200, 223);
+                     font-family: '' Poppins ', arial';
+                  ">
+                    Licentiehouder
+                </th>
+                <th style="
+                     border: 2px solid rgb(173, 200, 223);
+                     background-color: rgb(173, 200, 223);
+                     border-collapse: collapse;
+                     text-align: left;
+                     font-family: '' Poppins ', arial';
+                  ">
+                    @Model.LicenseHolderName
+                </th>
+            </tr>
+            <!--  -->
+            <tr>
+                <th style="
+                     border: 2px solid rgb(173, 200, 223);
+                     border-collapse: collapse;
+                     text-align: right;
+                     background-color: rgb(173, 200, 223);
+                     font-family: '' Poppins ', arial';
+                  ">
+                    Organizatie
+                </th>
+                <th style="
+                     border: 2px solid rgb(173, 200, 223);
+                     background-color: rgb(173, 200, 223);
+                     border-collapse: collapse;
+                     text-align: left;
+                     font-family: '' Poppins ', arial';
+                  ">
+                    @Model.OrganizationName
+                </th>
+            </tr>
+            <!--  -->
+            <tr>
+                <th style="
+                     border: 2px solid rgb(173, 200, 223);
+                     border-collapse: collapse;
+                     text-align: right;
+                     background-color: rgb(173, 200, 223);
+                     font-family: '' Poppins ', arial';
+                  ">
+                    Status
+                </th>
+                <th style="
+                     border: 2px solid rgb(173, 200, 223);
+                     border-collapse: collapse;
+                     text-align: left;
+                     background-color: rgb(173, 200, 223);
+                     font-family: '' Poppins ', arial';
+                  ">
+                    @Model.Status
+                </th>
+            </tr>
+            <!--  -->
+            <tr>
+                <th style="
+                     border: 2px solid rgb(173, 200, 223);
+                     border-collapse: collapse;
+                     text-align: right;
+                     background-color: rgb(173, 200, 223);
+                     font-family: '' Poppins ', arial';
+                  ">
+                    Datum van​ aankoop
+                </th>
+                <th style="
+                     border: 2px solid rgb(173, 200, 223);
+                     border-collapse: collapse;
+                     text-align: left;
+                     background-color: rgb(173, 200, 223);
+                     font-family: '' Poppins ', arial';
+                  ">
+                    @Model.CreatedAt
+                </th>
+            </tr>
+            <!--  -->
+            <tr>
+                <th style="
+                     border: 2px solid rgb(173, 200, 223);
+                     border-collapse: collapse;
+                     text-align: right;
+                     background-color: rgb(173, 200, 223);
+                     font-family: '' Poppins ', arial';
+                  ">
+                    Geldig tot
+                </th>
+                <th style="
+                     border: 2px solid rgb(173, 200, 223);
+                     border-collapse: collapse;
+                     text-align: left;
+                     background-color: rgb(173, 200, 223);
+                     font-family: '' Poppins ', arial';
+                  ">
+                    @Model.ValidUntil
+                </th>
+            </tr>
+            <!--  -->
+        </table>
+
+        <p style="text-align: center; font-family: 'Poppins', arial">
+            <br />Voor eventuele vragen of ondersteuning kunt u altijd contact
+            met ons opnemen via
+            <a href="mailto:ontwikkelaar@clientkompas.nl">ontwikkelaar@clientkompas.nl</a>
+            of <span style="color: rgb(157, 191, 255)">+31 06-123456789</span>.
+            <br /><br />
+            We wensen u veel succes met uw licentie!
+        </p>
+    </div>
+</body>
+</html>
