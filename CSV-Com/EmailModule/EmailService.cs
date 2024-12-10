@@ -8,7 +8,7 @@ namespace EmailModule
     {
         private string GetTemplateFilePath(string templateName)
         {
-            return Path.Combine(Directory.GetCurrentDirectory(), "EmailFolder", "Templates", $"{templateName}.cshtml");
+            return Path.Combine(Directory.GetCurrentDirectory(), "Templates", $"{templateName}.cshtml");
         }
 
         public async Task SendEmailAsync<T>(EmailMessage message, string templateName, T model)

@@ -4,7 +4,42 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Templates\2FAVerification.cshtml" />
+    <None Remove="Templates\LicenseBlocked.cshtml" />
+    <None Remove="Templates\LicenseBought.cshtml" />
+    <None Remove="Templates\LicenseExpired.cshtml" />
+    <None Remove="Templates\PasswordForgotten.cshtml" />
+    <None Remove="Templates\TestTemplate.cshtml" />
+    <None Remove="Templates\UserRegistration.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Templates\2FAVerification.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\LicenseBlocked.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\LicenseBought.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\LicenseExpired.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\PasswordForgotten.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\TestTemplate.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\UserRegistration.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FluentEmail.Core" Version="3.0.2" />

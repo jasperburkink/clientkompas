@@ -1,0 +1,185 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html dir="ltr"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:o="urn:schemas-microsoft-com:office:office"
+      lang="nl">
+<head>
+    <meta charset="UTF-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta name="x-apple-disable-message-reformatting" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta content="telephone=no" name="format-detection" />
+    <title>New Message</title>
+</head>
+
+<body style="
+         background-color: #ffffff;
+         margin: 0;
+         padding: 0;
+         font-family: 'Poppins', Arial, sans-serif;
+      ">
+    <div style="
+            text-align: center;
+            background-color: #ffffff;
+            border: 1px solid #adc8df;
+            border-radius: 10px;
+            width: 600px;
+            margin: 30px auto;
+            padding: 20px;
+         ">
+        <img src="https://i.gyazo.com/12f0c131fbf2a9ed283c7d76f464d5cf.png"
+             width="200"
+             style="margin: 20px auto; display: block"
+             alt="CliëntKompas Logo" />
+
+        <h1 style="
+               color: #323232;
+               font-size: 32px;
+               font-weight: 600;
+               margin: 10px 0;
+            ">
+            Bedank voor uw aankoop!
+        </h1>
+
+        <p style="
+               color: #4a4a4a;
+               font-size: 16px;
+               line-height: 1.5;
+               margin: 10px 0 20px;
+            ">
+            Hartelijk dank voor uw aankoop bij CliëntKompas. We bevestigen
+            hierbij dat uw abonnement succesvol is geactiveerd.
+        </p>
+
+        <table style="
+               border: 2px solid #adc8df;
+               border-collapse: collapse;
+               border-radius: 15px;
+               overflow: hidden;
+               margin: 0 auto;
+               width: 90%;
+               font-size: 14px;
+            ">
+            <tr>
+                <th style="
+                     border: 2px solid #adc8df;
+                     background-color: #88aecb;
+                     padding: 10px;
+                     text-align: right;
+                     color: white;
+                     font-weight: bold;
+                  ">
+                    Licentiehouder
+                </th>
+                <td style="
+                     border: 2px solid #adc8df;
+                     background-color: #f7f9fc;
+                     padding: 10px;
+                     text-align: left;
+                  ">
+                    @Model.LicenseHolderName
+                </td>
+            </tr>
+            <tr>
+                <th style="
+                     border: 2px solid #adc8df;
+                     background-color: #88aecb;
+                     padding: 10px;
+                     text-align: right;
+                     color: white;
+                     font-weight: bold;
+                  ">
+                    Organisatie
+                </th>
+                <td style="
+                     border: 2px solid #adc8df;
+                     background-color: #f7f9fc;
+                     padding: 10px;
+                     text-align: left;
+                  ">
+                    @Model.OrganizationName
+                </td>
+            </tr>
+            <tr>
+                <th style="
+                     border: 2px solid #adc8df;
+                     background-color: #88aecb;
+                     padding: 10px;
+                     text-align: right;
+                     color: white;
+                     font-weight: bold;
+                  ">
+                    Status
+                </th>
+                <td style="
+                     border: 2px solid #adc8df;
+                     background-color: #f7f9fc;
+                     padding: 10px;
+                     text-align: left;
+                  ">
+                    @Model.Status
+                </td>
+            </tr>
+            <tr>
+                <th style="
+                     border: 2px solid #adc8df;
+                     background-color: #88aecb;
+                     padding: 10px;
+                     text-align: right;
+                     color: white;
+                     font-weight: bold;
+                  ">
+                    Datum van aankoop
+                </th>
+                <td style="
+                     border: 2px solid #adc8df;
+                     background-color: #f7f9fc;
+                     padding: 10px;
+                     text-align: left;
+                  ">
+                    @Model.CreatedAt
+                </td>
+            </tr>
+            <tr>
+                <th style="
+                     border: 2px solid #adc8df;
+                     background-color: #88aecb;
+                     padding: 10px;
+                     text-align: right;
+                     color: white;
+                     font-weight: bold;
+                  ">
+                    Geldig tot
+                </th>
+                <td style="
+                     border: 2px solid #adc8df;
+                     background-color: #f7f9fc;
+                     padding: 10px;
+                     text-align: left;
+                  ">
+                    @Model.ValidUntil
+                </td>
+            </tr>
+        </table>
+
+        <p style="
+               color: #4a4a4a;
+               font-size: 14px;
+               line-height: 1.5;
+               margin: 20px 0;
+            ">
+            Voor eventuele vragen of ondersteuning kunt u altijd contact met ons
+            opnemen via:<br />
+            📧
+            <a style="text-decoration: none; color: #88aecb"
+               href="mailto:ontwikkelaar@clientkompas.nl">ontwikkelaar@clientkompas.nl</a>
+            of 📞
+            <span style="color: #88aecb">+31 06-123456789</span>.
+        </p>
+
+        <p style="color: #4a4a4a; font-size: 14px; line-height: 1.5; margin: 0">
+            We wensen u veel succes met uw licentie!
+        </p>
+    </div>
+</body>
+</html>
