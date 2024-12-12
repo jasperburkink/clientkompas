@@ -80,8 +80,7 @@ namespace Application.Authentication.Commands.Login
                 To = new List<string> { loggedInUser.User.Email }
             };
 
-            //await _emailService.SendEmailAsync(message, "2FAVerification", new { });
-            await _emailService.SendEmailAsync(message, "2FAVerification", new { VerificationCode = twoFactorPendingTokenValue, User = loggedInUser.User.UserName });
+            await _emailService.SendEmailAsync(message, "2FAVerification", new { VerificationCode = twoFactorAuthenticationTokenValue, User = loggedInUser.User.UserName });
 
             return new LoginCommandDto
             {

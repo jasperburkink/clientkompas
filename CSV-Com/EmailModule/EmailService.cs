@@ -1,10 +1,10 @@
-﻿using Application.Common.Interfaces;
+﻿using System.Diagnostics;
+using Application.Common.Interfaces;
 using Application.Common.Models;
 using AutoMapper;
-using FluentEmail.Core;
-using FluentEmail.MailKitSmtp;
+using MailKit.Net.Smtp;
+using MimeKit;
 using RazorLight;
-using System.Diagnostics;
 
 namespace EmailModule
 {
@@ -28,41 +28,31 @@ namespace EmailModule
             {
                 var message = _mapper.Map<EmailMessage>(messageDto);
 
-                var sender = new MailKitSender(new SmtpClientOptions
-                {
-                    Server = EmailConfig.SmtpServer,
-                    Port = EmailConfig.Port,
-                    User = EmailConfig.Username,
-                    Password = EmailConfig.Password,
-                    UseSsl = EmailConfig.Port == 465,
-                    RequiresAuthentication = true
-                });
+                var body = await _razorLightEngine.CompileRenderAsync($"EmailModule.Templates.{templateName}.cshtml", model);
 
-
-                Email.DefaultSender = sender;
-
-                var template = await _razorLightEngine.CompileRenderAsync($"EmailModule.Templates.{templateName}.cshtml", model);
-
-                var email = Email
-                    .From(EmailConfig.Username, "CliëntenKompas")
-                    .Subject(message.Subject)
-                    .UsingTemplate(template, model);
+                var email = new MimeMessage();
+                email.From.Add(new MailboxAddress("CliëntKompas", EmailConfig.Username));
 
                 foreach (var recipient in message.To)
                 {
-                    email.To(recipient);
+                    email.To.Add(MailboxAddress.Parse(recipient));
                 }
 
-                var response = await email.SendAsync();
+                email.Subject = messageDto.Subject;
+                email.Body = new TextPart("html") { Text = body };
 
-                if (response.Successful)
+                using var client = new SmtpClient();
+                client.ServerCertificateValidationCallback = (s, c, h, e) => true;
+
+                await client.ConnectAsync(EmailConfig.SmtpServer, EmailConfig.Port, false);
+
+                if (EmailConfig.RequiresAuthentication)
                 {
-                    Console.WriteLine("E-mail succesvol verzonden!");
+                    await client.AuthenticateAsync(EmailConfig.Username, EmailConfig.Password);
                 }
-                else
-                {
-                    Console.WriteLine($"Fout bij het verzenden: {string.Join(", ", response.ErrorMessages)}");
-                }
+
+                await client.SendAsync(email);
+                await client.DisconnectAsync(true);
             }
             catch (Exception ex)
             {
