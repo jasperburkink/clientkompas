@@ -1,10 +1,10 @@
-﻿using System.Diagnostics;
-using Application.Common.Interfaces;
+﻿using Application.Common.Interfaces;
 using Application.Common.Models;
 using AutoMapper;
 using FluentEmail.Core;
 using FluentEmail.MailKitSmtp;
 using RazorLight;
+using System.Diagnostics;
 
 namespace EmailModule
 {
@@ -34,7 +34,7 @@ namespace EmailModule
                     Port = EmailConfig.Port,
                     User = EmailConfig.Username,
                     Password = EmailConfig.Password,
-                    UseSsl = true,
+                    UseSsl = EmailConfig.Port == 465,
                     RequiresAuthentication = true
                 });
 
@@ -46,7 +46,7 @@ namespace EmailModule
                 var email = Email
                     .From(EmailConfig.Username, "CliëntenKompas")
                     .Subject(message.Subject)
-                    .Body(template);
+                    .UsingTemplate(template, model);
 
                 foreach (var recipient in message.To)
                 {
