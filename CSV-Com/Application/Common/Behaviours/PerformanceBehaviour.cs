@@ -9,12 +9,12 @@ namespace Application.Common.Behaviours
     {
         private readonly Stopwatch _timer;
         private readonly ILogger<TRequest> _logger;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly IUser _currentUserService;
         private readonly IIdentityService _identityService;
 
         public PerformanceBehaviour(
             ILogger<TRequest> logger,
-            ICurrentUserService currentUserService,
+            IUser currentUserService,
             IIdentityService identityService)
         {
             _timer = new Stopwatch();
@@ -37,7 +37,7 @@ namespace Application.Common.Behaviours
             if (elapsedMilliseconds > 500)
             {
                 var requestName = typeof(TRequest).Name;
-                var userId = _currentUserService.UserId ?? string.Empty;
+                var userId = _currentUserService.CurrentUserId ?? string.Empty;
                 var userName = string.Empty;
 
                 if (!string.IsNullOrEmpty(userId))

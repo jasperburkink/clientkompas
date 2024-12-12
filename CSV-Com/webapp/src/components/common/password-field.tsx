@@ -2,10 +2,17 @@ import './password-field.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faEyeSlash,faEye} from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from 'react';
+import { ValidationError } from 'types/common/validation-error';
+import { ErrorMessage } from './error-message';
 
-interface IPasswordFieldProps extends React.HtmlHTMLAttributes<HTMLElement> {
-    inputfieldname: string;
+interface IPasswordFieldProps {
+    inputfieldname: string;    
     placeholder: string;
+    value?: string;
+    className?: string;
+    dataTestId?: string;
+    errors?: ValidationError[];
+    onChange?: (value: string) => void;
 }
 const INPUTFIELDTYPE_PASSWORD = 'password';
 const INPUTFIELDTYPE_TEXT = 'text';
@@ -22,12 +29,21 @@ const PasswordField = (props: IPasswordFieldProps) => {
             setType(INPUTFIELDTYPE_PASSWORD);
             setIcon(<FontAwesomeIcon icon={faEyeSlash} size="lg" style={{color: "#000000",}} />)
         }
-        
     }
     return(
-        <div className='input-field'>
-            <input type={type} className='passwordfield' placeholder={props.placeholder} name={props.inputfieldname} />
-            <button type="button" onClick={visibility} className='visibilitybtn'>{icon}</button>
+        <div>
+            <div className='input-field password-container'>
+                <input 
+                    type={type} 
+                    className={`passwordfield ${props.className} ${props.errors ? 'error' : ''}`}
+                    placeholder={props.placeholder} 
+                    name={props.inputfieldname} 
+                    value={props.value} 
+                    onChange={(e) => {props.onChange?.(e.target.value);}}
+                    data-testid={props.dataTestId} />
+                <button type="button" onClick={visibility} className='visibilitybtn'>{icon}</button>                        
+            </div>
+            <ErrorMessage errors={props.errors} />
         </div>
     );
 };

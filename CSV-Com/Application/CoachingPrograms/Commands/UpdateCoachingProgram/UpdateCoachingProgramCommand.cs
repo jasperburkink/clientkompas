@@ -1,13 +1,13 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Interfaces.CVS;
-using AutoMapper;
+﻿using Application.Common.Interfaces.CVS;
+using Application.Common.Security;
+using Domain.Authentication.Constants;
 using Domain.CVS.Domain;
 using Domain.CVS.Enums;
 using Domain.CVS.Events;
-using MediatR;
 
 namespace Application.CoachingPrograms.Commands.UpdateCoachingProgram
 {
+    [Authorize(Policy = Policies.CoachingProgramManagement)]
     public record UpdateCoachingProgramCommand : IRequest<UpdateCoachingProgramCommandDto>
     {
         public required int Id { get; set; }

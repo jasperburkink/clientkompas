@@ -1,12 +1,11 @@
 ﻿using Application.Clients.Queries.GetClient;
 using Application.Common.Interfaces.CVS;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using MediatR;
+using Application.Common.Security;
+using Domain.Authentication.Constants;
 
 namespace Application.Clients.Queries.GetClients
 {
-    //[Authorize]
+    [Authorize(Policy = Policies.ClientManagement)]
     public record GetClientsQuery : IRequest<IEnumerable<GetClientDto>>;
 
     public class GetClientsQueryHandler : IRequestHandler<GetClientsQuery, IEnumerable<GetClientDto>>

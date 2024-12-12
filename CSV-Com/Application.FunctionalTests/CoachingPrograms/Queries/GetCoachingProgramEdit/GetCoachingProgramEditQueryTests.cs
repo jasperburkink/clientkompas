@@ -1,13 +1,12 @@
 ﻿using Application.CoachingPrograms.Queries.GetCoachingProgramEdit;
 using Domain.CVS.Domain;
-using MediatR;
 using TestData;
 using TestData.CoachingProgram;
 using static Application.FunctionalTests.Testing;
 
 namespace Application.FunctionalTests.CoachingPrograms.Queries.GetCoachingProgramEdit
 {
-    public class GetCoachingProgramEditQueryTests : IRequest<GetCoachingProgramEditDto>
+    public class GetCoachingProgramEditQueryTests : BaseTestFixture
     {
         private ITestDataGenerator<CoachingProgram> _testDataGeneratorCoachingProgram;
 

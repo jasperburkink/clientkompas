@@ -1,10 +1,10 @@
 ﻿using Application.Common.Interfaces.CVS;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using MediatR;
+using Application.Common.Security;
+using Domain.Authentication.Constants;
 
 namespace Application.Organizations.Queries.SearchOrganizations
 {
+    [Authorize(Policy = Policies.OrganizationManagement)]
     public class SearchOrganizationQuery : IRequest<IEnumerable<SearchOrganizationDto>>
     {
         public string SearchTerm { get; init; }

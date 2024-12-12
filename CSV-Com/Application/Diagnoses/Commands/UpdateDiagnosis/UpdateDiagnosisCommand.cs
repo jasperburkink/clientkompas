@@ -1,12 +1,12 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Interfaces.CVS;
+﻿using Application.Common.Interfaces.CVS;
+using Application.Common.Security;
 using Application.Diagnoses.Queries.GetDiagnosis;
-using AutoMapper;
+using Domain.Authentication.Constants;
 using Domain.CVS.Domain;
-using MediatR;
 
 namespace Application.Diagnoses.Commands.UpdateDiagnosis
 {
+    [Authorize(Policy = Policies.DiagnosisManagement)]
     public record UpdateDiagnosisCommand : IRequest<DiagnosisDto>
     {
         public int Id { get; init; }

@@ -1,10 +1,12 @@
 ﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces.CVS;
+using Application.Common.Security;
+using Domain.Authentication.Constants;
 using Domain.CVS.Domain;
-using MediatR;
 
 namespace Application.MaritalStatuses.Commands.DeleteMaritalStatus
 {
+    [Authorize(Policy = Policies.MaritalStatusManagement)]
     public record DeleteMaritalStatusCommand : IRequest
     {
         public int Id { get; init; }

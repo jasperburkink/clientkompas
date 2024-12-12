@@ -1,9 +1,10 @@
 ﻿using Application.Common.Interfaces.CVS;
-using AutoMapper;
-using MediatR;
+using Application.Common.Security;
+using Domain.Authentication.Constants;
 
 namespace Application.Clients.Commands.DeactivateClient
 {
+    [Authorize(Policy = Policies.DeactiveClient)]
     public record DeactivateClientCommand : IRequest
     {
         public int Id { get; init; }

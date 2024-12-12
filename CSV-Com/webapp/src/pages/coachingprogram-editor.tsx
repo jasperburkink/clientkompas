@@ -22,7 +22,7 @@ import { Label } from 'components/common/label';
 import { Dropdown, DropdownObject } from 'components/common/dropdown';
 import Organization from 'types/model/Organization';
 import { DatePicker } from 'components/common/datepicker';
-import { filterValidationErrors, ValidationErrorHash } from 'types/common/validation-error';
+import { filterValidationErrors, isHashEmpty, ValidationErrorHash } from 'types/common/validation-error';
 import CoachingProgramEdit from 'types/model/CoachingProgramEdit';
 import Decimal from 'decimal.js-light';
 import { DecimalInputField } from 'components/common/decimal-input-field';
@@ -213,7 +213,7 @@ const CoachingProgramEditor = () => {
             setCoachingProgram(apiResult.ReturnObject!);
         }
         else {
-            if(apiResult.ValidationErrors) {
+            if(apiResult.ValidationErrors && !isHashEmpty(apiResult.ValidationErrors)) {
                 setValidationErrors(apiResult.ValidationErrors);
             }
             else {

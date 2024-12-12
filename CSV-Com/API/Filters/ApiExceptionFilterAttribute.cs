@@ -18,6 +18,7 @@ namespace API.Filters
                 { typeof(NotFoundException), HandleNotFoundException },
                 { typeof(UnauthorizedAccessException), HandleUnauthorizedAccessException },
                 { typeof(ForbiddenAccessException), HandleForbiddenAccessException },
+                { typeof(InvalidLoginException), HandleInvalidLoginException },
             };
         }
 
@@ -115,6 +116,24 @@ namespace API.Filters
             context.Result = new ObjectResult(details)
             {
                 StatusCode = StatusCodes.Status403Forbidden
+            };
+
+            context.ExceptionHandled = true;
+        }
+
+        private void HandleInvalidLoginException(ExceptionContext context)
+        {
+            var exception = (InvalidLoginException)context.Exception;
+
+            var details = new ProblemDetails
+            {
+                Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+                Title = exception.Message
+            };
+
+            context.Result = new ObjectResult(details)
+            {
+                StatusCode = StatusCodes.Status400BadRequest
             };
 
             context.ExceptionHandled = true;

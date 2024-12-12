@@ -1,12 +1,13 @@
 ﻿using Application.Common.Interfaces.CVS;
+using Application.Common.Security;
+using Application.Diagnoses.Queries.GetDiagnosis;
+using Domain.Authentication.Constants;
 using Domain.CVS.Domain;
 using Domain.CVS.Events;
-using MediatR;
-using Application.Diagnoses.Queries.GetDiagnosis;
-using AutoMapper;
 
 namespace Application.Diagnoses.Commands.CreateDiagnosis
 {
+    [Authorize(Policy = Policies.DiagnosisManagement)]
     public record CreateDiagnosisCommand : IRequest<DiagnosisDto>
     {
         public string Name { get; init; }

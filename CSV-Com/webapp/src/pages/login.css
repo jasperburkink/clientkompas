@@ -1,0 +1,96 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600&display=swap');
+
+@layer components {
+.login-page{
+        .loading-spinner{
+            @apply
+            fixed
+            flex
+            inset-0
+            bg-gray-800
+            bg-opacity-50
+            items-center
+            justify-center
+            h-screen
+            w-full
+            z-50;
+        }
+
+        .sidebar{
+            @apply            
+            h-56
+            lg:h-full
+            lg:absolute;
+
+            .navBtnsContainer{
+                @apply
+                !my-4
+                !block;
+            }
+
+            .logo-dark{
+                @apply           
+                w-48
+                h-48            
+                mx-auto
+                block
+                lg:hidden;
+            }
+        }
+
+        .login-container{
+            @apply
+            w-full;
+
+            .login-logo-container{
+                @apply
+                w-full;
+
+                .logo-light{
+                    @apply           
+                    w-72
+                    h-72            
+                    mx-auto
+                    mt-10
+                    hidden
+                    lg:block;
+                }        
+            }
+
+            .login-fields-container{
+                @apply
+                flex
+                flex-col
+                mx-20
+                my-8
+                gap-y-2
+                items-center;
+
+                .login-username{
+                    @apply
+                    w-64;
+                }
+
+                .login-password{
+                    @apply
+                    w-64
+                    ml-[-10px];
+                }
+
+                .login-password-forgotten{
+                    @apply
+                    w-64;
+                }
+
+                .login-button{
+                    @apply
+                    w-40
+                    h-14;
+                }
+            }
+        }
+    }
+}

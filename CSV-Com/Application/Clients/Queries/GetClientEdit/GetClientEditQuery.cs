@@ -1,10 +1,10 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Interfaces.CVS;
-using AutoMapper;
-using MediatR;
+﻿using Application.Common.Interfaces.CVS;
+using Application.Common.Security;
+using Domain.Authentication.Constants;
 
 namespace Application.Clients.Queries.GetClientEdit
 {
+    [Authorize(Policy = Policies.ClientManagement)]
     public record GetClientEditQuery : IRequest<GetClientEditDto>
     {
         public int ClientId { get; init; }
