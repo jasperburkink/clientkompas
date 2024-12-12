@@ -1,7 +1,9 @@
-﻿namespace Application.Common.Interfaces
+﻿using Application.Common.Models;
+
+namespace Application.Common.Interfaces
 {
     public interface IEmailService
     {
-        Task SendEmailAsync(string emailAddress, string subject, string message);
+        Task SendEmailAsync<T>(EmailMessageDto messageDto, string templateName, T model);
     }
 }

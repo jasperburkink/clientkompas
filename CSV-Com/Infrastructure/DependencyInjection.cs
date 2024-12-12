@@ -3,6 +3,7 @@ using Application.Common.Interfaces.Authentication;
 using Application.Common.Interfaces.CVS;
 using Domain.Authentication.Constants;
 using Domain.Authentication.Domain;
+using EmailModule;
 using Infrastructure.Data.Authentication;
 using Infrastructure.Data.CVS;
 using Infrastructure.Data.Interceptor;
@@ -88,7 +89,8 @@ namespace Infrastructure
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IPasswordHasher<AuthenticationUser>, Argon2PasswordHasher>();
             services.AddScoped<IHasher, Argon2Hasher>();
-            services.AddScoped<IEmailService, EmailService>();
+
+            services.AddEmailModuleServices(configuration);
 
             services.AddAuthorization(options =>
             {

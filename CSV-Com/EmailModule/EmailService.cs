@@ -1,59 +1,87 @@
-﻿using FluentEmail.Core;
+﻿using System.Diagnostics;
+using Application.Common.Interfaces;
+using Application.Common.Mappings;
+using Application.Common.Models;
+using AutoMapper;
+using FluentEmail.Core;
 using FluentEmail.MailKitSmtp;
 using FluentEmail.Razor;
 
 namespace EmailModule
 {
-    public class EmailService
+    public class EmailService : IEmailService
     {
+        private readonly IConfigurationProvider _configuration;
+
+        private readonly IMapper _mapper;
+
+        public EmailService()
+        {
+            _configuration = new MapperConfiguration(config =>
+
+            config.AddProfile<MappingProfile>());
+            _mapper = _configuration.CreateMapper();
+
+        }
+
         private string GetTemplateFilePath(string templateName)
         {
             return Path.Combine(Directory.GetCurrentDirectory(), "Templates", $"{templateName}.cshtml");
         }
 
-        public async Task SendEmailAsync<T>(EmailMessage message, string templateName, T model)
+        public async Task SendEmailAsync<T>(EmailMessageDto messageDto, string templateName, T model)
         {
-            var sender = new MailKitSender(new SmtpClientOptions
+            try
             {
-                Server = EmailConfig.SmtpServer,
-                Port = EmailConfig.Port,
-                User = EmailConfig.Username,
-                Password = EmailConfig.Password,
-                UseSsl = true,
-                RequiresAuthentication = true
-            });
+                var message = _mapper.Map<EmailMessage>(messageDto);
 
-            Email.DefaultSender = sender;
-            Email.DefaultRenderer = new RazorRenderer();
+                var sender = new MailKitSender(new SmtpClientOptions
+                {
+                    Server = EmailConfig.SmtpServer,
+                    Port = EmailConfig.Port,
+                    User = EmailConfig.Username,
+                    Password = EmailConfig.Password,
+                    UseSsl = true,
+                    RequiresAuthentication = true
+                });
 
-            var templatePath = GetTemplateFilePath(templateName);
+                Email.DefaultSender = sender;
+                Email.DefaultRenderer = new RazorRenderer();
 
-            if (!File.Exists(templatePath))
-            {
-                Console.WriteLine($"Template file not found: {templatePath}");
-                return;
+                var templatePath = GetTemplateFilePath(templateName);
+
+                if (!File.Exists(templatePath))
+                {
+                    Console.WriteLine($"Template file not found: {templatePath}");
+                    return;
+                }
+
+                var email = Email
+                    .From(EmailConfig.Username, "CliëntenKompas")
+                    .Subject(message.Subject)
+                    .UsingTemplateFromFile(templatePath, model);
+
+                foreach (var recipient in message.To)
+                {
+                    email.To(recipient);
+                }
+
+                var response = await email.SendAsync();
+
+                if (response.Successful)
+                {
+                    Console.WriteLine("E-mail succesvol verzonden!");
+                }
+                else
+                {
+                    Console.WriteLine($"Fout bij het verzenden: {string.Join(", ", response.ErrorMessages)}");
+                }
             }
-
-            var email = Email
-                .From(EmailConfig.Username, "CliëntenKompas")
-                .Subject(message.Subject)
-                .UsingTemplateFromFile(templatePath, model);
-
-            foreach (var recipient in message.To)
+            catch (Exception ex)
             {
-                email.To(recipient);
-            }
-
-            var response = await email.SendAsync();
-
-            if (response.Successful)
-            {
-                Console.WriteLine("E-mail succesvol verzonden!");
-            }
-            else
-            {
-                Console.WriteLine($"Fout bij het verzenden: {string.Join(", ", response.ErrorMessages)}");
+                Debug.WriteLine(ex.Message);
             }
         }
+
     }
 }

@@ -52,7 +52,7 @@ namespace Application.Authentication.Commands.ResendTwoFactorAuthenticationToken
             var twoFactorPendingTokenValue = await _tokenService.GenerateTokenAsync(user, nameof(request.TwoFactorPendingToken));
 
             // Send the token via email
-            await _emailService.SendEmailAsync(user.Email, "Two-factor authentication token", twoFactorAuthenticationTokenValue);
+            //await _emailService.SendEmailAsync(user.Email, "Two-factor authentication token", twoFactorAuthenticationTokenValue);
 
             return new ResendTwoFactorAuthenticationTokenCommandDto
             {

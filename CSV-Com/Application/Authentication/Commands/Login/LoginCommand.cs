@@ -71,8 +71,16 @@ namespace Application.Authentication.Commands.Login
             var twoFactorPendingTokenValue = await _tokenService.GenerateTokenAsync(loggedInUser.User, nameof(LoginCommandDto.TwoFactorPendingToken));
 
             // Send the token via email
-            // TODO: user emailmodule            
-            await _emailService.SendEmailAsync(loggedInUser.User.Email, "Two-factor authentication token", twoFactorAuthenticationTokenValue);
+            // TODO: user emailmodule
+            // 
+
+            EmailMessageDto message = new()
+            {
+                Subject = "Two-factor authentication token",
+                To = new List<string> { loggedInUser.User.Email }
+            };
+
+            await _emailService.SendEmailAsync(message, "2FAVerification", new { VerificationCode = twoFactorPendingTokenValue, User = loggedInUser.User.UserName });
 
             return new LoginCommandDto
             {

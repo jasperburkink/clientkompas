@@ -155,11 +155,11 @@ namespace Infrastructure.Identity
             // TODO: Email logic should not be in this class
             var link = new Uri($"{WEBAPP_URL}/reset-password/{emailAddress}/{encodedToken}");
 
-            await _emailService.SendEmailAsync(emailAddress, "Wachtwoord opnieuw instellen", // TODO: Use the new emailservice and take the text from resources.
-                $""""
-                Via deze link kunt U uw wachtwoord opnieuw instellen.
-                {link}
-                """");
+            //await _emailService.SendEmailAsync(emailAddress, "Wachtwoord opnieuw instellen", // TODO: Use the new emailservice and take the text from resources.
+            //$""""
+            //Via deze link kunt U uw wachtwoord opnieuw instellen.
+            //{link}
+            //"""");
 
             return Result.Success();
         }
