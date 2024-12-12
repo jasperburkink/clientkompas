@@ -21,7 +21,7 @@ namespace Application.UnitTests.Authentication.Commands.RefreshToken
                 RefreshToken = refreshToken
             };
 
-            var refreshTokenMock = new Mock<IRefreshToken>();
+            var refreshTokenMock = new Mock<IToken>();
 
             var user = new AuthenticationUser
             {
@@ -29,11 +29,11 @@ namespace Application.UnitTests.Authentication.Commands.RefreshToken
                 Salt = Encoding.UTF8.GetBytes("Salt")
             };
 
-            var refreshTokenServiceMock = new Mock<IRefreshTokenService>();
-            refreshTokenServiceMock.Setup(mock => mock.GetRefreshTokenAsync(It.IsAny<string>())).ReturnsAsync(refreshTokenMock.Object);
-            refreshTokenServiceMock.Setup(mock => mock.ValidateRefreshTokenAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
-            refreshTokenServiceMock.Setup(mock => mock.RevokeRefreshTokenAsync(It.IsAny<string>(), It.IsAny<string>()));
-            refreshTokenServiceMock.Setup(mock => mock.GenerateRefreshTokenAsync(It.IsAny<AuthenticationUser>())).ReturnsAsync(refreshTokenNew);
+            var refreshTokenServiceMock = new Mock<ITokenService>();
+            refreshTokenServiceMock.Setup(mock => mock.GetTokenAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(refreshTokenMock.Object);
+            refreshTokenServiceMock.Setup(mock => mock.ValidateTokenAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
+            refreshTokenServiceMock.Setup(mock => mock.RevokeTokenAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
+            refreshTokenServiceMock.Setup(mock => mock.GenerateTokenAsync(It.IsAny<AuthenticationUser>(), It.IsAny<string>())).ReturnsAsync(refreshTokenNew);
 
             var bearerTokenServiceMock = new Mock<IBearerTokenService>();
             bearerTokenServiceMock.Setup(mock => mock.GenerateBearerTokenAsync(It.IsAny<AuthenticationUser>(), It.IsAny<IList<string>>())).ReturnsAsync(bearerToken);
@@ -64,7 +64,7 @@ namespace Application.UnitTests.Authentication.Commands.RefreshToken
                 RefreshToken = refreshToken
             };
 
-            var refreshTokenMock = new Mock<IRefreshToken>();
+            var refreshTokenMock = new Mock<IToken>();
 
             var user = new AuthenticationUser
             {
@@ -72,11 +72,11 @@ namespace Application.UnitTests.Authentication.Commands.RefreshToken
                 Salt = Encoding.UTF8.GetBytes("Salt")
             };
 
-            var refreshTokenServiceMock = new Mock<IRefreshTokenService>();
-            refreshTokenServiceMock.Setup(mock => mock.GetRefreshTokenAsync(It.IsAny<string>())).ReturnsAsync(refreshTokenMock.Object);
-            refreshTokenServiceMock.Setup(mock => mock.ValidateRefreshTokenAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
-            refreshTokenServiceMock.Setup(mock => mock.RevokeRefreshTokenAsync(It.IsAny<string>(), It.IsAny<string>()));
-            refreshTokenServiceMock.Setup(mock => mock.GenerateRefreshTokenAsync(It.IsAny<AuthenticationUser>())).ReturnsAsync(refreshTokenNew);
+            var refreshTokenServiceMock = new Mock<ITokenService>();
+            refreshTokenServiceMock.Setup(mock => mock.GetTokenAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(refreshTokenMock.Object);
+            refreshTokenServiceMock.Setup(mock => mock.ValidateTokenAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
+            refreshTokenServiceMock.Setup(mock => mock.RevokeTokenAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
+            refreshTokenServiceMock.Setup(mock => mock.GenerateTokenAsync(It.IsAny<AuthenticationUser>(), It.IsAny<string>())).ReturnsAsync(refreshTokenNew);
 
             var bearerTokenServiceMock = new Mock<IBearerTokenService>();
             bearerTokenServiceMock.Setup(mock => mock.GenerateBearerTokenAsync(It.IsAny<AuthenticationUser>(), It.IsAny<IList<string>>())).ReturnsAsync(bearerToken);
@@ -107,7 +107,7 @@ namespace Application.UnitTests.Authentication.Commands.RefreshToken
                 RefreshToken = refreshToken
             };
 
-            var refreshTokenMock = new Mock<IRefreshToken>();
+            var refreshTokenMock = new Mock<IToken>();
 
             var user = new AuthenticationUser
             {
@@ -115,11 +115,11 @@ namespace Application.UnitTests.Authentication.Commands.RefreshToken
                 Salt = Encoding.UTF8.GetBytes("Salt")
             };
 
-            var refreshTokenServiceMock = new Mock<IRefreshTokenService>();
-            refreshTokenServiceMock.Setup(mock => mock.GetRefreshTokenAsync(It.IsAny<string>())).ReturnsAsync(refreshTokenMock.Object);
-            refreshTokenServiceMock.Setup(mock => mock.ValidateRefreshTokenAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
-            refreshTokenServiceMock.Setup(mock => mock.RevokeRefreshTokenAsync(It.IsAny<string>(), It.IsAny<string>()));
-            refreshTokenServiceMock.Setup(mock => mock.GenerateRefreshTokenAsync(It.IsAny<AuthenticationUser>())).ReturnsAsync(refreshTokenNew);
+            var refreshTokenServiceMock = new Mock<ITokenService>();
+            refreshTokenServiceMock.Setup(mock => mock.GetTokenAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(refreshTokenMock.Object);
+            refreshTokenServiceMock.Setup(mock => mock.ValidateTokenAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
+            refreshTokenServiceMock.Setup(mock => mock.RevokeTokenAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
+            refreshTokenServiceMock.Setup(mock => mock.GenerateTokenAsync(It.IsAny<AuthenticationUser>(), It.IsAny<string>())).ReturnsAsync(refreshTokenNew);
 
             var bearerTokenServiceMock = new Mock<IBearerTokenService>();
             bearerTokenServiceMock.Setup(mock => mock.GenerateBearerTokenAsync(It.IsAny<AuthenticationUser>(), It.IsAny<IList<string>>())).ReturnsAsync(bearerToken);

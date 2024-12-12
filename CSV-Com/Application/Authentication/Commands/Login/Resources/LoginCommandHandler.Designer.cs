@@ -68,5 +68,14 @@ namespace Application.Authentication.Commands.Login.Resources {
                 return ResourceManager.GetString("InvalidLogin", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to U bent niet ingelogd..
+        /// </summary>
+        internal static string UserNotLoggedIn {
+            get {
+                return ResourceManager.GetString("UserNotLoggedIn", resourceCulture);
+            }
+        }
     }
 }

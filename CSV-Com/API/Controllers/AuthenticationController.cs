@@ -2,7 +2,9 @@
 using Application.Authentication.Commands.Logout;
 using Application.Authentication.Commands.RefreshToken;
 using Application.Authentication.Commands.RequestResetPassword;
+using Application.Authentication.Commands.ResendTwoFactorAuthenticationToken;
 using Application.Authentication.Commands.ResetPassword;
+using Application.Authentication.Commands.TwoFactorAuthentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -53,6 +55,22 @@ namespace API.Controllers
         [HttpPost("[action]")]
         [AllowAnonymous]
         public async Task<ActionResult<ResetPasswordCommandDto>> ResetPassword(ResetPasswordCommand command)
+        {
+            var result = await Mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpPost("[action]")]
+        [AllowAnonymous]
+        public async Task<ActionResult<TwoFactorAuthenticationCommandDto>> TwoFactorLogin(TwoFactorAuthenticationCommand command)
+        {
+            var result = await Mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpPost("[action]")]
+        [AllowAnonymous]
+        public async Task<ActionResult<TwoFactorAuthenticationCommandDto>> ResendTwoFactorToken(ResendTwoFactorAuthenticationTokenCommand command)
         {
             var result = await Mediator.Send(command);
             return Ok(result);

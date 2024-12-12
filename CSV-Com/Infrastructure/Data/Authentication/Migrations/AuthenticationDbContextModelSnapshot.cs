@@ -65,7 +65,6 @@ namespace Infrastructure.Data.Authentication.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<byte[]>("Salt")
-                        .IsRequired()
                         .HasColumnType("longblob");
 
                     b.Property<string>("SecurityStamp")

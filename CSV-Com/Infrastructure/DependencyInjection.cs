@@ -85,7 +85,7 @@ namespace Infrastructure
             services.AddSingleton<IDateTime, DateTimeWrapper>();
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IBearerTokenService, BearerTokenService>();
-            services.AddScoped<IRefreshTokenService, RefreshTokenService>();
+            services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IPasswordHasher<AuthenticationUser>, Argon2PasswordHasher>();
             services.AddScoped<IHasher, Argon2Hasher>();
             services.AddScoped<IEmailService, EmailService>();

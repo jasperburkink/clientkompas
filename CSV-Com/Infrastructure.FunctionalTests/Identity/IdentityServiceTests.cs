@@ -1,206 +1,332 @@
-﻿namespace Infrastructure.FunctionalTests.Identity
+﻿using Application.Common.Exceptions;
+using Application.Common.Interfaces;
+using Application.Common.Interfaces.Authentication;
+using Application.Common.Models;
+using Domain.Authentication.Constants;
+using Domain.Authentication.Domain;
+using FluentAssertions;
+using Infrastructure.Data.Authentication;
+using Infrastructure.Identity;
+using Infrastructure.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace Infrastructure.FunctionalTests.Identity
 {
     public class IdentityServiceIntegrationTests
     {
-        //private readonly IdentityService _identityService;
-        //private readonly UserManager<AuthenticationUser> _userManager;
-        //private readonly SignInManager<AuthenticationUser> _signInManager;
-        //private readonly IAuthorizationService _authorizationService;
-        //private readonly IHasher _hasher;
+        private readonly IdentityService _identityService;
+        private readonly UserManager<AuthenticationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        //public IdentityServiceIntegrationTests()
-        //{
-        //    // Setting up in-memory database and Identity-related services
-        //    var serviceProvider = new ServiceCollection()
-        //        .AddDbContext<DbContext>(options => options.UseInMemoryDatabase("TestDb"))
-        //        .AddIdentityCore<AuthenticationUser>(options => { })
-        //        .AddEntityFrameworkStores<DbContext>()
-        //        .AddSignInManager()
-        //        .AddAuthorization()
-        //        .BuildServiceProvider();
+        public IdentityServiceIntegrationTests()
+        {
+            var serviceCollection = new ServiceCollection()
+            .AddLogging()
+            .AddAuthorization()
+            .AddDbContext<AuthenticationDbContext>(options => options.UseInMemoryDatabase(Guid.NewGuid().ToString()))
+            .AddIdentity<AuthenticationUser, IdentityRole>()
+            .AddEntityFrameworkStores<AuthenticationDbContext>()
+            .AddDefaultTokenProviders();
 
-        //    _userManager = serviceProvider.GetRequiredService<UserManager<AuthenticationUser>>();
-        //    _signInManager = serviceProvider.GetRequiredService<SignInManager<AuthenticationUser>>();
-        //    _authorizationService = serviceProvider.GetRequiredService<IAuthorizationService>();
-        //    _hasher = new Argon2Hasher(); // Using the real implementation of Argon2Hasher
+            serviceCollection.Services.AddScoped<IAuthenticationDbContext>(provider => provider.GetService<AuthenticationDbContext>());
+            serviceCollection.Services.AddScoped<IHasher, Argon2Hasher>();
+            serviceCollection.Services.AddScoped<ITokenService, TokenService>();
+            serviceCollection.Services.AddScoped<IEmailService, EmailService>();
 
-        //    _identityService = new IdentityService(_userManager, _signInManager, null, _authorizationService, _hasher);
-        //}
+            // Build de ServiceProvider op de ServiceCollection, niet op de IdentityBuilder
+            var serviceProvider = serviceCollection.Services.BuildServiceProvider();
 
-        //#region CreateUserAsync
+            _userManager = serviceProvider.GetRequiredService<UserManager<AuthenticationUser>>();
+            _roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var signInManager = serviceProvider.GetRequiredService<SignInManager<AuthenticationUser>>();
+            var authorizationService = serviceProvider.GetRequiredService<IAuthorizationService>();
+            var hasher = serviceProvider.GetRequiredService<IHasher>();
+            var refreshtokenService = serviceProvider.GetRequiredService<ITokenService>();
+            var emailService = serviceProvider.GetRequiredService<IEmailService>();
 
-        //[Fact]
-        //public async Task CreateUserAsync_ValidInput_ShouldReturnSuccessResult()
-        //{
-        //    // Arrange
-        //    var userName = "test@example.com";
-        //    var password = "Password123!";
+            _identityService = new IdentityService(_userManager, signInManager, null, authorizationService, hasher, refreshtokenService, emailService);
+        }
 
-        //    // Act
-        //    var (result, userId) = await _identityService.CreateUserAsync(userName, password);
+        #region CreateUserAsync
 
-        //    // Assert
-        //    result.Succeeded.Should().BeTrue();
-        //    userId.Should().NotBeNullOrEmpty();
+        [Fact]
+        public async Task CreateUserAsync_ValidInput_ShouldReturnSuccessResult()
+        {
+            // Arrange
+            var userName = "test@example.com";
+            var password = "Password123!";
 
-        //    var user = await _userManager.FindByIdAsync(userId);
-        //    user.Should().NotBeNull();
-        //    user.UserName.Should().Be(userName);
-        //}
+            // Act
+            var (result, userId) = await _identityService.CreateUserAsync(userName, password);
 
-        //#endregion
+            // Assert
+            result.Succeeded.Should().BeTrue();
+            userId.Should().NotBeNullOrEmpty();
 
-        //#region LoginAsync
+            var user = await _userManager.FindByIdAsync(userId);
+            user.Should().NotBeNull();
+            user.UserName.Should().Be(userName);
+        }
 
-        //[Fact]
-        //public async Task LoginAsync_ValidCredentials_ShouldReturnSuccessResult()
-        //{
-        //    // Arrange
-        //    var userName = "test@example.com";
-        //    var password = "Password123!";
+        #endregion
 
-        //    // Create user
-        //    var (result, _) = await _identityService.CreateUserAsync(userName, password);
-        //    result.Succeeded.Should().BeTrue();
+        #region LoginAsync
 
-        //    // Act
-        //    var loginResult = await _identityService.LoginAsync(userName, password);
+        [Fact(Skip = "Login gives a known httpcontext is null error. Skip for now.")]
+        public async Task LoginAsync_ValidCredentials_ShouldReturnSuccessResult()
+        {
+            // Arrange
+            var userName = "test@example.com";
+            var password = "Password123!";
 
-        //    // Assert
-        //    loginResult.Succeeded.Should().BeTrue();
-        //    loginResult.User.Should().NotBeNull();
-        //    loginResult.User.UserName.Should().Be(userName);
-        //}
+            // Create user
+            var (result, _) = await _identityService.CreateUserAsync(userName, password);
+            result.Succeeded.Should().BeTrue();
 
-        //[Fact]
-        //public async Task LoginAsync_InvalidCredentials_ShouldReturnFailedResult()
-        //{
-        //    // Arrange
-        //    var userName = "test@example.com";
-        //    var password = "WrongPassword";
+            // Act
+            var loginResult = await _identityService.LoginAsync(userName, password);
 
-        //    // Create user
-        //    var (result, _) = await _identityService.CreateUserAsync(userName, "Password123!");
-        //    result.Succeeded.Should().BeTrue();
+            // Assert
+            loginResult.Succeeded.Should().BeTrue();
+            loginResult.User.Should().NotBeNull();
+            loginResult.User.UserName.Should().Be(userName);
+        }
 
-        //    // Act
-        //    var loginResult = await _identityService.LoginAsync(userName, password);
+        [Fact]
+        public async Task LoginAsync_InvalidCredentials_ShouldReturnFailedResult()
+        {
+            // Arrange
+            var userName = "test@example.com";
+            var password = "WrongPassword";
 
-        //    // Assert
-        //    loginResult.Succeeded.Should().BeFalse();
-        //    loginResult.User.Should().BeNull();
-        //}
+            // Create user
+            var (result, _) = await _identityService.CreateUserAsync(userName, "Password123!");
+            result.Succeeded.Should().BeTrue();
 
-        //#endregion
+            // Act
+            var loginResult = await _identityService.LoginAsync(userName, password);
 
-        //#region GetUserNameAsync
+            // Assert
+            loginResult.Succeeded.Should().BeFalse();
+            loginResult.User.Should().BeNull();
+        }
 
-        //[Fact]
-        //public async Task GetUserNameAsync_UserExists_ShouldReturnUserName()
-        //{
-        //    // Arrange
-        //    var userName = "test@example.com";
-        //    var password = "Password123!";
+        #endregion
 
-        //    // Create user
-        //    var (result, userId) = await _identityService.CreateUserAsync(userName, password);
-        //    result.Succeeded.Should().BeTrue();
+        #region GetUserNameAsync
 
-        //    // Act
-        //    var result = await _identityService.GetUserNameAsync(userId);
+        [Fact]
+        public async Task GetUserNameAsync_UserExists_ShouldReturnUserName()
+        {
+            // Arrange
+            var userName = "test@example.com";
+            var password = "Password123!";
 
-        //    // Assert
-        //    result.Should().Be(userName);
-        //}
+            // Create user
+            var (result, userId) = await _identityService.CreateUserAsync(userName, password);
+            result.Succeeded.Should().BeTrue();
 
-        //[Fact]
-        //public async Task GetUserNameAsync_UserDoesNotExist_ShouldReturnNull()
-        //{
-        //    // Act
-        //    var result = await _identityService.GetUserNameAsync("nonexistent");
+            // Act
+            var usernameResult = await _identityService.GetUserNameAsync(userId);
 
-        //    // Assert
-        //    result.Should().BeNull();
-        //}
+            // Assert
+            usernameResult.Should().Be(userName);
+        }
 
-        //#endregion
+        [Fact]
+        public async Task GetUserNameAsync_UserDoesNotExist_ShouldReturnNull()
+        {
+            // Act
+            var result = await _identityService.GetUserNameAsync("nonexistent");
 
-        //#region DeleteUserAsync
+            // Assert
+            result.Should().BeNull();
+        }
 
-        //[Fact]
-        //public async Task DeleteUserAsync_UserExists_ShouldReturnSuccessResult()
-        //{
-        //    // Arrange
-        //    var userName = "test@example.com";
-        //    var password = "Password123!";
+        #endregion
 
-        //    // Create user
-        //    var (result, userId) = await _identityService.CreateUserAsync(userName, password);
-        //    result.Succeeded.Should().BeTrue();
+        #region DeleteUserAsync
 
-        //    // Act
-        //    var deleteResult = await _identityService.DeleteUserAsync(userId);
+        [Fact]
+        public async Task DeleteUserAsync_UserExists_ShouldReturnSuccessResult()
+        {
+            // Arrange
+            var userName = "test@example.com";
+            var password = "Password123!";
 
-        //    // Assert
-        //    deleteResult.Succeeded.Should().BeTrue();
+            // Create user
+            var (result, userId) = await _identityService.CreateUserAsync(userName, password);
+            result.Succeeded.Should().BeTrue();
 
-        //    var deletedUser = await _userManager.FindByIdAsync(userId);
-        //    deletedUser.Should().BeNull();
-        //}
+            // Act
+            var deleteResult = await _identityService.DeleteUserAsync(userId);
 
-        //[Fact]
-        //public async Task DeleteUserAsync_UserDoesNotExist_ShouldReturnSuccessResult()
-        //{
-        //    // Act
-        //    var result = await _identityService.DeleteUserAsync("nonexistent");
+            // Assert
+            deleteResult.Succeeded.Should().BeTrue();
 
-        //    // Assert
-        //    result.Succeeded.Should().BeTrue();
-        //}
+            var deletedUser = await _userManager.FindByIdAsync(userId);
+            deletedUser.Should().BeNull();
+        }
 
-        //#endregion
+        [Fact]
+        public async Task DeleteUserAsync_UserDoesNotExist_ShouldReturnSuccessResult()
+        {
+            // Act
+            var result = await _identityService.DeleteUserAsync("nonexistent");
 
-        //#region IsInRoleAsync
+            // Assert
+            result.Succeeded.Should().BeTrue();
+        }
 
-        //[Fact]
-        //public async Task IsInRoleAsync_UserIsInRole_ShouldReturnTrue()
-        //{
-        //    // Arrange
-        //    var userName = "test@example.com";
-        //    var password = "Password123!";
+        #endregion
 
-        //    // Create user
-        //    var (result, userId) = await _identityService.CreateUserAsync(userName, password);
-        //    result.Succeeded.Should().BeTrue();
+        #region IsInRoleAsync
 
-        //    // Assign role
-        //    await _userManager.AddToRoleAsync(await _userManager.FindByIdAsync(userId), "Admin");
+        [Fact]
+        public async Task IsInRoleAsync_UserIsInRole_ShouldReturnTrue()
+        {
+            // Arrange
+            var userName = "test@example.com";
+            var password = "Password123!";
+            var role = Roles.Administrator;
 
-        //    // Act
-        //    var isInRole = await _identityService.IsInRoleAsync(userId, "Admin");
+            // Create user
+            var (result, userId) = await _identityService.CreateUserAsync(userName, password);
+            result.Succeeded.Should().BeTrue();
 
-        //    // Assert
-        //    isInRole.Should().BeTrue();
-        //}
+            // Assign role
+            await _roleManager.CreateAsync(new IdentityRole(role));
+            await _userManager.AddToRoleAsync(await _userManager.FindByIdAsync(userId), role);
 
-        //[Fact]
-        //public async Task IsInRoleAsync_UserIsNotInRole_ShouldReturnFalse()
-        //{
-        //    // Arrange
-        //    var userName = "test@example.com";
-        //    var password = "Password123!";
+            // Act
+            var isInRole = await _identityService.IsInRoleAsync(userId, role);
 
-        //    // Create user
-        //    var (result, userId) = await _identityService.CreateUserAsync(userName, password);
-        //    result.Succeeded.Should().BeTrue();
+            // Assert
+            isInRole.Should().BeTrue();
+        }
 
-        //    // Act
-        //    var isInRole = await _identityService.IsInRoleAsync(userId, "NonexistentRole");
+        [Fact]
+        public async Task IsInRoleAsync_UserIsNotInRole_ShouldReturnFalse()
+        {
+            // Arrange
+            var userName = "test@example.com";
+            var password = "Password123!";
 
-        //    // Assert
-        //    isInRole.Should().BeFalse();
-        //}
+            // Create user
+            var (result, userId) = await _identityService.CreateUserAsync(userName, password);
+            result.Succeeded.Should().BeTrue();
 
-        //#endregion
+            // Act
+            var isInRole = await _identityService.IsInRoleAsync(userId, "NonexistentRole");
+
+            // Assert
+            isInRole.Should().BeFalse();
+        }
+
+        #endregion
+
+        [Fact]
+        public async Task Get2FATokenAsync_CorrectFlow_ReturnToken()
+        {
+            // Arrange
+            var userName = "test@example.com";
+            var password = "Password123!";
+
+            var (result, userId) = await _identityService.CreateUserAsync(userName, password);
+
+            // Act
+            var token = await _identityService.Get2FATokenAsync(userId);
+
+            // Assert
+            token.Should().NotBeNullOrEmpty();
+        }
+
+        [Fact]
+        public async Task Get2FATokenAsync_UserDoesNotExists_ShouldThrowNotFoundException()
+        {
+            // Arrange
+            var userId = "Not a valid userid";
+
+            // Act
+            Func<Task<string>> act = async () => await _identityService.Get2FATokenAsync(userId);
+
+            // Assert
+            await act.Should().ThrowAsync<NotFoundException>();
+        }
+
+        [Fact(Skip = "Login gives a known httpcontext is null error. Skip for now.")]
+        public async Task Login2FAAsync_CorrectFlow_UserShouldBeLoggedIn()
+        {
+            // Arrange
+            var userName = "test@example.com";
+            var password = "Password123!";
+
+            var (result, userId) = await _identityService.CreateUserAsync(userName, password);
+            var token = await _identityService.Get2FATokenAsync(userId);
+
+            // Act
+            var resultLogin = await _identityService.Login2FAAsync(userId, token);
+
+            // Assert
+            resultLogin.Should().NotBeNull();
+            resultLogin.Succeeded.Should().BeTrue();
+        }
+
+        [Fact(Skip = "Login gives a known httpcontext is null error. Skip for now.")]
+        public async Task Login2FAAsync_CorrectFlow_UserShouldHaveRoles()
+        {
+            // Arrange
+            var userName = "test@example.com";
+            var password = "Password123!";
+            var role = nameof(Roles.Coach);
+
+            var (result, userId) = await _identityService.CreateUserAsync(userName, password);
+            await _roleManager.CreateAsync(new IdentityRole(role));
+            await _userManager.AddToRoleAsync(await _userManager.FindByIdAsync(userId), role);
+
+            var token = await _identityService.Get2FATokenAsync(userId);
+
+            // Act
+            var resultLogin = await _identityService.Login2FAAsync(userId, token);
+
+            // Assert
+            resultLogin.Should().NotBeNull();
+            resultLogin.Roles.Should().NotBeEmpty().And.Contain(role);
+        }
+
+        [Fact]
+        public async Task Login2FAAsync_UserDoesNotExists_ShouldThrowNotFoundException()
+        {
+            // Arrange
+            var userId = "Not a valid user id.";
+            var token = "132546";
+
+            // Act
+            Func<Task<LoggedInResult>> act = async () => await _identityService.Login2FAAsync(userId, token);
+
+            // Assert
+            await act.Should().ThrowAsync<NotFoundException>();
+        }
+
+        [Fact(Skip = "Login gives a known httpcontext is null error. Skip for now.")]
+        public async Task Login2FAAsync_TokenIsInvalid_UserShouldNotBeLoggedIn()
+        {
+            // Arrange
+            var userName = "test@example.com";
+            var password = "Password123!";
+
+            var (result, userId) = await _identityService.CreateUserAsync(userName, password);
+            var token = "WrongToken";
+
+            // Act
+            var resultLogin = await _identityService.Login2FAAsync(userId, token);
+
+            // Assert
+            resultLogin.Should().NotBeNull();
+            resultLogin.Succeeded.Should().BeFalse();
+        }
     }
 }

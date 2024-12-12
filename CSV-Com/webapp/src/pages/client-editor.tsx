@@ -37,7 +37,7 @@ import BenefitForm from 'types/model/BenefitForm';
 import { ClientContext } from './client-context';
 import Organization from 'types/model/Organization';
 import DropdownBoolean from 'components/common/dropdown-boolean';
-import { filterValidationErrors, ValidationErrorHash } from 'types/common/validation-error';
+import { filterValidationErrors, isHashEmpty, ValidationErrorHash } from 'types/common/validation-error';
 
 const ClientEditor = () => {
     
@@ -276,7 +276,7 @@ const ClientEditor = () => {
             setClient(apiResult.ReturnObject!);
         }
         else {
-            if(apiResult.ValidationErrors) {
+            if(apiResult.ValidationErrors && !isHashEmpty(apiResult.ValidationErrors)) {
                 setValidationErrors(apiResult.ValidationErrors);
             }
             else {

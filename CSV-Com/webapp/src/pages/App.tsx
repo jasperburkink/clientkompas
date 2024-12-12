@@ -30,6 +30,7 @@ import WorkingContract from 'types/model/WorkingContract';
 import LabelField from 'components/common/label-field';
 import ApiResult from 'types/common/api-result';
 import Menu from 'components/common/menu';
+import { CountdownButton } from 'components/common/countdown-button';
 
 function App() {
     const data = [
@@ -146,6 +147,8 @@ function App() {
     const onRemoveWorkingContract = (workingContract: WorkingContract):void => {
         console.log(`onRemoveObject`);
     }
+
+    const COUNTDOWN_SECONDS: number = 5;
 
     return (
         <div className="flex flex-col lg:flex-row h-screen lg:h-auto">
@@ -315,13 +318,13 @@ function App() {
 
                     <ErrorPopup isOpen={isErrorPopupOpen} onClose={() => {}} error={cvsError} />
 
-                <p>Foutmelding pop-up</p>
-                <Button buttonType={{ type: "Solid" }} text="Toon foutmelding" className='w-200px h-50px'
-                    onClick=
-                    {
-                        () => { setErrorPopupOpen(true); }
-                    } />
-              
+                    <p>Foutmelding pop-up</p>
+                    <Button buttonType={{ type: "Solid" }} text="Toon foutmelding" className='w-200px h-50px'
+                        onClick=
+                        {
+                            () => { setErrorPopupOpen(true); }
+                        } />
+                    
                     <DomainObjectInput                    
                         label='Inputvelden voor contactpersoon' 
                         addObject={addEmergencyPerson} 
@@ -372,6 +375,12 @@ function App() {
                         error={cvsError} 
                         isOpen={isErrorPopupOpen}
                         onClose={() => setErrorPopupOpen(false)} />  
+
+                    <p>Countdown button</p>
+                    <CountdownButton
+                        buttonType={{ type: "Solid" }}
+                        text={`Countdown from ${COUNTDOWN_SECONDS}`}
+                        className='w-200px h-50px' countdownMax={COUNTDOWN_SECONDS} />
                 </div>
             <Copyright />
         </div>

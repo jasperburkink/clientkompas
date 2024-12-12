@@ -11,7 +11,7 @@ namespace Infrastructure.UnitTests.Identity
 {
     public class RefreshTokenServiceTests
     {
-        private readonly RefreshTokenService _tokenService;
+        private readonly TokenService _tokenService;
         private readonly byte[] _salt = Encoding.UTF8.GetBytes("Salt");
         private readonly string _hashedString;
         private const string USER_ID = nameof(USER_ID);
@@ -44,7 +44,7 @@ namespace Infrastructure.UnitTests.Identity
             hasherMock.Setup(mock => mock.GenerateSalt(It.IsAny<int>())).Returns(_salt);
             hasherMock.Setup(mock => mock.HashString(It.IsAny<string>(), It.IsAny<byte[]>())).Returns(_hashedString);
 
-            _tokenService = new RefreshTokenService(authenticationDBContextMock.Object, hasherMock.Object);
+            _tokenService = new TokenService(authenticationDBContextMock.Object, hasherMock.Object);
         }
 
         [Fact]
@@ -61,7 +61,7 @@ namespace Infrastructure.UnitTests.Identity
             };
 
             // Act
-            var token = await _tokenService.GenerateRefreshTokenAsync(user);
+            var token = await _tokenService.GenerateTokenAsync(user, "RefreshToken");
 
             // Assert
             token.Should().NotBeNull();
@@ -75,7 +75,7 @@ namespace Infrastructure.UnitTests.Identity
             AuthenticationUser user = null;
 
             // Act & Assert
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _tokenService.GenerateRefreshTokenAsync(user));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _tokenService.GenerateTokenAsync(user, "RefreshToken"));
         }
 
         [Fact]
@@ -86,7 +86,7 @@ namespace Infrastructure.UnitTests.Identity
             var refreshToken = REFRESH_TOKEN_VALUE;
 
             // Act
-            var result = await _tokenService.ValidateRefreshTokenAsync(userId, refreshToken);
+            var result = await _tokenService.ValidateTokenAsync(userId, refreshToken, "RefreshToken");
 
             // Assert
             result.Should().BeTrue();
@@ -123,10 +123,10 @@ namespace Infrastructure.UnitTests.Identity
             hasherMock.Setup(mock => mock.GenerateSalt(It.IsAny<int>())).Returns(_salt);
             hasherMock.Setup(mock => mock.HashString(It.IsAny<string>(), It.IsAny<byte[]>())).Returns(_hashedString);
 
-            var tokenService = new RefreshTokenService(authenticationDBContextMock.Object, hasherMock.Object);
+            var tokenService = new TokenService(authenticationDBContextMock.Object, hasherMock.Object);
 
             // Act
-            var result = await tokenService.ValidateRefreshTokenAsync(userId, refreshToken);
+            var result = await tokenService.ValidateTokenAsync(userId, refreshToken, "RefreshToken");
 
             // Assert
             refreshTokenObject.IsUsed.Should().BeTrue();
@@ -161,10 +161,10 @@ namespace Infrastructure.UnitTests.Identity
             hasherMock.Setup(mock => mock.GenerateSalt(It.IsAny<int>())).Returns(_salt);
             hasherMock.Setup(mock => mock.HashString(It.IsAny<string>(), It.IsAny<byte[]>())).Returns(_hashedString);
 
-            var tokenService = new RefreshTokenService(authenticationDBContextMock.Object, hasherMock.Object);
+            var tokenService = new TokenService(authenticationDBContextMock.Object, hasherMock.Object);
 
             // Act
-            var result = await tokenService.ValidateRefreshTokenAsync(userId, refreshToken);
+            var result = await tokenService.ValidateTokenAsync(userId, refreshToken, "RefreshToken");
 
             // Assert
             result.Should().BeFalse();
@@ -199,10 +199,10 @@ namespace Infrastructure.UnitTests.Identity
             hasherMock.Setup(mock => mock.GenerateSalt(It.IsAny<int>())).Returns(_salt);
             hasherMock.Setup(mock => mock.HashString(It.IsAny<string>(), It.IsAny<byte[]>())).Returns(_hashedString);
 
-            var tokenService = new RefreshTokenService(authenticationDBContextMock.Object, hasherMock.Object);
+            var tokenService = new TokenService(authenticationDBContextMock.Object, hasherMock.Object);
 
             // Act
-            var result = await tokenService.ValidateRefreshTokenAsync(userId, refreshToken);
+            var result = await tokenService.ValidateTokenAsync(userId, refreshToken, "RefreshToken");
 
             // Assert
             result.Should().BeFalse();
@@ -237,10 +237,10 @@ namespace Infrastructure.UnitTests.Identity
             hasherMock.Setup(mock => mock.GenerateSalt(It.IsAny<int>())).Returns(_salt);
             hasherMock.Setup(mock => mock.HashString(It.IsAny<string>(), It.IsAny<byte[]>())).Returns(_hashedString);
 
-            var tokenService = new RefreshTokenService(authenticationDBContextMock.Object, hasherMock.Object);
+            var tokenService = new TokenService(authenticationDBContextMock.Object, hasherMock.Object);
 
             // Act
-            var result = await tokenService.ValidateRefreshTokenAsync(userId, refreshToken);
+            var result = await tokenService.ValidateTokenAsync(userId, refreshToken, "RefreshToken");
 
             // Assert
             result.Should().BeFalse();
@@ -275,10 +275,10 @@ namespace Infrastructure.UnitTests.Identity
             hasherMock.Setup(mock => mock.GenerateSalt(It.IsAny<int>())).Returns(_salt);
             hasherMock.Setup(mock => mock.HashString(It.IsAny<string>(), It.IsAny<byte[]>())).Returns(_hashedString);
 
-            var tokenService = new RefreshTokenService(authenticationDBContextMock.Object, hasherMock.Object);
+            var tokenService = new TokenService(authenticationDBContextMock.Object, hasherMock.Object);
 
             // Act
-            var result = await tokenService.ValidateRefreshTokenAsync(userId, refreshToken);
+            var result = await tokenService.ValidateTokenAsync(userId, refreshToken, "RefreshToken");
 
             // Assert
             result.Should().BeFalse();
@@ -313,10 +313,10 @@ namespace Infrastructure.UnitTests.Identity
             hasherMock.Setup(mock => mock.GenerateSalt(It.IsAny<int>())).Returns(_salt);
             hasherMock.Setup(mock => mock.HashString(It.IsAny<string>(), It.IsAny<byte[]>())).Returns(_hashedString);
 
-            var tokenService = new RefreshTokenService(authenticationDBContextMock.Object, hasherMock.Object);
+            var tokenService = new TokenService(authenticationDBContextMock.Object, hasherMock.Object);
 
             // Act
-            var result = await tokenService.ValidateRefreshTokenAsync(userId, refreshToken);
+            var result = await tokenService.ValidateTokenAsync(userId, refreshToken, "RefreshToken");
 
             // Assert
             result.Should().BeFalse();
@@ -330,7 +330,7 @@ namespace Infrastructure.UnitTests.Identity
             var refreshToken = "RefreshToken";
 
             // Act & Assert
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _tokenService.ValidateRefreshTokenAsync(userId, refreshToken));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _tokenService.ValidateTokenAsync(userId, refreshToken, "RefreshToken"));
         }
 
         [Fact]
@@ -341,7 +341,7 @@ namespace Infrastructure.UnitTests.Identity
             var refreshToken = "RefreshToken";
 
             // Act & Assert
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _tokenService.ValidateRefreshTokenAsync(userId, refreshToken));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _tokenService.ValidateTokenAsync(userId, refreshToken, "RefreshToken"));
         }
 
         [Fact]
@@ -372,10 +372,10 @@ namespace Infrastructure.UnitTests.Identity
 
             var hasherMock = new Mock<IHasher>();
 
-            var tokenService = new RefreshTokenService(authenticationDBContextMock.Object, hasherMock.Object);
+            var tokenService = new TokenService(authenticationDBContextMock.Object, hasherMock.Object);
 
             // Act
-            await tokenService.RevokeRefreshTokenAsync(userId, refreshToken);
+            await tokenService.RevokeTokenAsync(userId, refreshToken, "RefreshToken");
 
             // Assert
             refreshTokenObject.IsRevoked.Should().BeTrue();
@@ -409,10 +409,10 @@ namespace Infrastructure.UnitTests.Identity
 
             var hasherMock = new Mock<IHasher>();
 
-            var tokenService = new RefreshTokenService(authenticationDBContextMock.Object, hasherMock.Object);
+            var tokenService = new TokenService(authenticationDBContextMock.Object, hasherMock.Object);
 
             // Act
-            await tokenService.RevokeRefreshTokenAsync(userId, refreshToken);
+            await tokenService.RevokeTokenAsync(userId, refreshToken, "RefreshToken");
 
             // Assert
             authenticationDBContextMock.Verify(mock => mock.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
@@ -426,7 +426,7 @@ namespace Infrastructure.UnitTests.Identity
             var refreshToken = "RefreshToken";
 
             // Act & Assert
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _tokenService.RevokeRefreshTokenAsync(userId, refreshToken));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _tokenService.RevokeTokenAsync(userId, refreshToken, "RefreshToken"));
         }
 
         [Fact]
@@ -437,7 +437,7 @@ namespace Infrastructure.UnitTests.Identity
             string refreshToken = null;
 
             // Act & Assert
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _tokenService.RevokeRefreshTokenAsync(userId, refreshToken));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _tokenService.RevokeTokenAsync(userId, refreshToken, "RefreshToken"));
         }
 
         [Fact]
@@ -466,10 +466,10 @@ namespace Infrastructure.UnitTests.Identity
 
             var hasherMock = new Mock<IHasher>();
 
-            var tokenService = new RefreshTokenService(authenticationDBContextMock.Object, hasherMock.Object);
+            var tokenService = new TokenService(authenticationDBContextMock.Object, hasherMock.Object);
 
             // Act
-            await tokenService.RevokeRefreshTokenAsync(userId, refreshToken);
+            await tokenService.RevokeTokenAsync(userId, refreshToken, "RefreshToken");
 
             // Assert
             authenticationDBContextMock.Verify(mock => mock.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
@@ -501,10 +501,10 @@ namespace Infrastructure.UnitTests.Identity
 
             var hasherMock = new Mock<IHasher>();
 
-            var tokenService = new RefreshTokenService(authenticationDBContextMock.Object, hasherMock.Object);
+            var tokenService = new TokenService(authenticationDBContextMock.Object, hasherMock.Object);
 
             // Act
-            await tokenService.RevokeRefreshTokenAsync(userId, refreshToken);
+            await tokenService.RevokeTokenAsync(userId, refreshToken, "RefreshToken");
 
             // Assert
             authenticationDBContextMock.Verify(mock => mock.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
@@ -535,10 +535,10 @@ namespace Infrastructure.UnitTests.Identity
 
             var hasherMock = new Mock<IHasher>();
 
-            var tokenService = new RefreshTokenService(authenticationDBContextMock.Object, hasherMock.Object);
+            var tokenService = new TokenService(authenticationDBContextMock.Object, hasherMock.Object);
 
             // Act
-            var result = await tokenService.GetRefreshTokenAsync(refreshToken);
+            var result = await tokenService.GetTokenAsync(refreshToken, "RefreshToken");
 
             // Assert
             result.Should().NotBeNull().And.BeEquivalentTo(refreshTokenObject);
@@ -569,10 +569,10 @@ namespace Infrastructure.UnitTests.Identity
 
             var hasherMock = new Mock<IHasher>();
 
-            var tokenService = new RefreshTokenService(authenticationDBContextMock.Object, hasherMock.Object);
+            var tokenService = new TokenService(authenticationDBContextMock.Object, hasherMock.Object);
 
             // Act
-            var result = await tokenService.GetRefreshTokenAsync(refreshToken);
+            var result = await tokenService.GetTokenAsync(refreshToken, "RefreshToken");
 
             // Assert
             result.Should().BeNull();
@@ -608,10 +608,10 @@ namespace Infrastructure.UnitTests.Identity
 
             var hasherMock = new Mock<IHasher>();
 
-            var tokenService = new RefreshTokenService(authenticationDBContextMock.Object, hasherMock.Object);
+            var tokenService = new TokenService(authenticationDBContextMock.Object, hasherMock.Object);
 
             // Act
-            var result = await tokenService.GetValidRefreshTokensByUserAsync(USER_ID);
+            var result = await tokenService.GetValidTokensByUserAsync(USER_ID, "RefreshToken");
 
             // Assert
             result.Should().NotBeNull().And.BeEquivalentTo(refreshTokens);
@@ -648,10 +648,10 @@ namespace Infrastructure.UnitTests.Identity
 
             var hasherMock = new Mock<IHasher>();
 
-            var tokenService = new RefreshTokenService(authenticationDBContextMock.Object, hasherMock.Object);
+            var tokenService = new TokenService(authenticationDBContextMock.Object, hasherMock.Object);
 
             // Act
-            var result = await tokenService.GetValidRefreshTokensByUserAsync(USER_ID);
+            var result = await tokenService.GetValidTokensByUserAsync(USER_ID, "RefreshToken");
 
             // Assert
             result.Should().NotBeNull().And.BeEmpty();

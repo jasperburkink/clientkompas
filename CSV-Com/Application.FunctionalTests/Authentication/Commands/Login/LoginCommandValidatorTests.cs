@@ -1,10 +1,7 @@
 ﻿using Application.Authentication.Commands.Login;
 using Application.Common.Exceptions;
 using Domain.Authentication.Constants;
-using Domain.Authentication.Domain;
 using TestData;
-using TestData.Authentication;
-using static Application.FunctionalTests.Testing;
 
 namespace Application.FunctionalTests.Authentication.Commands.Login
 {
@@ -12,35 +9,31 @@ namespace Application.FunctionalTests.Authentication.Commands.Login
     {
         private string _password;
         private LoginCommand _command;
-        private ITestDataGenerator<AuthenticationUser> _testDataGeneratorAuthenticationUser;
 
         [SetUp]
         public async Task SetUp()
         {
-            _testDataGeneratorAuthenticationUser = new AuthenticationUserDataGenerator();
-            var authenticationUser = _testDataGeneratorAuthenticationUser.Create();
+            UseMocks = true;
 
             _password = PasswordGenerator.GenerateSecurePassword(16);
 
-            await RunAsUserAsync(authenticationUser.UserName, _password, Roles.Coach);
-
             _command = new LoginCommand
             {
-                UserName = authenticationUser.UserName,
+                UserName = CustomWebApplicationFactoryWithMocks.AuthenticationUser.UserName,
                 Password = _password
             };
         }
 
-        [Ignore("Logging in via tests is not working yet.")]
-        //[Test]
-        public void Handle_CorrectFlow_NoValidationExcceptions()
+        [Test]
+        public async Task Handle_CorrectFlow_NoValidationExcceptions()
         {
             // Act & Assert
-            Assert.DoesNotThrowAsync(() => SendAsync(_command));
+            Func<Task<LoginCommandDto>> act = async () => await SendAsync(_command);
+
+            await act.Should().NotThrowAsync<ValidationException>();
         }
 
-        [Ignore("Logging in via tests is not working yet.")]
-        //[Test]
+        [Test]
         public void Handle_UserNameIsLongerThanAllowed_ShouldHaveValidationError()
         {
             // Arrange
@@ -56,8 +49,7 @@ namespace Application.FunctionalTests.Authentication.Commands.Login
             });
         }
 
-        [Ignore("Logging in via tests is not working yet.")]
-        //[Test]
+        [Test]
         public void Handle_UserNameIsNull_ShouldHaveValidationError()
         {
             // Arrange
@@ -73,8 +65,7 @@ namespace Application.FunctionalTests.Authentication.Commands.Login
             });
         }
 
-        [Ignore("Logging in via tests is not working yet.")]
-        //[Test]
+        [Test]
         public void Handle_UserNameIsEmpty_ShouldHaveValidationError()
         {
             // Arrange
@@ -90,25 +81,7 @@ namespace Application.FunctionalTests.Authentication.Commands.Login
             });
         }
 
-        [Ignore("Logging in via tests is not working yet.")]
-        //[Test]
-        public void Handle_PasswordIsLongerThanAllowed_ShouldHaveValidationError()
-        {
-            // Arrange
-            var command = _command with
-            {
-                Password = FakerConfiguration.Faker.Random.String2(AuthenticationUserConstants.PASSWORD_MAXLENGTH + 1)
-            };
-
-            // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () =>
-            {
-                await SendAsync(command);
-            });
-        }
-
-        [Ignore("Logging in via tests is not working yet.")]
-        //[Test]
+        [Test]
         public void Handle_PasswordIsNull_ShouldHaveValidationError()
         {
             // Arrange
@@ -124,8 +97,7 @@ namespace Application.FunctionalTests.Authentication.Commands.Login
             });
         }
 
-        [Ignore("Logging in via tests is not working yet.")]
-        //[Test]
+        [Test]
         public void Handle_PasswordIsEmpty_ShouldHaveValidationError()
         {
             // Arrange
@@ -141,85 +113,7 @@ namespace Application.FunctionalTests.Authentication.Commands.Login
             });
         }
 
-        [Ignore("Logging in via tests is not working yet.")]
-        //[Test]
-        public void Handle_PasswordIsShorterThanAllowed_ShouldHaveValidationError()
-        {
-            // Arrange
-            var command = _command with
-            {
-                Password = FakerConfiguration.Faker.Random.String2(AuthenticationUserConstants.PASSWORD_MINLENGTH - 1)
-            };
-
-            // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () =>
-            {
-                await SendAsync(command);
-            });
-        }
-
-        [Ignore("Logging in via tests is not working yet.")]
-        //[Test]
-        public void Handle_PasswordDoesNotContainLowercaseCharacter_ShouldHaveValidationError()
-        {
-            // Arrange
-            var command = _command with
-            {
-                Password = "TESTDERTEST1!"
-            };
-
-            // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () =>
-            {
-                await SendAsync(command);
-            });
-        }
-
-        [Ignore("Logging in via tests is not working yet.")]
-        //[Test]
-        public void Handle_PasswordDoesNotContainUppercaseCharacter_ShouldHaveValidationError()
-        {
-            // Arrange
-            var command = _command with
-            {
-                Password = "testtest1!"
-            };
-
-            // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () =>
-            {
-                await SendAsync(command);
-            });
-        }
-
-        public void Handle_PasswordDoesNotContainNumber_ShouldHaveValidationError()
-        {
-            // Arrange
-            var command = _command with
-            {
-                Password = "TestTest!?.,"
-            };
-
-            // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () =>
-            {
-                await SendAsync(command);
-            });
-        }
-
-        public void Handle_PasswordDoesNotSpecialCharacter_ShouldHaveValidationError()
-        {
-            // Arrange
-            var command = _command with
-            {
-                Password = "TestTest1234"
-            };
-
-            // Act & Assert
-            Assert.ThrowsAsync<ValidationException>(async () =>
-            {
-                await SendAsync(command);
-            });
-        }
+        [TearDown]
+        public void TearDown() => UseMocks = false;
     }
 }

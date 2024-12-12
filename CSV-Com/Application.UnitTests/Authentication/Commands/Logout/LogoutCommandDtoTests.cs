@@ -52,16 +52,16 @@ namespace Application.UnitTests.Authentication.Commands.Logout
                 Value = "Test3"
             };
 
-            var userRefreshTokens = new List<IRefreshToken>
+            var userRefreshTokens = new List<IToken>
             {
                 refreshToken,
                 refreshTokenUser1,
                 refreshTokenUser2
             };
 
-            var refreshTokenServiceMock = new Mock<IRefreshTokenService>();
-            refreshTokenServiceMock.Setup(mock => mock.GetRefreshTokenAsync(It.IsAny<string>())).ReturnsAsync(refreshToken);
-            refreshTokenServiceMock.Setup(mock => mock.GetValidRefreshTokensByUserAsync(It.IsAny<string>())).ReturnsAsync(userRefreshTokens);
+            var refreshTokenServiceMock = new Mock<ITokenService>();
+            refreshTokenServiceMock.Setup(mock => mock.GetTokenAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(refreshToken);
+            refreshTokenServiceMock.Setup(mock => mock.GetValidTokensByUserAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(userRefreshTokens);
 
             var command = new LogoutCommand()
             {

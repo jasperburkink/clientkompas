@@ -14,7 +14,10 @@ namespace Infrastructure.Data.Authentication.Configuration
         public void Configure(EntityTypeBuilder<RefreshToken> builder)
         {
             builder.Ignore(rt => rt.IsExpired);
+            builder.Property(t => t.CreatedAt).HasColumnName("CreatedAt");
+            builder.Property(t => t.ExpiresAt).HasColumnName("ExpiresAt");
+            builder.Property(t => t.IsUsed).HasColumnName("IsUsed");
+            builder.Property(t => t.IsRevoked).HasColumnName("IsRevoked");
         }
-
     }
 }

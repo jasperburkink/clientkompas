@@ -1,6 +1,9 @@
 ﻿using System.Data.Common;
+using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Models;
+using Domain.Authentication.Constants;
+using Domain.Authentication.Domain;
 using Infrastructure.Data.Authentication;
 using Infrastructure.Data.CVS;
 using Microsoft.AspNetCore.Builder;
@@ -12,6 +15,8 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Moq;
+using TestData;
+using TestData.Authentication;
 
 namespace Application.FunctionalTests
 {
@@ -19,6 +24,8 @@ namespace Application.FunctionalTests
     {
         private readonly DbConnection _connectionCvs = connectionCvs;
         private readonly DbConnection _connectionAuthentication = connectionAuthentication;
+        private static readonly ITestDataGenerator<AuthenticationUser> s_testDataGeneratorAuthenticationUser = new AuthenticationUserDataGenerator();
+        public static readonly AuthenticationUser AuthenticationUser = s_testDataGeneratorAuthenticationUser.Create();
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
@@ -29,12 +36,20 @@ namespace Application.FunctionalTests
                     .AddTransient(provider => Mock.Of<IUser>(s => s.CurrentUserId == GetCurrentUserId()));
 
                 // Mock 
+                AuthenticationUser.TwoFactorEnabled = true;
+                AddAsync<AuthenticationUser, AuthenticationDbContext>(AuthenticationUser).GetAwaiter().GetResult();
                 var mockIdentityService = new Mock<IIdentityService>();
-                mockIdentityService.Setup(s => s.LoginAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new LoggedInResult(true));
+                mockIdentityService.Setup(s => s.LoginAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new LoggedInResult(true, AuthenticationUser, [Roles.Coach]));
                 mockIdentityService.Setup(s => s.LogoutAsync()).Returns(Task.CompletedTask);
                 mockIdentityService.Setup(s => s.ResetPasswordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(Result.Success);
+                mockIdentityService.Setup(s => s.Login2FAAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new LoggedInResult(true, AuthenticationUser, [Roles.Coach]));
+                mockIdentityService.Setup(s => s.Get2FATokenAsync(It.IsAny<string>())).ReturnsAsync("2FA");
                 services.RemoveAll<IIdentityService>();
                 services.AddSingleton(mockIdentityService.Object);
+
+                var emailServiceMock = new Mock<IEmailService>();
+                emailServiceMock.Setup(mock => mock.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
+
 
                 // CVS
                 services

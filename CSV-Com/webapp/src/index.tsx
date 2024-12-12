@@ -12,6 +12,7 @@ import Unauthorized from 'pages/statuspages/unauthorized';
 import Forbidden from 'pages/statuspages/forbidden';
 import RequestResetPassword from 'pages/request-reset-password';
 import ResetPassword from 'pages/reset-password';
+import Login2FA from 'pages/login-2fa';
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 root.render(
@@ -21,6 +22,7 @@ root.render(
                 <Routes>
                     <Route path='/' element={<App />} />
                     <Route path='/login' element={<Login />} />
+                    <Route path='/login-2fa/:userid/:remainingtimeinseconds' element={<Login2FA />} />
                     <Route path='/password-forgotten' element={<RequestResetPassword />} />
                     <Route path='/reset-password/:emailaddress/:token' element={<ResetPassword />} />
                     <Route path='/unauthorized' element={<Unauthorized />} />

@@ -4,7 +4,7 @@ using Application.Common.Interfaces;
 
 namespace Infrastructure.Services
 {
-    internal class EmailService : IEmailService // TODO: This service can be removed when emailmodule is ready
+    public class EmailService : IEmailService // TODO: This service can be removed when emailmodule is ready
     {
         private const string EMAIL_ADDRESS = "ontwikkelaar@clientkompas.nl";
         private const string PASSWORD = "iaOQ6m6hsm4cK5yAEi1X";

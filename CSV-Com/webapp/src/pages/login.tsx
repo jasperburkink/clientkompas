@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import Menu from 'components/common/menu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-import { ValidationErrorHash } from "types/common/validation-error";
+import { isHashEmpty, ValidationErrorHash } from "types/common/validation-error";
 import StatusEnum from "types/common/StatusEnum";
 import { ReactComponent as LogoLightSVG } from 'assets/CK_light_logo.svg';
 import { ReactComponent as LogoDarkSVG } from 'assets/CK_dark_logo.svg';
@@ -25,6 +25,7 @@ import ConfirmPopup from "components/common/confirm-popup";
 import { useNavigate } from "react-router-dom";
 import { BearerToken } from "types/common/bearer-token";
 import RefreshTokenService from "utils/refresh-token-service";
+import moment from "moment";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -76,15 +77,35 @@ const Login = () => {
         setCvsError: React.Dispatch<React.SetStateAction<CVSError>>, 
         setErrorPopupOpen: React.Dispatch<React.SetStateAction<boolean>>, 
         setBearerToken: React.Dispatch<React.SetStateAction<BearerToken | null>>) => {
-        if (apiResult.Ok) {
-            if(apiResult.ReturnObject?.success === true 
-                && apiResult.ReturnObject?.bearertoken
-                && apiResult.ReturnObject?.refreshtoken) {                
+        if (apiResult.Ok) {            
+            if(apiResult.ReturnObject?.success === true){
+                // Check if the user needs to supply a 2FA token to login
+                if(apiResult.ReturnObject?.twofactorpendingtoken && apiResult.ReturnObject?.userid) {  
+                    // Add token to the session
+                    sessionStorage.setItem('twofactorpendingtoken', apiResult.ReturnObject?.twofactorpendingtoken);
+                    
+                    const expiryDate = new Date(apiResult.ReturnObject?.expiresat);                    
+                    const remainingTimeInSeconds = Math.floor((expiryDate.getTime() - new Date().getTime()) / 1000);
 
-                setConfirmMessage('Inloggen succesvol.');
-                setConfirmPopupOneButtonOpen(true);
-                setBearerToken(new BearerToken(apiResult.ReturnObject.bearertoken));
-                setRefreshToken(apiResult.ReturnObject.refreshtoken);
+                    navigate(`/login-2fa/${apiResult.ReturnObject?.userid}/${remainingTimeInSeconds}`);
+                }
+                // User logged in successfully
+                else if (apiResult.ReturnObject?.bearertoken && apiResult.ReturnObject?.refreshtoken) {
+                    setConfirmMessage('Inloggen succesvol.');
+                    setConfirmPopupOneButtonOpen(true);
+                    setBearerToken(new BearerToken(apiResult.ReturnObject.bearertoken));
+                    setRefreshToken(apiResult.ReturnObject.refreshtoken);
+                }
+                else {
+                    setCvsError({
+                        id: 0,
+                        errorcode: 'E',
+                        message: `Er is een opgetreden tijdens het inloggen. Foutmelding: Not a valid loginresult.`
+                    });
+                    setErrorPopupOpen(true);
+    
+                    setValidationErrors({});
+                }
             }
             else{
                 setCvsError({
@@ -98,7 +119,7 @@ const Login = () => {
             }
         }
         else {
-            if(apiResult.ValidationErrors) {
+            if(apiResult.ValidationErrors && !isHashEmpty(apiResult.ValidationErrors)) {
                 setValidationErrors(apiResult.ValidationErrors);
             }
 
