@@ -8,6 +8,7 @@ namespace EmailModule
     {
         public static IServiceCollection AddEmailModuleServices(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddAutoMapper(typeof(MappingProfile));
             services.AddScoped<IEmailService, EmailService>();
 
             return services;

@@ -28,6 +28,8 @@ namespace Infrastructure
             var connectionStringCVS = configuration.GetValue<string>("ConnectionStrings:CVSConnectionString");
             Guard.Against.Null(connectionStringCVS, message: "Connection string 'CVSConnectionString' not found.");
 
+            services.AddEmailModuleServices(configuration);
+
             services.AddScoped<AuditableEntityInterceptor>();
             services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>(sp => sp.GetRequiredService<AuditableEntityInterceptor>());
 
@@ -89,8 +91,6 @@ namespace Infrastructure
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IPasswordHasher<AuthenticationUser>, Argon2PasswordHasher>();
             services.AddScoped<IHasher, Argon2Hasher>();
-
-            services.AddEmailModuleServices(configuration);
 
             services.AddAuthorization(options =>
             {

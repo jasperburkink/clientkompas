@@ -4,7 +4,7 @@
     {
         public const string SmtpServer = "mail.mijndomein.nl";
 
-        public const int Port = 465;
+        public const int Port = 587;
 
         public const string Username = "ontwikkelaar@clientkompas.nl";
 

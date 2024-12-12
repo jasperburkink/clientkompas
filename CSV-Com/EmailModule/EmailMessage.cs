@@ -1,10 +1,6 @@
-﻿using Application.Common.Mappings;
-using Application.Common.Models;
-using AutoMapper;
-
-namespace EmailModule
+﻿namespace EmailModule
 {
-    public class EmailMessage : IMapFrom<EmailMessageDto>
+    public class EmailMessage
     {
         public required List<string> To { get; set; } = new();
 
@@ -22,12 +18,6 @@ namespace EmailModule
         public void AddAttachment(string attachment)
         {
             Attachments.Add(attachment);
-        }
-
-        public void Mapping(Profile profile)
-        {
-            // TODO: Get the right text value for the enum values. Depends on language user.
-            profile.CreateMap<EmailMessageDto, EmailMessage>();
         }
     }
 }

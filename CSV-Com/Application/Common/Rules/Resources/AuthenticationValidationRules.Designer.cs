@@ -160,6 +160,15 @@ namespace Application.Common.Rules.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to UserId is verplicht..
+        /// </summary>
+        internal static string UserIdRequired {
+            get {
+                return ResourceManager.GetString("UserIdRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Gebruikersnaam mag niet langer zijn dan {0} karakters..
         /// </summary>
         internal static string UserNameMaxLength {

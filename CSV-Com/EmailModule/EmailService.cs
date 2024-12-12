@@ -1,32 +1,25 @@
 ﻿using System.Diagnostics;
 using Application.Common.Interfaces;
-using Application.Common.Mappings;
 using Application.Common.Models;
 using AutoMapper;
 using FluentEmail.Core;
 using FluentEmail.MailKitSmtp;
-using FluentEmail.Razor;
+using RazorLight;
 
 namespace EmailModule
 {
     public class EmailService : IEmailService
     {
-        private readonly IConfigurationProvider _configuration;
-
         private readonly IMapper _mapper;
+        private readonly IRazorLightEngine _razorLightEngine;
 
-        public EmailService()
+        public EmailService(IMapper mapper)
         {
-            _configuration = new MapperConfiguration(config =>
-
-            config.AddProfile<MappingProfile>());
-            _mapper = _configuration.CreateMapper();
-
-        }
-
-        private string GetTemplateFilePath(string templateName)
-        {
-            return Path.Combine(Directory.GetCurrentDirectory(), "Templates", $"{templateName}.cshtml");
+            _mapper = mapper;
+            _razorLightEngine = new RazorLightEngineBuilder()
+                .UseEmbeddedResourcesProject(typeof(EmailService).Assembly) // Laad sjablonen uit de embedded resources
+                .UseMemoryCachingProvider()
+                .Build();
         }
 
         public async Task SendEmailAsync<T>(EmailMessageDto messageDto, string templateName, T model)
@@ -45,21 +38,15 @@ namespace EmailModule
                     RequiresAuthentication = true
                 });
 
+
                 Email.DefaultSender = sender;
-                Email.DefaultRenderer = new RazorRenderer();
 
-                var templatePath = GetTemplateFilePath(templateName);
-
-                if (!File.Exists(templatePath))
-                {
-                    Console.WriteLine($"Template file not found: {templatePath}");
-                    return;
-                }
+                var template = await _razorLightEngine.CompileRenderAsync($"EmailModule.Templates.{templateName}.cshtml", model);
 
                 var email = Email
                     .From(EmailConfig.Username, "CliëntenKompas")
                     .Subject(message.Subject)
-                    .UsingTemplateFromFile(templatePath, model);
+                    .Body(template);
 
                 foreach (var recipient in message.To)
                 {
