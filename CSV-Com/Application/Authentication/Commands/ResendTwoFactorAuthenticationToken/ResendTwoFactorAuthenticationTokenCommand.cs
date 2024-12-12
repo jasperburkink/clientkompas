@@ -17,8 +17,6 @@ namespace Application.Authentication.Commands.ResendTwoFactorAuthenticationToken
 
     public class ResendTwoFactorAuthenticationTokenCommandHandler : IRequestHandler<ResendTwoFactorAuthenticationTokenCommand, ResendTwoFactorAuthenticationTokenCommandDto>
     {
-        private const string RESOURCE_KEY_NOEMAILADDRESS = "NoEmailAddress";
-        private const string RESOURCE_KEY_USERNOTLOGGEDIN = "UserNotLoggedIn";
         private readonly IIdentityService _identityService;
         private readonly ITokenService _tokenService;
         private readonly IResourceMessageProvider _resourceMessageProvider;
@@ -39,7 +37,7 @@ namespace Application.Authentication.Commands.ResendTwoFactorAuthenticationToken
 
             if (!await IsUserLoggedIn(request, user, currentTwoFactorPendingToken))
             {
-                throw new InvalidLoginException(_resourceMessageProvider.GetMessage(typeof(TwoFactorAuthenticationCommandHandler), RESOURCE_KEY_USERNOTLOGGEDIN));
+                throw new InvalidLoginException(_resourceMessageProvider.GetMessage(typeof(TwoFactorAuthenticationCommandHandler), AuthenticationCommandContants.RESOURCE_KEY_USERNOTLOGGEDIN));
             }
 
             // Token value that user needs to enter
@@ -47,7 +45,7 @@ namespace Application.Authentication.Commands.ResendTwoFactorAuthenticationToken
 
             if (string.IsNullOrEmpty(user.Email))
             {
-                throw new NotFoundException(_resourceMessageProvider.GetMessage(typeof(LoginCommandHandler), RESOURCE_KEY_NOEMAILADDRESS));
+                throw new NotFoundException(_resourceMessageProvider.GetMessage(typeof(LoginCommandHandler), AuthenticationCommandContants.RESOURCE_KEY_NOEMAILADDRESS));
             }
 
             // Security token for checking loginstatus user
