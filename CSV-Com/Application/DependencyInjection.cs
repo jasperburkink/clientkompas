@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Reflection;
 using Application.Common.Behaviours;
+using Application.Common.Helpers;
 using Application.Common.Interfaces;
 using Application.Common.Resources;
 using FluentValidation;
@@ -13,20 +14,35 @@ namespace Application
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            services.AddAutoMapper(Assembly.GetExecutingAssembly());
-            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            var assembly = Assembly.GetExecutingAssembly();
+
+            services.AddAutoMapper(assembly);
+            services.AddValidatorsFromAssembly(assembly);
             services.AddMediatR(cfg =>
             {
                 // TODO: uncomment when authorization is implemented
-                cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+                cfg.RegisterServicesFromAssembly(assembly);
                 cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehaviour<,>));
                 //cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(AuthorizationBehaviour<,>));
                 cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 
             });
-            services.AddSingleton<IResourceMessageProvider>(new ResourceMessageProvider(CultureInfo.CurrentUICulture));
+
+            LoadResources(services, assembly);
 
             return services;
+        }
+
+        private static void LoadResources(IServiceCollection services, Assembly assembly)
+        {
+            var resourceProvider = new ResourceMessageProvider(CultureInfo.CurrentUICulture); // TODO: Should load resources for all available cultures in de application.
+
+            foreach (var resourceType in ResourceHelper.GetResourceTypes(assembly))
+            {
+                resourceProvider.LoadResources(resourceType);
+            }
+
+            services.AddSingleton<IResourceMessageProvider>(resourceProvider);
         }
     }
 }
