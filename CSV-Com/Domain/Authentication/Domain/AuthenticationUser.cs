@@ -4,6 +4,8 @@ namespace Domain.Authentication.Domain
 {
     public class AuthenticationUser : IdentityUser
     {
-        public int CVSUserId { get; set; }
+        public int? CVSUserId { get; set; }
+
+        public byte[]? Salt { get; set; }
     }
 }

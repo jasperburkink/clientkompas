@@ -9,7 +9,6 @@ using Application.Clients.Queries.GetClientEdit;
 using Application.Clients.Queries.GetClientFullname;
 using Application.Clients.Queries.GetClients;
 using Application.Clients.Queries.SearchClients;
-using Application.Common.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -28,30 +27,16 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<GetClientDto>> Get(int id)
         {
-            try
-            {
-                var client = await Mediator.Send(new GetClientQuery { ClientId = id });
-                return Ok(client);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex);
-            }
+            var client = await Mediator.Send(new GetClientQuery { ClientId = id });
+            return Ok(client);
         }
 
 
         [HttpGet("[action]/{id}")]
         public async Task<ActionResult<GetClientEditDto>> GetClientEditor(int id)
         {
-            try
-            {
-                var client = await Mediator.Send(new GetClientEditQuery { ClientId = id });
-                return Ok(client);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex);
-            }
+            var client = await Mediator.Send(new GetClientEditQuery { ClientId = id });
+            return Ok(client);
         }
 
         [HttpGet("[action]/{id}")]
@@ -71,18 +56,7 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<ClientDto>> Create(CreateClientCommand command)
         {
-            try
-            {
-                return await Mediator.Send(command);
-            }
-            catch (FluentValidation.ValidationException ex)
-            {
-                return BadRequest(ex.Errors);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex);
-            }
+            return await Mediator.Send(command);
         }
 
         [Route("[action]")]
@@ -95,52 +69,14 @@ namespace API.Controllers
         [HttpPut]
         public async Task<ActionResult<ClientDto>> Updateclient(UpdateClientCommand command)
         {
-            try
-            {
-                var result = await Mediator.Send(command);
-                return Ok(result);
-            }
-            catch (NotFoundException ex)
-            {
-                return StatusCode(StatusCodes.Status404NotFound, ex);
-            }
-            catch (FluentValidation.ValidationException ex)
-            {
-                return BadRequest(ex.Errors);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex);
-            }
+            return await Mediator.Send(command);
         }
 
         [HttpPut("[action]")]
         public async Task<IActionResult> DeactivateClient(DeactivateClientCommand command)
         {
-            try
-            {
-                await Mediator.Send(command);
-                return Ok();
-            }
-            catch (NotFoundException ex)
-            {
-                return StatusCode(StatusCodes.Status404NotFound, ex);
-            }
-            catch (FluentValidation.ValidationException ex)
-            {
-                return BadRequest(ex.Errors);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex);
-            }
-        }
-
-        //TODO: implement with new Mediator structure
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-            throw new NotImplementedException();
+            await Mediator.Send(command);
+            return Ok();
         }
 
         [Route("[action]")]
@@ -151,23 +87,14 @@ namespace API.Controllers
         public async Task<IActionResult> DeleteDriversLicence(DeleteClientDriversLicenceCommand command)
         {
             await Mediator.Send(command);
-
             return NoContent();
         }
-
 
         [HttpGet("[action]")]
         public async Task<ActionResult<IEnumerable<SearchClientDto>>> SearchClients([FromQuery] SearchClientsQuery query)
         {
-            try
-            {
-                var clients = await Mediator.Send(query);
-                return Ok(clients);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex);
-            }
+            var clients = await Mediator.Send(query);
+            return Ok(clients);
         }
     }
 }

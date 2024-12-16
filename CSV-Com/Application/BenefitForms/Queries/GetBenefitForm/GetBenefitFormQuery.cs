@@ -1,10 +1,10 @@
 ﻿using Application.Common.Interfaces.CVS;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using MediatR;
+using Application.Common.Security;
+using Domain.Authentication.Constants;
 
 namespace Application.BenefitForms.Queries.GetBenefitForm
 {
+    [Authorize(Policy = Policies.BenefitFormManagement)]
     public record GetBenefitFormQuery : IRequest<IEnumerable<BenefitFormDto>> { }
 
     public class GetBenefitFormQueryHandler : IRequestHandler<GetBenefitFormQuery, IEnumerable<BenefitFormDto>>

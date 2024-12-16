@@ -1,8 +1,9 @@
 ﻿using System.Linq.Expressions;
-using Domain.Authentication.Constants;
+using Application.Common.Interfaces.Authentication;
+using Domain.Authentication.Domain;
+using Infrastructure.Data.Authentication;
+using Infrastructure.Data.CVS;
 using Infrastructure.Identity;
-using Infrastructure.Persistence.Authentication;
-using Infrastructure.Persistence.CVS;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -19,43 +20,47 @@ namespace Application.FunctionalTests
         private static ITestDatabase s_databaseCSV;
         private static ITestDatabase s_databaseAuthentication;
         private static CustomWebApplicationFactory s_factory = null!;
-        private static IServiceScopeFactory s_scopeFactory = null!;
-        private static string? s_userId;
+        private static CustomWebApplicationFactoryWithMocks s_factoryWithMocks = null!;
+        private static IServiceScopeFactory s_scopeFactory = null!, s_scopeFactoryWithMocks = null!;
+        private static string? s_currentUserId;
         private static readonly string? s_databasePrefix = GenerateRandomPrefix();
+        public static bool UseMocks { get; set; } = false;
+        public static IIdentityService IdentityService => CreateScope().ServiceProvider.GetRequiredService<IIdentityService>();
 
         [OneTimeSetUp]
         public async Task RunBeforeAnyTests()
         {
-            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            if (environment is null)
-            {
-                Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Development");
-                environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            }
-
+            // Configuration + Connectionstrings
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
             var configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile($"appsettings.{environment}.json", optional: false, reloadOnChange: true)
                 .AddEnvironmentVariables()
                 .Build();
 
-            var authenticationConnectionString = configuration.GetConnectionString("AuthenticationConnectionString");
-            var csvConnectionString = configuration.GetConnectionString("CVSConnectionString");
+            // Temporary databases for testing
+            var authenticationConnectionString = configuration.GetConnectionString("AuthenticationConnectionString")
+                ?.Replace("<<test_db_name>>", $"{s_databasePrefix}_Authentication");
 
-            authenticationConnectionString = authenticationConnectionString?.Replace("<<test_db_name>>", $"{s_databasePrefix}_Authentication");
-            csvConnectionString = csvConnectionString?.Replace("<<test_db_name>>", $"{s_databasePrefix}_CVS");
+            var csvConnectionString = configuration.GetConnectionString("CVSConnectionString")
+                ?.Replace("<<test_db_name>>", $"{s_databasePrefix}_CVS");
 
             s_databaseAuthentication = await TestDatabaseFactory<AuthenticationDbContext>.CreateAsync(authenticationConnectionString!);
             s_databaseCSV = await TestDatabaseFactory<CVSDbContext>.CreateAsync(csvConnectionString!);
 
-            s_factory = new CustomWebApplicationFactory(s_databaseCSV.GetConnection());
+            var connectionCvs = s_databaseCSV.GetConnection();
+            var connectionAuthentication = s_databaseAuthentication.GetConnection();
 
+            s_factory = new CustomWebApplicationFactory(connectionCvs, connectionAuthentication);
             s_scopeFactory = s_factory.Services.GetRequiredService<IServiceScopeFactory>();
+
+            s_factoryWithMocks = new CustomWebApplicationFactoryWithMocks(connectionCvs, connectionAuthentication);
+            s_scopeFactoryWithMocks = s_factoryWithMocks.Services.GetRequiredService<IServiceScopeFactory>();
         }
 
         public static async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
         {
-            using var scope = s_scopeFactory.CreateScope();
+            using var scope = CreateScope();
 
             var mediator = scope.ServiceProvider.GetRequiredService<ISender>();
 
@@ -64,55 +69,49 @@ namespace Application.FunctionalTests
 
         public static async Task SendAsync(IBaseRequest request)
         {
-            using var scope = s_scopeFactory.CreateScope();
+            using var scope = CreateScope();
 
             var mediator = scope.ServiceProvider.GetRequiredService<ISender>();
 
             await mediator.Send(request);
         }
 
-        public static string? GetUserId()
+        public static string? GetCurrentUserId()
         {
-            return s_userId;
+            return s_currentUserId;
         }
 
-        public static async Task<string> RunAsDefaultUserAsync()
+        public static async Task<string> RunAsAsync(string role)
         {
-            return await RunAsUserAsync("test@local", "Testing1234!", []);
+            return await RunAsUserAsync(role, $"{role}1!", role);
         }
 
-        public static async Task<string> RunAsAdministratorAsync()
+        public static async Task<string> RunAsUserAsync(string userName, string password, string role, string id = "")
         {
-            return await RunAsUserAsync("administrator@local", "Administrator1234!", [Roles.Administrator]);
-        }
+            using var scope = CreateScope();
 
-        public static async Task<string> RunAsUserAsync(string userName, string password, string[] roles)
-        {
-            using var scope = s_scopeFactory.CreateScope();
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AuthenticationUser>>();
 
-            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-
-            var user = new ApplicationUser { UserName = userName, Email = userName };
+            var user = new AuthenticationUser
+            {
+                Id = id,
+                UserName = userName,
+                Email = userName
+            };
 
             var result = await userManager.CreateAsync(user, password);
 
-            if (roles.Any())
-            {
-                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-                foreach (var role in roles)
-                {
-                    await roleManager.CreateAsync(new IdentityRole(role));
-                }
+            await roleManager.CreateAsync(new IdentityRole(role));
 
-                await userManager.AddToRolesAsync(user, roles);
-            }
+            await userManager.AddToRolesAsync(user, [role]);
 
             if (result.Succeeded)
             {
-                s_userId = user.Id;
+                s_currentUserId = user.Id;
 
-                return s_userId;
+                return s_currentUserId;
             }
 
             var errors = string.Join(Environment.NewLine, result.ToApplicationResult().Errors);
@@ -130,15 +129,22 @@ namespace Application.FunctionalTests
             {
             }
 
-            s_userId = null;
+            s_currentUserId = null;
         }
 
         public static async Task<TEntity?> FindAsync<TEntity>(params object[] keyValues)
             where TEntity : class
         {
-            using var scope = s_scopeFactory.CreateScope();
+            return await FindAsync<TEntity, CVSDbContext>(keyValues);
+        }
 
-            var context = scope.ServiceProvider.GetRequiredService<CVSDbContext>();
+        public static async Task<TEntity?> FindAsync<TEntity, TDbContext>(params object[] keyValues)
+            where TEntity : class
+            where TDbContext : DbContext
+        {
+            using var scope = CreateScope();
+
+            var context = scope.ServiceProvider.GetRequiredService<TDbContext>();
 
             return await context.FindAsync<TEntity>(keyValues);
         }
@@ -146,9 +152,16 @@ namespace Application.FunctionalTests
         public static async Task<ICollection<TEntity>> GetAsync<TEntity>(params Expression<Func<TEntity, object>>[] includes)
             where TEntity : class
         {
-            using var scope = s_scopeFactory.CreateScope();
+            return await GetAsync<TEntity, CVSDbContext>(includes);
+        }
 
-            var context = scope.ServiceProvider.GetRequiredService<CVSDbContext>();
+        public static async Task<ICollection<TEntity>> GetAsync<TEntity, TDbContext>(params Expression<Func<TEntity, object>>[] includes)
+            where TEntity : class
+            where TDbContext : DbContext
+        {
+            using var scope = CreateScope();
+
+            var context = scope.ServiceProvider.GetRequiredService<TDbContext>();
 
             IQueryable<TEntity> query = context.Set<TEntity>();
 
@@ -163,9 +176,16 @@ namespace Application.FunctionalTests
         public static async Task AddAsync<TEntity>(TEntity entity)
             where TEntity : class
         {
-            using var scope = s_scopeFactory.CreateScope();
+            await AddAsync<TEntity, CVSDbContext>(entity);
+        }
 
-            var context = scope.ServiceProvider.GetRequiredService<CVSDbContext>();
+        public static async Task AddAsync<TEntity, TDbContext>(TEntity entity)
+            where TEntity : class
+            where TDbContext : DbContext
+        {
+            using var scope = CreateScope();
+
+            var context = scope.ServiceProvider.GetRequiredService<TDbContext>();
 
             context.Add(entity);
 
@@ -186,11 +206,54 @@ namespace Application.FunctionalTests
 
         public static async Task<int> CountAsync<TEntity>() where TEntity : class
         {
-            using var scope = s_scopeFactory.CreateScope();
+            using var scope = CreateScope();
 
             var context = scope.ServiceProvider.GetRequiredService<CVSDbContext>();
 
             return await context.Set<TEntity>().CountAsync();
+        }
+
+        public static async Task<string> CreateUserAsync(string userName, string password)
+        {
+            using var scope = CreateScope();
+
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AuthenticationUser>>();
+
+
+            var user = new AuthenticationUser
+            {
+                UserName = userName,
+                Email = userName
+            };
+
+            var result = await userManager.CreateAsync(user, password);
+
+            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+            if (result.Succeeded)
+            {
+                s_currentUserId = user.Id;
+
+                return s_currentUserId;
+            }
+
+            var errors = string.Join(Environment.NewLine, result.ToApplicationResult().Errors);
+
+            throw new Exception($"Unable to create {userName}.{Environment.NewLine}{errors}");
+        }
+
+        public static async Task<string> GetPasswordResetTokenAsync(AuthenticationUser user)
+        {
+            using var scope = CreateScope();
+
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AuthenticationUser>>();
+
+            return await userManager.GeneratePasswordResetTokenAsync(user);
+        }
+
+        private static IServiceScope CreateScope()
+        {
+            return UseMocks ? s_scopeFactoryWithMocks.CreateScope() : s_scopeFactory.CreateScope();
         }
 
         [OneTimeTearDown]
@@ -199,6 +262,7 @@ namespace Application.FunctionalTests
             await s_databaseAuthentication.DropAsync();
             await s_databaseCSV.DropAsync();
             await s_databaseCSV.DisposeAsync();
+            await s_factory.DisposeAsync();
             await s_factory.DisposeAsync();
         }
 

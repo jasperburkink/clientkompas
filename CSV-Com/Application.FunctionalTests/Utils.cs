@@ -1,4 +1,6 @@
 ﻿using System.Linq.Expressions;
+using Domain.Authentication.Constants;
+using TestData;
 
 namespace Application.FunctionalTests
 {
@@ -20,6 +22,11 @@ namespace Application.FunctionalTests
             }
 
             return body.Member.Name;
+        }
+
+        public static string GeneratePassword()
+        {
+            return FakerConfiguration.Faker.Internet.Password(AuthenticationUserConstants.PASSWORD_MINLENGTH) + "Az1!";
         }
     }
 }

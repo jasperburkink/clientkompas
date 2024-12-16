@@ -1,19 +1,19 @@
 ﻿using Application.BenefitForms.Queries.GetBenefitForm;
 using Application.Clients.Dtos;
-using Application.Common.Exceptions;
 using Application.Common.Interfaces.CVS;
+using Application.Common.Security;
 using Application.Diagnoses.Queries.GetDiagnosis;
 using Application.DriversLicences.Queries;
 using Application.MaritalStatuses.Queries.GetMaritalStatus;
-using AutoMapper;
+using Domain.Authentication.Constants;
 using Domain.CVS.Domain;
 using Domain.CVS.Enums;
 using Domain.CVS.Events;
 using Domain.CVS.ValueObjects;
-using MediatR;
 
 namespace Application.Clients.Commands.CreateClient
 {
+    [Authorize(Policy = Policies.ClientManagement)]
     public record CreateClientCommand : IRequest<ClientDto>
     {
         public string? FirstName { get; set; }

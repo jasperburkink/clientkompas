@@ -1,4 +1,5 @@
 ﻿using Application.CoachingPrograms.Commands.CreateCoachingProgram;
+using Domain.Authentication.Constants;
 using Domain.CVS.Domain;
 using TestData;
 using TestData.Client;
@@ -37,6 +38,8 @@ namespace Application.FunctionalTests.CoachingPrograms.Commands.CreateCoachingPr
         public async Task Handle_CorrectFlow_ShouldCreateCoachingProgram()
         {
             // Act
+            await RunAsAsync(Roles.Administrator);
+
             await SendAsync(_command);
             var coachingProgram = (await GetAsync<CoachingProgram>()).FirstOrDefault();
 
@@ -49,6 +52,8 @@ namespace Application.FunctionalTests.CoachingPrograms.Commands.CreateCoachingPr
         public async Task Handle_CorrectFlow_ShouldHaveRightClientId()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var client = _testDataGeneratorClient.Create();
             await AddAsync(client);
             _command.ClientId = client.Id;
@@ -65,6 +70,8 @@ namespace Application.FunctionalTests.CoachingPrograms.Commands.CreateCoachingPr
         public async Task Handle_CorrectFlow_ShouldHaveRightOrganizationId()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var organization = _testDataGeneratorOrganization.Create();
             await AddAsync(organization);
             _command.OrganizationId = organization.Id;
@@ -81,6 +88,8 @@ namespace Application.FunctionalTests.CoachingPrograms.Commands.CreateCoachingPr
         public async Task Handle_MultipleCommands_ShouldCreateMultipleCoachingPrograms()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var client = _testDataGeneratorClient.Create();
             await AddAsync(client);
             var organization = _testDataGeneratorOrganization.Create();
@@ -98,6 +107,33 @@ namespace Application.FunctionalTests.CoachingPrograms.Commands.CreateCoachingPr
             var clients = await GetAsync<Client>();
 
             clients.Should().NotBeNull().And.HaveCount(2);
+        }
+
+        [TestCase(Roles.SystemOwner)]
+        [TestCase(Roles.Licensee)]
+        [TestCase(Roles.Administrator)]
+        [TestCase(Roles.Coach)]
+        public async Task Handle_RunAsRole_ShouldCreateCoachingProgram(string role)
+        {
+            // Act
+            await RunAsAsync(role);
+
+            await SendAsync(_command);
+            var coachingProgram = (await GetAsync<CoachingProgram>()).FirstOrDefault();
+
+            // Assert
+            coachingProgram.Should().NotBeNull();
+            coachingProgram!.Id.Should().NotBe(0);
+        }
+
+        [Test]
+        public async Task Handle_UserIsAnomymousUser_ThrowsUnauthorizedAccessException()
+        {
+            // Act
+            var result = async () => await SendAsync(_command);
+
+            // Assert
+            await result.Should().ThrowAsync<UnauthorizedAccessException>();
         }
     }
 }

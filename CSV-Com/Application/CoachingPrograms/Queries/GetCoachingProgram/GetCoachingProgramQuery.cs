@@ -1,10 +1,10 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Interfaces.CVS;
-using AutoMapper;
-using MediatR;
+﻿using Application.Common.Interfaces.CVS;
+using Application.Common.Security;
+using Domain.Authentication.Constants;
 
 namespace Application.CoachingPrograms.Queries.GetCoachingProgram
 {
+    [Authorize(Policy = Policies.CoachingProgramManagement)]
     public record GetCoachingProgramQuery : IRequest<GetCoachingProgramDto>
     {
         public int Id { get; init; }

@@ -1,4 +1,5 @@
 ﻿using Application.CoachingPrograms.Queries.GetCoachingProgramsByClient;
+using Domain.Authentication.Constants;
 using Domain.CVS.Domain;
 using TestData;
 using TestData.Client;
@@ -23,8 +24,8 @@ namespace Application.FunctionalTests.CoachingPrograms.Queries.GetCoachingProgra
         public async Task Handle_CorrectFlow_ShouldReturnCoachingPrograms()
         {
             // Arrange
-            // TODO: Turn on authentication 
-            //await RunAsDefaultUserAsync();
+            await RunAsAsync(Roles.Administrator);
+
             var client = _testDataGeneratorClient.Create();
 
             await AddAsync(client);
@@ -77,9 +78,42 @@ namespace Application.FunctionalTests.CoachingPrograms.Queries.GetCoachingProgra
             var result = () => SendAsync(query);
 
             // Assert
-            //TODO: Turn on authentication 
-            //await result.Should().ThrowAsync<UnauthorizedAccessException>();
+            await result.Should().ThrowAsync<UnauthorizedAccessException>();
+        }
+
+        [TestCase(Roles.SystemOwner)]
+        [TestCase(Roles.Licensee)]
+        [TestCase(Roles.Administrator)]
+        [TestCase(Roles.Coach)]
+        public async Task Handle_RunAsRole_ShouldReturnCoachingPrograms(string role)
+        {
+            // Arrange
+            await RunAsAsync(role);
+
+            var client = _testDataGeneratorClient.Create();
+
+            await AddAsync(client);
+
+            var coachingPrograms = _testDataGeneratorCoachingProgram.Create(5).ToList();
+            for (var i = 0; i < coachingPrograms.Count(); i++)
+            {
+                coachingPrograms[i].ClientId = client.Id;
+                coachingPrograms[i].Client = null;
+
+                await AddAsync(coachingPrograms[i]);
+            }
+
+            var query = new GetCoachingProgramsByClientQuery()
+            {
+                ClientId = client.Id
+            };
+
+            // Act
+            var result = await SendAsync(query);
+
+            // Assert
             result.Should().NotBeNull();
+            result.Count().Should().Be(coachingPrograms.Count());
         }
     }
 }

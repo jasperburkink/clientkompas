@@ -106,7 +106,7 @@ namespace Application.Common.Rules.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Postcode mag niet langer zijn dn {0} karakters..
+        ///   Looks up a localized string similar to Postcode mag niet langer zijn dan {0} karakters..
         /// </summary>
         internal static string PostalCodeMaxLength {
             get {

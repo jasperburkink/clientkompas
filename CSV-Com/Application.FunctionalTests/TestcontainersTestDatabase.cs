@@ -38,7 +38,7 @@ namespace Application.FunctionalTests
 
             _respawner = await Respawner.CreateAsync(_connectionString, new RespawnerOptions
             {
-                TablesToIgnore = new Respawn.Graph.Table[] { "__EFMigrationsHistory" }
+                TablesToIgnore = ["__EFMigrationsHistory"]
             });
         }
 
@@ -58,9 +58,9 @@ namespace Application.FunctionalTests
             await _container.DisposeAsync();
         }
 
-        public Task DropAsync()
+        public async Task DropAsync()
         {
-            throw new NotImplementedException();
+            await _container.StopAsync();
         }
     }
 }

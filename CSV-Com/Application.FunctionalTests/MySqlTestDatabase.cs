@@ -53,7 +53,7 @@ namespace Application.FunctionalTests
             _respawner = await Respawner.CreateAsync(_connection, new RespawnerOptions
             {
                 DbAdapter = DbAdapter.MySql,
-                TablesToIgnore = new Respawn.Graph.Table[] { "__EFMigrationsHistory" },
+                TablesToIgnore = ["__EFMigrationsHistory"],
             });
         }
 
