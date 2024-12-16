@@ -44,6 +44,26 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Authentication\Commands\Login\Resources\LoginCommandHandler.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>LoginCommandHandler.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Authentication\Commands\Login\Resources\LoginCommandHandler.nl.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>LoginCommandHandler.nl.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Authentication\Commands\ResendTwoFactorAuthenticationToken\Resources\ResendTwoFactorAuthenticationTokenCommandHandler.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResendTwoFactorAuthenticationTokenCommandHandler.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Authentication\Commands\TwoFactorAuthentication\Resources\TwoFactorAuthenticationCommandHandler.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>TwoFactorAuthenticationCommandHandler.resx</DependentUpon>
+    </Compile>
     <Compile Update="CoachingPrograms\Queries\GetCoachingProgram\Resources\GetCoachingProgramDto.nl.Designer.cs">
       <DependentUpon>GetCoachingProgramDto.nl.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -63,6 +83,16 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>AddressValidationRules.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Common\Rules\Resources\AuthenticationValidationRules.nl.Designer.cs">
+      <DependentUpon>AuthenticationValidationRules.nl.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Common\Rules\Resources\AuthenticationValidationRules.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AuthenticationValidationRules.resx</DependentUpon>
     </Compile>
     <Compile Update="Common\Rules\Resources\BenefitFormValidationRules.Designer.cs">
       <DependentUpon>BenefitFormValidationRules.resx</DependentUpon>
@@ -99,6 +129,16 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>BenefitFormValidationRules.nl.resx</DependentUpon>
     </Compile>
+    <Compile Update="Common\Rules\Resources\RefreshTokenValidationRules.nl.Designer.cs">
+      <DependentUpon>RefreshTokenValidationRules.nl.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Common\Rules\Resources\RefreshTokenValidationRules.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>RefreshTokenValidationRules.resx</DependentUpon>
+    </Compile>
     <Compile Update="Common\Rules\Resources\WorkingContractValidationRules.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -112,6 +152,22 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Authentication\Commands\Login\Resources\LoginCommandHandler.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>LoginCommandHandler.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Authentication\Commands\Login\Resources\LoginCommandHandler.nl.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>LoginCommandHandler.nl.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Authentication\Commands\ResendTwoFactorAuthenticationToken\Resources\ResendTwoFactorAuthenticationTokenCommandHandler.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResendTwoFactorAuthenticationTokenCommandHandler.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Authentication\Commands\TwoFactorAuthentication\Resources\TwoFactorAuthenticationCommandHandler.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TwoFactorAuthenticationCommandHandler.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="CoachingPrograms\Queries\GetCoachingProgram\Resources\GetCoachingProgramDto.nl.resx">
       <LastGenOutput>GetCoachingProgramDto.nl.Designer.cs</LastGenOutput>
       <Generator>ResXFileCodeGenerator</Generator>
@@ -127,6 +183,14 @@
     <EmbeddedResource Update="Common\Rules\Resources\AddressValidationRules.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>AddressValidationRules.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Rules\Resources\AuthenticationValidationRules.nl.resx">
+      <LastGenOutput>AuthenticationValidationRules.nl.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Rules\Resources\AuthenticationValidationRules.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AuthenticationValidationRules.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Common\Rules\Resources\BenefitFormValidationRules.resx">
       <LastGenOutput>BenefitFormValidationRules.Designer.cs</LastGenOutput>
@@ -155,6 +219,14 @@
     <EmbeddedResource Update="Common\Rules\Resources\BenefitFormValidationRules.nl.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>BenefitFormValidationRules.nl.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Rules\Resources\RefreshTokenValidationRules.nl.resx">
+      <LastGenOutput>RefreshTokenValidationRules.nl.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Rules\Resources\RefreshTokenValidationRules.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>RefreshTokenValidationRules.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Common\Rules\Resources\WorkingContractValidationRules.resx">
       <Generator>ResXFileCodeGenerator</Generator>

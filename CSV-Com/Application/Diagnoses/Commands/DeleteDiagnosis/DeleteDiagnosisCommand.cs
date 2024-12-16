@@ -1,10 +1,11 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Interfaces.CVS;
+﻿using Application.Common.Interfaces.CVS;
+using Application.Common.Security;
+using Domain.Authentication.Constants;
 using Domain.CVS.Domain;
-using MediatR;
 
 namespace Application.Diagnoses.Commands.DeleteDiagnosis
 {
+    [Authorize(Policy = Policies.DiagnosisManagement)]
     public record DeleteDiagnosisCommand : IRequest
     {
         public int Id { get; init; }

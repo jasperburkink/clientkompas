@@ -1,4 +1,4 @@
-﻿using Domain.Authentication.Constants;
+﻿using Domain.CVS.Constants;
 using Domain.CVS.Domain;
 using FluentValidation;
 

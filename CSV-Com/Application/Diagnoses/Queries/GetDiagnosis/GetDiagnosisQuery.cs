@@ -1,10 +1,10 @@
 ﻿using Application.Common.Interfaces.CVS;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using MediatR;
+using Application.Common.Security;
+using Domain.Authentication.Constants;
 
 namespace Application.Diagnoses.Queries.GetDiagnosis
 {
+    [Authorize(Policy = Policies.DiagnosisManagement)]
     public record GetDiagnosisQuery : IRequest<IEnumerable<DiagnosisDto>> { }
     public class GetDiagnosisQueryHandler : IRequestHandler<GetDiagnosisQuery, IEnumerable<DiagnosisDto>>
     {

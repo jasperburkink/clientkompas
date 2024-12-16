@@ -1,12 +1,12 @@
 ﻿using Application.Clients.Dtos;
-using Application.Common.Exceptions;
 using Application.Common.Interfaces.CVS;
-using AutoMapper;
+using Application.Common.Security;
+using Domain.Authentication.Constants;
 using Domain.CVS.Domain;
-using MediatR;
 
 namespace Application.Clients.Commands.AddDriversLicenceToClient
 {
+    [Authorize(Policy = Policies.ClientManagement)]
     public class AddDriversLicenceToClientCommand : IRequest<ClientDto>
     {
         public int ClientId { get; set; }

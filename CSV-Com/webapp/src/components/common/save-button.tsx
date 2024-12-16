@@ -14,9 +14,10 @@ interface SaveButtonProps<T> {
   onSave: () => Promise<ApiResult<T>>;
   onResult: (result: ApiResult<T>) => void;
   dataTestId?: string;
+  className?: string;
 }
 
-const SaveButton = <T,>({ buttonText, loadingText, successText, errorText, onSave, onResult, dataTestId }: SaveButtonProps<T>) => {
+const SaveButton = <T,>({ buttonText, loadingText, successText, errorText, onSave, onResult, dataTestId, className }: SaveButtonProps<T>) => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
@@ -45,7 +46,7 @@ const SaveButton = <T,>({ buttonText, loadingText, successText, errorText, onSav
     <div>
       <button
         onClick={saveAction}
-        className={IsButtonVisible(error, success)}
+        className={`${IsButtonVisible(error, success)} ${className}`}
         disabled={loading || error || success}
         data-testid={dataTestId}
       >

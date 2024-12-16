@@ -133,7 +133,7 @@
     <value>Postcode '{0}' is geen geldige postcode.</value>
   </data>
   <data name="PostalCodeMaxLength" xml:space="preserve">
-    <value>Postcode mag niet langer zijn dn {0} karakters.</value>
+    <value>Postcode mag niet langer zijn dan {0} karakters.</value>
   </data>
   <data name="PostalCodeRequired" xml:space="preserve">
     <value>Postcode is verplicht.</value>

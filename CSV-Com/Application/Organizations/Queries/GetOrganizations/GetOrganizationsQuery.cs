@@ -1,10 +1,10 @@
 ﻿using Application.Common.Interfaces.CVS;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using MediatR;
+using Application.Common.Security;
+using Domain.Authentication.Constants;
 
 namespace Application.Organizations.Queries.GetOrganizations
 {
+    [Authorize(Policy = Policies.OrganizationManagement)]
     public record GetOrganizationsQuery : IRequest<IEnumerable<GetOrganizationDto>>;
 
     public class GetOrganizationsQueryHandler : IRequestHandler<GetOrganizationsQuery, IEnumerable<GetOrganizationDto>>

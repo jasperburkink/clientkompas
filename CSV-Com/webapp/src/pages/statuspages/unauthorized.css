@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600&display=swap');
+
+@layer components {
+    .statuscode-container{
+        @apply
+        font-primary                
+        mt-40
+        mx-8;
+
+        h1{
+            @apply
+            font-bold
+            text-8xl;            
+        }
+
+        h2{
+            @apply
+            my-4
+            text-2xl; 
+        }
+
+        p{
+            @apply
+            text-sm;
+
+            a{
+                @apply
+                text-subBlue1
+                underline;   
+            }
+        }
+    }
+}

@@ -1,12 +1,13 @@
 ﻿using Application.Common.Interfaces.CVS;
-using AutoMapper;
+using Application.Common.Security;
+using Domain.Authentication.Constants;
 using Domain.CVS.Domain;
 using Domain.CVS.Enums;
 using Domain.CVS.Events;
-using MediatR;
 
 namespace Application.CoachingPrograms.Commands.CreateCoachingProgram
 {
+    [Authorize(Policy = Policies.CoachingProgramManagement)]
     public record CreateCoachingProgramCommand : IRequest<CreateCoachingProgramCommandDto>
     {
         public int? ClientId { get; set; }

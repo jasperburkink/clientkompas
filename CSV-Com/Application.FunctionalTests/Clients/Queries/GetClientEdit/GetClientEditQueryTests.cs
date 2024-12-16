@@ -1,4 +1,5 @@
 ﻿using Application.Clients.Queries.GetClientEdit;
+using Domain.Authentication.Constants;
 using Domain.CVS.Domain;
 using TestData;
 using TestData.Client;
@@ -21,8 +22,8 @@ namespace Application.FunctionalTests.Clients.Queries.GetClientEdit
         public async Task Handle_CorrectFlow_ShouldReturnClient()
         {
             // Arrange
-            // TODO: Turn on authentication 
-            //await RunAsDefaultUserAsync();
+            await RunAsAsync(Roles.Administrator);
+
             var client = _testDataGeneratorClient.Create();
 
             await AddAsync(client);
@@ -41,11 +42,11 @@ namespace Application.FunctionalTests.Clients.Queries.GetClientEdit
         }
 
         [Test]
-        public void Handle_ClientDoesNotExists_ThrowsNotFoundException()
+        public async Task Handle_ClientDoesNotExists_ThrowsNotFoundException()
         {
             // Arrange
-            // TODO: Turn on authentication 
-            //await RunAsDefaultUserAsync();
+            await RunAsAsync(Roles.Administrator);
+
             var query = new GetClientEditQuery();
 
             // Act & Assert
@@ -53,7 +54,7 @@ namespace Application.FunctionalTests.Clients.Queries.GetClientEdit
         }
 
         [Test]
-        public void Handle_UserIsAnomymousUser_ThrowsUnauthorizedAccessException()
+        public async Task Handle_UserIsAnomymousUser_ThrowsUnauthorizedAccessException()
         {
             // Arrange
             var query = new GetClientEditQuery();
@@ -62,15 +63,15 @@ namespace Application.FunctionalTests.Clients.Queries.GetClientEdit
             var result = () => SendAsync(query);
 
             // Assert
-            //TODO: Turn on authentication 
-            //await result.Should().ThrowAsync<UnauthorizedAccessException>();
-            result.Should().NotBeNull();
+            await result.Should().ThrowAsync<UnauthorizedAccessException>();
         }
 
         [Test]
         public async Task Handle_ClientWithoutOptionalProperties_ShouldReturnClient()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var client = _testDataGeneratorClient.Create();
             client.PrefixLastName = null;
             client.MaritalStatus = null;
@@ -84,6 +85,32 @@ namespace Application.FunctionalTests.Clients.Queries.GetClientEdit
             await AddAsync(client);
 
             var query = new GetClientEditQuery
+            {
+                ClientId = client.Id
+            };
+
+            // Act
+            var result = await SendAsync(query);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Id.Should().Be(client.Id);
+        }
+
+        [TestCase(Roles.SystemOwner)]
+        [TestCase(Roles.Licensee)]
+        [TestCase(Roles.Administrator)]
+        [TestCase(Roles.Coach)]
+        public async Task Handle_RunAsRole_ShouldReturnClient(string role)
+        {
+            // Arrange
+            await RunAsAsync(role);
+
+            var client = _testDataGeneratorClient.Create();
+
+            await AddAsync(client);
+
+            var query = new GetClientEditQuery()
             {
                 ClientId = client.Id
             };

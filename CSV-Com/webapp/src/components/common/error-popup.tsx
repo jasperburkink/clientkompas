@@ -23,7 +23,7 @@ const ErrorPopup = (props: IErrorPopupProps) => {
                 <FontAwesomeIcon icon={faXmark} className="flex-none fa-solid fa-xl close-icon" onClick={props.onClose} />
                 <FontAwesomeIcon icon={faTriangleExclamation} className="flex-none fa-solid fa-xl text-red-600 m-2"/>
                 <Header text="Er is een fout opgetreden" className='flex-auto' />
-                <p className='error-message'>{props.error.message}</p>
+                <p className='error-message whitespace-pre-wrap'>{props.error.message}</p>
                 <p className='error-code'>Foutcode: {props.error.errorcode}</p>
                 <Button buttonType={{type:"Solid"}} text="Sluiten" className='confirm-button' onClick={props.onClose} />
             </div>

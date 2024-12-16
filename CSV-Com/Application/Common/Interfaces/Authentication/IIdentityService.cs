@@ -1,4 +1,5 @@
 ﻿using Application.Common.Models;
+using Domain.Authentication.Domain;
 
 namespace Application.Common.Interfaces.Authentication
 {
@@ -13,5 +14,23 @@ namespace Application.Common.Interfaces.Authentication
         Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password);
 
         Task<Result> DeleteUserAsync(string userId);
+
+        Task<LoggedInResult> LoginAsync(string userName, string password);
+
+        Task LogoutAsync();
+
+        Task<IList<string>> GetRolesAsync(string userId);
+
+        Task<bool> UserExistsAsync(string userId);
+
+        Task<AuthenticationUser> GetUserAsync(string userId);
+
+        Task<Result> SendResetPasswordEmailAsync(string emailAddress);
+
+        Task<Result> ResetPasswordAsync(string emailAddress, string token, string newPassword);
+
+        Task<string> Get2FATokenAsync(string userId);
+
+        Task<LoggedInResult> Login2FAAsync(string userId, string token);
     }
 }
