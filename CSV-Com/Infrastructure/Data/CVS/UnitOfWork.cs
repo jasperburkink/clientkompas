@@ -25,6 +25,8 @@ namespace Infrastructure.Data.CVS
 
         private GenericRepository<CoachingProgram> _coachingProgramRepository;
 
+        private GenericRepository<License> _licenceRepository;
+
         public UnitOfWork(CVSDbContext context)
         {
             _context = context;
@@ -73,6 +75,11 @@ namespace Infrastructure.Data.CVS
         public IRepository<CoachingProgram> CoachingProgramRepository
         {
             get => _coachingProgramRepository ??= new GenericRepository<CoachingProgram>(_context);
+        }
+
+        public IRepository<License> LicenseRepository
+        {
+            get => _licenceRepository ??= new GenericRepository<License>(_context);
         }
 
         public void Save()

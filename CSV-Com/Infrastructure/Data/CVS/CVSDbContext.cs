@@ -22,6 +22,8 @@ namespace Infrastructure.Data.CVS
 
         public DbSet<CoachingProgram> CoachingPrograms { get; set; }
 
+        public DbSet<License> Licenses { get; set; }
+
         public CVSDbContext(DbContextOptions<CVSDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder builder)
