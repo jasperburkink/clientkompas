@@ -1,10 +1,10 @@
-﻿using System.Diagnostics;
-using Application.Common.Interfaces;
+﻿using Application.Common.Interfaces;
 using Application.Common.Models;
 using AutoMapper;
 using MailKit.Net.Smtp;
 using MimeKit;
 using RazorLight;
+using System.Diagnostics;
 
 namespace EmailModule
 {
@@ -33,7 +33,7 @@ namespace EmailModule
                 var email = new MimeMessage();
                 email.From.Add(new MailboxAddress("CliëntKompas", EmailConfig.Username));
 
-                foreach (var recipient in message.To)
+                foreach (var recipient in message.Recipients)
                 {
                     email.To.Add(MailboxAddress.Parse(recipient));
                 }

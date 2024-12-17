@@ -8,8 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Templates\PasswordResetConfirmation.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="Templates\2FAVerification.cshtml" />
     <EmbeddedResource Include="Templates\LicenseBlocked.cshtml" />
+    <EmbeddedResource Include="Templates\PasswordResetConfirmation.cshtml" />
     <EmbeddedResource Include="Templates\LicenseBought.cshtml" />
     <EmbeddedResource Include="Templates\LicenseExpired.cshtml" />
     <EmbeddedResource Include="Templates\PasswordForgotten.cshtml" />

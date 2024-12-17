@@ -25,7 +25,7 @@ namespace Application.Common.Interfaces.Authentication
 
         Task<AuthenticationUser> GetUserAsync(string userId);
 
-        Task<Result> SendResetPasswordEmailAsync(string emailAddress);
+        Task<string> GetResetPasswordEmailToken(string emailAddress);
 
         Task<Result> ResetPasswordAsync(string emailAddress, string token, string newPassword);
 

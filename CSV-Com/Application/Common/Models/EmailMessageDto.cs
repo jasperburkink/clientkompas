@@ -2,7 +2,7 @@
 {
     public class EmailMessageDto
     {
-        public required List<string> To { get; set; } = new();
+        public required List<string> Recipients { get; set; } = new();
 
         public List<string> Attachments { get; set; } = new();
 
