@@ -4,7 +4,7 @@ using Domain.Authentication.Constants;
 
 namespace Application.CoachingPrograms.Queries.GetCoachingProgramsByClient
 {
-    [Authorize(Policy = Policies.CoachingProgramManagement)]
+    [Authorize(Policy = Policies.CoachingProgramRead)]
     public record GetCoachingProgramsByClientQuery : IRequest<IEnumerable<GetCoachingProgramsByClientDto>>
     {
         public int ClientId { get; init; }

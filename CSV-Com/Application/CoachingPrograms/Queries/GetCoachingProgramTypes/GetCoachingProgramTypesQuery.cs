@@ -1,9 +1,10 @@
-﻿using AutoMapper;
+﻿using Application.Common.Security;
+using Domain.Authentication.Constants;
 using Domain.CVS.Enums;
-using MediatR;
 
 namespace Application.CoachingPrograms.Queries.GetCoachingProgramTypes
 {
+    [Authorize(Policy = Policies.CoachingProgramRead)]
     public record GetCoachingProgramTypesQuery : IRequest<IEnumerable<GetCoachingProgramTypesDto>>
     {
     }

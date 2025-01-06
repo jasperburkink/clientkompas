@@ -5,7 +5,7 @@ using Domain.Authentication.Constants;
 
 namespace Application.Clients.Queries.GetClients
 {
-    [Authorize(Policy = Policies.ClientManagement)]
+    [Authorize(Policy = Policies.ClientRead)]
     public record GetClientsQuery : IRequest<IEnumerable<GetClientDto>>;
 
     public class GetClientsQueryHandler : IRequestHandler<GetClientsQuery, IEnumerable<GetClientDto>>

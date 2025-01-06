@@ -4,7 +4,7 @@ using Domain.Authentication.Constants;
 
 namespace Application.Organizations.Queries.SearchOrganizations
 {
-    [Authorize(Policy = Policies.OrganizationManagement)]
+    [Authorize(Policy = Policies.OrganizationRead)]
     public class SearchOrganizationQuery : IRequest<IEnumerable<SearchOrganizationDto>>
     {
         public string SearchTerm { get; init; }

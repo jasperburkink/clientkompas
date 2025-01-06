@@ -4,7 +4,7 @@ using Domain.Authentication.Constants;
 
 namespace Application.BenefitForms.Queries.GetBenefitForm
 {
-    [Authorize(Policy = Policies.BenefitFormManagement)]
+    [Authorize(Policy = Policies.BenefitFormRead)]
     public record GetBenefitFormQuery : IRequest<IEnumerable<BenefitFormDto>> { }
 
     public class GetBenefitFormQueryHandler : IRequestHandler<GetBenefitFormQuery, IEnumerable<BenefitFormDto>>

@@ -3,7 +3,7 @@ using Application.Common.Security;
 using Domain.Authentication.Constants;
 namespace Application.DriversLicences.Queries
 {
-    [Authorize(Policy = Policies.DriversLicenceManagement)]
+    [Authorize(Policy = Policies.DriversLicenceRead)]
     public record GetDriversLicenceQuery : IRequest<IEnumerable<DriversLicenceDto>> { }
     public class GetDriversLicenceQueryHandler : IRequestHandler<GetDriversLicenceQuery, IEnumerable<DriversLicenceDto>>
     {

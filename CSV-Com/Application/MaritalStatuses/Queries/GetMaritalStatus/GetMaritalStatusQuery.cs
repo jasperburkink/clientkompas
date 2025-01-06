@@ -4,7 +4,7 @@ using Domain.Authentication.Constants;
 
 namespace Application.MaritalStatuses.Queries.GetMaritalStatus
 {
-    [Authorize(Policy = Policies.MaritalStatusManagement)]
+    [Authorize(Policy = Policies.MaritalStatusRead)]
     public record GetMaritalStatusQuery : IRequest<IEnumerable<MaritalStatusDto>> { }
 
     public class GetMaritalStatusQueryHandler : IRequestHandler<GetMaritalStatusQuery, IEnumerable<MaritalStatusDto>>

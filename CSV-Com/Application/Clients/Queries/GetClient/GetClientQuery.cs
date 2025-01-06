@@ -4,7 +4,7 @@ using Domain.Authentication.Constants;
 
 namespace Application.Clients.Queries.GetClient
 {
-    [Authorize(Policy = Policies.ClientManagement)]
+    [Authorize(Policy = Policies.ClientRead)]
     public record GetClientQuery : IRequest<GetClientDto>
     {
         public int ClientId { get; init; }
