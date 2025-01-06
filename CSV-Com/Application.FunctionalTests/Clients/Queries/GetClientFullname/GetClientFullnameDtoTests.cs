@@ -1,8 +1,8 @@
 ﻿using Application.Clients.Queries.GetClientFullname;
+using Domain.Authentication.Constants;
 using Domain.CVS.Domain;
 using TestData;
 using TestData.Client;
-using static Application.FunctionalTests.Testing;
 
 namespace Application.FunctionalTests.Clients.Queries.GetClientFullname
 {
@@ -19,7 +19,9 @@ namespace Application.FunctionalTests.Clients.Queries.GetClientFullname
         [Test]
         public async Task Id_IsSet_ShouldReturnId()
         {
-            // Arrange            
+            // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var client = _testDataGeneratorClient.Create();
 
             await AddAsync(client);
@@ -41,7 +43,9 @@ namespace Application.FunctionalTests.Clients.Queries.GetClientFullname
         [Test]
         public async Task Fullname_IsSet_ShouldReturnFullname()
         {
-            // Arrange            
+            // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var client = _testDataGeneratorClient.Create();
 
             await AddAsync(client);

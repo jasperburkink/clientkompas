@@ -4,7 +4,7 @@ using Domain.Authentication.Constants;
 
 namespace Application.Organizations.Queries.GetOrganizations
 {
-    [Authorize(Policy = Policies.OrganizationManagement)]
+    [Authorize(Policy = Policies.OrganizationRead)]
     public record GetOrganizationQuery : IRequest<GetOrganizationDto>
     {
         public int OrganizationId { get; init; }

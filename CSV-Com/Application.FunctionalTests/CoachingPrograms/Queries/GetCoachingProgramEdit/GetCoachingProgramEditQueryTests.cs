@@ -1,8 +1,8 @@
 ﻿using Application.CoachingPrograms.Queries.GetCoachingProgramEdit;
+using Domain.Authentication.Constants;
 using Domain.CVS.Domain;
 using TestData;
 using TestData.CoachingProgram;
-using static Application.FunctionalTests.Testing;
 
 namespace Application.FunctionalTests.CoachingPrograms.Queries.GetCoachingProgramEdit
 {
@@ -20,8 +20,8 @@ namespace Application.FunctionalTests.CoachingPrograms.Queries.GetCoachingProgra
         public async Task Handle_CorrectFlow_ShouldReturnCoachingProgram()
         {
             // Arrange
-            // TODO: Turn on authentication 
-            //await RunAsDefaultUserAsync();
+            await RunAsAsync(Roles.Administrator);
+
             var coachingProgram = _testDataGeneratorCoachingProgram.Create();
 
             await AddAsync(coachingProgram);
@@ -40,11 +40,11 @@ namespace Application.FunctionalTests.CoachingPrograms.Queries.GetCoachingProgra
         }
 
         [Test]
-        public void Handle_CoachingProgramDoesNotExists_ThrowsNotFoundException()
+        public async Task Handle_CoachingProgramDoesNotExists_ThrowsNotFoundException()
         {
             // Arrange
-            // TODO: Turn on authentication 
-            //await RunAsDefaultUserAsync();
+            await RunAsAsync(Roles.Administrator);
+
             var query = new GetCoachingProgramEditQuery();
 
             // Act & Assert
@@ -70,6 +70,8 @@ namespace Application.FunctionalTests.CoachingPrograms.Queries.GetCoachingProgra
         public async Task Handle_CoachingProgramWithoutOptionalProperties_ShouldReturnClient()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             _testDataGeneratorCoachingProgram = new CoachingProgramDataGenerator(false);
 
             var coachingProgram = _testDataGeneratorCoachingProgram.Create();

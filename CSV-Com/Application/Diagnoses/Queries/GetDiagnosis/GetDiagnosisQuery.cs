@@ -4,7 +4,7 @@ using Domain.Authentication.Constants;
 
 namespace Application.Diagnoses.Queries.GetDiagnosis
 {
-    [Authorize(Policy = Policies.DiagnosisManagement)]
+    [Authorize(Policy = Policies.DiagnosisRead)]
     public record GetDiagnosisQuery : IRequest<IEnumerable<DiagnosisDto>> { }
     public class GetDiagnosisQueryHandler : IRequestHandler<GetDiagnosisQuery, IEnumerable<DiagnosisDto>>
     {

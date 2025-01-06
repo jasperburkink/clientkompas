@@ -1,8 +1,8 @@
 ﻿using Application.CoachingPrograms.Queries.GetCoachingProgramEdit;
+using Domain.Authentication.Constants;
 using Domain.CVS.Domain;
 using TestData;
 using TestData.CoachingProgram;
-using static Application.FunctionalTests.Testing;
 
 namespace Application.FunctionalTests.CoachingPrograms.Queries.GetCoachingProgramEdit
 {
@@ -19,7 +19,9 @@ namespace Application.FunctionalTests.CoachingPrograms.Queries.GetCoachingProgra
         [Test]
         public async Task Id_IsSet_ShouldReturnId()
         {
-            // Arrange            
+            // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var coachingProgram = _testDataGeneratorCoachingProgram.Create();
 
             await AddAsync(coachingProgram);
@@ -42,6 +44,8 @@ namespace Application.FunctionalTests.CoachingPrograms.Queries.GetCoachingProgra
         public async Task ClientId_IsSet_ShouldReturnClientId()
         {
             // Arrange            
+            await RunAsAsync(Roles.Administrator);
+
             var coachingProgram = _testDataGeneratorCoachingProgram.Create();
 
             await AddAsync(coachingProgram);
@@ -63,7 +67,9 @@ namespace Application.FunctionalTests.CoachingPrograms.Queries.GetCoachingProgra
         [Test]
         public async Task Title_IsSet_ShouldReturnTitle()
         {
-            // Arrange            
+            // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var coachingProgram = _testDataGeneratorCoachingProgram.Create();
 
             await AddAsync(coachingProgram);
@@ -86,6 +92,8 @@ namespace Application.FunctionalTests.CoachingPrograms.Queries.GetCoachingProgra
         public async Task OrderNumber_IsSet_ShouldReturnOrderNumber()
         {
             // Arrange            
+            await RunAsAsync(Roles.Administrator);
+
             var coachingProgram = _testDataGeneratorCoachingProgram.Create();
 
             await AddAsync(coachingProgram);
@@ -108,6 +116,8 @@ namespace Application.FunctionalTests.CoachingPrograms.Queries.GetCoachingProgra
         public async Task OrganizationId_IsSet_ShouldReturnOrganizationId()
         {
             // Arrange            
+            await RunAsAsync(Roles.Administrator);
+
             var coachingProgram = _testDataGeneratorCoachingProgram.Create();
 
             await AddAsync(coachingProgram);
@@ -130,6 +140,8 @@ namespace Application.FunctionalTests.CoachingPrograms.Queries.GetCoachingProgra
         public async Task CoachingProgramType_IsSet_ShouldReturnCoachingProgramType()
         {
             // Arrange            
+            await RunAsAsync(Roles.Administrator);
+
             var coachingProgram = _testDataGeneratorCoachingProgram.Create();
             coachingProgram.CoachingProgramType = Domain.CVS.Enums.CoachingProgramType.PrivateCoachingProgram;
             var coachingProgramType = (int)coachingProgram.CoachingProgramType;
@@ -152,6 +164,8 @@ namespace Application.FunctionalTests.CoachingPrograms.Queries.GetCoachingProgra
         public async Task BeginDate_IsSet_ShouldReturnBeginDate()
         {
             // Arrange            
+            await RunAsAsync(Roles.Administrator);
+
             var coachingProgram = _testDataGeneratorCoachingProgram.Create();
 
             await AddAsync(coachingProgram);
@@ -174,6 +188,8 @@ namespace Application.FunctionalTests.CoachingPrograms.Queries.GetCoachingProgra
         public async Task EndDate_IsSet_ShouldReturnEndDate()
         {
             // Arrange            
+            await RunAsAsync(Roles.Administrator);
+
             var coachingProgram = _testDataGeneratorCoachingProgram.Create();
 
             await AddAsync(coachingProgram);
@@ -195,7 +211,9 @@ namespace Application.FunctionalTests.CoachingPrograms.Queries.GetCoachingProgra
         [Test]
         public async Task BudgetAmmount_IsSet_ShouldReturnBudgetAmmount()
         {
-            // Arrange            
+            // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var coachingProgram = _testDataGeneratorCoachingProgram.Create();
 
             await AddAsync(coachingProgram);
@@ -218,6 +236,8 @@ namespace Application.FunctionalTests.CoachingPrograms.Queries.GetCoachingProgra
         public async Task HourlyRate_IsSet_ShouldReturnHourlyRate()
         {
             // Arrange            
+            await RunAsAsync(Roles.Administrator);
+
             var coachingProgram = _testDataGeneratorCoachingProgram.Create();
 
             await AddAsync(coachingProgram);
@@ -240,6 +260,8 @@ namespace Application.FunctionalTests.CoachingPrograms.Queries.GetCoachingProgra
         public async Task RemainingHours_IsSet_ShouldReturnRemainingHours()
         {
             // Arrange            
+            await RunAsAsync(Roles.Administrator);
+
             var coachingProgram = _testDataGeneratorCoachingProgram.Create();
 
             await AddAsync(coachingProgram);
