@@ -53,7 +53,7 @@ module.exports = {
                 '500px': '500px',
                 '698px': '698px',
                 '748px': '748px',
-                'sidebar': '125vh'
+                'sidebar': '102vh'
             },
             maxHeight: {
                 '300px': '300px'

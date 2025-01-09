@@ -8,6 +8,7 @@ using Infrastructure.Data.CVS;
 using Infrastructure.Data.Interceptor;
 using Infrastructure.Identity;
 using Infrastructure.Services;
+using Infrastructure.Services.Menu;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -82,6 +83,8 @@ namespace Infrastructure
 
             services.AddHttpContextAccessor();
 
+            services.AddSingleton<IFileService, FileService>();
+            services.AddSingleton<IMenuService, MenuService>();
             services.AddSingleton<IDateTime, DateTimeWrapper>();
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IBearerTokenService, BearerTokenService>();

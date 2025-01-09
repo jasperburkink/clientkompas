@@ -1,3 +1,4 @@
+import SidebarEmpty from 'components/sidebar/sidebar-empty';
 import './unauthorized.css';
 import Menu from "components/common/menu";
 
@@ -7,10 +8,8 @@ const Unauthorized = () => {
     return(
         <div className="flex flex-col lg:flex-row h-screen lg:h-auto">
             <div className='lg:flex w-full'>
-                <div id='staticSidebar' className='sidebarContentPush'></div>
+                <SidebarEmpty />
                 
-                <Menu navItems={[]} />
-
                 <section className="statuscode-container">
                     <h1>401</h1>
                     <h2>Unauthorized - Niet ingelogd</h2>                    

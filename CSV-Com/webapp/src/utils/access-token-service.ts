@@ -17,9 +17,7 @@ export default class AccessTokenService {
 
     // Storage methods
     public getAccessToken(): BearerToken | null {
-var tokenvalie = sessionStorage.getItem(this.TokenName);
-
-        return sessionStorage.getItem(this.TokenName) ? BearerToken.deserialize(localStorage.getItem(this.TokenName)!) : null;
+        return sessionStorage.getItem(this.TokenName) ? BearerToken.deserialize(sessionStorage.getItem(this.TokenName)!) : null;
     }
 
     public setAccessToken(token: BearerToken): void {
@@ -40,5 +38,15 @@ var tokenvalie = sessionStorage.getItem(this.TokenName);
 
     public removeTwoFactorPendingToken(): void {
         sessionStorage.removeItem(this.TwoFactorPendingTokenName);
+    }
+
+    public getUserId(): string {
+        let accessToken = this.getAccessToken();
+
+        if(!accessToken){
+            return '';
+        }
+
+        return accessToken.getUserId();
     }
 }

@@ -30,6 +30,7 @@ import TwoFactorAuthenticationCommandDto from "types/model/login-2fa/login-2fa-c
 import TwoFactorAuthenticationCommand from "types/model/login-2fa/login-2fa-command";
 import ResendTwoFactorAuthenticationTokenCommand from "types/model/resend-2fa-token/resend-2fa-token-command";
 import ResendTwoFactorAuthenticationTokenCommandDto from "types/model/resend-2fa-token/resend-2fa-token-command-dto";
+import GetMenuByUserDto from "types/model/menu/get-menu-by-user-dto";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -243,6 +244,10 @@ export const resend2FAToken = async (loginCommand: ResendTwoFactorAuthentication
     const response = await fetch(`${apiUrl}Authentication/ResendTwoFactorToken`, requestOptions);     
     
     return handleApiResonse<ResendTwoFactorAuthenticationTokenCommandDto>(response);
+}
+
+export const fetchMenuByUserId = async (userId: string): Promise<GetMenuByUserDto> => {
+    return (await fetchAPI<GetMenuByUserDto>(`${apiUrl}Menu?UserId=${userId}`)).ReturnObject!;
 }
 
 export const fetchClient = async (clientId: string): Promise<ClientQuery> => {
