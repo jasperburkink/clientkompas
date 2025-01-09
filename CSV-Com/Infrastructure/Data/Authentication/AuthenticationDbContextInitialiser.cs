@@ -9,12 +9,12 @@ namespace Infrastructure.Data.Authentication
 {
     public class AuthenticationDbContextInitialiser
     {
-        private const string DEFAULT_TEST_EMAILADDRESS = "ontwikkelaar@clientkompas.nl";
         private readonly ILogger<AuthenticationDbContextInitialiser> _logger;
         private readonly AuthenticationDbContext _context;
         private readonly UserManager<AuthenticationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IIdentityService _identityService;
+        private const string DOMAIN_CLIENTKOMPAS = "clientkompas.nl";
 
         public AuthenticationDbContextInitialiser(ILogger<AuthenticationDbContextInitialiser> logger, AuthenticationDbContext context, UserManager<AuthenticationUser> userManager, RoleManager<IdentityRole> roleManager, IIdentityService identityService)
         {
@@ -80,11 +80,16 @@ namespace Infrastructure.Data.Authentication
             // Default users
             var password = $"{role.Name}{role.Name}1!";
 
-            var email = role.Name == nameof(Roles.SystemOwner) ? DEFAULT_TEST_EMAILADDRESS : role.Name;
+            var email = $"{role}@{DOMAIN_CLIENTKOMPAS}";
 
             if (_userManager.Users.All(u => u.UserName != email))
             {
                 var (result, userId) = await _identityService.CreateUserAsync(email, password);
+
+                if (result == null || userId == null)
+                {
+                    return;
+                }
 
                 var user = await _identityService.GetUserAsync(userId);
 

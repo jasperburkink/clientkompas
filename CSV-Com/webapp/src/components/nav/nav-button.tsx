@@ -1,6 +1,6 @@
 import '../../index.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUsers, faClock, faBuilding, faUser, faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { faUsers, faClock, faBuilding, faUser, faArrowRightFromBracket, faStethoscope, faRing, faCar, faCertificate, faPiggyBank, faHandsHelping } from "@fortawesome/free-solid-svg-icons";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { Link, useNavigate } from 'react-router-dom';
@@ -15,15 +15,27 @@ interface NavButtonProps {
 function GetIcon(icon: string): IconDefinition{
 
     switch (icon) {
-        case "Gebruikers":
+        case "Licence":
+            return faCertificate;
+        case "Diagnosis":
+            return faStethoscope;
+        case "MaritalStatus":
+            return faRing;
+        case "PiggyBank":
+            return faPiggyBank;
+        case "DriversLicence":
+            return faCar;
+        case "HelpingHands":
+            return faHandsHelping;
+        case "Users":
             return faUsers;
-        case "Klok":
+        case "Clock":
             return faClock;
-        case "Gebouw":
+        case "Building":
             return faBuilding;
-        case "Gebruiker":
+        case "User":
             return faUser;
-        case "Uitloggen":
+        case "Exit":
             return faArrowRightFromBracket;
         default:
             return faUsers;

@@ -14,7 +14,7 @@
     }
     /* Blue sidebar */
     .sidebar {
-        @apply bg-mainBlue w-full lg:w-sidebarBlue lg:min-w-sidebarBlue h-0 lg:block lg:h-sidebar lg:-mt-15px overflow-hidden lg:rounded-tr-sidebarT lg:rounded-br-sidebarB ease-in-out duration-500
+        @apply bg-mainBlue w-full lg:w-sidebarBlue lg:min-w-sidebarBlue h-0 lg:block lg:h-sidebar lg:-mt-15px overflow-hidden lg:rounded-tr-sidebarT lg:rounded-br-sidebarB ease-in-out duration-500 z-20
     }
 
     .sidebarLine {
@@ -65,11 +65,11 @@
     */
     /* Navigation for blue sidebar */
     .navBtnsContainer {
-        @apply flex flex-col justify-between h-2/3 w-11/12 md:h-400px md:w-60 mt-100px md:mt-250px mx-auto
+        @apply flex flex-col justify-between h-2/3 w-11/12 md:h-400px md:w-64 mt-100px md:mt-250px mx-auto
     }
 
     .navBtn {
-        @apply text-white w-11/12 md:w-60 h-65px cursor-pointer rounded-md flex justify-between content-center p-2 flex-wrap md:hover:bg-gradient-to-l md:hover:from-subBlue2
+        @apply text-white w-11/12 md:w-64 h-65px cursor-pointer rounded-md flex justify-between content-center p-2 flex-wrap md:hover:bg-gradient-to-l md:hover:from-subBlue2
         /*also add class "group" in the html file*/
     }
     /* Navigation for gray sidebar */
