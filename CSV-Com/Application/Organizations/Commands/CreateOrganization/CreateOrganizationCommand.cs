@@ -69,20 +69,11 @@ namespace Application.Organizations.Commands.CreateOrganization
         public string BIC { get; set; }
     }
 
-    public class CreateOrganizationCommandHandler : IRequestHandler<CreateOrganizationCommand, OrganizationDto>
+    public class CreateOrganizationCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<CreateOrganizationCommand, OrganizationDto>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-
-        public CreateOrganizationCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-        }
-
         public async Task<OrganizationDto> Handle(CreateOrganizationCommand request, CancellationToken cancellationToken)
         {
-            var existingOrganizationWithKVKNumber = await _unitOfWork.OrganizationRepository.GetByKVKNumberAsync(request.KVKNumber, cancellationToken);
+            var existingOrganizationWithKVKNumber = await unitOfWork.OrganizationRepository.GetByKVKNumberAsync(request.KVKNumber, cancellationToken);
             if (existingOrganizationWithKVKNumber != null)
             {
                 throw new ItemAlreadyExistsException($"Organization with KVKNumber {request.KVKNumber} already exists.");
@@ -108,12 +99,12 @@ namespace Application.Organizations.Commands.CreateOrganization
                 BIC = request.BIC
             };
 
-            await _unitOfWork.OrganizationRepository.InsertAsync(organization, cancellationToken);
-            await _unitOfWork.SaveAsync(cancellationToken);
+            await unitOfWork.OrganizationRepository.InsertAsync(organization, cancellationToken);
+            await unitOfWork.SaveAsync(cancellationToken);
 
             organization.AddDomainEvent(new OrganizationCreatedEvent(organization));
 
-            return _mapper.Map<OrganizationDto>(organization);
+            return mapper.Map<OrganizationDto>(organization);
         }
     }
 }

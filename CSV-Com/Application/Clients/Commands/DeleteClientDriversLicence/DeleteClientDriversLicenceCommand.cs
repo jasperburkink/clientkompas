@@ -13,18 +13,11 @@ namespace Application.Clients.Commands.DeleteClientDriversLicence
         public int DriversLicenceId { get; init; }
     }
 
-    public class DeleteClientDriversLicenceCommandHandler : IRequestHandler<DeleteClientDriversLicenceCommand>
+    public class DeleteClientDriversLicenceCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<DeleteClientDriversLicenceCommand>
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        public DeleteClientDriversLicenceCommandHandler(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
-
         public async Task Handle(DeleteClientDriversLicenceCommand request, CancellationToken cancellationToken)
         {
-            var client = await _unitOfWork.ClientRepository.GetByIDAsync(request.ClientId, "DriversLicences", cancellationToken)
+            var client = await unitOfWork.ClientRepository.GetByIDAsync(request.ClientId, "DriversLicences", cancellationToken)
                 ?? throw new NotFoundException(nameof(Client), request.ClientId);
 
             var driversLicence = client.DriversLicences.FirstOrDefault(dl => dl.Id.Equals(request.DriversLicenceId))
@@ -32,9 +25,9 @@ namespace Application.Clients.Commands.DeleteClientDriversLicence
 
             client.DriversLicences.Remove(driversLicence);
 
-            await _unitOfWork.ClientRepository.UpdateAsync(client, cancellationToken);
+            await unitOfWork.ClientRepository.UpdateAsync(client, cancellationToken);
 
-            await _unitOfWork.SaveAsync(cancellationToken);
+            await unitOfWork.SaveAsync(cancellationToken);
         }
     }
 }

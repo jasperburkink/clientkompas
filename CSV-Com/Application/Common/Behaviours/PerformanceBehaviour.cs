@@ -1,28 +1,15 @@
 ﻿using System.Diagnostics;
 using Application.Common.Interfaces.Authentication;
-using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace Application.Common.Behaviours
 {
-    public class PerformanceBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
+    public class PerformanceBehaviour<TRequest, TResponse>(
+        ILogger<TRequest> logger,
+        IUser currentUserService,
+        IIdentityService identityService) : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
     {
-        private readonly Stopwatch _timer;
-        private readonly ILogger<TRequest> _logger;
-        private readonly IUser _currentUserService;
-        private readonly IIdentityService _identityService;
-
-        public PerformanceBehaviour(
-            ILogger<TRequest> logger,
-            IUser currentUserService,
-            IIdentityService identityService)
-        {
-            _timer = new Stopwatch();
-
-            _logger = logger;
-            _currentUserService = currentUserService;
-            _identityService = identityService;
-        }
+        private readonly Stopwatch _timer = new();
 
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
@@ -37,15 +24,15 @@ namespace Application.Common.Behaviours
             if (elapsedMilliseconds > 500)
             {
                 var requestName = typeof(TRequest).Name;
-                var userId = _currentUserService.CurrentUserId ?? string.Empty;
+                var userId = currentUserService.CurrentUserId ?? string.Empty;
                 var userName = string.Empty;
 
                 if (!string.IsNullOrEmpty(userId))
                 {
-                    userName = await _identityService.GetUserNameAsync(userId);
+                    userName = await identityService.GetUserNameAsync(userId);
                 }
 
-                _logger.LogWarning("CleanArchitecture Long Running Request: {Name} ({ElapsedMilliseconds} milliseconds) {@UserId} {@UserName} {@Request}",
+                logger.LogWarning("CleanArchitecture Long Running Request: {Name} ({ElapsedMilliseconds} milliseconds) {@UserId} {@UserName} {@Request}",
                     requestName, elapsedMilliseconds, userId, userName, request);
             }
 

@@ -69,8 +69,11 @@ namespace Application.UnitTests.Clients.Queries.GetClient
                 query.ClientId, It.IsAny<string>(), default
             )).ReturnsAsync(client);
 
-            // Act & Assert
-            Assert.ThrowsAsync<NotFoundException>(() => _handler.Handle(query, default));
+            // Act
+            var act = () => _handler.Handle(query, default);
+
+            // Assert
+            act.Should().ThrowAsync<NotFoundException>();
         }
     }
 }

@@ -13,15 +13,8 @@ namespace Application.Authentication.Commands.ResetPassword
         public string NewPasswordRepeat { get; set; } = null!;
     }
 
-    public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand, ResetPasswordCommandDto>
+    public class ResetPasswordCommandHandler(IIdentityService identityService) : IRequestHandler<ResetPasswordCommand, ResetPasswordCommandDto>
     {
-        private readonly IIdentityService _identityService;
-
-        public ResetPasswordCommandHandler(IIdentityService identityService)
-        {
-            _identityService = identityService;
-        }
-
         public async Task<ResetPasswordCommandDto> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
         {
             try
@@ -30,7 +23,7 @@ namespace Application.Authentication.Commands.ResetPassword
                 ArgumentNullException.ThrowIfNull(request.Token);
                 ArgumentNullException.ThrowIfNull(request.NewPassword);
 
-                var result = await _identityService.ResetPasswordAsync(request.EmailAddress, request.Token, request.NewPassword);
+                var result = await identityService.ResetPasswordAsync(request.EmailAddress, request.Token, request.NewPassword);
 
                 return new ResetPasswordCommandDto
                 {
@@ -43,7 +36,7 @@ namespace Application.Authentication.Commands.ResetPassword
                 return new ResetPasswordCommandDto
                 {
                     Success = false,
-                    Errors = new List<string> { ex.Message }
+                    Errors = [ex.Message]
                 };
             }
         }

@@ -1,21 +1,10 @@
 ﻿using Domain.Common;
 using Domain.CVS.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Domain.CVS.Events
 {
-    public class MaritalStatusCreatedEvent : BaseEvent
+    public class MaritalStatusCreatedEvent(MaritalStatus maritalStatus) : BaseEvent
     {
-        public MaritalStatusCreatedEvent(MaritalStatus maritalStatus)
-        {
-            MaritalStatus = maritalStatus;
-        }
-
-        public MaritalStatus MaritalStatus { get; }
+        public MaritalStatus MaritalStatus { get; } = maritalStatus;
     }
-
 }

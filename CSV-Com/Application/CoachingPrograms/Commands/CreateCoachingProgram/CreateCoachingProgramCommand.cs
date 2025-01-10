@@ -29,17 +29,8 @@ namespace Application.CoachingPrograms.Commands.CreateCoachingProgram
         public decimal? HourlyRate { get; set; }
     }
 
-    public class CreateCoachingProgramCommandHandler : IRequestHandler<CreateCoachingProgramCommand, CreateCoachingProgramCommandDto>
+    public class CreateCoachingProgramCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<CreateCoachingProgramCommand, CreateCoachingProgramCommandDto>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-
-        public CreateCoachingProgramCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-        }
-
         public async Task<CreateCoachingProgramCommandDto> Handle(CreateCoachingProgramCommand request, CancellationToken cancellationToken)
         {
             var coachingProgram = new CoachingProgram
@@ -55,13 +46,13 @@ namespace Application.CoachingPrograms.Commands.CreateCoachingProgram
                 BudgetAmmount = request.BudgetAmmount
             };
 
-            await _unitOfWork.CoachingProgramRepository.InsertAsync(coachingProgram, cancellationToken);
-            await _unitOfWork.SaveAsync(cancellationToken);
-            coachingProgram = await _unitOfWork.CoachingProgramRepository.GetByIDAsync(coachingProgram.Id, includeProperties: "Client,Organization", cancellationToken);
+            await unitOfWork.CoachingProgramRepository.InsertAsync(coachingProgram, cancellationToken);
+            await unitOfWork.SaveAsync(cancellationToken);
+            coachingProgram = await unitOfWork.CoachingProgramRepository.GetByIDAsync(coachingProgram.Id, includeProperties: "Client,Organization", cancellationToken);
 
             coachingProgram.AddDomainEvent(new CoachingProgramCreatedEvent(coachingProgram));
 
-            return _mapper.Map<CreateCoachingProgramCommandDto>(coachingProgram);
+            return mapper.Map<CreateCoachingProgramCommandDto>(coachingProgram);
         }
     }
 }

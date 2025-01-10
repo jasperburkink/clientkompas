@@ -76,7 +76,7 @@ namespace Application.UnitTests.Clients.Queries.GetClientEdit
         }
 
         [Fact]
-        public void Handle_ClientDoesNotExists_ThrowsNotFoundException()
+        public async Task Handle_ClientDoesNotExists_ThrowsNotFoundException()
         {
             // Arrange
             var query = new GetClientEditQuery { ClientId = 0 };
@@ -85,8 +85,11 @@ namespace Application.UnitTests.Clients.Queries.GetClientEdit
                 query.ClientId, It.IsAny<string>(), default
             )).ReturnsAsync(client);
 
-            // Act & Assert
-            Assert.ThrowsAsync<NotFoundException>(() => _handler.Handle(query, default));
+            // Act
+            var act = () => _handler.Handle(query, default);
+
+            // Assert
+            await act.Should().ThrowAsync<NotFoundException>();
         }
     }
 }

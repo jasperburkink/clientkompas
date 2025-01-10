@@ -13,17 +13,8 @@ namespace Application.BenefitForms.Commands.CreateBenefitForm
         public string Name { get; init; }
     }
 
-    public class CreateBenefitFormCommandHandler : IRequestHandler<CreateBenefitFormCommand, BenefitFormDto>
+    public class CreateBenefitFormCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<CreateBenefitFormCommand, BenefitFormDto>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-
-        public CreateBenefitFormCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-        }
-
         public async Task<BenefitFormDto> Handle(CreateBenefitFormCommand request, CancellationToken cancellationToken)
         {
             var benefitForm = new BenefitForm
@@ -33,11 +24,11 @@ namespace Application.BenefitForms.Commands.CreateBenefitForm
 
             benefitForm.AddDomainEvent(new BenefitFormCreatedEvent(benefitForm));
 
-            await _unitOfWork.BenefitFormRepository.InsertAsync(benefitForm, cancellationToken);
+            await unitOfWork.BenefitFormRepository.InsertAsync(benefitForm, cancellationToken);
 
-            await _unitOfWork.SaveAsync(cancellationToken);
+            await unitOfWork.SaveAsync(cancellationToken);
 
-            return _mapper.Map<BenefitFormDto>(benefitForm);
+            return mapper.Map<BenefitFormDto>(benefitForm);
         }
     }
 }

@@ -15,21 +15,12 @@ namespace Application.Clients.Commands.AddDriversLicenceToClient
 
     }
 
-    public class AddDriversLicenceToClientCommandHandler : IRequestHandler<AddDriversLicenceToClientCommand, ClientDto>
+    public class AddDriversLicenceToClientCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<AddDriversLicenceToClientCommand, ClientDto>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-
-        public AddDriversLicenceToClientCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-        }
-
         public async Task<ClientDto> Handle(AddDriversLicenceToClientCommand request, CancellationToken cancellationToken)
         {
-            var client = await _unitOfWork.ClientRepository.GetByIDAsync(request.ClientId, cancellationToken) ?? throw new NotFoundException(nameof(Client), request.ClientId);
-            var driversLicence = await _unitOfWork.DriversLicenceRepository.GetByIDAsync(request.DriversLicenceId, cancellationToken) ?? throw new NotFoundException(nameof(Client), request.DriversLicenceId);
+            var client = await unitOfWork.ClientRepository.GetByIDAsync(request.ClientId, cancellationToken) ?? throw new NotFoundException(nameof(Client), request.ClientId);
+            var driversLicence = await unitOfWork.DriversLicenceRepository.GetByIDAsync(request.DriversLicenceId, cancellationToken) ?? throw new NotFoundException(nameof(Client), request.DriversLicenceId);
 
             throw new NotImplementedException();
         }

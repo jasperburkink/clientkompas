@@ -6,6 +6,6 @@ namespace Application.Menu.Queries.GetMenuByUser
     {
         public string Role { get; set; }
 
-        public IEnumerable<MenuItem> MenuItems { get; set; } = new List<MenuItem>();
+        public IEnumerable<MenuItem> MenuItems { get; set; } = [];
     }
 }
