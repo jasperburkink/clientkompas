@@ -3,7 +3,6 @@ using Domain.Authentication.Constants;
 using Domain.CVS.Domain;
 using TestData;
 using TestData.Client;
-using static Application.FunctionalTests.Testing;
 
 namespace Application.FunctionalTests.Clients.Queries.SearchClients
 {
@@ -44,7 +43,7 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
             var clients = await SendAsync(query);
 
             // Assert
-            Assert.IsTrue(clients.Any(c => c.Id == _client.Id));
+            clients.Should().Contain(c => c.Id == _client.Id);
         }
 
         [Test]
@@ -70,7 +69,7 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
             var clients = await SendAsync(query);
 
             // Assert
-            Assert.IsFalse(clients.Any(c => c.Id == _client.Id), "Client is already deactivated and should not be shown in the searchresults.");
+            clients.Should().NotContain(c => c.Id == _client.Id, because: "Client is already deactivated and should not be shown in the searchresults.");
         }
 
         [Test]
@@ -346,7 +345,7 @@ namespace Application.FunctionalTests.Clients.Queries.SearchClients
             var clients = await SendAsync(query);
 
             // Assert
-            Assert.IsTrue(clients.Any(c => c.Id == _client.Id));
+            clients.Should().Contain(c => c.Id == _client.Id);
         }
 
         // TODO: Move this method to a utils class in a test library

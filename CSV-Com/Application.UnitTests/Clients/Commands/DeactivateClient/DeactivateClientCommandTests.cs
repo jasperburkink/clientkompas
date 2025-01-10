@@ -51,7 +51,7 @@ namespace Application.UnitTests.Clients.Commands.DeactivateClient
             var unitOfWorkMock = new Mock<IUnitOfWork>();
             var mapperMock = new Mock<IMapper>();
             var clientRepositoryMock = new Mock<IRepository<Client>>();
-            Client client = null;
+            Client client = null!;
 
             unitOfWorkMock.Setup(uow => uow.ClientRepository).Returns(clientRepositoryMock.Object);
             clientRepositoryMock.Setup(cr => cr.GetByIDAsync(It.IsAny<int>(), It.IsAny<CancellationToken>())).ReturnsAsync(client);
@@ -59,8 +59,11 @@ namespace Application.UnitTests.Clients.Commands.DeactivateClient
             var handler = new DeactivateClientCommandHandler(unitOfWorkMock.Object, mapperMock.Object);
             var command = new DeactivateClientCommand { Id = 1 };
 
-            // Act & Assert
-            Assert.ThrowsAsync<NotFoundException>(() => handler.Handle(command, CancellationToken.None));
+            // Act
+            var act = () => handler.Handle(command, CancellationToken.None);
+
+            // Assert 
+            await act.Should().ThrowAsync<NotFoundException>();
         }
 
         [Fact]
@@ -78,8 +81,11 @@ namespace Application.UnitTests.Clients.Commands.DeactivateClient
             var handler = new DeactivateClientCommandHandler(unitOfWorkMock.Object, mapperMock.Object);
             var command = new DeactivateClientCommand { Id = 1 };
 
-            // Act & Assert
-            Assert.ThrowsAsync<InvalidOperationException>(() => handler.Handle(command, CancellationToken.None));
+            // Act
+            var act = () => handler.Handle(command, default);
+
+            // Assert
+            await act.Should().ThrowAsync<InvalidOperationException>();
             clientRepositoryMock.Verify(cr => cr.GetByIDAsync(It.IsAny<int>(), CancellationToken.None), Times.Once);
         }
 

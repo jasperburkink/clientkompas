@@ -6,6 +6,6 @@ namespace Domain.CVS.Domain
     {
         public string Name { get; set; }
 
-        public List<Client> Clients { get; } = new List<Client>();
+        public List<Client> Clients { get; } = [];
     }
 }

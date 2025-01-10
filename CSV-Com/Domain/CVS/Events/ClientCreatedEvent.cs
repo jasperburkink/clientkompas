@@ -4,14 +4,9 @@ using Domain.CVS.Domain;
 
 namespace Domain.CVS.Events
 {
-    public class ClientCreatedEvent : BaseEvent
+    public class ClientCreatedEvent(Client client) : BaseEvent
     {
-        public ClientCreatedEvent(Client client)
-        {
-            Client = client;
-        }
-
-        public Client Client { get; }
+        public Client Client { get; } = client;
     }
 
 }

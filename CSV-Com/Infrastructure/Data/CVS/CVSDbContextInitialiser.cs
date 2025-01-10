@@ -7,28 +7,22 @@ using TestData.CoachingProgram;
 
 namespace Infrastructure.Data.CVS
 {
-    public class CVSDbContextInitialiser
+    public class CVSDbContextInitialiser(ILogger<CVSDbContextInitialiser> logger, CVSDbContext context)
     {
         private const int INITIAL_NUMBER_OF_CLIENTS = 10, INITIAL_NUMBER_OF_COACHINGPROGRAMS = 2;
-        private readonly ILogger<CVSDbContextInitialiser> _logger;
-        private readonly CVSDbContext _context;
-        public CVSDbContextInitialiser(ILogger<CVSDbContextInitialiser> logger, CVSDbContext context)
-        {
-            _logger = logger;
-            _context = context;
-        }
+
         public async Task InitialiseAsync()
         {
             try
             {
-                if (_context.Database.IsMySql())
+                if (context.Database.IsMySql())
                 {
-                    await _context.Database.MigrateAsync();
+                    await context.Database.MigrateAsync();
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while initialising the database.");
+                logger.LogError(ex, "An error occurred while initialising the database.");
                 throw;
             }
         }
@@ -40,7 +34,7 @@ namespace Infrastructure.Data.CVS
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while seeding the database.");
+                logger.LogError(ex, "An error occurred while seeding the database.");
                 throw;
             }
         }
@@ -49,7 +43,7 @@ namespace Infrastructure.Data.CVS
             // Default data
             // Seed, if necessary
             // TODO: Maybe only when debugging
-            if (!_context.Clients.Any())
+            if (!context.Clients.Any())
             {
                 ITestDataGenerator<Client> testDataGeneratorClient = new ClientDataGenerator();
                 ITestDataGenerator<CoachingProgram> testDataGeneratorCoachingProgram = new CoachingProgramDataGenerator();
@@ -57,12 +51,12 @@ namespace Infrastructure.Data.CVS
                 for (var i = 0; i < INITIAL_NUMBER_OF_CLIENTS; i++)
                 {
                     var client = testDataGeneratorClient.Create();
-                    _context.Clients.Add(client);
+                    context.Clients.Add(client);
                 }
 
-                await _context.SaveChangesAsync();
+                await context.SaveChangesAsync();
 
-                var clients = _context.Clients.ToList();
+                var clients = context.Clients.ToList();
 
                 foreach (var client in clients)
                 {
@@ -71,11 +65,11 @@ namespace Infrastructure.Data.CVS
                         var coachingProgram = testDataGeneratorCoachingProgram.Create();
                         coachingProgram.ClientId = client.Id;
                         coachingProgram.Client = null;
-                        _context.CoachingPrograms.Add(coachingProgram);
+                        context.CoachingPrograms.Add(coachingProgram);
                     }
                 }
 
-                await _context.SaveChangesAsync();
+                await context.SaveChangesAsync();
             }
         }
     }

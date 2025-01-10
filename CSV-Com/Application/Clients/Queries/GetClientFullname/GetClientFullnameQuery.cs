@@ -10,24 +10,15 @@ namespace Application.Clients.Queries.GetClientFullname
         public int ClientId { get; init; }
     }
 
-    public class GetClientFullnameQueryHandler : IRequestHandler<GetClientFullnameQuery, GetClientFullnameDto>
+    public class GetClientFullnameQueryHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<GetClientFullnameQuery, GetClientFullnameDto>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-
-        public GetClientFullnameQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-        }
-
         public async Task<GetClientFullnameDto> Handle(GetClientFullnameQuery request, CancellationToken cancellationToken)
         {
-            var client = await _unitOfWork.ClientRepository.GetByIDAsync(request.ClientId, cancellationToken: cancellationToken);
+            var client = await unitOfWork.ClientRepository.GetByIDAsync(request.ClientId, cancellationToken: cancellationToken);
 
             return client == null
                 ? throw new NotFoundException($"Client with id '{request.ClientId}' could not be found.")
-                : _mapper.Map<GetClientFullnameDto>(client);
+                : mapper.Map<GetClientFullnameDto>(client);
         }
     }
 }

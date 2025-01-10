@@ -3,15 +3,8 @@ using Application.Common.Interfaces.Authentication;
 
 namespace API.Services
 {
-    public class CurrentUser : IUser
+    public class CurrentUser(IHttpContextAccessor httpContextAccessor) : IUser
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public CurrentUser(IHttpContextAccessor httpContextAccessor)
-        {
-            _httpContextAccessor = httpContextAccessor;
-        }
-
-        public string? CurrentUserId => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+        public string? CurrentUserId => httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
     }
 }

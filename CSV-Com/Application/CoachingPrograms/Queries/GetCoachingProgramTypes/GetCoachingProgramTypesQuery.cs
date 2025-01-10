@@ -9,19 +9,12 @@ namespace Application.CoachingPrograms.Queries.GetCoachingProgramTypes
     {
     }
 
-    public class GetCoachingProgramTypesQueryHandler : IRequestHandler<GetCoachingProgramTypesQuery, IEnumerable<GetCoachingProgramTypesDto>>
+    public class GetCoachingProgramTypesQueryHandler(IMapper mapper) : IRequestHandler<GetCoachingProgramTypesQuery, IEnumerable<GetCoachingProgramTypesDto>>
     {
-        private readonly IMapper _mapper;
-
-        public GetCoachingProgramTypesQueryHandler(IMapper mapper)
-        {
-            _mapper = mapper;
-        }
-
         public async Task<IEnumerable<GetCoachingProgramTypesDto>> Handle(GetCoachingProgramTypesQuery request, CancellationToken cancellationToken)
         {
             var values = Enum.GetValues(typeof(CoachingProgramType)).Cast<CoachingProgramType>();
-            return values.Select(value => _mapper.Map<GetCoachingProgramTypesDto>(value));
+            return values.Select(value => mapper.Map<GetCoachingProgramTypesDto>(value));
         }
     }
 }

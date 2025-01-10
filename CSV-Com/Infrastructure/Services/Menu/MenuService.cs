@@ -5,16 +5,9 @@ using Domain.CVS.Domain;
 
 namespace Infrastructure.Services.Menu
 {
-    public class MenuService : IMenuService
+    public class MenuService(IFileService fileService) : IMenuService
     {
         private const string CONFIG_FILE_PATH = "Services/Menu/menu-config.json";
-
-        private readonly IFileService _fileService;
-
-        public MenuService(IFileService fileService)
-        {
-            _fileService = fileService;
-        }
 
         public IEnumerable<MenuItem> GetMenuByRole(string role)
         {
@@ -27,7 +20,7 @@ namespace Infrastructure.Services.Menu
                 throw new FileNotFoundException($"Menu configuration file not found at path: {configPath}");
             }
 
-            var jsonContent = _fileService.ReadAllText(configPath);
+            var jsonContent = fileService.ReadAllText(configPath);
 
             var serializerOptions = new JsonSerializerOptions
             {
@@ -41,7 +34,7 @@ namespace Infrastructure.Services.Menu
                 return menuItems;
             }
 
-            return Enumerable.Empty<MenuItem>();
+            return [];
         }
     }
 }

@@ -3,13 +3,8 @@ using Domain.CVS.Domain;
 
 namespace Domain.CVS.Events
 {
-    public class OrganizationCreatedEvent : BaseEvent
+    public class OrganizationCreatedEvent(Organization organization) : BaseEvent
     {
-        public OrganizationCreatedEvent(Organization organization)
-        {
-            Organization = organization;
-        }
-
-        public Organization Organization { get; }
+        public Organization Organization { get; } = organization;
     }
 }

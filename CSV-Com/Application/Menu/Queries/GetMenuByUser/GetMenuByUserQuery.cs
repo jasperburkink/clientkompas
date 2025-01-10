@@ -9,20 +9,11 @@ namespace Application.Menu.Queries.GetMenuByUser
         public string UserId { get; set; } = null!;
     }
 
-    public class GetMenuByUserHandler : IRequestHandler<GetMenuByUserQuery, GetMenuByUserDto>
+    public class GetMenuByUserHandler(IIdentityService identityService, IMenuService menuService) : IRequestHandler<GetMenuByUserQuery, GetMenuByUserDto>
     {
-        private readonly IIdentityService _identityService;
-        private readonly IMenuService _menuService;
-
-        public GetMenuByUserHandler(IIdentityService identityService, IMenuService menuService)
-        {
-            _identityService = identityService;
-            _menuService = menuService;
-        }
-
         public async Task<GetMenuByUserDto> Handle(GetMenuByUserQuery request, CancellationToken cancellationToken)
         {
-            var roles = await _identityService.GetRolesAsync(request.UserId);
+            var roles = await identityService.GetRolesAsync(request.UserId);
 
             if (!roles.Any())
             {
@@ -31,7 +22,7 @@ namespace Application.Menu.Queries.GetMenuByUser
 
             var role = roles.First();
 
-            var menuItems = _menuService.GetMenuByRole(role);
+            var menuItems = menuService.GetMenuByRole(role);
 
             return new GetMenuByUserDto
             {

@@ -14,26 +14,18 @@ namespace Application.Diagnoses.Commands.UpdateDiagnosis
         public string Name { get; set; }
     }
 
-    public class UpdateDiagnosisCommandHandler : IRequestHandler<UpdateDiagnosisCommand, DiagnosisDto>
+    public class UpdateDiagnosisCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<UpdateDiagnosisCommand, DiagnosisDto>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-        public UpdateDiagnosisCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-        }
-
         public async Task<DiagnosisDto> Handle(UpdateDiagnosisCommand request, CancellationToken cancellationToken)
         {
-            var diagnosis = await _unitOfWork.DiagnosisRepository.GetByIDAsync(request.Id, cancellationToken)
+            var diagnosis = await unitOfWork.DiagnosisRepository.GetByIDAsync(request.Id, cancellationToken)
                 ?? throw new NotFoundException(nameof(Diagnosis), request.Id);
 
             diagnosis.Name = request.Name;
 
-            await _unitOfWork.SaveAsync(cancellationToken);
+            await unitOfWork.SaveAsync(cancellationToken);
 
-            return _mapper.Map<DiagnosisDto>(diagnosis);
+            return mapper.Map<DiagnosisDto>(diagnosis);
         }
     }
 }

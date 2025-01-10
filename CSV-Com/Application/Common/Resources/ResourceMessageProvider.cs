@@ -8,15 +8,10 @@ using Application.Common.Interfaces;
 
 namespace Application.Common.Resources
 {
-    public class ResourceMessageProvider : IResourceMessageProvider
+    public class ResourceMessageProvider(CultureInfo cultureInfo) : IResourceMessageProvider
     {
         private readonly ConcurrentDictionary<string, string> _resourceCache = new();
-        public CultureInfo CultureInfo { get; private set; }
-
-        public ResourceMessageProvider(CultureInfo cultureInfo)
-        {
-            CultureInfo = cultureInfo;
-        }
+        public CultureInfo CultureInfo { get; private set; } = cultureInfo;
 
         public void LoadResources(Type type)
         {

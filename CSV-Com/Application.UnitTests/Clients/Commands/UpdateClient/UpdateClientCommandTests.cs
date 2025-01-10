@@ -119,13 +119,13 @@ namespace Application.UnitTests.Clients.Commands.UpdateClient
         }
 
         [Fact]
-        public void Handle_ClientDoesNotExist_ShouldThrowNotFoundException()
+        public async Task Handle_ClientDoesNotExist_ShouldThrowNotFoundException()
         {
-            // Act & Asset
-            Assert.ThrowsAsync<NotFoundException>(async () =>
-            {
-                await _handler.Handle(_command, default);
-            });
+            // Act
+            var act = () => _handler.Handle(_command, default);
+
+            // Asset
+            await act.Should().ThrowAsync<NotFoundException>();
         }
 
         [Fact]

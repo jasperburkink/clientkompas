@@ -10,20 +10,16 @@ namespace Application.Clients.Commands.DeactivateClient
         public int Id { get; init; }
     }
 
-    public class DeactivateClientCommandHandler : IRequestHandler<DeactivateClientCommand>
+    public class DeactivateClientCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<DeactivateClientCommand>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-
-        public DeactivateClientCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-        }
-
         public async Task Handle(DeactivateClientCommand request, CancellationToken cancellationToken)
         {
-            var client = await _unitOfWork.ClientRepository.GetByIDAsync(request.Id, cancellationToken);
+            var client = await unitOfWork.ClientRepository.GetByIDAsync(request.Id, cancellationToken);
+
+            if (client == null)
+            {
+                throw new NotFoundException(nameof(client), request.Id);
+            }
 
             if (client.DeactivationDateTime != null)
             {
@@ -32,8 +28,8 @@ namespace Application.Clients.Commands.DeactivateClient
 
             client.Deactivate(DateTime.UtcNow);
 
-            await _unitOfWork.ClientRepository.UpdateAsync(client);
-            await _unitOfWork.SaveAsync(cancellationToken);
+            await unitOfWork.ClientRepository.UpdateAsync(client);
+            await unitOfWork.SaveAsync(cancellationToken);
         }
     }
 }

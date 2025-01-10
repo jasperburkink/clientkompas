@@ -31,20 +31,11 @@ namespace Application.CoachingPrograms.Commands.UpdateCoachingProgram
         public decimal? HourlyRate { get; set; }
     }
 
-    public class UpdateCoachingProgramCommandHandler : IRequestHandler<UpdateCoachingProgramCommand, UpdateCoachingProgramCommandDto>
+    public class UpdateCoachingProgramCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<UpdateCoachingProgramCommand, UpdateCoachingProgramCommandDto>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-
-        public UpdateCoachingProgramCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-        }
-
         public async Task<UpdateCoachingProgramCommandDto> Handle(UpdateCoachingProgramCommand request, CancellationToken cancellationToken)
         {
-            var coachingProgram = await _unitOfWork.CoachingProgramRepository.GetByIDAsync(request.Id, includeProperties: "Client,Organization", cancellationToken)
+            var coachingProgram = await unitOfWork.CoachingProgramRepository.GetByIDAsync(request.Id, includeProperties: "Client,Organization", cancellationToken)
                 ?? throw new NotFoundException(nameof(Client), request.Id);
 
             coachingProgram.ClientId = request.ClientId.Value;
@@ -57,14 +48,14 @@ namespace Application.CoachingPrograms.Commands.UpdateCoachingProgram
             coachingProgram.HourlyRate = request.HourlyRate.Value;
             coachingProgram.BudgetAmmount = request.BudgetAmmount;
 
-            await _unitOfWork.CoachingProgramRepository.UpdateAsync(coachingProgram, cancellationToken);
-            await _unitOfWork.SaveAsync(cancellationToken);
+            await unitOfWork.CoachingProgramRepository.UpdateAsync(coachingProgram, cancellationToken);
+            await unitOfWork.SaveAsync(cancellationToken);
 
             coachingProgram.AddDomainEvent(new CoachingProgramUpdatedEvent(coachingProgram));
 
-            coachingProgram = await _unitOfWork.CoachingProgramRepository.GetByIDAsync(coachingProgram.Id, includeProperties: "Client,Organization", cancellationToken);
+            coachingProgram = await unitOfWork.CoachingProgramRepository.GetByIDAsync(coachingProgram.Id, includeProperties: "Client,Organization", cancellationToken);
 
-            return _mapper.Map<UpdateCoachingProgramCommandDto>(coachingProgram);
+            return mapper.Map<UpdateCoachingProgramCommandDto>(coachingProgram);
         }
     }
 

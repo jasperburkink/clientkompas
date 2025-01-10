@@ -13,17 +13,8 @@ namespace Application.MaritalStatuses.Commands.CreateMaritalStatus
         public string Name { get; init; }
     }
 
-    public class CreateMaritalStatusCommandHandler : IRequestHandler<CreateMaritalStatusCommand, MaritalStatusDto>
+    public class CreateMaritalStatusCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<CreateMaritalStatusCommand, MaritalStatusDto>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-
-        public CreateMaritalStatusCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-        }
-
         public async Task<MaritalStatusDto> Handle(CreateMaritalStatusCommand request, CancellationToken cancellationToken)
         {
             var maritalStatus = new MaritalStatus
@@ -33,11 +24,11 @@ namespace Application.MaritalStatuses.Commands.CreateMaritalStatus
 
             maritalStatus.AddDomainEvent(new MaritalStatusCreatedEvent(maritalStatus));
 
-            await _unitOfWork.MaritalStatusRepository.InsertAsync(maritalStatus, cancellationToken);
+            await unitOfWork.MaritalStatusRepository.InsertAsync(maritalStatus, cancellationToken);
 
-            await _unitOfWork.SaveAsync(cancellationToken);
+            await unitOfWork.SaveAsync(cancellationToken);
 
-            return _mapper.Map<MaritalStatusDto>(maritalStatus);
+            return mapper.Map<MaritalStatusDto>(maritalStatus);
         }
     }
 }

@@ -2,10 +2,7 @@
 
 namespace Domain.CVS.Exceptions
 {
-    public class InvalidAddressException : Exception
+    public class InvalidAddressException(Address address) : Exception($"Address \"{address.GetFormattedAddress()}\" is invalid.")
     {
-        public InvalidAddressException(Address address) : base($"Address \"{address.GetFormattedAddress()}\" is invalid.")
-        {
-        }
     }
 }

@@ -60,30 +60,24 @@ namespace Application.Clients.Commands.UpdateClient
         public string? Remarks { get; set; }
     }
 
-    public class UpdateClientCommandHandler : IRequestHandler<UpdateClientCommand, ClientDto>
+    public class UpdateClientCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<UpdateClientCommand, ClientDto>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-
-        public UpdateClientCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-        }
-
         public async Task<ClientDto> Handle(UpdateClientCommand request, CancellationToken cancellationToken)
         {
-            var client = await _unitOfWork.ClientRepository.GetByIDAsync(request.Id, includeProperties: "DriversLicences,BenefitForms,Diagnoses,EmergencyPeople,WorkingContracts,MaritalStatus", cancellationToken)
+            var client = await unitOfWork.ClientRepository.GetByIDAsync(request.Id, includeProperties: "DriversLicences,BenefitForms,Diagnoses,EmergencyPeople,WorkingContracts,MaritalStatus", cancellationToken)
                 ?? throw new NotFoundException(nameof(Client), request.Id);
 
             var benefitFormIds = request.BenefitForms.Select(x => x.Id).ToList();
-            var benefitForms = (await _unitOfWork.BenefitFormRepository.GetAsync(bf => benefitFormIds.Contains(bf.Id))).ToList();
+            var benefitForms = (await unitOfWork.BenefitFormRepository.GetAsync())
+                .Where(bf => benefitFormIds.Contains(bf.Id));
 
             var diagnosisIds = request.Diagnoses.Select(x => x.Id).ToList();
-            var diagnoses = (await _unitOfWork.DiagnosisRepository.GetAsync(d => diagnosisIds.Contains(d.Id))).ToList();
+            var diagnoses = (await unitOfWork.DiagnosisRepository.GetAsync())
+                .Where(d => diagnosisIds.Contains(d.Id));
 
             var driversLicenceIds = request.DriversLicences.Select(x => x.Id).ToList();
-            var driversLicences = (await _unitOfWork.DriversLicenceRepository.GetAsync(dl => driversLicenceIds.Contains(dl.Id))).ToList();
+            var driversLicences = (await unitOfWork.DriversLicenceRepository.GetAsync())
+                .Where(dl => driversLicenceIds.Contains(dl.Id));
 
             client.FirstName = request.FirstName;
 
@@ -105,21 +99,21 @@ namespace Application.Clients.Commands.UpdateClient
 
             client.IsInTargetGroupRegister = request.IsInTargetGroupRegister.Value;
 
-            client.BenefitForms = benefitForms;
+            client.BenefitForms = [.. benefitForms];
 
-            client.DriversLicences = driversLicences;
+            client.DriversLicences = [.. driversLicences];
 
-            client.Diagnoses = diagnoses;
+            client.Diagnoses = [.. diagnoses];
 
-            client.EmergencyPeople = request.EmergencyPeople.Select(a => a.ToDomainModel(_mapper, client)).ToList();
+            client.EmergencyPeople = request.EmergencyPeople.Select(a => a.ToDomainModel(mapper, client)).ToList();
 
-            client.WorkingContracts = request.WorkingContracts.Select(a => a.ToDomainModel(_mapper, client)).ToList();
+            client.WorkingContracts = request.WorkingContracts.Select(a => a.ToDomainModel(mapper, client)).ToList();
 
             MaritalStatus? maritalStatus = null;
 
             if (request.MaritalStatus != null)
             {
-                maritalStatus = (await _unitOfWork.MaritalStatusRepository.GetAsync(a => a.Id == request.MaritalStatus.Id))?.SingleOrDefault()
+                maritalStatus = (await unitOfWork.MaritalStatusRepository.GetAsync(a => a.Id == request.MaritalStatus.Id))?.SingleOrDefault()
                   ?? throw new NotFoundException(nameof(MaritalStatus), request.MaritalStatus);
             }
 
@@ -127,11 +121,11 @@ namespace Application.Clients.Commands.UpdateClient
 
             client.Remarks = request.Remarks;
 
-            await _unitOfWork.ClientRepository.UpdateAsync(client);
+            await unitOfWork.ClientRepository.UpdateAsync(client);
 
-            await _unitOfWork.SaveAsync(cancellationToken);
+            await unitOfWork.SaveAsync(cancellationToken);
 
-            return _mapper.Map<ClientDto>(client);
+            return mapper.Map<ClientDto>(client);
         }
     }
 }

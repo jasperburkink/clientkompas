@@ -276,5 +276,11 @@ namespace Application.FunctionalTests
             }
             return prefix;
         }
+
+        [OneTimeTearDown]
+        public void OnTearDown()
+        {
+            s_factoryWithMocks?.Dispose();
+        }
     }
 }

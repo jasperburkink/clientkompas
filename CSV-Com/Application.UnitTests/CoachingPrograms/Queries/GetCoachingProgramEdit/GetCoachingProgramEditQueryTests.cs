@@ -65,7 +65,7 @@ namespace Application.UnitTests.CoachingPrograms.Queries.GetCoachingProgramEdit
         }
 
         [Fact]
-        public void Handle_CoachingProgram_ThrowsNotFoundException()
+        public async Task Handle_CoachingProgram_ThrowsNotFoundException()
         {
             // Arrange
             var query = new GetCoachingProgramEditQuery { Id = 0 };
@@ -74,8 +74,11 @@ namespace Application.UnitTests.CoachingPrograms.Queries.GetCoachingProgramEdit
                 query.Id, default
             )).ReturnsAsync(coachingProgram);
 
-            // Act & Assert
-            Assert.ThrowsAsync<NotFoundException>(() => _handler.Handle(query, default));
+            // Act
+            var act = () => _handler.Handle(query, default);
+
+            // Assert
+            await act.Should().ThrowAsync<NotFoundException>();
         }
     }
 }

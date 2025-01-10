@@ -13,17 +13,8 @@ namespace Application.Diagnoses.Commands.CreateDiagnosis
         public string Name { get; init; }
     }
 
-    public class CreateDiagnosisCommandHandler : IRequestHandler<CreateDiagnosisCommand, DiagnosisDto>
+    public class CreateDiagnosisCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<CreateDiagnosisCommand, DiagnosisDto>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-
-        public CreateDiagnosisCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-        }
-
         public async Task<DiagnosisDto> Handle(CreateDiagnosisCommand request, CancellationToken cancellationToken)
         {
             var diagnosis = new Diagnosis
@@ -33,11 +24,11 @@ namespace Application.Diagnoses.Commands.CreateDiagnosis
 
             diagnosis.AddDomainEvent(new DiagnosisCreatedEvent(diagnosis));
 
-            await _unitOfWork.DiagnosisRepository.InsertAsync(diagnosis, cancellationToken);
+            await unitOfWork.DiagnosisRepository.InsertAsync(diagnosis, cancellationToken);
 
-            await _unitOfWork.SaveAsync(cancellationToken);
+            await unitOfWork.SaveAsync(cancellationToken);
 
-            return _mapper.Map<DiagnosisDto>(diagnosis);
+            return mapper.Map<DiagnosisDto>(diagnosis);
         }
     }
 }

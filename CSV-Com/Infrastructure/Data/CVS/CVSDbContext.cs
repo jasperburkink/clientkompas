@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data.CVS
 {
-    public class CVSDbContext : DbContext
+    public class CVSDbContext(DbContextOptions<CVSDbContext> options) : DbContext(options)
     {
         public DbSet<User> Users { get; set; }
 
@@ -23,8 +23,6 @@ namespace Infrastructure.Data.CVS
         public DbSet<CoachingProgram> CoachingPrograms { get; set; }
 
         public DbSet<License> Licenses { get; set; }
-
-        public CVSDbContext(DbContextOptions<CVSDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

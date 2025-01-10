@@ -3,14 +3,9 @@ using Domain.CVS.Domain;
 
 namespace Domain.CVS.Events
 {
-    public class DriversLicenceCreatedEvent : BaseEvent
+    public class DriversLicenceCreatedEvent(DriversLicence driversLicence) : BaseEvent
     {
-        public DriversLicenceCreatedEvent(DriversLicence driversLicence)
-        {
-            DriversLicence = driversLicence;
-        }
-
-        public DriversLicence DriversLicence { get; }
+        public DriversLicence DriversLicence { get; } = driversLicence;
     }
 
 

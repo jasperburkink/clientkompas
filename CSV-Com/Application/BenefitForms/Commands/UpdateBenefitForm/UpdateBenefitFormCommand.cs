@@ -14,29 +14,20 @@ namespace Application.BenefitForms.Commands.UpdateBenefitForm
         public string Name { get; set; }
     }
 
-    public class UpdateBenefitFormCommandHandler : IRequestHandler<UpdateBenefitFormCommand, BenefitFormDto>
+    public class UpdateBenefitFormCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<UpdateBenefitFormCommand, BenefitFormDto>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-
-        public UpdateBenefitFormCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-        }
-
         public async Task<BenefitFormDto> Handle(UpdateBenefitFormCommand request, CancellationToken cancellationToken)
         {
 
-            var benefitForm = await _unitOfWork.BenefitFormRepository.GetByIDAsync(request.Id, cancellationToken)
+            var benefitForm = await unitOfWork.BenefitFormRepository.GetByIDAsync(request.Id, cancellationToken)
                 ?? throw new NotFoundException(nameof(BenefitForm), request.Id);
 
 
             benefitForm.Name = request.Name;
 
-            await _unitOfWork.SaveAsync(cancellationToken);
+            await unitOfWork.SaveAsync(cancellationToken);
 
-            return _mapper.Map<BenefitFormDto>(benefitForm);
+            return mapper.Map<BenefitFormDto>(benefitForm);
         }
     }
 }
