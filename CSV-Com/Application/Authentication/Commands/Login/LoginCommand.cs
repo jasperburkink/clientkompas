@@ -73,6 +73,7 @@ namespace Application.Authentication.Commands.Login
             // Send the token via email
             EmailMessageDto message = new()
             {
+                Id = Guid.NewGuid(),
                 Subject = "Two-factor authentication token",
                 Recipients = new List<string> { loggedInUser.User.Email }
             };

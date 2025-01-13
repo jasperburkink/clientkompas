@@ -1,5 +1,4 @@
 ﻿using Application.Common.Mappings;
-using AutoMapper;
 using Domain.CVS.Domain;
 using Domain.CVS.Enums;
 

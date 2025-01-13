@@ -45,6 +45,7 @@ namespace Application.Authentication.Commands.RequestResetPassword
                 // Send via email
                 EmailMessageDto message = new()
                 {
+                    Id = Guid.NewGuid(),
                     Subject = "Herstel Wachtwoord",
                     Recipients = new List<string> { request.EmailAddress }
                 };

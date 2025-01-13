@@ -35,4 +35,8 @@
     <ProjectReference Include="..\TestData\TestData.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Logging\" />
+  </ItemGroup>
+
 </Project>

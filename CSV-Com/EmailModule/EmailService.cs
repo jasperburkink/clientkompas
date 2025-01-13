@@ -14,15 +14,27 @@ namespace EmailModule
         private readonly IMapper _mapper;
         private readonly IRazorLightEngine _razorLightEngine;
         private static readonly ConcurrentDictionary<string, DateTime> s_emailSendTimes = new();
-        private readonly List<(MimeMessage, DateTime)> _mailMessages = new();
+
+        public readonly List<(EmailMessage, DateTime)> MailMessagesSent = new();
+        public readonly List<(EmailMessage, DateTime, string)> FailedMailMessagesSent = new();
+        private readonly System.Timers.Timer _timer = new(60000);
+
 
         public EmailService(IMapper mapper)
         {
+            _timer.Elapsed += OnTimerElapsed;
+            _timer.Enabled = true;
+            _timer.Start();
             _mapper = mapper;
             _razorLightEngine = new RazorLightEngineBuilder()
                 .UseEmbeddedResourcesProject(typeof(EmailService).Assembly)
                 .UseMemoryCachingProvider()
                 .Build();
+        }
+
+        private void OnTimerElapsed(object? sender, System.Timers.ElapsedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task SendEmailAsync<T>(EmailMessageDto messageDto, string templateName, T model)
@@ -61,7 +73,7 @@ namespace EmailModule
                     await client.AuthenticateAsync(EmailConfig.Username, EmailConfig.Password);
                 }
 
-                if (IsDuplicateEmail(email))
+                if (IsDuplicateEmail(messageDto))
                 {
                     Debug.WriteLine("Duplicate email detected");
                     return;
@@ -70,7 +82,9 @@ namespace EmailModule
                 await client.SendAsync(email);
                 await client.DisconnectAsync(true);
 
-                _mailMessages.Add((email, DateTime.Now));
+                MailMessagesSent.Add((message, DateTime.Now));
+
+
             }
             catch (Exception ex)
             {
@@ -78,13 +92,27 @@ namespace EmailModule
             }
         }
 
-        private bool IsDuplicateEmail(MimeMessage email)
+        private void WriteLog(EmailMessage email, string result, string recipient = "", string error = "")
         {
-            foreach (var (sentmail, _) in _mailMessages)
+            var logPath = "EmailModule.Logging";
+
+            using var writer = new StreamWriter(logPath, true);
             {
-                if (email.Subject == sentmail.Subject && email.Body == sentmail.Body)
+                writer.WriteLine($"{DateTime.Now} | {email.Id} | {EmailConfig.Username} | {recipient} | {email.Subject} | {result} | {error}");
+            }
+        }
+
+
+
+        private bool IsDuplicateEmail(EmailMessageDto email)
+        {
+            foreach (var (sentmail, _) in MailMessagesSent)
+            {
+                if (sentmail.IsDuplicateEmail(email))
                 {
                     Debug.WriteLine("Duplicate email detected");
+                    var failedEmail = _mapper.Map<EmailMessage>(email);
+                    FailedMailMessagesSent.Add((failedEmail, DateTime.Now, "Duplicate Email"));
                     return true;
                 }
             }
@@ -95,10 +123,11 @@ namespace EmailModule
         {
             if (s_emailSendTimes.TryGetValue(recipient, out var lastSent))
             {
+                // TO DO: Periodiek logging en dan worden de lijsten leeg gemaakt en weg gescheven naar de log
                 var timeSinceLastSent = DateTime.UtcNow - lastSent;
                 if (timeSinceLastSent < TimeSpan.FromMinutes(1))
                 {
-                    _mailMessages.Clear();
+                    //MailMessagesSent.Clear();
                     return true;
                 }
             }

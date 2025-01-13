@@ -38,6 +38,7 @@ namespace Application.Authentication.Commands.ResetPassword
 
                 EmailMessageDto message = new()
                 {
+                    Id = Guid.NewGuid(),
                     Subject = "Uw wachtwoord is veranderd",
                     Recipients = new List<string> { request.EmailAddress }
                 };
