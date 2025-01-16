@@ -48,7 +48,14 @@ namespace Domain.UnitTests.CVS.Domain
         [Fact]
         public void LicenseHolder_SettingProperty_ValueHasBeenSet()
         {
-            var licenseHolder = new User { FirstName = "Djomar" };
+            var licenseHolder = new User
+            {
+                FirstName = "Djomar",
+                EmailAddress = "a@b.com",
+                IsDeactivated = false,
+                LastName = "Test",
+                TelephoneNumber = "0123456789"
+            };
 
             _license.LicenseHolder = licenseHolder;
 

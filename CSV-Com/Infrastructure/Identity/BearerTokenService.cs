@@ -32,7 +32,7 @@ namespace Infrastructure.Identity
                     new (JwtRegisteredClaimNames.Name, user.UserName ?? ""),
                     new (JwtRegisteredClaimNames.Email, user.Email ?? ""),
                     new (JwtRegisteredClaimNames.Exp, expires.Ticks.ToString()),
-                    new (CLAIM_NAME_CVSUSERID, (user.CVSUserId ?? 0).ToString()),
+                    new (CLAIM_NAME_CVSUSERID, user.CVSUserId.ToString()),
                 };
 
                 foreach (var role in roles)

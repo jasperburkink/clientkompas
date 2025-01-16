@@ -28,7 +28,14 @@ namespace Application.FunctionalTests.License.Dtos
                 CreatedAt = DateTime.UtcNow,
                 ValidUntil = DateTime.UtcNow.AddYears(1),
                 Organization = new Organization { OrganizationName = "Test Organization" },
-                LicenseHolder = new User { FirstName = "John", LastName = "Doe" },
+                LicenseHolder = new User
+                {
+                    FirstName = "John",
+                    LastName = "Doe",
+                    EmailAddress = "a@b.com",
+                    IsDeactivated = false,
+                    TelephoneNumber = "1234567890"
+                },
                 Status = LicenseStatus.Active
             };
 

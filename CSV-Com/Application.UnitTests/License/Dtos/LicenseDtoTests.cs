@@ -33,7 +33,14 @@ namespace Application.UnitTests.License.Dtos
                 ValidUntil = DateTime.Now.AddYears(1),
                 Status = LicenseStatus.Active,
                 Organization = new Organization { OrganizationName = "Test Org" },
-                LicenseHolder = new User { FirstName = "John", LastName = "Doe" }
+                LicenseHolder = new User
+                {
+                    FirstName = "John",
+                    LastName = "Doe",
+                    EmailAddress = "a@b.com",
+                    IsDeactivated = false,
+                    TelephoneNumber = "1234567890"
+                }
             };
 
             // Act

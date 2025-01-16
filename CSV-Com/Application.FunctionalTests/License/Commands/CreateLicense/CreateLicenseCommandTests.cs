@@ -2,14 +2,11 @@
 using Domain.CVS.Domain;
 using Domain.CVS.Enums;
 using Domain.CVS.ValueObjects;
-using static Application.FunctionalTests.Testing;
 
 namespace Application.FunctionalTests.License.Commands.CreateLicense
 {
     public class CreateLicenseCommandTests : BaseTestFixture
     {
-
-
         [SetUp]
         public async Task SetUp()
         {
@@ -24,7 +21,9 @@ namespace Application.FunctionalTests.License.Commands.CreateLicense
             {
                 FirstName = "Jane",
                 LastName = "Smith",
-                EmailAddress = "jane.smith@example.com"
+                EmailAddress = "jane.smith@example.com",
+                IsDeactivated = false,
+                TelephoneNumber = "1234567890"
             };
             await AddAsync(licenseHolder);
 
@@ -83,7 +82,9 @@ namespace Application.FunctionalTests.License.Commands.CreateLicense
             {
                 FirstName = "John",
                 LastName = "Doe",
-                EmailAddress = "john.doe@example.com"
+                EmailAddress = "john.doe@example.com",
+                IsDeactivated = false,
+                TelephoneNumber = "1234567890"
             };
             await AddAsync(licenseHolder);
 
