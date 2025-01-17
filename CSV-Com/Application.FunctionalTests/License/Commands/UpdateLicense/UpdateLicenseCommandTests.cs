@@ -4,7 +4,6 @@ using Domain.CVS.Domain;
 using Domain.CVS.Enums;
 using TestData;
 using TestData.Organization;
-using static Application.FunctionalTests.Testing;
 
 namespace Application.FunctionalTests.License.Commands.UpdateLicense
 {
@@ -25,7 +24,14 @@ namespace Application.FunctionalTests.License.Commands.UpdateLicense
             var organization = testDataGeneratorOrganization.Create();
             await AddAsync(organization);
 
-            var licenseHolder = new User { FirstName = "John", LastName = "Doe", EmailAddress = "johndoe@email.com" };
+            var licenseHolder = new User
+            {
+                FirstName = "John",
+                LastName = "Doe",
+                EmailAddress = "johndoe@email.com",
+                IsDeactivated = false,
+                TelephoneNumber = "1234567890"
+            };
             await AddAsync(licenseHolder);
 
             var license = new Domain.CVS.Domain.License
@@ -94,7 +100,9 @@ namespace Application.FunctionalTests.License.Commands.UpdateLicense
             {
                 FirstName = "John",
                 LastName = "Doe",
-                EmailAddress = "john.doe@example.com"
+                EmailAddress = "john.doe@example.com",
+                IsDeactivated = false,
+                TelephoneNumber = "1234567890"
             };
             await AddAsync(licenseHolder);
 
@@ -140,7 +148,9 @@ namespace Application.FunctionalTests.License.Commands.UpdateLicense
                 {
                     FirstName = "John",
                     LastName = "Doe",
-                    EmailAddress = "john.doe@example.com"
+                    EmailAddress = "john.doe@example.com",
+                    IsDeactivated = false,
+                    TelephoneNumber = "1234567890"
                 },
                 Status = LicenseStatus.Active
             };

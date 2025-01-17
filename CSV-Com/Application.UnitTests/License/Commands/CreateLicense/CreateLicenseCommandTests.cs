@@ -39,7 +39,15 @@ namespace Application.UnitTests.License.Commands.CreateLicense
             };
 
             var organization = new Organization { Id = command.OrganizationId };
-            var licenseHolder = new User { Id = command.LicenseHolderId };
+            var licenseHolder = new User
+            {
+                Id = command.LicenseHolderId,
+                FirstName = "John",
+                LastName = "Doe",
+                EmailAddress = "john.doe@example.com",
+                IsDeactivated = false,
+                TelephoneNumber = "1234567890"
+            };
             var license = new Domain.CVS.Domain.License
             {
                 CreatedAt = command.CreatedAt,

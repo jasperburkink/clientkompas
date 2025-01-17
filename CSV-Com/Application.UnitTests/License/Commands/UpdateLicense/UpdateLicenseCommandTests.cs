@@ -41,7 +41,15 @@ namespace Application.UnitTests.License.Commands.UpdateLicense
 
             var license = new Domain.CVS.Domain.License { Id = command.Id };
             var organization = new Organization { Id = command.OrganizationId };
-            var licenseHolder = new User { Id = command.LicenseHolderId };
+            var licenseHolder = new User
+            {
+                Id = command.LicenseHolderId,
+                FirstName = "John",
+                LastName = "Doe",
+                EmailAddress = "a@b.com",
+                IsDeactivated = false,
+                TelephoneNumber = "1234567890"
+            };
             var licenseDto = new LicenseDto();
 
             _unitOfWorkMock.Setup(x => x.LicenseRepository.GetByIDAsync(command.Id, It.IsAny<CancellationToken>()))
