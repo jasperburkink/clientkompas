@@ -10,13 +10,10 @@
   <ItemGroup>
     <Compile Remove="Clients\Commands\DeleteClient\**" />
     <Compile Remove="Clients\Commands\UpdateClient\**" />
-    <Compile Remove="Users\**" />
     <EmbeddedResource Remove="Clients\Commands\DeleteClient\**" />
     <EmbeddedResource Remove="Clients\Commands\UpdateClient\**" />
-    <EmbeddedResource Remove="Users\**" />
     <None Remove="Clients\Commands\DeleteClient\**" />
     <None Remove="Clients\Commands\UpdateClient\**" />
-    <None Remove="Users\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +26,7 @@
     <Folder Include="MaritalStatuses\Commands\UpdateMaritalStatus\" />
     <Folder Include="MaritalStatuses\Queries\" />
     <Folder Include="Organizations\Commands\" />
+    <Folder Include="Users\Queries\" />
   </ItemGroup>
 
   <ItemGroup>
