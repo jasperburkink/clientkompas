@@ -47,6 +47,17 @@ namespace Infrastructure.Identity
                     IsUsed = false,
                     IsRevoked = false
                 },
+                "TemporaryPasswordToken" => new TemporaryPasswordToken
+                {
+                    Name = $"{TemporaryPasswordTokenConstants.NAME}_{DateTime.UtcNow.Ticks}",
+                    LoginProvider = TokenConstants.LOGINPROVIDER,
+                    Value = tokenValue,
+                    UserId = user.Id,
+                    ExpiresAt = DateTime.UtcNow.Add(TemporaryPasswordTokenConstants.TOKEN_TIMEOUT),
+                    CreatedAt = DateTime.UtcNow,
+                    IsUsed = false,
+                    IsRevoked = false
+                },
                 _ => throw new InvalidOperationException($"{tokenType} is not a valid tokentype")
             };
 

@@ -26,13 +26,14 @@ namespace Infrastructure.Identity
             return user?.UserName;
         }
 
-        public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password)
+        public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password, int cvsUserId)
         {
             var user = new AuthenticationUser
             {
                 UserName = userName,
                 Email = userName,
-                TwoFactorEnabled = TWOFACTORAUTHENTICATION_DEFAULT_ENABLED // NOTE: 
+                TwoFactorEnabled = TWOFACTORAUTHENTICATION_DEFAULT_ENABLED, // NOTE: Two-factor authentication is turned on by default
+                CVSUserId = cvsUserId
             };
 
             var result = await userManager.CreateAsync(user, password);

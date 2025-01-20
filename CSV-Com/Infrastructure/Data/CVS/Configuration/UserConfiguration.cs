@@ -36,6 +36,11 @@ namespace Infrastructure.Data.CVS.Configuration
 
             builder.Property(u => u.IsDeactivated)
                 .IsRequired();
+
+            builder.HasOne(u => u.CreatedByUser)
+                .WithMany()
+                .HasForeignKey(u => u.CreatedByUserId)
+                .IsRequired();
         }
     }
 }

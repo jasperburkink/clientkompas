@@ -70,7 +70,7 @@ namespace Infrastructure.Data.Authentication
 
             if (userManager.Users.All(u => u.UserName != email))
             {
-                var (result, userId) = await identityService.CreateUserAsync(email, password);
+                var (result, userId) = await identityService.CreateUserAsync(email, password, 0); // TODO: Add an CVS user?
 
                 if (result == null || userId == null)
                 {
