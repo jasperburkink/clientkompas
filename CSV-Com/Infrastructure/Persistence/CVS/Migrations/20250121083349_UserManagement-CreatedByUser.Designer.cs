@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.CVS.Migrations
 {
     [DbContext(typeof(CVSDbContext))]
-    [Migration("20250120143344_UserManagement-CreatedByUser")]
+    [Migration("20250121083349_UserManagement-CreatedByUser")]
     partial class UserManagementCreatedByUser
     {
         /// <inheritdoc />
@@ -491,7 +491,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("CreatedByUserId")
+                    b.Property<int?>("CreatedByUserId")
                         .HasColumnType("int");
 
                     b.Property<string>("EmailAddress")
@@ -904,9 +904,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
                 {
                     b.HasOne("Domain.CVS.Domain.User", "CreatedByUser")
                         .WithMany()
-                        .HasForeignKey("CreatedByUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CreatedByUserId");
 
                     b.Navigation("CreatedByUser");
                 });

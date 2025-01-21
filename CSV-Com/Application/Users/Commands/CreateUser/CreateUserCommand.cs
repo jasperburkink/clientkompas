@@ -1,14 +1,16 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Interfaces.CVS;
+using Application.Common.Models;
 using Application.Common.Security;
 using Domain.Authentication.Constants;
+using Domain.Authentication.Domain;
 using Domain.CVS.Domain;
 
 namespace Application.Users.Commands.CreateUser
 {
     [Authorize(Policy = Policies.UserManagement)]
-    public record CreateUserCommand : IRequest<CreateUserCommandDto>
+    public record CreateUserCommand : IRequest<Result<CreateUserCommandDto>>
     {
         public string? FirstName { get; set; }
 
@@ -19,15 +21,53 @@ namespace Application.Users.Commands.CreateUser
         public string? EmailAddress { get; set; }
 
         public string? TelephoneNumber { get; set; }
+
+        public int? LicenceId { get; set; } // TODO: Is not yet implemented
+
+        public string? RoleName { get; set; }
     }
 
     public class CreateUserCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IIdentityService identityService,
         ITokenService tokenService, IPasswordService passwordService, IEmailService emailService)
-        : IRequestHandler<CreateUserCommand, CreateUserCommandDto>
+        : IRequestHandler<CreateUserCommand, Result<CreateUserCommandDto>>
     {
         private const int DEFAULT_PASSWORD_LENGTH = 8;
 
-        public async Task<CreateUserCommandDto> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+        public async Task<Result<CreateUserCommandDto>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+        {
+            var currentLoggedInUserId = await GetCurrentLoggedInUserId(identityService);
+
+            var cvsUser = await CreateCVSUser(unitOfWork, request, currentLoggedInUserId, cancellationToken);
+
+            var password = passwordService.GeneratePassword(DEFAULT_PASSWORD_LENGTH);
+
+            var authenticationUserId = await CreateAuthenticationUser(identityService, request, cvsUser, password, cancellationToken);
+
+            var authenticationUser = await identityService.GetUserAsync(authenticationUserId);
+
+            var link = await CreateChangePasswordLink(tokenService, authenticationUser);
+
+            await SendEmail(emailService, request, password, link);
+
+            return Result.Success(mapper.Map<CreateUserCommandDto>(cvsUser));
+        }
+
+        private async Task<string> CreateAuthenticationUser(IIdentityService identityService, CreateUserCommand request, User user, string password, CancellationToken cancellationToken)
+        {
+            // Create Authentication user
+            var (result, userId) = await identityService.CreateUserAsync(request.EmailAddress, password, user.Id);
+
+            if (!result.Succeeded)
+            {
+                await RemoveUser(user, cancellationToken);
+                Result.Failure($"Something went wrong while createing an authentication user with email '{request.EmailAddress}'.");
+            }
+
+            await identityService.AddUserToRoleAsync(userId, request.RoleName);
+            return userId;
+        }
+
+        private static async Task<User> CreateCVSUser(IUnitOfWork unitOfWork, CreateUserCommand request, int? currentLoggedInUserId, CancellationToken cancellationToken)
         {
             var user = new User
             {
@@ -37,51 +77,50 @@ namespace Application.Users.Commands.CreateUser
                 EmailAddress = request.EmailAddress,
                 TelephoneNumber = request.TelephoneNumber,
                 IsDeactivated = false,
-                CreatedByUserId = 0
+                CreatedByUserId = currentLoggedInUserId
             };
 
             if (await unitOfWork.UserRepository.AnyAsync(u => u.EmailAddress.ToLower() == request.EmailAddress.ToLower(), cancellationToken))
             {
-                // TODO: custom exception
-                throw new Exception("Dit emailadres is al ingebruik.");
+                Result.Failure($"Emailaddress '{request.EmailAddress}' is already in use.");
             }
 
-            // Add CVS user
             await unitOfWork.UserRepository.InsertAsync(user);
             await unitOfWork.SaveAsync(cancellationToken);
+            return user;
+        }
 
-            var password = passwordService.GeneratePassword(DEFAULT_PASSWORD_LENGTH);
+        private static async Task<int?> GetCurrentLoggedInUserId(IIdentityService identityService)
+        {
+            var currentLoggedInUserId = await identityService.GetCurrentLoggedInUserId();
 
-            // Create Authentication user
-            var (result, userId) = await identityService.CreateUserAsync(request.EmailAddress, password, user.Id);
-            if (!result.Succeeded)
+            if (currentLoggedInUserId == 0)
             {
-                await RemoveUser(user, cancellationToken);
-
-                // TODO: Custom exception
-                throw new Exception();
+                Result.Failure("There's no user logged in right now!");
             }
 
-            var authenticationUser = await identityService.GetUserAsync(userId);
+            return currentLoggedInUserId;
+        }
 
-            // Create link with token for changing temporary password
+        private static async Task<Uri> CreateChangePasswordLink(ITokenService tokenService, AuthenticationUser authenticationUser)
+        {
             var token = await tokenService.GenerateTokenAsync(authenticationUser, "TemporaryPasswordToken"); // TODO: name in constants
-            var link = new Uri($"https://localhost:3000/ChangePassword/{token}");
+            return new Uri($"https://localhost:3000/ChangePassword/{token}");
+        }
 
-            // Send email with
-            emailService.SendEmailAsync(request.EmailAddress, "Gebruikersgegevens",
-                $"""
-                Beste {request.FirstName},
+        private static async Task SendEmail(IEmailService emailService, CreateUserCommand request, string password, Uri link)
+        {
+            await emailService.SendEmailAsync(request.EmailAddress, "Gebruikersgegevens",
+                            $"""
+                            Beste {request.FirstName},
 
-                Hierbij uw tijdelijke logingegevens.
-                Gebruikersnaam: {request.EmailAddress}
-                Wachtwoord:     {password}
+                            Hierbij uw tijdelijke logingegevens.
+                            Gebruikersnaam: {request.EmailAddress}
+                            Wachtwoord:     {password}
 
-                Bovenstaande wachtwoord is tijdelijk en dient zo spoedig mogelijk te worden aangepast.
-                Via de volgende link kunt u uw tijdelijke wachtwoord aanpassen: {link}
-                """); // TODO: Change to new emailmodule
-
-            return mapper.Map<CreateUserCommandDto>(user);
+                            Bovenstaande wachtwoord is tijdelijk en dient zo spoedig mogelijk te worden aangepast.
+                            Via de volgende link kunt u uw tijdelijke wachtwoord aanpassen: {link}
+                            """); // TODO: Change to new emailmodule
         }
 
         private async Task RemoveUser(User user, CancellationToken cancellationToken)

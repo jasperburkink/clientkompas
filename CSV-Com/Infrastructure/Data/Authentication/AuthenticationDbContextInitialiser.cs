@@ -1,15 +1,20 @@
 ﻿using Application.Common.Interfaces.Authentication;
+using Application.Common.Interfaces.CVS;
 using Domain.Authentication.Constants;
 using Domain.Authentication.Domain;
+using Domain.CVS.Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Data.Authentication
 {
-    public class AuthenticationDbContextInitialiser(ILogger<AuthenticationDbContextInitialiser> logger, AuthenticationDbContext context, UserManager<AuthenticationUser> userManager, RoleManager<IdentityRole> roleManager, IIdentityService identityService)
+    public class AuthenticationDbContextInitialiser(ILogger<AuthenticationDbContextInitialiser> logger, AuthenticationDbContext context,
+        UserManager<AuthenticationUser> userManager, RoleManager<IdentityRole> roleManager, IIdentityService identityService,
+        IUnitOfWork unitOfWork)
     {
         private const string DOMAIN_CLIENTKOMPAS = "clientkompas.nl";
+        private const string PHONENUMBER_SBICT = "0623452092";
 
         public async Task InitialiseAsync()
         {
@@ -44,33 +49,56 @@ namespace Infrastructure.Data.Authentication
         {
             // Default roles
             var administratorRole = new IdentityRole(nameof(Roles.Administrator));
-            await CreateRoleAndUser(administratorRole);
+            await CreateRole(administratorRole);
 
             var licenseeRole = new IdentityRole(nameof(Roles.Licensee));
-            await CreateRoleAndUser(licenseeRole);
+            await CreateRole(licenseeRole);
 
             var systemOwnerRole = new IdentityRole(nameof(Roles.SystemOwner));
-            await CreateRoleAndUser(systemOwnerRole);
+            await CreateRole(systemOwnerRole);
 
             var systemCoach = new IdentityRole(nameof(Roles.Coach));
-            await CreateRoleAndUser(systemCoach);
+            await CreateRole(systemCoach);
+
+            // Create systemowner role so lincences with users can be added
+            await CreateUser(systemOwnerRole.Name);
         }
 
-        private async Task CreateRoleAndUser(IdentityRole role)
+        private async Task CreateRole(IdentityRole role)
         {
             if (roleManager.Roles.All(r => r.Name != role.Name))
             {
                 await roleManager.CreateAsync(role);
             }
+        }
 
+        private async Task CreateUser(string userName)
+        {
             // Default users
-            var password = $"{role.Name}{role.Name}1!";
+            var password = $"{userName}{userName}1!";
 
-            var email = $"{role}@{DOMAIN_CLIENTKOMPAS}";
+            var email = $"{userName}@{DOMAIN_CLIENTKOMPAS}";
+
+            // CVSUser?
+            var cvsUser = (await unitOfWork.UserRepository.GetAsync(u => u.EmailAddress.ToLower() == email.ToLower())).FirstOrDefault();
+
+            if (cvsUser == null)
+            {
+                await unitOfWork.UserRepository.InsertAsync(new User
+                {
+                    EmailAddress = email,
+                    FirstName = userName,
+                    LastName = userName,
+                    TelephoneNumber = PHONENUMBER_SBICT,
+                    IsDeactivated = false,
+                });
+                await unitOfWork.SaveAsync();
+                cvsUser = (await unitOfWork.UserRepository.GetAsync(u => u.EmailAddress.ToLower() == email.ToLower())).First();
+            }
 
             if (userManager.Users.All(u => u.UserName != email))
             {
-                var (result, userId) = await identityService.CreateUserAsync(email, password, 0); // TODO: Add an CVS user?
+                var (result, userId) = await identityService.CreateUserAsync(email, password, cvsUser.Id);
 
                 if (result == null || userId == null)
                 {
@@ -79,9 +107,9 @@ namespace Infrastructure.Data.Authentication
 
                 var user = await identityService.GetUserAsync(userId);
 
-                if (!string.IsNullOrWhiteSpace(role.Name))
+                if (!string.IsNullOrWhiteSpace(userName))
                 {
-                    await userManager.AddToRolesAsync(user, [role.Name]); // TODO: move the addroles to the indetityservice and remove usermanager from this class
+                    await userManager.AddToRolesAsync(user, [userName]); // TODO: move the addroles to the indetityservice and remove usermanager from this class
                 }
             }
         }

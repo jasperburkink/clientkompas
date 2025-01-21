@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.Authentication.Migrations
 {
     [DbContext(typeof(AuthenticationDbContext))]
-    [Migration("20250116153022_UserManagement")]
+    [Migration("20250121091327_UserManagement")]
     partial class UserManagement
     {
         /// <inheritdoc />
@@ -274,6 +274,33 @@ namespace Infrastructure.Persistence.Authentication.Migrations
                         .HasColumnName("IsUsed");
 
                     b.HasDiscriminator().HasValue("RefreshToken");
+                });
+
+            modelBuilder.Entity("Infrastructure.Identity.TemporaryPasswordToken", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserToken<string>");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("CreatedAt");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("ExpiresAt");
+
+                    b.Property<bool>("IsRevoked")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("IsRevoked");
+
+                    b.Property<bool>("IsUsed")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("IsUsed");
+
+                    b.HasDiscriminator().HasValue("TemporaryPasswordToken");
                 });
 
             modelBuilder.Entity("Infrastructure.Identity.TwoFactorPendingToken", b =>

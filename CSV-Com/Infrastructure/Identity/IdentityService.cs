@@ -180,5 +180,21 @@ namespace Infrastructure.Identity
 
             return new LoggedInResult(tokenValid, user, roles);
         }
+
+        public async Task<int?> GetCurrentLoggedInUserId()
+        {
+            var user = await signInManager.UserManager.GetUserAsync(signInManager.Context.User);
+            return user?.CVSUserId;
+        }
+
+        public async Task<Result> AddUserToRoleAsync(string userId, string role)
+        {
+            var user = await userManager.FindByIdAsync(userId)
+                ?? throw new Application.Common.Exceptions.NotFoundException("AuthenticationUser not found.", userId);
+
+            userManager.AddToRoleAsync(user, role);
+
+            return Result.Success();
+        }
     }
 }

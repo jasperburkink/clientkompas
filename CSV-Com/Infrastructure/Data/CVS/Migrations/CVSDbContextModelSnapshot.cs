@@ -488,7 +488,7 @@ namespace Infrastructure.Data.CVS.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("CreatedByUserId")
+                    b.Property<int?>("CreatedByUserId")
                         .HasColumnType("int");
 
                     b.Property<string>("EmailAddress")
@@ -901,9 +901,7 @@ namespace Infrastructure.Data.CVS.Migrations
                 {
                     b.HasOne("Domain.CVS.Domain.User", "CreatedByUser")
                         .WithMany()
-                        .HasForeignKey("CreatedByUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CreatedByUserId");
 
                     b.Navigation("CreatedByUser");
                 });

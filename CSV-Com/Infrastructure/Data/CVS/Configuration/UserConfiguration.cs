@@ -40,7 +40,7 @@ namespace Infrastructure.Data.CVS.Configuration
             builder.HasOne(u => u.CreatedByUser)
                 .WithMany()
                 .HasForeignKey(u => u.CreatedByUserId)
-                .IsRequired();
+                .IsRequired(false);
         }
     }
 }

@@ -12,6 +12,8 @@ namespace Infrastructure.Data.Authentication
 
         DbSet<TwoFactorPendingToken> TwoFactorPendingTokens { get; set; }
 
+        DbSet<TemporaryPasswordToken> TemporaryPasswordTokens { get; set; }
+
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

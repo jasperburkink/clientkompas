@@ -32,5 +32,9 @@ namespace Application.Common.Interfaces.Authentication
         Task<string> Get2FATokenAsync(string userId);
 
         Task<LoggedInResult> Login2FAAsync(string userId, string token);
+
+        Task<int?> GetCurrentLoggedInUserId();
+
+        Task<Result> AddUserToRoleAsync(string userId, string role);
     }
 }

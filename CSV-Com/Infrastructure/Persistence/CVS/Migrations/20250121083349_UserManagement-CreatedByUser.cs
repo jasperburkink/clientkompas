@@ -14,8 +14,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
                 name: "CreatedByUserId",
                 table: "Users",
                 type: "int",
-                nullable: false,
-                defaultValue: 0);
+                nullable: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_CreatedByUserId",
@@ -27,8 +26,7 @@ namespace Infrastructure.Persistence.CVS.Migrations
                 table: "Users",
                 column: "CreatedByUserId",
                 principalTable: "Users",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                principalColumn: "Id");
         }
 
         /// <inheritdoc />
