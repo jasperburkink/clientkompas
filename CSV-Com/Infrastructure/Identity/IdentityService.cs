@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Models;
+using Domain.Authentication.Constants;
 using Domain.Authentication.Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -33,7 +34,10 @@ namespace Infrastructure.Identity
                 UserName = userName,
                 Email = userName,
                 TwoFactorEnabled = TWOFACTORAUTHENTICATION_DEFAULT_ENABLED, // NOTE: Two-factor authentication is turned on by default
-                CVSUserId = cvsUserId
+                CVSUserId = cvsUserId,
+                HasTemporaryPassword = true,
+                TemporaryPasswordExpiryDate = DateTime.UtcNow.Add(TemporaryPasswordTokenConstants.TOKEN_TIMEOUT),
+                TemporaryPasswordTokenCount = 1
             };
 
             var result = await userManager.CreateAsync(user, password);

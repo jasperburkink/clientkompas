@@ -1,4 +1,5 @@
-﻿using Application.Common.Interfaces;
+﻿using System.Net;
+using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Interfaces.CVS;
 using Application.Common.Models;
@@ -22,7 +23,7 @@ namespace Application.Users.Commands.CreateUser
 
         public string? TelephoneNumber { get; set; }
 
-        public int? LicenceId { get; set; } // TODO: Is not yet implemented
+        public int? LicenceId { get; set; } // TODO: Is not implemented yet
 
         public string? RoleName { get; set; }
     }
@@ -54,7 +55,6 @@ namespace Application.Users.Commands.CreateUser
 
         private async Task<string> CreateAuthenticationUser(IIdentityService identityService, CreateUserCommand request, User user, string password, CancellationToken cancellationToken)
         {
-            // Create Authentication user
             var (result, userId) = await identityService.CreateUserAsync(request.EmailAddress, password, user.Id);
 
             if (!result.Succeeded)
@@ -80,9 +80,14 @@ namespace Application.Users.Commands.CreateUser
                 CreatedByUserId = currentLoggedInUserId
             };
 
-            if (await unitOfWork.UserRepository.AnyAsync(u => u.EmailAddress.ToLower() == request.EmailAddress.ToLower(), cancellationToken))
+            if (await unitOfWork.UserRepository.AnyAsync(u => u.EmailAddress.ToUpper() == request.EmailAddress.ToUpper(), cancellationToken))
             {
                 Result.Failure($"Emailaddress '{request.EmailAddress}' is already in use.");
+            }
+
+            if (await unitOfWork.UserRepository.AnyAsync(u => u.TelephoneNumber.ToUpper() == request.TelephoneNumber.ToUpper(), cancellationToken))
+            {
+                Result.Failure($"Telephonenumber '{request.TelephoneNumber}' is already in use.");
             }
 
             await unitOfWork.UserRepository.InsertAsync(user);
@@ -105,7 +110,7 @@ namespace Application.Users.Commands.CreateUser
         private static async Task<Uri> CreateChangePasswordLink(ITokenService tokenService, AuthenticationUser authenticationUser)
         {
             var token = await tokenService.GenerateTokenAsync(authenticationUser, "TemporaryPasswordToken"); // TODO: name in constants
-            return new Uri($"https://localhost:3000/ChangePassword/{token}");
+            return new Uri($"https://localhost:3000/ChangePassword/{WebUtility.UrlEncode(token)}");
         }
 
         private static async Task SendEmail(IEmailService emailService, CreateUserCommand request, string password, Uri link)

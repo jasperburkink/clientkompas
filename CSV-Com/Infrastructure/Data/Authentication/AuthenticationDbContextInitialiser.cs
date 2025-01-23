@@ -90,7 +90,7 @@ namespace Infrastructure.Data.Authentication
                     FirstName = userName,
                     LastName = userName,
                     TelephoneNumber = PHONENUMBER_SBICT,
-                    IsDeactivated = false,
+                    IsDeactivated = false
                 });
                 await unitOfWork.SaveAsync();
                 cvsUser = (await unitOfWork.UserRepository.GetAsync(u => u.EmailAddress.ToLower() == email.ToLower())).First();
