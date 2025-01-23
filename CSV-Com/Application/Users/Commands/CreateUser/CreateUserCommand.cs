@@ -23,8 +23,6 @@ namespace Application.Users.Commands.CreateUser
 
         public string? TelephoneNumber { get; set; }
 
-        public int? LicenceId { get; set; } // TODO: Is not implemented yet
-
         public string? RoleName { get; set; }
     }
 

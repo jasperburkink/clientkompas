@@ -12,16 +12,16 @@ namespace Application.Common.Rules
             return ruleBuilder
                 .NotEmpty()
                 .WithMessage(resourceMessageProvider.GetMessage(typeof(UserValidationRules), "FirstNameRequired"))
-                .MaximumLength(UserConstants.EmailAddressMaxLength)
-                .WithMessage(resourceMessageProvider.GetMessage(typeof(UserValidationRules), "FirstNameMaxLength", UserConstants.EmailAddressMaxLength));
+                .MaximumLength(UserConstants.FirstNameMaxLength)
+                .WithMessage(resourceMessageProvider.GetMessage(typeof(UserValidationRules), "FirstNameMaxLength", UserConstants.FirstNameMaxLength));
         }
 
         public static IRuleBuilderOptions<T, string?> ValidateUserPrefixLastName<T>(this IRuleBuilder<T, string?> ruleBuilder,
             IResourceMessageProvider resourceMessageProvider)
         {
             return ruleBuilder
-                .MaximumLength(UserConstants.EmailAddressMaxLength)
-                .WithMessage(resourceMessageProvider.GetMessage(typeof(UserValidationRules), "PrefixLastnameMaxLength", UserConstants.EmailAddressMaxLength));
+                .MaximumLength(UserConstants.PrefixLastNameMaxLength)
+                .WithMessage(resourceMessageProvider.GetMessage(typeof(UserValidationRules), "PrefixLastnameMaxLength", UserConstants.PrefixLastNameMaxLength));
         }
 
         public static IRuleBuilderOptions<T, string?> ValidateUserLastName<T>(this IRuleBuilder<T, string?> ruleBuilder,
@@ -30,8 +30,8 @@ namespace Application.Common.Rules
             return ruleBuilder
                 .NotEmpty()
                 .WithMessage(resourceMessageProvider.GetMessage(typeof(UserValidationRules), "LastNameRequired"))
-                .MaximumLength(UserConstants.EmailAddressMaxLength)
-                .WithMessage(resourceMessageProvider.GetMessage(typeof(UserValidationRules), "LastNameMaxLength", UserConstants.EmailAddressMaxLength));
+                .MaximumLength(UserConstants.FirstNameMaxLength)
+                .WithMessage(resourceMessageProvider.GetMessage(typeof(UserValidationRules), "LastNameMaxLength", UserConstants.FirstNameMaxLength));
         }
 
         public static IRuleBuilderOptions<T, string?> ValidateUserEmailAddress<T>(this IRuleBuilder<T, string?> ruleBuilder, IUnitOfWork unitOfWork,
