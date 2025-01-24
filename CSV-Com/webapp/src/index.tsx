@@ -13,6 +13,7 @@ import Forbidden from 'pages/statuspages/forbidden';
 import RequestResetPassword from 'pages/request-reset-password';
 import ResetPassword from 'pages/reset-password';
 import Login2FA from 'pages/login-2fa';
+import { UserContextWrapper, UserRoute } from 'pages/user-context';
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 root.render(
@@ -36,6 +37,7 @@ root.render(
                     <Route path='/organization/edit/:id' element={<OrganizationContextWrapper organizationRoute={OrganizationRoute.EDIT_ORGANIZATION} />} />
                     <Route path='/clients/:clientid/coachingprogram-editor' element={<ClientContextWrapper clientRoute={ClientRoute.EDIT_CLIENT_COACHINGPROGRAM} />} />
                     <Route path='/clients/:clientid/coachingprogram-editor/:id' element={<ClientContextWrapper clientRoute={ClientRoute.EDIT_CLIENT_COACHINGPROGRAM} />} />
+                    <Route path='/users/' element={<UserContextWrapper userRoute={UserRoute.EDIT_USER} />} />
                 </Routes>
             </BrowserRouter>
         </React.StrictMode>

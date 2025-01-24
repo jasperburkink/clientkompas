@@ -5,7 +5,7 @@ import { ValidationError } from 'types/common/validation-error';
 
 export interface DropdownObject {
     label: string;
-    value: number;
+    value: any;
 }
 
 interface IDropDownProps {
@@ -13,8 +13,8 @@ interface IDropDownProps {
     className?: string;
     required: boolean;
     inputfieldname: string;
-    value?: number;
-    onChange?: (value: number) => void;
+    value?: any;
+    onChange?: (value: any) => void;
     dataTestId?: string;
     errors? :ValidationError[];
 }

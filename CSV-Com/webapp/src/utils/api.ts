@@ -31,6 +31,8 @@ import TwoFactorAuthenticationCommand from "types/model/login-2fa/login-2fa-comm
 import ResendTwoFactorAuthenticationTokenCommand from "types/model/resend-2fa-token/resend-2fa-token-command";
 import ResendTwoFactorAuthenticationTokenCommandDto from "types/model/resend-2fa-token/resend-2fa-token-command-dto";
 import GetMenuByUserDto from "types/model/menu/get-menu-by-user-dto";
+import CreateUserCommand from "types/model/user/create-user/create-user-command";
+import CreateUserCommandDto from "types/model/user/create-user/create-user-command-dto";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -381,6 +383,10 @@ export const resetPassword = async (resetPasswordCommand: ResetPasswordCommand):
     const response = await fetch(`${apiUrl}Authentication/ResetPassword`, requestOptions);
     
     return handleApiResonse<ResetPasswordCommandDto>(response);
+}
+
+export const createUser = async (user: CreateUserCommand): Promise<ApiResult<CreateUserCommandDto>> => {
+    return await fetchAPI(`${apiUrl}User`, 'POST', user);
 }
 
 function processErrors(errors: { [key: string]: string[] }): string[] {
