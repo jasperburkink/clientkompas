@@ -200,5 +200,14 @@ namespace Infrastructure.Identity
 
             return Result.Success();
         }
+
+        public async Task<IList<string>> GetUserRolesAsync(string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+
+            return user == null
+                ? throw new Application.Common.Exceptions.NotFoundException("AuthenticationUser not found.", userId)
+                : await userManager.GetRolesAsync(user);
+        }
     }
 }

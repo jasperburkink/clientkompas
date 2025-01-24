@@ -36,5 +36,7 @@ namespace Application.Common.Interfaces.Authentication
         Task<int?> GetCurrentLoggedInUserId();
 
         Task<Result> AddUserToRoleAsync(string userId, string role);
+
+        Task<IList<string>> GetUserRolesAsync(string userId);
     }
 }

@@ -328,5 +328,24 @@ namespace Infrastructure.FunctionalTests.Identity
             resultLogin.Should().NotBeNull();
             resultLogin.Succeeded.Should().BeFalse();
         }
+
+        [Fact]
+        public async Task GetUserRolesAsync_CorrectFlow_UserShouldHaveRoles()
+        {
+            // Arrange
+            var userName = "test@example.com";
+            var password = "Password123!";
+            var role = nameof(Roles.Coach);
+
+            var (result, userId) = await _identityService.CreateUserAsync(userName, password, 0);
+            await _roleManager.CreateAsync(new IdentityRole(role));
+            await _userManager.AddToRoleAsync(await _userManager.FindByIdAsync(userId), role);
+
+            // Act
+            var roles = await _identityService.GetUserRolesAsync(userId);
+
+            // Assert
+            roles.Should().NotBeNullOrEmpty().And.Contain(role);
+        }
     }
 }
