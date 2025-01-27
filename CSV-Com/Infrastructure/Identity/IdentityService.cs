@@ -197,7 +197,7 @@ namespace Infrastructure.Identity
             var user = await userManager.FindByIdAsync(userId)
                 ?? throw new Application.Common.Exceptions.NotFoundException("AuthenticationUser not found.", userId);
 
-            if (await roleManager.RoleExistsAsync(role))
+            if (!await roleManager.RoleExistsAsync(role))
             {
                 throw new Application.Common.Exceptions.NotFoundException("Role not found.", role);
             }
@@ -214,6 +214,13 @@ namespace Infrastructure.Identity
             return user == null
                 ? throw new Application.Common.Exceptions.NotFoundException("AuthenticationUser not found.", userId)
                 : await userManager.GetRolesAsync(user);
+        }
+
+        public async Task RemoveUserAsync(string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId)
+                ?? throw new Application.Common.Exceptions.NotFoundException("AuthenticationUser not found.", userId);
+            await userManager.DeleteAsync(user);
         }
     }
 }

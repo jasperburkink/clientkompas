@@ -113,6 +113,8 @@ namespace Application.Users.Commands.CreateUser
 
             if (!addToRoleResult.Succeeded)
             {
+                await identityService.RemoveUserAsync(userId);
+                await RemoveUser(user, cancellationToken);
                 return Result<string>.Failure($"Something went wrong while adding a role '{request.RoleName}' to an user '{request.EmailAddress}'.");
             }
 
