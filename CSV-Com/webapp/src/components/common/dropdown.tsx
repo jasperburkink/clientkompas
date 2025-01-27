@@ -19,13 +19,13 @@ interface IDropDownProps {
     errors? :ValidationError[];
 }
 
-const OPTION_TEXT = 'Kies uit de lijst'
+const OPTION_TEXT = 'Kies uit de lijst';
 
 export const Dropdown = (props: IDropDownProps) => (  
     <div className={`dropdown-container ${props.className}`} >
         <select name={props.inputfieldname} className={`dropdown ${props.errors ? 'error' : ''}`} required={props.required} value={props.value}
             onChange={(e) => {
-                const selectedValue = parseInt(e.target.value);
+                const selectedValue = e.target.value;
                 props.onChange?.(selectedValue);
             }}
             data-testid={props.dataTestId}>

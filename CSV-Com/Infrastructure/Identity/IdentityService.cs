@@ -11,6 +11,7 @@ namespace Infrastructure.Identity
     public class IdentityService(
         UserManager<AuthenticationUser> userManager,
         SignInManager<AuthenticationUser> signInManager,
+        RoleManager<IdentityRole> roleManager,
         IUserClaimsPrincipalFactory<AuthenticationUser> userClaimsPrincipalFactory,
         IAuthorizationService authorizationService,
         IHasher hasher,
@@ -196,7 +197,12 @@ namespace Infrastructure.Identity
             var user = await userManager.FindByIdAsync(userId)
                 ?? throw new Application.Common.Exceptions.NotFoundException("AuthenticationUser not found.", userId);
 
-            userManager.AddToRoleAsync(user, role);
+            if (await roleManager.RoleExistsAsync(role))
+            {
+                throw new Application.Common.Exceptions.NotFoundException("Role not found.", role);
+            }
+
+            await userManager.AddToRoleAsync(user, role);
 
             return Result.Success();
         }

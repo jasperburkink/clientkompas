@@ -57,13 +57,6 @@ const UserEditor = () => {
         }));
     };
 
-    const handleInputChange2 = (fieldName: string, index: number) => {
-        setCreateUserCommand(createUserCmd => ({
-            ...createUserCmd,
-            [fieldName]: index
-        }));
-    };
-
     const handleSaveResult = (
             apiResult: ApiResult<CreateUserCommand>, 
             setConfirmMessage: React.Dispatch<React.SetStateAction<string>>, 
@@ -182,7 +175,7 @@ const UserEditor = () => {
                                 required={true} 
                                 inputfieldname='dropdown'                                
                                 value={createUserCommand.rolename} 
-                                onChange={(value) => handleInputChange2('rolename', value)}
+                                onChange={(value) => handleInputChange('rolename', value)}
                                 dataTestId='rolename'
                                 errors={validationErrors.rolename} />
                         </LabelField>
