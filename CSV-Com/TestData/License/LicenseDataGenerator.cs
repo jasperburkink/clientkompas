@@ -4,16 +4,11 @@ using Domain.CVS.Enums;
 
 namespace TestData.License
 {
-    public class LicenseDataGenerator : ITestDataGenerator<Domain.CVS.Domain.License>
+    public class LicenseDataGenerator(bool fillOptionalProperties = true) : ITestDataGenerator<Domain.CVS.Domain.License>
     {
         public Faker<Domain.CVS.Domain.License> Faker { get => GetFaker(); }
 
-        public bool FillOptionalProperties { get; set; }
-
-        public LicenseDataGenerator(bool fillOptionalProperties = true)
-        {
-            FillOptionalProperties = fillOptionalProperties;
-        }
+        public bool FillOptionalProperties { get; set; } = fillOptionalProperties;
 
         private Faker<Domain.CVS.Domain.License> GetFaker()
         {
@@ -25,7 +20,14 @@ namespace TestData.License
                 .RuleFor(l => l.CreatedAt, f => f.Date.Past())
                 .RuleFor(l => l.ValidUntil, f => f.Date.Future())
                 .RuleFor(l => l.Organization, f => new Domain.CVS.Domain.Organization { OrganizationName = f.Company.CompanyName() })
-                .RuleFor(l => l.LicenseHolder, f => new User { FirstName = f.Name.FirstName() })
+                .RuleFor(l => l.LicenseHolder, f => new User
+                {
+                    FirstName = f.Name.FirstName(),
+                    LastName = f.Name.LastName(),
+                    EmailAddress = f.Person.Email,
+                    TelephoneNumber = f.Phone.PhoneNumber(),
+                    IsDeactivated = false,
+                })
                 .RuleFor(l => l.Status, f => f.PickRandom<LicenseStatus>());
         }
 

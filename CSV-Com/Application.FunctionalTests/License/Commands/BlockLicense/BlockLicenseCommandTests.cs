@@ -3,7 +3,6 @@ using Domain.CVS.Domain;
 using Domain.CVS.Enums;
 using TestData;
 using TestData.Organization;
-using static Application.FunctionalTests.Testing;
 
 namespace Application.FunctionalTests.License.Commands.BlockLicense
 {
@@ -23,7 +22,10 @@ namespace Application.FunctionalTests.License.Commands.BlockLicense
             {
                 FirstName = "John",
                 LastName = "Doe",
-                EmailAddress = "john.doe@example.com" // Ensure EmailAddress is provided
+                EmailAddress = "john.doe@example.com",
+                IsDeactivated = false,
+                TelephoneNumber = "1234567890"
+
             };
             await AddAsync(licenseHolder);
 
