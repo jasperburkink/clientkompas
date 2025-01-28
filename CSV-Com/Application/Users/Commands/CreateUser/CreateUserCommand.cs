@@ -70,6 +70,19 @@ namespace Application.Users.Commands.CreateUser
             }
         }
 
+        private async Task<Result<T>> CheckAndReturnFailure<T>(Task<Result<T>> resultTask)
+        {
+            var result = await resultTask;
+            if (!result.Succeeded)
+            {
+                // Retourneer de failure direct.
+                return Result<T>.Failure(result.Errors);
+            }
+
+            return result;
+        }
+
+
         private static async Task<Result<User>> CreateCVSUser(IUnitOfWork unitOfWork, CreateUserCommand request, int? currentLoggedInUserId, CancellationToken cancellationToken)
         {
             var user = new User
@@ -106,7 +119,7 @@ namespace Application.Users.Commands.CreateUser
             if (!result.Succeeded)
             {
                 await RemoveUser(user, cancellationToken);
-                return Result<string>.Failure($"Something went wrong while creating an authentication user with email '{request.EmailAddress}'.");
+                return Result<string>.Failure($"Something went wrong while creating an authentication user with email '{request.EmailAddress}'. ErrorMessage:'{result.ErrorMessage}'.");
             }
 
             var addToRoleResult = await identityService.AddUserToRoleAsync(userId, request.RoleName);
@@ -115,7 +128,7 @@ namespace Application.Users.Commands.CreateUser
             {
                 await identityService.RemoveUserAsync(userId);
                 await RemoveUser(user, cancellationToken);
-                return Result<string>.Failure($"Something went wrong while adding a role '{request.RoleName}' to an user '{request.EmailAddress}'.");
+                return Result<string>.Failure($"Something went wrong while adding a role '{request.RoleName}' to an user '{request.EmailAddress}'. ErrorMessage:'{addToRoleResult.ErrorMessage}'.");
             }
 
             return Result.Success(userId);

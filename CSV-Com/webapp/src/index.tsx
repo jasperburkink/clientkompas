@@ -37,7 +37,9 @@ root.render(
                     <Route path='/organization/edit/:id' element={<OrganizationContextWrapper organizationRoute={OrganizationRoute.EDIT_ORGANIZATION} />} />
                     <Route path='/clients/:clientid/coachingprogram-editor' element={<ClientContextWrapper clientRoute={ClientRoute.EDIT_CLIENT_COACHINGPROGRAM} />} />
                     <Route path='/clients/:clientid/coachingprogram-editor/:id' element={<ClientContextWrapper clientRoute={ClientRoute.EDIT_CLIENT_COACHINGPROGRAM} />} />
-                    <Route path='/users/' element={<UserContextWrapper userRoute={UserRoute.EDIT_USER} />} />
+                    <Route path='/users' element={<UserContextWrapper userRoute={UserRoute.VIEW_USER} />} />
+                    <Route path='/users/edit' element={<UserContextWrapper userRoute={UserRoute.EDIT_USER} />} />
+                    <Route path='/users/edit/:id' element={<UserContextWrapper userRoute={UserRoute.EDIT_USER} />} />
                 </Routes>
             </BrowserRouter>
         </React.StrictMode>

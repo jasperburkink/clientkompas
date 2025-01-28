@@ -194,12 +194,15 @@ namespace Infrastructure.Identity
 
         public async Task<Result> AddUserToRoleAsync(string userId, string role)
         {
-            var user = await userManager.FindByIdAsync(userId)
-                ?? throw new Application.Common.Exceptions.NotFoundException("AuthenticationUser not found.", userId);
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return Result.Failure($"AuthenticationUser with user id '{userId}' not found.");
+            }
 
             if (!await roleManager.RoleExistsAsync(role))
             {
-                throw new Application.Common.Exceptions.NotFoundException("Role not found.", role);
+                return Result.Failure($"Role '{role}' not found.");
             }
 
             await userManager.AddToRoleAsync(user, role);

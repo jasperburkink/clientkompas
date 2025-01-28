@@ -5,6 +5,7 @@ import UserEditor from './user-editor';
 export const UserContext = React.createContext<IUserContext>({allUsers: [], setAllUsers: (x) => null});
 
 export enum UserRoute {
+    VIEW_USER,
     EDIT_USER
   }
 

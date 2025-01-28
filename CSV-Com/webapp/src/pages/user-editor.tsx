@@ -19,19 +19,20 @@ import { Dropdown } from "components/common/dropdown";
 import SaveButton from "components/common/save-button";
 import { createUser } from "utils/api";
 import ApiResult from "types/common/api-result";
+import User from 'types/model/User';
 
 const UserEditor = () => { 
     const navigate = useNavigate();
 
     const [status, setStatus] = useState(StatusEnum.IDLE);
 
-    const [createUserCommand, setCreateUserCommand] = useState<CreateUserCommand>({
+    const [user, setUser] = useState<User>({        
         firstname: '',
         prefixlastname: '',
         lastname: '',
         emailaddress: '',
         telephonenumber: '',
-        rolename: 'Licencee'
+        rolename: 'Licensee'
     });
 
     const [confirmMessage, setConfirmMessage] = useState<string>('');
@@ -47,11 +48,11 @@ const UserEditor = () => {
 
     const handlePopUpConfirmSavedClick = () => {
         setConfirmPopupOneButtonOpen(false);
-        // navigate(`/clients/${clientid}`);
+        navigate(`/users/edit/${user.id}`);
     };
 
     const handleInputChange = (fieldName: string, value: any) => {
-        setCreateUserCommand(createUserCmd => ({
+        setUser(createUserCmd => ({
             ...createUserCmd,
             [fieldName]: value
         }));
@@ -63,12 +64,12 @@ const UserEditor = () => {
             setConfirmPopupOneButtonOpen: React.Dispatch<React.SetStateAction<boolean>>, 
             setCvsError: React.Dispatch<React.SetStateAction<CVSError>>, 
             setErrorPopupOpen: React.Dispatch<React.SetStateAction<boolean>>, 
-            setCoachingProgram: React.Dispatch<React.SetStateAction<CreateUserCommand>>): void => {
+            setUser: React.Dispatch<React.SetStateAction<User>>): void => {
             if (apiResult.Ok) {
                 setConfirmMessage('Medewerker opgeslagen');
                 setConfirmPopupOneButtonOpen(true);
         
-                setCoachingProgram(apiResult.ReturnObject!);
+                setUser(apiResult.ReturnObject!);
             }
             else {
                 if(apiResult.ValidationErrors && !isHashEmpty(apiResult.ValidationErrors)) {
@@ -113,7 +114,7 @@ const UserEditor = () => {
                                 inputfieldtype={{type:'text'}} 
                                 required={true} 
                                 placeholder='Voornaam' 
-                                value={createUserCommand.firstname} 
+                                value={user.firstname} 
                                 onChange={(value) => handleInputChange('firstname', value)}
                                 dataTestId='firstname'
                                 errors={validationErrors.firstname} />
@@ -124,7 +125,7 @@ const UserEditor = () => {
                                 inputfieldtype={{type:'text'}} 
                                 required={false} 
                                 placeholder='bv. de' 
-                                value={createUserCommand.prefixlastname} 
+                                value={user.prefixlastname} 
                                 onChange={(value) => handleInputChange('prefixlastname', value)}
                                 dataTestId='prefixlastname'
                                 errors={validationErrors.prefixlastname} />
@@ -135,7 +136,7 @@ const UserEditor = () => {
                                 inputfieldtype={{type:'text'}} 
                                 required={true} 
                                 placeholder='Achternaam' 
-                                value={createUserCommand.lastname} 
+                                value={user.lastname} 
                                 onChange={(value) => handleInputChange('lastname', value)}
                                 dataTestId='lastname'
                                 errors={validationErrors.lastname} />
@@ -146,7 +147,7 @@ const UserEditor = () => {
                                 inputfieldtype={{type:'text'}} 
                                 required={true} 
                                 placeholder='bv. 06-12345678' 
-                                value={createUserCommand.telephonenumber} 
+                                value={user.telephonenumber} 
                                 onChange={(value) => handleInputChange('telephonenumber', value)}
                                 dataTestId='telephonenumber'
                                 errors={validationErrors.telephonenumber} />
@@ -157,7 +158,7 @@ const UserEditor = () => {
                                 inputfieldtype={{type:'text'}} 
                                 required={true} 
                                 placeholder='bv. mail@mailbox.com' 
-                                value={createUserCommand.emailaddress} 
+                                value={user.emailaddress} 
                                 onChange={(value) => handleInputChange('emailaddress', value)}
                                 dataTestId='emailaddress'
                                 errors={validationErrors.emailaddress} />
@@ -168,13 +169,13 @@ const UserEditor = () => {
                                 options={
                                     [
                                         { label: 'SysteemEigenaar', value: "SystemOwner" },
-                                        { label: 'Licentiehouder', value: "Licencee" },
+                                        { label: 'Licentiehouder', value: "Licensee" },
                                         { label: 'Administrator', value: "Administrator" },
                                         { label: 'Coach', value: "Coach" }
                                     ]} // TODO: get roles from api
                                 required={true} 
                                 inputfieldname='dropdown'                                
-                                value={createUserCommand.rolename} 
+                                value={user.rolename} 
                                 onChange={(value) => handleInputChange('rolename', value)}
                                 dataTestId='rolename'
                                 errors={validationErrors.rolename} />
@@ -185,10 +186,10 @@ const UserEditor = () => {
                         <SaveButton
                             buttonText= "Opslaan"
                             loadingText = "Bezig met oplaan"
-                            successText = "Traject opgeslagen"
+                            successText = "Medewerker opgeslagen"
                             errorText = "Fout tijdens opslaan"
-                            onSave={async () => await createUser(createUserCommand)}
-                            onResult={(apiResult) => handleSaveResult(apiResult, setConfirmMessage, setConfirmPopupOneButtonOpen, setError, setErrorPopupOpen, setCreateUserCommand)}
+                            onSave={async () => await createUser(user)}
+                            onResult={(apiResult) => handleSaveResult(apiResult, setConfirmMessage, setConfirmPopupOneButtonOpen, setError, setErrorPopupOpen, setUser)}
                             dataTestId='button.save' />
                     </div>
 
