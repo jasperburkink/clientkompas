@@ -47,7 +47,7 @@ namespace Infrastructure.FunctionalTests.Identity
             var refreshtokenService = serviceProvider.GetRequiredService<ITokenService>();
             var emailService = serviceProvider.GetRequiredService<IEmailService>();
 
-            _identityService = new IdentityService(_userManager, signInManager, null, authorizationService, hasher, refreshtokenService, emailService);
+            _identityService = new IdentityService(_userManager, signInManager, _roleManager, null, authorizationService, hasher, refreshtokenService, emailService);
         }
 
         #region CreateUserAsync

@@ -18,6 +18,7 @@ namespace Infrastructure.UnitTests.Identity
     {
         private readonly Mock<UserManager<AuthenticationUser>> _userManagerMock;
         private readonly Mock<SignInManager<AuthenticationUser>> _signInManagerMock;
+        private readonly Mock<RoleManager<IdentityRole>> _roleManagerMock;
         private readonly Mock<IUserClaimsPrincipalFactory<AuthenticationUser>> _userClaimsPrincipalFactoryMock;
         private readonly Mock<IAuthorizationService> _authorizationServiceMock;
         private readonly Mock<IHasher> _hasherMock;
@@ -28,6 +29,7 @@ namespace Infrastructure.UnitTests.Identity
         {
             _userManagerMock = new Mock<UserManager<AuthenticationUser>>(Mock.Of<IUserStore<AuthenticationUser>>(), null, null, null, null, null, null, null, null);
             _signInManagerMock = new Mock<SignInManager<AuthenticationUser>>(_userManagerMock.Object, Mock.Of<IHttpContextAccessor>(), Mock.Of<IUserClaimsPrincipalFactory<AuthenticationUser>>(), null, null, null, null);
+            _roleManagerMock = new Mock<RoleManager<IdentityRole>>();
             _userClaimsPrincipalFactoryMock = new Mock<IUserClaimsPrincipalFactory<AuthenticationUser>>();
             _authorizationServiceMock = new Mock<IAuthorizationService>();
             _hasherMock = new Mock<IHasher>();
@@ -53,6 +55,7 @@ namespace Infrastructure.UnitTests.Identity
             var identityService = new IdentityService(
                 _userManagerMock.Object,
                 _signInManagerMock.Object,
+                _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
@@ -101,6 +104,7 @@ namespace Infrastructure.UnitTests.Identity
             var identityService = new IdentityService(
                 _userManagerMock.Object,
                 _signInManagerMock.Object,
+                _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
@@ -135,6 +139,7 @@ namespace Infrastructure.UnitTests.Identity
             var identityService = new IdentityService(
                  _userManagerMock.Object,
                  _signInManagerMock.Object,
+                 _roleManagerMock.Object,
                  _userClaimsPrincipalFactoryMock.Object,
                  _authorizationServiceMock.Object,
                  _hasherMock.Object,
@@ -166,6 +171,7 @@ namespace Infrastructure.UnitTests.Identity
             var identityService = new IdentityService(
                 _userManagerMock.Object,
                 _signInManagerMock.Object,
+                _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
@@ -193,6 +199,7 @@ namespace Infrastructure.UnitTests.Identity
             var identityService = new IdentityService(
                 _userManagerMock.Object,
                 _signInManagerMock.Object,
+                _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
@@ -228,6 +235,7 @@ namespace Infrastructure.UnitTests.Identity
             var identityService = new IdentityService(
                 _userManagerMock.Object,
                 _signInManagerMock.Object,
+                _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
@@ -264,6 +272,7 @@ namespace Infrastructure.UnitTests.Identity
             var identityService = new IdentityService(
                 _userManagerMock.Object,
                 _signInManagerMock.Object,
+                _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
@@ -294,6 +303,7 @@ namespace Infrastructure.UnitTests.Identity
             var identityService = new IdentityService(
                 _userManagerMock.Object,
                 _signInManagerMock.Object,
+                _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
@@ -320,6 +330,7 @@ namespace Infrastructure.UnitTests.Identity
             var identityService = new IdentityService(
                 _userManagerMock.Object,
                 _signInManagerMock.Object,
+                _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
@@ -347,6 +358,7 @@ namespace Infrastructure.UnitTests.Identity
             var identityService = new IdentityService(
                 _userManagerMock.Object,
                 _signInManagerMock.Object,
+                _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
@@ -371,6 +383,7 @@ namespace Infrastructure.UnitTests.Identity
             var identityService = new IdentityService(
                 _userManagerMock.Object,
                 _signInManagerMock.Object,
+                _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
@@ -401,6 +414,7 @@ namespace Infrastructure.UnitTests.Identity
             var identityService = new IdentityService(
                 _userManagerMock.Object,
                 _signInManagerMock.Object,
+                _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
@@ -431,6 +445,7 @@ namespace Infrastructure.UnitTests.Identity
             var identityService = new IdentityService(
                 _userManagerMock.Object,
                 _signInManagerMock.Object,
+                _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
@@ -456,6 +471,7 @@ namespace Infrastructure.UnitTests.Identity
             var identityService = new IdentityService(
                 _userManagerMock.Object,
                 _signInManagerMock.Object,
+                _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
@@ -488,6 +504,7 @@ namespace Infrastructure.UnitTests.Identity
             var identityService = new IdentityService(
                 _userManagerMock.Object,
                 _signInManagerMock.Object,
+                _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
@@ -516,6 +533,7 @@ namespace Infrastructure.UnitTests.Identity
             var identityService = new IdentityService(
                 _userManagerMock.Object,
                 _signInManagerMock.Object,
+                _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
@@ -549,6 +567,7 @@ namespace Infrastructure.UnitTests.Identity
             var identityService = new IdentityService(
                 _userManagerMock.Object,
                 _signInManagerMock.Object,
+                _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
@@ -574,6 +593,7 @@ namespace Infrastructure.UnitTests.Identity
             var identityService = new IdentityService(
                 _userManagerMock.Object,
                 _signInManagerMock.Object,
+                _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
@@ -609,6 +629,7 @@ namespace Infrastructure.UnitTests.Identity
             var identityService = new IdentityService(
                 _userManagerMock.Object,
                 _signInManagerMock.Object,
+                _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
@@ -639,6 +660,7 @@ namespace Infrastructure.UnitTests.Identity
             var identityService = new IdentityService(
                 _userManagerMock.Object,
                 _signInManagerMock.Object,
+                _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
