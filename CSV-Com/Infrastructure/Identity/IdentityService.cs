@@ -5,7 +5,6 @@ using Domain.Authentication.Constants;
 using Domain.Authentication.Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Identity
 {
@@ -229,9 +228,9 @@ namespace Infrastructure.Identity
 
         public async Task<IList<string>> GetAvailableUserRolesAsync()
         {
-            return await roleManager.Roles
-                .Select(role => role.Name)
-                .ToListAsync();
+            return await Task.FromResult(roleManager.Roles
+                .Select(role => role.Name!)
+                .ToList());
         }
     }
 }
