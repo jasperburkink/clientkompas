@@ -3,6 +3,7 @@ using Application.Common.Models;
 
 using AutoMapper;
 using FluentAssertions;
+using MailKit.Net.Smtp;
 
 namespace EmailModule.FunctionalTests
 {
@@ -13,11 +14,12 @@ namespace EmailModule.FunctionalTests
         [SetUp]
         public void Setup()
         {
+            ISmtpClient client = new SmtpClient();
             var mapper = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<MappingProfile>();
             }).CreateMapper();
-            _emailService = new EmailService(mapper);
+            _emailService = new EmailService(mapper, client);
         }
 
         [Test]

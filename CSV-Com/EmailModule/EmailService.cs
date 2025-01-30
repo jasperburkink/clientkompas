@@ -12,6 +12,7 @@ namespace EmailModule
     public class EmailService : IEmailService
     {
         private readonly IMapper _mapper;
+        private readonly ISmtpClient _smtpClient;
         private readonly IRazorLightEngine _razorLightEngine;
         private static readonly ConcurrentDictionary<string, DateTime> s_emailSendTimes = new();
 
@@ -20,7 +21,7 @@ namespace EmailModule
         private readonly System.Timers.Timer _timer = new(60000);
 
 
-        public EmailService(IMapper mapper)
+        public EmailService(IMapper mapper, ISmtpClient smtpClient)
         {
             _timer.Elapsed += OnTimerElapsed;
             _timer.Enabled = true;
@@ -63,14 +64,15 @@ namespace EmailModule
                 email.Subject = messageDto.Subject;
                 email.Body = new TextPart("html") { Text = body };
 
-                using var client = new SmtpClient();
-                client.ServerCertificateValidationCallback = (s, c, h, e) => true;
+                // zet ergens anders neer
+                //using var client = new SmtpClient(); 
+                _smtpClient.ServerCertificateValidationCallback = (s, c, h, e) => true;
 
-                await client.ConnectAsync(EmailConfig.SmtpServer, EmailConfig.Port, false);
+                await _smtpClient.ConnectAsync(EmailConfig.SmtpServer, EmailConfig.Port, false);
 
                 if (EmailConfig.RequiresAuthentication)
                 {
-                    await client.AuthenticateAsync(EmailConfig.Username, EmailConfig.Password);
+                    await _smtpClient.AuthenticateAsync(EmailConfig.Username, EmailConfig.Password);
                 }
 
                 if (IsDuplicateEmail(messageDto))
@@ -79,8 +81,8 @@ namespace EmailModule
                     return;
                 }
 
-                await client.SendAsync(email);
-                await client.DisconnectAsync(true);
+                await _smtpClient.SendAsync(email);
+                await _smtpClient.DisconnectAsync(true);
 
                 MailMessagesSent.Add((message, DateTime.Now));
 
