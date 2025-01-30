@@ -40,5 +40,7 @@ namespace Application.Common.Interfaces.Authentication
         Task<IList<string>> GetUserRolesAsync(string userId);
 
         Task RemoveUserAsync(string userId);
+
+        Task<IList<string>> GetAvailableUserRolesAsync();
     }
 }

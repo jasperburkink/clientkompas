@@ -5,6 +5,7 @@ using Domain.Authentication.Constants;
 using Domain.Authentication.Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Identity
 {
@@ -224,6 +225,13 @@ namespace Infrastructure.Identity
             var user = await userManager.FindByIdAsync(userId)
                 ?? throw new Application.Common.Exceptions.NotFoundException("AuthenticationUser not found.", userId);
             await userManager.DeleteAsync(user);
+        }
+
+        public async Task<IList<string>> GetAvailableUserRolesAsync()
+        {
+            return await roleManager.Roles
+                .Select(role => role.Name)
+                .ToListAsync();
         }
     }
 }

@@ -33,6 +33,7 @@ import ResendTwoFactorAuthenticationTokenCommandDto from "types/model/resend-2fa
 import GetMenuByUserDto from "types/model/menu/get-menu-by-user-dto";
 import CreateUserCommand from "types/model/user/create-user/create-user-command";
 import CreateUserCommandDto from "types/model/user/create-user/create-user-command-dto";
+import GetUserRolesDto from "types/model/user/get-user-roles/get-user-roles.dto";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -494,6 +495,10 @@ export const resetPassword = async (resetPasswordCommand: ResetPasswordCommand):
 
 export const createUser = async (user: CreateUserCommand): Promise<ApiResult<CreateUserCommandDto>> => {
     return await fetchAPI(`${apiUrl}User`, 'POST', user, true);
+}
+
+export const fetchUserRoles = async (): Promise<GetUserRolesDto[]> => {
+    return (await (fetchAPI<GetUserRolesDto[]>(`${apiUrl}User/GetAvailableUserRoles`))).ReturnObject!;
 }
 
 function processErrors(errors: { [key: string]: string[] }): string[] {
