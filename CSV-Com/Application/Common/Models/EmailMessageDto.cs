@@ -4,9 +4,9 @@
     {
         public required Guid Id { get; set; }
 
-        public required List<string> Recipients { get; set; } = new();
+        public required List<string> Recipients { get; set; } = [];
 
-        public List<string> Attachments { get; set; } = new();
+        public List<string> Attachments { get; set; } = [];
 
         public string Subject { get; set; }
 

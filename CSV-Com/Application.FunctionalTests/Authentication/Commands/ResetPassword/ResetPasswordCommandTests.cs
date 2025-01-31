@@ -54,7 +54,7 @@ namespace Application.FunctionalTests.Authentication.Commands.ResetPassword
                 EmailAddress = null
             };
 
-            var handler = new ResetPasswordCommandHandler(IdentityService);
+            var handler = new ResetPasswordCommandHandler(IdentityService, EmailService);
 
             // Act
             var result = await handler.Handle(command, default);
@@ -73,7 +73,7 @@ namespace Application.FunctionalTests.Authentication.Commands.ResetPassword
                 Token = null
             };
 
-            var handler = new ResetPasswordCommandHandler(IdentityService);
+            var handler = new ResetPasswordCommandHandler(IdentityService, EmailService);
 
             // Act
             var result = await handler.Handle(command, default);
@@ -92,7 +92,7 @@ namespace Application.FunctionalTests.Authentication.Commands.ResetPassword
                 NewPassword = null
             };
 
-            var handler = new ResetPasswordCommandHandler(IdentityService);
+            var handler = new ResetPasswordCommandHandler(IdentityService, EmailService);
 
             // Act
             var result = await handler.Handle(command, default);

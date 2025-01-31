@@ -16,10 +16,9 @@ namespace EmailModule
         private readonly IRazorLightEngine _razorLightEngine;
         private static readonly ConcurrentDictionary<string, DateTime> s_emailSendTimes = new();
 
-        public readonly List<(EmailMessage, DateTime)> MailMessagesSent = new();
-        public readonly List<(EmailMessage, DateTime, string)> FailedMailMessagesSent = new();
+        public readonly List<(EmailMessage, DateTime)> MailMessagesSent = [];
+        public readonly List<(EmailMessage, DateTime, string)> FailedMailMessagesSent = [];
         private readonly System.Timers.Timer _timer = new(60000);
-
 
         public EmailService(IMapper mapper, ISmtpClient smtpClient)
         {

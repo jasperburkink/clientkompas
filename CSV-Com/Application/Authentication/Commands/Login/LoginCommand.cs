@@ -15,21 +15,6 @@ namespace Application.Authentication.Commands.Login
 
     public class LoginCommandHandler(IIdentityService identityService, IBearerTokenService bearerTokenService, ITokenService tokenService, IResourceMessageProvider resourceMessageProvider, IEmailService emailService) : IRequestHandler<LoginCommand, LoginCommandDto>
     {
-        private readonly IIdentityService _identityService;
-        private readonly IBearerTokenService _bearerTokenService;
-        private readonly ITokenService _tokenService;
-        private readonly IResourceMessageProvider _resourceMessageProvider;
-        private readonly IEmailService _emailService;
-
-        public LoginCommandHandler(IIdentityService identityService, IBearerTokenService bearerTokenService, ITokenService tokenService, IResourceMessageProvider resourceMessageProvider, IEmailService emailService)
-        {
-            _identityService = identityService;
-            _bearerTokenService = bearerTokenService;
-            _tokenService = tokenService;
-            _resourceMessageProvider = resourceMessageProvider;
-            _emailService = emailService;
-        }
-
         public async Task<LoginCommandDto> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
             var loggedInUser = await identityService.LoginAsync(request.UserName!, request.Password!);
@@ -75,10 +60,10 @@ namespace Application.Authentication.Commands.Login
             {
                 Id = Guid.NewGuid(),
                 Subject = "Two-factor authentication token",
-                Recipients = new List<string> { loggedInUser.User.Email }
+                Recipients = [loggedInUser.User.Email]
             };
 
-            await _emailService.SendEmailAsync(message, "2FAVerification", new { VerificationCode = twoFactorAuthenticationTokenValue, User = loggedInUser.User.UserName });
+            await emailService.SendEmailAsync(message, "2FAVerification", new { VerificationCode = twoFactorAuthenticationTokenValue, User = loggedInUser.User.UserName });
 
             return new LoginCommandDto
             {

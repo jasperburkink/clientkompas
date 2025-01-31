@@ -1,4 +1,5 @@
 ﻿using Application.Authentication.Commands.ResetPassword;
+using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Models;
 using Moq;
@@ -17,7 +18,10 @@ namespace Application.UnitTests.Authentication.Commands.ResetPassword
             var identityServiceMock = new Mock<IIdentityService>();
             identityServiceMock.Setup(mock => mock.ResetPasswordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(Result.Success);
 
-            var handler = new ResetPasswordCommandHandler(identityServiceMock.Object);
+            var emailServiceMock = new Mock<IEmailService>();
+            emailServiceMock.Setup(mock => mock.SendEmailAsync(It.IsAny<EmailMessageDto>(), It.IsAny<string>(), It.IsAny<string>()));
+
+            var handler = new ResetPasswordCommandHandler(identityServiceMock.Object, emailServiceMock.Object);
 
             var command = new ResetPasswordCommand
             {
@@ -43,7 +47,10 @@ namespace Application.UnitTests.Authentication.Commands.ResetPassword
             var identityServiceMock = new Mock<IIdentityService>();
             identityServiceMock.Setup(mock => mock.ResetPasswordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(Result.Success);
 
-            var handler = new ResetPasswordCommandHandler(identityServiceMock.Object);
+            var emailServiceMock = new Mock<IEmailService>();
+            emailServiceMock.Setup(mock => mock.SendEmailAsync(It.IsAny<EmailMessageDto>(), It.IsAny<string>(), It.IsAny<string>()));
+
+            var handler = new ResetPasswordCommandHandler(identityServiceMock.Object, emailServiceMock.Object);
 
             var command = new ResetPasswordCommand
             {
@@ -69,7 +76,10 @@ namespace Application.UnitTests.Authentication.Commands.ResetPassword
             var identityServiceMock = new Mock<IIdentityService>();
             identityServiceMock.Setup(mock => mock.ResetPasswordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(Result.Success);
 
-            var handler = new ResetPasswordCommandHandler(identityServiceMock.Object);
+            var emailServiceMock = new Mock<IEmailService>();
+            emailServiceMock.Setup(mock => mock.SendEmailAsync(It.IsAny<EmailMessageDto>(), It.IsAny<string>(), It.IsAny<string>()));
+
+            var handler = new ResetPasswordCommandHandler(identityServiceMock.Object, emailServiceMock.Object);
 
             var command = new ResetPasswordCommand
             {
@@ -95,7 +105,10 @@ namespace Application.UnitTests.Authentication.Commands.ResetPassword
             var identityServiceMock = new Mock<IIdentityService>();
             identityServiceMock.Setup(mock => mock.ResetPasswordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(Result.Success);
 
-            var handler = new ResetPasswordCommandHandler(identityServiceMock.Object);
+            var emailServiceMock = new Mock<IEmailService>();
+            emailServiceMock.Setup(mock => mock.SendEmailAsync(It.IsAny<EmailMessageDto>(), It.IsAny<string>(), It.IsAny<string>()));
+
+            var handler = new ResetPasswordCommandHandler(identityServiceMock.Object, emailServiceMock.Object);
 
             var command = new ResetPasswordCommand
             {
@@ -121,7 +134,10 @@ namespace Application.UnitTests.Authentication.Commands.ResetPassword
             var identityServiceMock = new Mock<IIdentityService>();
             identityServiceMock.Setup(mock => mock.ResetPasswordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ThrowsAsync(new Exception("Test"));
 
-            var handler = new ResetPasswordCommandHandler(identityServiceMock.Object);
+            var emailServiceMock = new Mock<IEmailService>();
+            emailServiceMock.Setup(mock => mock.SendEmailAsync(It.IsAny<EmailMessageDto>(), It.IsAny<string>(), It.IsAny<string>()));
+
+            var handler = new ResetPasswordCommandHandler(identityServiceMock.Object, emailServiceMock.Object);
 
             var command = new ResetPasswordCommand
             {
@@ -148,7 +164,10 @@ namespace Application.UnitTests.Authentication.Commands.ResetPassword
             var errorMessage = "Test";
             identityServiceMock.Setup(mock => mock.ResetPasswordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ThrowsAsync(new Exception(errorMessage));
 
-            var handler = new ResetPasswordCommandHandler(identityServiceMock.Object);
+            var emailServiceMock = new Mock<IEmailService>();
+            emailServiceMock.Setup(mock => mock.SendEmailAsync(It.IsAny<EmailMessageDto>(), It.IsAny<string>(), It.IsAny<string>()));
+
+            var handler = new ResetPasswordCommandHandler(identityServiceMock.Object, emailServiceMock.Object);
 
             var command = new ResetPasswordCommand
             {
@@ -174,7 +193,10 @@ namespace Application.UnitTests.Authentication.Commands.ResetPassword
             var identityServiceMock = new Mock<IIdentityService>();
             identityServiceMock.Setup(mock => mock.ResetPasswordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(Result.Failure(["Test"]));
 
-            var handler = new ResetPasswordCommandHandler(identityServiceMock.Object);
+            var emailServiceMock = new Mock<IEmailService>();
+            emailServiceMock.Setup(mock => mock.SendEmailAsync(It.IsAny<EmailMessageDto>(), It.IsAny<string>(), It.IsAny<string>()));
+
+            var handler = new ResetPasswordCommandHandler(identityServiceMock.Object, emailServiceMock.Object);
 
             var command = new ResetPasswordCommand
             {
@@ -201,7 +223,10 @@ namespace Application.UnitTests.Authentication.Commands.ResetPassword
             var identityServiceMock = new Mock<IIdentityService>();
             identityServiceMock.Setup(mock => mock.ResetPasswordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(Result.Failure([errorMessage]));
 
-            var handler = new ResetPasswordCommandHandler(identityServiceMock.Object);
+            var emailServiceMock = new Mock<IEmailService>();
+            emailServiceMock.Setup(mock => mock.SendEmailAsync(It.IsAny<EmailMessageDto>(), It.IsAny<string>(), It.IsAny<string>()));
+
+            var handler = new ResetPasswordCommandHandler(identityServiceMock.Object, emailServiceMock.Object);
 
             var command = new ResetPasswordCommand
             {

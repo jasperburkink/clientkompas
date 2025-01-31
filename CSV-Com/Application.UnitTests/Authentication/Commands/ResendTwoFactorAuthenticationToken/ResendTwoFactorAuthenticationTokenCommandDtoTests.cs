@@ -1,6 +1,7 @@
 ﻿using Application.Authentication.Commands.ResendTwoFactorAuthenticationToken;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
+using Application.Common.Models;
 using Domain.Authentication.Constants;
 using Domain.Authentication.Domain;
 using Infrastructure.Identity;
@@ -49,7 +50,7 @@ namespace Application.UnitTests.Authentication.Commands.ResendTwoFactorAuthentic
             _resourceMessageProviderMock.Setup(mock => mock.GetMessage(It.IsAny<Type>(), It.IsAny<string>())).Returns("ResourceValue");
 
             _emailServiceMock = new Mock<IEmailService>();
-            _emailServiceMock.Setup(mock => mock.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
+            _emailServiceMock.Setup(mock => mock.SendEmailAsync(It.IsAny<EmailMessageDto>(), It.IsAny<string>(), It.IsAny<string>()));
         }
 
         [Fact]

@@ -13,7 +13,6 @@ using TestData.Diagnosis;
 using TestData.DriversLicence;
 using TestData.MaritalStatus;
 using TestData.Organization;
-using static Application.FunctionalTests.Testing;
 
 namespace Application.FunctionalTests.Clients.Commands.CreateClient
 {

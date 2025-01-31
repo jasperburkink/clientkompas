@@ -1,6 +1,5 @@
 ﻿using System.Security.Claims;
 using Application.Common.Exceptions;
-using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Models;
 using Domain.Authentication.Constants;
@@ -22,7 +21,6 @@ namespace Infrastructure.UnitTests.Identity
         private readonly Mock<IAuthorizationService> _authorizationServiceMock;
         private readonly Mock<IHasher> _hasherMock;
         private readonly Mock<ITokenService> _refreshTokenServiceMock;
-        private readonly Mock<IEmailService> _emailServiceMock;
 
         public IdentityServiceTests()
         {
@@ -32,7 +30,6 @@ namespace Infrastructure.UnitTests.Identity
             _authorizationServiceMock = new Mock<IAuthorizationService>();
             _hasherMock = new Mock<IHasher>();
             _refreshTokenServiceMock = new Mock<ITokenService>();
-            _emailServiceMock = new Mock<IEmailService>();
         }
 
         [Fact]
@@ -56,8 +53,7 @@ namespace Infrastructure.UnitTests.Identity
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
-                _refreshTokenServiceMock.Object,
-                _emailServiceMock.Object
+                _refreshTokenServiceMock.Object
             );
 
             // Act
@@ -104,8 +100,7 @@ namespace Infrastructure.UnitTests.Identity
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
-                _refreshTokenServiceMock.Object,
-                _emailServiceMock.Object
+                _refreshTokenServiceMock.Object
             );
 
             // Act
@@ -138,8 +133,7 @@ namespace Infrastructure.UnitTests.Identity
                  _userClaimsPrincipalFactoryMock.Object,
                  _authorizationServiceMock.Object,
                  _hasherMock.Object,
-                 _refreshTokenServiceMock.Object,
-                _emailServiceMock.Object
+                 _refreshTokenServiceMock.Object
              );
 
             // Act
@@ -169,8 +163,7 @@ namespace Infrastructure.UnitTests.Identity
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
-                _refreshTokenServiceMock.Object,
-                _emailServiceMock.Object
+                _refreshTokenServiceMock.Object
             );
 
             // Act
@@ -196,8 +189,7 @@ namespace Infrastructure.UnitTests.Identity
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
-                _refreshTokenServiceMock.Object,
-                _emailServiceMock.Object
+                _refreshTokenServiceMock.Object
             );
 
             // Act
@@ -231,8 +223,7 @@ namespace Infrastructure.UnitTests.Identity
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
-                _refreshTokenServiceMock.Object,
-                _emailServiceMock.Object
+                _refreshTokenServiceMock.Object
             );
 
             // Act
@@ -267,8 +258,7 @@ namespace Infrastructure.UnitTests.Identity
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
-                _refreshTokenServiceMock.Object,
-                _emailServiceMock.Object
+                _refreshTokenServiceMock.Object
             );
 
             // Act
@@ -297,8 +287,7 @@ namespace Infrastructure.UnitTests.Identity
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
-                _refreshTokenServiceMock.Object,
-                _emailServiceMock.Object
+                _refreshTokenServiceMock.Object
             );
 
             // Act
@@ -323,8 +312,7 @@ namespace Infrastructure.UnitTests.Identity
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
-                _refreshTokenServiceMock.Object,
-                _emailServiceMock.Object
+                _refreshTokenServiceMock.Object
             );
 
             // Act
@@ -350,8 +338,7 @@ namespace Infrastructure.UnitTests.Identity
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
-                _refreshTokenServiceMock.Object,
-                _emailServiceMock.Object
+                _refreshTokenServiceMock.Object
             );
 
             // Act
@@ -374,8 +361,7 @@ namespace Infrastructure.UnitTests.Identity
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
-                _refreshTokenServiceMock.Object,
-                _emailServiceMock.Object
+                _refreshTokenServiceMock.Object
             );
 
             // Act
@@ -396,7 +382,6 @@ namespace Infrastructure.UnitTests.Identity
             _userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>()))
                                   .ReturnsAsync(user);
             _userManagerMock.Setup(x => x.GeneratePasswordResetTokenAsync(It.IsAny<AuthenticationUser>())).ReturnsAsync(token);
-            _emailServiceMock.Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
 
             var identityService = new IdentityService(
                 _userManagerMock.Object,
@@ -404,49 +389,18 @@ namespace Infrastructure.UnitTests.Identity
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
-                _refreshTokenServiceMock.Object,
-                _emailServiceMock.Object
+                _refreshTokenServiceMock.Object
             );
 
             // Act
-            var result = await identityService.SendResetPasswordEmailAsync(emailAddress);
+            var result = await identityService.GetResetPasswordEmailToken(emailAddress);
 
             // Assert
-            result.Should().BeEquivalentTo(Result.Success());
+            result.Should().NotBeNullOrEmpty();
         }
 
         [Fact]
-        public async Task SendResetPasswordEmailAsync_CorrectFlow_EmailIsSended()
-        {
-            // Arrange
-            var emailAddress = TestData.FakerConfiguration.Faker.Person.Email;
-            var user = new AuthenticationUser();
-            string token = nameof(token);
-
-            _userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>()))
-                                  .ReturnsAsync(user);
-            _userManagerMock.Setup(x => x.GeneratePasswordResetTokenAsync(It.IsAny<AuthenticationUser>())).ReturnsAsync(token);
-            _emailServiceMock.Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
-
-            var identityService = new IdentityService(
-                _userManagerMock.Object,
-                _signInManagerMock.Object,
-                _userClaimsPrincipalFactoryMock.Object,
-                _authorizationServiceMock.Object,
-                _hasherMock.Object,
-                _refreshTokenServiceMock.Object,
-                _emailServiceMock.Object
-            );
-
-            // Act
-            var result = await identityService.SendResetPasswordEmailAsync(emailAddress);
-
-            // Assert
-            _emailServiceMock.Verify(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
-        }
-
-        [Fact]
-        public async Task SendResetPasswordEmailAsync_UserDoesNotExists_ResultIsSuccess()
+        public async Task GetResetPasswordEmailToken_UserDoesNotExists_ReturnsEmptyString()
         {
             // Arrange
             var emailAddress = TestData.FakerConfiguration.Faker.Person.Email;
@@ -459,15 +413,14 @@ namespace Infrastructure.UnitTests.Identity
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
-                _refreshTokenServiceMock.Object,
-                _emailServiceMock.Object
+                _refreshTokenServiceMock.Object
             );
 
             // Act
-            var result = await identityService.SendResetPasswordEmailAsync(emailAddress);
+            var result = await identityService.GetResetPasswordEmailToken(emailAddress);
 
             // Assert
-            result.Should().BeEquivalentTo(Result.Success());
+            result.Should().NotBeNull().And.BeEmpty();
         }
 
 
@@ -491,8 +444,7 @@ namespace Infrastructure.UnitTests.Identity
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
-                _refreshTokenServiceMock.Object,
-                _emailServiceMock.Object
+                _refreshTokenServiceMock.Object
             );
 
             // Act
@@ -519,8 +471,7 @@ namespace Infrastructure.UnitTests.Identity
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
-                _refreshTokenServiceMock.Object,
-                _emailServiceMock.Object
+                _refreshTokenServiceMock.Object
             );
 
             // Act
@@ -552,8 +503,7 @@ namespace Infrastructure.UnitTests.Identity
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
-                _refreshTokenServiceMock.Object,
-                _emailServiceMock.Object
+                _refreshTokenServiceMock.Object
             );
 
             // Act
@@ -577,8 +527,7 @@ namespace Infrastructure.UnitTests.Identity
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
-                _refreshTokenServiceMock.Object,
-                _emailServiceMock.Object
+                _refreshTokenServiceMock.Object
             );
 
             // Act
@@ -612,8 +561,7 @@ namespace Infrastructure.UnitTests.Identity
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
-                _refreshTokenServiceMock.Object,
-                _emailServiceMock.Object
+                _refreshTokenServiceMock.Object
             );
 
             // Act
@@ -642,8 +590,7 @@ namespace Infrastructure.UnitTests.Identity
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
                 _hasherMock.Object,
-                _refreshTokenServiceMock.Object,
-                _emailServiceMock.Object
+                _refreshTokenServiceMock.Object
             );
 
             // Act

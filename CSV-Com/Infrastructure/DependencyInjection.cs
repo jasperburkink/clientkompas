@@ -3,12 +3,14 @@ using Application.Common.Interfaces.Authentication;
 using Application.Common.Interfaces.CVS;
 using Domain.Authentication.Constants;
 using Domain.Authentication.Domain;
+using EmailModule;
 using Infrastructure.Data.Authentication;
 using Infrastructure.Data.CVS;
 using Infrastructure.Data.Interceptor;
 using Infrastructure.Identity;
 using Infrastructure.Services;
 using Infrastructure.Services.Menu;
+using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -91,8 +93,9 @@ namespace Infrastructure
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IPasswordHasher<AuthenticationUser>, Argon2PasswordHasher>();
             services.AddScoped<IHasher, Argon2Hasher>();
-            services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IPasswordService, PasswordService>();
+            services.AddSingleton<ISmtpClient, SmtpClient>();
+            services.AddSingleton<IEmailService, EmailService>();
 
             services.AddAuthorization(options =>
             {

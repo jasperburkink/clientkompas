@@ -44,7 +44,7 @@ namespace Application.UnitTests.Authentication.Commands.Login
             refreshTokenServiceMock.Setup(rtsm => rtsm.GenerateTokenAsync(It.IsAny<AuthenticationUser>(), It.IsAny<string>())).ReturnsAsync(refreshToken);
 
             var emailServiceMock = new Mock<IEmailService>();
-            emailServiceMock.Setup(mock => mock.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
+            emailServiceMock.Setup(mock => mock.SendEmailAsync(It.IsAny<EmailMessageDto>(), It.IsAny<string>(), It.IsAny<string>()));
 
             var handler = new LoginCommandHandler(identityServiceMock.Object, bearerTokenServiceMock.Object, refreshTokenServiceMock.Object, _resourceMessageProviderMock.Object, emailServiceMock.Object);
 
@@ -78,7 +78,7 @@ namespace Application.UnitTests.Authentication.Commands.Login
             refreshTokenServiceMock.Setup(rtsm => rtsm.GenerateTokenAsync(It.IsAny<AuthenticationUser>(), It.IsAny<string>())).ReturnsAsync(refreshToken);
 
             var emailServiceMock = new Mock<IEmailService>();
-            emailServiceMock.Setup(mock => mock.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
+            emailServiceMock.Setup(mock => mock.SendEmailAsync(It.IsAny<EmailMessageDto>(), It.IsAny<string>(), It.IsAny<string>()));
 
             var handler = new LoginCommandHandler(identityServiceMock.Object, bearerTokenServiceMock.Object, refreshTokenServiceMock.Object, _resourceMessageProviderMock.Object, emailServiceMock.Object);
 
@@ -118,7 +118,7 @@ namespace Application.UnitTests.Authentication.Commands.Login
             refreshTokenServiceMock.Setup(rtsm => rtsm.GenerateTokenAsync(It.IsAny<AuthenticationUser>(), It.IsAny<string>())).ReturnsAsync(refreshToken);
 
             var emailServiceMock = new Mock<IEmailService>();
-            emailServiceMock.Setup(mock => mock.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
+            emailServiceMock.Setup(mock => mock.SendEmailAsync(It.IsAny<EmailMessageDto>(), It.IsAny<string>(), It.IsAny<string>()));
 
             var handler = new LoginCommandHandler(identityServiceMock.Object, bearerTokenServiceMock.Object, refreshTokenServiceMock.Object, _resourceMessageProviderMock.Object, emailServiceMock.Object);
 

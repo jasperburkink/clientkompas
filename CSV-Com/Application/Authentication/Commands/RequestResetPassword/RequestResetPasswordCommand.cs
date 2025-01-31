@@ -9,18 +9,9 @@ namespace Application.Authentication.Commands.RequestResetPassword
         public string EmailAddress { get; set; } = null!;
     }
 
-    public class RequestResetPasswordCommandHandler(IIdentityService identityService) : IRequestHandler<RequestResetPasswordCommand, RequestResetPasswordCommandDto>
+    public class RequestResetPasswordCommandHandler(IIdentityService identityService, IEmailService emailService) : IRequestHandler<RequestResetPasswordCommand, RequestResetPasswordCommandDto>
     {
-        private readonly IIdentityService _identityService;
-        private readonly IEmailService _emailService;
         private const string WEBAPP_URL = "http://localhost:3000"; // TODO: Move this url to the appsettings or get the url from constants?
-
-
-        public RequestResetPasswordCommandHandler(IIdentityService identityService, IEmailService emailService)
-        {
-            _identityService = identityService;
-            _emailService = emailService;
-        }
 
         public async Task<RequestResetPasswordCommandDto> Handle(RequestResetPasswordCommand request, CancellationToken cancellationToken)
         {
@@ -28,7 +19,7 @@ namespace Application.Authentication.Commands.RequestResetPassword
             {
                 ArgumentException.ThrowIfNullOrEmpty(request.EmailAddress);
 
-                var token = await _identityService.GetResetPasswordEmailToken(request.EmailAddress);
+                var token = await identityService.GetResetPasswordEmailToken(request.EmailAddress);
 
                 if (token == string.Empty)
                 {
@@ -47,15 +38,14 @@ namespace Application.Authentication.Commands.RequestResetPassword
                 {
                     Id = Guid.NewGuid(),
                     Subject = "Herstel Wachtwoord",
-                    Recipients = new List<string> { request.EmailAddress }
+                    Recipients = [request.EmailAddress]
                 };
 
-                await _emailService.SendEmailAsync(message, "PasswordForgotten", new { ResetLink = link, User = request.EmailAddress });
+                await emailService.SendEmailAsync(message, "PasswordForgotten", new { ResetLink = link, User = request.EmailAddress });
 
                 return new RequestResetPasswordCommandDto
                 {
-                    Success = result.Succeeded,
-                    Errors = result.Errors
+                    Success = true
                 };
             }
             catch (Exception ex)

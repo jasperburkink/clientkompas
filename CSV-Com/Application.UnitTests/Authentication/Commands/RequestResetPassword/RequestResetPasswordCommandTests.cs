@@ -1,4 +1,5 @@
 ﻿using Application.Authentication.Commands.RequestResetPassword;
+using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Models;
 using Moq;
@@ -13,9 +14,12 @@ namespace Application.UnitTests.Authentication.Commands.RequestResetPassword
         {
             // Arrange
             var identityServiceMock = new Mock<IIdentityService>();
-            identityServiceMock.Setup(mock => mock.SendResetPasswordEmailAsync(It.IsAny<string>())).ReturnsAsync(Result.Success);
+            identityServiceMock.Setup(mock => mock.GetResetPasswordEmailToken(It.IsAny<string>())).ReturnsAsync("Token");
 
-            var handler = new RequestResetPasswordCommandHandler(identityServiceMock.Object);
+            var emailServiceMock = new Mock<IEmailService>();
+            emailServiceMock.Setup(mock => mock.SendEmailAsync(It.IsAny<EmailMessageDto>(), It.IsAny<string>(), It.IsAny<object>()));
+
+            var handler = new RequestResetPasswordCommandHandler(identityServiceMock.Object, emailServiceMock.Object);
 
             var command = new RequestResetPasswordCommand
             {
@@ -37,9 +41,10 @@ namespace Application.UnitTests.Authentication.Commands.RequestResetPassword
             var exception = new Exception(error);
 
             var identityServiceMock = new Mock<IIdentityService>();
-            identityServiceMock.Setup(mock => mock.SendResetPasswordEmailAsync(It.IsAny<string>())).ThrowsAsync(exception);
+            var emailServiceMock = new Mock<IEmailService>();
+            emailServiceMock.Setup(mock => mock.SendEmailAsync(It.IsAny<EmailMessageDto>(), It.IsAny<string>(), It.IsAny<object>())).ThrowsAsync(exception);
 
-            var handler = new RequestResetPasswordCommandHandler(identityServiceMock.Object);
+            var handler = new RequestResetPasswordCommandHandler(identityServiceMock.Object, emailServiceMock.Object);
 
             var command = new RequestResetPasswordCommand
             {
@@ -61,9 +66,12 @@ namespace Application.UnitTests.Authentication.Commands.RequestResetPassword
             var exception = new Exception(error);
 
             var identityServiceMock = new Mock<IIdentityService>();
-            identityServiceMock.Setup(mock => mock.SendResetPasswordEmailAsync(It.IsAny<string>())).ThrowsAsync(exception);
+            identityServiceMock.Setup(mock => mock.ResetPasswordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ThrowsAsync(exception);
 
-            var handler = new RequestResetPasswordCommandHandler(identityServiceMock.Object);
+            var emailServiceMock = new Mock<IEmailService>();
+            emailServiceMock.Setup(mock => mock.SendEmailAsync(It.IsAny<EmailMessageDto>(), It.IsAny<string>(), It.IsAny<object>()));
+
+            var handler = new RequestResetPasswordCommandHandler(identityServiceMock.Object, emailServiceMock.Object);
 
             var command = new RequestResetPasswordCommand
             {
