@@ -7,36 +7,22 @@ using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Data.Authentication
 {
-    public class AuthenticationDbContextInitialiser
+    public class AuthenticationDbContextInitialiser(ILogger<AuthenticationDbContextInitialiser> logger, AuthenticationDbContext context, UserManager<AuthenticationUser> userManager, RoleManager<IdentityRole> roleManager, IIdentityService identityService)
     {
-        private const string DEFAULT_TEST_EMAILADDRESS = "ontwikkelaar@clientkompas.nl";
-        private readonly ILogger<AuthenticationDbContextInitialiser> _logger;
-        private readonly AuthenticationDbContext _context;
-        private readonly UserManager<AuthenticationUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly IIdentityService _identityService;
-
-        public AuthenticationDbContextInitialiser(ILogger<AuthenticationDbContextInitialiser> logger, AuthenticationDbContext context, UserManager<AuthenticationUser> userManager, RoleManager<IdentityRole> roleManager, IIdentityService identityService)
-        {
-            _logger = logger;
-            _context = context;
-            _userManager = userManager;
-            _roleManager = roleManager;
-            _identityService = identityService;
-        }
+        private const string DOMAIN_CLIENTKOMPAS = "clientkompas.nl";
 
         public async Task InitialiseAsync()
         {
             try
             {
-                if (_context.Database.IsMySql())
+                if (context.Database.IsMySql())
                 {
-                    await _context.Database.MigrateAsync();
+                    await context.Database.MigrateAsync();
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while initialising the database.");
+                logger.LogError(ex, "An error occurred while initialising the database.");
                 throw;
             }
         }
@@ -49,7 +35,7 @@ namespace Infrastructure.Data.Authentication
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while seeding the database.");
+                logger.LogError(ex, "An error occurred while seeding the database.");
                 throw;
             }
         }
@@ -72,25 +58,30 @@ namespace Infrastructure.Data.Authentication
 
         private async Task CreateRoleAndUser(IdentityRole role)
         {
-            if (_roleManager.Roles.All(r => r.Name != role.Name))
+            if (roleManager.Roles.All(r => r.Name != role.Name))
             {
-                await _roleManager.CreateAsync(role);
+                await roleManager.CreateAsync(role);
             }
 
             // Default users
             var password = $"{role.Name}{role.Name}1!";
 
-            var email = role.Name == nameof(Roles.SystemOwner) ? DEFAULT_TEST_EMAILADDRESS : role.Name;
+            var email = $"{role}@{DOMAIN_CLIENTKOMPAS}";
 
-            if (_userManager.Users.All(u => u.UserName != email))
+            if (userManager.Users.All(u => u.UserName != email))
             {
-                var (result, userId) = await _identityService.CreateUserAsync(email, password);
+                var (result, userId) = await identityService.CreateUserAsync(email, password);
 
-                var user = await _identityService.GetUserAsync(userId);
+                if (result == null || userId == null)
+                {
+                    return;
+                }
+
+                var user = await identityService.GetUserAsync(userId);
 
                 if (!string.IsNullOrWhiteSpace(role.Name))
                 {
-                    await _userManager.AddToRolesAsync(user, new[] { role.Name }); // TODO: move the addroles to the indetityservice and remove usermanager from this class
+                    await userManager.AddToRolesAsync(user, [role.Name]); // TODO: move the addroles to the indetityservice and remove usermanager from this class
                 }
             }
         }

@@ -13,11 +13,20 @@ namespace Infrastructure.Data.Authentication.Configuration
 
         public void Configure(EntityTypeBuilder<AuthenticationUser> builder)
         {
-            builder.Property(u => u.CVSUserId) // TODO: Perhaps this prop must be required when adding the logics for copuling the CVS user to this user. A foreign key is not posible between different contexts.
-               .IsRequired(false);
+            builder.Property(u => u.CVSUserId)
+               .IsRequired(true);
 
             builder.Property(u => u.Salt)
                .IsRequired(false);
+
+            builder.Property(u => u.HasTemporaryPassword)
+                .IsRequired(true);
+
+            builder.Property(u => u.TemporaryPasswordExpiryDate)
+                .IsRequired(false);
+
+            builder.Property(u => u.TemporaryPasswordTokenCount)
+                .IsRequired(true);
         }
     }
 }

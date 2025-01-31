@@ -1,5 +1,4 @@
-﻿using Application.Common.Interfaces;
-using Application.Common.Interfaces.Authentication;
+﻿using Application.Common.Interfaces.Authentication;
 using Domain.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -7,19 +6,10 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Infrastructure.Data.Interceptor
 {
-    public class AuditableEntityInterceptor : SaveChangesInterceptor
+    public class AuditableEntityInterceptor(
+        IUser currentUserService,
+        TimeProvider dateTime) : SaveChangesInterceptor
     {
-        private readonly IUser _currentUser;
-        private readonly IDateTime _dateTime;  // TODO: When migrating to .net 8 you can replace this interface with TimeProvider
-
-        public AuditableEntityInterceptor(
-            IUser currentUserService,
-            IDateTime dateTime)
-        {
-            _currentUser = currentUserService;
-            _dateTime = dateTime;
-        }
-
         public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
         {
             UpdateEntities(eventData.Context);
@@ -42,13 +32,13 @@ namespace Infrastructure.Data.Interceptor
             {
                 if (entry.State is EntityState.Added or EntityState.Modified || entry.HasChangedOwnedEntities())
                 {
-                    var utcNow = _dateTime.GetUtcNow();
+                    var utcNow = dateTime.GetUtcNow().DateTime;
                     if (entry.State == EntityState.Added)
                     {
-                        entry.Entity.CreatedBy = _currentUser.CurrentUserId;
+                        entry.Entity.CreatedBy = currentUserService.CurrentUserId;
                         entry.Entity.Created = utcNow;
                     }
-                    entry.Entity.LastModifiedBy = _currentUser.CurrentUserId;
+                    entry.Entity.LastModifiedBy = currentUserService.CurrentUserId;
                     entry.Entity.LastModified = utcNow;
                 }
             }

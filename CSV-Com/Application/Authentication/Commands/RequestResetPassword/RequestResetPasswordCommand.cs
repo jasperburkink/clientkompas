@@ -9,7 +9,7 @@ namespace Application.Authentication.Commands.RequestResetPassword
         public string EmailAddress { get; set; } = null!;
     }
 
-    public class RequestResetPasswordCommandHandler : IRequestHandler<RequestResetPasswordCommand, RequestResetPasswordCommandDto>
+    public class RequestResetPasswordCommandHandler(IIdentityService identityService) : IRequestHandler<RequestResetPasswordCommand, RequestResetPasswordCommandDto>
     {
         private readonly IIdentityService _identityService;
         private readonly IEmailService _emailService;
@@ -54,7 +54,8 @@ namespace Application.Authentication.Commands.RequestResetPassword
 
                 return new RequestResetPasswordCommandDto
                 {
-                    Success = true
+                    Success = result.Succeeded,
+                    Errors = result.Errors
                 };
             }
             catch (Exception ex)
@@ -62,7 +63,7 @@ namespace Application.Authentication.Commands.RequestResetPassword
                 return new RequestResetPasswordCommandDto
                 {
                     Success = false,
-                    Errors = new List<string> { ex.Message }
+                    Errors = [ex.Message]
                 };
             }
         }

@@ -28,7 +28,7 @@ namespace Application.FunctionalTests.Authentication.Commands.RefreshToken
                 LoginProvider = "Test",
                 Name = "Test",
                 UserId = _authenticationUser.Id,
-                Value = "TestRefreshToken"
+                Value = "TestRefreshTokenWithEnoughLength"
             };
 
             _command = new RefreshTokenCommand

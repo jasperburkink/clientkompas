@@ -4,6 +4,6 @@
     {
         public required bool Success { get; set; }
 
-        public ICollection<string> Errors { get; set; } = new List<string>();
+        public ICollection<string> Errors { get; set; } = [];
     }
 }

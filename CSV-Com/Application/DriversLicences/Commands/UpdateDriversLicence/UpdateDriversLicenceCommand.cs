@@ -16,21 +16,12 @@ namespace Application.DriversLicences.Commands.UpdateDriversLicence
         public string Description { get; set; }
     }
 
-    public class UpdateDriversLicenceCommandHandler : IRequestHandler<UpdateDriversLicenceCommand, DriversLicenceDto>
+    public class UpdateDriversLicenceCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<UpdateDriversLicenceCommand, DriversLicenceDto>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-
-        public UpdateDriversLicenceCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-        }
-
         public async Task<DriversLicenceDto> Handle(UpdateDriversLicenceCommand request, CancellationToken cancellationToken)
         {
 
-            var driversLicence = await _unitOfWork.DriversLicenceRepository.GetByIDAsync(request.Id, cancellationToken);
+            var driversLicence = await unitOfWork.DriversLicenceRepository.GetByIDAsync(request.Id, cancellationToken);
 
             driversLicence.AssertNotNull();
 
@@ -38,9 +29,9 @@ namespace Application.DriversLicences.Commands.UpdateDriversLicence
 
             driversLicence.Description = request.Description;
 
-            await _unitOfWork.SaveAsync(cancellationToken);
+            await unitOfWork.SaveAsync(cancellationToken);
 
-            return _mapper.Map<DriversLicenceDto>(driversLicence);
+            return mapper.Map<DriversLicenceDto>(driversLicence);
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using Application.Clients.Queries.GetClientFullname;
+using Domain.Authentication.Constants;
 using Domain.CVS.Domain;
 using TestData;
 using TestData.Client;
-using static Application.FunctionalTests.Testing;
 
 namespace Application.FunctionalTests.Clients.Queries.GetClientFullname
 {
@@ -20,8 +20,8 @@ namespace Application.FunctionalTests.Clients.Queries.GetClientFullname
         public async Task Handle_CorrectFlow_ShouldReturnClient()
         {
             // Arrange
-            // TODO: Turn on authentication 
-            //await RunAsDefaultUserAsync();
+            await RunAsAsync(Roles.Administrator);
+
             var client = _testDataGeneratorClient.Create();
 
             await AddAsync(client);
@@ -41,11 +41,11 @@ namespace Application.FunctionalTests.Clients.Queries.GetClientFullname
         }
 
         [Test]
-        public void Handle_ClientDoesNotExists_ThrowsNotFoundException()
+        public async Task Handle_ClientDoesNotExists_ThrowsNotFoundException()
         {
             // Arrange
-            // TODO: Turn on authentication 
-            //await RunAsDefaultUserAsync();
+            await RunAsAsync(Roles.Administrator);
+
             var query = new GetClientFullnameQuery();
 
             // Act & Assert

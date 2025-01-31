@@ -42,15 +42,15 @@ namespace Domain.CVS.Domain
 
         public required bool IsInTargetGroupRegister { get; set; }
 
-        public List<DriversLicence> DriversLicences { get; set; } = new();
+        public List<DriversLicence> DriversLicences { get; set; } = [];
 
-        public List<EmergencyPerson> EmergencyPeople { get; set; } = new();
+        public List<EmergencyPerson> EmergencyPeople { get; set; } = [];
 
-        public List<Diagnosis> Diagnoses { get; set; } = new();
+        public List<Diagnosis> Diagnoses { get; set; } = [];
 
-        public List<BenefitForm> BenefitForms { get; set; } = new();
+        public List<BenefitForm> BenefitForms { get; set; } = [];
 
-        public List<WorkingContract> WorkingContracts { get; set; } = new();
+        public List<WorkingContract> WorkingContracts { get; set; } = [];
 
         public DateTime? DeactivationDateTime { get; private set; }
 

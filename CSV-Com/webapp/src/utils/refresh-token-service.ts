@@ -1,11 +1,14 @@
 import { BearerToken } from "types/common/bearer-token";
 import RefreshTokenCommandDto from "types/model/refresh-token/refresh-token-command-dto";
+import AccessTokenService from "./access-token-service";
 
 export default class RefreshTokenService {
     private static instance: RefreshTokenService | null = null;
     private isRefreshingToken: boolean = false;
     private refreshSubscribers: ((token: RefreshTokenCommandDto) => void)[] = [];
     private apiUrl = process.env.REACT_APP_API_URL; // Voeg de API-URL hier toe
+
+    private readonly TokenName = 'refreshToken';
 
     private constructor() {}
 
@@ -52,7 +55,7 @@ export default class RefreshTokenService {
             const data: RefreshTokenCommandDto = await response.json();
 
             if (response.ok && data.bearertoken && data.refreshtoken) {
-                this.setAccessToken(new BearerToken(data.bearertoken));
+                AccessTokenService.getInstance().setAccessToken(new BearerToken(data.bearertoken));
                 this.setRefreshToken(data.refreshtoken);
 
                 this.isRefreshingToken = false;
@@ -74,23 +77,15 @@ export default class RefreshTokenService {
 
     // Storage methods
     public setRefreshToken(token: string): void {
-        localStorage.setItem('refreshToken', token);
+        localStorage.setItem(this.TokenName, token);
     }
 
     public getRefreshToken(): string | null {
-        return localStorage.getItem('refreshToken') || null;
+        return localStorage.getItem(this.TokenName) || null;
     }
 
     public removeRefreshToken(): void {
-        localStorage.removeItem('refreshToken');
-        this.removeAccessToken();
-    }
-
-    private setAccessToken(token: BearerToken): void { // TODO: Move this to own accesstokenservice
-        sessionStorage.setItem('token', BearerToken.serialize(token));
-    }
-
-    private removeAccessToken(): void { // TODO: Move this to own accesstokenservice
-        sessionStorage.removeItem('token');
+        localStorage.removeItem(this.TokenName);
+        AccessTokenService.getInstance().removeAccessToken();
     }
 }

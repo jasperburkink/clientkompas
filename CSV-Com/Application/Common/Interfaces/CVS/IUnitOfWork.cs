@@ -22,6 +22,8 @@ namespace Application.Common.Interfaces.CVS
 
         IRepository<CoachingProgram> CoachingProgramRepository { get; }
 
+        IRepository<License> LicenseRepository { get; }
+
         public void Save();
 
         public Task SaveAsync(CancellationToken cancellationToken = default);

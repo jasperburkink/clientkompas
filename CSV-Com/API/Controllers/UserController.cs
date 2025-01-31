@@ -6,19 +6,12 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController(IUnitOfWork unitOfWork) : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        public UserController(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
-
         [HttpGet]
         public IEnumerable<User> Get()
         {
-            var users = _unitOfWork.UserRepository.Get().ToList();
+            var users = unitOfWork.UserRepository.Get().ToList();
 
             return users;
         }
@@ -26,29 +19,29 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public User Get(int id)
         {
-            var user = _unitOfWork.UserRepository.Get(u => u.Id.Equals(id)).First();
+            var user = unitOfWork.UserRepository.Get(u => u.Id.Equals(id)).First();
             return user;
         }
 
         [HttpPost]
         public void Post([FromBody] User user)
         {
-            _unitOfWork.UserRepository.Insert(user);
-            _unitOfWork.Save();
+            unitOfWork.UserRepository.Insert(user);
+            unitOfWork.Save();
         }
 
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] User value)
         {
-            _unitOfWork.UserRepository.Update(value);
-            _unitOfWork.Save();
+            unitOfWork.UserRepository.Update(value);
+            unitOfWork.Save();
         }
 
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            _unitOfWork.UserRepository.Delete(id);
-            _unitOfWork.Save();
+            unitOfWork.UserRepository.Delete(id);
+            unitOfWork.Save();
         }
     }
 }

@@ -70,23 +70,14 @@ namespace Application.Organizations.Commands.UpdateOrganization
         public string BIC { get; set; }
     }
 
-    public class UpdateOrganizationCommandHandler : IRequestHandler<UpdateOrganizationCommand, OrganizationDto>
+    public class UpdateOrganizationCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<UpdateOrganizationCommand, OrganizationDto>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-
-        public UpdateOrganizationCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-        }
-
         public async Task<OrganizationDto> Handle(UpdateOrganizationCommand request, CancellationToken cancellationToken)
         {
-            var organization = await _unitOfWork.OrganizationRepository.GetByIDAsync(request.Id, includeProperties: "", cancellationToken)
+            var organization = await unitOfWork.OrganizationRepository.GetByIDAsync(request.Id, includeProperties: "", cancellationToken)
                 ?? throw new NotFoundException(nameof(Organization), request.Id);
 
-            var existingOrganizationWithKVKNumber = await _unitOfWork.OrganizationRepository.GetByKVKNumberAsync(request.KVKNumber, cancellationToken);
+            var existingOrganizationWithKVKNumber = await unitOfWork.OrganizationRepository.GetByKVKNumberAsync(request.KVKNumber, cancellationToken);
 
             if (existingOrganizationWithKVKNumber != null && existingOrganizationWithKVKNumber.Id != request.Id)
             {
@@ -125,11 +116,11 @@ namespace Application.Organizations.Commands.UpdateOrganization
 
             organization.BIC = request.BIC;
 
-            await _unitOfWork.OrganizationRepository.UpdateAsync(organization);
+            await unitOfWork.OrganizationRepository.UpdateAsync(organization);
 
-            await _unitOfWork.SaveAsync(cancellationToken);
+            await unitOfWork.SaveAsync(cancellationToken);
 
-            return _mapper.Map<OrganizationDto>(organization);
+            return mapper.Map<OrganizationDto>(organization);
         }
     }
 }

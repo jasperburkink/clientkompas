@@ -7,17 +7,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data.CVS
 {
-    public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
+    public class GenericRepository<TEntity>(CVSDbContext context) : IRepository<TEntity> where TEntity : BaseEntity
     {
-        public CVSDbContext Context { get; }
+        public CVSDbContext Context { get; } = context;
 
-        internal DbSet<TEntity> _dbSet;
-
-        public GenericRepository(CVSDbContext context)
-        {
-            Context = context;
-            _dbSet = context.Set<TEntity>();
-        }
+        internal DbSet<TEntity> _dbSet = context.Set<TEntity>();
 
         public virtual IEnumerable<TEntity> Get(
             Expression<Func<TEntity, bool>> filter = null,
@@ -32,18 +26,18 @@ namespace Infrastructure.Data.CVS
             }
 
             foreach (var includeProperty in includeProperties.Split
-                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                ([','], StringSplitOptions.RemoveEmptyEntries))
             {
                 query = query.Include(includeProperty);
             }
 
             if (orderBy != null)
             {
-                return orderBy(query).ToList();
+                return [.. orderBy(query)];
             }
             else
             {
-                return query.ToList();
+                return [.. query];
             }
         }
 
@@ -103,7 +97,7 @@ namespace Infrastructure.Data.CVS
         private static IQueryable<TEntity> IncludeProperties(string includeProperties, IQueryable<TEntity> query)
         {
             foreach (var includeProperty in includeProperties.Split
-                            (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                            ([','], StringSplitOptions.RemoveEmptyEntries))
             {
                 query = query.Include(includeProperty);
             }
@@ -179,7 +173,7 @@ namespace Infrastructure.Data.CVS
 
             var tableName = ContextExtensions.GetTableName(Context, typeof(TEntity));
 
-            var searchTerms = searchTerm.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            var searchTerms = searchTerm.Split([' '], StringSplitOptions.RemoveEmptyEntries);
 
             var sqlParameters = new List<object>();
             var whereClauses = new List<string>();
@@ -201,7 +195,7 @@ namespace Infrastructure.Data.CVS
 
             var query = $"SELECT * FROM {tableName} WHERE {combinedWhereClause}";
 
-            return await _dbSet.FromSqlRaw(query, sqlParameters.ToArray()).ToListAsync(cancellationToken);
+            return await _dbSet.FromSqlRaw(query, [.. sqlParameters]).ToListAsync(cancellationToken);
         }
 
 

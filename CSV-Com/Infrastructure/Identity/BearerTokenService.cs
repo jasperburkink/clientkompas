@@ -10,7 +10,7 @@ namespace Infrastructure.Identity
 {
     public class BearerTokenService : IBearerTokenService
     {
-        public const string SECRET_KEY = "thisisasecretkey@123"; // TODO: Secret to KeyVault
+        public const string SECRET_KEY = "this_is_a_secure_secret_key_with_32_characters!"; // TODO: Secret to KeyVault
         public const string CLAIM_NAME_CVSUSERID = "CVSUserId";
 
         public Task<string> GenerateBearerTokenAsync(AuthenticationUser user, IList<string> roles)
@@ -32,7 +32,7 @@ namespace Infrastructure.Identity
                     new (JwtRegisteredClaimNames.Name, user.UserName ?? ""),
                     new (JwtRegisteredClaimNames.Email, user.Email ?? ""),
                     new (JwtRegisteredClaimNames.Exp, expires.Ticks.ToString()),
-                    new (CLAIM_NAME_CVSUSERID, (user.CVSUserId ?? 0).ToString()),
+                    new (CLAIM_NAME_CVSUSERID, user.CVSUserId.ToString()),
                 };
 
                 foreach (var role in roles)

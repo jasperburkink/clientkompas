@@ -6,15 +6,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data.Authentication
 {
-    public class AuthenticationDbContext : IdentityDbContext<AuthenticationUser>, IAuthenticationDbContext
+    public class AuthenticationDbContext(DbContextOptions<AuthenticationDbContext> options) : IdentityDbContext<AuthenticationUser>(options), IAuthenticationDbContext
     {
         public DbSet<AuthenticationUser> AuthenticationUsers { get; set; }
 
         public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         public DbSet<TwoFactorPendingToken> TwoFactorPendingTokens { get; set; }
-
-        public AuthenticationDbContext(DbContextOptions<AuthenticationDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

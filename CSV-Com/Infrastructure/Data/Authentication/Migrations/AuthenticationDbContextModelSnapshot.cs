@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Data.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -16,8 +17,10 @@ namespace Infrastructure.Data.Authentication.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.10")
+                .HasAnnotation("ProductVersion", "9.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
+
+            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
             modelBuilder.Entity("Domain.Authentication.Domain.AuthenticationUser", b =>
                 {
@@ -27,7 +30,7 @@ namespace Infrastructure.Data.Authentication.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CVSUserId")
+                    b.Property<int>("CVSUserId")
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -39,6 +42,9 @@ namespace Infrastructure.Data.Authentication.Migrations
                         .HasColumnType("varchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("HasTemporaryPassword")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("LockoutEnabled")
@@ -69,6 +75,12 @@ namespace Infrastructure.Data.Authentication.Migrations
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("TemporaryPasswordExpiryDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("TemporaryPasswordTokenCount")
+                        .HasColumnType("int");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("tinyint(1)");
@@ -121,6 +133,8 @@ namespace Infrastructure.Data.Authentication.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<string>("ClaimType")
                         .HasColumnType("longtext");
 
@@ -143,6 +157,8 @@ namespace Infrastructure.Data.Authentication.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("longtext");
@@ -215,7 +231,8 @@ namespace Infrastructure.Data.Authentication.Migrations
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(34)
+                        .HasColumnType("varchar(34)");
 
                     b.Property<string>("Value")
                         .HasColumnType("longtext");
@@ -224,7 +241,7 @@ namespace Infrastructure.Data.Authentication.Migrations
 
                     b.ToTable("AspNetUserTokens", (string)null);
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUserToken<string>");
+                    b.HasDiscriminator().HasValue("IdentityUserToken<string>");
 
                     b.UseTphMappingStrategy();
                 });
@@ -234,18 +251,53 @@ namespace Infrastructure.Data.Authentication.Migrations
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserToken<string>");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("CreatedAt");
 
                     b.Property<DateTime>("ExpiresAt")
-                        .HasColumnType("datetime(6)");
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("ExpiresAt");
 
                     b.Property<bool>("IsRevoked")
-                        .HasColumnType("tinyint(1)");
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("IsRevoked");
 
                     b.Property<bool>("IsUsed")
-                        .HasColumnType("tinyint(1)");
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("IsUsed");
 
                     b.HasDiscriminator().HasValue("RefreshToken");
+                });
+
+            modelBuilder.Entity("Infrastructure.Identity.TwoFactorPendingToken", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserToken<string>");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("CreatedAt");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("ExpiresAt");
+
+                    b.Property<bool>("IsRevoked")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("IsRevoked");
+
+                    b.Property<bool>("IsUsed")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("IsUsed");
+
+                    b.HasDiscriminator().HasValue("TwoFactorPendingToken");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

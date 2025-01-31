@@ -4,24 +4,15 @@ using Domain.Authentication.Constants;
 
 namespace Application.Diagnoses.Queries.GetDiagnosis
 {
-    [Authorize(Policy = Policies.DiagnosisManagement)]
+    [Authorize(Policy = Policies.DiagnosisRead)]
     public record GetDiagnosisQuery : IRequest<IEnumerable<DiagnosisDto>> { }
-    public class GetDiagnosisQueryHandler : IRequestHandler<GetDiagnosisQuery, IEnumerable<DiagnosisDto>>
+    public class GetDiagnosisQueryHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<GetDiagnosisQuery, IEnumerable<DiagnosisDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-
-        public GetDiagnosisQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-        }
-
         public async Task<IEnumerable<DiagnosisDto>> Handle(GetDiagnosisQuery request, CancellationToken cancellationToken)
         {
-            return (await _unitOfWork.DiagnosisRepository.GetAsync())
+            return (await unitOfWork.DiagnosisRepository.GetAsync())
                 .AsQueryable()
-                .ProjectTo<DiagnosisDto>(_mapper.ConfigurationProvider);
+                .ProjectTo<DiagnosisDto>(mapper.ConfigurationProvider);
         }
     }
 }

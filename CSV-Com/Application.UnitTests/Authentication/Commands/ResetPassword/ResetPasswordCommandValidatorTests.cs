@@ -1,4 +1,5 @@
-﻿using Application.Authentication.Commands.ResetPassword;
+﻿using System.Diagnostics;
+using Application.Authentication.Commands.ResetPassword;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.CVS;
 using Bogus;
@@ -32,7 +33,7 @@ namespace Application.UnitTests.Authentication.Commands.ResetPassword
         public async Task Handle_SuccessFlow_NoValidationErrors()
         {
             // Arrange
-            var password = s_faker.Internet.Password() + "!";
+            var password = s_faker.Internet.Password() + "Up1!";
 
             var command = new ResetPasswordCommand
             {
@@ -46,6 +47,8 @@ namespace Application.UnitTests.Authentication.Commands.ResetPassword
             var result = await _validator.TestValidateAsync(command);
 
             // Assert
+            Debug.WriteLine($"Password:{password}. Emailaddress:{command.EmailAddress}");
+
             result.ShouldNotHaveAnyValidationErrors();
         }
 

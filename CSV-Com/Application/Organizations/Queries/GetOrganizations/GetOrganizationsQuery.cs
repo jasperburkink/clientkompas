@@ -4,25 +4,16 @@ using Domain.Authentication.Constants;
 
 namespace Application.Organizations.Queries.GetOrganizations
 {
-    [Authorize(Policy = Policies.OrganizationManagement)]
+    [Authorize(Policy = Policies.OrganizationRead)]
     public record GetOrganizationsQuery : IRequest<IEnumerable<GetOrganizationDto>>;
 
-    public class GetOrganizationsQueryHandler : IRequestHandler<GetOrganizationsQuery, IEnumerable<GetOrganizationDto>>
+    public class GetOrganizationsQueryHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<GetOrganizationsQuery, IEnumerable<GetOrganizationDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-
-        public GetOrganizationsQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-        }
-
         public async Task<IEnumerable<GetOrganizationDto>> Handle(GetOrganizationsQuery request, CancellationToken cancellationToken)
         {
-            return (await _unitOfWork.OrganizationRepository.GetAsync(includeProperties: ""))
+            return (await unitOfWork.OrganizationRepository.GetAsync(includeProperties: ""))
                 .AsQueryable()
-                .ProjectTo<GetOrganizationDto>(_mapper.ConfigurationProvider)
+                .ProjectTo<GetOrganizationDto>(mapper.ConfigurationProvider)
                 .OrderBy(c => c.OrganizationName);
         }
     }

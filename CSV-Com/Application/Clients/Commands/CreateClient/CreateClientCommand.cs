@@ -64,32 +64,26 @@ namespace Application.Clients.Commands.CreateClient
         }
     }
 
-    public class CreateClientCommandHandler : IRequestHandler<CreateClientCommand, ClientDto>
+    public class CreateClientCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<CreateClientCommand, ClientDto>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-
-        public CreateClientCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-        }
-
         public async Task<ClientDto> Handle(CreateClientCommand request, CancellationToken cancellationToken)
         {
             var benefitFormIds = request.BenefitForms.Select(x => x.Id).ToList();
-            var benefitForms = (await _unitOfWork.BenefitFormRepository.GetAsync(bf => benefitFormIds.Contains(bf.Id))).ToList();
+            var benefitForms = (await unitOfWork.BenefitFormRepository.GetAsync())
+                .Where(bf => benefitFormIds.Contains(bf.Id));
 
             var diagnosisIds = request.Diagnoses.Select(x => x.Id).ToList();
-            var diagnoses = (await _unitOfWork.DiagnosisRepository.GetAsync(d => diagnosisIds.Contains(d.Id))).ToList();
+            var diagnoses = (await unitOfWork.DiagnosisRepository.GetAsync())
+                .Where(d => diagnosisIds.Contains(d.Id));
 
             var driversLicenceIds = request.DriversLicences.Select(x => x.Id).ToList();
-            var driversLicences = (await _unitOfWork.DriversLicenceRepository.GetAsync(dl => driversLicenceIds.Contains(dl.Id))).ToList();
+            var driversLicences = (await unitOfWork.DriversLicenceRepository.GetAsync())
+                .Where(dl => driversLicenceIds.Contains(dl.Id));
 
             MaritalStatus? maritalStatus = null;
             if (request.MaritalStatus != null)
             {
-                maritalStatus = (await _unitOfWork.MaritalStatusRepository.GetAsync(a => a.Id == request.MaritalStatus.Id))?.SingleOrDefault()
+                maritalStatus = (await unitOfWork.MaritalStatusRepository.GetAsync(a => a.Id == request.MaritalStatus.Id))?.SingleOrDefault()
                   ?? throw new NotFoundException(nameof(MaritalStatus), request.MaritalStatus);
             }
 
@@ -105,25 +99,25 @@ namespace Application.Clients.Commands.CreateClient
                 DateOfBirth = request.DateOfBirth.Value,
                 EmailAddress = request.EmailAddress,
                 IsInTargetGroupRegister = request.IsInTargetGroupRegister.Value,
-                BenefitForms = benefitForms,
+                BenefitForms = [.. benefitForms],
                 MaritalStatus = maritalStatus,
-                DriversLicences = driversLicences,
-                Diagnoses = diagnoses,
+                DriversLicences = [.. driversLicences],
+                Diagnoses = [.. diagnoses],
                 Remarks = request.Remarks,
-                EmergencyPeople = new(),
-                WorkingContracts = new()
+                EmergencyPeople = [],
+                WorkingContracts = []
             };
 
-            client.EmergencyPeople = request.EmergencyPeople.Select(a => a.ToDomainModel(_mapper, client)).ToList();
+            client.EmergencyPeople = request.EmergencyPeople.Select(a => a.ToDomainModel(mapper, client)).ToList();
 
-            client.WorkingContracts = request.WorkingContracts.Select(a => a.ToDomainModel(_mapper, client)).ToList();
+            client.WorkingContracts = request.WorkingContracts.Select(a => a.ToDomainModel(mapper, client)).ToList();
 
-            await _unitOfWork.ClientRepository.InsertAsync(client, cancellationToken);
-            await _unitOfWork.SaveAsync(cancellationToken);
+            await unitOfWork.ClientRepository.InsertAsync(client, cancellationToken);
+            await unitOfWork.SaveAsync(cancellationToken);
 
             client.AddDomainEvent(new ClientCreatedEvent(client));
 
-            return _mapper.Map<ClientDto>(client);
+            return mapper.Map<ClientDto>(client);
         }
     }
 }

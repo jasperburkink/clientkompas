@@ -15,44 +15,31 @@ namespace Application.Authentication.Commands.ResendTwoFactorAuthenticationToken
         public string TwoFactorPendingToken { get; set; } = null!;
     }
 
-    public class ResendTwoFactorAuthenticationTokenCommandHandler : IRequestHandler<ResendTwoFactorAuthenticationTokenCommand, ResendTwoFactorAuthenticationTokenCommandDto>
+    public class ResendTwoFactorAuthenticationTokenCommandHandler(IIdentityService identityService, ITokenService tokenService, IResourceMessageProvider resourceMessageProvider, IEmailService emailService) : IRequestHandler<ResendTwoFactorAuthenticationTokenCommand, ResendTwoFactorAuthenticationTokenCommandDto>
     {
-        private readonly IIdentityService _identityService;
-        private readonly ITokenService _tokenService;
-        private readonly IResourceMessageProvider _resourceMessageProvider;
-        private readonly IEmailService _emailService;
-
-        public ResendTwoFactorAuthenticationTokenCommandHandler(IIdentityService identityService, ITokenService tokenService, IResourceMessageProvider resourceMessageProvider, IEmailService emailService)
-        {
-            _identityService = identityService;
-            _tokenService = tokenService;
-            _resourceMessageProvider = resourceMessageProvider;
-            _emailService = emailService;
-        }
-
         public async Task<ResendTwoFactorAuthenticationTokenCommandDto> Handle(ResendTwoFactorAuthenticationTokenCommand request, CancellationToken cancellationToken)
         {
-            var user = await _identityService.GetUserAsync(request.UserId);
-            var currentTwoFactorPendingToken = await _tokenService.GetTokenAsync(request.TwoFactorPendingToken, nameof(request.TwoFactorPendingToken));
+            var user = await identityService.GetUserAsync(request.UserId);
+            var currentTwoFactorPendingToken = await tokenService.GetTokenAsync(request.TwoFactorPendingToken, nameof(request.TwoFactorPendingToken));
 
             if (!await IsUserLoggedIn(request, user, currentTwoFactorPendingToken))
             {
-                throw new InvalidLoginException(_resourceMessageProvider.GetMessage(typeof(TwoFactorAuthenticationCommandHandler), AuthenticationCommandContants.RESOURCE_KEY_USERNOTLOGGEDIN));
+                throw new InvalidLoginException(resourceMessageProvider.GetMessage(typeof(TwoFactorAuthenticationCommandHandler), AuthenticationCommandContants.RESOURCE_KEY_USERNOTLOGGEDIN));
             }
 
             // Token value that user needs to enter
-            var twoFactorAuthenticationTokenValue = await _identityService.Get2FATokenAsync(user.Id);
+            var twoFactorAuthenticationTokenValue = await identityService.Get2FATokenAsync(user.Id);
 
             if (string.IsNullOrEmpty(user.Email))
             {
-                throw new NotFoundException(_resourceMessageProvider.GetMessage(typeof(LoginCommandHandler), AuthenticationCommandContants.RESOURCE_KEY_NOEMAILADDRESS));
+                throw new NotFoundException(resourceMessageProvider.GetMessage(typeof(LoginCommandHandler), AuthenticationCommandContants.RESOURCE_KEY_NOEMAILADDRESS));
             }
 
             // Security token for checking loginstatus user
-            var twoFactorPendingTokenValue = await _tokenService.GenerateTokenAsync(user, nameof(request.TwoFactorPendingToken));
+            var twoFactorPendingTokenValue = await tokenService.GenerateTokenAsync(user, nameof(request.TwoFactorPendingToken));
 
             // Send the token via email
-            //await _emailService.SendEmailAsync(user.Email, "Two-factor authentication token", twoFactorAuthenticationTokenValue);
+            await emailService.SendEmailAsync(user.Email, "Two-factor authentication token", twoFactorAuthenticationTokenValue);
 
             return new ResendTwoFactorAuthenticationTokenCommandDto
             {
@@ -68,7 +55,7 @@ namespace Application.Authentication.Commands.ResendTwoFactorAuthenticationToken
             return user != null
                 && twoFactorPendingToken != null
                 && twoFactorPendingToken.UserId == request.UserId
-                && (await _tokenService.ValidateTokenAsync(user.Id, twoFactorPendingToken.Value, nameof(request.TwoFactorPendingToken)));
+                && (await tokenService.ValidateTokenAsync(user.Id, twoFactorPendingToken.Value, nameof(request.TwoFactorPendingToken)));
         }
     }
 }

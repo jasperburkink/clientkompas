@@ -7,24 +7,15 @@ namespace Application.Authentication.Commands.Logout
         public string RefreshToken { get; set; } = null!;
     }
 
-    public class LogoutCommandHandler : IRequestHandler<LogoutCommand, LogoutCommandDto>
+    public class LogoutCommandHandler(IIdentityService identityService, ITokenService tokenService) : IRequestHandler<LogoutCommand, LogoutCommandDto>
     {
-        private readonly IIdentityService _identityService;
-        private readonly ITokenService _tokenService;
-
-        public LogoutCommandHandler(IIdentityService identityService, ITokenService tokenService)
-        {
-            _identityService = identityService;
-            _tokenService = tokenService;
-        }
-
         public async Task<LogoutCommandDto> Handle(LogoutCommand request, CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(request.RefreshToken);
 
-            await _identityService.LogoutAsync();
+            await identityService.LogoutAsync();
 
-            var refreshToken = await _tokenService.GetTokenAsync(request.RefreshToken, "RefreshToken");
+            var refreshToken = await tokenService.GetTokenAsync(request.RefreshToken, "RefreshToken");
 
             if (refreshToken == null)
             {
@@ -34,11 +25,11 @@ namespace Application.Authentication.Commands.Logout
                 };
             }
 
-            var userRefreshTokens = await _tokenService.GetValidTokensByUserAsync(refreshToken.UserId, "RefreshToken");
+            var userRefreshTokens = await tokenService.GetValidTokensByUserAsync(refreshToken.UserId, "RefreshToken");
 
             foreach (var userRefreshToken in userRefreshTokens)
             {
-                await _tokenService.RevokeTokenAsync(userRefreshToken.UserId, userRefreshToken.Value, "RefreshToken");
+                await tokenService.RevokeTokenAsync(userRefreshToken.UserId, userRefreshToken.Value, "RefreshToken");
             }
 
             return new LogoutCommandDto

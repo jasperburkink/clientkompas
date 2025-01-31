@@ -1,6 +1,6 @@
 ﻿using Application.CoachingPrograms.Queries.GetCoachingProgramTypes;
+using Domain.Authentication.Constants;
 using Domain.CVS.Enums;
-using static Application.FunctionalTests.Testing;
 
 namespace Application.FunctionalTests.CoachingPrograms.Queries.GetCoachingProgramTypes
 {
@@ -10,6 +10,8 @@ namespace Application.FunctionalTests.CoachingPrograms.Queries.GetCoachingProgra
         public async Task Handle_GetCoachingProgramTypes_ShouldContainIds()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var query = new GetCoachingProgramTypesQuery { };
             var ids = Enum.GetValues(typeof(CoachingProgramType)).Cast<int>();
 
@@ -24,6 +26,8 @@ namespace Application.FunctionalTests.CoachingPrograms.Queries.GetCoachingProgra
         public async Task Handle_GetCoachingProgramTypes_ShouldContainNames()
         {
             // Arrange
+            await RunAsAsync(Roles.Administrator);
+
             var query = new GetCoachingProgramTypesQuery { };
             var names = new string[]
             {

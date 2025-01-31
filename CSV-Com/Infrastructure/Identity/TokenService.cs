@@ -7,17 +7,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Identity
 {
-    public class TokenService : ITokenService
+    public class TokenService(IAuthenticationDbContext authenticationDbContext, IHasher hasher) : ITokenService
     {
-        private readonly IAuthenticationDbContext _authenticationDbContext;
-        private readonly IHasher _hasher;
-
-        public TokenService(IAuthenticationDbContext authenticationDbContext, IHasher hasher)
-        {
-            _authenticationDbContext = authenticationDbContext;
-            _hasher = hasher;
-        }
-
         public async Task<string> GenerateTokenAsync(AuthenticationUser user, string tokenType)
         {
             ArgumentNullException.ThrowIfNull(user);
@@ -29,8 +20,8 @@ namespace Infrastructure.Identity
             }
             var randomNumberBase64String = Convert.ToBase64String(randomNumber);
 
-            var salt = _hasher.GenerateSalt();
-            var tokenValue = _hasher.HashString(randomNumberBase64String, salt);
+            var salt = hasher.GenerateSalt();
+            var tokenValue = hasher.HashString(randomNumberBase64String, salt);
 
             IToken tokenEntry = tokenType switch
             {
@@ -61,20 +52,20 @@ namespace Infrastructure.Identity
 
             if (tokenEntry.GetType() == typeof(RefreshToken))
             {
-                await _authenticationDbContext.RefreshTokens.AddAsync((RefreshToken)tokenEntry);
+                await authenticationDbContext.RefreshTokens.AddAsync((RefreshToken)tokenEntry);
             }
             else if (tokenEntry.GetType() == typeof(TwoFactorPendingToken))
             {
-                await _authenticationDbContext.TwoFactorPendingTokens.AddAsync((TwoFactorPendingToken)tokenEntry);
+                await authenticationDbContext.TwoFactorPendingTokens.AddAsync((TwoFactorPendingToken)tokenEntry);
             }
             else
             {
                 throw new ArgumentException("Invalid token type", nameof(tokenType));
             }
 
-            await _authenticationDbContext.SaveChangesAsync();
+            await authenticationDbContext.SaveChangesAsync();
 
-            foreach (var oldToken in _authenticationDbContext.RefreshTokens.Where(rt =>
+            foreach (var oldToken in authenticationDbContext.RefreshTokens.Where(rt =>
             rt.UserId == user.Id
             && !rt.IsRevoked
             && !rt.IsUsed
@@ -93,9 +84,9 @@ namespace Infrastructure.Identity
             ArgumentNullException.ThrowIfNull(tokenValue);
 
             var token = tokenType == "RefreshToken"
-                ? await _authenticationDbContext.RefreshTokens.FirstOrDefaultAsync(rt => rt.Value == tokenValue && rt.UserId == userId && !rt.IsUsed && !rt.IsRevoked)
+                ? await authenticationDbContext.RefreshTokens.FirstOrDefaultAsync(rt => rt.Value == tokenValue && rt.UserId == userId && !rt.IsUsed && !rt.IsRevoked)
                 : tokenType == "TwoFactorPendingToken"
-                    ? (IToken?)await _authenticationDbContext.TwoFactorPendingTokens.FirstOrDefaultAsync(t => t.Value == tokenValue && t.UserId == userId && !t.IsUsed && !t.IsRevoked)
+                    ? (IToken?)await authenticationDbContext.TwoFactorPendingTokens.FirstOrDefaultAsync(t => t.Value == tokenValue && t.UserId == userId && !t.IsUsed && !t.IsRevoked)
                     : throw new ArgumentException("Invalid token type", nameof(tokenType));
             if (token == null || token.IsExpired)
             {
@@ -103,7 +94,7 @@ namespace Infrastructure.Identity
             }
 
             token.IsUsed = true;
-            await _authenticationDbContext.SaveChangesAsync();
+            await authenticationDbContext.SaveChangesAsync();
             return true;
         }
 
@@ -113,15 +104,15 @@ namespace Infrastructure.Identity
             ArgumentNullException.ThrowIfNull(tokenValue);
 
             var token = tokenType == "RefreshToken"
-                ? await _authenticationDbContext.RefreshTokens.FirstOrDefaultAsync(rt => rt.Value == tokenValue && rt.UserId == userId)
+                ? await authenticationDbContext.RefreshTokens.FirstOrDefaultAsync(rt => rt.Value == tokenValue && rt.UserId == userId)
                 : tokenType == "TwoFactorPendingToken"
-                    ? (IToken?)await _authenticationDbContext.TwoFactorPendingTokens.FirstOrDefaultAsync(t => t.Value == tokenValue && t.UserId == userId)
+                    ? (IToken?)await authenticationDbContext.TwoFactorPendingTokens.FirstOrDefaultAsync(t => t.Value == tokenValue && t.UserId == userId)
                     : throw new ArgumentException("Invalid token type", nameof(tokenType));
 
             if (token != null)
             {
                 token.IsRevoked = true;
-                await _authenticationDbContext.SaveChangesAsync();
+                await authenticationDbContext.SaveChangesAsync();
             }
         }
 
@@ -129,12 +120,12 @@ namespace Infrastructure.Identity
         {
             if (tokenType == "RefreshToken")
             {
-                return await _authenticationDbContext.RefreshTokens
+                return await authenticationDbContext.RefreshTokens
                     .FirstOrDefaultAsync(rt => rt.Value == tokenValue);
             }
             else if (tokenType == "TwoFactorPendingToken")
             {
-                return await _authenticationDbContext.TwoFactorPendingTokens
+                return await authenticationDbContext.TwoFactorPendingTokens
                     .FirstOrDefaultAsync(t => t.Value == tokenValue);
             }
             else
@@ -147,13 +138,13 @@ namespace Infrastructure.Identity
         {
             if (tokenType == "RefreshToken")
             {
-                return await _authenticationDbContext.RefreshTokens
+                return await authenticationDbContext.RefreshTokens
                     .Where(rt => rt.UserId == userId && !rt.IsUsed && !rt.IsRevoked)
                     .ToListAsync<IToken>();
             }
             else if (tokenType == "TwoFactorPendingToken")
             {
-                return await _authenticationDbContext.TwoFactorPendingTokens
+                return await authenticationDbContext.TwoFactorPendingTokens
                     .Where(t => t.UserId == userId && !t.IsUsed && !t.IsRevoked)
                     .ToListAsync<IToken>();
             }

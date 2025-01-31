@@ -3,10 +3,8 @@ using Domain.CVS.Domain;
 
 namespace Infrastructure.Data.CVS
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork(CVSDbContext context) : IUnitOfWork
     {
-        private readonly CVSDbContext _context;
-
         private GenericRepository<User> _userRepository;
 
         private GenericRepository<Client> _clientRepository;
@@ -25,64 +23,66 @@ namespace Infrastructure.Data.CVS
 
         private GenericRepository<CoachingProgram> _coachingProgramRepository;
 
-        public UnitOfWork(CVSDbContext context)
-        {
-            _context = context;
-        }
+        private GenericRepository<License> _licenceRepository;
 
         public IRepository<User> UserRepository
         {
-            get => _userRepository ??= new GenericRepository<User>(_context);
+            get => _userRepository ??= new GenericRepository<User>(context);
         }
 
         public IRepository<Diagnosis> DiagnosisRepository
         {
-            get => _diagnosisRepository ??= new GenericRepository<Diagnosis>(_context);
+            get => _diagnosisRepository ??= new GenericRepository<Diagnosis>(context);
         }
 
         public IRepository<Client> ClientRepository
         {
-            get => _clientRepository ??= new GenericRepository<Client>(_context);
+            get => _clientRepository ??= new GenericRepository<Client>(context);
         }
 
         public IRepository<DriversLicence> DriversLicenceRepository
         {
-            get => _driversLicenceRepository ??= new GenericRepository<DriversLicence>(_context);
+            get => _driversLicenceRepository ??= new GenericRepository<DriversLicence>(context);
         }
 
         public IRepository<MaritalStatus> MaritalStatusRepository
         {
-            get => _maritalStatusRepository ??= new GenericRepository<MaritalStatus>(_context);
+            get => _maritalStatusRepository ??= new GenericRepository<MaritalStatus>(context);
         }
 
         public IRepository<BenefitForm> BenefitFormRepository
         {
-            get => _benefitFormRepository ??= new GenericRepository<BenefitForm>(_context);
+            get => _benefitFormRepository ??= new GenericRepository<BenefitForm>(context);
         }
 
         public IRepository<Organization> OrganizationRepository
         {
-            get => _organizationRepository ??= new GenericRepository<Organization>(_context);
+            get => _organizationRepository ??= new GenericRepository<Organization>(context);
         }
 
         public IRepository<WorkingContract> WorkingContractRepository
         {
-            get => _workingContractRepository ??= new GenericRepository<WorkingContract>(_context);
+            get => _workingContractRepository ??= new GenericRepository<WorkingContract>(context);
         }
 
         public IRepository<CoachingProgram> CoachingProgramRepository
         {
-            get => _coachingProgramRepository ??= new GenericRepository<CoachingProgram>(_context);
+            get => _coachingProgramRepository ??= new GenericRepository<CoachingProgram>(context);
+        }
+
+        public IRepository<License> LicenseRepository
+        {
+            get => _licenceRepository ??= new GenericRepository<License>(context);
         }
 
         public void Save()
         {
-            _context.SaveChanges();
+            context.SaveChanges();
         }
 
         public async Task SaveAsync(CancellationToken cancellationToken = default)
         {
-            await _context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
         }
 
         private bool _disposed = false;
@@ -93,7 +93,7 @@ namespace Infrastructure.Data.CVS
             {
                 if (disposing)
                 {
-                    _context.Dispose();
+                    context.Dispose();
                 }
             }
             _disposed = true;

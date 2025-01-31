@@ -26,6 +26,7 @@ import { useNavigate } from "react-router-dom";
 import { BearerToken } from "types/common/bearer-token";
 import RefreshTokenService from "utils/refresh-token-service";
 import moment from "moment";
+import AccessTokenService from "utils/access-token-service";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -41,18 +42,6 @@ const Login = () => {
     const [confirmMessage, setConfirmMessage] = useState<string>('');
     const [isConfirmPopupOneButtonOpen, setConfirmPopupOneButtonOpen] = useState<boolean>(false);
     const [loginCommand, setLoginCommand] = useState<LoginCommand>(initialLoginCommand);
-    const [bearertoken, setBearerToken] = useState<BearerToken | null>(sessionStorage.getItem('token') ? BearerToken.deserialize(sessionStorage.getItem('token')!) : null);
-    const [refreshtoken, setRefreshToken] = useState<string | null>(RefreshTokenService.getInstance().getRefreshToken() ? RefreshTokenService.getInstance().getRefreshToken() : null);
-    
-    useEffect(() => {         
-        if(bearertoken) {
-            sessionStorage.setItem('token', BearerToken.serialize(bearertoken));
-        }
-
-        if(refreshtoken) {
-            RefreshTokenService.getInstance().setRefreshToken(refreshtoken);
-        }
-    }, [bearertoken, refreshtoken]);
 
     const [isErrorPopupOpen, setErrorPopupOpen] = useState<boolean>(false);
     const [cvsError, setCvsError] = useState<CVSError>(() => {
@@ -75,26 +64,27 @@ const Login = () => {
         setConfirmMessage: React.Dispatch<React.SetStateAction<string>>, 
         setConfirmPopupOneButtonOpen: React.Dispatch<React.SetStateAction<boolean>>, 
         setCvsError: React.Dispatch<React.SetStateAction<CVSError>>, 
-        setErrorPopupOpen: React.Dispatch<React.SetStateAction<boolean>>, 
-        setBearerToken: React.Dispatch<React.SetStateAction<BearerToken | null>>) => {
+        setErrorPopupOpen: React.Dispatch<React.SetStateAction<boolean>>) => {
         if (apiResult.Ok) {            
             if(apiResult.ReturnObject?.success === true){
                 // Check if the user needs to supply a 2FA token to login
                 if(apiResult.ReturnObject?.twofactorpendingtoken && apiResult.ReturnObject?.userid) {  
                     // Add token to the session
-                    sessionStorage.setItem('twofactorpendingtoken', apiResult.ReturnObject?.twofactorpendingtoken);
+                    AccessTokenService.getInstance().setTwoFactorPendingToken(apiResult.ReturnObject?.twofactorpendingtoken);
                     
                     const expiryDate = new Date(apiResult.ReturnObject?.expiresat);                    
                     const remainingTimeInSeconds = Math.floor((expiryDate.getTime() - new Date().getTime()) / 1000);
 
-                    navigate(`/login-2fa/${apiResult.ReturnObject?.userid}/${remainingTimeInSeconds}`);
+                    setTimeout(() => {
+                        navigate(`/login-2fa/${apiResult.ReturnObject?.userid}/${remainingTimeInSeconds}`);
+                    }, 0);
                 }
                 // User logged in successfully
                 else if (apiResult.ReturnObject?.bearertoken && apiResult.ReturnObject?.refreshtoken) {
                     setConfirmMessage('Inloggen succesvol.');
                     setConfirmPopupOneButtonOpen(true);
-                    setBearerToken(new BearerToken(apiResult.ReturnObject.bearertoken));
-                    setRefreshToken(apiResult.ReturnObject.refreshtoken);
+                    AccessTokenService.getInstance().setAccessToken(new BearerToken(apiResult.ReturnObject.bearertoken));
+                    RefreshTokenService.getInstance().setRefreshToken(apiResult.ReturnObject.refreshtoken);
                 }
                 else {
                     setCvsError({
@@ -204,8 +194,7 @@ const Login = () => {
                                 setConfirmMessage, 
                                 setConfirmPopupOneButtonOpen, 
                                 setCvsError, 
-                                setErrorPopupOpen, 
-                                setBearerToken)}
+                                setErrorPopupOpen)}
                             dataTestId='button.login'
                         />
                     </div>

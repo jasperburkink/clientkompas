@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System.Collections;
+using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 using System.Resources;
@@ -6,13 +8,26 @@ using Application.Common.Interfaces;
 
 namespace Application.Common.Resources
 {
-    public class ResourceMessageProvider : IResourceMessageProvider
+    public class ResourceMessageProvider(CultureInfo cultureInfo) : IResourceMessageProvider
     {
-        public CultureInfo CultureInfo { get; private set; }
+        private readonly ConcurrentDictionary<string, string> _resourceCache = new();
+        public CultureInfo CultureInfo { get; private set; } = cultureInfo;
 
-        public ResourceMessageProvider(CultureInfo cultureInfo)
+        public void LoadResources(Type type)
         {
-            CultureInfo = cultureInfo;
+            var namespaceName = type.Namespace;
+
+            var resourceManager = new ResourceManager($"{namespaceName}.Resources.{type.Name}", Assembly.GetExecutingAssembly());
+
+            var resourceSet = resourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true);
+
+            foreach (var entry in resourceSet)
+            {
+                if (entry is DictionaryEntry resourceEntry)
+                {
+                    _resourceCache.TryAdd($"{type.FullName}.{resourceEntry.Key}", resourceEntry.Value.ToString()!);
+                }
+            }
         }
 
         public string GetMessage<T>(string key, params object[] args)
@@ -23,21 +38,20 @@ namespace Application.Common.Resources
 
         public string GetMessage(Type type, string key, params object[] args)
         {
-            try
+            if (!_resourceCache.Any(r => r.Key.StartsWith(type.FullName)))
             {
-                var namespaceName = type.Namespace;
+                LoadResources(type);
+            }
 
-                var resourceManager = new ResourceManager($"{namespaceName}.Resources.{type.Name}", Assembly.GetExecutingAssembly());
+            var cacheKey = $"{type.FullName}.{key}";
 
-                var message = resourceManager.GetString(key, CultureInfo.CurrentUICulture) ?? string.Empty;
-
+            if (_resourceCache.TryGetValue(cacheKey, out var message))
+            {
                 return args.Length > 0 ? string.Format(message, args) : message;
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"An error has occured while getting a resource message. Message:{ex.Message}");
-                throw;
-            }
+
+            Debug.WriteLine($"Resource key '{key}' not found for type '{type.FullName}'.");
+            return string.Empty;
         }
     }
 }

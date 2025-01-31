@@ -32,7 +32,7 @@ namespace Application.Common.Mappings
 
                 if (methodInfo != null)
                 {
-                    methodInfo.Invoke(instance, new object[] { this });
+                    methodInfo.Invoke(instance, [this]);
                 }
                 else
                 {
@@ -44,7 +44,7 @@ namespace Application.Common.Mappings
                         {
                             var interfaceMethodInfo = @interface.GetMethod(mappingMethodName, argumentTypes);
 
-                            interfaceMethodInfo?.Invoke(instance, new object[] { this });
+                            interfaceMethodInfo?.Invoke(instance, [this]);
                         }
                     }
                 }

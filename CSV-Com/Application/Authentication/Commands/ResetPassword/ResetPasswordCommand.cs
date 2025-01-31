@@ -15,13 +15,8 @@ namespace Application.Authentication.Commands.ResetPassword
         public string NewPasswordRepeat { get; set; } = null!;
     }
 
-    public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand, ResetPasswordCommandDto>
+    public class ResetPasswordCommandHandler(IIdentityService identityService) : IRequestHandler<ResetPasswordCommand, ResetPasswordCommandDto>
     {
-        private readonly IIdentityService _identityService;
-        private readonly IEmailService _emailService;
-
-        public ResetPasswordCommandHandler(IIdentityService identityService, IEmailService emailService)
-        {
             _identityService = identityService;
             _emailService = emailService;
         }
@@ -59,7 +54,7 @@ namespace Application.Authentication.Commands.ResetPassword
                 return new ResetPasswordCommandDto
                 {
                     Success = false,
-                    Errors = new List<string> { ex.Message }
+                    Errors = [ex.Message]
                 };
             }
         }

@@ -32,6 +32,7 @@ import { Moment } from "moment";
 import moment from "moment";
 import { CountdownButton } from "components/common/countdown-button";
 import ResendTwoFactorAuthenticationTokenCommand from "types/model/resend-2fa-token/resend-2fa-token-command";
+import AccessTokenService from "utils/access-token-service";
 
 const Login2FA = () => {
     const COUNTDOWN_SECONDS: number = 60;
@@ -52,20 +53,8 @@ const Login2FA = () => {
     const [confirmMessage, setConfirmMessage] = useState<string>('');
     const [isConfirmPopupOneButtonOpen, setConfirmPopupOneButtonOpen] = useState<boolean>(false);
     const [confirmOnClose, setConfirmOnClose] = useState<() => void>(() => {});
-    const [login2FACommand, setLogin2FACommand] = useState<TwoFactorAuthenticationCommand>(initialLogin2FACommand);
-    const [bearertoken, setBearerToken] = useState<BearerToken | null>(sessionStorage.getItem('token') ? BearerToken.deserialize(sessionStorage.getItem('token')!) : null);
-    const [refreshtoken, setRefreshToken] = useState<string | null>(RefreshTokenService.getInstance().getRefreshToken() ? RefreshTokenService.getInstance().getRefreshToken() : null);
-    const [remainingSecondsTokenValid, setRemainingSecondsTokenValid] = useState<number>(parseInt(remainingtimeinseconds!, 10));
-    
-    useEffect(() => {
-        if(bearertoken) {
-            sessionStorage.setItem('token', BearerToken.serialize(bearertoken));
-        }
-
-        if(refreshtoken) {
-            RefreshTokenService.getInstance().setRefreshToken(refreshtoken);
-        }
-    }, [bearertoken, refreshtoken]);
+    const [login2FACommand, setLogin2FACommand] = useState<TwoFactorAuthenticationCommand>(initialLogin2FACommand);    
+    const [remainingSecondsTokenValid, setRemainingSecondsTokenValid] = useState<number>(parseInt(remainingtimeinseconds!, 10));    
 
     const [isErrorPopupOpen, setErrorPopupOpen] = useState<boolean>(false);
     const [cvsError, setCvsError] = useState<CVSError>(() => {
@@ -103,8 +92,7 @@ const Login2FA = () => {
         setConfirmPopupOneButtonOpen: React.Dispatch<React.SetStateAction<boolean>>,
         setConfirmOnClose: React.Dispatch<React.SetStateAction<() => void>>, 
         setCvsError: React.Dispatch<React.SetStateAction<CVSError>>, 
-        setErrorPopupOpen: React.Dispatch<React.SetStateAction<boolean>>, 
-        setBearerToken: React.Dispatch<React.SetStateAction<BearerToken | null>>) => {
+        setErrorPopupOpen: React.Dispatch<React.SetStateAction<boolean>>) => {
         if (apiResult.Ok) {           
             if(apiResult.ReturnObject?.success === true 
                 && apiResult.ReturnObject?.bearertoken
@@ -113,8 +101,8 @@ const Login2FA = () => {
                 setConfirmMessage('Inloggen succesvol.');
                 setConfirmPopupOneButtonOpen(true);
                 setConfirmOnClose(() => handleLoginConfirmedClick);
-                setBearerToken(new BearerToken(apiResult.ReturnObject.bearertoken));
-                setRefreshToken(apiResult.ReturnObject.refreshtoken);
+                AccessTokenService.getInstance().setAccessToken(new BearerToken(apiResult.ReturnObject.bearertoken));
+                RefreshTokenService.getInstance().setRefreshToken(apiResult.ReturnObject.refreshtoken);
             }
             else{
                 setCvsError({
@@ -161,7 +149,7 @@ const Login2FA = () => {
         try {
             let command: ResendTwoFactorAuthenticationTokenCommand = {
                 userid: userid!,
-                twofactorpendingtoken: sessionStorage.getItem('twofactorpendingtoken')!
+                twofactorpendingtoken: AccessTokenService.getInstance().getTwoFactorPendingToken()!
             }
 
             var apiResult = await resend2FAToken(command);
@@ -170,8 +158,7 @@ const Login2FA = () => {
                 const expiryDate = new Date(apiResult.ReturnObject.expiresat);                    
                 const remainingTimeInSeconds = Math.floor((expiryDate.getTime() - new Date().getTime()) / 1000);
                 setRemainingSecondsTokenValid(remainingTimeInSeconds);
-                sessionStorage.setItem('twofactorpendingtoken', apiResult.ReturnObject.twofactorpendingtoken);
-                handleLogin2FACommandInputChange('twofactorpendingtoken', apiResult.ReturnObject.twofactorpendingtoken);
+                AccessTokenService.getInstance().setTwoFactorPendingToken(apiResult.ReturnObject.twofactorpendingtoken);
                 
                 setConfirmMessage('Token is opnieuw verstuurd.');
                 setConfirmPopupOneButtonOpen(true);
@@ -255,8 +242,7 @@ const Login2FA = () => {
                                 setConfirmPopupOneButtonOpen,
                                 setConfirmOnClose,
                                 setCvsError, 
-                                setErrorPopupOpen, 
-                                setBearerToken)}
+                                setErrorPopupOpen)}
                             dataTestId='button.login'
                         />
 

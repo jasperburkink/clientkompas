@@ -11,22 +11,16 @@ namespace Application.Diagnoses.Commands.DeleteDiagnosis
         public int Id { get; init; }
     }
 
-    public class DeleteDiagnosisCommandHandler : IRequestHandler<DeleteDiagnosisCommand>
+    public class DeleteDiagnosisCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<DeleteDiagnosisCommand>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        public DeleteDiagnosisCommandHandler(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
-
         public async Task Handle(DeleteDiagnosisCommand request, CancellationToken cancellationToken)
         {
-            var diagnosis = await _unitOfWork.DiagnosisRepository.GetByIDAsync(request.Id, cancellationToken)
+            var diagnosis = await unitOfWork.DiagnosisRepository.GetByIDAsync(request.Id, cancellationToken)
                 ?? throw new NotFoundException(nameof(Diagnosis), request.Id);
 
-            await _unitOfWork.DiagnosisRepository.DeleteAsync(diagnosis);
+            await unitOfWork.DiagnosisRepository.DeleteAsync(diagnosis);
 
-            await _unitOfWork.SaveAsync(cancellationToken);
+            await unitOfWork.SaveAsync(cancellationToken);
         }
     }
 }
