@@ -28,9 +28,11 @@ namespace Application.UnitTests.Users.Queries.GetUserRoles
                 .Setup(service => service.GetAvailableUserRolesAsync())
                 .ReturnsAsync(roles);
 
+            var resourceString = "Test";
+
             _resourceMessageProviderMock
                 .Setup(provider => provider.GetMessage<GetUserRolesDto>(It.IsAny<string>()))
-                .Returns((string role) => $"{role}_Localized");
+                .Returns(resourceString);
 
             var query = new GetUserRolesQuery();
 
@@ -42,7 +44,7 @@ namespace Application.UnitTests.Users.Queries.GetUserRoles
             result.Should().HaveCount(roles.Count);
             result.Should().BeEquivalentTo(roles.Select(role => new GetUserRolesDto
             {
-                Name = $"{role}_Localized",
+                Name = resourceString,
                 Value = role
             }));
         }
