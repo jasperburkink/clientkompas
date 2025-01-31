@@ -59,17 +59,16 @@ namespace Application.UnitTests.Authentication.Commands.RequestResetPassword
         }
 
         [Fact]
-        public async Task Handle_SendResetPasswordEmailThrowsException_ErrorContainsExceptionMessage()
+        public async Task Handle_GetResetPasswordEmailToken_ErrorContainsExceptionMessage()
         {
             // Arrange
             var error = "This is an error!";
             var exception = new Exception(error);
 
             var identityServiceMock = new Mock<IIdentityService>();
-            identityServiceMock.Setup(mock => mock.ResetPasswordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ThrowsAsync(exception);
+            identityServiceMock.Setup(mock => mock.GetResetPasswordEmailToken(It.IsAny<string>())).ThrowsAsync(exception);
 
             var emailServiceMock = new Mock<IEmailService>();
-            emailServiceMock.Setup(mock => mock.SendEmailAsync(It.IsAny<EmailMessageDto>(), It.IsAny<string>(), It.IsAny<object>()));
 
             var handler = new RequestResetPasswordCommandHandler(identityServiceMock.Object, emailServiceMock.Object);
 
