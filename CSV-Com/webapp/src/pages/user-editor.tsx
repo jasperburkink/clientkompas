@@ -63,7 +63,6 @@ const UserEditor = () => {
 
     useEffect (() => {
         const getUserRoles = async() => {
-
             setStatus(StatusEnum.PENDING);
 
             setUserRoles(await fetchUserRoles());
@@ -182,7 +181,7 @@ const UserEditor = () => {
 
                         <LabelField text='Rol' required={true}>
                             <Dropdown 
-                                options={userRoles.map((userRole, i, ty ) => { 
+                                options={userRoles.map((userRole) => { 
                                         return {
                                             label: userRole.name,
                                             value: userRole.value 
