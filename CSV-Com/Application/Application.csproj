@@ -10,13 +10,10 @@
   <ItemGroup>
     <Compile Remove="Clients\Commands\DeleteClient\**" />
     <Compile Remove="Clients\Commands\UpdateClient\**" />
-    <Compile Remove="Users\**" />
     <EmbeddedResource Remove="Clients\Commands\DeleteClient\**" />
     <EmbeddedResource Remove="Clients\Commands\UpdateClient\**" />
-    <EmbeddedResource Remove="Users\**" />
     <None Remove="Clients\Commands\DeleteClient\**" />
     <None Remove="Clients\Commands\UpdateClient\**" />
-    <None Remove="Users\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +26,7 @@
     <Folder Include="MaritalStatuses\Commands\UpdateMaritalStatus\" />
     <Folder Include="MaritalStatuses\Queries\" />
     <Folder Include="Organizations\Commands\" />
+    <Folder Include="Users\Queries\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -139,6 +137,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>RefreshTokenValidationRules.resx</DependentUpon>
     </Compile>
+    <Compile Update="Common\Rules\Resources\UserValidationRules.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>UserValidationRules.resx</DependentUpon>
+    </Compile>
     <Compile Update="Common\Rules\Resources\WorkingContractValidationRules.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -227,6 +230,10 @@
     <EmbeddedResource Update="Common\Rules\Resources\RefreshTokenValidationRules.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>RefreshTokenValidationRules.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Rules\Resources\UserValidationRules.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>UserValidationRules.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Common\Rules\Resources\WorkingContractValidationRules.resx">
       <Generator>ResXFileCodeGenerator</Generator>

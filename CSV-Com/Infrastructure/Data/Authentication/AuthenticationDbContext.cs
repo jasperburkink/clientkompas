@@ -14,6 +14,8 @@ namespace Infrastructure.Data.Authentication
 
         public DbSet<TwoFactorPendingToken> TwoFactorPendingTokens { get; set; }
 
+        public DbSet<TemporaryPasswordToken> TemporaryPasswordTokens { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             var configurations = GetType().Assembly.GetTypes()

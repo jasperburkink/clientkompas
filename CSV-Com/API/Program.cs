@@ -27,13 +27,13 @@ if (app.Environment.IsDevelopment() || true) // <- TODO: for now we want this sc
     // Initialise and seed database
     using var scope = app.Services.CreateScope();
 
-    var initialiserAuthentication = scope.ServiceProvider.GetRequiredService<AuthenticationDbContextInitialiser>();
-    await initialiserAuthentication.InitialiseAsync();
-    await initialiserAuthentication.SeedAsync();
-
     var initialiserCVS = scope.ServiceProvider.GetRequiredService<CVSDbContextInitialiser>();
     await initialiserCVS.InitialiseAsync();
     await initialiserCVS.SeedAsync();
+
+    var initialiserAuthentication = scope.ServiceProvider.GetRequiredService<AuthenticationDbContextInitialiser>();
+    await initialiserAuthentication.InitialiseAsync();
+    await initialiserAuthentication.SeedAsync();
 }
 
 app.UseSwagger();

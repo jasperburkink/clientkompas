@@ -1,4 +1,4 @@
-﻿namespace Domain.Authentication.Constants
+﻿namespace Domain.CVS.Constants
 {
     public class UserConstants
     {
