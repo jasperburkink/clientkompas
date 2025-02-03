@@ -43,6 +43,11 @@ namespace Application.Users.Commands.SendTemporaryPasswordLinkCommand
 
             var cvsUser = unitOfWork.UserRepository.GetByID(authenticationUser.CVSUserId);
 
+            if (cvsUser == null)
+            {
+                return Result<SendTemporaryPasswordLinkCommandDto>.Failure("User not found.");
+            }
+
             // When token has been sent more than n times, send temporary password link with token to user.
             if (authenticationUser.TemporaryPasswordTokenCount <= MAX_TIMES_SEND_TEMP_PASSWORD_TOKEN)
             {

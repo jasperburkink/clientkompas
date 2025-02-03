@@ -1,9 +1,6 @@
-﻿using Application.Common.Mappings;
-using Domain.CVS.Domain;
-
-namespace Application.Users.Commands.SendTemporaryPasswordLinkCommand
+﻿namespace Application.Users.Commands.SendTemporaryPasswordLinkCommand
 {
-    public class SendTemporaryPasswordLinkCommandDto : IMapFrom<User>
+    public class SendTemporaryPasswordLinkCommandDto
     {
         public int UserId { get; set; }
     }
