@@ -9,7 +9,7 @@ using Domain.Authentication.Constants;
 using Domain.Authentication.Domain;
 using Domain.CVS.Domain;
 
-namespace Application.Users.Commands.SendTemporaryPasswordLinkCommand
+namespace Application.Users.Commands.SendTemporaryPasswordLink
 {
     [Authorize(Policy = Policies.UserManagement)]
     public record SendTemporaryPasswordLinkCommand : IRequest<Result<SendTemporaryPasswordLinkCommandDto>>

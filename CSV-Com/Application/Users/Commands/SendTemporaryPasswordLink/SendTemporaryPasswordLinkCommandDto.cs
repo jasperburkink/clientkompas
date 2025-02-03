@@ -1,4 +1,4 @@
-﻿namespace Application.Users.Commands.SendTemporaryPasswordLinkCommand
+﻿namespace Application.Users.Commands.SendTemporaryPasswordLink
 {
     public class SendTemporaryPasswordLinkCommandDto
     {

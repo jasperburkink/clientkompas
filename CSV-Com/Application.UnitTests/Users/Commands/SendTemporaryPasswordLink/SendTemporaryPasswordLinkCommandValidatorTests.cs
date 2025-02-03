@@ -1,7 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Interfaces.CVS;
 using Application.Common.Rules;
-using Application.Users.Commands.SendTemporaryPasswordLinkCommand;
+using Application.Users.Commands.SendTemporaryPasswordLink;
 using FluentValidation.TestHelper;
 using Moq;
 

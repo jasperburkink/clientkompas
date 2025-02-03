@@ -119,11 +119,14 @@ namespace Infrastructure.Identity
             ArgumentNullException.ThrowIfNull(userId);
             ArgumentNullException.ThrowIfNull(tokenValue);
 
-            var token = tokenType == "RefreshToken"
-                ? await authenticationDbContext.RefreshTokens.FirstOrDefaultAsync(rt => rt.Value == tokenValue && rt.UserId == userId && !rt.IsUsed && !rt.IsRevoked)
-                : tokenType == "TwoFactorPendingToken"
-                    ? (IToken?)await authenticationDbContext.TwoFactorPendingTokens.FirstOrDefaultAsync(t => t.Value == tokenValue && t.UserId == userId && !t.IsUsed && !t.IsRevoked)
-                    : throw new ArgumentException("Invalid token type", nameof(tokenType));
+            var token = tokenType switch
+            {
+                "RefreshToken" => (IToken?)await authenticationDbContext.RefreshTokens.FirstOrDefaultAsync(rt => rt.Value == tokenValue && rt.UserId == userId && !rt.IsUsed && !rt.IsRevoked),
+                "TwoFactorPendingToken" => await authenticationDbContext.TwoFactorPendingTokens.FirstOrDefaultAsync(t => t.Value == tokenValue && t.UserId == userId && !t.IsUsed && !t.IsRevoked),
+                "TemporaryPasswordToken" => await authenticationDbContext.TemporaryPasswordTokens.FirstOrDefaultAsync(t => t.Value == tokenValue && t.UserId == userId && !t.IsUsed && !t.IsRevoked),
+                _ => throw new ArgumentException("Invalid token type", nameof(tokenType))
+            };
+
             if (token == null || token.IsExpired)
             {
                 return false;
@@ -166,6 +169,11 @@ namespace Infrastructure.Identity
                 return await authenticationDbContext.TwoFactorPendingTokens
                     .FirstOrDefaultAsync(t => t.Value == tokenValue);
             }
+            else if (tokenType == "TemporaryPasswordToken")
+            {
+                return await authenticationDbContext.TemporaryPasswordTokens
+                    .FirstOrDefaultAsync(t => t.Value == tokenValue);
+            }
             else
             {
                 throw new ArgumentException("Invalid token type", nameof(tokenType));
@@ -183,6 +191,12 @@ namespace Infrastructure.Identity
             else if (tokenType == "TwoFactorPendingToken")
             {
                 return await authenticationDbContext.TwoFactorPendingTokens
+                    .Where(t => t.UserId == userId && !t.IsUsed && !t.IsRevoked)
+                    .ToListAsync<IToken>();
+            }
+            else if (tokenType == "TemporaryPasswordToken")
+            {
+                return await authenticationDbContext.TemporaryPasswordTokens
                     .Where(t => t.UserId == userId && !t.IsUsed && !t.IsRevoked)
                     .ToListAsync<IToken>();
             }

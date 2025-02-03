@@ -1,7 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Interfaces.CVS;
-using Application.Users.Commands.SendTemporaryPasswordLinkCommand;
+using Application.Users.Commands.SendTemporaryPasswordLink;
 using AutoMapper;
 using Domain.Authentication.Domain;
 using Domain.CVS.Domain;

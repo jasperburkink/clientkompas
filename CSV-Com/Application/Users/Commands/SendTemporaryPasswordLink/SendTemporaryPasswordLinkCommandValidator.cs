@@ -2,7 +2,7 @@
 using Application.Common.Interfaces.CVS;
 using Application.Common.Rules;
 
-namespace Application.Users.Commands.SendTemporaryPasswordLinkCommand
+namespace Application.Users.Commands.SendTemporaryPasswordLink
 {
     public class SendTemporaryPasswordLinkCommandValidator : AbstractValidator<SendTemporaryPasswordLinkCommand>
     {
