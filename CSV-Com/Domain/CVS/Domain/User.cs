@@ -15,5 +15,9 @@ namespace Domain.CVS.Domain
         public required string TelephoneNumber { get; set; }
 
         public required bool IsDeactivated { get; set; }
+
+        public User? CreatedByUser { get; set; }
+
+        public int? CreatedByUserId { get; set; }
     }
 }

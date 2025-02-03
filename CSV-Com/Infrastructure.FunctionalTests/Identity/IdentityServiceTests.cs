@@ -60,7 +60,7 @@ namespace Infrastructure.FunctionalTests.Identity
             var password = "Password123!";
 
             // Act
-            var (result, userId) = await _identityService.CreateUserAsync(userName, password);
+            var (result, userId) = await _identityService.CreateUserAsync(userName, password, 0);
 
             // Assert
             result.Succeeded.Should().BeTrue();
@@ -83,7 +83,7 @@ namespace Infrastructure.FunctionalTests.Identity
             var password = "Password123!";
 
             // Create user
-            var (result, _) = await _identityService.CreateUserAsync(userName, password);
+            var (result, _) = await _identityService.CreateUserAsync(userName, password, 0);
             result.Succeeded.Should().BeTrue();
 
             // Act
@@ -103,7 +103,7 @@ namespace Infrastructure.FunctionalTests.Identity
             var password = "WrongPassword";
 
             // Create user
-            var (result, _) = await _identityService.CreateUserAsync(userName, "Password123!");
+            var (result, _) = await _identityService.CreateUserAsync(userName, "Password123!", 0);
             result.Succeeded.Should().BeTrue();
 
             // Act
@@ -126,7 +126,7 @@ namespace Infrastructure.FunctionalTests.Identity
             var password = "Password123!";
 
             // Create user
-            var (result, userId) = await _identityService.CreateUserAsync(userName, password);
+            var (result, userId) = await _identityService.CreateUserAsync(userName, password, 0);
             result.Succeeded.Should().BeTrue();
 
             // Act
@@ -158,7 +158,7 @@ namespace Infrastructure.FunctionalTests.Identity
             var password = "Password123!";
 
             // Create user
-            var (result, userId) = await _identityService.CreateUserAsync(userName, password);
+            var (result, userId) = await _identityService.CreateUserAsync(userName, password, 0);
             result.Succeeded.Should().BeTrue();
 
             // Act
@@ -194,7 +194,7 @@ namespace Infrastructure.FunctionalTests.Identity
             var role = Roles.Administrator;
 
             // Create user
-            var (result, userId) = await _identityService.CreateUserAsync(userName, password);
+            var (result, userId) = await _identityService.CreateUserAsync(userName, password, 0);
             result.Succeeded.Should().BeTrue();
 
             // Assign role
@@ -216,7 +216,7 @@ namespace Infrastructure.FunctionalTests.Identity
             var password = "Password123!";
 
             // Create user
-            var (result, userId) = await _identityService.CreateUserAsync(userName, password);
+            var (result, userId) = await _identityService.CreateUserAsync(userName, password, 0);
             result.Succeeded.Should().BeTrue();
 
             // Act
@@ -235,7 +235,7 @@ namespace Infrastructure.FunctionalTests.Identity
             var userName = "test@example.com";
             var password = "Password123!";
 
-            var (result, userId) = await _identityService.CreateUserAsync(userName, password);
+            var (result, userId) = await _identityService.CreateUserAsync(userName, password, 0);
 
             // Act
             var token = await _identityService.Get2FATokenAsync(userId);
@@ -264,7 +264,7 @@ namespace Infrastructure.FunctionalTests.Identity
             var userName = "test@example.com";
             var password = "Password123!";
 
-            var (result, userId) = await _identityService.CreateUserAsync(userName, password);
+            var (result, userId) = await _identityService.CreateUserAsync(userName, password, 0);
             var token = await _identityService.Get2FATokenAsync(userId);
 
             // Act
@@ -283,7 +283,7 @@ namespace Infrastructure.FunctionalTests.Identity
             var password = "Password123!";
             var role = nameof(Roles.Coach);
 
-            var (result, userId) = await _identityService.CreateUserAsync(userName, password);
+            var (result, userId) = await _identityService.CreateUserAsync(userName, password, 0);
             await _roleManager.CreateAsync(new IdentityRole(role));
             await _userManager.AddToRoleAsync(await _userManager.FindByIdAsync(userId), role);
 
@@ -318,7 +318,7 @@ namespace Infrastructure.FunctionalTests.Identity
             var userName = "test@example.com";
             var password = "Password123!";
 
-            var (result, userId) = await _identityService.CreateUserAsync(userName, password);
+            var (result, userId) = await _identityService.CreateUserAsync(userName, password, 0);
             var token = "WrongToken";
 
             // Act
@@ -327,6 +327,25 @@ namespace Infrastructure.FunctionalTests.Identity
             // Assert
             resultLogin.Should().NotBeNull();
             resultLogin.Succeeded.Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task GetUserRolesAsync_CorrectFlow_UserShouldHaveRoles()
+        {
+            // Arrange
+            var userName = "test@example.com";
+            var password = "Password123!";
+            var role = nameof(Roles.Coach);
+
+            var (result, userId) = await _identityService.CreateUserAsync(userName, password, 0);
+            await _roleManager.CreateAsync(new IdentityRole(role));
+            await _userManager.AddToRoleAsync(await _userManager.FindByIdAsync(userId), role);
+
+            // Act
+            var roles = await _identityService.GetUserRolesAsync(userId);
+
+            // Assert
+            roles.Should().NotBeNullOrEmpty().And.Contain(role);
         }
     }
 }

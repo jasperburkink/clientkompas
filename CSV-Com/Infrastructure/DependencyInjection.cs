@@ -106,12 +106,12 @@ namespace Infrastructure
                     policy.RequireRole([Roles.SystemOwner, Roles.Licensee, Roles.Administrator, Roles.Coach]);
                 });
 
-                options.AddPolicy(Policies.CoachManagement, policy =>
+                options.AddPolicy(Policies.UserManagement, policy =>
                 {
                     policy.RequireRole([Roles.SystemOwner, Roles.Licensee, Roles.Administrator]);
                 });
 
-                options.AddPolicy(Policies.CoachRead, policy =>
+                options.AddPolicy(Policies.UserRead, policy =>
                 {
                     policy.RequireRole([Roles.SystemOwner, Roles.Licensee, Roles.Administrator, Roles.Coach]);
                 });

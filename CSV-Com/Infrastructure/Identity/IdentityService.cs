@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Models;
+using Domain.Authentication.Constants;
 using Domain.Authentication.Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -26,13 +27,17 @@ namespace Infrastructure.Identity
             return user?.UserName;
         }
 
-        public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password)
+        public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password, int cvsUserId)
         {
             var user = new AuthenticationUser
             {
                 UserName = userName,
                 Email = userName,
-                TwoFactorEnabled = TWOFACTORAUTHENTICATION_DEFAULT_ENABLED // NOTE: 
+                TwoFactorEnabled = TWOFACTORAUTHENTICATION_DEFAULT_ENABLED, // NOTE: Two-factor authentication is turned on by default
+                CVSUserId = cvsUserId,
+                HasTemporaryPassword = true,
+                TemporaryPasswordExpiryDate = DateTime.UtcNow.Add(TemporaryPasswordTokenConstants.TOKEN_TIMEOUT),
+                TemporaryPasswordTokenCount = 1
             };
 
             var result = await userManager.CreateAsync(user, password);
@@ -178,6 +183,31 @@ namespace Infrastructure.Identity
             var roles = await userManager.GetRolesAsync(user);
 
             return new LoggedInResult(tokenValid, user, roles);
+        }
+
+        public async Task<int?> GetCurrentLoggedInUserId()
+        {
+            var user = await signInManager.UserManager.GetUserAsync(signInManager.Context.User);
+            return user?.CVSUserId;
+        }
+
+        public async Task<Result> AddUserToRoleAsync(string userId, string role)
+        {
+            var user = await userManager.FindByIdAsync(userId)
+                ?? throw new Application.Common.Exceptions.NotFoundException("AuthenticationUser not found.", userId);
+
+            userManager.AddToRoleAsync(user, role);
+
+            return Result.Success();
+        }
+
+        public async Task<IList<string>> GetUserRolesAsync(string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+
+            return user == null
+                ? throw new Application.Common.Exceptions.NotFoundException("AuthenticationUser not found.", userId)
+                : await userManager.GetRolesAsync(user);
         }
     }
 }
