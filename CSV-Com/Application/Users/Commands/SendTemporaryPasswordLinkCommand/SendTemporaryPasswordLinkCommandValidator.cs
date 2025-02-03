@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Application.Common.Interfaces;
+using Application.Common.Interfaces.CVS;
+using Application.Common.Rules;
 
 namespace Application.Users.Commands.SendTemporaryPasswordLinkCommand
 {
-    internal class SendTemporaryPasswordLinkCommandValidator
+    public class SendTemporaryPasswordLinkCommandValidator : AbstractValidator<SendTemporaryPasswordLinkCommand>
     {
+        public SendTemporaryPasswordLinkCommandValidator(IUnitOfWork unitOfWork, IResourceMessageProvider resourceMessageProvider)
+        {
+            RuleFor(dto => dto.UserId).ValidateUserId(resourceMessageProvider);
+        }
     }
 }

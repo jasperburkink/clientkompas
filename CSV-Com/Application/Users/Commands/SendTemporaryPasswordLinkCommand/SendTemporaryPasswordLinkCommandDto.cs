@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Application.Common.Mappings;
+using Domain.CVS.Domain;
 
 namespace Application.Users.Commands.SendTemporaryPasswordLinkCommand
 {
-    internal class SendTemporaryPasswordLinkCommandDto
+    public class SendTemporaryPasswordLinkCommandDto : IMapFrom<User>
     {
+        public int UserId { get; set; }
     }
 }
