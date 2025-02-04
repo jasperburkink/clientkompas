@@ -16,7 +16,7 @@ namespace TestData.User
             return new AutoFaker<Domain.CVS.Domain.User>()
                 .StrictMode(false)
                 .RuleFor(u => u.Id, 0)
-                .RuleFor(u => u.EmailAddress, FakerConfiguration.Faker.Person.Email)
+                .RuleFor(u => u.EmailAddress, faker.Person.Email)
                 .RuleFor(u => u.FirstName, faker.Person.FirstName)
                 .RuleFor(u => u.PrefixLastName, f =>
                 {

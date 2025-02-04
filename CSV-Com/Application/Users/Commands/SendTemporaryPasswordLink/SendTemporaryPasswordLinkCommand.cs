@@ -29,6 +29,11 @@ namespace Application.Users.Commands.SendTemporaryPasswordLink
 
             var authenticationUser = await identityService.GetUserAsync(request.UserId);
 
+            if (authenticationUser == null)
+            {
+                return Result<SendTemporaryPasswordLinkCommandDto>.Failure("User not found.");
+            }
+
             if (!authenticationUser.HasTemporaryPassword)
             {
                 return Result<SendTemporaryPasswordLinkCommandDto>.Failure("This user has not got a temporary password.");
@@ -38,14 +43,19 @@ namespace Application.Users.Commands.SendTemporaryPasswordLink
 
             if (currentToken == null)
             {
-                return Result<SendTemporaryPasswordLinkCommandDto>.Failure("Temporary password token not found for user.");
+                return Result<SendTemporaryPasswordLinkCommandDto>.Failure("No valid temporary password token found for user.");
             }
 
-            var cvsUser = unitOfWork.UserRepository.GetByID(authenticationUser.CVSUserId);
+            var cvsUser = (await unitOfWork.UserRepository.GetAsync(user => user.Id == authenticationUser.CVSUserId, includeProperties: "CreatedByUser")).FirstOrDefault();
 
             if (cvsUser == null)
             {
                 return Result<SendTemporaryPasswordLinkCommandDto>.Failure("User not found.");
+            }
+
+            if (string.IsNullOrEmpty(cvsUser.EmailAddress))
+            {
+                return Result<SendTemporaryPasswordLinkCommandDto>.Failure("No emailaddress found for this user.");
             }
 
             // When token has been sent more than n times, send temporary password link with token to user.
@@ -80,12 +90,7 @@ namespace Application.Users.Commands.SendTemporaryPasswordLink
             var newToken = await tokenService.GenerateTokenAsync(authenticationUser, "TemporaryPasswordToken"); // TODO: name in constants
             var link = new Uri($"https://localhost:3000/ChangePassword/{WebUtility.UrlEncode(newToken)}");
 
-            var emailAddress = authenticationUser.UserName ?? authenticationUser.Email;
-
-            if (string.IsNullOrEmpty(emailAddress))
-            {
-                return Result.Failure("No emailaddress found for this user.");
-            }
+            var emailAddress = cvsUser.EmailAddress;
 
             await emailService.SendEmailAsync(emailAddress, "Gebruikersgegevens",
                 $"""
@@ -114,20 +119,23 @@ namespace Application.Users.Commands.SendTemporaryPasswordLink
                 return Result.Failure("User which create this user not found.");
             }
 
-            var emailAddress = cvsUser.CreatedByUser.EmailAddress;
+            var emailAddress = cvsUser.EmailAddress;
+            var emailAddressContact = cvsUser.CreatedByUser.EmailAddress;
 
-            if (string.IsNullOrEmpty(emailAddress))
+            if (string.IsNullOrEmpty(emailAddressContact))
             {
-                return Result.Failure("No emailaddress found for this user.");
+                return Result.Failure("No emailaddress found for contactperson.");
             }
 
-            await emailService.SendEmailAsync(emailAddress, "Gebruikersgegevens",
+            var prefixLastNameContactPerson = string.IsNullOrEmpty(cvsUser.PrefixLastName) ? (cvsUser.PrefixLastName + " ") : "";
+
+            await emailService.SendEmailAsync(emailAddress, "Tijdelijk wachtwoord link verlopen",
                 $"""
                     Beste {cvsUser.FirstName},
 
                     Uw link om uw tijdelijke wachtwoord te kunnen resetten is helaas verlopen.
-                    Mocht u een nieuwe link willen ontvangen, dan verzoeken wij u om contact op te nemen met {cvsUser.CreatedByUser.FirstName} {cvsUser.PrefixLastName + " " ?? ""}{cvsUser.LastName}.
-                    Dat kan via het volgende e-mailadres: {emailAddress}
+                    Mocht u een nieuwe link willen ontvangen, dan verzoeken wij u om contact op te nemen met {cvsUser.CreatedByUser.FirstName} {prefixLastNameContactPerson}{cvsUser.LastName}.
+                    Dat kan via het volgende e-mailadres: {emailAddressContact}
                     """); // TODO: Change to new emailmodule
 
             return Result.Success();
