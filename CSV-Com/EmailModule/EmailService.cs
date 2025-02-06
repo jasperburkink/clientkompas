@@ -1,6 +1,4 @@
-﻿using System.Collections.Concurrent;
-using System.Diagnostics;
-using Application.Common.Interfaces;
+﻿using Application.Common.Interfaces;
 using Application.Common.Models;
 using AutoMapper;
 using MailKit.Net.Smtp;
@@ -11,133 +9,48 @@ namespace EmailModule
 {
     public class EmailService : IEmailService
     {
-        private readonly IMapper _mapper;
-        private readonly ISmtpClient _smtpClient;
-        private readonly IRazorLightEngine _razorLightEngine;
-        private static readonly ConcurrentDictionary<string, DateTime> s_emailSendTimes = new();
-
-        public readonly List<(EmailMessage, DateTime)> MailMessagesSent = [];
-        public readonly List<(EmailMessage, DateTime, string)> FailedMailMessagesSent = [];
-        private readonly System.Timers.Timer _timer = new(60000);
-
-        public EmailService(IMapper mapper, ISmtpClient smtpClient)
-        {
-            _timer.Elapsed += OnTimerElapsed;
-            _timer.Enabled = true;
-            _timer.Start();
-            _mapper = mapper;
-            _razorLightEngine = new RazorLightEngineBuilder()
+        private readonly IRazorLightEngine _razorLightEngine = new RazorLightEngineBuilder()
                 .UseEmbeddedResourcesProject(typeof(EmailService).Assembly)
                 .UseMemoryCachingProvider()
                 .Build();
-        }
+        private readonly ISmtpClient _smtpClient;
+        private readonly IMapper _mapper;
 
-        private void OnTimerElapsed(object? sender, System.Timers.ElapsedEventArgs e)
+        public EmailService(ISmtpClient smtpClient)
         {
-            throw new NotImplementedException();
+            _smtpClient = smtpClient;
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<EmailMessageDto, EmailMessage>());
+            _mapper = config.CreateMapper();
         }
 
         public async Task SendEmailAsync<T>(EmailMessageDto messageDto, string templateName, T model)
         {
-            try
+            var message = _mapper.Map<EmailMessage>(messageDto);
+
+            var body = await _razorLightEngine.CompileRenderAsync($"EmailModule.Templates.{templateName}.cshtml", model);
+
+            var email = new MimeMessage();
+            email.From.Add(new MailboxAddress("CliëntKompas", EmailConfig.Username));
+
+            foreach (var recipient in message.Recipients)
             {
-                var message = _mapper.Map<EmailMessage>(messageDto);
-
-                var body = await _razorLightEngine.CompileRenderAsync($"EmailModule.Templates.{templateName}.cshtml", model);
-
-                var email = new MimeMessage();
-                email.From.Add(new MailboxAddress("CliëntKompas", EmailConfig.Username));
-
-                foreach (var recipient in message.Recipients)
-                {
-                    if (IsRateLimited(recipient))
-                    {
-                        Debug.WriteLine($"Rate limit exceeded for {recipient}");
-                        continue;
-                    }
-
-                    email.To.Add(MailboxAddress.Parse(recipient));
-                    UpdateRateLimit(recipient);
-                }
-
-                email.Subject = messageDto.Subject;
-                email.Body = new TextPart("html") { Text = body };
-
-                // zet ergens anders neer
-                //using var client = new SmtpClient(); 
-                _smtpClient.ServerCertificateValidationCallback = (s, c, h, e) => true;
-
-                await _smtpClient.ConnectAsync(EmailConfig.SmtpServer, EmailConfig.Port, false);
-
-                if (EmailConfig.RequiresAuthentication)
-                {
-                    await _smtpClient.AuthenticateAsync(EmailConfig.Username, EmailConfig.Password);
-                }
-
-                if (IsDuplicateEmail(messageDto))
-                {
-                    Debug.WriteLine("Duplicate email detected");
-                    return;
-                }
-
-                await _smtpClient.SendAsync(email);
-                await _smtpClient.DisconnectAsync(true);
-
-                MailMessagesSent.Add((message, DateTime.Now));
-
-
+                email.To.Add(MailboxAddress.Parse(recipient));
             }
-            catch (Exception ex)
+
+            email.Subject = messageDto.Subject;
+            email.Body = new TextPart("html") { Text = body };
+
+            _smtpClient.ServerCertificateValidationCallback = (s, c, h, e) => true;
+
+            await _smtpClient.ConnectAsync(EmailConfig.SmtpServer, EmailConfig.Port, false);
+
+            if (EmailConfig.RequiresAuthentication)
             {
-                Debug.WriteLine(ex.Message);
+                await _smtpClient.AuthenticateAsync(EmailConfig.Username, EmailConfig.Password);
             }
-        }
 
-        private void WriteLog(EmailMessage email, string result, string recipient = "", string error = "")
-        {
-            var logPath = "EmailModule.Logging";
-
-            using var writer = new StreamWriter(logPath, true);
-            {
-                writer.WriteLine($"{DateTime.Now} | {email.Id} | {EmailConfig.Username} | {recipient} | {email.Subject} | {result} | {error}");
-            }
-        }
-
-
-
-        private bool IsDuplicateEmail(EmailMessageDto email)
-        {
-            foreach (var (sentmail, _) in MailMessagesSent)
-            {
-                if (sentmail.IsDuplicateEmail(email))
-                {
-                    Debug.WriteLine("Duplicate email detected");
-                    var failedEmail = _mapper.Map<EmailMessage>(email);
-                    FailedMailMessagesSent.Add((failedEmail, DateTime.Now, "Duplicate Email"));
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        private bool IsRateLimited(string recipient)
-        {
-            if (s_emailSendTimes.TryGetValue(recipient, out var lastSent))
-            {
-                // TO DO: Periodiek logging en dan worden de lijsten leeg gemaakt en weg gescheven naar de log
-                var timeSinceLastSent = DateTime.UtcNow - lastSent;
-                if (timeSinceLastSent < TimeSpan.FromMinutes(1))
-                {
-                    //MailMessagesSent.Clear();
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        private void UpdateRateLimit(string recipient)
-        {
-            s_emailSendTimes[recipient] = DateTime.UtcNow;
+            await _smtpClient.SendAsync(email);
+            await _smtpClient.DisconnectAsync(true);
         }
     }
 }

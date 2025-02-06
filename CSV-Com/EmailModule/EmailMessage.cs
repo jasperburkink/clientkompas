@@ -8,29 +8,17 @@ namespace EmailModule
     {
         public required Guid Id { get; set; }
 
-        public required List<string> Recipients { get; set; } = new();
+        public required List<string> Recipients { get; set; } = [];
 
-        public List<string> Attachments { get; set; } = new();
+        public List<string> Attachments { get; set; } = [];
 
-        public string Subject { get; set; }
+        public required string Subject { get; set; }
 
-        public string Body { get; set; }
-
-        public void AddAttachment(string attachment)
-        {
-            Attachments.Add(attachment);
-        }
+        public string? Body { get; set; }
 
         public void Mapping(Profile profile)
         {
-
             profile.CreateMap<EmailMessageDto, EmailMessage>();
         }
-
-        public bool IsDuplicateEmail(EmailMessageDto email)
-        {
-            return email.Id == Id;
-        }
-
     }
 }
