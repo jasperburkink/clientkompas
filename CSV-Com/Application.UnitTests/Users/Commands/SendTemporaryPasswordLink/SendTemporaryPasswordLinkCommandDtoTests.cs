@@ -1,4 +1,5 @@
-﻿using Application.Common.Interfaces;
+﻿using System.Linq.Expressions;
+using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Interfaces.CVS;
 using Application.Users.Commands.SendTemporaryPasswordLink;
@@ -65,8 +66,8 @@ namespace Application.UnitTests.Users.Commands.SendTemporaryPasswordLink
             _tokenServiceMock.Setup(t => t.GetValidTokensByUserAsync(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync([new TemporaryPasswordToken { CreatedAt = DateTime.UtcNow, ExpiresAt = DateTime.UtcNow.AddDays(7), IsRevoked = false, IsUsed = false }]);
 
-            _unitOfWorkMock.Setup(uw => uw.UserRepository.GetByID(It.IsAny<int>()))
-                .Returns(_cvsUser);
+            _unitOfWorkMock.Setup(uw => uw.UserRepository.GetAsync(It.IsAny<Expression<Func<User, bool>>>(), It.IsAny<Func<IQueryable<User>, IOrderedQueryable<User>>>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync([_cvsUser]);
 
             _handler = new SendTemporaryPasswordLinkCommandHandler(
                 _unitOfWorkMock.Object,
