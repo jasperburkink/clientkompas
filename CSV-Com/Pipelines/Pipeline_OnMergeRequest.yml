@@ -5,7 +5,7 @@ workflow:
 variables:  
   DOTNET_IMAGE: "mcr.microsoft.com/dotnet/sdk:9.0" # Default image   for gitlabrunner
   DOCKER_IMAGE: "docker:stable"
-  NODE_IMAGE: "node:lts"  
+  NODE_IMAGE: "node:22"  
   SOLUTION_FOLDER: "CSV-Com"
   SOLUTION: "$SOLUTION_FOLDER/CSV-Com.sln"
   NODE_FOLDER: "webapp"
