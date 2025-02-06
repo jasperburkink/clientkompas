@@ -110,8 +110,8 @@ namespace Application.UnitTests.Users.Commands.SendTemporaryPasswordLink
         public async Task Handle_UserNotFound_ShouldReturnFailure()
         {
             // Arrange
-            _unitOfWorkMock.Setup(uw => uw.UserRepository.GetByID(It.IsAny<int>()))
-                .Returns((User)null);
+            _unitOfWorkMock.Setup(uw => uw.UserRepository.GetAsync(It.IsAny<Expression<Func<User, bool>>>(), It.IsAny<Func<IQueryable<User>, IOrderedQueryable<User>>>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync([]);
 
             var command = new SendTemporaryPasswordLinkCommand { UserId = _authUser.Id };
 
