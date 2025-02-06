@@ -26,6 +26,12 @@ namespace Infrastructure.Data.CVS.Configuration
                 .HasMaxLength(UserConstants.LastNameMaxLength)
                 .IsRequired();
 
+            builder.Property(c => c.FullName)
+                .HasMaxLength(UserConstants.FullnameMaxLength);
+
+            builder.HasIndex(c => c.FullName)
+                .IsFullText();
+
             builder.Property(u => u.EmailAddress)
                 .HasMaxLength(UserConstants.EmailAddressMaxLength)
                 .IsRequired();
