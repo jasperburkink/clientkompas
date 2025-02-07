@@ -7,6 +7,7 @@ using Application.Users.Commands.CreateUser;
 using AutoMapper;
 using Domain.Authentication.Domain;
 using Domain.CVS.Domain;
+using Infrastructure.Identity;
 using Moq;
 
 namespace Application.UnitTests.Users.Commands.CreateUser

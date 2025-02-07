@@ -9,7 +9,7 @@ namespace Infrastructure.Identity
 {
     public class TokenService(IAuthenticationDbContext authenticationDbContext, IHasher hasher) : ITokenService
     {
-        public async Task<string> GenerateTokenAsync(AuthenticationUser user, string tokenType)
+        public async Task<string> GenerateTokenAsync(IAuthenticationUser user, string tokenType)
         {
             ArgumentNullException.ThrowIfNull(user);
 

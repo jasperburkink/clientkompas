@@ -85,7 +85,7 @@ namespace Application.Users.Commands.SendTemporaryPasswordLink
             });
         }
 
-        private static async Task<Result> HandleResendTemporaryPasswordLink(IIdentityService identityService, ITokenService tokenService, IEmailService emailService, AuthenticationUser authenticationUser, User cvsUser)
+        private static async Task<Result> HandleResendTemporaryPasswordLink(IIdentityService identityService, ITokenService tokenService, IEmailService emailService, IAuthenticationUser authenticationUser, User cvsUser)
         {
             var newToken = await tokenService.GenerateTokenAsync(authenticationUser, "TemporaryPasswordToken"); // TODO: name in constants
             var link = new Uri($"https://localhost:3000/ChangePassword/{WebUtility.UrlEncode(newToken)}");

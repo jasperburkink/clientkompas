@@ -1,6 +1,7 @@
 ﻿using Application.Authentication.Commands.RequestResetPassword;
 using Domain.Authentication.Domain;
 using Infrastructure.Data.Authentication;
+using Infrastructure.Identity;
 using TestData;
 using TestData.Authentication;
 
@@ -14,8 +15,8 @@ namespace Application.FunctionalTests.Authentication.Commands.RequestResetPasswo
         [SetUp]
         public async Task SetUp()
         {
-            ITestDataGenerator<AuthenticationUser> testDataGenerator = new AuthenticationUserDataGenerator();
-            _authenticationUser = testDataGenerator.Create();
+            ITestDataGenerator<IAuthenticationUser> testDataGenerator = new AuthenticationUserDataGenerator();
+            _authenticationUser = testDataGenerator.Create() as AuthenticationUser;
             _authenticationUser.Email = FakerConfiguration.Faker.Person.Email;
 
             await AddAsync<AuthenticationUser, AuthenticationDbContext>(_authenticationUser);

@@ -13,7 +13,7 @@ namespace Infrastructure.Identity
         public const string SECRET_KEY = "this_is_a_secure_secret_key_with_32_characters!"; // TODO: Secret to KeyVault
         public const string CLAIM_NAME_CVSUSERID = "CVSUserId";
 
-        public Task<string> GenerateBearerTokenAsync(AuthenticationUser user, IList<string> roles)
+        public Task<string> GenerateBearerTokenAsync(IAuthenticationUser user, IList<string> roles)
         {
             ArgumentNullException.ThrowIfNull(user);
             ArgumentNullException.ThrowIfNull(roles);

@@ -15,8 +15,8 @@ namespace Application.FunctionalTests.Authentication.Commands.ResendTwoFactorAut
         [SetUp]
         public async Task SetUp()
         {
-            ITestDataGenerator<AuthenticationUser> testDataGeneratorAuthenticationUser = new AuthenticationUserDataGenerator();
-            _authenticationUser = testDataGeneratorAuthenticationUser.Create();
+            ITestDataGenerator<IAuthenticationUser> testDataGeneratorAuthenticationUser = new AuthenticationUserDataGenerator();
+            _authenticationUser = testDataGeneratorAuthenticationUser.Create() as AuthenticationUser;
 
             var initialPassword = Utils.GeneratePassword();
             var id = await CreateUserAsync(_authenticationUser.Email!, initialPassword);

@@ -2,6 +2,7 @@
 using Application.Common.Exceptions;
 using Domain.Authentication.Constants;
 using Domain.Authentication.Domain;
+using Infrastructure.Identity;
 using TestData;
 using TestData.Authentication;
 
@@ -17,8 +18,8 @@ namespace Application.FunctionalTests.Authentication.Commands.ResetPassword
         {
             UseMocks = true;
 
-            ITestDataGenerator<AuthenticationUser> testDataGeneratorAuthenticationUser = new AuthenticationUserDataGenerator();
-            _authenticationUser = testDataGeneratorAuthenticationUser.Create();
+            ITestDataGenerator<IAuthenticationUser> testDataGeneratorAuthenticationUser = new AuthenticationUserDataGenerator();
+            _authenticationUser = testDataGeneratorAuthenticationUser.Create() as AuthenticationUser;
 
             var initialPassword = Utils.GeneratePassword();
             await CreateUserAsync(_authenticationUser.Email!, initialPassword);

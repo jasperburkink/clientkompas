@@ -1,6 +1,7 @@
 ﻿using Application.Authentication.Commands.RefreshToken;
 using Domain.Authentication.Domain;
 using Infrastructure.Data.Authentication;
+using Infrastructure.Identity;
 using TestData;
 using TestData.Authentication;
 
@@ -15,8 +16,8 @@ namespace Application.FunctionalTests.Authentication.Commands.RefreshToken
         [SetUp]
         public async Task SetUp()
         {
-            ITestDataGenerator<AuthenticationUser> testDataGeneratorAuthenticationUser = new AuthenticationUserDataGenerator();
-            _authenticationUser = testDataGeneratorAuthenticationUser.Create();
+            ITestDataGenerator<IAuthenticationUser> testDataGeneratorAuthenticationUser = new AuthenticationUserDataGenerator();
+            _authenticationUser = testDataGeneratorAuthenticationUser.Create() as AuthenticationUser;
             await AddAsync<AuthenticationUser, AuthenticationDbContext>(_authenticationUser);
 
             _refreshToken = new Infrastructure.Identity.RefreshToken

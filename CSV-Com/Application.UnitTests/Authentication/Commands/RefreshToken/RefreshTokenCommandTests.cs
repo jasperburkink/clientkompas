@@ -2,6 +2,7 @@
 using Application.Authentication.Commands.RefreshToken;
 using Application.Common.Interfaces.Authentication;
 using Domain.Authentication.Domain;
+using Infrastructure.Identity;
 using Moq;
 
 namespace Application.UnitTests.Authentication.Commands.RefreshToken

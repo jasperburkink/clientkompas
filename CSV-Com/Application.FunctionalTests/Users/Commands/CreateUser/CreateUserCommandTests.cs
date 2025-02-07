@@ -1,8 +1,8 @@
 ﻿using Application.Users.Commands.CreateUser;
 using Domain.Authentication.Constants;
-using Domain.Authentication.Domain;
 using Domain.CVS.Domain;
 using Infrastructure.Data.Authentication;
+using Infrastructure.Identity;
 using TestData;
 using TestData.User.Commands;
 
@@ -64,7 +64,7 @@ namespace Application.FunctionalTests.Users.Commands.CreateUser
             var result = await SendAsync(_command);
             var authenticationUser = (await GetAsync<AuthenticationUser, AuthenticationDbContext>(user => user.CVSUserId == result.Value.Id)).First();
 
-            var userRoles = await IdentityService.GetUserRolesAsync(authenticationUser.Id);
+            var userRoles = await Testing.IdentityService.GetUserRolesAsync(authenticationUser.Id);
 
             // Assert
             userRoles.Should().Contain(_command.RoleName);

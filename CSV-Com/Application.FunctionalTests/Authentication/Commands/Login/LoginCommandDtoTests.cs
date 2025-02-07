@@ -20,8 +20,8 @@ namespace Application.FunctionalTests.Authentication.Commands.Login
 
             _password = PasswordGenerator.GenerateSecurePassword(16);
 
-            ITestDataGenerator<AuthenticationUser> testDataGeneratorAuthenticationUser = new AuthenticationUserDataGenerator();
-            _authenticationUser = testDataGeneratorAuthenticationUser.Create();
+            ITestDataGenerator<IAuthenticationUser> testDataGeneratorAuthenticationUser = new AuthenticationUserDataGenerator();
+            _authenticationUser = testDataGeneratorAuthenticationUser.Create() as AuthenticationUser;
 
             var initialPassword = Utils.GeneratePassword();
             var id = await CreateUserAsync(_authenticationUser.Email!, initialPassword);

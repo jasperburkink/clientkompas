@@ -4,8 +4,8 @@ using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Models;
 using Domain.Authentication.Constants;
-using Domain.Authentication.Domain;
 using FluentAssertions;
+using Infrastructure.Data.Authentication;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -18,9 +18,10 @@ namespace Infrastructure.UnitTests.Identity
     {
         private readonly Mock<UserManager<AuthenticationUser>> _userManagerMock;
         private readonly Mock<SignInManager<AuthenticationUser>> _signInManagerMock;
-        private readonly Mock<RoleManager<IdentityRole>> _roleManagerMock;
+        private readonly Mock<RoleManager<AuthenticationRole>> _roleManagerMock;
         private readonly Mock<IUserClaimsPrincipalFactory<AuthenticationUser>> _userClaimsPrincipalFactoryMock;
         private readonly Mock<IAuthorizationService> _authorizationServiceMock;
+        private readonly Mock<IAuthenticationDbContext> _authenticationDbContext;
         private readonly Mock<IHasher> _hasherMock;
         private readonly Mock<ITokenService> _refreshTokenServiceMock;
         private readonly Mock<IEmailService> _emailServiceMock;
@@ -29,9 +30,10 @@ namespace Infrastructure.UnitTests.Identity
         {
             _userManagerMock = new Mock<UserManager<AuthenticationUser>>(Mock.Of<IUserStore<AuthenticationUser>>(), null, null, null, null, null, null, null, null);
             _signInManagerMock = new Mock<SignInManager<AuthenticationUser>>(_userManagerMock.Object, Mock.Of<IHttpContextAccessor>(), Mock.Of<IUserClaimsPrincipalFactory<AuthenticationUser>>(), null, null, null, null);
-            _roleManagerMock = new Mock<RoleManager<IdentityRole>>(Mock.Of<IRoleStore<IdentityRole>>(), null, null, null, null);
+            _roleManagerMock = new Mock<RoleManager<AuthenticationRole>>(Mock.Of<IRoleStore<IdentityRole>>(), null, null, null, null);
             _userClaimsPrincipalFactoryMock = new Mock<IUserClaimsPrincipalFactory<AuthenticationUser>>();
             _authorizationServiceMock = new Mock<IAuthorizationService>();
+            _authenticationDbContext = new Mock<IAuthenticationDbContext>();
             _hasherMock = new Mock<IHasher>();
             _refreshTokenServiceMock = new Mock<ITokenService>();
             _emailServiceMock = new Mock<IEmailService>();
@@ -58,6 +60,7 @@ namespace Infrastructure.UnitTests.Identity
                 _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
+                _authenticationDbContext.Object,
                 _hasherMock.Object,
                 _refreshTokenServiceMock.Object,
                 _emailServiceMock.Object
@@ -107,6 +110,7 @@ namespace Infrastructure.UnitTests.Identity
                 _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
+                _authenticationDbContext.Object,
                 _hasherMock.Object,
                 _refreshTokenServiceMock.Object,
                 _emailServiceMock.Object
@@ -142,6 +146,7 @@ namespace Infrastructure.UnitTests.Identity
                  _roleManagerMock.Object,
                  _userClaimsPrincipalFactoryMock.Object,
                  _authorizationServiceMock.Object,
+                 _authenticationDbContext.Object,
                  _hasherMock.Object,
                  _refreshTokenServiceMock.Object,
                 _emailServiceMock.Object
@@ -174,6 +179,7 @@ namespace Infrastructure.UnitTests.Identity
                 _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
+                _authenticationDbContext.Object,
                 _hasherMock.Object,
                 _refreshTokenServiceMock.Object,
                 _emailServiceMock.Object
@@ -202,6 +208,7 @@ namespace Infrastructure.UnitTests.Identity
                 _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
+                _authenticationDbContext.Object,
                 _hasherMock.Object,
                 _refreshTokenServiceMock.Object,
                 _emailServiceMock.Object
@@ -238,6 +245,7 @@ namespace Infrastructure.UnitTests.Identity
                 _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
+                _authenticationDbContext.Object,
                 _hasherMock.Object,
                 _refreshTokenServiceMock.Object,
                 _emailServiceMock.Object
@@ -275,6 +283,7 @@ namespace Infrastructure.UnitTests.Identity
                 _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
+                _authenticationDbContext.Object,
                 _hasherMock.Object,
                 _refreshTokenServiceMock.Object,
                 _emailServiceMock.Object
@@ -306,6 +315,7 @@ namespace Infrastructure.UnitTests.Identity
                 _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
+                _authenticationDbContext.Object,
                 _hasherMock.Object,
                 _refreshTokenServiceMock.Object,
                 _emailServiceMock.Object
@@ -333,6 +343,7 @@ namespace Infrastructure.UnitTests.Identity
                 _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
+                _authenticationDbContext.Object,
                 _hasherMock.Object,
                 _refreshTokenServiceMock.Object,
                 _emailServiceMock.Object
@@ -361,6 +372,7 @@ namespace Infrastructure.UnitTests.Identity
                 _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
+                _authenticationDbContext.Object,
                 _hasherMock.Object,
                 _refreshTokenServiceMock.Object,
                 _emailServiceMock.Object
@@ -386,6 +398,7 @@ namespace Infrastructure.UnitTests.Identity
                 _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
+                _authenticationDbContext.Object,
                 _hasherMock.Object,
                 _refreshTokenServiceMock.Object,
                 _emailServiceMock.Object
@@ -417,6 +430,7 @@ namespace Infrastructure.UnitTests.Identity
                 _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
+                _authenticationDbContext.Object,
                 _hasherMock.Object,
                 _refreshTokenServiceMock.Object,
                 _emailServiceMock.Object
@@ -448,6 +462,7 @@ namespace Infrastructure.UnitTests.Identity
                 _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
+                _authenticationDbContext.Object,
                 _hasherMock.Object,
                 _refreshTokenServiceMock.Object,
                 _emailServiceMock.Object
@@ -474,6 +489,7 @@ namespace Infrastructure.UnitTests.Identity
                 _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
+                _authenticationDbContext.Object,
                 _hasherMock.Object,
                 _refreshTokenServiceMock.Object,
                 _emailServiceMock.Object
@@ -507,6 +523,7 @@ namespace Infrastructure.UnitTests.Identity
                 _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
+                _authenticationDbContext.Object,
                 _hasherMock.Object,
                 _refreshTokenServiceMock.Object,
                 _emailServiceMock.Object
@@ -536,6 +553,7 @@ namespace Infrastructure.UnitTests.Identity
                 _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
+                _authenticationDbContext.Object,
                 _hasherMock.Object,
                 _refreshTokenServiceMock.Object,
                 _emailServiceMock.Object
@@ -570,6 +588,7 @@ namespace Infrastructure.UnitTests.Identity
                 _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
+                _authenticationDbContext.Object,
                 _hasherMock.Object,
                 _refreshTokenServiceMock.Object,
                 _emailServiceMock.Object
@@ -596,6 +615,7 @@ namespace Infrastructure.UnitTests.Identity
                 _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
+                _authenticationDbContext.Object,
                 _hasherMock.Object,
                 _refreshTokenServiceMock.Object,
                 _emailServiceMock.Object
@@ -632,6 +652,7 @@ namespace Infrastructure.UnitTests.Identity
                 _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
+                _authenticationDbContext.Object,
                 _hasherMock.Object,
                 _refreshTokenServiceMock.Object,
                 _emailServiceMock.Object
@@ -663,6 +684,7 @@ namespace Infrastructure.UnitTests.Identity
                 _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
+                _authenticationDbContext.Object,
                 _hasherMock.Object,
                 _refreshTokenServiceMock.Object,
                 _emailServiceMock.Object
@@ -680,7 +702,7 @@ namespace Infrastructure.UnitTests.Identity
         public async Task GetAvailableUserRolesAsync_CorrectFlow_ReturnsMultipleRoles()
         {
             // Arrange
-            var rolesDefault = new List<IdentityRole> { new(Roles.Administrator), new(Roles.Licensee), new(Roles.SystemOwner), new(Roles.Coach) };
+            var rolesDefault = new List<AuthenticationRole> { new(Roles.Administrator), new(Roles.Licensee), new(Roles.SystemOwner), new(Roles.Coach) };
 
             _roleManagerMock.Setup(mock => mock.Roles)
                 .Returns(rolesDefault.AsQueryable());
@@ -691,6 +713,7 @@ namespace Infrastructure.UnitTests.Identity
                 _roleManagerMock.Object,
                 _userClaimsPrincipalFactoryMock.Object,
                 _authorizationServiceMock.Object,
+                _authenticationDbContext.Object,
                 _hasherMock.Object,
                 _refreshTokenServiceMock.Object,
                 _emailServiceMock.Object

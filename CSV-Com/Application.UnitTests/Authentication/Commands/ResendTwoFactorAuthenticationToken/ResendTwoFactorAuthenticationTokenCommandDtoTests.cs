@@ -23,8 +23,8 @@ namespace Application.UnitTests.Authentication.Commands.ResendTwoFactorAuthentic
 
         public ResendTwoFactorAuthenticationTokenCommandDtoTests()
         {
-            ITestDataGenerator<AuthenticationUser> testDataGenerator = new AuthenticationUserDataGenerator();
-            _user = testDataGenerator.Create();
+            ITestDataGenerator<IAuthenticationUser> testDataGenerator = new AuthenticationUserDataGenerator();
+            _user = testDataGenerator.Create() as AuthenticationUser;
 
             _token = new TwoFactorPendingToken
             {

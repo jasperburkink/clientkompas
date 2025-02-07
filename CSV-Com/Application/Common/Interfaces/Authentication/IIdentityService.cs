@@ -23,7 +23,7 @@ namespace Application.Common.Interfaces.Authentication
 
         Task<bool> UserExistsAsync(string userId);
 
-        Task<AuthenticationUser> GetUserAsync(string userId);
+        Task<IAuthenticationUser> GetUserAsync(string userId);
 
         Task<Result> SendResetPasswordEmailAsync(string emailAddress);
 
@@ -43,6 +43,8 @@ namespace Application.Common.Interfaces.Authentication
 
         Task<IList<string>> GetAvailableUserRolesAsync();
 
-        Task UpdateUserAsync(AuthenticationUser user);
+        Task UpdateUserAsync(IAuthenticationUser user);
+
+        Task<IList<IAuthenticationUser>> GetUsersInRolesAsync(string role, params string[] roles);
     }
 }

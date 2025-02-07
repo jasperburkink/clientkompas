@@ -3,7 +3,6 @@ using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Models;
 using Domain.Authentication.Constants;
-using Domain.Authentication.Domain;
 using FluentAssertions;
 using Infrastructure.Data.Authentication;
 using Infrastructure.Identity;
@@ -19,7 +18,7 @@ namespace Infrastructure.FunctionalTests.Identity
     {
         private readonly IdentityService _identityService;
         private readonly UserManager<AuthenticationUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<AuthenticationRole> _roleManager;
 
         public IdentityServiceIntegrationTests()
         {
@@ -40,14 +39,17 @@ namespace Infrastructure.FunctionalTests.Identity
             var serviceProvider = serviceCollection.Services.BuildServiceProvider();
 
             _userManager = serviceProvider.GetRequiredService<UserManager<AuthenticationUser>>();
-            _roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            _roleManager = serviceProvider.GetRequiredService<RoleManager<AuthenticationRole>>();
+            var authenticationDbContext = serviceProvider.GetRequiredService<IAuthenticationDbContext>();
             var signInManager = serviceProvider.GetRequiredService<SignInManager<AuthenticationUser>>();
             var authorizationService = serviceProvider.GetRequiredService<IAuthorizationService>();
             var hasher = serviceProvider.GetRequiredService<IHasher>();
             var refreshtokenService = serviceProvider.GetRequiredService<ITokenService>();
             var emailService = serviceProvider.GetRequiredService<IEmailService>();
 
-            _identityService = new IdentityService(_userManager, signInManager, _roleManager, null, authorizationService, hasher, refreshtokenService, emailService);
+            _identityService = new IdentityService(_userManager, signInManager, _roleManager, null,
+                authorizationService, authenticationDbContext, hasher,
+                refreshtokenService, emailService);
         }
 
         #region CreateUserAsync
@@ -198,7 +200,7 @@ namespace Infrastructure.FunctionalTests.Identity
             result.Succeeded.Should().BeTrue();
 
             // Assign role
-            await _roleManager.CreateAsync(new IdentityRole(role));
+            await _roleManager.CreateAsync(new AuthenticationRole(role));
             await _userManager.AddToRoleAsync(await _userManager.FindByIdAsync(userId), role);
 
             // Act
@@ -284,7 +286,7 @@ namespace Infrastructure.FunctionalTests.Identity
             var role = nameof(Roles.Coach);
 
             var (result, userId) = await _identityService.CreateUserAsync(userName, password, 0);
-            await _roleManager.CreateAsync(new IdentityRole(role));
+            await _roleManager.CreateAsync(new AuthenticationRole(role));
             await _userManager.AddToRoleAsync(await _userManager.FindByIdAsync(userId), role);
 
             var token = await _identityService.Get2FATokenAsync(userId);
@@ -338,7 +340,7 @@ namespace Infrastructure.FunctionalTests.Identity
             var role = nameof(Roles.Coach);
 
             var (result, userId) = await _identityService.CreateUserAsync(userName, password, 0);
-            await _roleManager.CreateAsync(new IdentityRole(role));
+            await _roleManager.CreateAsync(new AuthenticationRole(role));
             await _userManager.AddToRoleAsync(await _userManager.FindByIdAsync(userId), role);
 
             // Act
@@ -357,7 +359,7 @@ namespace Infrastructure.FunctionalTests.Identity
 
             foreach (var role in roles)
             {
-                await _roleManager.CreateAsync(new IdentityRole(role));
+                await _roleManager.CreateAsync(new AuthenticationRole(role));
             }
 
             // Act

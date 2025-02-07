@@ -2,7 +2,6 @@
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Interfaces.CVS;
 using Domain.Authentication.Constants;
-using Domain.Authentication.Domain;
 using Infrastructure.Data.Authentication;
 using Infrastructure.Data.CVS;
 using Infrastructure.Data.Interceptor;

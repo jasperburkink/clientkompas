@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Domain.Authentication.Domain;
+using Microsoft.AspNetCore.Identity;
 
-namespace Domain.Authentication.Domain
+namespace Infrastructure.Identity
 {
-    public class AuthenticationUser : IdentityUser
+    public class AuthenticationUser : IdentityUser, IAuthenticationUser
     {
         public int CVSUserId { get; set; }
 

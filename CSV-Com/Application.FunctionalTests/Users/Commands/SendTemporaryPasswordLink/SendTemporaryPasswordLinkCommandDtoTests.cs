@@ -13,7 +13,7 @@ namespace Application.FunctionalTests.Users.Commands.SendTemporaryPasswordLink
 {
     public class SendTemporaryPasswordLinkCommandDtoTests : BaseTestFixture
     {
-        private ITestDataGenerator<AuthenticationUser> _testDataGeneratorAuthenticationUser;
+        private ITestDataGenerator<IAuthenticationUser> _testDataGeneratorAuthenticationUser;
         private ITestDataGenerator<User> _testDataGeneratorCvsUser;
         private ITestDataGenerator<SendTemporaryPasswordLinkCommand> _testDataGeneratorSendTemporaryPasswordLinkCommand;
         private SendTemporaryPasswordLinkCommand _command;
@@ -32,7 +32,7 @@ namespace Application.FunctionalTests.Users.Commands.SendTemporaryPasswordLink
             _cvsUser.CreatedByUserId = _cvsParentUser.Id;
             await AddAsync(_cvsUser);
 
-            var authenticationUser = _testDataGeneratorAuthenticationUser.Create();
+            var authenticationUser = _testDataGeneratorAuthenticationUser.Create() as AuthenticationUser;
             authenticationUser.HasTemporaryPassword = true;
             authenticationUser.CVSUserId = _cvsUser.Id;
             await AddAsync<AuthenticationUser, AuthenticationDbContext>(authenticationUser);
@@ -73,7 +73,7 @@ namespace Application.FunctionalTests.Users.Commands.SendTemporaryPasswordLink
         public async Task Handle_UserWithoutTemporaryPassword_DtoShouldBeNull()
         {
             // Arrange
-            var authenticationUserWithoutTempPassword = _testDataGeneratorAuthenticationUser.Create();
+            var authenticationUserWithoutTempPassword = _testDataGeneratorAuthenticationUser.Create() as AuthenticationUser;
             authenticationUserWithoutTempPassword.HasTemporaryPassword = false;
             authenticationUserWithoutTempPassword.CVSUserId = _cvsUser.Id;
             await AddAsync<AuthenticationUser, AuthenticationDbContext>(authenticationUserWithoutTempPassword);

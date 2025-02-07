@@ -3,17 +3,20 @@ using Application.Common.Interfaces.Authentication;
 using Application.Common.Models;
 using Domain.Authentication.Constants;
 using Domain.Authentication.Domain;
+using Infrastructure.Data.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Identity
 {
     public class IdentityService(
         UserManager<AuthenticationUser> userManager,
         SignInManager<AuthenticationUser> signInManager,
-        RoleManager<IdentityRole> roleManager,
+        RoleManager<AuthenticationRole> roleManager,
         IUserClaimsPrincipalFactory<AuthenticationUser> userClaimsPrincipalFactory,
         IAuthorizationService authorizationService,
+        IAuthenticationDbContext authenticationDbContext,
         IHasher hasher,
         ITokenService refreshTokenService,
         IEmailService emailService) : IIdentityService
@@ -124,7 +127,7 @@ namespace Infrastructure.Identity
             return await userManager.FindByIdAsync(userId) != null;
         }
 
-        public async Task<AuthenticationUser> GetUserAsync(string userId) => await userManager.FindByIdAsync(userId);
+        public async Task<IAuthenticationUser> GetUserAsync(string userId) => await userManager.FindByIdAsync(userId);
 
         public async Task<Result> SendResetPasswordEmailAsync(string emailAddress)
         {
@@ -233,9 +236,28 @@ namespace Infrastructure.Identity
                 .ToList());
         }
 
-        public async Task UpdateUserAsync(AuthenticationUser user)
+        public async Task UpdateUserAsync(IAuthenticationUser user)
         {
-            await userManager.UpdateAsync(user);
+            if (user is not AuthenticationUser authUser)
+            {
+                throw new InvalidOperationException("User is not of type AuthenticationUser");
+            }
+
+            await userManager.UpdateAsync(authUser);
+        }
+
+        public async Task<IList<IAuthenticationUser>> GetUsersInRolesAsync(string role, params string[] roles)
+        {
+            var allRoles = new HashSet<string>(roles) { role };
+
+            return await (from user in authenticationDbContext.Users
+                          join userRole in authenticationDbContext.UserRoles on user.Id equals userRole.UserId
+                          join roleEntity in authenticationDbContext.Roles on userRole.RoleId equals roleEntity.Id
+                          where allRoles.Contains(roleEntity.Name)
+                          select user)
+                      .Distinct()
+                      .Cast<IAuthenticationUser>()
+                      .ToListAsync();
         }
     }
 }

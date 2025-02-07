@@ -1,6 +1,7 @@
 ﻿using Application.Authentication.Commands.TwoFactorAuthentication;
 using Domain.Authentication.Domain;
 using Infrastructure.Data.Authentication;
+using Infrastructure.Identity;
 
 namespace Application.FunctionalTests.Authentication.Commands.TwoFactorAuthentication
 {

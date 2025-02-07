@@ -1,8 +1,8 @@
 ﻿using Application.Common.Interfaces.Authentication;
 using Application.Common.Interfaces.CVS;
 using Domain.Authentication.Constants;
-using Domain.Authentication.Domain;
 using Domain.CVS.Domain;
+using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -109,7 +109,7 @@ namespace Infrastructure.Data.Authentication
 
                 if (!string.IsNullOrWhiteSpace(userName))
                 {
-                    await userManager.AddToRolesAsync(user, [userName]); // TODO: move the addroles to the indetityservice and remove usermanager from this class
+                    await userManager.AddToRolesAsync((AuthenticationUser)user, [userName]); // TODO: move the addroles to the indetityservice and remove usermanager from this class
                 }
             }
         }

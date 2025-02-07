@@ -6,6 +6,7 @@ using Domain.Authentication.Constants;
 using Domain.Authentication.Domain;
 using Infrastructure.Data.Authentication;
 using Infrastructure.Data.CVS;
+using Infrastructure.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -24,8 +25,8 @@ namespace Application.FunctionalTests
     {
         private readonly DbConnection _connectionCvs = connectionCvs;
         private readonly DbConnection _connectionAuthentication = connectionAuthentication;
-        private static readonly ITestDataGenerator<AuthenticationUser> s_testDataGeneratorAuthenticationUser = new AuthenticationUserDataGenerator();
-        public static readonly AuthenticationUser AuthenticationUser = s_testDataGeneratorAuthenticationUser.Create();
+        private static readonly ITestDataGenerator<IAuthenticationUser> s_testDataGeneratorAuthenticationUser = new AuthenticationUserDataGenerator();
+        public static readonly AuthenticationUser AuthenticationUser = s_testDataGeneratorAuthenticationUser.Create() as AuthenticationUser;
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {

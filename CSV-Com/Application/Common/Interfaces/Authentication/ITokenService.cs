@@ -4,7 +4,7 @@ namespace Application.Common.Interfaces.Authentication
 {
     public interface ITokenService
     {
-        Task<string> GenerateTokenAsync(AuthenticationUser user, string tokenType);
+        Task<string> GenerateTokenAsync(IAuthenticationUser user, string tokenType);
 
         Task<bool> ValidateTokenAsync(string userId, string tokenValue, string tokenType);
 
