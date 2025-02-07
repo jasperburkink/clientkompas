@@ -26,7 +26,6 @@
     <Folder Include="MaritalStatuses\Commands\UpdateMaritalStatus\" />
     <Folder Include="MaritalStatuses\Queries\" />
     <Folder Include="Organizations\Commands\" />
-    <Folder Include="Users\Queries\SearchUsers\" />
   </ItemGroup>
 
   <ItemGroup>
