@@ -76,9 +76,11 @@ namespace Infrastructure
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services
-                .AddDefaultIdentity<AuthenticationUser>()
-                .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<AuthenticationDbContext>();
+                .AddIdentity<AuthenticationUser, AuthenticationRole>()
+                .AddEntityFrameworkStores<AuthenticationDbContext>()
+                .AddRoleManager<RoleManager<AuthenticationRole>>()
+                .AddUserManager<UserManager<AuthenticationUser>>()
+                .AddDefaultTokenProviders();
 
             services.AddHttpContextAccessor();
 
