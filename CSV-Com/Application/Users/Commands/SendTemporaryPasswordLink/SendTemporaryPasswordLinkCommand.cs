@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Application.Common.Guards;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Interfaces.CVS;
@@ -8,6 +9,7 @@ using Ardalis.GuardClauses;
 using Domain.Authentication.Constants;
 using Domain.Authentication.Domain;
 using Domain.CVS.Domain;
+using Microsoft.Extensions.Configuration;
 
 namespace Application.Users.Commands.SendTemporaryPasswordLink
 {
@@ -18,7 +20,7 @@ namespace Application.Users.Commands.SendTemporaryPasswordLink
     }
 
     public class SendTemporaryPasswordLinkCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IIdentityService identityService,
-        ITokenService tokenService, IPasswordService passwordService, IEmailService emailService)
+        ITokenService tokenService, IPasswordService passwordService, IEmailService emailService, IConfiguration configuration)
         : IRequestHandler<SendTemporaryPasswordLinkCommand, Result<SendTemporaryPasswordLinkCommandDto>>
     {
         private const int MAX_TIMES_SEND_TEMP_PASSWORD_TOKEN = 1;
@@ -29,9 +31,11 @@ namespace Application.Users.Commands.SendTemporaryPasswordLink
 
             var authenticationUser = await identityService.GetUserAsync(request.UserId);
 
-            if (authenticationUser == null)
+            var authenticationUserResult = Guard.Against.NotNull(authenticationUser);
+
+            if (!authenticationUserResult.Succeeded)
             {
-                return Result<SendTemporaryPasswordLinkCommandDto>.Failure("User not found.");
+                return Result<SendTemporaryPasswordLinkCommandDto>.Failure(authenticationUserResult.Errors);
             }
 
             if (!authenticationUser.HasTemporaryPassword)
@@ -40,20 +44,22 @@ namespace Application.Users.Commands.SendTemporaryPasswordLink
             }
 
             var currentToken = (await tokenService.GetValidTokensByUserAsync(authenticationUser.Id, "TemporaryPasswordToken")).FirstOrDefault(); // TODO: name in constants
+            var currentTokenResult = Guard.Against.NotNull(currentToken, "No valid temporary password token found for user.");
 
-            if (currentToken == null)
+            if (!currentTokenResult.Succeeded)
             {
-                return Result<SendTemporaryPasswordLinkCommandDto>.Failure("No valid temporary password token found for user.");
+                return Result<SendTemporaryPasswordLinkCommandDto>.Failure(currentTokenResult.Errors);
             }
 
             var cvsUser = (await unitOfWork.UserRepository.GetAsync(user => user.Id == authenticationUser.CVSUserId, includeProperties: "CreatedByUser")).FirstOrDefault();
+            var cvsUserResult = Guard.Against.NotNull(cvsUser);
 
-            if (cvsUser == null)
+            if (!cvsUserResult.Succeeded)
             {
-                return Result<SendTemporaryPasswordLinkCommandDto>.Failure("User not found.");
+                return Result<SendTemporaryPasswordLinkCommandDto>.Failure(cvsUserResult.Errors);
             }
 
-            if (string.IsNullOrEmpty(cvsUser.EmailAddress))
+            if (string.IsNullOrEmpty(cvsUser!.EmailAddress))
             {
                 return Result<SendTemporaryPasswordLinkCommandDto>.Failure("No emailaddress found for this user.");
             }
@@ -61,7 +67,7 @@ namespace Application.Users.Commands.SendTemporaryPasswordLink
             // When token has been sent more than n times, send temporary password link with token to user.
             if (authenticationUser.TemporaryPasswordTokenCount <= MAX_TIMES_SEND_TEMP_PASSWORD_TOKEN)
             {
-                var result = await HandleResendTemporaryPasswordLink(identityService, tokenService, emailService, authenticationUser, cvsUser);
+                var result = await HandleResendTemporaryPasswordLink(identityService, tokenService, emailService, configuration, authenticationUser, cvsUser);
 
                 if (!result.Succeeded)
                 {
@@ -85,10 +91,18 @@ namespace Application.Users.Commands.SendTemporaryPasswordLink
             });
         }
 
-        private static async Task<Result> HandleResendTemporaryPasswordLink(IIdentityService identityService, ITokenService tokenService, IEmailService emailService, AuthenticationUser authenticationUser, User cvsUser)
+        private static async Task<Result> HandleResendTemporaryPasswordLink(IIdentityService identityService, ITokenService tokenService, IEmailService emailService, IConfiguration configuration, AuthenticationUser authenticationUser, User cvsUser)
         {
             var newToken = await tokenService.GenerateTokenAsync(authenticationUser, "TemporaryPasswordToken"); // TODO: name in constants
-            var link = new Uri($"https://localhost:3000/ChangePassword/{WebUtility.UrlEncode(newToken)}");
+
+            var baseUrl = configuration.GetValue<string>("Urls:ChangePassword");
+            var baseUrlResult = Guard.Against.NotNull(baseUrl);
+            if (!baseUrlResult.Succeeded)
+            {
+                return Result.Failure(baseUrlResult.Errors);
+            }
+
+            var link = new Uri($"{baseUrlResult.Value}{WebUtility.UrlEncode(newToken)}");
 
             var emailAddress = cvsUser.EmailAddress;
 
