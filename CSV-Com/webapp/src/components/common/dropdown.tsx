@@ -5,7 +5,7 @@ import { ValidationError } from 'types/common/validation-error';
 
 export interface DropdownObject {
     label: string;
-    value: number;
+    value: any;
 }
 
 interface IDropDownProps {
@@ -13,19 +13,19 @@ interface IDropDownProps {
     className?: string;
     required: boolean;
     inputfieldname: string;
-    value?: number;
-    onChange?: (value: number) => void;
+    value?: any;
+    onChange?: (value: any) => void;
     dataTestId?: string;
     errors? :ValidationError[];
 }
 
-const OPTION_TEXT = 'Kies uit de lijst'
+const OPTION_TEXT = 'Kies uit de lijst';
 
 export const Dropdown = (props: IDropDownProps) => (  
     <div className={`dropdown-container ${props.className}`} >
         <select name={props.inputfieldname} className={`dropdown ${props.errors ? 'error' : ''}`} required={props.required} value={props.value}
             onChange={(e) => {
-                const selectedValue = parseInt(e.target.value);
+                const selectedValue = e.target.value;
                 props.onChange?.(selectedValue);
             }}
             data-testid={props.dataTestId}>

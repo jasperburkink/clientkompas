@@ -5,6 +5,7 @@
         bool Succeeded { get; }
 
         string[] Errors { get; }
-    }
 
+        string ErrorMessage { get; }
+    }
 }

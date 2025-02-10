@@ -82,6 +82,9 @@ namespace Application.UnitTests.Users.Commands.CreateUser
             _identityServiceMock.Setup(s => s.CreateUserAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
                 .ReturnsAsync((Result.Success(), "newUserId"));
 
+            _identityServiceMock.Setup(s => s.AddUserToRoleAsync(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(Result.Success());
+
             _tokenServiceMock.Setup(s => s.GenerateTokenAsync(It.IsAny<AuthenticationUser>(), It.IsAny<string>()))
                 .ReturnsAsync("generatedToken");
 

@@ -34,38 +34,56 @@ namespace Application.Users.Commands.CreateUser
 
         public async Task<Result<CreateUserCommandDto>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            var currentLoggedInUserId = await GetCurrentLoggedInUserId(identityService);
+            try
+            {
+                var currentLoggedInUserResult = await GetCurrentLoggedInUserId(identityService);
+                if (!currentLoggedInUserResult.Succeeded)
+                {
+                    return Result<CreateUserCommandDto>.Failure(currentLoggedInUserResult.Errors);
+                }
 
-            var cvsUser = await CreateCVSUser(unitOfWork, request, currentLoggedInUserId, cancellationToken);
+                var cvsUserResult = await CreateCVSUser(unitOfWork, request, currentLoggedInUserResult.Value, cancellationToken);
+                if (!cvsUserResult.Succeeded)
+                {
+                    return Result<CreateUserCommandDto>.Failure(cvsUserResult.Errors);
+                }
 
-            var password = passwordService.GeneratePassword(DEFAULT_PASSWORD_LENGTH);
+                var password = passwordService.GeneratePassword(DEFAULT_PASSWORD_LENGTH);
 
-            var authenticationUserId = await CreateAuthenticationUser(identityService, request, cvsUser, password, cancellationToken);
+                var authenticationUserResult = await CreateAuthenticationUser(identityService, request, cvsUserResult.Value, password, cancellationToken);
+                if (!authenticationUserResult.Succeeded)
+                {
+                    return Result<CreateUserCommandDto>.Failure(authenticationUserResult.Errors);
+                }
 
-            var authenticationUser = await identityService.GetUserAsync(authenticationUserId);
+                var authenticationUser = await identityService.GetUserAsync(authenticationUserResult.Value);
 
-            var link = await CreateChangePasswordLink(tokenService, authenticationUser);
+                var link = await CreateChangePasswordLink(tokenService, authenticationUser);
 
-            await SendEmail(emailService, request, password, link);
+                await SendEmail(emailService, request, password, link);
 
-            return Result.Success(mapper.Map<CreateUserCommandDto>(cvsUser));
+                return Result.Success(mapper.Map<CreateUserCommandDto>(cvsUserResult.Value));
+            }
+            catch (Exception ex)
+            {
+                return Result<CreateUserCommandDto>.Failure(ex.Message);
+            }
         }
 
-        private async Task<string> CreateAuthenticationUser(IIdentityService identityService, CreateUserCommand request, User user, string password, CancellationToken cancellationToken)
+        private async Task<Result<T>> CheckAndReturnFailure<T>(Task<Result<T>> resultTask)
         {
-            var (result, userId) = await identityService.CreateUserAsync(request.EmailAddress, password, user.Id);
-
+            var result = await resultTask;
             if (!result.Succeeded)
             {
-                await RemoveUser(user, cancellationToken);
-                Result.Failure($"Something went wrong while createing an authentication user with email '{request.EmailAddress}'.");
+                // Retourneer de failure direct.
+                return Result<T>.Failure(result.Errors);
             }
 
-            await identityService.AddUserToRoleAsync(userId, request.RoleName);
-            return userId;
+            return result;
         }
 
-        private static async Task<User> CreateCVSUser(IUnitOfWork unitOfWork, CreateUserCommand request, int? currentLoggedInUserId, CancellationToken cancellationToken)
+
+        private static async Task<Result<User>> CreateCVSUser(IUnitOfWork unitOfWork, CreateUserCommand request, int? currentLoggedInUserId, CancellationToken cancellationToken)
         {
             var user = new User
             {
@@ -80,29 +98,52 @@ namespace Application.Users.Commands.CreateUser
 
             if (await unitOfWork.UserRepository.AnyAsync(u => u.EmailAddress.ToUpper() == request.EmailAddress.ToUpper(), cancellationToken))
             {
-                Result.Failure($"Emailaddress '{request.EmailAddress}' is already in use.");
+                return Result<User>.Failure($"Emailaddress '{request.EmailAddress}' is already in use.");
             }
 
             if (await unitOfWork.UserRepository.AnyAsync(u => u.TelephoneNumber.ToUpper() == request.TelephoneNumber.ToUpper(), cancellationToken))
             {
-                Result.Failure($"Telephonenumber '{request.TelephoneNumber}' is already in use.");
+                return Result<User>.Failure($"Telephonenumber '{request.TelephoneNumber}' is already in use.");
             }
 
             await unitOfWork.UserRepository.InsertAsync(user);
             await unitOfWork.SaveAsync(cancellationToken);
-            return user;
+
+            return Result.Success(user);
         }
 
-        private static async Task<int?> GetCurrentLoggedInUserId(IIdentityService identityService)
+        private async Task<Result<string>> CreateAuthenticationUser(IIdentityService identityService, CreateUserCommand request, User user, string password, CancellationToken cancellationToken)
+        {
+            var (result, userId) = await identityService.CreateUserAsync(request.EmailAddress, password, user.Id);
+
+            if (!result.Succeeded)
+            {
+                await RemoveUser(user, cancellationToken);
+                return Result<string>.Failure($"Something went wrong while creating an authentication user with email '{request.EmailAddress}'. ErrorMessage:'{result.ErrorMessage}'.");
+            }
+
+            var addToRoleResult = await identityService.AddUserToRoleAsync(userId, request.RoleName);
+
+            if (!addToRoleResult.Succeeded)
+            {
+                await identityService.RemoveUserAsync(userId);
+                await RemoveUser(user, cancellationToken);
+                return Result<string>.Failure($"Something went wrong while adding a role '{request.RoleName}' to an user '{request.EmailAddress}'. ErrorMessage:'{addToRoleResult.ErrorMessage}'.");
+            }
+
+            return Result.Success(userId);
+        }
+
+        private static async Task<Result<int?>> GetCurrentLoggedInUserId(IIdentityService identityService)
         {
             var currentLoggedInUserId = await identityService.GetCurrentLoggedInUserId();
 
             if (currentLoggedInUserId == 0)
             {
-                Result.Failure("There's no user logged in right now!");
+                return Result<int?>.Failure("There's no user logged in right now!");
             }
 
-            return currentLoggedInUserId;
+            return Result.Success(currentLoggedInUserId);
         }
 
         private static async Task<Uri> CreateChangePasswordLink(ITokenService tokenService, AuthenticationUser authenticationUser)

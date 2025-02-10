@@ -28,6 +28,7 @@ namespace Application.FunctionalTests
                    .RemoveAll<IUser>()
                    .AddTransient(provider => Mock.Of<IUser>(s => s.CurrentUserId == GetCurrentUserId()));
 
+                // TODO: find a good solution for the HTTPContext is null problem. That's why this commented code is comitted.
                 //services.RemoveAll<IHttpContextAccessor>(); 
                 //services.AddSingleton<IHttpContextAccessor>(provider =>
                 //{

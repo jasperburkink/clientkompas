@@ -11,6 +11,7 @@ namespace Infrastructure.Identity
     public class IdentityService(
         UserManager<AuthenticationUser> userManager,
         SignInManager<AuthenticationUser> signInManager,
+        RoleManager<IdentityRole> roleManager,
         IUserClaimsPrincipalFactory<AuthenticationUser> userClaimsPrincipalFactory,
         IAuthorizationService authorizationService,
         IHasher hasher,
@@ -193,10 +194,18 @@ namespace Infrastructure.Identity
 
         public async Task<Result> AddUserToRoleAsync(string userId, string role)
         {
-            var user = await userManager.FindByIdAsync(userId)
-                ?? throw new Application.Common.Exceptions.NotFoundException("AuthenticationUser not found.", userId);
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return Result.Failure($"AuthenticationUser with user id '{userId}' not found.");
+            }
 
-            userManager.AddToRoleAsync(user, role);
+            if (!await roleManager.RoleExistsAsync(role))
+            {
+                return Result.Failure($"Role '{role}' not found.");
+            }
+
+            await userManager.AddToRoleAsync(user, role);
 
             return Result.Success();
         }
@@ -208,6 +217,13 @@ namespace Infrastructure.Identity
             return user == null
                 ? throw new Application.Common.Exceptions.NotFoundException("AuthenticationUser not found.", userId)
                 : await userManager.GetRolesAsync(user);
+        }
+
+        public async Task RemoveUserAsync(string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId)
+                ?? throw new Application.Common.Exceptions.NotFoundException("AuthenticationUser not found.", userId);
+            await userManager.DeleteAsync(user);
         }
     }
 }

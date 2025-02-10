@@ -38,5 +38,7 @@ namespace Application.Common.Interfaces.Authentication
         Task<Result> AddUserToRoleAsync(string userId, string role);
 
         Task<IList<string>> GetUserRolesAsync(string userId);
+
+        Task RemoveUserAsync(string userId);
     }
 }

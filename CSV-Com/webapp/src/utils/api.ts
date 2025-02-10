@@ -31,10 +31,12 @@ import TwoFactorAuthenticationCommand from "types/model/login-2fa/login-2fa-comm
 import ResendTwoFactorAuthenticationTokenCommand from "types/model/resend-2fa-token/resend-2fa-token-command";
 import ResendTwoFactorAuthenticationTokenCommandDto from "types/model/resend-2fa-token/resend-2fa-token-command-dto";
 import GetMenuByUserDto from "types/model/menu/get-menu-by-user-dto";
+import CreateUserCommand from "types/model/user/create-user/create-user-command";
+import CreateUserCommandDto from "types/model/user/create-user/create-user-command-dto";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
-async function fetchAPI<T>(url: string, method: string = 'GET', body?: any): Promise<ApiResult<T>> {
+async function fetchAPI<T>(url: string, method: string = 'GET', body?: any, resultPattern: boolean = false): Promise<ApiResult<T>> {
     let bearerTokenJson: string | null = sessionStorage.getItem('token');
     let bearerToken: BearerToken | null = null;
 
@@ -76,7 +78,7 @@ async function fetchAPI<T>(url: string, method: string = 'GET', body?: any): Pro
     
     const response = await fetch(url, options);
     
-    return handleApiResonse<T>(response);
+    return resultPattern ? handleApiResonseResult<T>(response) : handleApiResonse<T>(response);
 }
 
 //TODO: move this to global file
@@ -90,6 +92,9 @@ Date.prototype.toJSON = function(){
     return moment(this).format(DATE_FORMAT_JSON);
 }
 
+/**
+ * @deprecated This method is deprecated and will be removed. Please use handleApiResonseResult when result pattern is implemented.
+ */
 const handleApiResonse = async <T>(response: Response): Promise<ApiResult<T>> => {
     // Ok API response
     if(response.ok){
@@ -98,6 +103,110 @@ const handleApiResonse = async <T>(response: Response): Promise<ApiResult<T>> =>
         return {
             Ok: response.ok,
             ReturnObject: ObjectReturn
+        }
+    }
+
+    // TODO: Implement all HTTP status codes with the pages. https://sbict.atlassian.net/wiki/spaces/CVS/pages/35356674/Foutafhandeling#Gehele-pagina%E2%80%99s
+
+    // Bad request --> Validation errors
+    if(response.status === 400) {
+        var responseData = await response.json();
+
+        let titleResponse: string | undefined;
+        let errorsResponse: string[] | undefined;
+        let validationErrorsResponse: ValidationErrorHash | undefined;
+
+        try{
+            validationErrorsResponse = parseValidationErrors(responseData);
+        }
+        catch(err){
+            console.log(`Error while parsing api validation errors. Error:${err}`);
+        }
+
+        try{
+            let {title, errors} = responseData;
+            titleResponse = title;
+            errorsResponse = processErrors(errors);
+        }
+        catch(err){
+            console.log(`Error while parsing api errors. Error:${err}`);
+        }
+
+        return {
+            Ok: response.ok,
+            Title: titleResponse,
+            Errors: errorsResponse,
+            ValidationErrors: validationErrorsResponse
+        }  
+    }    
+    // Unauthorized 
+    else if (response.status === 401) {
+        window.location.href = '/unauthorized';
+        return Promise.reject({
+            Ok: false,
+            Errors: ['Unauthorized access']
+        });
+    }
+    // Forbidden 
+    else if (response.status === 403) {
+        window.location.href = '/forbidden';
+        return Promise.reject({
+            Ok: false,
+            Errors: ['Forbidden access']
+        });
+    }
+    // Internal error
+    else if (response.status === 500) {
+        window.location.href = '/internalerror';
+        return Promise.reject({
+            Ok: false,
+            Errors: ['Internal Error']
+        });
+    }
+    // Error
+    else {
+        let titleResponse: string | undefined;
+        let errorsResponse: string[] | undefined;
+        let validationErrorsResponse: ValidationErrorHash | undefined;
+
+        try{
+            let {title, errors} = responseData;
+            titleResponse = title;
+            errorsResponse = processErrors(errors);
+        }
+        catch(err){
+            console.log(`Error while parsing api errors. Error:${err}`);
+        }
+
+        return {
+            Ok: response.ok,
+            Title: titleResponse,
+            Errors: errorsResponse,
+            ValidationErrors: validationErrorsResponse
+        }  
+    }
+}
+
+const handleApiResonseResult = async <T>(response: Response): Promise<ApiResult<T>> => {
+    // Ok API response
+    if(response.ok){
+        let responseJson = await response.json();
+
+        if(responseJson.succeeded)
+        {
+            let ObjectReturn: T = responseJson.value;
+
+            return {
+                Ok: responseJson.succeeded,
+                ReturnObject: ObjectReturn
+            }
+        }
+        else
+        {
+            return {
+                Ok: responseJson.succeeded,
+                Errors: responseJson.errors
+            }
         }
     }
 
@@ -381,6 +490,10 @@ export const resetPassword = async (resetPasswordCommand: ResetPasswordCommand):
     const response = await fetch(`${apiUrl}Authentication/ResetPassword`, requestOptions);
     
     return handleApiResonse<ResetPasswordCommandDto>(response);
+}
+
+export const createUser = async (user: CreateUserCommand): Promise<ApiResult<CreateUserCommandDto>> => {
+    return await fetchAPI(`${apiUrl}User`, 'POST', user, true);
 }
 
 function processErrors(errors: { [key: string]: string[] }): string[] {

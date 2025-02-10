@@ -11,7 +11,10 @@ namespace Application.Common.Models
         }
 
         public bool Succeeded { get; }
+
         public string[] Errors { get; }
+
+        public string ErrorMessage => string.Join(", ", Errors);
 
         public static Result Success()
         {
@@ -44,8 +47,12 @@ namespace Application.Common.Models
         }
 
         public T? Value { get; }
+
         public bool Succeeded { get; }
+
         public string[] Errors { get; }
+
+        public string ErrorMessage => string.Join(", ", Errors);
 
         public static Result<T> Success(T value)
         {
