@@ -674,5 +674,33 @@ namespace Infrastructure.UnitTests.Identity
             // Assert
             await act.Should().ThrowAsync<NotFoundException>();
         }
+
+
+        [Fact]
+        public async Task GetAvailableUserRolesAsync_CorrectFlow_ReturnsMultipleRoles()
+        {
+            // Arrange
+            var rolesDefault = new List<IdentityRole> { new(Roles.Administrator), new(Roles.Licensee), new(Roles.SystemOwner), new(Roles.Coach) };
+
+            _roleManagerMock.Setup(mock => mock.Roles)
+                .Returns(rolesDefault.AsQueryable());
+
+            var identityService = new IdentityService(
+                _userManagerMock.Object,
+                _signInManagerMock.Object,
+                _roleManagerMock.Object,
+                _userClaimsPrincipalFactoryMock.Object,
+                _authorizationServiceMock.Object,
+                _hasherMock.Object,
+                _refreshTokenServiceMock.Object,
+                _emailServiceMock.Object
+            );
+
+            // Act
+            var roles = await identityService.GetAvailableUserRolesAsync();
+
+            // Assert
+            roles.Should().NotBeNullOrEmpty().And.HaveCount(rolesDefault.Count());
+        }
     }
 }

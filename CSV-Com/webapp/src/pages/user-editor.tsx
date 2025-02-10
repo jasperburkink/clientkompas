@@ -1,5 +1,5 @@
 import './user-editor.css';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CVSError from "types/common/cvs-error";
 import StatusEnum from "types/common/StatusEnum";
@@ -17,9 +17,10 @@ import { InputField } from "components/common/input-field";
 import { isHashEmpty, ValidationErrorHash } from "types/common/validation-error";
 import { Dropdown } from "components/common/dropdown";
 import SaveButton from "components/common/save-button";
-import { createUser } from "utils/api";
+import { createUser, fetchUserRoles } from "utils/api";
 import ApiResult from "types/common/api-result";
 import User from 'types/model/User';
+import GetUserRolesDto from 'types/model/user/get-user-roles/get-user-roles.dto';
 
 const UserEditor = () => { 
     const navigate = useNavigate();
@@ -34,6 +35,8 @@ const UserEditor = () => {
         telephonenumber: '',
         rolename: 'Licensee'
     });
+
+    const [userRoles, setUserRoles] = useState<GetUserRolesDto[]>([]);
 
     const [confirmMessage, setConfirmMessage] = useState<string>('');
     const [isConfirmPopupOneButtonOpen, setConfirmPopupOneButtonOpen] = useState<boolean>(false);
@@ -56,7 +59,19 @@ const UserEditor = () => {
             ...createUserCmd,
             [fieldName]: value
         }));
-    };
+    };    
+
+    useEffect (() => {
+        const getUserRoles = async() => {
+            setStatus(StatusEnum.PENDING);
+
+            setUserRoles(await fetchUserRoles());
+
+            setStatus(StatusEnum.SUCCESSFUL);
+        }
+
+        getUserRoles();
+    }, []);
 
     const handleSaveResult = (
             apiResult: ApiResult<CreateUserCommand>, 
@@ -166,13 +181,13 @@ const UserEditor = () => {
 
                         <LabelField text='Rol' required={true}>
                             <Dropdown 
-                                options={
-                                    [
-                                        { label: 'SysteemEigenaar', value: "SystemOwner" },
-                                        { label: 'Licentiehouder', value: "Licensee" },
-                                        { label: 'Administrator', value: "Administrator" },
-                                        { label: 'Coach', value: "Coach" }
-                                    ]} // TODO: get roles from api
+                                options={userRoles.map((userRole) => { 
+                                        return {
+                                            label: userRole.name,
+                                            value: userRole.value 
+                                        }
+                                    })
+                                }
                                 required={true} 
                                 inputfieldname='dropdown'                                
                                 value={user.rolename} 

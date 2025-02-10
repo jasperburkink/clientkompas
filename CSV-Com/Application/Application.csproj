@@ -26,7 +26,6 @@
     <Folder Include="MaritalStatuses\Commands\UpdateMaritalStatus\" />
     <Folder Include="MaritalStatuses\Queries\" />
     <Folder Include="Organizations\Commands\" />
-    <Folder Include="Users\Queries\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -152,6 +151,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>WorkingContractValidationRules.nl.resx</DependentUpon>
     </Compile>
+    <Compile Update="Users\Queries\GetUserRoles\Resources\GetUserRolesDto.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>GetUserRolesDto.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -242,6 +246,10 @@
     <EmbeddedResource Update="Common\Rules\Resources\WorkingContractValidationRules.nl.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>WorkingContractValidationRules.nl.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Users\Queries\GetUserRoles\Resources\GetUserRolesDto.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>GetUserRolesDto.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

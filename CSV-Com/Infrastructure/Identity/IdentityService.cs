@@ -225,5 +225,12 @@ namespace Infrastructure.Identity
                 ?? throw new Application.Common.Exceptions.NotFoundException("AuthenticationUser not found.", userId);
             await userManager.DeleteAsync(user);
         }
+
+        public async Task<IList<string>> GetAvailableUserRolesAsync()
+        {
+            return await Task.FromResult(roleManager.Roles
+                .Select(role => role.Name!)
+                .ToList());
+        }
     }
 }

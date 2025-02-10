@@ -347,5 +347,25 @@ namespace Infrastructure.FunctionalTests.Identity
             // Assert
             roles.Should().NotBeNullOrEmpty().And.Contain(role);
         }
+
+
+        [Fact]
+        public async Task GetAvailableUserRolesAsync_CorrectFlow_ReturnsMultipleRole()
+        {
+            // Arrange
+            IList<string> roles = [Roles.Licensee, Roles.SystemOwner, Roles.Administrator, Roles.Coach];
+
+            foreach (var role in roles)
+            {
+                await _roleManager.CreateAsync(new IdentityRole(role));
+            }
+
+            // Act
+            var result = await _identityService.GetAvailableUserRolesAsync();
+
+
+            // Assert
+            result.Should().NotBeNullOrEmpty().And.BeEquivalentTo(roles);
+        }
     }
 }
