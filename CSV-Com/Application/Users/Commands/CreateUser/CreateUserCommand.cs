@@ -34,7 +34,7 @@ namespace Application.Users.Commands.CreateUser
 
         public async Task<Result<CreateUserCommandDto>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            try
+            try // TODO: remove this try catch. Exceptions should be returned as result by the API Exceptionhandler eventually
             {
                 var currentLoggedInUserResult = await GetCurrentLoggedInUserId(identityService);
                 if (!currentLoggedInUserResult.Succeeded)
@@ -69,19 +69,6 @@ namespace Application.Users.Commands.CreateUser
                 return Result<CreateUserCommandDto>.Failure(ex.Message);
             }
         }
-
-        private async Task<Result<T>> CheckAndReturnFailure<T>(Task<Result<T>> resultTask)
-        {
-            var result = await resultTask;
-            if (!result.Succeeded)
-            {
-                // Retourneer de failure direct.
-                return Result<T>.Failure(result.Errors);
-            }
-
-            return result;
-        }
-
 
         private static async Task<Result<User>> CreateCVSUser(IUnitOfWork unitOfWork, CreateUserCommand request, int? currentLoggedInUserId, CancellationToken cancellationToken)
         {

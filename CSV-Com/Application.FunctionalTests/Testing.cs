@@ -192,16 +192,23 @@ namespace Application.FunctionalTests
             await context.SaveChangesAsync();
         }
 
-        public static async Task UpdateAsync<TEntity>(TEntity entity)
+        public static async Task UpdateAsync<TEntity, TDbContext>(TEntity entity)
             where TEntity : class
+            where TDbContext : DbContext
         {
             using var scope = s_scopeFactory.CreateScope();
 
-            var context = scope.ServiceProvider.GetRequiredService<CVSDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<TDbContext>();
 
             context.Update(entity);
 
             await context.SaveChangesAsync();
+        }
+
+        public static async Task UpdateAsync<TEntity>(TEntity entity)
+            where TEntity : class
+        {
+            await UpdateAsync<TEntity, CVSDbContext>(entity);
         }
 
         public static async Task<int> CountAsync<TEntity>() where TEntity : class

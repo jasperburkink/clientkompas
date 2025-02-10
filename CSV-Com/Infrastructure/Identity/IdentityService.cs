@@ -232,5 +232,10 @@ namespace Infrastructure.Identity
                 .Select(role => role.Name!)
                 .ToList());
         }
+
+        public async Task UpdateUserAsync(AuthenticationUser user)
+        {
+            await userManager.UpdateAsync(user);
+        }
     }
 }
