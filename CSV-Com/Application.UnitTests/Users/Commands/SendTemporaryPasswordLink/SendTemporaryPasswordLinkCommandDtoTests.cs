@@ -7,6 +7,7 @@ using AutoMapper;
 using Domain.Authentication.Domain;
 using Domain.CVS.Domain;
 using Infrastructure.Identity;
+using Microsoft.Extensions.Configuration;
 using Moq;
 
 namespace Application.UnitTests.Users.Commands.SendTemporaryPasswordLink
@@ -19,6 +20,7 @@ namespace Application.UnitTests.Users.Commands.SendTemporaryPasswordLink
         private readonly Mock<ITokenService> _tokenServiceMock;
         private readonly Mock<IPasswordService> _passwordServiceMock;
         private readonly Mock<IEmailService> _emailServiceMock;
+        private readonly Mock<IConfiguration> _configurationMock;
         private readonly SendTemporaryPasswordLinkCommandHandler _handler;
         private readonly AuthenticationUser _authUser;
         private readonly User _cvsUser;
@@ -31,6 +33,7 @@ namespace Application.UnitTests.Users.Commands.SendTemporaryPasswordLink
             _tokenServiceMock = new Mock<ITokenService>();
             _passwordServiceMock = new Mock<IPasswordService>();
             _emailServiceMock = new Mock<IEmailService>();
+            _configurationMock = new Mock<IConfiguration>();
 
             _authUser = new AuthenticationUser
             {
@@ -69,13 +72,18 @@ namespace Application.UnitTests.Users.Commands.SendTemporaryPasswordLink
             _unitOfWorkMock.Setup(uw => uw.UserRepository.GetAsync(It.IsAny<Expression<Func<User, bool>>>(), It.IsAny<Func<IQueryable<User>, IOrderedQueryable<User>>>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync([_cvsUser]);
 
+            var sectionMock = new Mock<IConfigurationSection>();
+            sectionMock.Setup(x => x.Value).Returns("https://testurl.com/ChangePassword/");
+            _configurationMock.Setup(x => x.GetSection("Urls:ChangePassword")).Returns(sectionMock.Object);
+
             _handler = new SendTemporaryPasswordLinkCommandHandler(
                 _unitOfWorkMock.Object,
                 _mapperMock.Object,
                 _identityServiceMock.Object,
                 _tokenServiceMock.Object,
                 _passwordServiceMock.Object,
-                _emailServiceMock.Object
+                _emailServiceMock.Object,
+                _configurationMock.Object
             );
         }
 
@@ -120,7 +128,7 @@ namespace Application.UnitTests.Users.Commands.SendTemporaryPasswordLink
 
             // Assert
             result.Succeeded.Should().BeFalse();
-            result.Errors.Should().Contain("User not found.");
+            result.Errors.Should().Contain("User cannot be null.");
         }
     }
 }
