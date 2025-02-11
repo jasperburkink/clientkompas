@@ -10,8 +10,8 @@ namespace Application.Common.Interfaces.Authentication
 
         Task RevokeTokenAsync(string userId, string tokenValue, string tokenType);
 
-        Task<IToken?> GetTokenAsync(string tokenValue, string tokenType);
+        Task<IAuthenticationToken?> GetTokenAsync(string tokenValue, string tokenType);
 
-        Task<IList<IToken>> GetValidTokensByUserAsync(string userId, string tokenType);
+        Task<IList<IAuthenticationToken>> GetValidTokensByUserAsync(string userId, string tokenType);
     }
 }

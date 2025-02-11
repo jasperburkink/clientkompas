@@ -23,7 +23,7 @@ namespace Infrastructure.Identity
             var salt = hasher.GenerateSalt();
             var tokenValue = hasher.HashString(randomNumberBase64String, salt);
 
-            IToken tokenEntry = tokenType switch
+            IAuthenticationToken tokenEntry = tokenType switch
             {
                 "RefreshToken" => tokenEntry = new RefreshToken
                 {
@@ -121,7 +121,7 @@ namespace Infrastructure.Identity
 
             var token = tokenType switch
             {
-                "RefreshToken" => (IToken?)await authenticationDbContext.RefreshTokens.FirstOrDefaultAsync(rt => rt.Value == tokenValue && rt.UserId == userId && !rt.IsUsed && !rt.IsRevoked),
+                "RefreshToken" => (IAuthenticationToken?)await authenticationDbContext.RefreshTokens.FirstOrDefaultAsync(rt => rt.Value == tokenValue && rt.UserId == userId && !rt.IsUsed && !rt.IsRevoked),
                 "TwoFactorPendingToken" => await authenticationDbContext.TwoFactorPendingTokens.FirstOrDefaultAsync(t => t.Value == tokenValue && t.UserId == userId && !t.IsUsed && !t.IsRevoked),
                 "TemporaryPasswordToken" => await authenticationDbContext.TemporaryPasswordTokens.FirstOrDefaultAsync(t => t.Value == tokenValue && t.UserId == userId && !t.IsUsed && !t.IsRevoked),
                 _ => throw new ArgumentException("Invalid token type", nameof(tokenType))
@@ -142,7 +142,7 @@ namespace Infrastructure.Identity
             ArgumentNullException.ThrowIfNull(userId);
             ArgumentNullException.ThrowIfNull(tokenValue);
 
-            IToken? token = tokenType switch
+            IAuthenticationToken? token = tokenType switch
             {
                 nameof(RefreshToken) => token = await authenticationDbContext.RefreshTokens.FirstOrDefaultAsync(rt => rt.Value == tokenValue && rt.UserId == userId),
                 nameof(TwoFactorPendingToken) => await authenticationDbContext.TwoFactorPendingTokens.FirstOrDefaultAsync(t => t.Value == tokenValue && t.UserId == userId),
@@ -157,7 +157,7 @@ namespace Infrastructure.Identity
             }
         }
 
-        public async Task<IToken?> GetTokenAsync(string tokenValue, string tokenType)
+        public async Task<IAuthenticationToken?> GetTokenAsync(string tokenValue, string tokenType)
         {
             if (tokenType == "RefreshToken")
             {
@@ -180,25 +180,25 @@ namespace Infrastructure.Identity
             }
         }
 
-        public async Task<IList<IToken>> GetValidTokensByUserAsync(string userId, string tokenType)
+        public async Task<IList<IAuthenticationToken>> GetValidTokensByUserAsync(string userId, string tokenType)
         {
             if (tokenType == "RefreshToken")
             {
                 return await authenticationDbContext.RefreshTokens
                     .Where(rt => rt.UserId == userId && !rt.IsUsed && !rt.IsRevoked)
-                    .ToListAsync<IToken>();
+                    .ToListAsync<IAuthenticationToken>();
             }
             else if (tokenType == "TwoFactorPendingToken")
             {
                 return await authenticationDbContext.TwoFactorPendingTokens
                     .Where(t => t.UserId == userId && !t.IsUsed && !t.IsRevoked)
-                    .ToListAsync<IToken>();
+                    .ToListAsync<IAuthenticationToken>();
             }
             else if (tokenType == "TemporaryPasswordToken")
             {
                 return await authenticationDbContext.TemporaryPasswordTokens
                     .Where(t => t.UserId == userId && !t.IsUsed && !t.IsRevoked)
-                    .ToListAsync<IToken>();
+                    .ToListAsync<IAuthenticationToken>();
             }
             else
             {

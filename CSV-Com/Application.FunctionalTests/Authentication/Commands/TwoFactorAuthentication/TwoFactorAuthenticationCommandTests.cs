@@ -1,7 +1,6 @@
 ﻿using Application.Authentication.Commands.TwoFactorAuthentication;
 using Domain.Authentication.Domain;
 using Infrastructure.Data.Authentication;
-using Infrastructure.Identity;
 
 namespace Application.FunctionalTests.Authentication.Commands.TwoFactorAuthentication
 {
@@ -14,7 +13,7 @@ namespace Application.FunctionalTests.Authentication.Commands.TwoFactorAuthentic
         {
             UseMocks = true;
 
-            AddAsync<AuthenticationUser, AuthenticationDbContext>(CustomWebApplicationFactoryWithMocks.AuthenticationUser).GetAwaiter().GetResult();
+            AddAsync<IAuthenticationUser, AuthenticationDbContext>(CustomWebApplicationFactoryWithMocks.AuthenticationUser).GetAwaiter().GetResult();
 
             _command = new TwoFactorAuthenticationCommand
             {

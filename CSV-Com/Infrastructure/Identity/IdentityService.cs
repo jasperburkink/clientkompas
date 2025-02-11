@@ -250,14 +250,16 @@ namespace Infrastructure.Identity
         {
             var allRoles = new HashSet<string>(roles) { role };
 
-            return await (from user in authenticationDbContext.Users
-                          join userRole in authenticationDbContext.UserRoles on user.Id equals userRole.UserId
-                          join roleEntity in authenticationDbContext.Roles on userRole.RoleId equals roleEntity.Id
-                          where allRoles.Contains(roleEntity.Name)
-                          select user)
-                      .Distinct()
-                      .Cast<IAuthenticationUser>()
-                      .ToListAsync();
+            var users = await (from user in authenticationDbContext.Users
+                               join userRole in authenticationDbContext.UserRoles on user.Id equals userRole.UserId
+                               join roleEntity in authenticationDbContext.Roles on userRole.RoleId equals roleEntity.Id
+                               select new { user, roleEntity.Name }).ToListAsync();
+
+            return users
+                .Where(roleUser => allRoles.Contains(roleUser.Name))
+                .Select(roleUser => (IAuthenticationUser)roleUser.user)
+                .Distinct()
+                .ToList();
         }
     }
 }

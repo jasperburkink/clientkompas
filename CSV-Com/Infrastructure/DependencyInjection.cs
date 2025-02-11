@@ -78,9 +78,10 @@ namespace Infrastructure
             services
                 .AddIdentity<AuthenticationUser, AuthenticationRole>()
                 .AddEntityFrameworkStores<AuthenticationDbContext>()
-                .AddRoleManager<RoleManager<AuthenticationRole>>()
-                .AddUserManager<UserManager<AuthenticationUser>>()
                 .AddDefaultTokenProviders();
+
+            services.AddScoped<RoleManager<AuthenticationRole>>();
+            services.AddScoped<UserManager<AuthenticationUser>>();
 
             services.AddHttpContextAccessor();
 

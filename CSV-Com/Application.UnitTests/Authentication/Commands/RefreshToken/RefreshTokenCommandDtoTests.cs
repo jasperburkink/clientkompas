@@ -22,7 +22,7 @@ namespace Application.UnitTests.Authentication.Commands.RefreshToken
                 RefreshToken = refreshToken
             };
 
-            var refreshTokenMock = new Mock<IToken>();
+            var refreshTokenMock = new Mock<IAuthenticationToken>();
 
             var user = new AuthenticationUser
             {
@@ -65,7 +65,7 @@ namespace Application.UnitTests.Authentication.Commands.RefreshToken
                 RefreshToken = refreshToken
             };
 
-            var refreshTokenMock = new Mock<IToken>();
+            var refreshTokenMock = new Mock<IAuthenticationToken>();
 
             var user = new AuthenticationUser
             {
@@ -108,7 +108,7 @@ namespace Application.UnitTests.Authentication.Commands.RefreshToken
                 RefreshToken = refreshToken
             };
 
-            var refreshTokenMock = new Mock<IToken>();
+            var refreshTokenMock = new Mock<IAuthenticationToken>();
 
             var user = new AuthenticationUser
             {

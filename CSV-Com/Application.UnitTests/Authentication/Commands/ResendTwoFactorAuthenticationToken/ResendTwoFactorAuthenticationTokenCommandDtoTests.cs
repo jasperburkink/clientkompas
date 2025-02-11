@@ -17,7 +17,7 @@ namespace Application.UnitTests.Authentication.Commands.ResendTwoFactorAuthentic
         private readonly Mock<IResourceMessageProvider> _resourceMessageProviderMock;
         private readonly Mock<IEmailService> _emailServiceMock;
         private readonly AuthenticationUser _user;
-        private readonly IToken _token;
+        private readonly IAuthenticationToken _token;
         private const string TokenValueOld = "2FATokenValue_Old";
         private const string TokenValueNew = "2FATokenValue_New";
 

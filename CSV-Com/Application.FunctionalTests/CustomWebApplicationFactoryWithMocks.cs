@@ -25,8 +25,8 @@ namespace Application.FunctionalTests
     {
         private readonly DbConnection _connectionCvs = connectionCvs;
         private readonly DbConnection _connectionAuthentication = connectionAuthentication;
-        private static readonly ITestDataGenerator<IAuthenticationUser> s_testDataGeneratorAuthenticationUser = new AuthenticationUserDataGenerator();
-        public static readonly AuthenticationUser AuthenticationUser = s_testDataGeneratorAuthenticationUser.Create() as AuthenticationUser;
+        private static readonly ITestDataGenerator<AuthenticationUser> s_testDataGeneratorAuthenticationUser = new AuthenticationUserDataGenerator();
+        public static readonly AuthenticationUser AuthenticationUser = s_testDataGeneratorAuthenticationUser.Create();
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
@@ -38,7 +38,7 @@ namespace Application.FunctionalTests
 
                 // Mock 
                 AuthenticationUser.TwoFactorEnabled = true;
-                AddAsync<AuthenticationUser, AuthenticationDbContext>(AuthenticationUser).GetAwaiter().GetResult();
+                AddAsync<IAuthenticationUser, AuthenticationDbContext>(AuthenticationUser).GetAwaiter().GetResult();
                 var mockIdentityService = new Mock<IIdentityService>();
                 mockIdentityService.Setup(s => s.LoginAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new LoggedInResult(true, AuthenticationUser, [Roles.Coach]));
                 mockIdentityService.Setup(s => s.LogoutAsync()).Returns(Task.CompletedTask);

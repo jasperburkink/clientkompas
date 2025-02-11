@@ -13,7 +13,7 @@ namespace Application.FunctionalTests.Users.Commands.SendTemporaryPasswordLink
 {
     public class SendTemporaryPasswordLinkCommandTests : BaseTestFixture
     {
-        private ITestDataGenerator<IAuthenticationUser> _testDataGeneratorAuthenticationUser;
+        private ITestDataGenerator<AuthenticationUser> _testDataGeneratorAuthenticationUser;
         private ITestDataGenerator<User> _testDataGeneratorCvsUser;
         private ITestDataGenerator<SendTemporaryPasswordLinkCommand> _testDataGeneratorSendTemporaryPasswordLinkCommand;
         private SendTemporaryPasswordLinkCommand _command;
@@ -32,7 +32,7 @@ namespace Application.FunctionalTests.Users.Commands.SendTemporaryPasswordLink
             _cvsUser.CreatedByUserId = _cvsParentUser.Id;
             await AddAsync(_cvsUser);
 
-            var authenticationUser = _testDataGeneratorAuthenticationUser.Create() as AuthenticationUser;
+            var authenticationUser = _testDataGeneratorAuthenticationUser.Create();
             authenticationUser.HasTemporaryPassword = true;
             authenticationUser.CVSUserId = _cvsUser.Id;
             await AddAsync<AuthenticationUser, AuthenticationDbContext>(authenticationUser);

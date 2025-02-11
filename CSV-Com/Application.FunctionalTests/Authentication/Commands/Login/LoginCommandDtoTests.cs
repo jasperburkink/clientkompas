@@ -1,5 +1,4 @@
 ﻿using Application.Authentication.Commands.Login;
-using Domain.Authentication.Domain;
 using Infrastructure.Data.Authentication;
 using Infrastructure.Identity;
 using TestData;
@@ -20,8 +19,8 @@ namespace Application.FunctionalTests.Authentication.Commands.Login
 
             _password = PasswordGenerator.GenerateSecurePassword(16);
 
-            ITestDataGenerator<IAuthenticationUser> testDataGeneratorAuthenticationUser = new AuthenticationUserDataGenerator();
-            _authenticationUser = testDataGeneratorAuthenticationUser.Create() as AuthenticationUser;
+            ITestDataGenerator<AuthenticationUser> testDataGeneratorAuthenticationUser = new AuthenticationUserDataGenerator();
+            _authenticationUser = testDataGeneratorAuthenticationUser.Create();
 
             var initialPassword = Utils.GeneratePassword();
             var id = await CreateUserAsync(_authenticationUser.Email!, initialPassword);

@@ -1,5 +1,4 @@
 ﻿using Application.Authentication.Commands.RequestResetPassword;
-using Domain.Authentication.Domain;
 using Infrastructure.Data.Authentication;
 using Infrastructure.Identity;
 using TestData;
@@ -15,8 +14,8 @@ namespace Application.FunctionalTests.Authentication.Commands.RequestResetPasswo
         [SetUp]
         public async Task SetUp()
         {
-            ITestDataGenerator<IAuthenticationUser> testDataGeneratorAuthenticationUser = new AuthenticationUserDataGenerator();
-            _authenticationUser = testDataGeneratorAuthenticationUser.Create() as AuthenticationUser;
+            ITestDataGenerator<AuthenticationUser> testDataGeneratorAuthenticationUser = new AuthenticationUserDataGenerator();
+            _authenticationUser = testDataGeneratorAuthenticationUser.Create();
             await AddAsync<AuthenticationUser, AuthenticationDbContext>(_authenticationUser);
 
             _command = new RequestResetPasswordCommand

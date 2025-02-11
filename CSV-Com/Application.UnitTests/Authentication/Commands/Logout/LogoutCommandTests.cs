@@ -52,7 +52,7 @@ namespace Application.UnitTests.Authentication.Commands.Logout
                 Value = "Test3"
             };
 
-            var userRefreshTokens = new List<IToken>
+            var userRefreshTokens = new List<IAuthenticationToken>
             {
                 refreshToken,
                 refreshTokenUser1,
@@ -103,7 +103,7 @@ namespace Application.UnitTests.Authentication.Commands.Logout
                 Value = "Test1"
             };
 
-            var userRefreshTokens = new List<IToken>
+            var userRefreshTokens = new List<IAuthenticationToken>
             {
             };
 
@@ -140,7 +140,7 @@ namespace Application.UnitTests.Authentication.Commands.Logout
             identityServiceMock.Setup(mock => mock.LogoutAsync());
 
             var refreshTokenServiceMock = new Mock<ITokenService>();
-            refreshTokenServiceMock.Setup(mock => mock.GetTokenAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync((IToken)null);
+            refreshTokenServiceMock.Setup(mock => mock.GetTokenAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync((IAuthenticationToken)null);
 
             var command = new LogoutCommand()
             {

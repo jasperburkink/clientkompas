@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 namespace Infrastructure.Data.Authentication
 {
     public class AuthenticationDbContextInitialiser(ILogger<AuthenticationDbContextInitialiser> logger, AuthenticationDbContext context,
-        UserManager<AuthenticationUser> userManager, RoleManager<IdentityRole> roleManager, IIdentityService identityService,
+        UserManager<AuthenticationUser> userManager, RoleManager<AuthenticationRole> roleManager, IIdentityService identityService,
         IUnitOfWork unitOfWork)
     {
         private const string DOMAIN_CLIENTKOMPAS = "clientkompas.nl";
@@ -48,23 +48,23 @@ namespace Infrastructure.Data.Authentication
         public async Task TrySeedAsync()
         {
             // Default roles
-            var administratorRole = new IdentityRole(nameof(Roles.Administrator));
+            var administratorRole = new AuthenticationRole(nameof(Roles.Administrator));
             await CreateRole(administratorRole);
 
-            var licenseeRole = new IdentityRole(nameof(Roles.Licensee));
+            var licenseeRole = new AuthenticationRole(nameof(Roles.Licensee));
             await CreateRole(licenseeRole);
 
-            var systemOwnerRole = new IdentityRole(nameof(Roles.SystemOwner));
+            var systemOwnerRole = new AuthenticationRole(nameof(Roles.SystemOwner));
             await CreateRole(systemOwnerRole);
 
-            var systemCoach = new IdentityRole(nameof(Roles.Coach));
+            var systemCoach = new AuthenticationRole(nameof(Roles.Coach));
             await CreateRole(systemCoach);
 
             // Create systemowner role so lincences with users can be added
             await CreateUser(systemOwnerRole.Name);
         }
 
-        private async Task CreateRole(IdentityRole role)
+        private async Task CreateRole(AuthenticationRole role)
         {
             if (roleManager.Roles.All(r => r.Name != role.Name))
             {

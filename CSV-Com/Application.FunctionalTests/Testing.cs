@@ -1,6 +1,5 @@
 ﻿using System.Linq.Expressions;
 using Application.Common.Interfaces.Authentication;
-using Domain.Authentication.Domain;
 using Infrastructure.Data.Authentication;
 using Infrastructure.Data.CVS;
 using Infrastructure.Identity;
@@ -101,9 +100,9 @@ namespace Application.FunctionalTests
 
             var result = await userManager.CreateAsync(user, password);
 
-            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<AuthenticationRole>>();
 
-            await roleManager.CreateAsync(new IdentityRole(role));
+            await roleManager.CreateAsync(new AuthenticationRole(role));
 
             await userManager.AddToRolesAsync(user, [role]);
 
@@ -235,7 +234,7 @@ namespace Application.FunctionalTests
 
             var result = await userManager.CreateAsync(user, password);
 
-            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<AuthenticationRole>>();
 
             if (result.Succeeded)
             {

@@ -49,7 +49,7 @@ namespace Application.Authentication.Commands.TwoFactorAuthentication
             };
         }
 
-        private bool IsUserLoggedIn(TwoFactorAuthenticationCommand request, IAuthenticationUser user, IToken? twoFactorPendingToken)
+        private bool IsUserLoggedIn(TwoFactorAuthenticationCommand request, IAuthenticationUser user, IAuthenticationToken? twoFactorPendingToken)
         {
             return user != null
                 && twoFactorPendingToken != null
