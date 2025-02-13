@@ -255,11 +255,10 @@ namespace Infrastructure.Identity
                                join roleEntity in authenticationDbContext.Roles on userRole.RoleId equals roleEntity.Id
                                select new { user, roleEntity.Name }).ToListAsync();
 
-            return users
+            return [.. users
                 .Where(roleUser => allRoles.Contains(roleUser.Name))
                 .Select(roleUser => (IAuthenticationUser)roleUser.user)
-                .Distinct()
-                .ToList();
+                .Distinct()];
         }
     }
 }
