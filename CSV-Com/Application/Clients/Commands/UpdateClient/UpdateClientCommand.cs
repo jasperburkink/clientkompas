@@ -105,9 +105,9 @@ namespace Application.Clients.Commands.UpdateClient
 
             client.Diagnoses = [.. diagnoses];
 
-            client.EmergencyPeople = request.EmergencyPeople.Select(a => a.ToDomainModel(mapper, client)).ToList();
+            client.EmergencyPeople = [.. request.EmergencyPeople.Select(a => a.ToDomainModel(mapper, client))];
 
-            client.WorkingContracts = request.WorkingContracts.Select(a => a.ToDomainModel(mapper, client)).ToList();
+            client.WorkingContracts = [.. request.WorkingContracts.Select(a => a.ToDomainModel(mapper, client))];
 
             MaritalStatus? maritalStatus = null;
 

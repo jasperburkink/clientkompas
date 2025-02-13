@@ -7,7 +7,7 @@ namespace Application.Common.Models
         private Result(bool succeeded, IEnumerable<string> errors)
         {
             Succeeded = succeeded;
-            Errors = errors.ToArray();
+            Errors = [.. errors];
         }
 
         public bool Succeeded { get; }
@@ -43,7 +43,7 @@ namespace Application.Common.Models
         {
             Value = value;
             Succeeded = succeeded;
-            Errors = errors.ToArray();
+            Errors = [.. errors];
         }
 
         public T? Value { get; }
