@@ -22,8 +22,8 @@ namespace Application.UnitTests.Authentication.Commands.ResendTwoFactorAuthentic
 
         public ResendTwoFactorAuthenticationTokenCommandTests()
         {
-            ITestDataGenerator<IAuthenticationUser> testDataGenerator = new AuthenticationUserDataGenerator();
-            _user = testDataGenerator.Create() as AuthenticationUser;
+            ITestDataGenerator<AuthenticationUser> testDataGenerator = new AuthenticationUserDataGenerator();
+            _user = testDataGenerator.Create();
 
             _token = new TwoFactorPendingToken
             {
@@ -292,8 +292,8 @@ namespace Application.UnitTests.Authentication.Commands.ResendTwoFactorAuthentic
         public async Task Handle_UserHasNoEmailAddress_ShouldThrowNotFoundException()
         {
             // Arrange
-            ITestDataGenerator<IAuthenticationUser> testDataGenerator = new AuthenticationUserDataGenerator();
-            var user = testDataGenerator.Create() as AuthenticationUser;
+            ITestDataGenerator<AuthenticationUser> testDataGenerator = new AuthenticationUserDataGenerator();
+            var user = testDataGenerator.Create();
             user.Id = _user.Id;
             user.Email = string.Empty;
 

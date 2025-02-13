@@ -26,7 +26,7 @@ namespace Infrastructure.FunctionalTests.Identity
             .AddLogging()
             .AddAuthorization()
             .AddDbContext<AuthenticationDbContext>(options => options.UseInMemoryDatabase(Guid.NewGuid().ToString()))
-            .AddIdentity<AuthenticationUser, IdentityRole>()
+            .AddIdentity<AuthenticationUser, AuthenticationRole>()
             .AddEntityFrameworkStores<AuthenticationDbContext>()
             .AddDefaultTokenProviders();
 
