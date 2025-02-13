@@ -101,8 +101,10 @@ namespace Application.FunctionalTests
             var result = await userManager.CreateAsync(user, password);
 
             var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<AuthenticationRole>>();
-
-            await roleManager.CreateAsync(new AuthenticationRole(role));
+            if (!await roleManager.RoleExistsAsync(role))
+            {
+                await roleManager.CreateAsync(new AuthenticationRole(role));
+            }
 
             await userManager.AddToRolesAsync(user, [role]);
 
