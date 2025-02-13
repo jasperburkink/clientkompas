@@ -23,9 +23,24 @@ namespace Application.FunctionalTests
         {
             builder.ConfigureTestServices(services =>
             {
+                // TODO: find a good solution for the HTTPContext is null problem
                 services
-                    .RemoveAll<IUser>()
-                    .AddTransient(provider => Mock.Of<IUser>(s => s.CurrentUserId == GetCurrentUserId()));
+                   .RemoveAll<IUser>()
+                   .AddTransient(provider => Mock.Of<IUser>(s => s.CurrentUserId == GetCurrentUserId()));
+
+                //services.RemoveAll<IHttpContextAccessor>(); 
+                //services.AddSingleton<IHttpContextAccessor>(provider =>
+                //{
+                //    var context = new DefaultHttpContext
+                //    {
+                //        User = new ClaimsPrincipal(new ClaimsIdentity(
+                //        [
+                //            new Claim(ClaimTypes.NameIdentifier, ""TestUserId"")
+                //        ], "mock"))
+                //    };
+
+                //    return new HttpContextAccessor { HttpContext = context };
+                //});
 
                 // CVS
                 services

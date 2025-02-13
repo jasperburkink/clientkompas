@@ -57,7 +57,7 @@ namespace Infrastructure.UnitTests.Identity
             );
 
             // Act
-            var (result, userId) = await identityService.CreateUserAsync(userName, password);
+            var (result, userId) = await identityService.CreateUserAsync(userName, password, 0);
 
             // Assert
             result.Succeeded.Should().BeTrue();

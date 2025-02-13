@@ -6,9 +6,9 @@
 
         public const string LicenceRead = nameof(LicenceRead);
 
-        public const string CoachManagement = nameof(CoachManagement);
+        public const string UserManagement = nameof(UserManagement);
 
-        public const string CoachRead = nameof(CoachRead);
+        public const string UserRead = nameof(UserRead);
 
         public const string ClientManagement = nameof(ClientManagement);
 

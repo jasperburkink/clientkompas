@@ -1,5 +1,4 @@
 ﻿using Bogus;
-using Domain.CVS.Domain;
 using Domain.CVS.Enums;
 
 namespace TestData.License
@@ -20,7 +19,7 @@ namespace TestData.License
                 .RuleFor(l => l.CreatedAt, f => f.Date.Past())
                 .RuleFor(l => l.ValidUntil, f => f.Date.Future())
                 .RuleFor(l => l.Organization, f => new Domain.CVS.Domain.Organization { OrganizationName = f.Company.CompanyName() })
-                .RuleFor(l => l.LicenseHolder, f => new User
+                .RuleFor(l => l.LicenseHolder, f => new Domain.CVS.Domain.User
                 {
                     FirstName = f.Name.FirstName(),
                     LastName = f.Name.LastName(),
