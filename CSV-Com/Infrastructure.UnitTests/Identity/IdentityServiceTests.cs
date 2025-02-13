@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Moq;
+using Moq.EntityFrameworkCore;
 
 namespace Infrastructure.UnitTests.Identity
 {
@@ -724,6 +725,166 @@ namespace Infrastructure.UnitTests.Identity
 
             // Assert
             roles.Should().NotBeNullOrEmpty().And.HaveCount(rolesDefault.Count());
+        }
+
+        [Fact]
+        public async Task GetUsersInRolesAsync_MultipleUsersWithDifferentRoles_ReturnsAllUsers()
+        {
+            // Arrange
+            var user1 = new AuthenticationUser { Id = "Test1" };
+            var user2 = new AuthenticationUser { Id = "Test2" };
+            var user3 = new AuthenticationUser { Id = "Test3" };
+            var user4 = new AuthenticationUser { Id = "Test4" };
+            var users = new List<AuthenticationUser> { user1, user2, user3, user4 };
+            _authenticationDbContext.Setup(mock => mock.Users).ReturnsDbSet(users);
+
+            var role1 = new AuthenticationRole(Roles.SystemOwner);
+            var role2 = new AuthenticationRole(Roles.Administrator);
+            var role3 = new AuthenticationRole(Roles.Licensee);
+            var role4 = new AuthenticationRole(Roles.Coach);
+
+            var roles = new List<AuthenticationRole> { role1, role2, role3, role4 };
+            _authenticationDbContext.Setup(mock => mock.Roles).ReturnsDbSet(roles);
+
+            var userRoles = new List<AuthenticationUserRole>
+            {
+                new() { RoleId = role1.Id, UserId = user1.Id },
+                new() { RoleId = role2.Id, UserId = user2.Id },
+                new() { RoleId = role3.Id, UserId = user3.Id },
+                new() { RoleId = role4.Id, UserId = user4.Id }
+            };
+            _authenticationDbContext.Setup(mock => mock.UserRoles).ReturnsDbSet(userRoles);
+
+            var identityService = new IdentityService(
+                _userManagerMock.Object,
+                _signInManagerMock.Object,
+                _roleManagerMock.Object,
+                _userClaimsPrincipalFactoryMock.Object,
+                _authorizationServiceMock.Object,
+                _authenticationDbContext.Object,
+                _hasherMock.Object,
+                _refreshTokenServiceMock.Object,
+                _emailServiceMock.Object
+            );
+
+            // Act
+            var result = await identityService.GetUsersInRolesAsync(role1.Name, role2.Name, role3.Name, role4.Name);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Should().BeEquivalentTo(users);
+        }
+
+        [Theory]
+        [InlineData(Roles.SystemOwner)]
+        [InlineData(Roles.Licensee)]
+        [InlineData(Roles.Administrator)]
+        [InlineData(Roles.Coach)]
+        public async Task GetUsersInRolesAsync_GetUserWithSpecificRole_ReturnsOneUserWithRole(string role)
+        {
+            // Arrange
+            var user1 = new AuthenticationUser { Id = "Test1" };
+            var user2 = new AuthenticationUser { Id = "Test2" };
+            var user3 = new AuthenticationUser { Id = "Test3" };
+            var user4 = new AuthenticationUser { Id = "Test4" };
+            var users = new List<AuthenticationUser> { user1, user2, user3, user4 };
+            _authenticationDbContext.Setup(mock => mock.Users).ReturnsDbSet(users);
+
+            var role1 = new AuthenticationRole(Roles.SystemOwner);
+            var role2 = new AuthenticationRole(Roles.Administrator);
+            var role3 = new AuthenticationRole(Roles.Licensee);
+            var role4 = new AuthenticationRole(Roles.Coach);
+
+            var roles = new List<AuthenticationRole> { role1, role2, role3, role4 };
+            _authenticationDbContext.Setup(mock => mock.Roles).ReturnsDbSet(roles);
+
+            var userRoles = new List<AuthenticationUserRole>
+            {
+                new() { RoleId = role1.Id, UserId = user1.Id },
+                new() { RoleId = role2.Id, UserId = user2.Id },
+                new() { RoleId = role3.Id, UserId = user3.Id },
+                new() { RoleId = role4.Id, UserId = user4.Id }
+            };
+            _authenticationDbContext.Setup(mock => mock.UserRoles).ReturnsDbSet(userRoles);
+
+            var identityService = new IdentityService(
+                _userManagerMock.Object,
+                _signInManagerMock.Object,
+                _roleManagerMock.Object,
+                _userClaimsPrincipalFactoryMock.Object,
+                _authorizationServiceMock.Object,
+                _authenticationDbContext.Object,
+                _hasherMock.Object,
+                _refreshTokenServiceMock.Object,
+                _emailServiceMock.Object
+            );
+
+            // Act
+            var result = await identityService.GetUsersInRolesAsync(role);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Count.Should().Be(1);
+
+            var shouldReturnUser = (from u in users
+                                    join ur in userRoles on u.Id equals ur.UserId
+                                    join r in roles on ur.RoleId equals r.Id
+                                    where r.Name == role
+                                    select u).First();
+
+            result.Should().ContainEquivalentOf(shouldReturnUser);
+        }
+
+        [Fact]
+        public async Task GetUsersInRolesAsync_UserWithMultipleRoles_ReturnsUserWithMultipleRoles()
+        {
+            // Arrange
+            var user1 = new AuthenticationUser { Id = "Test1" };
+            var user2 = new AuthenticationUser { Id = "Test2" };
+            var user3 = new AuthenticationUser { Id = "Test3" };
+            var user4 = new AuthenticationUser { Id = "Test4" };
+            var users = new List<AuthenticationUser> { user1, user2, user3, user4 };
+            _authenticationDbContext.Setup(mock => mock.Users).ReturnsDbSet(users);
+
+            var role1 = new AuthenticationRole(Roles.SystemOwner);
+            var role2 = new AuthenticationRole(Roles.Administrator);
+            var role3 = new AuthenticationRole(Roles.Licensee);
+            var role4 = new AuthenticationRole(Roles.Coach);
+
+            var roles = new List<AuthenticationRole> { role1, role2, role3, role4 };
+            _authenticationDbContext.Setup(mock => mock.Roles).ReturnsDbSet(roles);
+
+            var userRoles = new List<AuthenticationUserRole>
+            {
+                new() { RoleId = role1.Id, UserId = user1.Id },
+                new() { RoleId = role2.Id, UserId = user1.Id },
+                new() { RoleId = role3.Id, UserId = user1.Id },
+                new() { RoleId = role4.Id, UserId = user1.Id },
+                new() { RoleId = role2.Id, UserId = user2.Id },
+                new() { RoleId = role3.Id, UserId = user3.Id },
+                new() { RoleId = role4.Id, UserId = user4.Id }
+            };
+            _authenticationDbContext.Setup(mock => mock.UserRoles).ReturnsDbSet(userRoles);
+
+            var identityService = new IdentityService(
+                _userManagerMock.Object,
+                _signInManagerMock.Object,
+                _roleManagerMock.Object,
+                _userClaimsPrincipalFactoryMock.Object,
+                _authorizationServiceMock.Object,
+                _authenticationDbContext.Object,
+                _hasherMock.Object,
+                _refreshTokenServiceMock.Object,
+                _emailServiceMock.Object
+            );
+
+            // Act
+            var result = await identityService.GetUsersInRolesAsync(Roles.Coach);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Count.Should().Be(2);
+            result.Should().ContainEquivalentOf(user1).And.ContainEquivalentOf(user4);
         }
     }
 }
