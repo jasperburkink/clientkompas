@@ -141,7 +141,7 @@ namespace Application.FunctionalTests.Users.Commands.SendTemporaryPasswordLink
             // Assert
             result.Should().NotBeNull();
             result.Succeeded.Should().BeFalse();
-            result.Errors.Should().Contain("AuthenticationUser cannot be null.");
+            result.Errors.Should().Contain("IAuthenticationUser cannot be null.");
         }
 
         [Test]
