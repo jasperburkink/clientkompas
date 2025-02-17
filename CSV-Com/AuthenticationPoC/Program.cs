@@ -1,15 +1,11 @@
-using AuthenticationPoC.Models;
-using Microsoft.Extensions.Configuration;
-using Microsoft.EntityFrameworkCore;
-using System.Configuration;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
+﻿using AuthenticationPoC.CustomPolicy;
 using AuthenticationPoC.IdentityPolicy;
-using AuthenticationPoC.CustomPolicy;
-using Microsoft.AspNetCore.Authorization;
+using AuthenticationPoC.Models;
 using CVSInfrastructurePoC;
-using Pomelo.EntityFrameworkCore.MySql.Internal;
 using CVSInfrastructurePoC.Repositories;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,7 +25,7 @@ builder.Services.AddTransient<IUserValidator<AppUser>, CustomUsernameEmailPolicy
 
 builder.Services.AddDbContext<CVSDbContext>(
 dbContextOptions => dbContextOptions
-                .UseMySql(connectionStringCVS, serverVersion, 
+                .UseMySql(connectionStringCVS, serverVersion,
                 mySqlOptions =>
                 {
                     mySqlOptions.MigrationsAssembly(typeof(CVSDbContext).Assembly.FullName); // Migrations in class library
@@ -64,8 +60,10 @@ builder.Services.Configure<IdentityOptions>(identityOptions);
 //});
 
 // Custom policies static
-builder.Services.AddAuthorization(opts => {
-    opts.AddPolicy("NederlandseAdmin", policy => {
+builder.Services.AddAuthorization(opts =>
+{
+    opts.AddPolicy("NederlandseAdmin", policy =>
+    {
         policy.RequireRole("Admin");
         policy.RequireClaim("Nationaliteit", "Nederlands");
     });
@@ -74,8 +72,10 @@ builder.Services.AddAuthorization(opts => {
 
 // Custom user policy with custom user policy class
 builder.Services.AddTransient<IAuthorizationHandler, AllowUsersHandler>();
-builder.Services.AddAuthorization(opts => {
-    opts.AddPolicy("AllowJasper", policy => {
+builder.Services.AddAuthorization(opts =>
+{
+    opts.AddPolicy("AllowJasper", policy =>
+    {
         policy.AddRequirements(new AllowUserPolicy("Jasper"));
     });
 });

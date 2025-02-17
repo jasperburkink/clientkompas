@@ -44,14 +44,14 @@ namespace Application.UnitTests.Clients.Queries.GetClientEdit
                 Initials = _client.Initials,
                 PrefixLastName = _client.PrefixLastName,
                 Id = _client.Id,
-                BenefitForms = _client.BenefitForms.Select(bf => new GetClientEditBenefitFormDto { Id = bf.Id, Name = bf.Name }).ToList(),
+                BenefitForms = [.. _client.BenefitForms.Select(bf => new GetClientEditBenefitFormDto { Id = bf.Id, Name = bf.Name })],
                 DateOfBirth = _client.DateOfBirth,
                 Gender = (int)_client.Gender,
                 TelephoneNumber = _client.TelephoneNumber,
                 EmailAddress = _client.EmailAddress,
-                Diagnoses = _client.Diagnoses.Select(d => new GetClientEditDiagnosisDto { Id = d.Id, Name = d.Name }).ToList(),
-                DriversLicences = _client.DriversLicences.Select(dl => new GetClientEditDriversLicenceDto { Id = dl.Id, Category = dl.Category, Description = dl.Description }).ToList(),
-                EmergencyPeople = _client.EmergencyPeople.Select(ep => new GetClientEditEmergencyPersonDto { Name = ep.Name, TelephoneNumber = ep.TelephoneNumber }).ToList(),
+                Diagnoses = [.. _client.Diagnoses.Select(d => new GetClientEditDiagnosisDto { Id = d.Id, Name = d.Name })],
+                DriversLicences = [.. _client.DriversLicences.Select(dl => new GetClientEditDriversLicenceDto { Id = dl.Id, Category = dl.Category, Description = dl.Description })],
+                EmergencyPeople = [.. _client.EmergencyPeople.Select(ep => new GetClientEditEmergencyPersonDto { Name = ep.Name, TelephoneNumber = ep.TelephoneNumber })],
                 HouseNumber = _client.Address.HouseNumber,
                 HouseNumberAddition = _client.Address.HouseNumberAddition,
                 PostalCode = _client.Address.PostalCode,
@@ -59,7 +59,7 @@ namespace Application.UnitTests.Clients.Queries.GetClientEdit
                 StreetName = _client.Address.StreetName,
                 MaritalStatus = _client.MaritalStatus != null ? new GetClientEditMaritalStatusDto { Id = _client.MaritalStatus.Id, Name = _client.MaritalStatus.Name } : null,
                 IsInTargetGroupRegister = false,
-                WorkingContracts = _client.WorkingContracts.Select(wc => new GetClientEditWorkingContractDto { Id = wc.Id, OrganizationId = wc.OrganizationId, Function = wc.Function, ContractType = (int)wc.ContractType, FromDate = wc.FromDate, ToDate = wc.ToDate }).ToList(),
+                WorkingContracts = [.. _client.WorkingContracts.Select(wc => new GetClientEditWorkingContractDto { Id = wc.Id, OrganizationId = wc.OrganizationId, Function = wc.Function, ContractType = (int)wc.ContractType, FromDate = wc.FromDate, ToDate = wc.ToDate })],
                 Remarks = _client.Remarks
             };
 

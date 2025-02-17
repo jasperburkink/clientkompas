@@ -32,7 +32,7 @@ namespace Domain.CVS.ValueObjects
 
         public static Address From(string streetName, int houseNumber, string houseNumberAddition, string postalCode, string residence)
         {
-            var address = new Address(streetName, houseNumber, houseNumberAddition, postalCode, residence);
+            Address address = new(streetName, houseNumber, houseNumberAddition, postalCode, residence);
 
             if (!address.IsValid())
             {

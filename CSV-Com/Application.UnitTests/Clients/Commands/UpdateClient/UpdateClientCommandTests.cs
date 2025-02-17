@@ -75,8 +75,8 @@ namespace Application.UnitTests.Clients.Commands.UpdateClient
                 IsInTargetGroupRegister = false,
                 DriversLicences = [],
                 Diagnoses = [],
-                EmergencyPeople = _command.EmergencyPeople.Select(ep => ep.ToDomainModel(_mapperMock.Object, null)).ToList(),
-                WorkingContracts = _command.WorkingContracts.Select(wc => wc.ToDomainModel(_mapperMock.Object, null)).ToList(),
+                EmergencyPeople = [.. _command.EmergencyPeople.Select(ep => ep.ToDomainModel(_mapperMock.Object, null))],
+                WorkingContracts = [.. _command.WorkingContracts.Select(wc => wc.ToDomainModel(_mapperMock.Object, null))],
                 Remarks = _command.Remarks
             };
 
