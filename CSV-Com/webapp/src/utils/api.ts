@@ -493,6 +493,10 @@ export const resetPassword = async (resetPasswordCommand: ResetPasswordCommand):
     return handleApiResonse<ResetPasswordCommandDto>(response);
 }
 
+export const searchUsers = async (searchTerm: string): Promise<ClientQuery[]> => {
+    return (await fetchAPI<ClientQuery[]>(`${apiUrl}Client/SearchClients?SearchTerm=${searchTerm}`)).ReturnObject!;
+}
+
 export const createUser = async (user: CreateUserCommand): Promise<ApiResult<CreateUserCommandDto>> => {
     return await fetchAPI(`${apiUrl}User`, 'POST', user, true);
 }
