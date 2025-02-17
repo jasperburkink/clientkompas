@@ -61,7 +61,7 @@ namespace Application.UnitTests.Users.Queries.SearchUsers
                 LastName = u.LastName,
                 FullName = u.FullName,
                 PrefixLastName = u.PrefixLastName,
-                IsDeactivated = u.IsDeactivated
+                DeactivatedDateTime = u.DeactivationDateTime
             }).ToList();
 
             _unitOfWorkMock.Setup(uw => uw.UserRepository.FullTextSearch(
@@ -159,7 +159,6 @@ namespace Application.UnitTests.Users.Queries.SearchUsers
                     LastName = u.LastName,
                     FullName = u.FullName,
                     PrefixLastName = u.PrefixLastName,
-                    IsDeactivated = u.IsDeactivated
                 })
                 .OrderBy(u => u.LastName)
                 .ThenBy(u => u.FirstName)

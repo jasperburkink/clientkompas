@@ -89,8 +89,7 @@ namespace Infrastructure.Data.Authentication
                     EmailAddress = email,
                     FirstName = userName,
                     LastName = userName,
-                    TelephoneNumber = PHONENUMBER_SBICT,
-                    IsDeactivated = false
+                    TelephoneNumber = PHONENUMBER_SBICT
                 });
                 await unitOfWork.SaveAsync();
                 cvsUser = (await unitOfWork.UserRepository.GetAsync(u => u.EmailAddress.ToLower() == email.ToLower())).First();

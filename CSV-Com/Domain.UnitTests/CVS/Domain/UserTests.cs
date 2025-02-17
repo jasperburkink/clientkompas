@@ -14,7 +14,6 @@ namespace Domain.UnitTests.CVS.Domain
                 LastName = "Doe",
                 EmailAddress = "john.doe@example.com",
                 TelephoneNumber = "1234567890",
-                IsDeactivated = false
             };
         }
 
@@ -87,10 +86,10 @@ namespace Domain.UnitTests.CVS.Domain
         public void IsDeactivated_SettingProperty_ValueHasBeenSet()
         {
             // Act
-            _user.IsDeactivated = true;
+            _user.Deactivate(DateTime.UtcNow);
 
             // Assert
-            _user.IsDeactivated.Should().BeTrue();
+            _user.DeactivationDateTime.Should().NotBeNull();
         }
 
         [Fact]
@@ -102,8 +101,7 @@ namespace Domain.UnitTests.CVS.Domain
                 FirstName = "Admin",
                 LastName = "User",
                 EmailAddress = "a@b.com",
-                IsDeactivated = false,
-                TelephoneNumber = "0134567892"
+                TelephoneNumber = "0134567892",
             };
 
             // Act

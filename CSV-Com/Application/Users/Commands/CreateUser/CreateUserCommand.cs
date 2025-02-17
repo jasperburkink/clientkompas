@@ -79,7 +79,6 @@ namespace Application.Users.Commands.CreateUser
                 LastName = request.LastName,
                 EmailAddress = request.EmailAddress,
                 TelephoneNumber = request.TelephoneNumber,
-                IsDeactivated = false,
                 CreatedByUserId = currentLoggedInUserId
             };
 

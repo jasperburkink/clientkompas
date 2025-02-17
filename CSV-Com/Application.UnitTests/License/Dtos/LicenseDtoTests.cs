@@ -38,7 +38,6 @@ namespace Application.UnitTests.License.Dtos
                     FirstName = "John",
                     LastName = "Doe",
                     EmailAddress = "a@b.com",
-                    IsDeactivated = false,
                     TelephoneNumber = "1234567890"
                 }
             };

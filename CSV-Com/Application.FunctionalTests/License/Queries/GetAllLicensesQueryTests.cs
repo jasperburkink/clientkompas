@@ -29,7 +29,6 @@ namespace Application.FunctionalTests.License.Queries
                 FirstName = "John",
                 LastName = "Doe",
                 EmailAddress = "John.Doe@example.com",
-                IsDeactivated = false,
                 TelephoneNumber = "1234567890"
             };
 

@@ -28,7 +28,6 @@ namespace Application.UnitTests.Users.Queries.SearchUsers
                 LastName = "Doe",
                 EmailAddress = "john.doe@example.com",
                 TelephoneNumber = "123456789",
-                IsDeactivated = false
             };
 
             // Act
@@ -41,7 +40,6 @@ namespace Application.UnitTests.Users.Queries.SearchUsers
             dto.PrefixLastName.Should().Be(user.PrefixLastName);
             dto.LastName.Should().Be(user.LastName);
             dto.FullName.Should().Be("John van Doe"); // FullName moet correct worden gegenereerd
-            dto.IsDeactivated.Should().Be(user.IsDeactivated);
         }
 
         [Fact]
@@ -56,7 +54,6 @@ namespace Application.UnitTests.Users.Queries.SearchUsers
                 LastName = "Smith",
                 EmailAddress = "alice@example.com",
                 TelephoneNumber = "987654321",
-                IsDeactivated = true
             };
 
             // Act
@@ -65,10 +62,9 @@ namespace Application.UnitTests.Users.Queries.SearchUsers
             // Assert
             dto.Should().NotBeNull();
             dto.FirstName.Should().Be("Alice");
-            dto.PrefixLastName.Should().BeNull(); // Geen PrefixLastName, dus null
+            dto.PrefixLastName.Should().BeNull();
             dto.LastName.Should().Be("Smith");
-            dto.FullName.Should().Be("Alice Smith"); // Geen extra spaties
-            dto.IsDeactivated.Should().BeTrue();
+            dto.FullName.Should().Be("Alice Smith");
         }
 
         [Fact]
@@ -83,7 +79,6 @@ namespace Application.UnitTests.Users.Queries.SearchUsers
                 LastName = " Berg ",
                 EmailAddress = "bob@example.com",
                 TelephoneNumber = "555444333",
-                IsDeactivated = false
             };
 
             // Act
@@ -105,7 +100,6 @@ namespace Application.UnitTests.Users.Queries.SearchUsers
                 LastName = "Brown",
                 EmailAddress = "emma@example.com",
                 TelephoneNumber = "666777888",
-                IsDeactivated = false
             };
 
             // Act

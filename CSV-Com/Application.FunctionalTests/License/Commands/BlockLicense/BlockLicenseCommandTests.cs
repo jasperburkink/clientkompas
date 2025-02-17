@@ -23,7 +23,6 @@ namespace Application.FunctionalTests.License.Commands.BlockLicense
                 FirstName = "John",
                 LastName = "Doe",
                 EmailAddress = "john.doe@example.com",
-                IsDeactivated = false,
                 TelephoneNumber = "1234567890"
 
             };

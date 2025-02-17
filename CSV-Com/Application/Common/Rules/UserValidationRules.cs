@@ -6,6 +6,17 @@ namespace Application.Common.Rules
 {
     public static class UserValidationRules
     {
+        public static IRuleBuilderOptions<T, int> ValidateUserExists<T>(this IRuleBuilder<T, int> ruleBuilder, IUnitOfWork unitOfWork,
+            IResourceMessageProvider resourceMessageProvider)
+        {
+            return ruleBuilder
+                .MustAsync(async (id, cancellationToken) =>
+                {
+                    return await unitOfWork.UserRepository.ExistsAsync(user => user.Id == id, cancellationToken);
+                })
+                .WithMessage(id => resourceMessageProvider.GetMessage(typeof(UserValidationRules), "UserDoesNotExists", id));
+        }
+
         public static IRuleBuilderOptions<T, string?> ValidateUserFirstName<T>(this IRuleBuilder<T, string?> ruleBuilder,
             IResourceMessageProvider resourceMessageProvider)
         {
