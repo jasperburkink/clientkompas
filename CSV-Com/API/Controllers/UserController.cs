@@ -1,5 +1,6 @@
 ﻿using Application.Common.Models;
 using Application.Users.Commands.CreateUser;
+using Application.Users.Commands.SendTemporaryPasswordLink;
 using Application.Users.Queries.GetUserRoles;
 using Application.Users.Queries.SearchUsers;
 using Microsoft.AspNetCore.Mvc;
@@ -28,6 +29,12 @@ namespace API.Controllers
         {
             var clients = await Mediator.Send(query);
             return Ok(clients);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult<Result<SendTemporaryPasswordLinkCommandDto>>> SendTemporaryPasswordLink(SendTemporaryPasswordLinkCommand command)
+        {
+            return await Mediator.Send(command);
         }
     }
 }
