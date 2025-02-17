@@ -1,6 +1,5 @@
 ﻿using Application.Users.Commands.SendTemporaryPasswordLink;
 using Domain.Authentication.Constants;
-using Domain.Authentication.Domain;
 using Domain.CVS.Domain;
 using Infrastructure.Data.Authentication;
 using Infrastructure.Identity;

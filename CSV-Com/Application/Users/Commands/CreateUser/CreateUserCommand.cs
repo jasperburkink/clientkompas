@@ -133,7 +133,7 @@ namespace Application.Users.Commands.CreateUser
             return Result.Success(currentLoggedInUserId);
         }
 
-        private static async Task<Uri> CreateChangePasswordLink(ITokenService tokenService, AuthenticationUser authenticationUser)
+        private static async Task<Uri> CreateChangePasswordLink(ITokenService tokenService, IAuthenticationUser authenticationUser)
         {
             var token = await tokenService.GenerateTokenAsync(authenticationUser, "TemporaryPasswordToken"); // TODO: name in constants
             return new Uri($"https://localhost:3000/ChangePassword/{WebUtility.UrlEncode(token)}");

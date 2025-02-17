@@ -501,6 +501,11 @@ namespace Infrastructure.Data.CVS.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120)");
+
                     b.Property<bool>("IsDeactivated")
                         .HasColumnType("tinyint(1)");
 
@@ -527,6 +532,9 @@ namespace Infrastructure.Data.CVS.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("FullName")
+                        .HasAnnotation("MySql:FullTextIndex", true);
 
                     b.ToTable("Users");
                 });

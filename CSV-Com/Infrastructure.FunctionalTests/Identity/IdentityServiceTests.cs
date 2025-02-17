@@ -3,7 +3,6 @@ using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Models;
 using Domain.Authentication.Constants;
-using Domain.Authentication.Domain;
 using FluentAssertions;
 using Infrastructure.Data.Authentication;
 using Infrastructure.Identity;
@@ -19,7 +18,7 @@ namespace Infrastructure.FunctionalTests.Identity
     {
         private readonly IdentityService _identityService;
         private readonly UserManager<AuthenticationUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<AuthenticationRole> _roleManager;
 
         public IdentityServiceIntegrationTests()
         {
@@ -27,7 +26,7 @@ namespace Infrastructure.FunctionalTests.Identity
             .AddLogging()
             .AddAuthorization()
             .AddDbContext<AuthenticationDbContext>(options => options.UseInMemoryDatabase(Guid.NewGuid().ToString()))
-            .AddIdentity<AuthenticationUser, IdentityRole>()
+            .AddIdentity<AuthenticationUser, AuthenticationRole>()
             .AddEntityFrameworkStores<AuthenticationDbContext>()
             .AddDefaultTokenProviders();
 
@@ -40,14 +39,17 @@ namespace Infrastructure.FunctionalTests.Identity
             var serviceProvider = serviceCollection.Services.BuildServiceProvider();
 
             _userManager = serviceProvider.GetRequiredService<UserManager<AuthenticationUser>>();
-            _roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            _roleManager = serviceProvider.GetRequiredService<RoleManager<AuthenticationRole>>();
+            var authenticationDbContext = serviceProvider.GetRequiredService<IAuthenticationDbContext>();
             var signInManager = serviceProvider.GetRequiredService<SignInManager<AuthenticationUser>>();
             var authorizationService = serviceProvider.GetRequiredService<IAuthorizationService>();
             var hasher = serviceProvider.GetRequiredService<IHasher>();
             var refreshtokenService = serviceProvider.GetRequiredService<ITokenService>();
             var emailService = serviceProvider.GetRequiredService<IEmailService>();
 
-            _identityService = new IdentityService(_userManager, signInManager, _roleManager, null, authorizationService, hasher, refreshtokenService, emailService);
+            _identityService = new IdentityService(_userManager, signInManager, _roleManager, null,
+                authorizationService, authenticationDbContext, hasher,
+                refreshtokenService, emailService);
         }
 
         #region CreateUserAsync
@@ -198,7 +200,7 @@ namespace Infrastructure.FunctionalTests.Identity
             result.Succeeded.Should().BeTrue();
 
             // Assign role
-            await _roleManager.CreateAsync(new IdentityRole(role));
+            await _roleManager.CreateAsync(new AuthenticationRole(role));
             await _userManager.AddToRoleAsync(await _userManager.FindByIdAsync(userId), role);
 
             // Act
@@ -284,7 +286,7 @@ namespace Infrastructure.FunctionalTests.Identity
             var role = nameof(Roles.Coach);
 
             var (result, userId) = await _identityService.CreateUserAsync(userName, password, 0);
-            await _roleManager.CreateAsync(new IdentityRole(role));
+            await _roleManager.CreateAsync(new AuthenticationRole(role));
             await _userManager.AddToRoleAsync(await _userManager.FindByIdAsync(userId), role);
 
             var token = await _identityService.Get2FATokenAsync(userId);
@@ -338,7 +340,7 @@ namespace Infrastructure.FunctionalTests.Identity
             var role = nameof(Roles.Coach);
 
             var (result, userId) = await _identityService.CreateUserAsync(userName, password, 0);
-            await _roleManager.CreateAsync(new IdentityRole(role));
+            await _roleManager.CreateAsync(new AuthenticationRole(role));
             await _userManager.AddToRoleAsync(await _userManager.FindByIdAsync(userId), role);
 
             // Act
@@ -357,7 +359,7 @@ namespace Infrastructure.FunctionalTests.Identity
 
             foreach (var role in roles)
             {
-                await _roleManager.CreateAsync(new IdentityRole(role));
+                await _roleManager.CreateAsync(new AuthenticationRole(role));
             }
 
             // Act
@@ -366,6 +368,125 @@ namespace Infrastructure.FunctionalTests.Identity
 
             // Assert
             result.Should().NotBeNullOrEmpty().And.BeEquivalentTo(roles);
+        }
+
+        [Fact]
+        public async Task GetUsersInRolesAsync_MultipleUsersWithDifferentRoles_ReturnsAllUsers()
+        {
+            // Arrange
+            IList<string> roles = [Roles.Licensee, Roles.SystemOwner, Roles.Administrator, Roles.Coach];
+
+            foreach (var role in roles)
+            {
+                await _roleManager.CreateAsync(new AuthenticationRole(role));
+            }
+
+            var user1 = new AuthenticationUser { Id = "Test1", UserName = "Test1" };
+            var user2 = new AuthenticationUser { Id = "Test2", UserName = "Test2" };
+            var user3 = new AuthenticationUser { Id = "Test3", UserName = "Test3" };
+            var user4 = new AuthenticationUser { Id = "Test4", UserName = "Test4" };
+
+            var users = new List<AuthenticationUser> { user1, user2, user3, user4 };
+
+            var counter = 0;
+            foreach (var user in users)
+            {
+                await _userManager.CreateAsync(user);
+                await _userManager.AddToRoleAsync(user, roles[counter]);
+                counter++;
+            }
+
+            // Act
+            var result = await _identityService.GetUsersInRolesAsync(Roles.Licensee, Roles.SystemOwner, Roles.Administrator, Roles.Coach);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Should().BeEquivalentTo(users);
+        }
+
+        [Theory]
+        [InlineData(Roles.SystemOwner)]
+        [InlineData(Roles.Licensee)]
+        [InlineData(Roles.Administrator)]
+        [InlineData(Roles.Coach)]
+        public async Task GetUsersInRolesAsync_GetUserWithSpecificRole_ReturnsOneUserWithRole(string role)
+        {
+            // Arrange
+            IList<string> roles = [Roles.Licensee, Roles.SystemOwner, Roles.Administrator, Roles.Coach];
+
+            foreach (var r in roles)
+            {
+                await _roleManager.CreateAsync(new AuthenticationRole(r));
+            }
+
+            var user1 = new AuthenticationUser { Id = "Test1", UserName = "Test1" };
+            var user2 = new AuthenticationUser { Id = "Test2", UserName = "Test2" };
+            var user3 = new AuthenticationUser { Id = "Test3", UserName = "Test3" };
+            var user4 = new AuthenticationUser { Id = "Test4", UserName = "Test4" };
+
+            var users = new List<AuthenticationUser> { user1, user2, user3, user4 };
+
+            var counter = 0;
+            foreach (var user in users)
+            {
+                await _userManager.CreateAsync(user);
+                await _userManager.AddToRoleAsync(user, roles[counter]);
+                counter++;
+            }
+
+            // Act
+            var result = await _identityService.GetUsersInRolesAsync(role);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Count.Should().Be(1);
+        }
+
+        [Fact]
+        public async Task GetUsersInRolesAsync_UserWithMultipleRoles_ReturnsUserWithMultipleRoles()
+        {
+            // Arrange
+            IList<string> roles = [Roles.Licensee, Roles.SystemOwner, Roles.Administrator, Roles.Coach];
+
+            foreach (var r in roles)
+            {
+                await _roleManager.CreateAsync(new AuthenticationRole(r));
+            }
+
+            var user1 = new AuthenticationUser { Id = "Test1", UserName = "Test1" };
+            var user2 = new AuthenticationUser { Id = "Test2", UserName = "Test2" };
+            var user3 = new AuthenticationUser { Id = "Test3", UserName = "Test3" };
+            var user4 = new AuthenticationUser { Id = "Test4", UserName = "Test4" };
+
+            var users = new List<AuthenticationUser> { user1, user2, user3, user4 };
+
+            var counter = 0;
+            foreach (var user in users)
+            {
+                await _userManager.CreateAsync(user);
+
+                if (counter == 0)
+                {
+                    foreach (var r in roles)
+                    {
+                        await _userManager.AddToRoleAsync(user, r);
+                    }
+                }
+                else
+                {
+                    await _userManager.AddToRoleAsync(user, roles[counter]);
+                }
+
+                counter++;
+            }
+
+            // Act
+            var result = await _identityService.GetUsersInRolesAsync(Roles.Coach);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Count.Should().Be(2);
+            result.Should().ContainEquivalentOf(user1).And.ContainEquivalentOf(user4);
         }
     }
 }

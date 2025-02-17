@@ -1,4 +1,5 @@
-﻿using Domain.Common;
+﻿using System.Text.RegularExpressions;
+using Domain.Common;
 
 namespace Domain.CVS.Domain
 {
@@ -9,6 +10,19 @@ namespace Domain.CVS.Domain
         public string? PrefixLastName { get; set; }
 
         public required string LastName { get; set; }
+
+        public string FullName
+        {
+            get
+            {
+                var fullName = string.Join(' ', (new string[] { FirstName, PrefixLastName, LastName })
+                .Where(fv => !string.IsNullOrEmpty(fv))
+                .Select(s => s.Trim()));
+
+                return Regex.Replace(fullName, @"\s+", " ");
+            }
+            set => _ = value;
+        }
 
         public required string EmailAddress { get; set; }
 

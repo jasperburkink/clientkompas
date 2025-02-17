@@ -1,7 +1,7 @@
 ﻿using Application.Authentication.Commands.ResetPassword;
 using Application.Common.Exceptions;
 using Domain.Authentication.Constants;
-using Domain.Authentication.Domain;
+using Infrastructure.Identity;
 using TestData;
 using TestData.Authentication;
 

@@ -2,6 +2,7 @@
 using Application.Users.Commands.CreateUser;
 using Application.Users.Commands.SendTemporaryPasswordLink;
 using Application.Users.Queries.GetUserRoles;
+using Application.Users.Queries.SearchUsers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -21,6 +22,13 @@ namespace API.Controllers
         {
             var roles = await Mediator.Send(query);
             return Ok(roles);
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult<IEnumerable<SearchUsersQueryDto>>> SearchUsers([FromQuery] SearchUsersQuery query)
+        {
+            var clients = await Mediator.Send(query);
+            return Ok(clients);
         }
 
         [HttpPost("[action]")]

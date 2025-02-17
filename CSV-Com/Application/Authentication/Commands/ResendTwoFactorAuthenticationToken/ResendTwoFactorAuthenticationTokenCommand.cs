@@ -50,7 +50,7 @@ namespace Application.Authentication.Commands.ResendTwoFactorAuthenticationToken
             };
         }
 
-        private async Task<bool> IsUserLoggedIn(ResendTwoFactorAuthenticationTokenCommand request, AuthenticationUser user, IToken? twoFactorPendingToken)
+        private async Task<bool> IsUserLoggedIn(ResendTwoFactorAuthenticationTokenCommand request, IAuthenticationUser user, IAuthenticationToken? twoFactorPendingToken)
         {
             return user != null
                 && twoFactorPendingToken != null

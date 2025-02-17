@@ -75,7 +75,7 @@ namespace Application.FunctionalTests.Users.Commands.SendTemporaryPasswordLink
             var authenticationUserWithoutTempPassword = _testDataGeneratorAuthenticationUser.Create();
             authenticationUserWithoutTempPassword.HasTemporaryPassword = false;
             authenticationUserWithoutTempPassword.CVSUserId = _cvsUser.Id;
-            await AddAsync<AuthenticationUser, AuthenticationDbContext>(authenticationUserWithoutTempPassword);
+            await AddAsync<IAuthenticationUser, AuthenticationDbContext>(authenticationUserWithoutTempPassword);
 
             _command.UserId = authenticationUserWithoutTempPassword.Id;
 
@@ -98,7 +98,7 @@ namespace Application.FunctionalTests.Users.Commands.SendTemporaryPasswordLink
             authenticationUserWithMaxAttempts.TemporaryPasswordTokenCount = 10;
             authenticationUserWithMaxAttempts.HasTemporaryPassword = true;
             authenticationUserWithMaxAttempts.CVSUserId = _cvsUser.Id;
-            await AddAsync<AuthenticationUser, AuthenticationDbContext>(authenticationUserWithMaxAttempts);
+            await AddAsync<IAuthenticationUser, AuthenticationDbContext>(authenticationUserWithMaxAttempts);
 
             var token = new TemporaryPasswordToken
             {
@@ -141,7 +141,7 @@ namespace Application.FunctionalTests.Users.Commands.SendTemporaryPasswordLink
             // Assert
             result.Should().NotBeNull();
             result.Succeeded.Should().BeFalse();
-            result.Errors.Should().Contain("AuthenticationUser cannot be null.");
+            result.Errors.Should().Contain("IAuthenticationUser cannot be null.");
         }
 
         [Test]
@@ -155,7 +155,7 @@ namespace Application.FunctionalTests.Users.Commands.SendTemporaryPasswordLink
             authenticationUserWithNoCreator.HasTemporaryPassword = true;
             authenticationUserWithNoCreator.CVSUserId = cvsUser.Id;
             authenticationUserWithNoCreator.TemporaryPasswordTokenCount = 10;
-            await AddAsync<AuthenticationUser, AuthenticationDbContext>(authenticationUserWithNoCreator);
+            await AddAsync<IAuthenticationUser, AuthenticationDbContext>(authenticationUserWithNoCreator);
 
             var token = new TemporaryPasswordToken
             {
@@ -213,7 +213,7 @@ namespace Application.FunctionalTests.Users.Commands.SendTemporaryPasswordLink
             authenticationUserWithNoCreator.HasTemporaryPassword = true;
             authenticationUserWithNoCreator.CVSUserId = _cvsUser.Id;
             authenticationUserWithNoCreator.TemporaryPasswordTokenCount = 10;
-            await AddAsync<AuthenticationUser, AuthenticationDbContext>(authenticationUserWithNoCreator);
+            await AddAsync<IAuthenticationUser, AuthenticationDbContext>(authenticationUserWithNoCreator);
 
             var token = new TemporaryPasswordToken
             {
@@ -253,7 +253,7 @@ namespace Application.FunctionalTests.Users.Commands.SendTemporaryPasswordLink
             authenticationUserWithNoCreator.HasTemporaryPassword = true;
             authenticationUserWithNoCreator.CVSUserId = _cvsUser.Id;
             authenticationUserWithNoCreator.TemporaryPasswordTokenCount = 10;
-            await AddAsync<AuthenticationUser, AuthenticationDbContext>(authenticationUserWithNoCreator);
+            await AddAsync<IAuthenticationUser, AuthenticationDbContext>(authenticationUserWithNoCreator);
 
             var token = new TemporaryPasswordToken
             {
@@ -289,7 +289,7 @@ namespace Application.FunctionalTests.Users.Commands.SendTemporaryPasswordLink
             var authenticationUserWithExpiredToken = _testDataGeneratorAuthenticationUser.Create();
             authenticationUserWithExpiredToken.HasTemporaryPassword = true;
             authenticationUserWithExpiredToken.CVSUserId = _cvsUser.Id;
-            await AddAsync<AuthenticationUser, AuthenticationDbContext>(authenticationUserWithExpiredToken);
+            await AddAsync<IAuthenticationUser, AuthenticationDbContext>(authenticationUserWithExpiredToken);
 
             var token = new TemporaryPasswordToken
             {
@@ -324,7 +324,7 @@ namespace Application.FunctionalTests.Users.Commands.SendTemporaryPasswordLink
             var authenticationUserWithExpiredToken = _testDataGeneratorAuthenticationUser.Create();
             authenticationUserWithExpiredToken.HasTemporaryPassword = true;
             authenticationUserWithExpiredToken.CVSUserId = _cvsUser.Id;
-            await AddAsync<AuthenticationUser, AuthenticationDbContext>(authenticationUserWithExpiredToken);
+            await AddAsync<IAuthenticationUser, AuthenticationDbContext>(authenticationUserWithExpiredToken);
 
             _command.UserId = authenticationUserWithExpiredToken.Id;
 
@@ -346,7 +346,7 @@ namespace Application.FunctionalTests.Users.Commands.SendTemporaryPasswordLink
             var authenticationUserWithRevokedToken = _testDataGeneratorAuthenticationUser.Create();
             authenticationUserWithRevokedToken.HasTemporaryPassword = true;
             authenticationUserWithRevokedToken.CVSUserId = _cvsUser.Id;
-            await AddAsync<AuthenticationUser, AuthenticationDbContext>(authenticationUserWithRevokedToken);
+            await AddAsync<IAuthenticationUser, AuthenticationDbContext>(authenticationUserWithRevokedToken);
 
             var token = new TemporaryPasswordToken
             {
@@ -382,7 +382,7 @@ namespace Application.FunctionalTests.Users.Commands.SendTemporaryPasswordLink
             var authenticationUserWithUsedToken = _testDataGeneratorAuthenticationUser.Create();
             authenticationUserWithUsedToken.HasTemporaryPassword = true;
             authenticationUserWithUsedToken.CVSUserId = _cvsUser.Id;
-            await AddAsync<AuthenticationUser, AuthenticationDbContext>(authenticationUserWithUsedToken);
+            await AddAsync<IAuthenticationUser, AuthenticationDbContext>(authenticationUserWithUsedToken);
 
             var token = new TemporaryPasswordToken
             {

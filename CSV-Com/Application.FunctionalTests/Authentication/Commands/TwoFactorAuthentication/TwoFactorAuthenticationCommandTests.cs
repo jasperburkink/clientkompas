@@ -13,7 +13,7 @@ namespace Application.FunctionalTests.Authentication.Commands.TwoFactorAuthentic
         {
             UseMocks = true;
 
-            AddAsync<AuthenticationUser, AuthenticationDbContext>(CustomWebApplicationFactoryWithMocks.AuthenticationUser).GetAwaiter().GetResult();
+            AddAsync<IAuthenticationUser, AuthenticationDbContext>(CustomWebApplicationFactoryWithMocks.AuthenticationUser).GetAwaiter().GetResult();
 
             _command = new TwoFactorAuthenticationCommand
             {

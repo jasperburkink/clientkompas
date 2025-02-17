@@ -4,6 +4,7 @@ using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Models;
 using Domain.Authentication.Domain;
+using Infrastructure.Identity;
 using Moq;
 
 namespace Application.UnitTests.Authentication.Commands.Login

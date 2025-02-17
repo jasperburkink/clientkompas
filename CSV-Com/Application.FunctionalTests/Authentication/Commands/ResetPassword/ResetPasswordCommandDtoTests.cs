@@ -1,5 +1,5 @@
 ﻿using Application.Authentication.Commands.ResetPassword;
-using Domain.Authentication.Domain;
+using Infrastructure.Identity;
 using TestData;
 using TestData.Authentication;
 
@@ -63,7 +63,7 @@ namespace Application.FunctionalTests.Authentication.Commands.ResetPassword
                 NewPassword = null
             };
 
-            var handler = new ResetPasswordCommandHandler(IdentityService);
+            var handler = new ResetPasswordCommandHandler(Testing.IdentityService);
 
             // Act
             var result = await handler.Handle(command, default);
@@ -81,7 +81,7 @@ namespace Application.FunctionalTests.Authentication.Commands.ResetPassword
                 NewPassword = null
             };
 
-            var handler = new ResetPasswordCommandHandler(IdentityService);
+            var handler = new ResetPasswordCommandHandler(Testing.IdentityService);
 
             // Act
             var result = await handler.Handle(command, default);

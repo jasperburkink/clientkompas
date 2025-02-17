@@ -1,6 +1,6 @@
 ﻿using System.Text;
 using Bogus;
-using Domain.Authentication.Domain;
+using Infrastructure.Identity;
 
 namespace TestData.Authentication
 {
