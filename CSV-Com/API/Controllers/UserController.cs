@@ -1,5 +1,6 @@
 ﻿using Application.Common.Models;
 using Application.Users.Commands.CreateUser;
+using Application.Users.Commands.DeactivateUser;
 using Application.Users.Commands.SendTemporaryPasswordLink;
 using Application.Users.Queries.GetUserRoles;
 using Application.Users.Queries.SearchUsers;
@@ -33,6 +34,12 @@ namespace API.Controllers
 
         [HttpPost("[action]")]
         public async Task<ActionResult<Result<SendTemporaryPasswordLinkCommandDto>>> SendTemporaryPasswordLink(SendTemporaryPasswordLinkCommand command)
+        {
+            return await Mediator.Send(command);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult<Result>> DeactivateUser(DeactivateUserCommand command)
         {
             return await Mediator.Send(command);
         }

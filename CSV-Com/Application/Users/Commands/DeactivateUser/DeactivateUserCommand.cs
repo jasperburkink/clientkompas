@@ -1,4 +1,5 @@
-﻿using Application.Common.Interfaces.CVS;
+﻿using Application.Common.Interfaces;
+using Application.Common.Interfaces.CVS;
 using Application.Common.Models;
 
 namespace Application.Users.Commands.DeactivateUser
@@ -8,7 +9,7 @@ namespace Application.Users.Commands.DeactivateUser
         public int Id { get; init; }
     }
 
-    public class DeactivateUserCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<DeactivateUserCommand, Result>
+    public class DeactivateUserCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IEmailService emailService) : IRequestHandler<DeactivateUserCommand, Result>
     {
         public async Task<Result> Handle(DeactivateUserCommand request, CancellationToken cancellationToken)
         {
@@ -28,6 +29,18 @@ namespace Application.Users.Commands.DeactivateUser
 
             await unitOfWork.UserRepository.UpdateAsync(user);
             await unitOfWork.SaveAsync(cancellationToken);
+
+            // TODO: Rebuild to new emailservice
+            emailService.SendEmailAsync(
+                user.EmailAddress,
+                "Uw account is gedeactiveerd",
+                """
+                Uw account is gedeactiveerd. 
+                U kunt niet langer inloggen in het systeem. 
+                Wanneer u opnieuw toegang wilt tot het systeem, verzoeken wij u om contact op te nemen met uw contactpersoon.
+                """);
+
+            // TODO: add unit tests for sending email
 
             return Result.Success();
         }
