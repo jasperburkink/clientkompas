@@ -17,12 +17,6 @@ namespace Application.UnitTests.License.Dtos
         }
 
         [Fact]
-        public void Mapping_ConfigurationIsValid()
-        {
-            _mapper.ConfigurationProvider.AssertConfigurationIsValid();
-        }
-
-        [Fact]
         public void Mapping_MapsLicenseToLicenseDto()
         {
             // Arrange

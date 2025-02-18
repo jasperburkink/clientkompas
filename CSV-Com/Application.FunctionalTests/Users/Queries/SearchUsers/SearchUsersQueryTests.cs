@@ -91,7 +91,7 @@ namespace Application.FunctionalTests.Users.Queries.SearchUsers
                 Id = _user1.Id,
                 FirstName = _user1.FirstName,
                 FullName = _user1.FullName,
-                DeactivatedDateTime = _user1.DeactivationDateTime,
+                DeactivationDateTime = _user1.DeactivationDateTime,
                 LastName = _user1.LastName,
                 PrefixLastName = _user1.PrefixLastName
             };
@@ -101,7 +101,7 @@ namespace Application.FunctionalTests.Users.Queries.SearchUsers
                 Id = _user2.Id,
                 FirstName = _user2.FirstName,
                 FullName = _user2.FullName,
-                DeactivatedDateTime = _user2.DeactivationDateTime,
+                DeactivationDateTime = _user2.DeactivationDateTime,
                 LastName = _user2.LastName,
                 PrefixLastName = _user2.PrefixLastName
             };

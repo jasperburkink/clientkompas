@@ -259,7 +259,7 @@ namespace Application.FunctionalTests
             return await userManager.GeneratePasswordResetTokenAsync(user);
         }
 
-        private static IServiceScope CreateScope()
+        public static IServiceScope CreateScope()
         {
             return UseMocks ? s_scopeFactoryWithMocks.CreateScope() : s_scopeFactory.CreateScope();
         }

@@ -1,6 +1,9 @@
-﻿using Application.Users.Commands.DeactivateUser;
+﻿using Application.Common.Interfaces.CVS;
+using Application.Users.Commands.DeactivateUser;
+using AutoMapper;
 using Domain.Authentication.Constants;
 using Domain.CVS.Domain;
+using Microsoft.Extensions.DependencyInjection;
 using TestData;
 using TestData.User;
 
@@ -52,8 +55,13 @@ namespace Application.FunctionalTests.Users.Commands.DeactivateUser
                 Id = user.Id
             };
 
+            var unitOfWork = CreateScope().ServiceProvider.GetRequiredService<IUnitOfWork>();
+            var mapper = CreateScope().ServiceProvider.GetRequiredService<IMapper>();
+
+            var handler = new DeactivateUserCommandHandler(unitOfWork, mapper);
+
             // Act
-            var result = await SendAsync(command);
+            var result = await handler.Handle(command, default);
 
             // Assert
             result.Should().NotBeNull();

@@ -61,7 +61,7 @@ namespace Application.UnitTests.Users.Queries.SearchUsers
                 LastName = u.LastName,
                 FullName = u.FullName,
                 PrefixLastName = u.PrefixLastName,
-                DeactivatedDateTime = u.DeactivationDateTime
+                DeactivationDateTime = u.DeactivationDateTime
             }).ToList();
 
             _unitOfWorkMock.Setup(uw => uw.UserRepository.FullTextSearch(

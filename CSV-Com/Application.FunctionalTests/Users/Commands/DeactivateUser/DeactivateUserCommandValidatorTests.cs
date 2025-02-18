@@ -7,7 +7,7 @@ using TestData.User;
 
 namespace Application.FunctionalTests.Users.Commands.DeactivateUser
 {
-    public class DeactivateUserCommandValidatorTests
+    public class DeactivateUserCommandValidatorTests : BaseTestFixture
     {
         private ITestDataGenerator<User> _testDataGeneratorUser;
 
