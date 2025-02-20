@@ -1,4 +1,5 @@
-﻿using Application.Common.Interfaces.CVS;
+﻿using Application.Common.Interfaces;
+using Application.Common.Interfaces.CVS;
 using Application.Common.Mappings;
 using Application.Users.Commands.DeactivateUser;
 using AutoMapper;
@@ -16,6 +17,7 @@ namespace Application.UnitTests.Users.Commands.DeactivateUser
         private readonly IConfigurationProvider _configuration;
         private readonly IMapper _mapper;
         private readonly ITestDataGenerator<User> _testDataGenerator;
+        private readonly Mock<IEmailService> _emailServiceMock;
 
         public DeactivateUserCommandTests()
         {
@@ -26,6 +28,9 @@ namespace Application.UnitTests.Users.Commands.DeactivateUser
             _mapper = _configuration.CreateMapper();
 
             _testDataGenerator = new UserDataGenerator();
+
+            _emailServiceMock = new Mock<IEmailService>();
+            _emailServiceMock.Setup(mock => mock.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
         }
 
         [Fact]
@@ -41,7 +46,7 @@ namespace Application.UnitTests.Users.Commands.DeactivateUser
                 Id = user.Id
             };
 
-            var handler = new DeactivateUserCommandHandler(_unitOfWorkMock.Object, _mapper);
+            var handler = new DeactivateUserCommandHandler(_unitOfWorkMock.Object, _mapper, _emailServiceMock.Object);
 
             // Act
             var result = await handler.Handle(command, CancellationToken.None);
@@ -64,7 +69,7 @@ namespace Application.UnitTests.Users.Commands.DeactivateUser
                 Id = user.Id
             };
 
-            var handler = new DeactivateUserCommandHandler(_unitOfWorkMock.Object, _mapper);
+            var handler = new DeactivateUserCommandHandler(_unitOfWorkMock.Object, _mapper, _emailServiceMock.Object);
 
             // Act
             var result = await handler.Handle(command, CancellationToken.None);
@@ -89,7 +94,7 @@ namespace Application.UnitTests.Users.Commands.DeactivateUser
                 Id = user.Id
             };
 
-            var handler = new DeactivateUserCommandHandler(_unitOfWorkMock.Object, _mapper);
+            var handler = new DeactivateUserCommandHandler(_unitOfWorkMock.Object, _mapper, _emailServiceMock.Object);
 
             // Act
             var result = await handler.Handle(command, CancellationToken.None);
@@ -114,7 +119,7 @@ namespace Application.UnitTests.Users.Commands.DeactivateUser
                 Id = user.Id
             };
 
-            var handler = new DeactivateUserCommandHandler(_unitOfWorkMock.Object, _mapper);
+            var handler = new DeactivateUserCommandHandler(_unitOfWorkMock.Object, _mapper, _emailServiceMock.Object);
 
             // Act
             var act = () => handler.Handle(command, CancellationToken.None);
