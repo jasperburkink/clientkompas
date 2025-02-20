@@ -4,6 +4,7 @@ using Application.Authentication.Commands.TwoFactorAuthentication;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
+using Application.Common.Models;
 using Domain.Authentication.Constants;
 using Domain.Authentication.Domain;
 
@@ -39,7 +40,14 @@ namespace Application.Authentication.Commands.ResendTwoFactorAuthenticationToken
             var twoFactorPendingTokenValue = await tokenService.GenerateTokenAsync(user, nameof(request.TwoFactorPendingToken));
 
             // Send the token via email
-            await emailService.SendEmailAsync(user.Email, "Two-factor authentication token", twoFactorAuthenticationTokenValue);
+            EmailMessageDto message = new()
+            {
+                Id = Guid.NewGuid(),
+                Subject = "Two-factor authentication token",
+                Recipients = [user.Email]
+            };
+
+            await emailService.SendEmailAsync(message, "Two-factor authentication token", twoFactorAuthenticationTokenValue);
 
             return new ResendTwoFactorAuthenticationTokenCommandDto
             {

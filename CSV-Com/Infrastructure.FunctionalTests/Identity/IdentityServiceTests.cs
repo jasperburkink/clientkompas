@@ -1,5 +1,4 @@
 ﻿using Application.Common.Exceptions;
-using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Models;
 using Domain.Authentication.Constants;
@@ -7,7 +6,6 @@ using Domain.Authentication.Domain;
 using FluentAssertions;
 using Infrastructure.Data.Authentication;
 using Infrastructure.Identity;
-using Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -34,7 +32,6 @@ namespace Infrastructure.FunctionalTests.Identity
             serviceCollection.Services.AddScoped<IAuthenticationDbContext>(provider => provider.GetService<AuthenticationDbContext>());
             serviceCollection.Services.AddScoped<IHasher, Argon2Hasher>();
             serviceCollection.Services.AddScoped<ITokenService, TokenService>();
-            serviceCollection.Services.AddScoped<IEmailService, EmailService>();
 
             // Build de ServiceProvider op de ServiceCollection, niet op de IdentityBuilder
             var serviceProvider = serviceCollection.Services.BuildServiceProvider();
@@ -45,9 +42,8 @@ namespace Infrastructure.FunctionalTests.Identity
             var authorizationService = serviceProvider.GetRequiredService<IAuthorizationService>();
             var hasher = serviceProvider.GetRequiredService<IHasher>();
             var refreshtokenService = serviceProvider.GetRequiredService<ITokenService>();
-            var emailService = serviceProvider.GetRequiredService<IEmailService>();
 
-            _identityService = new IdentityService(_userManager, signInManager, null, authorizationService, hasher, refreshtokenService, emailService);
+            _identityService = new IdentityService(_userManager, signInManager, null, authorizationService, hasher, refreshtokenService);
         }
 
         #region CreateUserAsync

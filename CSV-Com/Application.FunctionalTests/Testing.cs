@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
 using Domain.Authentication.Domain;
 using Infrastructure.Data.Authentication;
@@ -26,6 +27,7 @@ namespace Application.FunctionalTests
         private static readonly string? s_databasePrefix = GenerateRandomPrefix();
         public static bool UseMocks { get; set; } = false;
         public static IIdentityService IdentityService => CreateScope().ServiceProvider.GetRequiredService<IIdentityService>();
+        public static IEmailService EmailService => CreateScope().ServiceProvider.GetRequiredService<IEmailService>();
 
         [OneTimeSetUp]
         public async Task RunBeforeAnyTests()

@@ -1,0 +1,172 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html dir="ltr"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:o="urn:schemas-microsoft-com:office:office"
+      lang="nl">
+<head>
+    <meta charset="UTF-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta name="x-apple-disable-message-reformatting" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta content="telephone=no" name="format-detection" />
+    <title>Registratie Succesvol</title>
+</head>
+
+<body style="
+         background-color: white;
+         margin: 0;
+         padding: 0;
+         font-family: 'Poppins', Arial, sans-serif;
+      ">
+    <div style="
+            text-align: center;
+            background-color: #ffffff;
+            border: 1px solid #adc8df;
+            border-radius: 10px;
+            width: 600px;
+            margin: 30px auto;
+            padding: 20px;
+         ">
+        <img src="https://i.gyazo.com/12f0c131fbf2a9ed283c7d76f464d5cf.png"
+             width="150"
+             style="margin: 20px auto; display: block"
+             alt="Logo" />
+
+        <h1 style="
+               color: #323232;
+               font-size: 30px;
+               font-weight: 600;
+               margin: 10px 0;
+            ">
+            Welkom bij CliëntenKompas!
+        </h1>
+
+        <p style="
+               color: #4a4a4a;
+               font-size: 16px;
+               line-height: 1.5;
+               margin: 10px 0 20px;
+            ">
+            Beste <strong>@Model.UserFirstName</strong>,
+        </p>
+        <p style="
+               color: #4a4a4a;
+               font-size: 16px;
+               line-height: 1.5;
+               margin: 10px 0 20px;
+            ">
+            Bedankt voor uw registratie bij <strong>[Product/Dienst]</strong>!
+            Uw account is succesvol aangemaakt en u kunt nu gebruikmaken van
+            onze diensten.
+        </p>
+
+        <table style="
+               border: 2px solid #adc8df;
+               border-collapse: collapse;
+               border-radius: 15px;
+               overflow: hidden;
+               margin: 0 auto;
+               width: 90%;
+               font-size: 14px;
+            ">
+            <tr>
+                <th style="
+                     border: 2px solid #adc8df;
+                     background-color: #88aecb;
+                     padding: 10px;
+                     text-align: right;
+                     color: white;
+                     font-weight: bold;
+                  ">
+                    Gebruikersnaam
+                </th>
+                <td style="
+                     border: 2px solid #adc8df;
+                     background-color: #f7f9fc;
+                     padding: 10px;
+                     text-align: left;
+                  ">
+                    @Model.Username
+                </td>
+            </tr>
+            <tr>
+                <th style="
+                     border: 2px solid #adc8df;
+                     background-color: #88aecb;
+                     padding: 10px;
+                     text-align: right;
+                     color: white;
+                     font-weight: bold;
+                  ">
+                    Registratiedatum
+                </th>
+                <td style="
+                     border: 2px solid #adc8df;
+                     background-color: #f7f9fc;
+                     padding: 10px;
+                     text-align: left;
+                  ">
+                    @Model.RegistrationDate
+                </td>
+            </tr>
+        </table>
+        <br />
+        <a href="@Model.LoginUrl"
+           style="
+               font-family: 'Poppins', Arial, sans-serif;
+               line-height: 16px;
+               color: #ffffff;
+               font-weight: 400;
+               text-decoration: none;
+               font-size: 14px;
+               display: inline-block;
+               padding: 12px 24px;
+               background-color: #88aecb;
+               border-radius: 5px;
+               margin-top: 20px;
+            "
+           target="_blank">
+            Inloggen
+        </a>
+
+        <p style="
+               color: #4a4a4a;
+               font-size: 14px;
+               line-height: 1.5;
+               margin: 20px 0 0;
+            ">
+            Heeft u vragen of hulp nodig? Neem gerust contact met ons op via:
+        </p>
+        <p style="
+               color: #4a4a4a;
+               font-size: 14px;
+               line-height: 1.5;
+               margin: 5px 0 0;
+            ">
+            📧
+            <a style="text-decoration: none; color: #88aecb"
+               href="mailto:ontwikkelaar@clientkompas.nl">ontwikkelaar@clientkompas.nl</a>
+            of 📞 <span style="color: #88aecb">+31 06-123456789</span>.
+        </p>
+
+        <p style="
+               color: #4a4a4a;
+               font-size: 14px;
+               line-height: 1.5;
+               margin: 20px 0 0;
+            ">
+            We kijken ernaar uit om u van dienst te zijn!
+        </p>
+
+        <p style="
+               color: #4a4a4a;
+               font-size: 14px;
+               font-weight: bold;
+               margin: 20px 0 0;
+            ">
+            Met vriendelijke groet,<br />
+            CliëntenKompas
+        </p>
+    </div>
+</body>
+</html>

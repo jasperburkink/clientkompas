@@ -1,5 +1,4 @@
-﻿using Application.Common.Interfaces;
-using Application.Common.Interfaces.Authentication;
+﻿using Application.Common.Interfaces.Authentication;
 using Application.Common.Models;
 using Domain.Authentication.Constants;
 using Domain.Authentication.Domain;
@@ -14,8 +13,7 @@ namespace Infrastructure.Identity
         IUserClaimsPrincipalFactory<AuthenticationUser> userClaimsPrincipalFactory,
         IAuthorizationService authorizationService,
         IHasher hasher,
-        ITokenService refreshTokenService,
-        IEmailService emailService) : IIdentityService
+        ITokenService refreshTokenService) : IIdentityService
     {
         private const string WEBAPP_URL = "http://localhost:3000"; // TODO: Move this url to the appsettings or get the url from constants?
         private const string TOKEN_PROVIDER = "Email";
@@ -125,30 +123,21 @@ namespace Infrastructure.Identity
 
         public async Task<AuthenticationUser> GetUserAsync(string userId) => await userManager.FindByIdAsync(userId);
 
-        public async Task<Result> SendResetPasswordEmailAsync(string emailAddress)
+        public async Task<string> GetResetPasswordEmailToken(string emailAddress)
         {
             var user = await userManager.FindByEmailAsync(emailAddress);
 
             // When user is unknown, still show a success result. No polling if emailaddresses are in the system.
             if (user == null)
             {
-                return Result.Success();
+                return string.Empty;
             }
 
             var token = await userManager.GeneratePasswordResetTokenAsync(user);
 
             var encodedToken = Uri.EscapeDataString(token);
 
-            // TODO: Email logic should not be in this class
-            var link = new Uri($"{WEBAPP_URL}/reset-password/{emailAddress}/{encodedToken}");
-
-            await emailService.SendEmailAsync(emailAddress, "Wachtwoord opnieuw instellen", // TODO: Use the new emailservice and take the text from resources.
-                $""""
-                Via deze link kunt U uw wachtwoord opnieuw instellen.
-                {link}
-                """");
-
-            return Result.Success();
+            return encodedToken;
         }
 
         public async Task<Result> ResetPasswordAsync(string emailAddress, string token, string newPassword)

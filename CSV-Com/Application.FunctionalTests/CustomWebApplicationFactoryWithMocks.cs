@@ -48,8 +48,7 @@ namespace Application.FunctionalTests
                 services.AddSingleton(mockIdentityService.Object);
 
                 var emailServiceMock = new Mock<IEmailService>();
-                emailServiceMock.Setup(mock => mock.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
-
+                emailServiceMock.Setup(mock => mock.SendEmailAsync(It.IsAny<EmailMessageDto>(), It.IsAny<string>(), It.IsAny<string>()));
 
                 // CVS
                 services

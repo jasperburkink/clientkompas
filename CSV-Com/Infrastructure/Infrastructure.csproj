@@ -37,6 +37,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj" />
+    <ProjectReference Include="..\EmailModule\EmailModule.csproj" />
     <ProjectReference Include="..\TestData\TestData.csproj" />
   </ItemGroup>
 

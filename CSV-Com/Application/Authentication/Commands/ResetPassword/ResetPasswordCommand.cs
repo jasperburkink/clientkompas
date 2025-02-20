@@ -1,4 +1,6 @@
-﻿using Application.Common.Interfaces.Authentication;
+﻿using Application.Common.Interfaces;
+using Application.Common.Interfaces.Authentication;
+using Application.Common.Models;
 
 namespace Application.Authentication.Commands.ResetPassword
 {
@@ -13,7 +15,7 @@ namespace Application.Authentication.Commands.ResetPassword
         public string NewPasswordRepeat { get; set; } = null!;
     }
 
-    public class ResetPasswordCommandHandler(IIdentityService identityService) : IRequestHandler<ResetPasswordCommand, ResetPasswordCommandDto>
+    public class ResetPasswordCommandHandler(IIdentityService identityService, IEmailService emailService) : IRequestHandler<ResetPasswordCommand, ResetPasswordCommandDto>
     {
         public async Task<ResetPasswordCommandDto> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
         {
@@ -24,6 +26,18 @@ namespace Application.Authentication.Commands.ResetPassword
                 ArgumentNullException.ThrowIfNull(request.NewPassword);
 
                 var result = await identityService.ResetPasswordAsync(request.EmailAddress, request.Token, request.NewPassword);
+
+                EmailMessageDto message = new()
+                {
+                    Id = Guid.NewGuid(),
+                    Subject = "Uw wachtwoord is veranderd",
+                    Recipients = [request.EmailAddress]
+                };
+
+                if (result.Succeeded)
+                {
+                    await emailService.SendEmailAsync(message, "PasswordResetConfirmation", new { });
+                }
 
                 return new ResetPasswordCommandDto
                 {
