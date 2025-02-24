@@ -52,7 +52,7 @@ namespace Application.UnitTests.Authentication.Commands.Logout
                 Value = "Test3"
             };
 
-            var userRefreshTokens = new List<IToken>
+            var userRefreshTokens = new List<IAuthenticationToken>
             {
                 refreshToken,
                 refreshTokenUser1,

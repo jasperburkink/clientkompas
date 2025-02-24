@@ -1,6 +1,5 @@
 ﻿using System.Linq.Expressions;
 using Application.Common.Interfaces.Authentication;
-using Domain.Authentication.Domain;
 using Infrastructure.Data.Authentication;
 using Infrastructure.Data.CVS;
 using Infrastructure.Identity;
@@ -101,9 +100,11 @@ namespace Application.FunctionalTests
 
             var result = await userManager.CreateAsync(user, password);
 
-            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-
-            await roleManager.CreateAsync(new IdentityRole(role));
+            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<AuthenticationRole>>();
+            if (!await roleManager.RoleExistsAsync(role))
+            {
+                await roleManager.CreateAsync(new AuthenticationRole(role));
+            }
 
             await userManager.AddToRolesAsync(user, [role]);
 
@@ -192,16 +193,23 @@ namespace Application.FunctionalTests
             await context.SaveChangesAsync();
         }
 
-        public static async Task UpdateAsync<TEntity>(TEntity entity)
+        public static async Task UpdateAsync<TEntity, TDbContext>(TEntity entity)
             where TEntity : class
+            where TDbContext : DbContext
         {
             using var scope = s_scopeFactory.CreateScope();
 
-            var context = scope.ServiceProvider.GetRequiredService<CVSDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<TDbContext>();
 
             context.Update(entity);
 
             await context.SaveChangesAsync();
+        }
+
+        public static async Task UpdateAsync<TEntity>(TEntity entity)
+            where TEntity : class
+        {
+            await UpdateAsync<TEntity, CVSDbContext>(entity);
         }
 
         public static async Task<int> CountAsync<TEntity>() where TEntity : class
@@ -228,7 +236,7 @@ namespace Application.FunctionalTests
 
             var result = await userManager.CreateAsync(user, password);
 
-            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<AuthenticationRole>>();
 
             if (result.Succeeded)
             {
@@ -251,7 +259,7 @@ namespace Application.FunctionalTests
             return await userManager.GeneratePasswordResetTokenAsync(user);
         }
 
-        private static IServiceScope CreateScope()
+        public static IServiceScope CreateScope()
         {
             return UseMocks ? s_scopeFactoryWithMocks.CreateScope() : s_scopeFactory.CreateScope();
         }

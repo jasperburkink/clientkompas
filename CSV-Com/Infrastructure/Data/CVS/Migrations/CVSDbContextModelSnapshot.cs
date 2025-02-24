@@ -491,6 +491,9 @@ namespace Infrastructure.Data.CVS.Migrations
                     b.Property<int?>("CreatedByUserId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("DeactivationDateTime")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("EmailAddress")
                         .IsRequired()
                         .HasMaxLength(250)
@@ -501,8 +504,10 @@ namespace Infrastructure.Data.CVS.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
-                    b.Property<bool>("IsDeactivated")
-                        .HasColumnType("tinyint(1)");
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime(6)");
@@ -527,6 +532,9 @@ namespace Infrastructure.Data.CVS.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("FullName")
+                        .HasAnnotation("MySql:FullTextIndex", true);
 
                     b.ToTable("Users");
                 });

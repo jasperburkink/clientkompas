@@ -1,12 +1,15 @@
-﻿using Domain.Authentication.Domain;
-using Infrastructure.Identity;
+﻿using Infrastructure.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data.Authentication
 {
     public interface IAuthenticationDbContext
     {
-        DbSet<AuthenticationUser> AuthenticationUsers { get; set; }
+        DbSet<AuthenticationUser> Users { get; set; }
+
+        DbSet<AuthenticationUserRole> UserRoles { get; set; }
+
+        DbSet<AuthenticationRole> Roles { get; set; }
 
         DbSet<RefreshToken> RefreshTokens { get; set; }
 

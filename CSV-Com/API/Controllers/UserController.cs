@@ -1,5 +1,9 @@
 ﻿using Application.Common.Models;
 using Application.Users.Commands.CreateUser;
+using Application.Users.Commands.DeactivateUser;
+using Application.Users.Commands.SendTemporaryPasswordLink;
+using Application.Users.Queries.GetUserRoles;
+using Application.Users.Queries.SearchUsers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -10,6 +14,32 @@ namespace API.Controllers
     {
         [HttpPost]
         public async Task<ActionResult<Result<CreateUserCommandDto>>> Create(CreateUserCommand command)
+        {
+            return await Mediator.Send(command);
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult<IEnumerable<GetUserRolesQuery>>> GetAvailableUserRoles([FromQuery] GetUserRolesQuery query)
+        {
+            var roles = await Mediator.Send(query);
+            return Ok(roles);
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult<IEnumerable<SearchUsersQueryDto>>> SearchUsers([FromQuery] SearchUsersQuery query)
+        {
+            var clients = await Mediator.Send(query);
+            return Ok(clients);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult<Result<SendTemporaryPasswordLinkCommandDto>>> SendTemporaryPasswordLink(SendTemporaryPasswordLinkCommand command)
+        {
+            return await Mediator.Send(command);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult<Result>> DeactivateUser(DeactivateUserCommand command)
         {
             return await Mediator.Send(command);
         }

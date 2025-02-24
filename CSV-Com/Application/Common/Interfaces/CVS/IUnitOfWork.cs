@@ -24,8 +24,8 @@ namespace Application.Common.Interfaces.CVS
 
         IRepository<License> LicenseRepository { get; }
 
-        public void Save();
+        void Save();
 
-        public Task SaveAsync(CancellationToken cancellationToken = default);
+        Task SaveAsync(CancellationToken cancellationToken = default);
     }
 }

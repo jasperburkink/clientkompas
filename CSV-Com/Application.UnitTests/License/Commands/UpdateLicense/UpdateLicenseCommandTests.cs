@@ -47,7 +47,6 @@ namespace Application.UnitTests.License.Commands.UpdateLicense
                 FirstName = "John",
                 LastName = "Doe",
                 EmailAddress = "a@b.com",
-                IsDeactivated = false,
                 TelephoneNumber = "1234567890"
             };
             var licenseDto = new LicenseDto();

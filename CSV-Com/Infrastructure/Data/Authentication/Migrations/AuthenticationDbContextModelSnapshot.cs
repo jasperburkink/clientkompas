@@ -22,7 +22,58 @@ namespace Infrastructure.Data.Authentication.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Authentication.Domain.AuthenticationUser", b =>
+            modelBuilder.Entity("Infrastructure.Identity.AuthenticationRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex");
+
+                    b.ToTable("AspNetRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Infrastructure.Identity.AuthenticationRoleClaim", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Infrastructure.Identity.AuthenticationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("varchar(255)");
@@ -101,58 +152,7 @@ namespace Infrastructure.Data.Authentication.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("varchar(256)");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("varchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex");
-
-                    b.ToTable("AspNetRoles", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetRoleClaims", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Infrastructure.Identity.AuthenticationUserClaim", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -177,15 +177,13 @@ namespace Infrastructure.Data.Authentication.Migrations
                     b.ToTable("AspNetUserClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Infrastructure.Identity.AuthenticationUserLogin", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("varchar(128)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("varchar(128)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("longtext");
@@ -201,7 +199,7 @@ namespace Infrastructure.Data.Authentication.Migrations
                     b.ToTable("AspNetUserLogins", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Infrastructure.Identity.AuthenticationUserRole", b =>
                 {
                     b.Property<string>("UserId")
                         .HasColumnType("varchar(255)");
@@ -216,23 +214,37 @@ namespace Infrastructure.Data.Authentication.Migrations
                     b.ToTable("AspNetUserRoles", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Infrastructure.Identity.AuthenticationUserToken", b =>
                 {
                     b.Property<string>("UserId")
                         .HasColumnType("varchar(255)");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("varchar(128)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("varchar(128)");
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("CreatedAt");
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
                         .HasMaxLength(34)
                         .HasColumnType("varchar(34)");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("ExpiresAt");
+
+                    b.Property<bool>("IsRevoked")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("IsRevoked");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("IsUsed");
 
                     b.Property<string>("Value")
                         .HasColumnType("longtext");
@@ -241,137 +253,77 @@ namespace Infrastructure.Data.Authentication.Migrations
 
                     b.ToTable("AspNetUserTokens", (string)null);
 
-                    b.HasDiscriminator().HasValue("IdentityUserToken<string>");
+                    b.HasDiscriminator().HasValue("AuthenticationUserToken");
 
                     b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Infrastructure.Identity.RefreshToken", b =>
                 {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserToken<string>");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("CreatedAt");
-
-                    b.Property<DateTime>("ExpiresAt")
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("ExpiresAt");
-
-                    b.Property<bool>("IsRevoked")
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("tinyint(1)")
-                        .HasColumnName("IsRevoked");
-
-                    b.Property<bool>("IsUsed")
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("tinyint(1)")
-                        .HasColumnName("IsUsed");
+                    b.HasBaseType("Infrastructure.Identity.AuthenticationUserToken");
 
                     b.HasDiscriminator().HasValue("RefreshToken");
                 });
 
             modelBuilder.Entity("Infrastructure.Identity.TemporaryPasswordToken", b =>
                 {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserToken<string>");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("CreatedAt");
-
-                    b.Property<DateTime>("ExpiresAt")
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("ExpiresAt");
-
-                    b.Property<bool>("IsRevoked")
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("tinyint(1)")
-                        .HasColumnName("IsRevoked");
-
-                    b.Property<bool>("IsUsed")
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("tinyint(1)")
-                        .HasColumnName("IsUsed");
+                    b.HasBaseType("Infrastructure.Identity.AuthenticationUserToken");
 
                     b.HasDiscriminator().HasValue("TemporaryPasswordToken");
                 });
 
             modelBuilder.Entity("Infrastructure.Identity.TwoFactorPendingToken", b =>
                 {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserToken<string>");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("CreatedAt");
-
-                    b.Property<DateTime>("ExpiresAt")
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("ExpiresAt");
-
-                    b.Property<bool>("IsRevoked")
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("tinyint(1)")
-                        .HasColumnName("IsRevoked");
-
-                    b.Property<bool>("IsUsed")
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("tinyint(1)")
-                        .HasColumnName("IsUsed");
+                    b.HasBaseType("Infrastructure.Identity.AuthenticationUserToken");
 
                     b.HasDiscriminator().HasValue("TwoFactorPendingToken");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Infrastructure.Identity.AuthenticationRoleClaim", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("Infrastructure.Identity.AuthenticationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Infrastructure.Identity.AuthenticationUserClaim", b =>
                 {
-                    b.HasOne("Domain.Authentication.Domain.AuthenticationUser", null)
+                    b.HasOne("Infrastructure.Identity.AuthenticationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Infrastructure.Identity.AuthenticationUserLogin", b =>
                 {
-                    b.HasOne("Domain.Authentication.Domain.AuthenticationUser", null)
+                    b.HasOne("Infrastructure.Identity.AuthenticationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Infrastructure.Identity.AuthenticationUserRole", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("Infrastructure.Identity.AuthenticationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Authentication.Domain.AuthenticationUser", null)
+                    b.HasOne("Infrastructure.Identity.AuthenticationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Infrastructure.Identity.AuthenticationUserToken", b =>
                 {
-                    b.HasOne("Domain.Authentication.Domain.AuthenticationUser", null)
+                    b.HasOne("Infrastructure.Identity.AuthenticationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

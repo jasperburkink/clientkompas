@@ -22,7 +22,6 @@ namespace Application.FunctionalTests.License.Commands.CreateLicense
                 FirstName = "Jane",
                 LastName = "Smith",
                 EmailAddress = "jane.smith@example.com",
-                IsDeactivated = false,
                 TelephoneNumber = "1234567890"
             };
             await AddAsync(licenseHolder);
@@ -83,7 +82,6 @@ namespace Application.FunctionalTests.License.Commands.CreateLicense
                 FirstName = "John",
                 LastName = "Doe",
                 EmailAddress = "john.doe@example.com",
-                IsDeactivated = false,
                 TelephoneNumber = "1234567890"
             };
             await AddAsync(licenseHolder);

@@ -33,7 +33,6 @@ namespace Application.FunctionalTests.License.Dtos
                     FirstName = "John",
                     LastName = "Doe",
                     EmailAddress = "a@b.com",
-                    IsDeactivated = false,
                     TelephoneNumber = "1234567890"
                 },
                 Status = LicenseStatus.Active

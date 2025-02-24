@@ -29,7 +29,6 @@ namespace Application.FunctionalTests.License.Commands.UpdateLicense
                 FirstName = "John",
                 LastName = "Doe",
                 EmailAddress = "johndoe@email.com",
-                IsDeactivated = false,
                 TelephoneNumber = "1234567890"
             };
             await AddAsync(licenseHolder);
@@ -101,7 +100,6 @@ namespace Application.FunctionalTests.License.Commands.UpdateLicense
                 FirstName = "John",
                 LastName = "Doe",
                 EmailAddress = "john.doe@example.com",
-                IsDeactivated = false,
                 TelephoneNumber = "1234567890"
             };
             await AddAsync(licenseHolder);
@@ -149,7 +147,6 @@ namespace Application.FunctionalTests.License.Commands.UpdateLicense
                     FirstName = "John",
                     LastName = "Doe",
                     EmailAddress = "john.doe@example.com",
-                    IsDeactivated = false,
                     TelephoneNumber = "1234567890"
                 },
                 Status = LicenseStatus.Active

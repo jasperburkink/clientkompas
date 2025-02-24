@@ -5,8 +5,8 @@ using Application.Common.Interfaces.CVS;
 using Application.Common.Models;
 using Application.Users.Commands.CreateUser;
 using AutoMapper;
-using Domain.Authentication.Domain;
 using Domain.CVS.Domain;
+using Infrastructure.Identity;
 using Moq;
 
 namespace Application.UnitTests.Users.Commands.CreateUser
@@ -40,7 +40,6 @@ namespace Application.UnitTests.Users.Commands.CreateUser
                 LastName = "Doe",
                 EmailAddress = "john.doe@example.com",
                 TelephoneNumber = "1234567890",
-                IsDeactivated = false,
             };
 
             _command = new CreateUserCommand
@@ -81,6 +80,9 @@ namespace Application.UnitTests.Users.Commands.CreateUser
 
             _identityServiceMock.Setup(s => s.CreateUserAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
                 .ReturnsAsync((Result.Success(), "newUserId"));
+
+            _identityServiceMock.Setup(s => s.AddUserToRoleAsync(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(Result.Success());
 
             _tokenServiceMock.Setup(s => s.GenerateTokenAsync(It.IsAny<AuthenticationUser>(), It.IsAny<string>()))
                 .ReturnsAsync("generatedToken");
