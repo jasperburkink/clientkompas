@@ -34,6 +34,7 @@ import GetMenuByUserDto from "types/model/menu/get-menu-by-user-dto";
 import CreateUserCommand from "types/model/user/create-user/create-user-command";
 import CreateUserCommandDto from "types/model/user/create-user/create-user-command-dto";
 import GetUserRolesDto from "types/model/user/get-user-roles/get-user-roles.dto";
+import SearchUserQueryDto from "types/model/user/search-users/search-user-query-dto";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -491,6 +492,10 @@ export const resetPassword = async (resetPasswordCommand: ResetPasswordCommand):
     const response = await fetch(`${apiUrl}Authentication/ResetPassword`, requestOptions);
     
     return handleApiResonse<ResetPasswordCommandDto>(response);
+}
+
+export const searchUsers = async (searchTerm: string): Promise<SearchUserQueryDto[]> => {
+    return (await fetchAPI<SearchUserQueryDto[]>(`${apiUrl}User/SearchUsers?SearchTerm=${searchTerm}`)).ReturnObject!;
 }
 
 export const createUser = async (user: CreateUserCommand): Promise<ApiResult<CreateUserCommandDto>> => {

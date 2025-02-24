@@ -8,6 +8,7 @@ interface ResultsListProps {
   results: ResultItem[];
   noResultsText: string;
   loading: boolean;
+  href: string;
 }
 
 const ResultsList: React.FC<ResultsListProps> = (props) => {
@@ -29,7 +30,7 @@ const ResultsList: React.FC<ResultsListProps> = (props) => {
     return (
     <ul>
       {props.results.map((result) => (
-        <li className='results-item' key={result.id} data-testid='results-item'><a href={'/clients/' + result.id}>{result.name}</a></li>
+        <li className={`results-item${result.isdeactivated ? ' isdeactivated' : ''}`}  key={result.id} data-testid='results-item'><a href={'/' + props.href + '/' + result.id}>{result.name}</a></li>
       ))}
     </ul>
   );

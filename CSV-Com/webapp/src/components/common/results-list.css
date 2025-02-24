@@ -17,4 +17,10 @@
         z-10
         hover:underline;
     }
+
+    .isdeactivated {
+        @apply
+        text-subGray2
+        line-through;
+    }
 }

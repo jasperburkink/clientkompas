@@ -1,17 +1,15 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import SearchForm from 'components/common/search-form';
-import ResultItem  from 'types/common/ResultItem';
 import ResultsList from 'components/common/results-list';
-import { searchClients } from 'utils/api';
-import ClientQuery, { getCompleteClientName } from 'types/model/ClientQuery';
+import { searchUsers } from 'utils/api';
 import StatusEnum from 'types/common/StatusEnum';
-import { ClientContext } from '../../pages/client-context';
+import { UserContext } from '../../pages/user-context';
 
-const NO_RESULT_TEXT = 'Er zijn geen cliënten gevonden die aan de zoekcriteria voldoen.';
+const NO_RESULT_TEXT = 'Er zijn geen gebruikers gevonden die aan de zoekcriteria voldoen.';
 const TYPEING_TIMEOUT = 500;
 
-const SearchClients: React.FC = () => {
-  const clientContext = useContext(ClientContext);
+const Searchusers: React.FC = () => {
+  const userContext = useContext(UserContext);
   const [error, setError] = useState<string|null>(null);      
   const [status, setStatus] = useState(StatusEnum.IDLE);
 
@@ -34,17 +32,18 @@ const SearchClients: React.FC = () => {
   const updateSearchResults = async (searchTerm: string) => {
     try{
       setStatus(StatusEnum.PENDING);
-      const clients = await searchClients(searchTerm);      
+      const users = await searchUsers(searchTerm);
       setStatus(StatusEnum.SUCCESSFUL);
       
-      if(!clients){
+      if(!users){
         return;
       }
 
-      clientContext.setAllClients(clients.map((client) => (          
+      userContext.setAllUsers(users.map((user) => (          
       {          
-        id: client.id,
-        name: getCompleteClientName(client)
+        id: user.id,
+        name: user.fullname,
+        isdeactivated: user.isdeactivated
       })));      
     }
     catch(err) {
@@ -70,9 +69,9 @@ const SearchClients: React.FC = () => {
   return (
     <div>
       <SearchForm onSearchChange={handleSearchChange} />
-      <ResultsList href='clients' results={clientContext.allClients} noResultsText={NO_RESULT_TEXT} loading={status === StatusEnum.IDLE || status === StatusEnum.PENDING} />
+      <ResultsList href='users' results={userContext.allUsers} noResultsText={NO_RESULT_TEXT} loading={status === StatusEnum.IDLE || status === StatusEnum.PENDING} />
     </div>
   );
 };
 
-export default SearchClients;
+export default Searchusers;
