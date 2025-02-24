@@ -52,7 +52,6 @@ namespace Domain.UnitTests.CVS.Domain
             {
                 FirstName = "Djomar",
                 EmailAddress = "a@b.com",
-                IsDeactivated = false,
                 LastName = "Test",
                 TelephoneNumber = "0123456789"
             };

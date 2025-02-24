@@ -42,8 +42,8 @@ const Searchusers: React.FC = () => {
       userContext.setAllUsers(users.map((user) => (          
       {          
         id: user.id,
-        name: user.fullname,
-        isdeactivated: user.isdeactivated
+        name: user.fullname,        
+        isdeactivated: user.deactivateddatetime !== null
       })));      
     }
     catch(err) {

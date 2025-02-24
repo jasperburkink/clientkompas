@@ -25,7 +25,6 @@ namespace TestData.License
                     LastName = f.Name.LastName(),
                     EmailAddress = f.Person.Email,
                     TelephoneNumber = f.Phone.PhoneNumber(),
-                    IsDeactivated = false,
                 })
                 .RuleFor(l => l.Status, f => f.PickRandom<LicenseStatus>());
         }

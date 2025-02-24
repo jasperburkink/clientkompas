@@ -5,7 +5,6 @@ using Application.Common.Interfaces.CVS;
 using Application.Common.Models;
 using Application.Users.Commands.CreateUser;
 using AutoMapper;
-using Domain.Authentication.Domain;
 using Domain.CVS.Domain;
 using Infrastructure.Identity;
 using Moq;
@@ -41,7 +40,6 @@ namespace Application.UnitTests.Users.Commands.CreateUser
                 LastName = "Doe",
                 EmailAddress = "john.doe@example.com",
                 TelephoneNumber = "1234567890",
-                IsDeactivated = false,
             };
 
             _command = new CreateUserCommand

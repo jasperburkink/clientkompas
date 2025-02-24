@@ -28,10 +28,20 @@ namespace Domain.CVS.Domain
 
         public required string TelephoneNumber { get; set; }
 
-        public required bool IsDeactivated { get; set; }
+        public DateTime? DeactivationDateTime { get; private set; }
 
         public User? CreatedByUser { get; set; }
 
         public int? CreatedByUserId { get; set; }
+
+        public DateTime Deactivate(DateTime deactivationDateTime)
+        {
+            if (!DeactivationDateTime.HasValue)
+            {
+                DeactivationDateTime = deactivationDateTime;
+            }
+
+            return DeactivationDateTime.Value;
+        }
     }
 }

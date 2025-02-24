@@ -19,8 +19,7 @@ namespace Application.Users.Queries.SearchUsers
 
             // Don't show systemowners in the searchresults
             var systemOwnerIds = (await identityService.GetUsersInRolesAsync(Roles.SystemOwner))
-                            .Select(systemOwner => systemOwner.CVSUserId)
-                            ;
+                            .Select(systemOwner => systemOwner.CVSUserId);
 
             var users = (await unitOfWork.UserRepository.FullTextSearch(
                 request.SearchTerm,

@@ -25,7 +25,7 @@ namespace TestData.User
                 })
                 .RuleFor(u => u.LastName, faker.Person.LastName)
                 .RuleFor(u => u.TelephoneNumber, faker.Phone.PhoneNumber())
-                .RuleFor(u => u.IsDeactivated, false)
+                .RuleFor(u => u.DeactivationDateTime, f => { return null; })
                 .RuleFor(u => u.CreatedByUser, f => { return null; })
                 .RuleFor(u => u.CreatedByUserId, f => { return null; });
         }

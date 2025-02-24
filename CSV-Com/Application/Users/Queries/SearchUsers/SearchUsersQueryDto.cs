@@ -15,6 +15,6 @@ namespace Application.Users.Queries.SearchUsers
 
         public required string FullName { get; set; }
 
-        public required bool IsDeactivated { get; set; }
+        public DateTime? DeactivationDateTime { get; set; }
     }
 }

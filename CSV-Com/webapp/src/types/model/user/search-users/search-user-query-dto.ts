@@ -4,5 +4,5 @@ export default interface SearchUserQueryDto {
     prefixlastname?: string;
     lastname: string;
     fullname: string;
-    isdeactivated: boolean;
+    deactivateddatetime?: boolean;
 }

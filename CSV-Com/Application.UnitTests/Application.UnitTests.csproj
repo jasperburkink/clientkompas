@@ -33,12 +33,4 @@
     <ProjectReference Include="..\TestData\TestData.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Clients\Commands\SearchClients\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Clients\Commands\SearchClients\" />
-  </ItemGroup>
-
 </Project>

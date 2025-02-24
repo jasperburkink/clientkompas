@@ -30,7 +30,9 @@ const ResultsList: React.FC<ResultsListProps> = (props) => {
     return (
     <ul>
       {props.results.map((result) => (
-        <li className={`results-item${result.isdeactivated ? ' isdeactivated' : ''}`}  key={result.id} data-testid='results-item'><a href={'/' + props.href + '/' + result.id}>{result.name}</a></li>
+        <li className={`results-item${result.isdeactivated ? ' isdeactivated' : ''}`}  key={result.id} data-testid='results-item'>
+          <a href={'/' + props.href + '/' + result.id}>{result.name}</a>
+        </li>
       ))}
     </ul>
   );

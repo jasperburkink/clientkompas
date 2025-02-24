@@ -40,8 +40,8 @@ namespace Infrastructure.Data.CVS.Configuration
                 .HasMaxLength(UserConstants.TelephoneNumberMaxLength)
                 .IsRequired();
 
-            builder.Property(u => u.IsDeactivated)
-                .IsRequired();
+            builder.Property(u => u.DeactivationDateTime)
+                .IsRequired(false);
 
             builder.HasOne(u => u.CreatedByUser)
                 .WithMany()
