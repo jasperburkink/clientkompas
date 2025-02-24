@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Application.Common.Mappings;
+using Domain.CVS.Domain;
 
 namespace Application.Users.Queries.GetUser
 {
-    internal class GetUserQueryDto
+    public class GetUserQueryDto : IMapFrom<User>
     {
+
     }
 }
