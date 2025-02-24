@@ -2,7 +2,6 @@
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Interfaces.CVS;
 using Domain.Authentication.Constants;
-using Domain.Authentication.Domain;
 using Infrastructure.Data.Authentication;
 using Infrastructure.Data.CVS;
 using Infrastructure.Data.Interceptor;
@@ -77,9 +76,12 @@ namespace Infrastructure
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services
-                .AddDefaultIdentity<AuthenticationUser>()
-                .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<AuthenticationDbContext>();
+                .AddIdentity<AuthenticationUser, AuthenticationRole>()
+                .AddEntityFrameworkStores<AuthenticationDbContext>()
+                .AddDefaultTokenProviders();
+
+            services.AddScoped<RoleManager<AuthenticationRole>>();
+            services.AddScoped<UserManager<AuthenticationUser>>();
 
             services.AddHttpContextAccessor();
 

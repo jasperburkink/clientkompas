@@ -1,6 +1,6 @@
 ﻿using Application.Authentication.Commands.RefreshToken;
-using Domain.Authentication.Domain;
 using Infrastructure.Data.Authentication;
+using Infrastructure.Identity;
 using TestData;
 using TestData.Authentication;
 

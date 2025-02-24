@@ -29,7 +29,6 @@ if (app.Environment.IsDevelopment() || true) // <- TODO: for now we want this sc
 
     var initialiserCVS = scope.ServiceProvider.GetRequiredService<CVSDbContextInitialiser>();
     await initialiserCVS.InitialiseAsync();
-    await initialiserCVS.SeedAsync();
 
     var initialiserAuthentication = scope.ServiceProvider.GetRequiredService<AuthenticationDbContextInitialiser>();
     await initialiserAuthentication.InitialiseAsync();

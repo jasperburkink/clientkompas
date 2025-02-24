@@ -156,4 +156,7 @@
   <data name="TelephoneNumberRequired" xml:space="preserve">
     <value>Telefoonnummer is verplicht.</value>
   </data>
+  <data name="UserDoesNotExists" xml:space="preserve">
+    <value>Gebruiker met id '{0}' bestaat niet.</value>
+  </data>
 </root>

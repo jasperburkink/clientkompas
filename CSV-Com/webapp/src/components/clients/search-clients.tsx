@@ -70,7 +70,7 @@ const SearchClients: React.FC = () => {
   return (
     <div>
       <SearchForm onSearchChange={handleSearchChange} />
-      <ResultsList results={clientContext.allClients} noResultsText={NO_RESULT_TEXT} loading={status === StatusEnum.IDLE || status === StatusEnum.PENDING} />
+      <ResultsList href='clients' results={clientContext.allClients} noResultsText={NO_RESULT_TEXT} loading={status === StatusEnum.IDLE || status === StatusEnum.PENDING} />
     </div>
   );
 };

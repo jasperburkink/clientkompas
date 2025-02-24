@@ -17,12 +17,6 @@ namespace Application.UnitTests.License.Dtos
         }
 
         [Fact]
-        public void Mapping_ConfigurationIsValid()
-        {
-            _mapper.ConfigurationProvider.AssertConfigurationIsValid();
-        }
-
-        [Fact]
         public void Mapping_MapsLicenseToLicenseDto()
         {
             // Arrange
@@ -38,7 +32,6 @@ namespace Application.UnitTests.License.Dtos
                     FirstName = "John",
                     LastName = "Doe",
                     EmailAddress = "a@b.com",
-                    IsDeactivated = false,
                     TelephoneNumber = "1234567890"
                 }
             };

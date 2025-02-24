@@ -6,6 +6,7 @@ using Domain.Authentication.Constants;
 using Domain.Authentication.Domain;
 using Infrastructure.Data.Authentication;
 using Infrastructure.Data.CVS;
+using Infrastructure.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -37,7 +38,7 @@ namespace Application.FunctionalTests
 
                 // Mock 
                 AuthenticationUser.TwoFactorEnabled = true;
-                AddAsync<AuthenticationUser, AuthenticationDbContext>(AuthenticationUser).GetAwaiter().GetResult();
+                AddAsync<IAuthenticationUser, AuthenticationDbContext>(AuthenticationUser).GetAwaiter().GetResult();
                 var mockIdentityService = new Mock<IIdentityService>();
                 mockIdentityService.Setup(s => s.LoginAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new LoggedInResult(true, AuthenticationUser, [Roles.Coach]));
                 mockIdentityService.Setup(s => s.LogoutAsync()).Returns(Task.CompletedTask);

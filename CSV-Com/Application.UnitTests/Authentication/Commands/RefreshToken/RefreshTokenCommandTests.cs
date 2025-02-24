@@ -2,6 +2,7 @@
 using Application.Authentication.Commands.RefreshToken;
 using Application.Common.Interfaces.Authentication;
 using Domain.Authentication.Domain;
+using Infrastructure.Identity;
 using Moq;
 
 namespace Application.UnitTests.Authentication.Commands.RefreshToken
@@ -21,7 +22,7 @@ namespace Application.UnitTests.Authentication.Commands.RefreshToken
                 RefreshToken = refreshToken
             };
 
-            var refreshTokenMock = new Mock<IToken>();
+            var refreshTokenMock = new Mock<IAuthenticationToken>();
 
             var user = new AuthenticationUser
             {
@@ -109,7 +110,7 @@ namespace Application.UnitTests.Authentication.Commands.RefreshToken
                 RefreshToken = refreshToken
             };
 
-            var refreshTokenMock = new Mock<IToken>();
+            var refreshTokenMock = new Mock<IAuthenticationToken>();
 
             var refreshTokenServiceMock = new Mock<ITokenService>();
             refreshTokenServiceMock.Setup(mock => mock.GetTokenAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(refreshTokenMock.Object);
@@ -136,7 +137,7 @@ namespace Application.UnitTests.Authentication.Commands.RefreshToken
                 RefreshToken = refreshToken
             };
 
-            var refreshTokenMock = new Mock<IToken>();
+            var refreshTokenMock = new Mock<IAuthenticationToken>();
 
             var refreshTokenServiceMock = new Mock<ITokenService>();
             refreshTokenServiceMock.Setup(mock => mock.GetTokenAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(refreshTokenMock.Object);

@@ -1,6 +1,6 @@
 ﻿namespace Domain.Authentication.Domain
 {
-    public interface IToken
+    public interface IAuthenticationToken
     {
         string UserId { get; set; }
 

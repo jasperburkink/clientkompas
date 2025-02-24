@@ -176,5 +176,14 @@ namespace Application.Common.Rules.Resources {
                 return ResourceManager.GetString("TelephoneNumberRequired", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gebruiker met id &apos;{0}&apos; bestaat niet..
+        /// </summary>
+        internal static string UserDoesNotExists {
+            get {
+                return ResourceManager.GetString("UserDoesNotExists", resourceCulture);
+            }
+        }
     }
 }

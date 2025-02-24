@@ -5,6 +5,7 @@
         public const int FirstNameMaxLength = 50;
         public const int LastNameMaxLength = 50;
         public const int PrefixLastNameMaxLength = 15;
+        public const int FullnameMaxLength = 120;
         public const int TelephoneNumberMaxLength = 15;
         public const int EmailAddressMaxLength = 250;
     }

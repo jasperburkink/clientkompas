@@ -1,4 +1,5 @@
-﻿using Domain.Common;
+﻿using System.Text.RegularExpressions;
+using Domain.Common;
 
 namespace Domain.CVS.Domain
 {
@@ -10,14 +11,37 @@ namespace Domain.CVS.Domain
 
         public required string LastName { get; set; }
 
+        public string FullName
+        {
+            get
+            {
+                var fullName = string.Join(' ', (new string[] { FirstName, PrefixLastName, LastName })
+                .Where(fv => !string.IsNullOrEmpty(fv))
+                .Select(s => s.Trim()));
+
+                return Regex.Replace(fullName, @"\s+", " ");
+            }
+            set => _ = value;
+        }
+
         public required string EmailAddress { get; set; }
 
         public required string TelephoneNumber { get; set; }
 
-        public required bool IsDeactivated { get; set; }
+        public DateTime? DeactivationDateTime { get; private set; }
 
         public User? CreatedByUser { get; set; }
 
         public int? CreatedByUserId { get; set; }
+
+        public DateTime Deactivate(DateTime deactivationDateTime)
+        {
+            if (!DeactivationDateTime.HasValue)
+            {
+                DeactivationDateTime = deactivationDateTime;
+            }
+
+            return DeactivationDateTime.Value;
+        }
     }
 }

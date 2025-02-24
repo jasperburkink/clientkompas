@@ -8,6 +8,12 @@
         "id": null
       },
       {
+        "to": "/users",
+        "text": "Medewerkers",
+        "icon": "Users",
+        "id": null
+      },
+      {
         "to": "/logout",
         "text": "Uitloggen",
         "icon": "Exit",

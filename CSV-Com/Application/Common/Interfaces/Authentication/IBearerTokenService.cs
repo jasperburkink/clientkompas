@@ -4,6 +4,6 @@ namespace Application.Common.Interfaces.Authentication
 {
     public interface IBearerTokenService
     {
-        Task<string> GenerateBearerTokenAsync(AuthenticationUser user, IList<string> roles);
+        Task<string> GenerateBearerTokenAsync(IAuthenticationUser user, IList<string> roles);
     }
 }

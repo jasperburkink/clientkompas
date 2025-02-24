@@ -33,7 +33,7 @@ namespace Infrastructure.FunctionalTests.Identity
                 PhoneNumber = FakerConfiguration.Faker.Person.Phone
             };
 
-            _authenticationDbContext.AuthenticationUsers.Add(_authenticationUser);
+            _authenticationDbContext.Users.Add(_authenticationUser);
             _authenticationDbContext.SaveChanges();
 
             var hasher = new Argon2Hasher();

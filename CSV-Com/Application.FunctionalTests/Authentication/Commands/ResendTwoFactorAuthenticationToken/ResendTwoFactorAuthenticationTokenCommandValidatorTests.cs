@@ -1,6 +1,5 @@
 ﻿using Application.Authentication.Commands.ResendTwoFactorAuthenticationToken;
 using Application.Common.Exceptions;
-using Domain.Authentication.Domain;
 using Infrastructure.Data.Authentication;
 using Infrastructure.Identity;
 using TestData;

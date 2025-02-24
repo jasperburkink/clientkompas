@@ -7,11 +7,14 @@ namespace Application.Common.Models
         private Result(bool succeeded, IEnumerable<string> errors)
         {
             Succeeded = succeeded;
-            Errors = errors.ToArray();
+            Errors = [.. errors];
         }
 
         public bool Succeeded { get; }
+
         public string[] Errors { get; }
+
+        public string ErrorMessage => string.Join(", ", Errors);
 
         public static Result Success()
         {
@@ -40,12 +43,16 @@ namespace Application.Common.Models
         {
             Value = value;
             Succeeded = succeeded;
-            Errors = errors.ToArray();
+            Errors = [.. errors];
         }
 
         public T? Value { get; }
+
         public bool Succeeded { get; }
+
         public string[] Errors { get; }
+
+        public string ErrorMessage => string.Join(", ", Errors);
 
         public static Result<T> Success(T value)
         {
