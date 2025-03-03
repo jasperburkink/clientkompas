@@ -2,6 +2,7 @@
 using Application.Users.Commands.CreateUser;
 using Application.Users.Commands.DeactivateUser;
 using Application.Users.Commands.SendTemporaryPasswordLink;
+using Application.Users.Queries.GetUser;
 using Application.Users.Queries.GetUserRoles;
 using Application.Users.Queries.SearchUsers;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,13 @@ namespace API.Controllers
     [ApiController]
     public class UserController : ApiControllerBase
     {
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Result<GetUserQueryDto>>> Get(int id)
+        {
+            var user = await Mediator.Send(new GetUserQuery { UserId = id });
+            return Ok(user);
+        }
+
         [HttpPost]
         public async Task<ActionResult<Result<CreateUserCommandDto>>> Create(CreateUserCommand command)
         {

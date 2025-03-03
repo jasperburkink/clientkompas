@@ -2,7 +2,6 @@
 using Application.Common.Mappings;
 using Application.Diagnoses.Queries.GetDiagnosis;
 using Application.DriversLicences.Queries;
-using AutoMapper;
 using Domain.CVS.Domain;
 using Domain.CVS.Enums;
 
