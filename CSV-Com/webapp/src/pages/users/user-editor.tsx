@@ -21,7 +21,7 @@ import { createUser, fetchUserRoles } from "utils/api";
 import ApiResult from "types/common/api-result";
 import User from 'types/model/User';
 import GetUserRolesDto from 'types/model/user/get-user-roles/get-user-roles.dto';
-import SearchUsers from './users/search-users';
+import SearchUsers from './search-users';
 
 const UserEditor = () => { 
     const navigate = useNavigate();
