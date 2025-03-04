@@ -1,4 +1,5 @@
-﻿using Application.Common.Interfaces.CVS;
+﻿using Application.Common.Interfaces;
+using Application.Common.Interfaces.CVS;
 using Application.Users.Commands.DeactivateUser;
 using AutoMapper;
 using Domain.Authentication.Constants;
@@ -57,8 +58,9 @@ namespace Application.FunctionalTests.Users.Commands.DeactivateUser
 
             var unitOfWork = CreateScope().ServiceProvider.GetRequiredService<IUnitOfWork>();
             var mapper = CreateScope().ServiceProvider.GetRequiredService<IMapper>();
+            var emailService = CreateScope().ServiceProvider.GetRequiredService<IEmailService>();
 
-            var handler = new DeactivateUserCommandHandler(unitOfWork, mapper);
+            var handler = new DeactivateUserCommandHandler(unitOfWork, mapper, emailService);
 
             // Act
             var result = await handler.Handle(command, default);
@@ -92,6 +94,24 @@ namespace Application.FunctionalTests.Users.Commands.DeactivateUser
             result.Should().NotBeNull();
             result.Succeeded.Should().BeFalse();
             result.ErrorMessage.Should().Be($"Gebruiker met id '${user.Id}' is al gedeactiveerd op ${user.DeactivationDateTime} en kan dus niet opnieuw worden gedeactiveerd.");
+        }
+
+        [Test]
+        public async Task Handle_UserDoesNotExist_ShouldThrowUnauthorizedAccessException()
+        {
+            // Arrange
+            var user = _testDataGeneratorUser.Create();
+
+            var command = new DeactivateUserCommand
+            {
+                Id = user.Id
+            };
+
+            // Act
+            var act = () => SendAsync(command);
+
+            // Assert
+            await act.Should().ThrowAsync<UnauthorizedAccessException>();
         }
     }
 }

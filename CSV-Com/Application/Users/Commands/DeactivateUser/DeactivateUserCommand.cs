@@ -1,9 +1,12 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Interfaces.CVS;
 using Application.Common.Models;
+using Application.Common.Security;
+using Domain.Authentication.Constants;
 
 namespace Application.Users.Commands.DeactivateUser
 {
+    [Authorize(Policy = Policies.UserManagement)]
     public record DeactivateUserCommand : IRequest<Result>
     {
         public int Id { get; init; }
