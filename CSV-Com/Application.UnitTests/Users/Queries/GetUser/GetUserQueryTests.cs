@@ -53,13 +53,21 @@ namespace Application.UnitTests.Users.Queries.GetUser
         public async Task Handle_UserDoesNotExists_ShouldReturnFailureResult()
         {
             // Arrange
+            var user = _userTestDataGenerator.Create();
 
+            _unitOfWorkMock.Setup(mock => mock.UserRepository.GetByIDAsync(It.IsAny<int>(), It.IsAny<string>(), default));
+
+            var handler = new GetUserQueryHandler(_unitOfWorkMock.Object, _mapper);
+
+            var query = new GetUserQuery { UserId = user.Id };
 
             // Act
-
+            var result = await handler.Handle(query, default);
 
             // Assert
-
+            result.Should().NotBeNull();
+            result.Succeeded.Should().BeFalse();
+            result.Errors.Should().Contain("User not found!");
         }
     }
 }
