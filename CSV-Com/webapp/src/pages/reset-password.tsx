@@ -11,7 +11,7 @@ import { InputField } from "components/common/input-field";
 import SaveButton from "components/common/save-button";
 import ResetPasswordCommand from "types/model/reset-password/reset-password-command";
 import ResetPasswordCommandDto from "types/model/reset-password/reset-password-command-dto";
-import ApiResult, { getErrorMessage } from "types/common/api-result";
+import ApiResultOld, { getErrorMessage } from "types/common/api-result-old";
 import CVSError from "types/common/cvs-error";
 import ErrorPopup from "components/common/error-popup";
 import { Copyright } from "components/common/copyright";
@@ -86,7 +86,7 @@ const RequestResetPassword = () => {
     };
 
     const handleResetPasswordResult = (
-        apiResult: ApiResult<ResetPasswordCommandDto>, 
+        apiResult: ApiResultOld<ResetPasswordCommandDto>, 
         setConfirmMessage: React.Dispatch<React.SetStateAction<string>>, 
         setConfirmPopupOneButtonOpen: React.Dispatch<React.SetStateAction<boolean>>, 
         setCvsError: React.Dispatch<React.SetStateAction<CVSError>>, 
@@ -187,13 +187,13 @@ const RequestResetPassword = () => {
                             loadingText = "Bezig met aanvragen"
                             successText = "Aanvraag succesvol"
                             errorText = "Fout tijdens aanvragen"
-                            onSave={async () => {  
+                            onSaveOld={async () => {  
                                     setStatus(StatusEnum.PENDING);
 
                                     return await resetPassword(resetPasswordCommand);                                    
                                 }
                             }
-                            onResult={(apiResult) => handleResetPasswordResult(
+                            onResultOld={(apiResult) => handleResetPasswordResult(
                                 apiResult, 
                                 setConfirmMessage, 
                                 setConfirmPopupOneButtonOpen, 

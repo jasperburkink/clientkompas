@@ -43,7 +43,7 @@ const Searchusers: React.FC = () => {
       {          
         id: user.id,
         name: user.fullname,        
-        isdeactivated: user.deactivateddatetime !== null
+        isdeactivated: user.deactivateddatetime
       })));      
     }
     catch(err) {

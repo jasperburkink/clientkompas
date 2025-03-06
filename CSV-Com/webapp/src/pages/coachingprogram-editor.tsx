@@ -28,10 +28,11 @@ import Decimal from 'decimal.js-light';
 import { DecimalInputField } from 'components/common/decimal-input-field';
 import { Moment } from 'moment';
 import SaveButton from 'components/common/save-button';
-import ApiResult from 'types/common/api-result';
+import ApiResultOld from 'types/common/api-result-old';
 import ConfirmPopup from 'components/common/confirm-popup';
 import GetClientFullnameDto from 'types/model/GetClientFullnameDto';
 import GetCoachingProgramTypesDto from 'types/model/GetCoachingProgramTypesDto';
+import ApiResult from 'types/common/api-result';
 
 const CoachingProgramEditor = () => {
     var { clientid, id } = useParams();
@@ -206,21 +207,21 @@ const CoachingProgramEditor = () => {
         setCvsError: React.Dispatch<React.SetStateAction<CvsError>>, 
         setErrorPopupOpen: React.Dispatch<React.SetStateAction<boolean>>, 
         setCoachingProgram: React.Dispatch<React.SetStateAction<CoachingProgramEdit>>): void => {
-        if (apiResult.Ok) {
+        if (apiResult.succeeded) {
             setConfirmMessage('Client succesvol opgeslagen');
             setConfirmPopupOneButtonOpen(true);
     
-            setCoachingProgram(apiResult.ReturnObject!);
+            setCoachingProgram(apiResult.value!);
         }
         else {
-            if(apiResult.ValidationErrors && !isHashEmpty(apiResult.ValidationErrors)) {
-                setValidationErrors(apiResult.ValidationErrors);
+            if(apiResult.validationerrors && !isHashEmpty(apiResult.validationerrors)) {
+                setValidationErrors(apiResult.validationerrors);
             }
             else {
                 setCvsError({
                     id: 0,
                     errorcode: 'E',
-                    message: `Er is een opgetreden tijdens het opslaan van een traject. Foutmelding: ${(apiResult.Errors as string[]).join(', ')}`
+                    message: `Er is een opgetreden tijdens het opslaan van een traject. Foutmelding: ${(apiResult.errors as string[]).join(', ')}`
                 });
                 
                 setErrorPopupOpen(true);    

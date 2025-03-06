@@ -6,7 +6,7 @@ import DriversLicence from "types/model/DriversLicence";
 import Client from "types/model/Client";
 import moment from 'moment';
 import { isNullOrEmpty } from "./utilities";
-import ApiResult from "types/common/api-result";
+import ApiResultOld from "types/common/api-result-old";
 import { Console, error } from "console";
 import Organization from "types/model/Organization";
 import { ValidationErrorHash, ValidationError, parseValidationErrors } from "types/common/validation-error";
@@ -35,10 +35,12 @@ import CreateUserCommand from "types/model/user/create-user/create-user-command"
 import CreateUserCommandDto from "types/model/user/create-user/create-user-command-dto";
 import GetUserRolesDto from "types/model/user/get-user-roles/get-user-roles.dto";
 import SearchUserQueryDto from "types/model/user/search-users/search-user-query-dto";
+import GetUserDto from "types/model/user/get-user/get-user-query-dto";
+import ApiResult from "types/common/api-result";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
-async function fetchAPI<T>(url: string, method: string = 'GET', body?: any, resultPattern: boolean = false): Promise<ApiResult<T>> {
+async function fetchAPIResult<T>(url: string, method: string = 'GET', body?: any): Promise<ApiResult<T>> {
     let bearerTokenJson: string | null = sessionStorage.getItem('token');
     let bearerToken: BearerToken | null = null;
 
@@ -80,7 +82,55 @@ async function fetchAPI<T>(url: string, method: string = 'GET', body?: any, resu
     
     const response = await fetch(url, options);
     
-    return resultPattern ? handleApiResonseResult<T>(response) : handleApiResonse<T>(response);
+    return handleApiResonseResult<T>(response);
+}
+
+/**
+ * @deprecated This method is deprecated and will be removed. Please use fetchAPIResult when result pattern is implemented for queries.
+ */
+async function fetchAPI<T>(url: string, method: string = 'GET', body?: any): Promise<ApiResultOld<T>> {
+    let bearerTokenJson: string | null = sessionStorage.getItem('token');
+    let bearerToken: BearerToken | null = null;
+
+    // Token expired?
+    if(bearerTokenJson){
+        bearerToken = BearerToken.deserialize(bearerTokenJson);
+
+        if(bearerToken.isExpired()){
+            const newToken = await RefreshTokenService.getInstance().refreshAccessToken();
+
+            if(!newToken) {
+                return Promise.reject({
+                    Ok: false,
+                    Errors: ['Unauthorized access']
+                });
+            }
+        }
+    }
+    // Refresh token?
+    else {
+        const newToken = await RefreshTokenService.getInstance().refreshAccessToken();
+
+        if(!newToken) {
+            return Promise.reject({
+                Ok: false,
+                Errors: ['Unauthorized access']
+            });
+        }
+    }
+
+    const options: RequestInit = {
+        method,
+        headers: {
+          'Content-type': 'application/json',
+          ...(bearerToken ? {'Authorization': `Bearer ${bearerToken.getToken()}`} : {})
+        },
+        body: body ? JSON.stringify(body) : undefined,
+      };
+    
+    const response = await fetch(url, options);
+    
+    return handleApiResonse<T>(response);
 }
 
 //TODO: move this to global file
@@ -97,7 +147,7 @@ Date.prototype.toJSON = function(){
 /**
  * @deprecated This method is deprecated and will be removed. Please use handleApiResonseResult when result pattern is implemented.
  */
-const handleApiResonse = async <T>(response: Response): Promise<ApiResult<T>> => {
+const handleApiResonse = async <T>(response: Response): Promise<ApiResultOld<T>> => {
     // Ok API response
     if(response.ok){
         let ObjectReturn: T = await response.json();
@@ -194,22 +244,9 @@ const handleApiResonseResult = async <T>(response: Response): Promise<ApiResult<
     if(response.ok){
         let responseJson = await response.json();
 
-        if(responseJson.succeeded)
-        {
-            let ObjectReturn: T = responseJson.value;
+        let responseObj: ApiResult<T> = responseJson.value;
 
-            return {
-                Ok: responseJson.succeeded,
-                ReturnObject: ObjectReturn
-            }
-        }
-        else
-        {
-            return {
-                Ok: responseJson.succeeded,
-                Errors: responseJson.errors
-            }
-        }
+        return responseObj;
     }
 
     // TODO: Implement all HTTP status codes with the pages. https://sbict.atlassian.net/wiki/spaces/CVS/pages/35356674/Foutafhandeling#Gehele-pagina%E2%80%99s
@@ -239,10 +276,10 @@ const handleApiResonseResult = async <T>(response: Response): Promise<ApiResult<
         }
 
         return {
-            Ok: response.ok,
-            Title: titleResponse,
-            Errors: errorsResponse,
-            ValidationErrors: validationErrorsResponse
+            succeeded: response.ok,
+            errormessage: titleResponse,
+            errors: errorsResponse,
+            validationerrors: validationErrorsResponse
         }  
     }    
     // Unauthorized 
@@ -283,17 +320,17 @@ const handleApiResonseResult = async <T>(response: Response): Promise<ApiResult<
         catch(err){
             console.log(`Error while parsing api errors. Error:${err}`);
         }
-
+        
         return {
-            Ok: response.ok,
-            Title: titleResponse,
-            Errors: errorsResponse,
-            ValidationErrors: validationErrorsResponse
+            succeeded: response.ok,
+            errormessage: titleResponse,
+            errors: errorsResponse,
+            validationerrors: validationErrorsResponse
         }  
     }
 }
 
-export const login = async (loginCommand: LoginCommand): Promise<ApiResult<LoginCommandDto>> => {
+export const login = async (loginCommand: LoginCommand): Promise<ApiResultOld<LoginCommandDto>> => {
     let method = 'POST';
 
     const requestOptions: RequestInit = {
@@ -309,7 +346,7 @@ export const login = async (loginCommand: LoginCommand): Promise<ApiResult<Login
     return handleApiResonse<LoginCommandDto>(response);
 }
 
-export const logout = async (logoutCommand: LogoutCommand): Promise<ApiResult<LogoutCommandDto>> => {
+export const logout = async (logoutCommand: LogoutCommand): Promise<ApiResultOld<LogoutCommandDto>> => {
     let method = 'POST';
 
     const requestOptions: RequestInit = {
@@ -325,7 +362,7 @@ export const logout = async (logoutCommand: LogoutCommand): Promise<ApiResult<Lo
     return handleApiResonse<LoginCommandDto>(response);
 }
 
-export const login2FA = async (loginCommand: TwoFactorAuthenticationCommand): Promise<ApiResult<TwoFactorAuthenticationCommandDto>> => {
+export const login2FA = async (loginCommand: TwoFactorAuthenticationCommand): Promise<ApiResultOld<TwoFactorAuthenticationCommandDto>> => {
     let method = 'POST';
 
     const requestOptions: RequestInit = {
@@ -341,7 +378,7 @@ export const login2FA = async (loginCommand: TwoFactorAuthenticationCommand): Pr
     return handleApiResonse<TwoFactorAuthenticationCommandDto>(response);
 }
 
-export const resend2FAToken = async (loginCommand: ResendTwoFactorAuthenticationTokenCommand): Promise<ApiResult<ResendTwoFactorAuthenticationTokenCommandDto>> => {
+export const resend2FAToken = async (loginCommand: ResendTwoFactorAuthenticationTokenCommand): Promise<ApiResultOld<ResendTwoFactorAuthenticationTokenCommandDto>> => {
     let method = 'POST';
 
     const requestOptions: RequestInit = {
@@ -423,7 +460,7 @@ Date.prototype.toJSON = function(){
 export const saveClient = async (client: Client): Promise<ApiResult<Client>> => {
     let method = client.id > 0  ? 'PUT' : 'POST';
 
-    return await fetchAPI(`${apiUrl}Client`, method, client);     
+    return await fetchAPIResult(`${apiUrl}Client`, method, client);     
 }
 
 export const fetchOrganization = async (organizationId: string): Promise<Organization> => {
@@ -434,7 +471,7 @@ export const fetchOrganizationEditor = async (organizationId: string): Promise<O
     return (await fetchAPI<Organization>(`${apiUrl}Organization/${organizationId}`)).ReturnObject!;
 }
 
-export const saveOrganization = async (organization: Organization): Promise<ApiResult<Organization>> => {
+export const saveOrganization = async (organization: Organization): Promise<ApiResultOld<Organization>> => {
     let method = organization.id > 0  ? 'PUT' : 'POST';
 
     return await fetchAPI(`${apiUrl}Organization`, method, organization);
@@ -459,10 +496,10 @@ export const fetchCoachingProgramTypes = async (): Promise<GetCoachingProgramTyp
 export const saveCoachingProgram = async (coachingProgram: CoachingProgramEdit): Promise<ApiResult<CoachingProgramEdit>> => {
     let method = coachingProgram.id > 0  ? 'PUT' : 'POST';
 
-    return await fetchAPI(`${apiUrl}CoachingProgram`, method, coachingProgram);
+    return await fetchAPIResult(`${apiUrl}CoachingProgram`, method, coachingProgram);
 }
 
-export const requestResetPassword = async (requestResetPasswordCommand: RequestResetPasswordCommand): Promise<ApiResult<RequestResetPasswordCommandDto>> => {
+export const requestResetPassword = async (requestResetPasswordCommand: RequestResetPasswordCommand): Promise<ApiResultOld<RequestResetPasswordCommandDto>> => {
     let method = 'POST';
 
     const requestOptions: RequestInit = {
@@ -478,7 +515,7 @@ export const requestResetPassword = async (requestResetPasswordCommand: RequestR
     return handleApiResonse<RequestResetPasswordCommandDto>(response);
 }
 
-export const resetPassword = async (resetPasswordCommand: ResetPasswordCommand): Promise<ApiResult<ResetPasswordCommandDto>> => {
+export const resetPassword = async (resetPasswordCommand: ResetPasswordCommand): Promise<ApiResultOld<ResetPasswordCommandDto>> => {
     let method = 'POST';
 
     const requestOptions: RequestInit = {
@@ -494,12 +531,16 @@ export const resetPassword = async (resetPasswordCommand: ResetPasswordCommand):
     return handleApiResonse<ResetPasswordCommandDto>(response);
 }
 
+export const fetchUser = async (userId: string): Promise<ApiResult<GetUserDto>> => {
+    return await fetchAPIResult<GetUserDto>(`${apiUrl}User/${userId}`);
+}
+
 export const searchUsers = async (searchTerm: string): Promise<SearchUserQueryDto[]> => {
     return (await fetchAPI<SearchUserQueryDto[]>(`${apiUrl}User/SearchUsers?SearchTerm=${searchTerm}`)).ReturnObject!;
 }
 
 export const createUser = async (user: CreateUserCommand): Promise<ApiResult<CreateUserCommandDto>> => {
-    return await fetchAPI(`${apiUrl}User`, 'POST', user, true);
+    return await fetchAPIResult(`${apiUrl}User`, 'POST', user);
 }
 
 export const fetchUserRoles = async (): Promise<GetUserRolesDto[]> => {

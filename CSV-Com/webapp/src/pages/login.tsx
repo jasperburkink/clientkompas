@@ -17,7 +17,7 @@ import SaveButton from "components/common/save-button";
 import { login } from "utils/api";
 import LoginCommand from "types/model/login/login-command";
 import LoginCommandDto from "types/model/login/login-command-dto";
-import ApiResult, { getErrorMessage } from "types/common/api-result";
+import ApiResultOld, { getErrorMessage } from "types/common/api-result-old";
 import CVSError from "types/common/cvs-error";
 import ErrorPopup from "components/common/error-popup";
 import { Copyright } from "components/common/copyright";
@@ -60,7 +60,7 @@ const Login = () => {
     };
 
     const handleLoginResult = (
-        apiResult: ApiResult<LoginCommandDto>, 
+        apiResult: ApiResultOld<LoginCommandDto>, 
         setConfirmMessage: React.Dispatch<React.SetStateAction<string>>, 
         setConfirmPopupOneButtonOpen: React.Dispatch<React.SetStateAction<boolean>>, 
         setCvsError: React.Dispatch<React.SetStateAction<CVSError>>, 
@@ -183,13 +183,13 @@ const Login = () => {
                             loadingText = "Bezig met inloggen"
                             successText = "Inloggen succesvol"
                             errorText = "Fout tijdens inloggen"
-                            onSave={async () => {  
+                            onSaveOld={async () => {  
                                     setStatus(StatusEnum.PENDING);
 
                                     return await login(loginCommand);                                    
                                 }
                             }
-                            onResult={(apiResult) => handleLoginResult(
+                            onResultOld={(apiResult) => handleLoginResult(
                                 apiResult, 
                                 setConfirmMessage, 
                                 setConfirmPopupOneButtonOpen, 

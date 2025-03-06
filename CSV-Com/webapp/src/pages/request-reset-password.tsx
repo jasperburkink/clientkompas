@@ -11,7 +11,7 @@ import { InputField } from "components/common/input-field";
 import SaveButton from "components/common/save-button";
 import RequestResetPasswordCommand from "types/model/request-reset-password/request-reset-password-command";
 import RequestResetPasswordCommandDto from "types/model/request-reset-password/request-reset-password-command-dto";
-import ApiResult, { getErrorMessage } from "types/common/api-result";
+import ApiResultOld, { getErrorMessage } from "types/common/api-result-old";
 import CVSError from "types/common/cvs-error";
 import ErrorPopup from "components/common/error-popup";
 import { Copyright } from "components/common/copyright";
@@ -51,7 +51,7 @@ const RequestResetPassword = () => {
     };
 
     const handleRequestResetPasswordResult = (
-        apiResult: ApiResult<RequestResetPasswordCommandDto>, 
+        apiResult: ApiResultOld<RequestResetPasswordCommandDto>, 
         setConfirmMessage: React.Dispatch<React.SetStateAction<string>>, 
         setConfirmPopupOneButtonOpen: React.Dispatch<React.SetStateAction<boolean>>, 
         setCvsError: React.Dispatch<React.SetStateAction<CVSError>>, 
@@ -134,13 +134,13 @@ const RequestResetPassword = () => {
                             loadingText = "Bezig met aanvragen"
                             successText = "Aanvraag succesvol"
                             errorText = "Fout tijdens aanvragen"
-                            onSave={async () => {  
+                            onSaveOld={async () => {  
                                     setStatus(StatusEnum.PENDING);
 
                                     return await requestResetPassword(requestResetPasswordCommand);                                    
                                 }
                             }
-                            onResult={(apiResult) => handleRequestResetPasswordResult(
+                            onResultOld={(apiResult) => handleRequestResetPasswordResult(
                                 apiResult, 
                                 setConfirmMessage, 
                                 setConfirmPopupOneButtonOpen, 

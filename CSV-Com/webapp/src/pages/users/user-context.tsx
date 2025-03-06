@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import ResultItem  from '../../types/common/ResultItem';
 import UserEditor from './user-editor';
+import UserDetails from './user-details';
 
 export const UserContext = React.createContext<IUserContext>({allUsers: [], setAllUsers: (x) => null});
 
@@ -28,7 +29,7 @@ export const UserContextWrapper = (props: UserContextWrapperProps) => {
 
     return (
         <UserContext.Provider value={userContext}>
-            { props.userRoute === UserRoute.VIEW_USER && < />}
+            { props.userRoute === UserRoute.VIEW_USER && <UserDetails />}
             { props.userRoute === UserRoute.EDIT_USER && <UserEditor />}
         </UserContext.Provider>
     );

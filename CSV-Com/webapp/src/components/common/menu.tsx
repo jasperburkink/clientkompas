@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import ErrorPopup from './error-popup';
 import LogoutCommandDto from 'types/model/logout/logout-command-dto';
 import { fetchMenuByUserId, logout } from 'utils/api';
-import ApiResult from 'types/common/api-result';
+import ApiResultOld from 'types/common/api-result-old';
 import LogoutCommand from 'types/model/logout/logout-command';
 import RefreshTokenService from 'utils/refresh-token-service';
 import CVSError from 'types/common/cvs-error';
@@ -68,7 +68,7 @@ const MenuComponent: React.FC<MenuComponentProps> = (props: MenuComponentProps) 
             };
 
             // API-aanroep om uit te loggen
-            const result: ApiResult<LogoutCommandDto> = await logout(logoutCommand);
+            const result: ApiResultOld<LogoutCommandDto> = await logout(logoutCommand);
     
             // Check of de logout succesvol is
             if (result.Ok && result.ReturnObject && result.ReturnObject.success) {

@@ -20,7 +20,7 @@ import CVSError from 'types/common/cvs-error';
 import { fetchClientEditor } from 'utils/api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDiagnoses, faSpinner } from "@fortawesome/free-solid-svg-icons";
-import ApiResult from 'types/common/api-result';
+import ApiResultOld from 'types/common/api-result-old';
 import { OrganizationContext } from './organization-context';
 import Organization from 'types/model/Organization';
 import Menu from 'components/common/menu';
@@ -410,11 +410,11 @@ const OrganizationEditor = () => {
                         loadingText = "Bezig met oplaan"
                         successText = "Cliënt opgeslagen"
                         errorText = "Fout tijdens opslaan"
-                        onSave={async () => {                                 
+                        onSaveOld={async () => {                                 
                                 return await saveOrganization(organization!)
                             }
                         }
-                        onResult={(apiResult) => handleSaveResult(apiResult, setConfirmMessage, setConfirmPopupOneButtonOpen, setCvsError, setErrorPopupOpen, setOrganization)} />
+                        onResultOld={(apiResult) => handleSaveResult(apiResult, setConfirmMessage, setConfirmPopupOneButtonOpen, setCvsError, setErrorPopupOpen, setOrganization)} />
                     </div>
                 </div>
             </div>
@@ -435,7 +435,7 @@ const OrganizationEditor = () => {
 export default OrganizationEditor;
 
 function handleSaveResult(
-    apiResult: ApiResult<Organization>, 
+    apiResult: ApiResultOld<Organization>, 
     setConfirmMessage: React.Dispatch<React.SetStateAction<string>>, 
     setConfirmPopupOneButtonOpen: React.Dispatch<React.SetStateAction<boolean>>, 
     setCvsError: React.Dispatch<React.SetStateAction<CVSError>>, 

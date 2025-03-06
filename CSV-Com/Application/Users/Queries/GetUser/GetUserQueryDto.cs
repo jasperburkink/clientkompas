@@ -17,6 +17,8 @@ namespace Application.Users.Queries.GetUser
 
         public required string TelephoneNumber { get; set; }
 
+        public required string Role { get; set; }
+
         public DateTime? DeactivationDateTime { get; set; }
 
         public string? CreatedByUserDescription { get; set; }

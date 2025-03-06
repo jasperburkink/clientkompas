@@ -18,10 +18,11 @@ import { isHashEmpty, ValidationErrorHash } from "types/common/validation-error"
 import { Dropdown } from "components/common/dropdown";
 import SaveButton from "components/common/save-button";
 import { createUser, fetchUserRoles } from "utils/api";
-import ApiResult from "types/common/api-result";
+import ApiResultOld from "types/common/api-result-old";
 import User from 'types/model/User';
 import GetUserRolesDto from 'types/model/user/get-user-roles/get-user-roles.dto';
 import SearchUsers from './search-users';
+import ApiResult from 'types/common/api-result';
 
 const UserEditor = () => { 
     const navigate = useNavigate();
@@ -81,21 +82,21 @@ const UserEditor = () => {
             setCvsError: React.Dispatch<React.SetStateAction<CVSError>>, 
             setErrorPopupOpen: React.Dispatch<React.SetStateAction<boolean>>, 
             setUser: React.Dispatch<React.SetStateAction<User>>): void => {
-            if (apiResult.Ok) {
+            if (apiResult.succeeded) {
                 setConfirmMessage('Medewerker opgeslagen');
                 setConfirmPopupOneButtonOpen(true);
         
-                setUser(apiResult.ReturnObject!);
+                setUser(apiResult.value!);
             }
             else {
-                if(apiResult.ValidationErrors && !isHashEmpty(apiResult.ValidationErrors)) {
-                    setValidationErrors(apiResult.ValidationErrors);
+                if(apiResult.validationerrors && !isHashEmpty(apiResult.validationerrors)) {
+                    setValidationErrors(apiResult.validationerrors);
                 }
                 else {
                     setCvsError({
                         id: 0,
                         errorcode: 'E',
-                        message: `Er is een opgetreden tijdens het opslaan van een medewerker. Foutmelding: ${(apiResult.Errors as string[]).join(', ')}`
+                        message: `Er is een opgetreden tijdens het opslaan van een medewerker. Foutmelding: ${(apiResult.errors as string[]).join(', ')}`
                     });
                     
                     setErrorPopupOpen(true);    
