@@ -1,3 +1,4 @@
+import './user-details.css'
 import Menu from "components/common/menu";
 import { NavTitle } from "components/nav/nav-title";
 import { useEffect, useState } from "react";
@@ -68,7 +69,7 @@ export default function UserDetails() {
         <div id='staticSidebar' className='sidebarContentPush'></div>
 
         <Menu>
-            <NavTitle lijstNaam="Medewerkers" />
+            <NavTitle lijstNaam="Medewerkerslijst" />
             <Searchusers />
         </Menu>
 
@@ -87,32 +88,35 @@ export default function UserDetails() {
         <div className="user">        
             <Header text="Medewerker" className='user-header' />
 
-            <Header text="Medewerker gegevens" className='user-subheader' />
+            <Header text="Medewerkergegevens" className='user-subheader' />
 
-            <Label text={user.fullName} />
-            <Label text={user.emailaddress} />
-            <Label text={user.telephonenumber} />            
-            <LabelField text='Rol' required={true}>
-              <Label text={user.role} />
-            </LabelField>
+            <Label className='user-label' text={user.fullname} />
+            <Label className='user-label' text={user.emailaddress} />
+            <Label className='user-label' text={user.telephonenumber} />
+            <Label className='user-label' text={`Rol: ${user.role}`}  />
 
-            <LabelField text='Gebruikersnaam' required={true}>
-              <Label text={user.emailaddress} />
-            </LabelField>
+            <span className='user-whitespace' />
+
+            <Label className='user-label' text={`Gebruikersnaam: ${user.emailaddress}`}  />
 
             {user.createdbyuserdescription &&
-            <LabelField text='Aangemaakt door:' required={true}>
-              <Label text={user.createdbyuserdescription} />
-            </LabelField>
+            <div>
+              <span className='user-whitespace' />
+              <Label className='user-label' text={`Aangemaakt door: ${user.createdbyuserdescription}`}  />
+            </div>
             }
 
             {user.deactivationdatetime &&
-            <LabelField text='Gedeactiveerd op' required={true}>
-              <Label text={user.deactivationdatetime.toString()} />
-            </LabelField>
+            <div>
+              <Label className='user-label' text={`Gedeactiveerd op: ${user.deactivationdatetime.toString()}`}  />
+              <span className='user-whitespace' />
+            </div>
             }
+
+            <span className='user-whitespace' />
+
             <div className='button-container'>
-                <LinkButton buttonType={{type:"Solid"}} text="Aanpassen" href={`../user/edit/${id}`} />
+                <LinkButton buttonType={{type:"Solid"}} text="Aanpassen" href={`../users/edit/${id}`} />
                 {!user.deactivationdatetime &&
                 <Button buttonType={{type:"NotSolid"}} text="Non actief" onClick={() => deactivateUserClick(user)} dataTestId="button.deactivate" />
                 }

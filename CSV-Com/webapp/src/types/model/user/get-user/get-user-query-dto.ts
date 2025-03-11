@@ -4,7 +4,7 @@ export default interface GetUserDto {
     firstname: string;
     prefixlastName?: string;
     lastname: string;
-    fullName: string;
+    fullname: string;
     emailaddress: string;
     role: string; 
     telephonenumber: string;
