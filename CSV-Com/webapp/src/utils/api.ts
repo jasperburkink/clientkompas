@@ -244,7 +244,7 @@ const handleApiResonseResult = async <T>(response: Response): Promise<ApiResult<
     if(response.ok){
         let responseJson = await response.json();
 
-        let responseObj: ApiResult<T> = responseJson.value;
+        let responseObj: ApiResult<T> = responseJson;
 
         return responseObj;
     }
@@ -330,7 +330,7 @@ const handleApiResonseResult = async <T>(response: Response): Promise<ApiResult<
     }
 }
 
-export const login = async (loginCommand: LoginCommand): Promise<ApiResultOld<LoginCommandDto>> => {
+export const login = async (loginCommand: LoginCommand): Promise<ApiResult<LoginCommandDto>> => {
     let method = 'POST';
 
     const requestOptions: RequestInit = {
@@ -343,7 +343,7 @@ export const login = async (loginCommand: LoginCommand): Promise<ApiResultOld<Lo
 
     const response = await fetch(`${apiUrl}Authentication`, requestOptions);     
     
-    return handleApiResonse<LoginCommandDto>(response);
+    return handleApiResonseResult<LoginCommandDto>(response);
 }
 
 export const logout = async (logoutCommand: LogoutCommand): Promise<ApiResultOld<LogoutCommandDto>> => {
@@ -362,7 +362,7 @@ export const logout = async (logoutCommand: LogoutCommand): Promise<ApiResultOld
     return handleApiResonse<LoginCommandDto>(response);
 }
 
-export const login2FA = async (loginCommand: TwoFactorAuthenticationCommand): Promise<ApiResultOld<TwoFactorAuthenticationCommandDto>> => {
+export const login2FA = async (loginCommand: TwoFactorAuthenticationCommand): Promise<ApiResult<TwoFactorAuthenticationCommandDto>> => {
     let method = 'POST';
 
     const requestOptions: RequestInit = {
@@ -375,7 +375,7 @@ export const login2FA = async (loginCommand: TwoFactorAuthenticationCommand): Pr
 
     const response = await fetch(`${apiUrl}Authentication/TwoFactorLogin`, requestOptions);     
     
-    return handleApiResonse<TwoFactorAuthenticationCommandDto>(response);
+    return handleApiResonseResult<TwoFactorAuthenticationCommandDto>(response);
 }
 
 export const resend2FAToken = async (loginCommand: ResendTwoFactorAuthenticationTokenCommand): Promise<ApiResultOld<ResendTwoFactorAuthenticationTokenCommandDto>> => {
@@ -471,10 +471,10 @@ export const fetchOrganizationEditor = async (organizationId: string): Promise<O
     return (await fetchAPI<Organization>(`${apiUrl}Organization/${organizationId}`)).ReturnObject!;
 }
 
-export const saveOrganization = async (organization: Organization): Promise<ApiResultOld<Organization>> => {
+export const saveOrganization = async (organization: Organization): Promise<ApiResult<Organization>> => {
     let method = organization.id > 0  ? 'PUT' : 'POST';
 
-    return await fetchAPI(`${apiUrl}Organization`, method, organization);
+    return await fetchAPIResult(`${apiUrl}Organization`, method, organization);
 }
 
 export const fetchCoachingProgramsByClient = async (clientId: string): Promise<CoachingProgramQuery[]> => {
@@ -499,7 +499,7 @@ export const saveCoachingProgram = async (coachingProgram: CoachingProgramEdit):
     return await fetchAPIResult(`${apiUrl}CoachingProgram`, method, coachingProgram);
 }
 
-export const requestResetPassword = async (requestResetPasswordCommand: RequestResetPasswordCommand): Promise<ApiResultOld<RequestResetPasswordCommandDto>> => {
+export const requestResetPassword = async (requestResetPasswordCommand: RequestResetPasswordCommand): Promise<ApiResult<RequestResetPasswordCommandDto>> => {
     let method = 'POST';
 
     const requestOptions: RequestInit = {
@@ -512,10 +512,10 @@ export const requestResetPassword = async (requestResetPasswordCommand: RequestR
 
     const response = await fetch(`${apiUrl}Authentication/RequestResetPassword`, requestOptions);     
     
-    return handleApiResonse<RequestResetPasswordCommandDto>(response);
+    return handleApiResonseResult<RequestResetPasswordCommandDto>(response);
 }
 
-export const resetPassword = async (resetPasswordCommand: ResetPasswordCommand): Promise<ApiResultOld<ResetPasswordCommandDto>> => {
+export const resetPassword = async (resetPasswordCommand: ResetPasswordCommand): Promise<ApiResult<ResetPasswordCommandDto>> => {
     let method = 'POST';
 
     const requestOptions: RequestInit = {
@@ -528,7 +528,7 @@ export const resetPassword = async (resetPasswordCommand: ResetPasswordCommand):
 
     const response = await fetch(`${apiUrl}Authentication/ResetPassword`, requestOptions);
     
-    return handleApiResonse<ResetPasswordCommandDto>(response);
+    return handleApiResonseResult<ResetPasswordCommandDto>(response);
 }
 
 export const fetchUser = async (userId: string): Promise<ApiResult<GetUserDto>> => {

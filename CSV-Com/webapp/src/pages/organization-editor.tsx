@@ -24,6 +24,7 @@ import ApiResultOld from 'types/common/api-result-old';
 import { OrganizationContext } from './organization-context';
 import Organization from 'types/model/Organization';
 import Menu from 'components/common/menu';
+import ApiResult from 'types/common/api-result';
 
 const OrganizationEditor = () => {
     const initialOrganization: Organization = { 
@@ -410,11 +411,11 @@ const OrganizationEditor = () => {
                         loadingText = "Bezig met oplaan"
                         successText = "Cliënt opgeslagen"
                         errorText = "Fout tijdens opslaan"
-                        onSaveOld={async () => {                                 
+                        onSave={async () => {                                 
                                 return await saveOrganization(organization!)
                             }
                         }
-                        onResultOld={(apiResult) => handleSaveResult(apiResult, setConfirmMessage, setConfirmPopupOneButtonOpen, setCvsError, setErrorPopupOpen, setOrganization)} />
+                        onResult={(apiResult) => handleSaveResult(apiResult, setConfirmMessage, setConfirmPopupOneButtonOpen, setCvsError, setErrorPopupOpen, setOrganization)} />
                     </div>
                 </div>
             </div>
@@ -435,23 +436,23 @@ const OrganizationEditor = () => {
 export default OrganizationEditor;
 
 function handleSaveResult(
-    apiResult: ApiResultOld<Organization>, 
+    apiResult: ApiResult<Organization>, 
     setConfirmMessage: React.Dispatch<React.SetStateAction<string>>, 
     setConfirmPopupOneButtonOpen: React.Dispatch<React.SetStateAction<boolean>>, 
     setCvsError: React.Dispatch<React.SetStateAction<CVSError>>, 
     setErrorPopupOpen: React.Dispatch<React.SetStateAction<boolean>>, 
     setClient: React.Dispatch<React.SetStateAction<Organization>>) {
-    if (apiResult.Ok) {
+    if (apiResult.succeeded) {
         setConfirmMessage('Organisatie succesvol opgeslagen');
         setConfirmPopupOneButtonOpen(true);
 
-        setClient(apiResult.ReturnObject!);
+        setClient(apiResult.value!);
     }
     else {
         setCvsError({
             id: 0,
             errorcode: 'E',
-            message: `Er is een opgetreden tijdens het opslaan van een organisatie. Foutmelding: ${apiResult.Errors!.join(', ')}`
+            message: `Er is een opgetreden tijdens het opslaan van een organisatie. Foutmelding: ${apiResult.errors!.join(', ')}`
         });
         setErrorPopupOpen(true);
     }

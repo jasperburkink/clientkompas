@@ -102,14 +102,14 @@ const Login2FA = () => {
                 setConfirmMessage('Inloggen succesvol.');
                 setConfirmPopupOneButtonOpen(true);
                 setConfirmOnClose(() => handleLoginConfirmedClick);
-                AccessTokenService.getInstance().setAccessToken(new BearerToken(apiResult.ReturnObject.bearertoken));
-                RefreshTokenService.getInstance().setRefreshToken(apiResult.ReturnObject.refreshtoken);
+                AccessTokenService.getInstance().setAccessToken(new BearerToken(apiResult.value.bearertoken));
+                RefreshTokenService.getInstance().setRefreshToken(apiResult.value.refreshtoken);
             }
             else{
                 setCvsError({
                     id: 0,
                     errorcode: 'E',
-                    message: `Er is een opgetreden tijdens het inloggen. Foutmelding: ${getErrorMessage<TwoFactorAuthenticationCommandDto>(apiResult)}.`
+                    message: `Er is een opgetreden tijdens het inloggen. Foutmelding: ${apiResult.errormessage}.`
                 });
                 setErrorPopupOpen(true);
 
@@ -117,15 +117,15 @@ const Login2FA = () => {
             }
         }
         else {
-            if(apiResult.ValidationErrors && !isHashEmpty(apiResult.ValidationErrors)) {
-                setValidationErrors(apiResult.ValidationErrors);
+            if(apiResult.validationerrors && !isHashEmpty(apiResult.validationerrors)) {
+                setValidationErrors(apiResult.validationerrors);
             }
             else {
-                if(apiResult.Title) {
+                if(apiResult.errormessage) {
                     setCvsError({
                         id: 0,
                         errorcode: 'E',
-                        message: `Er is een opgetreden tijdens het inloggen.\n\nFoutmelding: ${getErrorMessage<TwoFactorAuthenticationCommandDto>(apiResult)}`
+                        message: `Er is een opgetreden tijdens het inloggen.\n\nFoutmelding: ${apiResult.errormessage}`
                     });
                     setErrorPopupOpen(true);
 
@@ -231,13 +231,13 @@ const Login2FA = () => {
                             loadingText = "Bezig met inloggen"
                             successText = "Inloggen succesvol"
                             errorText = "Fout tijdens inloggen"
-                            onSave={async () => {  
+                            onSave={async (): Promise<ApiResult<TwoFactorAuthenticationCommandDto>> => {  
                                     setStatus(StatusEnum.PENDING);
 
                                     return await login2FA(login2FACommand);                                    
                                 }
                             }
-                            onResult={(apiResult) => handleLogin2FAResult(
+                            onResult={(apiResult: ApiResult<TwoFactorAuthenticationCommandDto>) => handleLogin2FAResult(
                                 apiResult, 
                                 setConfirmMessage, 
                                 setConfirmPopupOneButtonOpen,

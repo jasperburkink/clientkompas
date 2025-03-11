@@ -6,7 +6,7 @@ using Domain.Authentication.Domain;
 
 namespace Application.Authentication.Commands.TwoFactorAuthentication
 {
-    public record TwoFactorAuthenticationCommand : IRequest<TwoFactorAuthenticationCommandDto>
+    public record TwoFactorAuthenticationCommand : IRequest<Result<TwoFactorAuthenticationCommandDto>>
     {
         public string UserId { get; set; } = null!;
 
@@ -15,12 +15,12 @@ namespace Application.Authentication.Commands.TwoFactorAuthentication
         public string TwoFactorPendingToken { get; set; } = null!;
     }
 
-    public class TwoFactorAuthenticationCommandHandler(IIdentityService identityService, IBearerTokenService bearerTokenService, ITokenService tokenService, IResourceMessageProvider resourceMessageProvider) : IRequestHandler<TwoFactorAuthenticationCommand, TwoFactorAuthenticationCommandDto>
+    public class TwoFactorAuthenticationCommandHandler(IIdentityService identityService, IBearerTokenService bearerTokenService, ITokenService tokenService, IResourceMessageProvider resourceMessageProvider) : IRequestHandler<TwoFactorAuthenticationCommand, Result<TwoFactorAuthenticationCommandDto>>
     {
         private const string RESOURCE_KEY_USERNOTLOGGEDIN = "UserNotLoggedIn";
         private const string RESOURCE_KEY_INVALIDTOKEN = "InvalidToken";
 
-        public async Task<TwoFactorAuthenticationCommandDto> Handle(TwoFactorAuthenticationCommand request, CancellationToken cancellationToken)
+        public async Task<Result<TwoFactorAuthenticationCommandDto>> Handle(TwoFactorAuthenticationCommand request, CancellationToken cancellationToken)
         {
             var user = await identityService.GetUserAsync(request.UserId);
             var twoFactorPendingToken = await tokenService.GetTokenAsync(request.TwoFactorPendingToken, nameof(request.TwoFactorPendingToken));
@@ -41,12 +41,13 @@ namespace Application.Authentication.Commands.TwoFactorAuthentication
 
             var refreshToken = await tokenService.GenerateTokenAsync(loggedInResult.User, nameof(TwoFactorAuthenticationCommandDto.RefreshToken));
 
-            return new TwoFactorAuthenticationCommandDto
+            return Result.Success(
+            new TwoFactorAuthenticationCommandDto
             {
                 Success = true,
                 BearerToken = bearerToken,
                 RefreshToken = refreshToken
-            };
+            });
         }
 
         private bool IsUserLoggedIn(TwoFactorAuthenticationCommand request, IAuthenticationUser user, IAuthenticationToken? twoFactorPendingToken)

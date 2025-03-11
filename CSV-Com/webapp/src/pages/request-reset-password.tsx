@@ -19,6 +19,7 @@ import ConfirmPopup from "components/common/confirm-popup";
 import { useNavigate } from "react-router-dom";
 import { requestResetPassword } from "utils/api";
 import { Label } from "components/common/label";
+import ApiResult from "types/common/api-result";
 
 const RequestResetPassword = () => {
     const navigate = useNavigate();
@@ -51,13 +52,13 @@ const RequestResetPassword = () => {
     };
 
     const handleRequestResetPasswordResult = (
-        apiResult: ApiResultOld<RequestResetPasswordCommandDto>, 
+        apiResult: ApiResult<RequestResetPasswordCommandDto>, 
         setConfirmMessage: React.Dispatch<React.SetStateAction<string>>, 
         setConfirmPopupOneButtonOpen: React.Dispatch<React.SetStateAction<boolean>>, 
         setCvsError: React.Dispatch<React.SetStateAction<CVSError>>, 
         setErrorPopupOpen: React.Dispatch<React.SetStateAction<boolean>>) => {
-        if (apiResult.Ok) {
-            if(apiResult.ReturnObject?.success === true) {                
+        if (apiResult.succeeded) {
+            if(apiResult.value?.success === true) {                
                 setConfirmMessage('Als het opegeven e-mailadres bij ons bekend is, sturen wij u een e-mail om uw wachtwoord opnieuw in te stellen.');
                 setConfirmPopupOneButtonOpen(true);
             }
@@ -65,7 +66,7 @@ const RequestResetPassword = () => {
                 setCvsError({
                     id: 0,
                     errorcode: 'E',
-                    message: `Er is een opgetreden tijdens aanvragen van een nieuw wachtwoord. Foutmelding: ${getErrorMessage<RequestResetPasswordCommandDto>(apiResult)}.`
+                    message: `Er is een opgetreden tijdens aanvragen van een nieuw wachtwoord. Foutmelding: ${apiResult.errormessage}.`
                 });
                 setErrorPopupOpen(true);
 
@@ -73,14 +74,14 @@ const RequestResetPassword = () => {
             }
         }
         else {
-            if(apiResult.ValidationErrors && !isHashEmpty(apiResult.ValidationErrors)) {
-                setValidationErrors(apiResult.ValidationErrors);
+            if(apiResult.validationerrors && !isHashEmpty(apiResult.validationerrors)) {
+                setValidationErrors(apiResult.validationerrors);
             }
             else {
                 setCvsError({
                     id: 0,
                     errorcode: 'E',
-                    message: `Er is een opgetreden tijdens aanvragen van een nieuw wachtwoord. Foutmelding: ${getErrorMessage<RequestResetPasswordCommandDto>(apiResult)}.`
+                    message: `Er is een opgetreden tijdens aanvragen van een nieuw wachtwoord. Foutmelding: ${apiResult.errormessage}.`
                 });
                 setErrorPopupOpen(true);  
 
@@ -134,13 +135,13 @@ const RequestResetPassword = () => {
                             loadingText = "Bezig met aanvragen"
                             successText = "Aanvraag succesvol"
                             errorText = "Fout tijdens aanvragen"
-                            onSaveOld={async () => {  
+                            onSave={async () => {  
                                     setStatus(StatusEnum.PENDING);
 
                                     return await requestResetPassword(requestResetPasswordCommand);                                    
                                 }
                             }
-                            onResultOld={(apiResult) => handleRequestResetPasswordResult(
+                            onResult={(apiResult) => handleRequestResetPasswordResult(
                                 apiResult, 
                                 setConfirmMessage, 
                                 setConfirmPopupOneButtonOpen, 
