@@ -127,7 +127,10 @@ namespace Infrastructure.Identity
             return await userManager.FindByIdAsync(userId) != null;
         }
 
-        public async Task<IAuthenticationUser> GetUserAsync(string userId) => await userManager.FindByIdAsync(userId);
+        public async Task<IAuthenticationUser> GetUserAsync(string userId)
+        {
+            return await userManager.FindByIdAsync(userId);
+        }
 
         public async Task<Result> SendResetPasswordEmailAsync(string emailAddress)
         {
@@ -259,6 +262,11 @@ namespace Infrastructure.Identity
                 .Where(roleUser => allRoles.Contains(roleUser.Name))
                 .Select(roleUser => (IAuthenticationUser)roleUser.user)
                 .Distinct()];
+        }
+
+        public async Task<IAuthenticationUser?> GetUserByCVSUserIdAsync(int cvsUserId)
+        {
+            return await authenticationDbContext.Users.Where(user => user.CVSUserId == cvsUserId).FirstOrDefaultAsync();
         }
     }
 }

@@ -28,9 +28,9 @@ const SaveButton = <T,>({ buttonText, loadingText, successText, errorText, onSav
 
       var result = await onSave();
       setLoading(false);
-      setSuccess(result.Ok);
+      setSuccess(result.succeeded);
 
-      if (result.Ok === false) {
+      if (result.succeeded === false) {
         setError(true);
       }
 

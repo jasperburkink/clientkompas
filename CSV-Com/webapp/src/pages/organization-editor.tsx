@@ -20,10 +20,11 @@ import CVSError from 'types/common/cvs-error';
 import { fetchClientEditor } from 'utils/api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDiagnoses, faSpinner } from "@fortawesome/free-solid-svg-icons";
-import ApiResult from 'types/common/api-result';
+import ApiResultOld from 'types/common/api-result-old';
 import { OrganizationContext } from './organization-context';
 import Organization from 'types/model/Organization';
 import Menu from 'components/common/menu';
+import ApiResult from 'types/common/api-result';
 
 const OrganizationEditor = () => {
     const initialOrganization: Organization = { 
@@ -441,17 +442,17 @@ function handleSaveResult(
     setCvsError: React.Dispatch<React.SetStateAction<CVSError>>, 
     setErrorPopupOpen: React.Dispatch<React.SetStateAction<boolean>>, 
     setClient: React.Dispatch<React.SetStateAction<Organization>>) {
-    if (apiResult.Ok) {
+    if (apiResult.succeeded) {
         setConfirmMessage('Organisatie succesvol opgeslagen');
         setConfirmPopupOneButtonOpen(true);
 
-        setClient(apiResult.ReturnObject!);
+        setClient(apiResult.value!);
     }
     else {
         setCvsError({
             id: 0,
             errorcode: 'E',
-            message: `Er is een opgetreden tijdens het opslaan van een organisatie. Foutmelding: ${apiResult.Errors!.join(', ')}`
+            message: `Er is een opgetreden tijdens het opslaan van een organisatie. Foutmelding: ${apiResult.errors!.join(', ')}`
         });
         setErrorPopupOpen(true);
     }

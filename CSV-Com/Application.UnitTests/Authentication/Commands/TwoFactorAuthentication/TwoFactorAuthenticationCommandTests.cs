@@ -4,7 +4,6 @@ using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Models;
 using Domain.Authentication.Constants;
-using Domain.Authentication.Domain;
 using Infrastructure.Identity;
 using Moq;
 
@@ -86,8 +85,9 @@ namespace Application.UnitTests.Authentication.Commands.TwoFactorAuthentication
             var result = await _handler.Handle(_command, default);
 
             // Assert
-            result.Should().NotBeNull();
-            result.Success.Should().BeTrue();
+            result.Succeeded.Should().BeTrue();
+            result.Value.Should().NotBeNull();
+            result.Value.Success.Should().BeTrue();
         }
 
         [Fact]
@@ -98,7 +98,7 @@ namespace Application.UnitTests.Authentication.Commands.TwoFactorAuthentication
                 new LoggedInResult(false, null, null));
 
             // Act
-            Func<Task<TwoFactorAuthenticationCommandDto>> act = () => _handler.Handle(_command, default);
+            Func<Task<Result<TwoFactorAuthenticationCommandDto>>> act = () => _handler.Handle(_command, default);
 
             // Assert
             await act.Should().ThrowAsync<InvalidLoginException>();

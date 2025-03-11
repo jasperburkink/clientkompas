@@ -17,7 +17,7 @@ import SaveButton from "components/common/save-button";
 import { login2FA, resend2FAToken } from "utils/api";
 import LoginCommand from "types/model/login/login-command";
 import LoginCommandDto from "types/model/login/login-command-dto";
-import ApiResult, { getErrorMessage } from "types/common/api-result";
+import ApiResultOld, { getErrorMessage } from "types/common/api-result-old";
 import CVSError from "types/common/cvs-error";
 import ErrorPopup from "components/common/error-popup";
 import { Copyright } from "components/common/copyright";
@@ -33,6 +33,7 @@ import moment from "moment";
 import { CountdownButton } from "components/common/countdown-button";
 import ResendTwoFactorAuthenticationTokenCommand from "types/model/resend-2fa-token/resend-2fa-token-command";
 import AccessTokenService from "utils/access-token-service";
+import ApiResult from "types/common/api-result";
 
 const Login2FA = () => {
     const COUNTDOWN_SECONDS: number = 60;
@@ -93,22 +94,22 @@ const Login2FA = () => {
         setConfirmOnClose: React.Dispatch<React.SetStateAction<() => void>>, 
         setCvsError: React.Dispatch<React.SetStateAction<CVSError>>, 
         setErrorPopupOpen: React.Dispatch<React.SetStateAction<boolean>>) => {
-        if (apiResult.Ok) {           
-            if(apiResult.ReturnObject?.success === true 
-                && apiResult.ReturnObject?.bearertoken
-                && apiResult.ReturnObject?.refreshtoken) {
+        if (apiResult.succeeded) {           
+            if(apiResult.value?.success === true 
+                && apiResult.value?.bearertoken
+                && apiResult.value?.refreshtoken) {
 
                 setConfirmMessage('Inloggen succesvol.');
                 setConfirmPopupOneButtonOpen(true);
                 setConfirmOnClose(() => handleLoginConfirmedClick);
-                AccessTokenService.getInstance().setAccessToken(new BearerToken(apiResult.ReturnObject.bearertoken));
-                RefreshTokenService.getInstance().setRefreshToken(apiResult.ReturnObject.refreshtoken);
+                AccessTokenService.getInstance().setAccessToken(new BearerToken(apiResult.value.bearertoken));
+                RefreshTokenService.getInstance().setRefreshToken(apiResult.value.refreshtoken);
             }
             else{
                 setCvsError({
                     id: 0,
                     errorcode: 'E',
-                    message: `Er is een opgetreden tijdens het inloggen. Foutmelding: ${getErrorMessage<TwoFactorAuthenticationCommandDto>(apiResult)}.`
+                    message: `Er is een opgetreden tijdens het inloggen. Foutmelding: ${apiResult.errormessage}.`
                 });
                 setErrorPopupOpen(true);
 
@@ -116,15 +117,15 @@ const Login2FA = () => {
             }
         }
         else {
-            if(apiResult.ValidationErrors && !isHashEmpty(apiResult.ValidationErrors)) {
-                setValidationErrors(apiResult.ValidationErrors);
+            if(apiResult.validationerrors && !isHashEmpty(apiResult.validationerrors)) {
+                setValidationErrors(apiResult.validationerrors);
             }
             else {
-                if(apiResult.Title) {
+                if(apiResult.errormessage) {
                     setCvsError({
                         id: 0,
                         errorcode: 'E',
-                        message: `Er is een opgetreden tijdens het inloggen.\n\nFoutmelding: ${getErrorMessage<TwoFactorAuthenticationCommandDto>(apiResult)}`
+                        message: `Er is een opgetreden tijdens het inloggen.\n\nFoutmelding: ${apiResult.errormessage}`
                     });
                     setErrorPopupOpen(true);
 
@@ -230,13 +231,13 @@ const Login2FA = () => {
                             loadingText = "Bezig met inloggen"
                             successText = "Inloggen succesvol"
                             errorText = "Fout tijdens inloggen"
-                            onSave={async () => {  
+                            onSave={async (): Promise<ApiResult<TwoFactorAuthenticationCommandDto>> => {  
                                     setStatus(StatusEnum.PENDING);
 
                                     return await login2FA(login2FACommand);                                    
                                 }
                             }
-                            onResult={(apiResult) => handleLogin2FAResult(
+                            onResult={(apiResult: ApiResult<TwoFactorAuthenticationCommandDto>) => handleLogin2FAResult(
                                 apiResult, 
                                 setConfirmMessage, 
                                 setConfirmPopupOneButtonOpen,

@@ -17,7 +17,7 @@ import SaveButton from "components/common/save-button";
 import { login } from "utils/api";
 import LoginCommand from "types/model/login/login-command";
 import LoginCommandDto from "types/model/login/login-command-dto";
-import ApiResult, { getErrorMessage } from "types/common/api-result";
+import ApiResultOld, { getErrorMessage } from "types/common/api-result-old";
 import CVSError from "types/common/cvs-error";
 import ErrorPopup from "components/common/error-popup";
 import { Copyright } from "components/common/copyright";
@@ -27,6 +27,7 @@ import { BearerToken } from "types/common/bearer-token";
 import RefreshTokenService from "utils/refresh-token-service";
 import moment from "moment";
 import AccessTokenService from "utils/access-token-service";
+import ApiResult from "types/common/api-result";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -65,26 +66,26 @@ const Login = () => {
         setConfirmPopupOneButtonOpen: React.Dispatch<React.SetStateAction<boolean>>, 
         setCvsError: React.Dispatch<React.SetStateAction<CVSError>>, 
         setErrorPopupOpen: React.Dispatch<React.SetStateAction<boolean>>) => {
-        if (apiResult.Ok) {            
-            if(apiResult.ReturnObject?.success === true){
+        if (apiResult.succeeded) {            
+            if(apiResult.value?.success === true){
                 // Check if the user needs to supply a 2FA token to login
-                if(apiResult.ReturnObject?.twofactorpendingtoken && apiResult.ReturnObject?.userid) {  
+                if(apiResult.value?.twofactorpendingtoken && apiResult.value?.userid) {  
                     // Add token to the session
-                    AccessTokenService.getInstance().setTwoFactorPendingToken(apiResult.ReturnObject?.twofactorpendingtoken);
+                    AccessTokenService.getInstance().setTwoFactorPendingToken(apiResult.value?.twofactorpendingtoken);
                     
-                    const expiryDate = new Date(apiResult.ReturnObject?.expiresat);                    
+                    const expiryDate = new Date(apiResult.value?.expiresat);                    
                     const remainingTimeInSeconds = Math.floor((expiryDate.getTime() - new Date().getTime()) / 1000);
 
                     setTimeout(() => {
-                        navigate(`/login-2fa/${apiResult.ReturnObject?.userid}/${remainingTimeInSeconds}`);
+                        navigate(`/login-2fa/${apiResult.value?.userid}/${remainingTimeInSeconds}`);
                     }, 0);
                 }
                 // User logged in successfully
-                else if (apiResult.ReturnObject?.bearertoken && apiResult.ReturnObject?.refreshtoken) {
+                else if (apiResult.value?.bearertoken && apiResult.value?.refreshtoken) {
                     setConfirmMessage('Inloggen succesvol.');
                     setConfirmPopupOneButtonOpen(true);
-                    AccessTokenService.getInstance().setAccessToken(new BearerToken(apiResult.ReturnObject.bearertoken));
-                    RefreshTokenService.getInstance().setRefreshToken(apiResult.ReturnObject.refreshtoken);
+                    AccessTokenService.getInstance().setAccessToken(new BearerToken(apiResult.value.bearertoken));
+                    RefreshTokenService.getInstance().setRefreshToken(apiResult.value.refreshtoken);
                 }
                 else {
                     setCvsError({
@@ -101,7 +102,7 @@ const Login = () => {
                 setCvsError({
                     id: 0,
                     errorcode: 'E',
-                    message: `Er is een opgetreden tijdens het inloggen. Foutmelding: ${getErrorMessage<LoginCommandDto>(apiResult)}.`
+                    message: `Er is een opgetreden tijdens het inloggen. Foutmelding: ${apiResult.errormessage}.`
                 });
                 setErrorPopupOpen(true);
 
@@ -109,15 +110,15 @@ const Login = () => {
             }
         }
         else {
-            if(apiResult.ValidationErrors && !isHashEmpty(apiResult.ValidationErrors)) {
-                setValidationErrors(apiResult.ValidationErrors);
+            if(apiResult.validationerrors && !isHashEmpty(apiResult.validationerrors)) {
+                setValidationErrors(apiResult.validationerrors);
             }
 
-            if(apiResult.Title) {
+            if(apiResult.errormessage) {
                 setCvsError({
                     id: 0,
                     errorcode: 'E',
-                    message: `Er is een opgetreden tijdens het inloggen. Foutmelding: ${getErrorMessage<LoginCommandDto>(apiResult)}`
+                    message: `Er is een opgetreden tijdens het inloggen. Foutmelding: ${apiResult.errormessage}`
                 });
                 setErrorPopupOpen(true);  
 
