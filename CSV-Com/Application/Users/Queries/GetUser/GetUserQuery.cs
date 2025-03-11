@@ -20,7 +20,7 @@ namespace Application.Users.Queries.GetUser
 
             if (user == null)
             {
-                return Result<GetUserQueryDto>.Failure("User not found!");
+                return Result<GetUserQueryDto>.Failure(GetUserQueryErrors.UserNotFound);
             }
 
             var userDto = mapper.Map<GetUserQueryDto>(user);
@@ -33,7 +33,7 @@ namespace Application.Users.Queries.GetUser
                 userDto.Role = string.Join(", ", userRoles);
             }
 
-            return Result.Success(userDto);
+            return Result<GetUserQueryDto>.Success(userDto);
         }
     }
 }

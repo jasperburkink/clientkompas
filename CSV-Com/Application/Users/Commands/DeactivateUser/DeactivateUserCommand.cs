@@ -20,12 +20,12 @@ namespace Application.Users.Commands.DeactivateUser
 
             if (user == null)
             {
-                return Result.Failure($"Gebruiker met id '${request.Id}' kan niet worden gevonden."); // TODO: Result error object
+                return Result.Failure(DeactivateUserCommandErrors.UserNotFound.WithParams(request.Id));
             }
 
             if (user.DeactivationDateTime != null)
             {
-                return Result.Failure($"Gebruiker met id '${user.Id}' is al gedeactiveerd op ${user.DeactivationDateTime} en kan dus niet opnieuw worden gedeactiveerd."); // TODO: Result error object
+                return Result.Failure(DeactivateUserCommandErrors.UserAlreadyDeactivated.WithParams(user.Id, user.DeactivationDateTime));
             }
 
             user.Deactivate(DateTime.UtcNow);

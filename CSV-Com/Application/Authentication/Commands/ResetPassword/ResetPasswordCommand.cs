@@ -27,8 +27,7 @@ namespace Application.Authentication.Commands.ResetPassword
 
                 return new ResetPasswordCommandDto
                 {
-                    Success = result.Succeeded,
-                    Errors = result.Errors
+                    Success = result.Succeeded
                 };
             }
             catch (Exception ex)

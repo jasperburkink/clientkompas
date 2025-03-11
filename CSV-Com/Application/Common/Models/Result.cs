@@ -1,73 +1,23 @@
-﻿using Application.Common.Interfaces;
-
-namespace Application.Common.Models
+﻿namespace Application.Common.Models
 {
-    public class Result : IResult
+    public class Result : ResultBase
     {
-        private Result(bool succeeded, IEnumerable<string> errors)
-        {
-            Succeeded = succeeded;
-            Errors = [.. errors];
-        }
-
-        public bool Succeeded { get; }
-
-        public string[] Errors { get; }
-
-        public string ErrorMessage => string.Join(", ", Errors);
+        private Result(bool succeeded, IReadOnlyList<Error>? errors = null)
+            : base(succeeded, errors) { }
 
         public static Result Success()
         {
-            return new Result(true, []);
+            return new(true);
         }
 
-        public static Result Failure(IEnumerable<string> errors)
+        public static Result Failure(IReadOnlyList<Error> errors)
         {
-            return new Result(false, errors);
+            return new(false, errors);
         }
 
-        public static Result Failure(string error)
+        public static Result Failure(Error error)
         {
-            return new Result(false, [error]);
-        }
-
-        public static Result<T> Success<T>(T value)
-        {
-            return Result<T>.Success(value);
+            return new(false, [error]);
         }
     }
-
-    public class Result<T> : IResult
-    {
-        private Result(T? value, bool succeeded, IEnumerable<string> errors)
-        {
-            Value = value;
-            Succeeded = succeeded;
-            Errors = [.. errors];
-        }
-
-        public T? Value { get; }
-
-        public bool Succeeded { get; }
-
-        public string[] Errors { get; }
-
-        public string ErrorMessage => string.Join(", ", Errors);
-
-        public static Result<T> Success(T value)
-        {
-            return new Result<T>(value, true, []);
-        }
-
-        public static Result<T> Failure(IEnumerable<string> errors)
-        {
-            return new Result<T>(default, false, errors);
-        }
-
-        public static Result<T> Failure(string error)
-        {
-            return new Result<T>(default, false, [error]);
-        }
-    }
-
 }

@@ -19,8 +19,7 @@ namespace Application.Authentication.Commands.RequestResetPassword
 
                 return new RequestResetPasswordCommandDto
                 {
-                    Success = result.Succeeded,
-                    Errors = result.Errors
+                    Success = result.Succeeded
                 };
             }
             catch (Exception ex)
