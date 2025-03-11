@@ -27,6 +27,9 @@ namespace Application.Users.Queries.GetUser
         {
             profile.CreateMap<User, GetUserQueryDto>()
                 .ForMember(userDto =>
+                    userDto.Role,
+                    f => f.MapFrom(user => ""))
+                .ForMember(userDto =>
                     userDto.CreatedByUserDescription,
                     f => f.MapFrom(user => user.CreatedByUser != null ? $"{user.CreatedByUser.FullName} ({user.CreatedByUser.EmailAddress})" : null));
         }

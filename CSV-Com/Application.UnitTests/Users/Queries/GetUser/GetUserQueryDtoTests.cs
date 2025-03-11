@@ -1,8 +1,11 @@
-﻿using Application.Common.Interfaces.CVS;
+﻿using Application.Common.Interfaces.Authentication;
+using Application.Common.Interfaces.CVS;
 using Application.Common.Mappings;
 using Application.Users.Queries.GetUser;
 using AutoMapper;
+using Domain.Authentication.Constants;
 using Domain.CVS.Domain;
+using Infrastructure.Identity;
 using Moq;
 using TestData;
 using TestData.User;
@@ -12,6 +15,7 @@ namespace Application.UnitTests.Users.Queries.GetUser
     public class GetUserQueryDtoTests
     {
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;
+        private readonly Mock<IIdentityService> _identityServiceMock;
         private readonly ITestDataGenerator<User> _userTestDataGenerator;
         private readonly IMapper _mapper;
 
@@ -19,6 +23,8 @@ namespace Application.UnitTests.Users.Queries.GetUser
         {
             _userTestDataGenerator = new UserDataGenerator();
             _unitOfWorkMock = new Mock<IUnitOfWork>();
+
+            _identityServiceMock = new Mock<IIdentityService>();
 
             var configuration = new MapperConfiguration(config =>
                 config.AddProfile<MappingProfile>());
@@ -36,7 +42,7 @@ namespace Application.UnitTests.Users.Queries.GetUser
 
             _unitOfWorkMock.Setup(mock => mock.UserRepository.GetByIDAsync(It.IsAny<int>(), It.IsAny<string>(), default)).ReturnsAsync(user);
 
-            var handler = new GetUserQueryHandler(_unitOfWorkMock.Object, _mapper);
+            var handler = new GetUserQueryHandler(_unitOfWorkMock.Object, _identityServiceMock.Object, _mapper);
 
             var query = new GetUserQuery { UserId = user.Id };
 
@@ -55,7 +61,7 @@ namespace Application.UnitTests.Users.Queries.GetUser
 
             _unitOfWorkMock.Setup(mock => mock.UserRepository.GetByIDAsync(It.IsAny<int>(), It.IsAny<string>(), default));
 
-            var handler = new GetUserQueryHandler(_unitOfWorkMock.Object, _mapper);
+            var handler = new GetUserQueryHandler(_unitOfWorkMock.Object, _identityServiceMock.Object, _mapper);
 
             var query = new GetUserQuery { UserId = user.Id };
 
@@ -76,7 +82,7 @@ namespace Application.UnitTests.Users.Queries.GetUser
 
             _unitOfWorkMock.Setup(mock => mock.UserRepository.GetByIDAsync(It.IsAny<int>(), It.IsAny<string>(), default)).ReturnsAsync(user);
 
-            var handler = new GetUserQueryHandler(_unitOfWorkMock.Object, _mapper);
+            var handler = new GetUserQueryHandler(_unitOfWorkMock.Object, _identityServiceMock.Object, _mapper);
 
             var query = new GetUserQuery { UserId = user.Id };
 
@@ -99,7 +105,7 @@ namespace Application.UnitTests.Users.Queries.GetUser
 
             _unitOfWorkMock.Setup(mock => mock.UserRepository.GetByIDAsync(It.IsAny<int>(), It.IsAny<string>(), default)).ReturnsAsync(user);
 
-            var handler = new GetUserQueryHandler(_unitOfWorkMock.Object, _mapper);
+            var handler = new GetUserQueryHandler(_unitOfWorkMock.Object, _identityServiceMock.Object, _mapper);
 
             var query = new GetUserQuery { UserId = user.Id };
 
@@ -121,7 +127,7 @@ namespace Application.UnitTests.Users.Queries.GetUser
 
             _unitOfWorkMock.Setup(mock => mock.UserRepository.GetByIDAsync(It.IsAny<int>(), It.IsAny<string>(), default)).ReturnsAsync(user);
 
-            var handler = new GetUserQueryHandler(_unitOfWorkMock.Object, _mapper);
+            var handler = new GetUserQueryHandler(_unitOfWorkMock.Object, _identityServiceMock.Object, _mapper);
 
             var query = new GetUserQuery { UserId = user.Id };
 
@@ -143,7 +149,7 @@ namespace Application.UnitTests.Users.Queries.GetUser
 
             _unitOfWorkMock.Setup(mock => mock.UserRepository.GetByIDAsync(It.IsAny<int>(), It.IsAny<string>(), default)).ReturnsAsync(user);
 
-            var handler = new GetUserQueryHandler(_unitOfWorkMock.Object, _mapper);
+            var handler = new GetUserQueryHandler(_unitOfWorkMock.Object, _identityServiceMock.Object, _mapper);
 
             var query = new GetUserQuery { UserId = user.Id };
 
@@ -166,7 +172,7 @@ namespace Application.UnitTests.Users.Queries.GetUser
 
             _unitOfWorkMock.Setup(mock => mock.UserRepository.GetByIDAsync(It.IsAny<int>(), It.IsAny<string>(), default)).ReturnsAsync(user);
 
-            var handler = new GetUserQueryHandler(_unitOfWorkMock.Object, _mapper);
+            var handler = new GetUserQueryHandler(_unitOfWorkMock.Object, _identityServiceMock.Object, _mapper);
 
             var query = new GetUserQuery { UserId = user.Id };
 
@@ -188,7 +194,7 @@ namespace Application.UnitTests.Users.Queries.GetUser
 
             _unitOfWorkMock.Setup(mock => mock.UserRepository.GetByIDAsync(It.IsAny<int>(), It.IsAny<string>(), default)).ReturnsAsync(user);
 
-            var handler = new GetUserQueryHandler(_unitOfWorkMock.Object, _mapper);
+            var handler = new GetUserQueryHandler(_unitOfWorkMock.Object, _identityServiceMock.Object, _mapper);
 
             var query = new GetUserQuery { UserId = user.Id };
 
@@ -211,7 +217,7 @@ namespace Application.UnitTests.Users.Queries.GetUser
 
             _unitOfWorkMock.Setup(mock => mock.UserRepository.GetByIDAsync(It.IsAny<int>(), It.IsAny<string>(), default)).ReturnsAsync(user);
 
-            var handler = new GetUserQueryHandler(_unitOfWorkMock.Object, _mapper);
+            var handler = new GetUserQueryHandler(_unitOfWorkMock.Object, _identityServiceMock.Object, _mapper);
 
             var query = new GetUserQuery { UserId = user.Id };
 
@@ -236,7 +242,7 @@ namespace Application.UnitTests.Users.Queries.GetUser
 
             _unitOfWorkMock.Setup(mock => mock.UserRepository.GetByIDAsync(It.IsAny<int>(), It.IsAny<string>(), default)).ReturnsAsync(user);
 
-            var handler = new GetUserQueryHandler(_unitOfWorkMock.Object, _mapper);
+            var handler = new GetUserQueryHandler(_unitOfWorkMock.Object, _identityServiceMock.Object, _mapper);
 
             var query = new GetUserQuery { UserId = user.Id };
 
@@ -258,7 +264,7 @@ namespace Application.UnitTests.Users.Queries.GetUser
 
             _unitOfWorkMock.Setup(mock => mock.UserRepository.GetByIDAsync(It.IsAny<int>(), It.IsAny<string>(), default)).ReturnsAsync(user);
 
-            var handler = new GetUserQueryHandler(_unitOfWorkMock.Object, _mapper);
+            var handler = new GetUserQueryHandler(_unitOfWorkMock.Object, _identityServiceMock.Object, _mapper);
 
             var query = new GetUserQuery { UserId = user.Id };
 
@@ -268,6 +274,79 @@ namespace Application.UnitTests.Users.Queries.GetUser
             // Assert
             result.Value.Should().NotBeNull();
             result.Value!.CreatedByUserDescription.Should().BeNullOrEmpty();
+        }
+
+        [Fact]
+        public async Task Handle_UserHasOneRole_RoleShouldBeSet()
+        {
+            // Arrange
+            var user = _userTestDataGenerator.Create();
+
+            var userDto = _mapper.Map<GetUserQueryDto>(user);
+
+            _unitOfWorkMock.Setup(mock => mock.UserRepository.GetByIDAsync(It.IsAny<int>(), It.IsAny<string>(), default)).ReturnsAsync(user);
+
+            var authenticationUser = new AuthenticationUser
+            {
+                Id = Guid.NewGuid().ToString(),
+                CVSUserId = user.Id
+            };
+
+            var role = Roles.Coach;
+            List<string> roles = [role];
+
+            _identityServiceMock.Setup(mock => mock.GetUserByCVSUserIdAsync(It.IsAny<int>())).ReturnsAsync(authenticationUser);
+            _identityServiceMock.Setup(mock => mock.GetUserRolesAsync(It.IsAny<string>())).ReturnsAsync(roles);
+
+            var handler = new GetUserQueryHandler(_unitOfWorkMock.Object, _identityServiceMock.Object, _mapper);
+
+            var query = new GetUserQuery { UserId = user.Id };
+
+            // Act
+            var result = await handler.Handle(query, default);
+
+            // Assert
+            result.Value.Should().NotBeNull();
+            result.Value!.Role.Should().Be(role);
+        }
+
+        [Fact]
+        public async Task Handle_UserHasMultipleRole_RolesShouldBeSet()
+        {
+            // Arrange
+            var user = _userTestDataGenerator.Create();
+
+            var userDto = _mapper.Map<GetUserQueryDto>(user);
+
+            _unitOfWorkMock.Setup(mock => mock.UserRepository.GetByIDAsync(It.IsAny<int>(), It.IsAny<string>(), default)).ReturnsAsync(user);
+
+            var authenticationUser = new AuthenticationUser
+            {
+                Id = Guid.NewGuid().ToString(),
+                CVSUserId = user.Id
+            };
+
+            List<string> roles =
+            [
+                Roles.Administrator,
+                Roles.Coach,
+                Roles.Licensee,
+                Roles.SystemOwner
+            ];
+
+            _identityServiceMock.Setup(mock => mock.GetUserByCVSUserIdAsync(It.IsAny<int>())).ReturnsAsync(authenticationUser);
+            _identityServiceMock.Setup(mock => mock.GetUserRolesAsync(It.IsAny<string>())).ReturnsAsync(roles);
+
+            var handler = new GetUserQueryHandler(_unitOfWorkMock.Object, _identityServiceMock.Object, _mapper);
+
+            var query = new GetUserQuery { UserId = user.Id };
+
+            // Act
+            var result = await handler.Handle(query, default);
+
+            // Assert
+            result.Value.Should().NotBeNull();
+            result.Value!.Role.Should().Be(string.Join(", ", roles));
         }
     }
 }

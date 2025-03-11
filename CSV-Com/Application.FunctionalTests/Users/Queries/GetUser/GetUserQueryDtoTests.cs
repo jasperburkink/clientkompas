@@ -3,6 +3,8 @@ using Application.Users.Queries.GetUser;
 using AutoMapper;
 using Domain.Authentication.Constants;
 using Domain.CVS.Domain;
+using Infrastructure.Data.Authentication;
+using Infrastructure.Identity;
 using TestData;
 using TestData.User;
 
@@ -256,6 +258,33 @@ namespace Application.FunctionalTests.Users.Queries.GetUser
             // Assert
             result.Value.Should().NotBeNull();
             result.Value!.CreatedByUserDescription.Should().BeNullOrEmpty();
+        }
+
+        [Test]
+        public async Task Handle_UserHasOneRole_ShouldReturnRole()
+        {
+            // Arrange
+            var user = _userTestDataGenerator.Create();
+            await AddAsync(user);
+
+            var userId = Guid.NewGuid().ToString();
+
+            var role = Roles.Coach;
+            await RunAsUserAsync(user.EmailAddress, "Test1234!", role, userId);
+
+            var userDto = _mapper.Map<GetUserQueryDto>(user);
+
+            var authenticationUser = (await GetAsync<AuthenticationUser, AuthenticationDbContext>()).First(u => u.Id == userId);
+            authenticationUser.CVSUserId = user.Id;
+            await UpdateAsync<AuthenticationUser, AuthenticationDbContext>(authenticationUser);
+
+            var query = new GetUserQuery { UserId = user.Id };
+
+            // Act
+            var result = await SendAsync(query);
+
+            // Assert
+            result.Value.Role.Should().Be(role);
         }
     }
 }

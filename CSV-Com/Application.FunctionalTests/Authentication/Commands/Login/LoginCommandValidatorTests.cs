@@ -1,5 +1,6 @@
 ﻿using Application.Authentication.Commands.Login;
 using Application.Common.Exceptions;
+using Application.Common.Models;
 using Domain.Authentication.Constants;
 using TestData;
 
@@ -28,7 +29,7 @@ namespace Application.FunctionalTests.Authentication.Commands.Login
         public async Task Handle_CorrectFlow_NoValidationExcceptions()
         {
             // Act & Assert
-            Func<Task<LoginCommandDto>> act = async () => await SendAsync(_command);
+            Func<Task<Result<LoginCommandDto>>> act = async () => await SendAsync(_command);
 
             await act.Should().NotThrowAsync<ValidationException>();
         }
@@ -114,6 +115,9 @@ namespace Application.FunctionalTests.Authentication.Commands.Login
         }
 
         [TearDown]
-        public void TearDown() => UseMocks = false;
+        public void TearDown()
+        {
+            UseMocks = false;
+        }
     }
 }

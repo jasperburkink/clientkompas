@@ -55,7 +55,9 @@ namespace Application.FunctionalTests.Authentication.Commands.Login
             var result = await SendAsync(_command);
 
             // Assert
-            result.Success.Should().BeTrue();
+            result.Succeeded.Should().BeTrue();
+            result.Value.Should().NotBeNull();
+            result.Value.Success.Should().BeTrue();
         }
 
         [Test]
@@ -73,10 +75,15 @@ namespace Application.FunctionalTests.Authentication.Commands.Login
             var result = await SendAsync(_command);
 
             // Assert
-            result.Success.Should().BeFalse();
+            result.Succeeded.Should().BeTrue();
+            result.Value.Should().NotBeNull();
+            result.Value.Success.Should().BeFalse();
         }
 
         [TearDown]
-        public void TearDown() => UseMocks = false;
+        public void TearDown()
+        {
+            UseMocks = false;
+        }
     }
 }

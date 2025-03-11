@@ -3,7 +3,6 @@ using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Models;
-using Domain.Authentication.Domain;
 using Infrastructure.Identity;
 using Moq;
 
@@ -66,7 +65,7 @@ namespace Application.UnitTests.Authentication.Commands.Login
             var result = await handler.Handle(command, default);
 
             // Assert
-            result.Should().BeEquivalentTo(loginCommandDto);
+            result.Value.Should().BeEquivalentTo(loginCommandDto);
         }
 
         [Fact]

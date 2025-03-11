@@ -1,5 +1,6 @@
 ﻿using Application.Authentication.Commands.TwoFactorAuthentication;
 using Application.Common.Exceptions;
+using Application.Common.Models;
 
 namespace Application.FunctionalTests.Authentication.Commands.TwoFactorAuthentication
 {
@@ -23,7 +24,7 @@ namespace Application.FunctionalTests.Authentication.Commands.TwoFactorAuthentic
         public async Task Handle_CorrectFlow_NoValidationErrors()
         {
             // Act
-            Func<Task<TwoFactorAuthenticationCommandDto>> act = async () => await SendAsync(_command);
+            Func<Task<Result<TwoFactorAuthenticationCommandDto>>> act = async () => await SendAsync(_command);
 
             // Assert
             await act.Should().NotThrowAsync<ValidationException>();
@@ -39,7 +40,7 @@ namespace Application.FunctionalTests.Authentication.Commands.TwoFactorAuthentic
             };
 
             // Act
-            Func<Task<TwoFactorAuthenticationCommandDto>> act = async () => await SendAsync(command);
+            Func<Task<Result<TwoFactorAuthenticationCommandDto>>> act = async () => await SendAsync(command);
 
             // Assert
             await act.Should().ThrowAsync<ValidationException>();
@@ -55,7 +56,7 @@ namespace Application.FunctionalTests.Authentication.Commands.TwoFactorAuthentic
             };
 
             // Act
-            Func<Task<TwoFactorAuthenticationCommandDto>> act = async () => await SendAsync(command);
+            Func<Task<Result<TwoFactorAuthenticationCommandDto>>> act = async () => await SendAsync(command);
 
             // Assert
             await act.Should().ThrowAsync<ValidationException>();
@@ -71,7 +72,7 @@ namespace Application.FunctionalTests.Authentication.Commands.TwoFactorAuthentic
             };
 
             // Act
-            Func<Task<TwoFactorAuthenticationCommandDto>> act = async () => await SendAsync(command);
+            Func<Task<Result<TwoFactorAuthenticationCommandDto>>> act = async () => await SendAsync(command);
 
             // Assert
             await act.Should().ThrowAsync<ValidationException>();
@@ -87,13 +88,16 @@ namespace Application.FunctionalTests.Authentication.Commands.TwoFactorAuthentic
             };
 
             // Act
-            Func<Task<TwoFactorAuthenticationCommandDto>> act = async () => await SendAsync(command);
+            Func<Task<Result<TwoFactorAuthenticationCommandDto>>> act = async () => await SendAsync(command);
 
             // Assert
             await act.Should().ThrowAsync<ValidationException>();
         }
 
         [TearDown]
-        public void TearDown() => UseMocks = false;
+        public void TearDown()
+        {
+            UseMocks = false;
+        }
     }
 }
