@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Models;
+using Application.Common.Models.Authentication;
 using Domain.Authentication.Constants;
 using Domain.Authentication.Domain;
 using Infrastructure.Data.Authentication;
@@ -164,7 +165,7 @@ namespace Infrastructure.Identity
 
             if (user == null)
             {
-                return Result.Failure(["User is not found with the given emailaddress."]);
+                return IdentityServiceErrors.UserEmailAddressNotFound;
             }
 
             var result = await userManager.ResetPasswordAsync(user, token, newPassword);
@@ -203,12 +204,12 @@ namespace Infrastructure.Identity
             var user = await userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                return Result.Failure($"AuthenticationUser with user id '{userId}' not found.");
+                return IdentityServiceErrors.UserNotFound.WithParams(user.Id);
             }
 
             if (!await roleManager.RoleExistsAsync(role))
             {
-                return Result.Failure($"Role '{role}' not found.");
+                return IdentityServiceErrors.RoleNotFound.WithParams(role);
             }
 
             await userManager.AddToRoleAsync(user, role);

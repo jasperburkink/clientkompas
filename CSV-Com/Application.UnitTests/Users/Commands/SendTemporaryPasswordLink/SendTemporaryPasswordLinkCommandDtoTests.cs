@@ -125,7 +125,7 @@ namespace Application.UnitTests.Users.Commands.SendTemporaryPasswordLink
 
             // Assert
             result.Succeeded.Should().BeFalse();
-            result.Errors.Should().Contain("User cannot be null.");
+            result.Errors.Should().Contain(SendTemporaryPasswordLinkCommandErrors.UserNotFound);
         }
     }
 }

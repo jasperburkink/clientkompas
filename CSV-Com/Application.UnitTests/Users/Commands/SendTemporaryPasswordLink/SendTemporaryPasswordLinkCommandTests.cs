@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Application.Common.Guards;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Interfaces.CVS;
@@ -108,7 +109,7 @@ namespace Application.UnitTests.Users.Commands.SendTemporaryPasswordLink
 
             // Assert
             result.Succeeded.Should().BeFalse();
-            result.Errors.Should().Contain("This user has not got a temporary password.");
+            result.Errors.Should().Contain(SendTemporaryPasswordLinkCommandErrors.UserHasNoTemporaryPassword);
         }
 
         [Fact]
@@ -123,7 +124,7 @@ namespace Application.UnitTests.Users.Commands.SendTemporaryPasswordLink
 
             // Assert
             result.Succeeded.Should().BeFalse();
-            result.Errors.Should().Contain("No valid temporary password token found for user.");
+            result.Errors.Should().Contain(GenericGuards.GuardNotNull);
         }
 
         [Fact]

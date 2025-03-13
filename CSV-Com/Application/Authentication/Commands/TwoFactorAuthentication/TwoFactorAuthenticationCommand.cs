@@ -41,7 +41,7 @@ namespace Application.Authentication.Commands.TwoFactorAuthentication
 
             var refreshToken = await tokenService.GenerateTokenAsync(loggedInResult.User, nameof(TwoFactorAuthenticationCommandDto.RefreshToken));
 
-            return Result.Success(
+            return Result<TwoFactorAuthenticationCommandDto>.Success(
             new TwoFactorAuthenticationCommandDto
             {
                 Success = true,

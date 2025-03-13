@@ -24,7 +24,7 @@ namespace Application.Authentication.Commands.Login
                 throw new InvalidLoginException(resourceMessageProvider.GetMessage(typeof(LoginCommandHandler), AuthenticationCommandContants.RESOURCE_KEY_INVALIDLOGIN));
             }
 
-            return Result.Success(
+            return Result<LoginCommandDto>.Success(
                 loggedInUser.User!.TwoFactorEnabled
                 ? await HandleTwoFactorAuthentication(loggedInUser)
                 : await HandleStandardLogin(loggedInUser));

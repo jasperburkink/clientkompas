@@ -3,6 +3,7 @@ using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Models;
+using Application.Common.Models.Authentication;
 using Domain.Authentication.Constants;
 using FluentAssertions;
 using Infrastructure.Data.Authentication;
@@ -564,7 +565,7 @@ namespace Infrastructure.UnitTests.Identity
             var result = await identityService.ResetPasswordAsync(emailAddress, token, password);
 
             // Assert
-            result.Should().BeEquivalentTo(Result.Failure(["User is not found with the given emailaddress."]));
+            result.Errors.Should().Contain(IdentityServiceErrors.UserEmailAddressNotFound);
         }
 
 
