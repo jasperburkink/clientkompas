@@ -17,6 +17,8 @@ namespace Application.Users.Queries.GetUser
 
         public required string TelephoneNumber { get; set; }
 
+        public required string Role { get; set; }
+
         public DateTime? DeactivationDateTime { get; set; }
 
         public string? CreatedByUserDescription { get; set; }
@@ -24,6 +26,9 @@ namespace Application.Users.Queries.GetUser
         public void Mapping(Profile profile)
         {
             profile.CreateMap<User, GetUserQueryDto>()
+                .ForMember(userDto =>
+                    userDto.Role,
+                    f => f.MapFrom(user => ""))
                 .ForMember(userDto =>
                     userDto.CreatedByUserDescription,
                     f => f.MapFrom(user => user.CreatedByUser != null ? $"{user.CreatedByUser.FullName} ({user.CreatedByUser.EmailAddress})" : null));

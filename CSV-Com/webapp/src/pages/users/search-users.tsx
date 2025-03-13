@@ -3,7 +3,7 @@ import SearchForm from 'components/common/search-form';
 import ResultsList from 'components/common/results-list';
 import { searchUsers } from 'utils/api';
 import StatusEnum from 'types/common/StatusEnum';
-import { UserContext } from '../../pages/user-context';
+import { UserContext } from './user-context';
 
 const NO_RESULT_TEXT = 'Er zijn geen gebruikers gevonden die aan de zoekcriteria voldoen.';
 const TYPEING_TIMEOUT = 500;
@@ -43,7 +43,7 @@ const Searchusers: React.FC = () => {
       {          
         id: user.id,
         name: user.fullname,        
-        isdeactivated: user.deactivateddatetime !== null
+        isdeactivated: user.deactivateddatetime
       })));      
     }
     catch(err) {

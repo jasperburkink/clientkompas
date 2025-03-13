@@ -1,4 +1,5 @@
-﻿using Application.Common.Interfaces.CVS;
+﻿using Application.Common.Interfaces.Authentication;
+using Application.Common.Interfaces.CVS;
 using Application.Common.Mappings;
 using Application.Users.Queries.GetUser;
 using AutoMapper;
@@ -12,6 +13,7 @@ namespace Application.UnitTests.Users.Queries.GetUser
     public class GetUserQueryTests
     {
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;
+        private readonly Mock<IIdentityService> _identityServiceMock;
         private readonly ITestDataGenerator<User> _userTestDataGenerator;
         private readonly IMapper _mapper;
 
@@ -19,6 +21,8 @@ namespace Application.UnitTests.Users.Queries.GetUser
         {
             _userTestDataGenerator = new UserDataGenerator();
             _unitOfWorkMock = new Mock<IUnitOfWork>();
+
+            _identityServiceMock = new Mock<IIdentityService>();
 
             var configuration = new MapperConfiguration(config =>
                 config.AddProfile<MappingProfile>());
@@ -36,7 +40,7 @@ namespace Application.UnitTests.Users.Queries.GetUser
 
             _unitOfWorkMock.Setup(mock => mock.UserRepository.GetByIDAsync(It.IsAny<int>(), It.IsAny<string>(), default)).ReturnsAsync(user);
 
-            var handler = new GetUserQueryHandler(_unitOfWorkMock.Object, _mapper);
+            var handler = new GetUserQueryHandler(_unitOfWorkMock.Object, _identityServiceMock.Object, _mapper);
 
             var query = new GetUserQuery { UserId = user.Id };
 
@@ -57,7 +61,7 @@ namespace Application.UnitTests.Users.Queries.GetUser
 
             _unitOfWorkMock.Setup(mock => mock.UserRepository.GetByIDAsync(It.IsAny<int>(), It.IsAny<string>(), default));
 
-            var handler = new GetUserQueryHandler(_unitOfWorkMock.Object, _mapper);
+            var handler = new GetUserQueryHandler(_unitOfWorkMock.Object, _identityServiceMock.Object, _mapper);
 
             var query = new GetUserQuery { UserId = user.Id };
 
@@ -67,7 +71,7 @@ namespace Application.UnitTests.Users.Queries.GetUser
             // Assert
             result.Should().NotBeNull();
             result.Succeeded.Should().BeFalse();
-            result.Errors.Should().Contain("User not found!");
+            result.Errors.Should().Contain(GetUserQueryErrors.UserNotFound);
         }
     }
 }

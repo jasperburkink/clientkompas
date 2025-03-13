@@ -30,8 +30,9 @@ namespace Application.FunctionalTests.Authentication.Commands.TwoFactorAuthentic
             var result = await SendAsync(_command);
 
             // Assert
-            result.Should().NotBeNull();
-            result.Success.Should().BeTrue();
+            result.Succeeded.Should().BeTrue();
+            result.Value.Should().NotBeNull();
+            result.Value.Success.Should().BeTrue();
         }
 
         [Test]
@@ -42,8 +43,9 @@ namespace Application.FunctionalTests.Authentication.Commands.TwoFactorAuthentic
             var result = await SendAsync(_command);
 
             // Assert
-            result.Should().NotBeNull();
-            result.BearerToken.Should().NotBeNullOrEmpty();
+            result.Succeeded.Should().BeTrue();
+            result.Value.Should().NotBeNull();
+            result.Value.BearerToken.Should().NotBeNullOrEmpty();
         }
 
         [Test]
@@ -54,11 +56,15 @@ namespace Application.FunctionalTests.Authentication.Commands.TwoFactorAuthentic
             var result = await SendAsync(_command);
 
             // Assert
-            result.Should().NotBeNull();
-            result.RefreshToken.Should().NotBeNullOrEmpty();
+            result.Succeeded.Should().BeTrue();
+            result.Value.Should().NotBeNull();
+            result.Value.RefreshToken.Should().NotBeNullOrEmpty();
         }
 
         [TearDown]
-        public void TearDown() => UseMocks = false;
+        public void TearDown()
+        {
+            UseMocks = false;
+        }
     }
 }

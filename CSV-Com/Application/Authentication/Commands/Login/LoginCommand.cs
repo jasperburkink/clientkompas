@@ -6,16 +6,16 @@ using Domain.Authentication.Constants;
 
 namespace Application.Authentication.Commands.Login
 {
-    public record LoginCommand : IRequest<LoginCommandDto>
+    public record LoginCommand : IRequest<Result<LoginCommandDto>>
     {
         public string UserName { get; set; } = null!;
 
         public string Password { get; set; } = null!;
     }
 
-    public class LoginCommandHandler(IIdentityService identityService, IBearerTokenService bearerTokenService, ITokenService tokenService, IResourceMessageProvider resourceMessageProvider, IEmailService emailService) : IRequestHandler<LoginCommand, LoginCommandDto>
+    public class LoginCommandHandler(IIdentityService identityService, IBearerTokenService bearerTokenService, ITokenService tokenService, IResourceMessageProvider resourceMessageProvider, IEmailService emailService) : IRequestHandler<LoginCommand, Result<LoginCommandDto>>
     {
-        public async Task<LoginCommandDto> Handle(LoginCommand request, CancellationToken cancellationToken)
+        public async Task<Result<LoginCommandDto>> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
             var loggedInUser = await identityService.LoginAsync(request.UserName!, request.Password!);
 
@@ -24,9 +24,10 @@ namespace Application.Authentication.Commands.Login
                 throw new InvalidLoginException(resourceMessageProvider.GetMessage(typeof(LoginCommandHandler), AuthenticationCommandContants.RESOURCE_KEY_INVALIDLOGIN));
             }
 
-            return loggedInUser.User!.TwoFactorEnabled
+            return Result<LoginCommandDto>.Success(
+                loggedInUser.User!.TwoFactorEnabled
                 ? await HandleTwoFactorAuthentication(loggedInUser)
-                : await HandleStandardLogin(loggedInUser);
+                : await HandleStandardLogin(loggedInUser));
         }
 
         private async Task<LoginCommandDto> HandleStandardLogin(LoggedInResult loggedInUser)

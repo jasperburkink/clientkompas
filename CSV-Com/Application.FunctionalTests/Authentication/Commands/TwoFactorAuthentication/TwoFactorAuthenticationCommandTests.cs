@@ -30,13 +30,17 @@ namespace Application.FunctionalTests.Authentication.Commands.TwoFactorAuthentic
             var result = await SendAsync(_command);
 
             // Assert
-            result.Should().NotBeNull();
-            result.Success.Should().BeTrue();
+            result.Succeeded.Should().BeTrue();
+            result.Value.Should().NotBeNull();
+            result.Value.Success.Should().BeTrue();
         }
 
         // TODO: Add additional tests when https://sbict.atlassian.net/browse/CVS-578 is solved and mocks are removed.
 
         [TearDown]
-        public void TearDown() => UseMocks = false;
+        public void TearDown()
+        {
+            UseMocks = false;
+        }
     }
 }

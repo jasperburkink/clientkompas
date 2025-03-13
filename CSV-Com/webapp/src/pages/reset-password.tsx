@@ -11,7 +11,7 @@ import { InputField } from "components/common/input-field";
 import SaveButton from "components/common/save-button";
 import ResetPasswordCommand from "types/model/reset-password/reset-password-command";
 import ResetPasswordCommandDto from "types/model/reset-password/reset-password-command-dto";
-import ApiResult, { getErrorMessage } from "types/common/api-result";
+import ApiResultOld, { getErrorMessage } from "types/common/api-result-old";
 import CVSError from "types/common/cvs-error";
 import ErrorPopup from "components/common/error-popup";
 import { Copyright } from "components/common/copyright";
@@ -20,6 +20,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { resetPassword } from "utils/api";
 import { Label } from "components/common/label";
 import PasswordField from "components/common/password-field";
+import ApiResult from "types/common/api-result";
 
 const RequestResetPassword = () => {
     const navigate = useNavigate();
@@ -91,8 +92,8 @@ const RequestResetPassword = () => {
         setConfirmPopupOneButtonOpen: React.Dispatch<React.SetStateAction<boolean>>, 
         setCvsError: React.Dispatch<React.SetStateAction<CVSError>>, 
         setErrorPopupOpen: React.Dispatch<React.SetStateAction<boolean>>) => {
-        if (apiResult.Ok) {
-            if(apiResult.ReturnObject?.success === true) {                
+        if (apiResult.succeeded) {
+            if(apiResult.value?.success === true) {                
                 setConfirmMessage('Uw wachtwoord is opnieuw ingesteld. U kun uw nieuwe wachtwoord gebruiken om in te loggen.');
                 setConfirmPopupOneButtonOpen(true);
             }
@@ -100,7 +101,7 @@ const RequestResetPassword = () => {
                 setCvsError({
                     id: 0,
                     errorcode: 'E',
-                    message: `Er is een opgetreden tijdens het opnieuw instellen van een nieuw wachtwoord. Foutmelding: ${getErrorMessage<ResetPasswordCommandDto>(apiResult)}.`
+                    message: `Er is een opgetreden tijdens het opnieuw instellen van een nieuw wachtwoord. Foutmelding: ${apiResult.errormessage}.`
                 });
                 setErrorPopupOpen(true);
 
@@ -108,14 +109,14 @@ const RequestResetPassword = () => {
             }
         }
         else {
-            if(apiResult.ValidationErrors && !isHashEmpty(apiResult.ValidationErrors)) {
-                setValidationErrors(apiResult.ValidationErrors);
+            if(apiResult.validationerrors&& !isHashEmpty(apiResult.validationerrors)) {
+                setValidationErrors(apiResult.validationerrors);
             }
             else {
                 setCvsError({
                     id: 0,
                     errorcode: 'E',
-                    message: `Er is een opgetreden tijdens het opnieuw instellen van een nieuw wachtwoord. Foutmelding: ${getErrorMessage<ResetPasswordCommandDto>(apiResult)}.`
+                    message: `Er is een opgetreden tijdens het opnieuw instellen van een nieuw wachtwoord. Foutmelding: ${apiResult.errormessage}.`
                 });
                 setErrorPopupOpen(true);  
 

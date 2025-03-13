@@ -46,5 +46,7 @@ namespace Application.Common.Interfaces.Authentication
         Task UpdateUserAsync(IAuthenticationUser user);
 
         Task<IList<IAuthenticationUser>> GetUsersInRolesAsync(string role, params string[] roles);
+
+        Task<IAuthenticationUser?> GetUserByCVSUserIdAsync(int cvsUserId);
     }
 }

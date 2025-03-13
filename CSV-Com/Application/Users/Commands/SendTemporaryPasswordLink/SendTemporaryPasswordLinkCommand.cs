@@ -40,11 +40,11 @@ namespace Application.Users.Commands.SendTemporaryPasswordLink
 
             if (!authenticationUser.HasTemporaryPassword)
             {
-                return Result<SendTemporaryPasswordLinkCommandDto>.Failure("This user has not got a temporary password.");
+                return Result<SendTemporaryPasswordLinkCommandDto>.Failure(SendTemporaryPasswordLinkCommandErrors.UserHasNoTemporaryPassword);
             }
 
             var currentToken = (await tokenService.GetValidTokensByUserAsync(authenticationUser.Id, "TemporaryPasswordToken")).FirstOrDefault(); // TODO: name in constants
-            var currentTokenResult = Guard.Against.NotNull(currentToken, "No valid temporary password token found for user.");
+            var currentTokenResult = Guard.Against.NotNull(currentToken);
 
             if (!currentTokenResult.Succeeded)
             {
@@ -61,7 +61,7 @@ namespace Application.Users.Commands.SendTemporaryPasswordLink
 
             if (string.IsNullOrEmpty(cvsUser!.EmailAddress))
             {
-                return Result<SendTemporaryPasswordLinkCommandDto>.Failure("No emailaddress found for this user.");
+                return Result<SendTemporaryPasswordLinkCommandDto>.Failure(SendTemporaryPasswordLinkCommandErrors.UserHasNoEmailAddress);
             }
 
             // When token has been sent more than n times, send temporary password link with token to user.
@@ -85,7 +85,7 @@ namespace Application.Users.Commands.SendTemporaryPasswordLink
                 }
             }
 
-            return Result.Success(new SendTemporaryPasswordLinkCommandDto
+            return Result<SendTemporaryPasswordLinkCommandDto>.Success(new SendTemporaryPasswordLinkCommandDto
             {
                 UserId = cvsUser.Id
             });
@@ -125,12 +125,12 @@ namespace Application.Users.Commands.SendTemporaryPasswordLink
         {
             if (cvsUser == null)
             {
-                return Result.Failure("User not found.");
+                return Result.Failure(SendTemporaryPasswordLinkCommandErrors.UserNotFound);
             }
 
             if (cvsUser.CreatedByUser == null)
             {
-                return Result.Failure("User which create this user not found.");
+                return SendTemporaryPasswordLinkCommandErrors.CreatedByUserNotFound;
             }
 
             var emailAddress = cvsUser.EmailAddress;
@@ -138,7 +138,7 @@ namespace Application.Users.Commands.SendTemporaryPasswordLink
 
             if (string.IsNullOrEmpty(emailAddressContact))
             {
-                return Result.Failure("No emailaddress found for contactperson.");
+                return SendTemporaryPasswordLinkCommandErrors.EmailAddressContactPersonNotFound;
             }
 
             var prefixLastNameContactPerson = string.IsNullOrEmpty(cvsUser.PrefixLastName) ? (cvsUser.PrefixLastName + " ") : "";

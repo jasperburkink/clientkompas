@@ -77,15 +77,17 @@ namespace Application.UnitTests.Users.Commands.DeactivateUser
             // Assert
             result.Should().NotBeNull();
             result.Succeeded.Should().BeFalse();
-            result.ErrorMessage.Should().Be($"Gebruiker met id '${command.Id}' kan niet worden gevonden.");
+            result.Errors.Should().Contain(DeactivateUserCommandErrors.UserNotFound.WithParams(user.Id));
         }
 
         [Fact]
         public async Task Handle_UserIsAlreadyDeactivated_ReturnsFailureResult()
         {
             // Arrange
+            var now = DateTime.UtcNow;
+
             var user = _testDataGenerator.Create();
-            user.Deactivate(DateTime.UtcNow);
+            user.Deactivate(now);
 
             _unitOfWorkMock.Setup(mock => mock.UserRepository.GetByIDAsync(It.IsAny<int>(), default)).ReturnsAsync(user);
 
@@ -102,7 +104,7 @@ namespace Application.UnitTests.Users.Commands.DeactivateUser
             // Assert
             result.Should().NotBeNull();
             result.Succeeded.Should().BeFalse();
-            result.ErrorMessage.Should().Be($"Gebruiker met id '${user.Id}' is al gedeactiveerd op ${user.DeactivationDateTime} en kan dus niet opnieuw worden gedeactiveerd.");
+            result.Errors.Should().Contain(DeactivateUserCommandErrors.UserAlreadyDeactivated.WithParams(user.Id, now));
         }
 
         [Fact]

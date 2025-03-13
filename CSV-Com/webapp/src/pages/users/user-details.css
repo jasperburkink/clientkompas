@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600&display=swap');
+
+@layer components {
+
+    .user {
+        @apply
+        flex
+        flex-col
+        mt-40;
+
+        .user-header{
+            @apply
+            w-full
+            px-2
+            py-4
+            text-xl;
+        }
+
+        .user-subheader{
+            @apply
+            w-full
+            px-2
+            py-4            
+            text-lg;
+
+            p {
+                @apply
+                no-underline;
+            }
+        }
+
+        .user-label{
+            @apply
+            w-full
+            px-2
+            text-lg;
+        }
+
+        .user-whitespace{
+            @apply
+            block
+            h-4;
+        }
+    }
+
+    .button-container{
+        @apply
+        flex
+        justify-center
+        flex-row
+        w-full
+        fixed
+        bottom-0
+        h-[90px]
+        bg-mainLightGray
+        p-5
+        shadow-2xl
+        shadow-black
+        lg:relative
+        lg:bg-transparent
+        lg:w-full
+        lg:h-auto
+        lg:flex-col
+        lg:shadow-none
+        lg:justify-end
+        lg:gap-0
+        lg:p-0
+        z-50
+        lg:mt-4
+        lg:mb-12
+        lg:items-end;
+
+        .button{
+            @apply
+            text-base
+            w-full
+            mx-2
+            lg:w-52
+            lg:h-12
+            lg:my-2            
+            text-center;            
+        }
+    }
+}

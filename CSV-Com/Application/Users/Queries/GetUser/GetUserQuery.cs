@@ -1,4 +1,5 @@
-﻿using Application.Common.Interfaces.CVS;
+﻿using Application.Common.Interfaces.Authentication;
+using Application.Common.Interfaces.CVS;
 using Application.Common.Models;
 using Application.Common.Security;
 using Domain.Authentication.Constants;
@@ -11,7 +12,7 @@ namespace Application.Users.Queries.GetUser
         public int UserId { get; set; }
     }
 
-    public class GetUserQueryHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<GetUserQuery, Result<GetUserQueryDto>>
+    public class GetUserQueryHandler(IUnitOfWork unitOfWork, IIdentityService identityService, IMapper mapper) : IRequestHandler<GetUserQuery, Result<GetUserQueryDto>>
     {
         public async Task<Result<GetUserQueryDto>> Handle(GetUserQuery request, CancellationToken cancellationToken)
         {
@@ -19,12 +20,20 @@ namespace Application.Users.Queries.GetUser
 
             if (user == null)
             {
-                return Result<GetUserQueryDto>.Failure("User not found!");
+                return Result<GetUserQueryDto>.Failure(GetUserQueryErrors.UserNotFound);
             }
 
             var userDto = mapper.Map<GetUserQueryDto>(user);
 
-            return Result.Success(userDto);
+            var authenticationUser = await identityService.GetUserByCVSUserIdAsync(request.UserId);
+
+            if (authenticationUser != null)
+            {
+                var userRoles = await identityService.GetUserRolesAsync(authenticationUser.Id);
+                userDto.Role = string.Join(", ", userRoles);
+            }
+
+            return Result<GetUserQueryDto>.Success(userDto);
         }
     }
 }

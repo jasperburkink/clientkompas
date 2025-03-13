@@ -3,7 +3,6 @@ using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Models;
-using Domain.Authentication.Domain;
 using Infrastructure.Identity;
 using Moq;
 
@@ -59,7 +58,9 @@ namespace Application.UnitTests.Authentication.Commands.Login
             var result = await handler.Handle(command, default);
 
             // Assert
-            result.Success.Should().Be(isUserLoggedIn);
+            result.Succeeded.Should().BeTrue();
+            result.Value.Should().NotBeNull();
+            result.Value.Success.Should().Be(isUserLoggedIn);
         }
 
         [Fact]
@@ -133,7 +134,8 @@ namespace Application.UnitTests.Authentication.Commands.Login
             var result = await handler.Handle(command, default);
 
             // Assert
-            result.BearerToken.Should().NotBeEmpty().And.Be(bearerToken);
+            result.Value.Should().NotBeNull();
+            result.Value.BearerToken.Should().NotBeEmpty().And.Be(bearerToken);
         }
     }
 }

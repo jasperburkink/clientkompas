@@ -9,7 +9,7 @@ namespace Infrastructure.Identity
         {
             return result.Succeeded
                 ? Result.Success()
-                : Result.Failure(result.Errors.Select(e => e.Description));
+                : Result.Failure(new Error($"{nameof(IdentityResultExtensions)}.{nameof(ToApplicationResult)}", string.Join(',', result.Errors.Select(e => e.Description))));
         }
     }
 }

@@ -64,7 +64,7 @@ namespace Application.FunctionalTests.Users.Queries.GetUser
             // Assert
             result.Should().NotBeNull();
             result.Succeeded.Should().BeFalse();
-            result.Errors.Should().Contain("User not found!");
+            result.Errors.Should().Contain(GetUserQueryErrors.UserNotFound);
         }
 
         [Test]

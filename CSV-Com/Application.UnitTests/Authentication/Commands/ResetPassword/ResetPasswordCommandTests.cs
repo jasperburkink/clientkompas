@@ -1,6 +1,7 @@
 ﻿using Application.Authentication.Commands.ResetPassword;
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Models;
+using Application.Common.Models.Authentication;
 using Moq;
 using TestData;
 
@@ -172,7 +173,7 @@ namespace Application.UnitTests.Authentication.Commands.ResetPassword
             var password = FakerConfiguration.Faker.Internet.Password();
 
             var identityServiceMock = new Mock<IIdentityService>();
-            identityServiceMock.Setup(mock => mock.ResetPasswordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(Result.Failure(["Test"]));
+            identityServiceMock.Setup(mock => mock.ResetPasswordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(IdentityServiceErrors.UserNotFound);
 
             var handler = new ResetPasswordCommandHandler(identityServiceMock.Object);
 
@@ -196,10 +197,9 @@ namespace Application.UnitTests.Authentication.Commands.ResetPassword
         {
             // Arrange
             var password = FakerConfiguration.Faker.Internet.Password();
-            var errorMessage = "Test!";
 
             var identityServiceMock = new Mock<IIdentityService>();
-            identityServiceMock.Setup(mock => mock.ResetPasswordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(Result.Failure([errorMessage]));
+            identityServiceMock.Setup(mock => mock.ResetPasswordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(IdentityServiceErrors.UserNotFound);
 
             var handler = new ResetPasswordCommandHandler(identityServiceMock.Object);
 
@@ -215,7 +215,7 @@ namespace Application.UnitTests.Authentication.Commands.ResetPassword
             var result = await handler.Handle(command, default);
 
             // Assert
-            result.Errors.Contains(errorMessage);
+            result.Errors.Should().NotBeEmpty(); // TODO: check for result error
         }
     }
 }

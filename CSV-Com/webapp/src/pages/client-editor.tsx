@@ -30,7 +30,7 @@ import StatusEnum from 'types/common/StatusEnum';
 import { fetchClientEditor } from 'utils/api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-import ApiResult from 'types/common/api-result';
+import ApiResultOld from 'types/common/api-result-old';
 import DriversLicence from 'types/model/DriversLicence';
 import MaritalStatus from 'types/model/MaritalStatus';
 import BenefitForm from 'types/model/BenefitForm';
@@ -38,6 +38,7 @@ import { ClientContext } from './client-context';
 import Organization from 'types/model/Organization';
 import DropdownBoolean from 'components/common/dropdown-boolean';
 import { filterValidationErrors, isHashEmpty, ValidationErrorHash } from 'types/common/validation-error';
+import ApiResult from 'types/common/api-result';
 
 const ClientEditor = () => {
     
@@ -269,21 +270,21 @@ const ClientEditor = () => {
         setCvsError: React.Dispatch<React.SetStateAction<CvsError>>, 
         setErrorPopupOpen: React.Dispatch<React.SetStateAction<boolean>>, 
         setClient: React.Dispatch<React.SetStateAction<Client>>): void => {
-        if (apiResult.Ok) {
+        if (apiResult.succeeded) {
             setConfirmMessage('Client succesvol opgeslagen');
             setConfirmPopupOneButtonOpen(true);
     
-            setClient(apiResult.ReturnObject!);
+            setClient(apiResult.value!);
         }
         else {
-            if(apiResult.ValidationErrors && !isHashEmpty(apiResult.ValidationErrors)) {
-                setValidationErrors(apiResult.ValidationErrors);
+            if(apiResult.validationerrors && !isHashEmpty(apiResult.validationerrors)) {
+                setValidationErrors(apiResult.validationerrors);
             }
             else {
                 setCvsError({
                     id: 0,
                     errorcode: 'E',
-                    message: `Er is een opgetreden tijdens het opslaan van een client. Foutmelding: ${(apiResult.Errors as string[]).join(', ')}`
+                    message: `Er is een opgetreden tijdens het opslaan van een client. Foutmelding: ${(apiResult.errors as string[]).join(', ')}`
                 });
                 
                 setErrorPopupOpen(true);    

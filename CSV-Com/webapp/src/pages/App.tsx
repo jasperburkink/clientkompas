@@ -28,9 +28,10 @@ import DomainObjectInput from 'components/common/domain-object-input';
 import EmergencyPerson from 'types/model/EmergencyPerson';
 import WorkingContract from 'types/model/WorkingContract';
 import LabelField from 'components/common/label-field';
-import ApiResult from 'types/common/api-result';
+import ApiResultOld from 'types/common/api-result-old';
 import Menu from 'components/common/menu';
 import { CountdownButton } from 'components/common/countdown-button';
+import ApiResult from 'types/common/api-result';
 
 function App() {
     const data = [
@@ -304,16 +305,16 @@ function App() {
                     errorText = "Fout tijdens opslaan"
                     onSave={() => {
                         let result: ApiResult<returnObject> = {
-                            Ok: true,
-                            Errors: ['Er is iets mis gegaan!'] ,
-                            ReturnObject: {
+                            succeeded: true,
+                            errors: ['Er is iets mis gegaan!'] ,
+                            value: {
                                 name: "test",
                                 id: 1
                             }                            
                         }
                         return new Promise<ApiResult<returnObject>>(resolve => setTimeout(() => resolve(result), 2000));
                     }}
-                    onResult={(result) => console.error('Result: ', result.Ok)}
+                    onResult={(result) => console.error('Result: ', result.succeeded)}
                     />
 
                     <ErrorPopup isOpen={isErrorPopupOpen} onClose={() => {}} error={cvsError} />

@@ -1,4 +1,5 @@
-﻿using Application.Users.Commands.SendTemporaryPasswordLink;
+﻿using Application.Common.Guards;
+using Application.Users.Commands.SendTemporaryPasswordLink;
 using Domain.Authentication.Constants;
 using Domain.Authentication.Domain;
 using Domain.CVS.Domain;
@@ -87,7 +88,7 @@ namespace Application.FunctionalTests.Users.Commands.SendTemporaryPasswordLink
             // Assert
             result.Should().NotBeNull();
             result.Succeeded.Should().BeFalse();
-            result.Errors.Should().Contain("This user has not got a temporary password.");
+            result.Errors.Should().Contain(SendTemporaryPasswordLinkCommandErrors.UserHasNoTemporaryPassword);
         }
 
         [Test]
@@ -141,7 +142,7 @@ namespace Application.FunctionalTests.Users.Commands.SendTemporaryPasswordLink
             // Assert
             result.Should().NotBeNull();
             result.Succeeded.Should().BeFalse();
-            result.Errors.Should().Contain("IAuthenticationUser cannot be null.");
+            result.Errors.Should().Contain(GenericGuards.GuardNotNull.WithParams(nameof(IAuthenticationUser)));
         }
 
         [Test]
@@ -181,7 +182,7 @@ namespace Application.FunctionalTests.Users.Commands.SendTemporaryPasswordLink
             // Assert
             result.Should().NotBeNull();
             result.Succeeded.Should().BeFalse();
-            result.Errors.Should().Contain("User which create this user not found.");
+            result.Errors.Should().Contain(SendTemporaryPasswordLinkCommandErrors.CreatedByUserNotFound);
         }
 
         [Test]
@@ -199,7 +200,7 @@ namespace Application.FunctionalTests.Users.Commands.SendTemporaryPasswordLink
             // Assert
             result.Should().NotBeNull();
             result.Succeeded.Should().BeFalse();
-            result.Errors.Should().Contain("No emailaddress found for this user.");
+            result.Errors.Should().Contain(SendTemporaryPasswordLinkCommandErrors.UserHasNoEmailAddress);
         }
 
         [Test]
@@ -239,7 +240,7 @@ namespace Application.FunctionalTests.Users.Commands.SendTemporaryPasswordLink
             // Assert
             result.Should().NotBeNull();
             result.Succeeded.Should().BeFalse();
-            result.Errors.Should().Contain("No emailaddress found for this user.");
+            result.Errors.Should().Contain(SendTemporaryPasswordLinkCommandErrors.UserHasNoEmailAddress);
         }
 
         [Test]
@@ -279,7 +280,7 @@ namespace Application.FunctionalTests.Users.Commands.SendTemporaryPasswordLink
             // Assert
             result.Should().NotBeNull();
             result.Succeeded.Should().BeFalse();
-            result.Errors.Should().Contain("No emailaddress found for contactperson.");
+            result.Errors.Should().Contain(SendTemporaryPasswordLinkCommandErrors.EmailAddressContactPersonNotFound);
         }
 
         [Test]
@@ -336,7 +337,7 @@ namespace Application.FunctionalTests.Users.Commands.SendTemporaryPasswordLink
             // Assert
             result.Should().NotBeNull();
             result.Succeeded.Should().BeFalse();
-            result.Errors.Should().Contain("No valid temporary password token found for user.");
+            result.Errors.Should().Contain(GenericGuards.GuardNotNull.WithParams(nameof(IAuthenticationToken)));
         }
 
         [Test]
@@ -372,7 +373,7 @@ namespace Application.FunctionalTests.Users.Commands.SendTemporaryPasswordLink
             // Assert
             result.Should().NotBeNull();
             result.Succeeded.Should().BeFalse();
-            result.Errors.Should().Contain("No valid temporary password token found for user.");
+            result.Errors.Should().Contain(GenericGuards.GuardNotNull.WithParams(nameof(IAuthenticationToken)));
         }
 
         [Test]
@@ -408,7 +409,7 @@ namespace Application.FunctionalTests.Users.Commands.SendTemporaryPasswordLink
             // Assert
             result.Should().NotBeNull();
             result.Succeeded.Should().BeFalse();
-            result.Errors.Should().Contain("No valid temporary password token found for user.");
+            result.Errors.Should().Contain(GenericGuards.GuardNotNull.WithParams(nameof(IAuthenticationToken)));
         }
     }
 }
