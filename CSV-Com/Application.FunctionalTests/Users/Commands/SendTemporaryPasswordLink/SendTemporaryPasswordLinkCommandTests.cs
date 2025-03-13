@@ -142,7 +142,7 @@ namespace Application.FunctionalTests.Users.Commands.SendTemporaryPasswordLink
             // Assert
             result.Should().NotBeNull();
             result.Succeeded.Should().BeFalse();
-            result.Errors.Should().Contain(SendTemporaryPasswordLinkCommandErrors.UserNotFound);
+            result.Errors.Should().Contain(GenericGuards.GuardNotNull.WithParams(nameof(IAuthenticationUser)));
         }
 
         [Test]
@@ -337,7 +337,7 @@ namespace Application.FunctionalTests.Users.Commands.SendTemporaryPasswordLink
             // Assert
             result.Should().NotBeNull();
             result.Succeeded.Should().BeFalse();
-            result.Errors.Should().Contain(GenericGuards.GuardNotNull);
+            result.Errors.Should().Contain(GenericGuards.GuardNotNull.WithParams(nameof(IAuthenticationToken)));
         }
 
         [Test]
@@ -373,7 +373,7 @@ namespace Application.FunctionalTests.Users.Commands.SendTemporaryPasswordLink
             // Assert
             result.Should().NotBeNull();
             result.Succeeded.Should().BeFalse();
-            result.Errors.Should().Contain(GenericGuards.GuardNotNull);
+            result.Errors.Should().Contain(GenericGuards.GuardNotNull.WithParams(nameof(IAuthenticationToken)));
         }
 
         [Test]
@@ -409,7 +409,7 @@ namespace Application.FunctionalTests.Users.Commands.SendTemporaryPasswordLink
             // Assert
             result.Should().NotBeNull();
             result.Succeeded.Should().BeFalse();
-            result.Errors.Should().Contain(GenericGuards.GuardNotNull);
+            result.Errors.Should().Contain(GenericGuards.GuardNotNull.WithParams(nameof(IAuthenticationToken)));
         }
     }
 }

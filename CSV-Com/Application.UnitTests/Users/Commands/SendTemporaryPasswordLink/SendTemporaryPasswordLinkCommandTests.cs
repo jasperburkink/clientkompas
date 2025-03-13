@@ -5,6 +5,7 @@ using Application.Common.Interfaces.Authentication;
 using Application.Common.Interfaces.CVS;
 using Application.Users.Commands.SendTemporaryPasswordLink;
 using AutoMapper;
+using Domain.Authentication.Domain;
 using Domain.CVS.Domain;
 using Infrastructure.Identity;
 using Microsoft.Extensions.Configuration;
@@ -124,7 +125,7 @@ namespace Application.UnitTests.Users.Commands.SendTemporaryPasswordLink
 
             // Assert
             result.Succeeded.Should().BeFalse();
-            result.Errors.Should().Contain(GenericGuards.GuardNotNull);
+            result.Errors.Should().Contain(GenericGuards.GuardNotNull.WithParams(nameof(IAuthenticationToken)));
         }
 
         [Fact]

@@ -68,7 +68,7 @@ namespace Application.FunctionalTests.Users.Commands.DeactivateUser
             // Assert
             result.Should().NotBeNull();
             result.Succeeded.Should().BeFalse();
-            result.ErrorMessage.Should().Be($"Gebruiker met id '${command.Id}' kan niet worden gevonden.");
+            result.Errors.Should().Contain(DeactivateUserCommandErrors.UserNotFound.WithParams(user.Id));
         }
 
         [Test]
@@ -76,7 +76,8 @@ namespace Application.FunctionalTests.Users.Commands.DeactivateUser
         {
             // Arrange
             var user = _testDataGeneratorUser.Create();
-            user.Deactivate(DateTime.UtcNow);
+            var now = DateTime.UtcNow;
+            user.Deactivate(now);
 
             await RunAsAsync(Roles.Administrator);
 
@@ -93,7 +94,7 @@ namespace Application.FunctionalTests.Users.Commands.DeactivateUser
             // Assert
             result.Should().NotBeNull();
             result.Succeeded.Should().BeFalse();
-            result.ErrorMessage.Should().Be($"Gebruiker met id '${user.Id}' is al gedeactiveerd op ${user.DeactivationDateTime} en kan dus niet opnieuw worden gedeactiveerd.");
+            result.Errors.Should().Contain(DeactivateUserCommandErrors.UserAlreadyDeactivated.WithParams(user.Id, now));
         }
 
         [Test]

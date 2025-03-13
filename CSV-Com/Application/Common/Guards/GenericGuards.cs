@@ -11,8 +11,7 @@ namespace Application.Common.Guards
         {
             if (value is null)
             {
-                var defaultMessage = $"{typeof(T).Name} cannot be null.";
-                return Result<T>.Failure(GuardNotNull.WithParams(defaultMessage));
+                return Result<T>.Failure(GuardNotNull.WithParams(typeof(T).Name));
             }
 
             return Result<T>.Success(value);

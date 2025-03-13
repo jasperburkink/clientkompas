@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Application.Common.Guards;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Interfaces.CVS;
@@ -125,7 +126,7 @@ namespace Application.UnitTests.Users.Commands.SendTemporaryPasswordLink
 
             // Assert
             result.Succeeded.Should().BeFalse();
-            result.Errors.Should().Contain(SendTemporaryPasswordLinkCommandErrors.UserNotFound);
+            result.Errors.Should().Contain(GenericGuards.GuardNotNull.WithParams(nameof(User)));
         }
     }
 }

@@ -9,7 +9,7 @@
 
         public string FormatDescription(params object[] args)
         {
-            return string.Format(Description, args);
+            return args.Count() > 0 ? string.Format(Description, args) : Description;
         }
 
         public Error WithParams(params object[] args)
