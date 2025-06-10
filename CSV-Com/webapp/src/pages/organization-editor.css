@@ -1,0 +1,174 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600&display=swap');
+
+@layer components {
+    .loading-spinner{
+        @apply
+        fixed
+        flex
+        inset-0
+        bg-gray-800
+        bg-opacity-50
+        items-center
+        justify-center
+        h-screen
+        w-full
+        z-50;
+    }
+
+    .loading-spinner-visible{
+        @apply
+        visible;
+    }
+
+    .loading-spinner-hidden{
+        @apply
+        invisible;
+    }
+
+    .organization-create-container {
+        @apply
+        flex
+        flex-col
+        px-5
+        pt-[140px]
+        pb-[90px]
+        mt-4
+        lg:mt-20        
+        lg:w-full
+        lg:p-0
+        lg:h-14
+        lg:px-12;
+
+        .label{
+            @apply 
+            text-lg;
+        }        
+    
+        .header{
+            @apply 
+            text-3xl 
+            w-full 
+            mb-5
+            lg:text-3xl 
+            col-span-3 
+            lg:row-end-1;
+        }
+
+        .organization-create-subheader {
+            @apply 
+            my-8
+            col-span-2;
+        }
+
+        .organization-create-fields{
+            @apply            
+            lg:grid
+            lg:grid-cols-2;
+
+            .house-number{
+                width: 40%;
+                @apply
+                float-left;
+            }
+        
+            .house-number-addition{
+                @apply
+                py-0;
+
+                label{
+                    @apply
+                    text-sm
+                    w-12;
+                }
+
+                .house-number-addition-field{
+                    @apply
+                    w-[104%]
+                }
+            }             
+        }
+
+        .organization-domain-object{
+            @apply
+            lg:mt-14;
+        }
+
+        .organization-remarks{
+            @apply
+            my-2
+            lg:flex
+            lg:flex-row
+            lg:mr-6;
+ 
+            .label{
+                @apply
+                lg:flex-none
+                lg:w-28
+                lg:mt-6;
+            }
+
+            textarea{
+                @apply
+                my-4
+                w-full
+                lg:flex-initial
+                lg:ml-4;
+            }
+        }
+
+        .organization-extra-info{
+            @apply
+            lg:grid
+            lg:grid-cols-2;
+        }
+
+         .button-container{
+            @apply
+            flex
+            justify-center
+            flex-row
+            w-full
+            fixed
+            bottom-0
+            h-[90px]
+            bg-mainLightGray
+            p-5
+            -mx-5
+            shadow-2xl
+            shadow-black
+            lg:relative
+            lg:bg-transparent
+            lg:w-full
+            lg:h-auto
+            lg:shadow-none
+            lg:justify-end
+            lg:gap-0
+            lg:p-0
+            z-50
+            lg:mt-8
+            lg:mb-12;
+    
+            .button{
+                @apply
+                text-base
+                lg:w-52
+                lg:mb-8
+                lg:text-center
+                lg:col-span-2;
+            }
+        }
+    }    
+
+    .header-menu{
+        @apply
+        fixed
+        lg:flex
+        lg:static
+        h-[140px]
+        w-full
+        lg:w-auto;
+    }
+}

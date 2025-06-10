@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Common
 {
@@ -11,7 +6,7 @@ namespace Domain.Common
     {
         public int Id { get; set; }
 
-        private readonly List<BaseEvent> _domainEvents = new();
+        private readonly List<BaseEvent> _domainEvents = [];
 
         [NotMapped]
         public IReadOnlyCollection<BaseEvent> DomainEvents => _domainEvents.AsReadOnly();

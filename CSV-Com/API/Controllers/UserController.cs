@@ -1,58 +1,47 @@
-﻿using Application.Common.Interfaces.CVS;
-using AutoMapper;
-using Domain.CVS.Domain;
+﻿using Application.Common.Models;
+using Application.Users.Commands.CreateUser;
+using Application.Users.Commands.DeactivateUser;
+using Application.Users.Commands.SendTemporaryPasswordLink;
+using Application.Users.Queries.GetUserRoles;
+using Application.Users.Queries.SearchUsers;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : ApiControllerBase
     {
-
-        private readonly IUnitOfWork _unitOfWork;
-
-        public UserController(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }    
-
-        [HttpGet]
-        public IEnumerable<User> Get()
-        {
-            var users = _unitOfWork.UserRepository.Get().ToList();            
-
-            return users;
-        }
-
-        [HttpGet("{id}")]
-        public User Get(int id)
-        {
-            var user = _unitOfWork.UserRepository.Get(u => u.Id.Equals(id)).First();
-            return user;
-        }
-
         [HttpPost]
-        public void Post([FromBody] User user)
+        public async Task<ActionResult<Result<CreateUserCommandDto>>> Create(CreateUserCommand command)
         {
-            _unitOfWork.UserRepository.Insert(user);
-            _unitOfWork.Save();
+            return await Mediator.Send(command);
         }
 
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] User value)
+        [HttpGet("[action]")]
+        public async Task<ActionResult<IEnumerable<GetUserRolesQuery>>> GetAvailableUserRoles([FromQuery] GetUserRolesQuery query)
         {
-            _unitOfWork.UserRepository.Update(value);
-            _unitOfWork.Save();
+            var roles = await Mediator.Send(query);
+            return Ok(roles);
         }
 
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpGet("[action]")]
+        public async Task<ActionResult<IEnumerable<SearchUsersQueryDto>>> SearchUsers([FromQuery] SearchUsersQuery query)
         {
-            _unitOfWork.UserRepository.Delete(id);
-            _unitOfWork.Save();
+            var clients = await Mediator.Send(query);
+            return Ok(clients);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult<Result<SendTemporaryPasswordLinkCommandDto>>> SendTemporaryPasswordLink(SendTemporaryPasswordLinkCommand command)
+        {
+            return await Mediator.Send(command);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult<Result>> DeactivateUser(DeactivateUserCommand command)
+        {
+            return await Mediator.Send(command);
         }
     }
 }

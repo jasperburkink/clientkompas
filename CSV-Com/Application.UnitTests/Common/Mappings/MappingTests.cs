@@ -1,13 +1,8 @@
-﻿using Application.Clients.Queries.GetClients;
+﻿using System.Runtime.Serialization;
+using Application.Clients.Dtos;
 using Application.Common.Mappings;
 using AutoMapper;
 using Domain.CVS.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.UnitTests.Common.Mappings
 {
@@ -32,7 +27,7 @@ namespace Application.UnitTests.Common.Mappings
 
         [Theory]
         [InlineData(typeof(Client), typeof(ClientDto))]
-        [InlineData(typeof(WorkingContract), typeof(WorkingContractDto))]
+        [InlineData(typeof(WorkingContract), typeof(ClientWorkingContractDto))]
         [InlineData(typeof(EmergencyPerson), typeof(EmergencyPersonDto))]
         public void ShouldSupportMappingFromSourceToDestination(Type source, Type destination)
         {
@@ -44,7 +39,9 @@ namespace Application.UnitTests.Common.Mappings
         private object GetInstanceOf(Type type)
         {
             if (type.GetConstructor(Type.EmptyTypes) != null)
+            {
                 return Activator.CreateInstance(type)!;
+            }
 
             // Type without parameterless constructor
             return FormatterServices.GetUninitializedObject(type);

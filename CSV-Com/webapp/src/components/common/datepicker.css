@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components { 
+    .datepicker-container{
+
+        .datepicker{
+            @apply
+            bg-mainLightGray;
+
+            input{
+                @apply
+                text-sm                 
+                h-4;
+            }
+
+            div{   
+                @apply
+                rounded-lg;
+            }
+
+            fieldset{
+                @apply
+                border-2; 
+            }
+        }
+
+        .error{
+            @apply            
+            bg-redRequiredLight;
+
+            fieldset{
+                @apply
+                border-redRequired;
+            }
+        }
+
+    }   
+}

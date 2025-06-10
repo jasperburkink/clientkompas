@@ -53,3 +53,13 @@ obj/
 /CSV-Com/UpgradeLog.htm
 /POC css framework/tailwind-react/node_modules
 *.user
+/CSV-Com/API/API.csproj.user
+/CSV-Com/UpgradeLog3.htm
+/CSV-Com/UpgradeLog2.htm
+.vscode/settings.json
+/CSV-Com/webapp/junit.xml
+**/node_modules/ 
+node_modules/
+**/coverage.cobertura.xml
+**/TestResults.xml
+**/TestResults/

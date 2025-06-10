@@ -1,28 +1,257 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Clients\Commands\DeleteClient\" />
-    <Folder Include="Clients\Commands\UpdateClient\" />
-    <Folder Include="Users\Commands\" />
-    <Folder Include="Users\EventHandlers\" />
-    <Folder Include="Users\Queries\GetUsers\" />
+    <Compile Remove="Clients\Commands\DeleteClient\**" />
+    <Compile Remove="Clients\Commands\UpdateClient\**" />
+    <EmbeddedResource Remove="Clients\Commands\DeleteClient\**" />
+    <EmbeddedResource Remove="Clients\Commands\UpdateClient\**" />
+    <None Remove="Clients\Commands\DeleteClient\**" />
+    <None Remove="Clients\Commands\UpdateClient\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
-    <PackageReference Include="FluentValidation" Version="11.7.1" />
-    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.7.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.10" />
+    <Compile Include="Clients\Commands\UpdateClient\UpdateClientCommandValidator.cs" />
+    <Compile Include="Clients\Commands\UpdateClient\UpdateClientCommand.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="MaritalStatuses\Commands\DeleteMaritalStatus\" />
+    <Folder Include="MaritalStatuses\Commands\UpdateMaritalStatus\" />
+    <Folder Include="MaritalStatuses\Queries\" />
+    <Folder Include="Organizations\Commands\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Ardalis.GuardClauses" Version="5.0.0" />
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="FluentValidation" Version="11.11.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Authentication\Commands\Login\Resources\LoginCommandHandler.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>LoginCommandHandler.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Authentication\Commands\Login\Resources\LoginCommandHandler.nl.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>LoginCommandHandler.nl.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Authentication\Commands\ResendTwoFactorAuthenticationToken\Resources\ResendTwoFactorAuthenticationTokenCommandHandler.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResendTwoFactorAuthenticationTokenCommandHandler.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Authentication\Commands\TwoFactorAuthentication\Resources\TwoFactorAuthenticationCommandHandler.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>TwoFactorAuthenticationCommandHandler.resx</DependentUpon>
+    </Compile>
+    <Compile Update="CoachingPrograms\Queries\GetCoachingProgram\Resources\GetCoachingProgramDto.nl.Designer.cs">
+      <DependentUpon>GetCoachingProgramDto.nl.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="CoachingPrograms\Queries\GetCoachingProgram\Resources\GetCoachingProgramDto.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>GetCoachingProgramDto.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Common\Rules\Resources\AddressValidationRules.nl.Designer.cs">
+      <DependentUpon>AddressValidationRules.nl.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Common\Rules\Resources\AddressValidationRules.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AddressValidationRules.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Common\Rules\Resources\AuthenticationValidationRules.nl.Designer.cs">
+      <DependentUpon>AuthenticationValidationRules.nl.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Common\Rules\Resources\AuthenticationValidationRules.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AuthenticationValidationRules.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Common\Rules\Resources\BenefitFormValidationRules.Designer.cs">
+      <DependentUpon>BenefitFormValidationRules.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Common\Rules\Resources\CoachingProgramValidationRules.nl.Designer.cs">
+      <DependentUpon>CoachingProgramValidationRules.nl.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Common\Rules\Resources\CoachingProgramValidationRules.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CoachingProgramValidationRules.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Common\Rules\Resources\DriversLicenceValidationRules.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DriversLicenceValidationRules.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Common\Rules\Resources\EmergencyPersonValidationRules.nl.Designer.cs">
+      <DependentUpon>EmergencyPersonValidationRules.nl.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Common\Rules\Resources\EmergencyPersonValidationRules.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>EmergencyPersonValidationRules.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Common\Rules\Resources\BenefitFormValidationRules.nl.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>BenefitFormValidationRules.nl.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Common\Rules\Resources\RefreshTokenValidationRules.nl.Designer.cs">
+      <DependentUpon>RefreshTokenValidationRules.nl.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Common\Rules\Resources\RefreshTokenValidationRules.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>RefreshTokenValidationRules.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Common\Rules\Resources\UserValidationRules.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>UserValidationRules.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Common\Rules\Resources\WorkingContractValidationRules.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>WorkingContractValidationRules.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Common\Rules\Resources\WorkingContractValidationRules.nl.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>WorkingContractValidationRules.nl.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Users\Queries\GetUserRoles\Resources\GetUserRolesDto.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>GetUserRolesDto.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Authentication\Commands\Login\Resources\LoginCommandHandler.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>LoginCommandHandler.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Authentication\Commands\Login\Resources\LoginCommandHandler.nl.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>LoginCommandHandler.nl.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Authentication\Commands\ResendTwoFactorAuthenticationToken\Resources\ResendTwoFactorAuthenticationTokenCommandHandler.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResendTwoFactorAuthenticationTokenCommandHandler.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Authentication\Commands\TwoFactorAuthentication\Resources\TwoFactorAuthenticationCommandHandler.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TwoFactorAuthenticationCommandHandler.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="CoachingPrograms\Queries\GetCoachingProgram\Resources\GetCoachingProgramDto.nl.resx">
+      <LastGenOutput>GetCoachingProgramDto.nl.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="CoachingPrograms\Queries\GetCoachingProgram\Resources\GetCoachingProgramDto.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>GetCoachingProgramDto.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Rules\Resources\AddressValidationRules.nl.resx">
+      <LastGenOutput>AddressValidationRules.nl.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Rules\Resources\AddressValidationRules.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AddressValidationRules.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Rules\Resources\AuthenticationValidationRules.nl.resx">
+      <LastGenOutput>AuthenticationValidationRules.nl.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Rules\Resources\AuthenticationValidationRules.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AuthenticationValidationRules.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Rules\Resources\BenefitFormValidationRules.resx">
+      <LastGenOutput>BenefitFormValidationRules.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Rules\Resources\CoachingProgramValidationRules.nl.resx">
+      <LastGenOutput>CoachingProgramValidationRules.nl.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Rules\Resources\CoachingProgramValidationRules.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>CoachingProgramValidationRules.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Rules\Resources\DriversLicenceValidationRules.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>DriversLicenceValidationRules.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Rules\Resources\EmergencyPersonValidationRules.nl.resx">
+      <LastGenOutput>EmergencyPersonValidationRules.nl.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Rules\Resources\EmergencyPersonValidationRules.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>EmergencyPersonValidationRules.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Rules\Resources\BenefitFormValidationRules.nl.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>BenefitFormValidationRules.nl.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Rules\Resources\RefreshTokenValidationRules.nl.resx">
+      <LastGenOutput>RefreshTokenValidationRules.nl.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Rules\Resources\RefreshTokenValidationRules.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>RefreshTokenValidationRules.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Rules\Resources\UserValidationRules.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>UserValidationRules.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Rules\Resources\WorkingContractValidationRules.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WorkingContractValidationRules.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Rules\Resources\WorkingContractValidationRules.nl.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WorkingContractValidationRules.nl.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Users\Queries\GetUserRoles\Resources\GetUserRolesDto.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>GetUserRolesDto.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

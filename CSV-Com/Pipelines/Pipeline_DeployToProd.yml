@@ -1,0 +1,161 @@
+workflow:
+  rules:
+    - when: always
+
+variables:  
+  DOTNET_IMAGE: "mcr.microsoft.com/dotnet/sdk:9.0" # Default image   for gitlabrunner
+  DOCKER_IMAGE: "docker:stable"
+  NODE_IMAGE: "node:18"  
+  SOLUTION_FOLDER: "CSV-Com"
+  SOLUTION: "$SOLUTION_FOLDER/CSV-Com.sln"
+  NODE_FOLDER: "webapp"
+  BUILD_CONFIGURATION: "Debug"
+  DOTNET_DOCKER_IMAGE_NAME_DEV: "$CI_REGISTRY/client-volgsysteem/cvs-com/dev-api"
+  NODE_DOCKER_IMAGE_NAME_DEV: "$CI_REGISTRY/client-volgsysteem/cvs-com/dev-webapp"
+  DOTNET_DOCKER_IMAGE_NAME_TEST: "$CI_REGISTRY/client-volgsysteem/cvs-com/test-api"
+  NODE_DOCKER_IMAGE_NAME_TEST: "$CI_REGISTRY/client-volgsysteem/cvs-com/test-webapp"
+  DOTNET_DOCKER_IMAGE_FILENAME: "dotnet_docker_image"
+  NODE_DOCKER_IMAGE_FILENAME: "node_docker_image"
+
+stages: 
+  - build
+  - test   
+  - preparations
+  - deployment
+
+dotnet-build:
+  before_script:
+  - shopt -s globstar # setting for enabling wildcards in bash **/*.csproj
+  - 'dotnet restore $SOLUTION' # dotnet build does also restore but an explicit restore is better when using GitLab for caching purposes
+  stage: build
+  script:
+    # Build all .NET projects
+    - | 
+      for project in **/*.csproj; do
+        dotnet build "$project" -c $BUILD_CONFIGURATION --no-restore
+      done
+  image: $DOTNET_IMAGE
+  artifacts:
+    paths:
+      - '**/bin'
+      - '**/obj'
+    expire_in: 1 day
+
+dotnet-test:
+  stage: test
+  variables:
+    LOGGER_FLAG: "junit;LogFilePath=./TestResults/test-results.xml;MethodFormat=Class;FailureBodyFormat=Verbose"
+  script:
+    - export ASPNETCORE_ENVIRONMENT=ocdev
+    - cd $SOLUTION_FOLDER
+    - |
+      dotnet test \
+        -c $BUILD_CONFIGURATION \
+        --no-build \
+        --no-restore \
+        --logger "$LOGGER_FLAG" \
+        --results-directory "./TestResults" \
+  image: $DOTNET_IMAGE
+  artifacts:
+    paths:
+      - $SOLUTION_FOLDER/**/TestResults/**/test-results.xml
+    reports:
+      junit: $SOLUTION_FOLDER/**/TestResults/**/test-results.xml
+    when: always
+  needs: ["dotnet-build"]
+  dependencies:
+    - dotnet-build
+
+node-build:
+  before_script:
+    - cd $SOLUTION_FOLDER/$NODE_FOLDER
+    - |
+      if [ -f "package-lock.json" ]; then
+        echo "Please remove package-lock.json and don't use 'npm install', use 'yarn install' and 'yarn add' instead."
+        exit 1
+      fi
+    - yarn cache clean && yarn install
+    - export CI=false
+  stage: build
+  script:
+    - yarn build
+  image: $NODE_IMAGE
+  artifacts:
+    paths:
+      - '$SOLUTION_FOLDER/$NODE_FOLDER/build/'
+      - '$SOLUTION_FOLDER/$NODE_FOLDER/node_modules/'
+    expire_in: 1 day
+
+node-test:
+  before_script:
+    - cd $SOLUTION_FOLDER/$NODE_FOLDER
+  stage: test
+  script:
+    - npx nyc --reporter=cobertura npm run test:ci
+  coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
+  artifacts:
+    paths:
+      - $SOLUTION_FOLDER/$NODE_FOLDER/**/junit.xml
+      - $SOLUTION_FOLDER/$NODE_FOLDER/**/coverage/
+      - $SOLUTION_FOLDER/$NODE_FOLDER/**/coverage-final.json
+    when: always
+    reports:
+      junit:
+        - $SOLUTION_FOLDER/$NODE_FOLDER/**/junit.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: $SOLUTION_FOLDER/$NODE_FOLDER/**/coverage-final.json
+  image: $NODE_IMAGE
+  needs: ["node-build"]
+  dependencies:
+    - node-build
+
+upload-images-test:
+  services:
+  - name: docker:20.10.16-dind
+  variables:
+    DOCKER_TLS_CERTDIR: "" 
+  before_script:
+  - "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
+  - apk add --update curl
+  stage: preparations
+  script:
+    # Dotnet build  
+    - cd CSV-Com
+    - docker build --build-arg ENVIRONMENT_NAME=test -t $DOTNET_DOCKER_IMAGE_NAME_TEST -f "./API/Dockerfile" "."
+    - cd ..
+    # Node build
+    - cd CSV-Com/webapp
+    - docker build --build-arg ENVIRONMENT_NAME=test -t $NODE_DOCKER_IMAGE_NAME_TEST -f "./Dockerfile" "."
+    - cd ../..
+    # Docker push
+    - docker push $DOTNET_DOCKER_IMAGE_NAME_TEST
+    - docker push $NODE_DOCKER_IMAGE_NAME_TEST
+  image: $DOCKER_IMAGE
+  needs: [ "dotnet-test", "node-test" ]
+  allow_failure: true
+  rules:
+  - when: manual
+  
+deploy-latest-images:
+  stage: deployment
+  script:
+    - secret="$ENV_REFRESH_SECRET"
+    # Step 1: Call the first URL with the provided secret and store the response as "identifier"
+    - FIRST_URL="http://cvs-dev.sbict.local:6021/DockerInternal/refresh_environments?s=$secret"
+    - identifier=$(curl -s "$FIRST_URL")
+    - echo "Running refresh job:"
+    - echo "$identifier"
+    # Step 2: Keep checking the second URL until the response is not "Loading"
+    - SECOND_URL="http://cvs-dev.sbict.local:6021/DockerInternal/check_job?identifier=$identifier"
+    - while [[ "$(curl -s "$SECOND_URL")" == "Loading" ]]; do
+    -     echo "Waiting for job to finish"
+    -     sleep 5
+    - done
+    # Step 3: Call the third URL and display the response
+    - THIRD_URL="http://cvs-dev.sbict.local:6021/DockerInternal/job_result?identifier=$identifier"
+    - response=$(curl -s "$THIRD_URL")
+    - echo "Job result:"
+    - echo "$response"
+  image: $DOTNET_IMAGE
+  needs: [ "upload-images-test" ]

@@ -1,0 +1,268 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600&display=swap');
+
+@layer components {
+    .clients {
+        @apply 
+        grid 
+        grid-cols-2 
+        px-5 
+        pt-[140px] 
+        pb-[90px] 
+        mt-4 
+        lg:mt-20 
+        lg:grid-cols-3 
+        lg:w-full 
+        lg:p-0 
+        lg:h-full 
+        lg:px-12;
+
+        .property{
+            @apply 
+            col-span-2 
+            grid 
+            grid-cols-2 
+            overflow-hidden 
+            lg:col-span-3;
+        }
+    
+        .label{
+            @apply 
+            text-lg;
+        }        
+    
+        .client-header{
+            @apply 
+            text-3xl 
+            mb-5 
+            w-full 
+            lg:text-3xl
+            lg:row-end-1;
+        }
+    
+        .client-info-main{
+            @apply 
+            col-span-1 
+            lg:col-end-2 
+            lg:col-span-1 
+            lg:row-end-2;
+        }
+    
+        .client-profile-picture{
+            @apply 
+            mx-auto 
+            row-span-2 
+            lg:col-end-4 
+            lg:col-span-1 
+            lg:my-5;
+        }
+    
+        .client-number{
+            @apply 
+            col-span-2 
+            lg:col-end-2 
+            lg:col-span-1 
+            my-5;
+        }
+    
+        .client-info-main-2{
+            @apply 
+            col-span-2 
+            lg:col-end-3 
+            lg:col-span-1 
+            lg:row-end-2;
+        }
+    
+        .client-label-value{
+            @apply 
+            grid grid-cols-2 
+            overflow-hidden 
+            lg:flex 
+            lg:whitespace-break-spaces;
+
+            .client-socialbenefit-form{
+                @apply 
+                my-4 
+                lg:my-0;
+            }
+        }
+    
+        .client-subheader{
+            @apply 
+            my-5 
+            col-span-2;
+        }
+    
+        .client-emergencyperson{
+            @apply 
+            col-span-2 
+            grid 
+            grid-cols-2 
+            mb-2;
+        }
+    
+        .client-additional-info{
+            @apply 
+            col-span-2;
+
+            .toggle-button{                
+                @apply
+                lg:block;
+            }
+
+            .toggle-animation{
+                @apply 
+                col-span-2;
+            }
+
+            .client-additional-info-container{
+                @apply 
+                lg:grid
+                lg:grid-cols-2;
+            }
+        }
+    
+        .client-remarks{
+            @apply 
+            col-span-2;
+        }
+
+        .slidetoggle{
+            @apply
+            col-span-2;
+        }
+
+        .traject-container{
+            @apply
+            flex
+            flex-col
+            col-span-2
+            lg:col-span-2;
+
+            .traject-header{
+                @apply 
+                text-3xl 
+                mb-5 
+                w-full
+                mt-5
+                lg:text-3xl;
+            }
+            
+            .traject-default-values{
+                @apply 
+                lg:grid
+                lg:grid-cols-2;
+            }
+
+            .traject-label-value{
+                @apply 
+                grid grid-cols-2 
+                overflow-hidden 
+                lg:flex 
+                lg:whitespace-break-spaces;
+            }
+    
+            .traject-additional-info{
+                @apply 
+                lg:grid
+                lg:grid-cols-2;
+    
+                .toggle-button{                
+                    @apply 
+                    hidden 
+                    float-right 
+                    lg:block;
+                }
+            }
+
+            .traject-buttons{
+                @apply
+                w-full 
+                h-auto 
+                shadow-none
+                flex
+                flex-col
+                items-center
+                gap-4
+                lg:items-end
+                lg:pr-4;
+
+                .button{
+                    @apply
+                    content-center
+                    w-56
+                    h-20
+                    lg:h-12
+                    lg:text-base
+                    text-lg
+                    text-center;
+                }
+            }
+        }
+
+        .button-container{
+            @apply 
+            fixed 
+            bottom-0 
+            h-[90px] 
+            col-span-2 
+            w-full 
+            bg-mainLightGray 
+            p-5 
+            gap-4 
+            -mx-5 
+            grid 
+            grid-cols-2 
+            shadow-2xl 
+            shadow-black 
+            lg:relative 
+            lg:bg-transparent 
+            lg:w-full 
+            lg:h-auto 
+            lg:shadow-none 
+            lg:justify-items-end 
+            lg:gap-0 
+            lg:p-0;
+
+            .button{
+                @apply 
+                text-base 
+                lg:w-52 
+                lg:text-center 
+                lg:col-span-2;
+            }
+        }
+
+        .button{
+            @apply 
+            text-xs 
+            lg:text-lg;
+        }
+
+        .client-deactivate-button{
+            @apply
+            col-span-2
+            my-20
+            mx-16
+            h-20
+            px-8
+            leading-4            
+            lg:col-end-4 
+            lg:col-span-1
+            lg:h-14
+            lg:w-52
+            text-lg;            
+        }
+    }
+
+    .clients-spinner{
+        @apply 
+        flex
+        items-center
+        justify-center
+        h-screen
+        w-full;
+    }
+}

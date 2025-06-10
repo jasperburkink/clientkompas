@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans&display=swap');
+
+@layer components {
+    
+    .domain-object-label{
+        @apply
+        my-4
+        lg:col-span-2;        
+    } 
+
+    .domain-object-container{
+        @apply 
+        flex
+        flex-col
+        lg:col-span-2;
+
+        .domain-object-container-item {
+            @apply
+            grid
+            grid-cols-1            
+            lg:grid-cols-2;
+        }
+
+        .domain-object-field {
+            @apply            
+            flex            
+            items-center
+            lg:w-full;
+
+            .domain-object-field-container{
+                @apply
+                flex-grow;
+            }
+        }  
+    }
+
+    .domain-object-add-button{
+        @apply
+        !text-left
+        pt-4
+        pb-12
+        lg:col-span-2;
+    }
+
+    .domain-object-remove-button{
+        @apply
+        p-3
+        mr-2
+        border-2
+        rounded-lg
+        w-12
+        h-12
+        border-subGray2
+        bg-mainLightGray
+        cursor-pointer;
+    }
+}

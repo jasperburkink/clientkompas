@@ -4,22 +4,36 @@
 
 @layer components {
     a.button {
-        @apply w-200px h-50px font-medium text-sm rounded-lg flex;
+        @apply 
+        px-3 
+        h-50px 
+        font-medium 
+        text-sm 
+        rounded-lg 
+        flex;
     }
 
     p.button {
-        @apply m-auto;
+        @apply 
+        m-auto;
     }
 
     a.button-solid {
-        @apply bg-mainBlue text-white;
+        @apply 
+        bg-mainBlue 
+        text-white;
     }
 
     a.button-not-solid {
-        @apply text-mainBlue border-4 border-mainBlue;
+        @apply 
+        text-mainBlue 
+        border-4 
+        border-mainBlue;
     }
 
     a.button-underline {
-        @apply text-mainBlue underline;
+        @apply 
+        text-mainBlue 
+        underline;
     }
 }

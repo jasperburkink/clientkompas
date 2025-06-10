@@ -1,19 +1,47 @@
-﻿using Domain.Common;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
+using Domain.Common;
 
 namespace Domain.CVS.Domain
 {
     public class User : BaseAuditableEntity
     {
-        public string FirstName { get; set; }
+        public required string FirstName { get; set; }
 
-        public string LastName { get; set; }
+        public string? PrefixLastName { get; set; }
 
-        public string EmailAddress { get; set; }
+        public required string LastName { get; set; }
+
+        public string FullName
+        {
+            get
+            {
+                var fullName = string.Join(' ', (new string[] { FirstName, PrefixLastName, LastName })
+                .Where(fv => !string.IsNullOrEmpty(fv))
+                .Select(s => s.Trim()));
+
+                return Regex.Replace(fullName, @"\s+", " ");
+            }
+            set => _ = value;
+        }
+
+        public required string EmailAddress { get; set; }
+
+        public required string TelephoneNumber { get; set; }
+
+        public DateTime? DeactivationDateTime { get; private set; }
+
+        public User? CreatedByUser { get; set; }
+
+        public int? CreatedByUserId { get; set; }
+
+        public DateTime Deactivate(DateTime deactivationDateTime)
+        {
+            if (!DeactivationDateTime.HasValue)
+            {
+                DeactivationDateTime = deactivationDateTime;
+            }
+
+            return DeactivationDateTime.Value;
+        }
     }
 }

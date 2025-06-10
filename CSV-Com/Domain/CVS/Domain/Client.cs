@@ -1,55 +1,69 @@
-﻿using Domain.Common;
+﻿using System.Text.RegularExpressions;
+using Domain.Common;
 using Domain.CVS.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Domain.CVS.ValueObjects;
 
 namespace Domain.CVS.Domain
 {
     public class Client : BaseAuditableEntity
     {
-        public int IdentificationNumber { get; set; }
+        public required string FirstName { get; set; }
 
-        public string FirstName { get; set; }
+        public required string Initials { get; set; }
 
-        public string Initials { get; set; }
+        public string? PrefixLastName { get; set; }
 
-        public string PrefixLastName { get; set; }
+        public required string LastName { get; set; }
 
-        public string LastName{ get; set; }
+        public string FullName
+        {
+            get
+            {
+                var fullName = string.Join(' ', (new string[] { FirstName, PrefixLastName, LastName })
+                .Where(fv => !string.IsNullOrEmpty(fv))
+                .Select(s => s.Trim()));
 
-        public Gender Gender { get; set; }
+                return Regex.Replace(fullName, @"\s+", " ");
+            }
+            set => _ = value;
+        }
 
-        public string StreetName { get; set; }
+        public required Gender Gender { get; set; }
 
-        public int HouseNumber { get; set; }
+        public required Address Address { get; set; }
 
-        public string HouseNumberAddition { get; set; }
+        public required string TelephoneNumber { get; set; }
 
-        public string PostalCode { get; set; }
+        public required DateOnly DateOfBirth { get; set; }
 
-        public string Residence { get; set; }
+        public required string EmailAddress { get; set; }
 
-        public string TelephoneNumber { get; set; }
-        
-        public DateOnly DateOfBirth { get; set; }
+        public MaritalStatus? MaritalStatus { get; set; }
 
-        public string EmailAddress { get; set; }        
+        public required bool IsInTargetGroupRegister { get; set; }
 
-        public MaritalStatus MaritalStatus { get; set; }
+        public List<DriversLicence> DriversLicences { get; set; } = [];
 
-        public virtual ICollection<DriversLicence> DriversLicences { get; set; } = new List<DriversLicence>();
+        public List<EmergencyPerson> EmergencyPeople { get; set; } = [];
 
-        public virtual ICollection<EmergencyPerson> EmergencyPeople { get; set; } = new List<EmergencyPerson>();
+        public List<Diagnosis> Diagnoses { get; set; } = [];
 
-        public virtual ICollection<Diagnosis> Diagnoses { get; set; } = new List<Diagnosis>();
+        public List<BenefitForm> BenefitForms { get; set; } = [];
 
-        public BenefitForm BenefitForm { get; set; }
+        public List<WorkingContract> WorkingContracts { get; set; } = [];
 
-        public virtual ICollection<WorkingContract> WorkingContracts { get; set; } = new List<WorkingContract>();
+        public DateTime? DeactivationDateTime { get; private set; }
 
-        public string Remarks { get; set; }
+        public string? Remarks { get; set; }
+
+        public DateTime Deactivate(DateTime deactivationDateTime)
+        {
+            if (!DeactivationDateTime.HasValue)
+            {
+                DeactivationDateTime = deactivationDateTime;
+            }
+
+            return DeactivationDateTime.Value;
+        }
     }
 }

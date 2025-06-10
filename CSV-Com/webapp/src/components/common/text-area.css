@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+
+    .text-area-container{
+
+        .text-area {
+            @apply
+            p-2.5
+            bg-mainLightGray 
+            border-2 
+            border-subGray2 
+            placeholder-subGray2 
+            focus:border-mainBlue 
+            focus:ring-1 
+            ring-mainBlue 
+            text-gray-900 
+            outline-none 
+            text-sm 
+            rounded-lg
+            w-full;
+        }
+
+        textarea.error{
+            @apply
+            border-redRequired
+            bg-redRequiredLight; 
+        }
+
+        .error-icon{
+            @apply
+            text-redRequired
+            mx-[-50px]
+            my-[60px]
+            w-8;
+        }
+    }
+}

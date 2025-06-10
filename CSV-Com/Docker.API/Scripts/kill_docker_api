@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Usage: ./my_script.sh <secret>
+# Example: ./my_script.sh mySecret123
+
+# Check if the secret argument is provided
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 <secret>"
+    exit 1
+fi
+
+secret="$1"
+
+# Step 1: Call the first URL with the provided secret and store the response as "identifier"
+FIRST_URL="http://cvs-dev.sbict.local:6021/DockerInternal/exit?s=$secret"
+curl -f -s "$FIRST_URL"
+
+echo "Killing server, it should be automatically rebooted"

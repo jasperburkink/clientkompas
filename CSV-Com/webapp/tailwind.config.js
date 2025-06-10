@@ -5,8 +5,12 @@ module.exports = {
     ],
     theme: {
         extend: {
+            backgroundSize:{
+                'size17':'17px'
+            },
             fontFamily:{
-                'primary': ['Work+Sans']
+                'primary': ['Work+Sans'],
+                'workSans': ['"WorkSans"']
             },
             colors: {
                 'mainBlue': '#148CB8',
@@ -19,7 +23,10 @@ module.exports = {
                 'subGray2': '#B3B3B3',
 
                 'redRequired': '#C41E3A',
-                'redError': '#D2042D'
+                'redRequiredLight': '#FAE9E7',
+                'redError': '#D2042D',
+                
+                'greensucces' : '#129000',
             },
             width: {
                 '50px': '50px',
@@ -46,7 +53,7 @@ module.exports = {
                 '500px': '500px',
                 '698px': '698px',
                 '748px': '748px',
-                'sidebar': '125vh'
+                'sidebar': '102vh'
             },
             maxHeight: {
                 '300px': '300px'

@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+
+    .results-spinner{
+        @apply 
+        flex
+        items-center
+        justify-center;
+    }
+
+    .results-item{
+        @apply
+        relative
+        z-10
+        hover:underline;
+    }
+
+    .isdeactivated {
+        @apply
+        text-subGray2
+        line-through;
+    }
+}

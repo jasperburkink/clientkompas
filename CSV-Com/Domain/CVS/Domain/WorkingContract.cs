@@ -1,10 +1,5 @@
 ﻿using Domain.Common;
 using Domain.CVS.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Domain.CVS.Domain
 {
@@ -12,9 +7,13 @@ namespace Domain.CVS.Domain
     {
         public int Id { get; set; }
 
-        public virtual Client Client { get; set; }
+        public Client Client { get; set; }
 
-        public string CompanyName { get; set; }
+        public int ClientId { get; set; }
+
+        public Organization Organization { get; set; }
+
+        public int OrganizationId { get; set; }
 
         public string Function { get; set; }
 

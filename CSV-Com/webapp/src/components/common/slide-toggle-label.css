@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600&display=swap');
+
+@layer components {
+
+    
+    .toggle-button {
+        @apply 
+        relative 
+        h-50px 
+        font-medium 
+        text-base
+        rounded-lg;
+    }
+
+    #toggle-smalltext {
+        @apply 
+        relative 
+        h-50px 
+        font-normal 
+        text-base
+        rounded-lg;
+    }
+
+    @media screen and (max-width: 1000px) {
+        #toggle-smalltext {
+            font-size: 0.8rem;
+        }
+      }
+
+    .toggle-animation{
+        @apply 
+        duration-500 
+        ease-in-out;
+    }
+}

@@ -1,24 +1,37 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './input-field.css';
-import { InputFieldType } from '../../types/common/InputFieldComponentType';
+import { InputFieldType } from 'types/common/InputFieldComponentType';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAsterisk } from "@fortawesome/free-solid-svg-icons";
+import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
+import { ErrorMessage } from './error-message';
+import { ValidationError } from 'types/common/validation-error';
 
-export interface InputFieldProps extends React.HtmlHTMLAttributes<HTMLInputElement> {
+export interface InputFieldProps {
     value?: string,
     placeholder: string,
     required: boolean,
-    inputFieldType: InputFieldType
+    inputfieldtype: InputFieldType,
+    className?: string,
+    onChange?: (value: string) => void,
+    dataTestId?: string;
+    errors?: ValidationError[];
 }
 
-export const InputField = (props: InputFieldProps) => (  
-    <div className='input-field'>
-        <input {...props}
-        value={props.value} 
-        type={props.inputFieldType.type}         
-        placeholder={props.placeholder} 
-        required={props.required} /> 
-        {props.required === true &&
-        <FontAwesomeIcon icon={faAsterisk} className="fa-solid fa-1x"/>}
+export const InputField = (props: InputFieldProps) => {
+
+    return(
+    <div className={`input-field ${props.className}`}>
+        <div className={`input-field-container`}>
+            <input
+            onChange={(e) => {props.onChange?.(e.target.value);}}        
+            value={props.value}
+            type={props.inputfieldtype.type}
+            placeholder={props.placeholder}
+            required={props.required}
+            data-testid={props.dataTestId}
+            className={`${props.errors ? 'error' : ''}`} />        
+            <FontAwesomeIcon icon={faTriangleExclamation} className={`error-icon fa-lg ${props.errors ? 'visible' : 'hidden'}`} />
+        </div>
+        <ErrorMessage errors={props.errors} />
      </div>
-);
+)};

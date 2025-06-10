@@ -2,30 +2,55 @@ stages:
     - triggers
 
 # Trigger development pipeline when creating a mergerequest
-trigger_DevPipeline:
+trigger_MergeRequestPipeline:
+   stage: triggers
+   trigger:
+       include: CSV-Com/Pipelines/Pipeline_OnMergeRequest.yml
+       strategy: depend
+   only: 
+       - merge_requests
+ #      - web
+
+trigger_DeployToDevPipeline:
     stage: triggers
     trigger:
-        include:             
-            - local: DevPipeline.yml
-    only: 
-        - merge_requests
+        include: CSV-Com/Pipelines/Pipeline_DeployToDev.yml
+        strategy: depend
+    rules:
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "develop"
+      when: always
+    - if: $CI_PIPELINE_SOURCE == "web"
+      when: always
+    - when: never
+  
+trigger_DeployToProd:
+    stage: triggers
+    trigger:
+        include: CSV-Com/Pipelines/Pipeline_DeployToProd.yml
+        strategy: depend
+    only:
+        refs:
+        - tags
+        variables:
+        - $CI_COMMIT_TAG =~ /^[Rr]elease_.*/
 
 # Trigger feature pipeline when pushing to feature branch
-trigger_FeaturePipeline:    
-    stage: triggers
-    trigger:
-        include:
-          - local: FeaturePipeline.yml
-    only:
-      - /^Feature[0-9]*_*//i 
-#TODO: Hier moeten we nog bepalen hoe we de naamgeving van een feature branch doen. Voor nu is het een regex pattern "Feature[Featurenummer]_". Dus bijv. "feature25_Beschrijving-van-een-feature".
+# trigger_FeaturePipeline:    
+#     stage: triggers
+#     trigger:
+#         include: CSV-Com/Pipelines/FeaturePipeline.yml
+#     rules:
+#       - if: $CI_PIPELINE_SOURCE == "web"
+#         when: never
+#       - if: $CI_COMMIT_BRANCH =~ /^Feature[0-9]*_*//i
+#    only:
+#      - /^Feature[0-9]*_*//i # See naming conventions for features https://sbict.atlassian.net/wiki/spaces/CVS/pages/7241742/GIT-Flow#Naamgeving
 
-trigger_DevPipelineTest:
-    stage: triggers
-    trigger:
-        include: DevPipeline.yml
-
-#trigger_ReleasePipeline:
+# Trigger release pipeline when pushing to release branch
+# trigger_ReleasePipeline:
 #    stage: triggers
 #    trigger:
 #        include: ReleasePipeline.yml
+#        strategy: depend
+#    only:
+#       - /^Release[0-9]*_*//i # See naming conventions for features https://sbict.atlassian.net/wiki/spaces/CVS/pages/7241742/GIT-Flow#Naamgeving

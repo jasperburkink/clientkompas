@@ -1,31 +1,73 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Application.Common.Interfaces;
 
 namespace Application.Common.Models
 {
-    public class Result
+    public class Result : IResult
     {
-        internal Result(bool succeeded, IEnumerable<string> errors)
+        private Result(bool succeeded, IEnumerable<string> errors)
         {
             Succeeded = succeeded;
-            Errors = errors.ToArray();
+            Errors = [.. errors];
         }
 
-        public bool Succeeded { get; init; }
+        public bool Succeeded { get; }
 
-        public string[] Errors { get; init; }
+        public string[] Errors { get; }
+
+        public string ErrorMessage => string.Join(", ", Errors);
 
         public static Result Success()
         {
-            return new Result(true, Array.Empty<string>());
+            return new Result(true, []);
         }
 
         public static Result Failure(IEnumerable<string> errors)
         {
             return new Result(false, errors);
         }
+
+        public static Result Failure(string error)
+        {
+            return new Result(false, [error]);
+        }
+
+        public static Result<T> Success<T>(T value)
+        {
+            return Result<T>.Success(value);
+        }
     }
+
+    public class Result<T> : IResult
+    {
+        private Result(T? value, bool succeeded, IEnumerable<string> errors)
+        {
+            Value = value;
+            Succeeded = succeeded;
+            Errors = [.. errors];
+        }
+
+        public T? Value { get; }
+
+        public bool Succeeded { get; }
+
+        public string[] Errors { get; }
+
+        public string ErrorMessage => string.Join(", ", Errors);
+
+        public static Result<T> Success(T value)
+        {
+            return new Result<T>(value, true, []);
+        }
+
+        public static Result<T> Failure(IEnumerable<string> errors)
+        {
+            return new Result<T>(default, false, errors);
+        }
+
+        public static Result<T> Failure(string error)
+        {
+            return new Result<T>(default, false, [error]);
+        }
+    }
+
 }

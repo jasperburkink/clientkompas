@@ -1,8 +1,8 @@
 import React, { LabelHTMLAttributes } from 'react';
 import { useState } from "react";
 import './profile-picture.css';
-import { Button } from '../common/button';
-import { Picture } from '../common/picture';
+import { Button } from 'components/common/button';
+import { Picture } from 'components/common/picture';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 
@@ -17,7 +17,7 @@ export function ProfilePicture(props: ProfilePictureProps){
             <div className='profile-picture-box'>
                 {
                     pictureUrl === undefined &&
-                    <FontAwesomeIcon icon={faCircleUser} className="fa-sollid fa-10x text-white"/>
+                    <FontAwesomeIcon icon={faCircleUser} className="fa-sollid fa-5x md:fa-10x text-white"/>
                 }
                 {
                     pictureUrl !== null &&

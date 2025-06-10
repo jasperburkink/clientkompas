@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Domain.CVS.Enums
+﻿namespace Domain.CVS.Enums
 {
     public enum Gender
     {
-        Men,
+        Man,
         Woman,
         NonBinary
     }

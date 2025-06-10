@@ -1,9 +1,4 @@
 ﻿using Domain.CVS.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Common.Interfaces.CVS
 {
@@ -13,8 +8,24 @@ namespace Application.Common.Interfaces.CVS
 
         IRepository<Client> ClientRepository { get; }
 
-        public void Save();
+        IRepository<DriversLicence> DriversLicenceRepository { get; }
 
-        public Task SaveAsync(CancellationToken cancellationToken = default);
+        IRepository<MaritalStatus> MaritalStatusRepository { get; }
+
+        IRepository<Diagnosis> DiagnosisRepository { get; }
+
+        IRepository<BenefitForm> BenefitFormRepository { get; }
+
+        IRepository<Organization> OrganizationRepository { get; }
+
+        IRepository<WorkingContract> WorkingContractRepository { get; }
+
+        IRepository<CoachingProgram> CoachingProgramRepository { get; }
+
+        IRepository<License> LicenseRepository { get; }
+
+        void Save();
+
+        Task SaveAsync(CancellationToken cancellationToken = default);
     }
 }

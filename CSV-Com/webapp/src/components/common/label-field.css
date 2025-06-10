@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans&display=swap');
+
+@layer components {
+    div.label-field{
+        @apply 
+        font-primary 
+        flex
+        py-1;
+    
+        label{
+            @apply 
+            mr-5 
+            flex-none
+            w-24
+            mt-3
+            mx-1;
+        }
+
+        .field-container{
+            @apply
+            w-full
+            flex-auto
+            mx-2;
+        }
+    }
+}

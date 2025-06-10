@@ -1,0 +1,162 @@
+{
+  "roles": {
+    "SystemOwner": [
+      {
+        "to": "/licences",
+        "text": "Licenties",
+        "icon": "Licence",
+        "id": null
+      },
+      {
+        "to": "/users",
+        "text": "Medewerkers",
+        "icon": "Users",
+        "id": null
+      },
+      {
+        "to": "/logout",
+        "text": "Uitloggen",
+        "icon": "Exit",
+        "id": "logout"
+      }
+    ],
+    "Licensee": [
+      {
+        "to": "/diagnoses",
+        "text": "Diagnoses",
+        "icon": "Diagnosis",
+        "id": null
+      },
+      {
+        "to": "/marital_statuses",
+        "text": "Burgerlijke staat",
+        "icon": "MaritalStatus",
+        "id": null
+      },
+      {
+        "to": "/benefit_form",
+        "text": "Uitkeringsvorm",
+        "icon": "PiggyBank",
+        "id": null
+      },
+      {
+        "to": "/drivers_licences",
+        "text": "Rijbewijzen",
+        "icon": "DriversLicence",
+        "id": null
+      },
+      {
+        "to": "/clients",
+        "text": "Cliënten",
+        "icon": "HelpingHands",
+        "id": null
+      },
+      {
+        "to": "/hours_registration",
+        "text": "Uren registratie",
+        "icon": "Clock",
+        "id": null
+      },
+      {
+        "to": "/organizations",
+        "text": "Organisaties",
+        "icon": "Building",
+        "id": null
+      },
+      {
+        "to": "/users",
+        "text": "Gebruikers",
+        "icon": "Users",
+        "id": null
+      },
+      {
+        "to": "/logout",
+        "text": "Uitloggen",
+        "icon": "Exit",
+        "id": "logout"
+      }
+    ],
+    "Administrator": [
+      {
+        "to": "/diagnoses",
+        "text": "Diagnoses",
+        "icon": "Diagnosis",
+        "id": null
+      },
+      {
+        "to": "/marital_statuses",
+        "text": "Burgerlijke staat",
+        "icon": "MaritalStatus",
+        "id": null
+      },
+      {
+        "to": "/benefit_form",
+        "text": "Uitkeringsvorm",
+        "icon": "PiggyBank",
+        "id": null
+      },
+      {
+        "to": "/drivers_licences",
+        "text": "Rijbewijzen",
+        "icon": "DriversLicence",
+        "id": null
+      },
+      {
+        "to": "/clients",
+        "text": "Cliënten",
+        "icon": "HelpingHands",
+        "id": null
+      },
+      {
+        "to": "/hours_registration",
+        "text": "Uren registratie",
+        "icon": "Clock",
+        "id": null
+      },
+      {
+        "to": "/organizations",
+        "text": "Organisaties",
+        "icon": "Building",
+        "id": null
+      },
+      {
+        "to": "/users",
+        "text": "Gebruikers",
+        "icon": "Users",
+        "id": null
+      },
+      {
+        "to": "/logout",
+        "text": "Uitloggen",
+        "icon": "Exit",
+        "id": "logout"
+      }
+    ],
+    "Coach": [
+      {
+        "to": "/clients",
+        "text": "Cliënten",
+        "icon": "HelpingHands",
+        "id": null
+      },
+      {
+        "to": "/hours_registration",
+        "text": "Uren registratie",
+        "icon": "Clock",
+        "id": null
+      },
+      {
+        "to": "/organizations",
+        "text": "Organisaties",
+        "icon": "Building",
+        "id": null
+      },
+      {
+        "to": "/logout",
+        "text": "Uitloggen",
+        "icon": "Exit",
+        "id": "logout"
+      }
+    ]
+  }
+}

@@ -1,11 +1,15 @@
-﻿using Application.Clients.Commands.AddClientDriversLicence;
+﻿using Application.Clients.Commands.AddDriversLicenceToClient;
 using Application.Clients.Commands.CreateClient;
+using Application.Clients.Commands.DeactivateClient;
 using Application.Clients.Commands.DeleteClientDriversLicence;
+using Application.Clients.Commands.UpdateClient;
+using Application.Clients.Dtos;
+using Application.Clients.Queries.GetClient;
+using Application.Clients.Queries.GetClientEdit;
+using Application.Clients.Queries.GetClientFullname;
 using Application.Clients.Queries.GetClients;
-using Application.Common.Interfaces.CVS;
-using Domain.CVS.Domain;
+using Application.Clients.Queries.SearchClients;
 using Microsoft.AspNetCore.Mvc;
-using System.Web.Http.Cors;
 
 namespace API.Controllers
 {
@@ -15,43 +19,64 @@ namespace API.Controllers
     public class ClientController : ApiControllerBase
     {
         [HttpGet]
-        public async Task<IEnumerable<ClientDto>> Get([FromQuery] GetClientsQuery query)
+        public async Task<IEnumerable<GetClientDto>> Get([FromQuery] GetClientsQuery query)
         {
             return await Mediator.Send(query);
         }
 
-        //TODO: implement with new Mediator structure
         [HttpGet("{id}")]
-        public Client Get(int id)
+        public async Task<ActionResult<GetClientDto>> Get(int id)
         {
-            throw new NotImplementedException();
+            var client = await Mediator.Send(new GetClientQuery { ClientId = id });
+            return Ok(client);
+        }
+
+
+        [HttpGet("[action]/{id}")]
+        public async Task<ActionResult<GetClientEditDto>> GetClientEditor(int id)
+        {
+            var client = await Mediator.Send(new GetClientEditQuery { ClientId = id });
+            return Ok(client);
+        }
+
+        [HttpGet("[action]/{id}")]
+        public async Task<ActionResult<GetClientFullnameDto>> GetClientFullname(int id)
+        {
+            try
+            {
+                var clientFullname = await Mediator.Send(new GetClientFullnameQuery { ClientId = id });
+                return Ok(clientFullname);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> Create(CreateClientCommand command)
+        public async Task<ActionResult<ClientDto>> Create(CreateClientCommand command)
         {
             return await Mediator.Send(command);
         }
 
         [Route("[action]")]
         [HttpPost]
-        public async Task<ActionResult<int>> AddDriversLicence(AddClientDriversLicenceCommand command)
+        public async Task<ActionResult<ClientDto>> AddDriversLicence(AddDriversLicenceToClientCommand command)
         {
             return await Mediator.Send(command);
         }
 
-        //TODO: implement with new Mediator structure
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Client value)
+        [HttpPut]
+        public async Task<ActionResult<ClientDto>> Updateclient(UpdateClientCommand command)
         {
-            throw new NotImplementedException();
+            return await Mediator.Send(command);
         }
 
-        //TODO: implement with new Mediator structure
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpPut("[action]")]
+        public async Task<IActionResult> DeactivateClient(DeactivateClientCommand command)
         {
-            throw new NotImplementedException();
+            await Mediator.Send(command);
+            return Ok();
         }
 
         [Route("[action]")]
@@ -62,8 +87,14 @@ namespace API.Controllers
         public async Task<IActionResult> DeleteDriversLicence(DeleteClientDriversLicenceCommand command)
         {
             await Mediator.Send(command);
-
             return NoContent();
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult<IEnumerable<SearchClientDto>>> SearchClients([FromQuery] SearchClientsQuery query)
+        {
+            var clients = await Mediator.Send(query);
+            return Ok(clients);
         }
     }
 }

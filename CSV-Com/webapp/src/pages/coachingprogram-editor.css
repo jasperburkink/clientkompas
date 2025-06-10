@@ -1,0 +1,139 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600&display=swap');
+
+@layer components {
+    .loading-spinner{
+        @apply
+        fixed
+        flex
+        inset-0
+         bg-gray-800
+          bg-opacity-50
+        items-center
+        justify-center
+        h-screen
+        w-full
+        z-50;
+    }
+
+    .loading-spinner-visible{
+        @apply
+        visible;
+    }
+
+    .loading-spinner-hidden{
+        @apply
+        invisible;
+    }
+
+    .coachingprogram-create-container {
+        @apply
+        flex
+        flex-col
+        px-5
+        pt-[140px]
+        pb-[90px]
+        mt-4
+        lg:mt-20        
+        lg:w-full
+        lg:p-0
+        lg:h-full
+        lg:px-12;
+
+        .coachingprogram-create-header{
+            @apply
+            items-center
+            flex
+            flex-row
+            my-6
+            lg:col-span-2;
+
+            .coachingprogram-create-header-main{
+                @apply
+                flex-none
+                text-xl
+                lg:col-span-2;
+            }
+
+            .coachingprogram-create-header-sub{
+                @apply
+                px-1
+                text-sm
+                grow;
+            }
+        }
+
+        .coachingprogram-create-subheader {
+            @apply
+            my-2;
+        }
+
+        .coachingprogram-create-fields{
+            @apply            
+            h-full
+            flex
+            flex-col
+            lg:grid
+            lg:grid-cols-2;       
+        }
+       
+        .client-fullname{
+            @apply
+            flex 
+            flex-col
+            items-end
+            justify-start
+            h-full
+            lg:h-auto
+            lg:mt-3;
+            
+            p {
+                @apply
+                text-left
+                w-full;
+            }
+
+            .error-message{
+                @apply
+                w-full;
+            }
+        }
+
+        .button-container{
+            @apply
+            flex
+            justify-center
+            flex-row
+            w-full
+            fixed
+            bottom-0
+            h-[90px]
+            bg-mainLightGray
+            p-5
+            -mx-5
+            shadow-2xl
+            shadow-black
+            lg:relative
+            lg:bg-transparent
+            lg:w-full
+            lg:h-auto
+            lg:shadow-none
+            lg:justify-end
+            lg:gap-0
+            lg:p-0
+            z-50
+            lg:mt-4
+            lg:mb-12;
+    
+            .button{
+                @apply
+                text-base
+                lg:w-52
+                lg:text-center
+                lg:col-span-2;
+            }
+        }
+    }
+}
